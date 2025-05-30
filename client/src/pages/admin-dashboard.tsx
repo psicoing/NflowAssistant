@@ -128,7 +128,7 @@ export default function AdminDashboard() {
                 <DollarSign className="h-8 w-8 text-yellow-500" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-400">Ingresos Totales</p>
-                  <p className="text-2xl font-bold text-white">${stats?.totalRevenue || "0"}</p>
+                  <p className="text-2xl font-bold text-white">€{stats?.totalRevenue || "0"}</p>
                 </div>
               </div>
             </CardContent>

@@ -389,7 +389,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get total revenue from PayPal transactions
       const transactions = await storage.getAllPaypalTransactions();
       const completedTransactions = transactions.filter(t => t.status === "COMPLETED");
-      const totalRevenue = completedTransactions.reduce((sum, t) => sum + parseFloat(t.amount), 0).toFixed(2);
+      const totalRevenue = completedTransactions.reduce((sum, t) => {
+        // Convert amount to number and handle different currencies
+        const amount = parseFloat(t.amount);
+        return sum + amount;
+      }, 0).toFixed(2);
 
       // Get total conversations
       const conversations = await storage.getConversations();
