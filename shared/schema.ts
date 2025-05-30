@@ -11,6 +11,10 @@ export const users = pgTable("users", {
   subscriptionPlan: text("subscription_plan"), // basic, group, individual
   subscriptionId: text("subscription_id"),
   subscriptionExpiresAt: timestamp("subscription_expires_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  lastLoginAt: timestamp("last_login_at"),
+  loginCount: integer("login_count").default(0),
+  hasCompletedPayment: boolean("has_completed_payment").default(false),
 });
 
 export const conversations = pgTable("conversations", {
@@ -37,6 +41,18 @@ export const resources = pgTable("resources", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const paypalTransactions = pgTable("paypal_transactions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  paypalOrderId: text("paypal_order_id").notNull(),
+  subscriptionPlan: text("subscription_plan").notNull(),
+  amount: text("amount").notNull(),
+  currency: text("currency").notNull(),
+  status: text("status").notNull(), // CREATED, APPROVED, COMPLETED, CANCELLED
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -57,6 +73,12 @@ export const insertResourceSchema = createInsertSchema(resources).omit({
   createdAt: true,
 });
 
+export const insertPaypalTransactionSchema = createInsertSchema(paypalTransactions).omit({
+  id: true,
+  createdAt: true,
+  completedAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertConversation = z.infer<typeof insertConversationSchema>;
@@ -65,3 +87,5 @@ export type InsertMessage = z.infer<typeof insertMessageSchema>;
 export type Message = typeof messages.$inferSelect;
 export type InsertResource = z.infer<typeof insertResourceSchema>;
 export type Resource = typeof resources.$inferSelect;
+export type InsertPaypalTransaction = z.infer<typeof insertPaypalTransactionSchema>;
+export type PaypalTransaction = typeof paypalTransactions.$inferSelect;
