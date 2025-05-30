@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertConversationSchema, insertMessageSchema, insertUserSchema } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
 import { paypalService } from "./paypal";
+import "./types"; // Import session types
 
 export async function registerRoutes(app: Express): Promise<Server> {
   

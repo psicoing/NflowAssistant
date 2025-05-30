@@ -31,20 +31,27 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchDashboardStats();
+    checkAuthAndFetchStats();
   }, []);
 
-  const fetchDashboardStats = async () => {
+  const checkAuthAndFetchStats = async () => {
     try {
       const response = await fetch("/api/admin/stats");
+      if (response.status === 401) {
+        setLocation("/admin/login");
+        return;
+      }
       const data = await response.json();
       setStats(data);
     } catch (error) {
       console.error("Error fetching stats:", error);
+      setLocation("/admin/login");
     } finally {
       setLoading(false);
     }
   };
+
+
 
   const handleLogout = async () => {
     try {
