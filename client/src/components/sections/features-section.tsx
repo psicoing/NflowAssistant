@@ -11,7 +11,7 @@ export default function FeaturesSection() {
               <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
                 <MessageCircle className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-800">Asistente de Salud Mental</h3>
+              <h3 className="text-xl font-bold text-gray-800">Asistente de Salud Mental</h3>
             </div>
 
             <p className="text-gray-600 mb-6">
@@ -62,7 +62,7 @@ export default function FeaturesSection() {
               <div className="w-12 h-12 bg-nflow-orange rounded-xl flex items-center justify-center">
                 <Book className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-800">Recursos de Salud Mental</h3>
+              <h3 className="text-xl font-bold text-gray-800">Recursos de Salud Mental</h3>
             </div>
 
             <p className="text-gray-600 mb-6">

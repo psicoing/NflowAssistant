@@ -19,7 +19,7 @@ export default function ServicesSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
               <span className="text-white">Acompañamiento emocional</span><br />
               <span className="text-nflow-orange">moderno</span>
             </h2>

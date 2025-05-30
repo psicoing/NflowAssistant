@@ -34,8 +34,8 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 bg-nflow-orange rounded-lg flex items-center justify-center">
-              <Brain className="w-5 h-5 text-white" />
+            <div className="w-8 h-8 flex items-center justify-center">
+              <img src="/attached_assets/faro.png" alt="NFLOW" className="w-8 h-8" />
             </div>
             <span className="text-xl font-bold text-white">NFLOW</span>
             <span className="text-xs bg-nflow-orange/20 text-nflow-orange px-2 py-1 rounded-full">

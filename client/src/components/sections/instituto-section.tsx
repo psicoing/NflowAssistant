@@ -25,7 +25,7 @@ export default function InstitutoSection() {
   return (
     <section id="instituto" className="py-20 px-4 bg-gradient-to-br from-nflow-dark to-nflow-navy">
       <div className="max-w-6xl mx-auto text-center">
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Instituto NeuronMeg</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Instituto NeuronMeg</h2>
         <p className="text-xl text-gray-300 mb-12 max-w-4xl mx-auto">
           Un equipo de profesionales dedicados a mejorar el bienestar emocional 
           a través de soluciones digitales innovadoras
