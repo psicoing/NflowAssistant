@@ -1,0 +1,267 @@
+import { Request, Response, Router } from "express";
+import { z } from "zod";
+import { storage } from "./storage";
+import { cryptoRandomString } from "./utils";
+import { insertPartnerSchema, insertReferralSchema } from "@shared/schema";
+
+const router = Router();
+
+// Middleware para verificar si el usuario está autenticado
+function isAuthenticated(req: Request, res: Response, next: Function) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ message: "No autenticado" });
+}
+
+// Middleware para verificar si el usuario es admin
+function isAdmin(req: Request, res: Response, next: Function) {
+  if (req.isAuthenticated() && req.user?.role === "admin") {
+    return next();
+  }
+  res.status(403).json({ message: "Acceso denegado" });
+}
+
+// Verificar si el usuario ya es partner
+router.get("/status", isAuthenticated, async (req, res) => {
+  try {
+    const partner = await storage.getPartnerByUserId(req.user!.id);
+    res.json({ isPartner: !!partner });
+  } catch (error) {
+    console.error("Error al verificar estado de partner:", error);
+    res.status(500).json({ message: "Error al verificar estado de partner" });
+  }
+});
+
+// Obtener dashboard del partner
+router.get("/dashboard", isAuthenticated, async (req, res) => {
+  try {
+    // Verificar si el usuario es partner
+    const partner = await storage.getPartnerByUserId(req.user!.id);
+    if (!partner) {
+      return res.status(404).json({ message: "No eres partner" });
+    }
+
+    // Obtener referidos del partner
+    const referrals = await storage.getPartnerReferrals(partner.id);
+
+    // Obtener estadísticas del partner
+    const stats = await storage.getPartnerStats(partner.id);
+
+    // Devolver los datos
+    res.json({
+      partner,
+      referrals,
+      stats
+    });
+  } catch (error) {
+    console.error("Error al obtener dashboard de partner:", error);
+    res.status(500).json({ message: "Error al obtener dashboard de partner" });
+  }
+});
+
+// Registrar un nuevo partner
+router.post("/register", isAuthenticated, async (req, res) => {
+  try {
+    // Verificar si el usuario ya es partner
+    const existingPartner = await storage.getPartnerByUserId(req.user!.id);
+    if (existingPartner) {
+      return res.status(400).json({ message: "Ya eres partner" });
+    }
+
+    // Validar datos de entrada
+    const partnerData = {
+      ...req.body,
+      userId: req.user!.id,
+      // Generar código de referido único (iniciales + números aleatorios)
+      referralCode: req.user!.username.substring(0, 2).toUpperCase() + 
+                   cryptoRandomString({ length: 6, type: 'alphanumeric' })
+    };
+
+    // Validar con zod
+    const validatedData = insertPartnerSchema.parse(partnerData);
+
+    // Crear el partner
+    const newPartner = await storage.createPartner(validatedData);
+
+    // Devolver el nuevo partner
+    res.status(201).json(newPartner);
+  } catch (error) {
+    console.error("Error al registrar partner:", error);
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ message: "Datos inválidos", errors: error.errors });
+    }
+    res.status(500).json({ message: "Error al registrar partner" });
+  }
+});
+
+// Procesar un referido (cuando un usuario se registra con un código de referido)
+router.post("/process-referral", async (req, res) => {
+  try {
+    const { referralCode, userId } = req.body;
+
+    // Validar que existen el código y el usuario
+    if (!referralCode || !userId) {
+      return res.status(400).json({ message: "Código de referido y ID de usuario son requeridos" });
+    }
+
+    // Buscar el partner por el código de referido
+    const partner = await storage.getPartnerByReferralCode(referralCode);
+    if (!partner) {
+      return res.status(404).json({ message: "Código de referido inválido" });
+    }
+
+    // Verificar que el partner esté aprobado
+    if (partner.status !== "approved") {
+      return res.status(400).json({ message: "El partner no está activo" });
+    }
+
+    // Verificar que el usuario existe
+    const user = await storage.getUser(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Crear el referido
+    const referralData = {
+      partnerId: partner.id,
+      userId: user.id,
+      status: "pending"
+    };
+
+    // Validar con zod
+    const validatedData = insertReferralSchema.parse(referralData);
+
+    // Crear el referido
+    const newReferral = await storage.createReferral(validatedData);
+
+    // Devolver el nuevo referido
+    res.status(201).json(newReferral);
+  } catch (error) {
+    console.error("Error al procesar referido:", error);
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ message: "Datos inválidos", errors: error.errors });
+    }
+    res.status(500).json({ message: "Error al procesar referido" });
+  }
+});
+
+// Completar un referido (cuando un usuario referido se suscribe)
+router.post("/complete-referral", async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    // Validar que existe el usuario
+    if (!userId) {
+      return res.status(400).json({ message: "ID de usuario es requerido" });
+    }
+
+    // Buscar referidos pendientes para este usuario
+    const user = await storage.getUser(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // NOTA: Habría que mejorar esta función para buscar referidos por userId
+    // Por ahora, asumimos que esto lo hará el admin manualmente
+    
+    res.status(200).json({ message: "Proceso iniciado" });
+  } catch (error) {
+    console.error("Error al completar referido:", error);
+    res.status(500).json({ message: "Error al completar referido" });
+  }
+});
+
+// ---- RUTAS DE ADMINISTRACIÓN ----
+
+// Obtener todos los partners (solo admin)
+router.get("/admin/list", isAdmin, async (req, res) => {
+  try {
+    const partners = await storage.getAllPartners();
+    res.json(partners);
+  } catch (error) {
+    console.error("Error al obtener partners:", error);
+    res.status(500).json({ message: "Error al obtener partners" });
+  }
+});
+
+// Aprobar o rechazar un partner (solo admin)
+router.post("/admin/update-status", isAdmin, async (req, res) => {
+  try {
+    const { partnerId, status } = req.body;
+
+    // Validar datos
+    if (!partnerId || !status) {
+      return res.status(400).json({ message: "ID de partner y estado son requeridos" });
+    }
+
+    // Validar estado
+    if (!["approved", "rejected", "suspended"].includes(status)) {
+      return res.status(400).json({ message: "Estado inválido" });
+    }
+
+    // Actualizar estado
+    const updatedPartner = await storage.updatePartnerStatus(partnerId, status, req.user!.id);
+
+    // Devolver partner actualizado
+    res.json(updatedPartner);
+  } catch (error) {
+    console.error("Error al actualizar estado del partner:", error);
+    res.status(500).json({ message: "Error al actualizar estado del partner" });
+  }
+});
+
+// Crear un pago de comisiones (solo admin)
+router.post("/admin/create-payment", isAdmin, async (req, res) => {
+  try {
+    const { partnerId, amount, referenceNumber, notes } = req.body;
+
+    // Validar datos
+    if (!partnerId || !amount || !referenceNumber) {
+      return res.status(400).json({ 
+        message: "ID de partner, monto y número de referencia son requeridos" 
+      });
+    }
+
+    // Crear pago
+    const payment = await storage.createPartnerPayment({
+      partnerId,
+      amount,
+      referenceNumber,
+      notes: notes || null,
+      status: "processing",
+      paymentMethod: "transfer",
+      createdAt: new Date(),
+      completedAt: null
+    });
+
+    // Devolver pago creado
+    res.status(201).json(payment);
+  } catch (error) {
+    console.error("Error al crear pago:", error);
+    res.status(500).json({ message: "Error al crear pago" });
+  }
+});
+
+// Marcar un pago como completado (solo admin)
+router.post("/admin/complete-payment", isAdmin, async (req, res) => {
+  try {
+    const { paymentId } = req.body;
+
+    // Validar datos
+    if (!paymentId) {
+      return res.status(400).json({ message: "ID de pago es requerido" });
+    }
+
+    // Actualizar estado del pago
+    const updatedPayment = await storage.updatePartnerPaymentStatus(paymentId, "completed");
+
+    // Devolver pago actualizado
+    res.json(updatedPayment);
+  } catch (error) {
+    console.error("Error al completar pago:", error);
+    res.status(500).json({ message: "Error al completar pago" });
+  }
+});
+
+export default router;
