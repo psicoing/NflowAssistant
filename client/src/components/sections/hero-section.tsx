@@ -26,9 +26,11 @@ export default function HeroSection() {
 
       <div className="relative z-10 text-center max-w-4xl mx-auto">
         {/* Main Heading */}
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight">
-          Tu psicólogo en tu
-          <span className="text-nflow-blue"> bolsillo</span>
+        <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+          <span className="text-white">NFLOW,</span><br />
+          <span className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light bg-clip-text text-transparent">
+            un psicólogo en tu bolsillo
+          </span>
         </h1>
 
         {/* Subtitle */}
