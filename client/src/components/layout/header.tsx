@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Brain, Globe } from "lucide-react";
+import { Brain, Globe, LogIn, UserPlus } from "lucide-react";
 import SidebarMenu from "@/components/ui/sidebar-menu";
 
 export default function Header() {
@@ -60,9 +60,25 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Language Selector & Sidebar Menu */}
+          {/* Auth Buttons & Language Selector & Sidebar Menu */}
           <div className="flex items-center space-x-4">
-            <div className="hidden md:flex items-center space-x-2 text-sm">
+            {/* Auth Buttons */}
+            <div className="hidden md:flex items-center space-x-2">
+              <Link href="/login">
+                <Button variant="outline" size="sm" className="border-nflow-orange/30 text-nflow-orange hover:bg-nflow-orange/10">
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Login
+                </Button>
+              </Link>
+              <Link href="/registro">
+                <Button size="sm" className="bg-nflow-blue hover:bg-nflow-blue/90 text-white">
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Registro
+                </Button>
+              </Link>
+            </div>
+
+            <div className="hidden lg:flex items-center space-x-2 text-sm">
               <Globe className="w-4 h-4 text-nflow-orange" />
               <span className="text-gray-400">ES</span>
             </div>

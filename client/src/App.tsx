@@ -10,11 +10,15 @@ import Resources from "@/pages/resources";
 import Consejos from "@/pages/consejos";
 import Partners from "@/pages/partners";
 import Recompensas from "@/pages/recompensas";
+import Login from "@/pages/login";
+import Registro from "@/pages/registro";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/login" component={Login} />
+      <Route path="/registro" component={Registro} />
       <Route path="/chat" component={Chat} />
       <Route path="/chat/:id" component={Chat} />
       <Route path="/recursos" component={Resources} />
