@@ -5,6 +5,8 @@ import {
   type Message, type InsertMessage,
   type Resource, type InsertResource
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -23,146 +25,76 @@ export interface IStorage {
   createResource(resource: InsertResource): Promise<Resource>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private conversations: Map<number, Conversation>;
-  private messages: Map<number, Message>;
-  private resources: Map<number, Resource>;
-  private currentUserId: number;
-  private currentConversationId: number;
-  private currentMessageId: number;
-  private currentResourceId: number;
-
-  constructor() {
-    this.users = new Map();
-    this.conversations = new Map();
-    this.messages = new Map();
-    this.resources = new Map();
-    this.currentUserId = 1;
-    this.currentConversationId = 1;
-    this.currentMessageId = 1;
-    this.currentResourceId = 1;
-    
-    // Initialize with sample resources
-    this.initializeResources();
-  }
-
-  private initializeResources() {
-    const sampleResources: InsertResource[] = [
-      {
-        title: "Manejo del Estrés y la Ansiedad",
-        content: "Técnicas de respiración profunda y mindfulness para reducir los niveles de estrés y ansiedad en situaciones cotidianas.",
-        category: "ansiedad",
-        type: "article"
-      },
-      {
-        title: "Comunicación Efectiva en la Familia",
-        content: "Estrategias para mejorar la comunicación familiar y fortalecer los vínculos emocionales entre padres e hijos.",
-        category: "familia",
-        type: "guide"
-      },
-      {
-        title: "Ejercicios de Relajación Muscular",
-        content: "Rutina de ejercicios de relajación progresiva para liberar tensiones físicas y mentales.",
-        category: "bienestar",
-        type: "exercise"
-      },
-      {
-        title: "Gestión Emocional en el Trabajo",
-        content: "Herramientas para manejar el estrés laboral y mantener un equilibrio emocional en el entorno profesional.",
-        category: "laboral",
-        type: "article"
-      },
-      {
-        title: "Autoestima y Confianza Personal",
-        content: "Estrategias para desarrollar una autoestima saludable y fortalecer la confianza en uno mismo.",
-        category: "autoestima",
-        type: "guide"
-      }
-    ];
-
-    sampleResources.forEach(resource => {
-      this.createResource(resource);
-    });
-  }
-
+export class DatabaseStorage implements IStorage {
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
     return user;
   }
 
   async createConversation(insertConversation: InsertConversation): Promise<Conversation> {
-    const id = this.currentConversationId++;
-    const conversation: Conversation = { 
-      id,
-      title: insertConversation.title,
-      userId: insertConversation.userId || null,
-      createdAt: new Date() 
-    };
-    this.conversations.set(id, conversation);
+    const [conversation] = await db
+      .insert(conversations)
+      .values(insertConversation)
+      .returning();
     return conversation;
   }
 
   async getConversations(userId?: number): Promise<Conversation[]> {
-    const allConversations = Array.from(this.conversations.values());
     if (userId) {
-      return allConversations.filter(conv => conv.userId === userId);
+      return await db.select().from(conversations).where(eq(conversations.userId, userId));
     }
-    return allConversations;
+    return await db.select().from(conversations);
   }
 
   async getConversation(id: number): Promise<Conversation | undefined> {
-    return this.conversations.get(id);
+    const [conversation] = await db.select().from(conversations).where(eq(conversations.id, id));
+    return conversation || undefined;
   }
 
   async createMessage(insertMessage: InsertMessage): Promise<Message> {
-    const id = this.currentMessageId++;
-    const message: Message = { 
-      ...insertMessage, 
-      id, 
-      timestamp: new Date() 
-    };
-    this.messages.set(id, message);
+    const [message] = await db
+      .insert(messages)
+      .values(insertMessage)
+      .returning();
     return message;
   }
 
   async getMessages(conversationId: number): Promise<Message[]> {
-    return Array.from(this.messages.values())
-      .filter(message => message.conversationId === conversationId)
-      .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+    return await db
+      .select()
+      .from(messages)
+      .where(eq(messages.conversationId, conversationId))
+      .orderBy(messages.timestamp);
   }
 
   async getResources(): Promise<Resource[]> {
-    return Array.from(this.resources.values());
+    return await db.select().from(resources);
   }
 
   async getResourcesByCategory(category: string): Promise<Resource[]> {
-    return Array.from(this.resources.values())
-      .filter(resource => resource.category === category);
+    return await db.select().from(resources).where(eq(resources.category, category));
   }
 
   async createResource(insertResource: InsertResource): Promise<Resource> {
-    const id = this.currentResourceId++;
-    const resource: Resource = { 
-      ...insertResource, 
-      id, 
-      createdAt: new Date() 
-    };
-    this.resources.set(id, resource);
+    const [resource] = await db
+      .insert(resources)
+      .values(insertResource)
+      .returning();
     return resource;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
