@@ -21,7 +21,6 @@ export default function Header() {
   const navigation = [
     { name: "Inicio", href: "/" },
     { name: "Chat", href: "/chat" },
-    { name: "Recursos", href: "/resources" },
   ];
 
   return (
