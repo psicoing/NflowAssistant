@@ -12,6 +12,12 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUserSubscription(userId: number, subscriptionData: {
+    status: string;
+    plan: string;
+    subscriptionId: string;
+    expiresAt?: Date;
+  }): Promise<User>;
   
   createConversation(conversation: InsertConversation): Promise<Conversation>;
   getConversations(userId?: number): Promise<Conversation[]>;
@@ -94,6 +100,25 @@ export class DatabaseStorage implements IStorage {
       .values(insertResource)
       .returning();
     return resource;
+  }
+
+  async updateUserSubscription(userId: number, subscriptionData: {
+    status: string;
+    plan: string;
+    subscriptionId: string;
+    expiresAt?: Date;
+  }): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({
+        subscriptionStatus: subscriptionData.status,
+        subscriptionPlan: subscriptionData.plan,
+        subscriptionId: subscriptionData.subscriptionId,
+        subscriptionExpiresAt: subscriptionData.expiresAt
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
   }
 }
 

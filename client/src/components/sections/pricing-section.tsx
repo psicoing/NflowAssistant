@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Calendar, Users, User } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 const pricingTiers = [
   {
@@ -54,6 +56,49 @@ const pricingTiers = [
 
 export default function PricingSection() {
   const [viewType, setViewType] = useState<"cards" | "list">("cards");
+
+  // Check current subscription status
+  const { data: subscriptionStatus } = useQuery({
+    queryKey: ["/api/subscription-status", 1], // Default user ID
+  });
+
+  const handleSubscribe = (planId: string) => {
+    // Initialize PayPal Checkout
+    if (window.paypal) {
+      window.paypal.Buttons({
+        createSubscription: function(data: any, actions: any) {
+          return actions.subscription.create({
+            plan_id: getPayPalPlanId(planId)
+          });
+        },
+        onApprove: async function(data: any, actions: any) {
+          try {
+            const response = await apiRequest("POST", "/api/subscribe", {
+              subscriptionId: data.subscriptionID,
+              userId: 1
+            });
+            
+            if (response.ok) {
+              alert("¡Suscripción activada exitosamente!");
+              window.location.reload();
+            }
+          } catch (error) {
+            alert("Error al procesar la suscripción");
+          }
+        }
+      }).render('#paypal-button-container');
+    }
+  };
+
+  const getPayPalPlanId = (planId: string) => {
+    // These would be your actual PayPal plan IDs from PayPal dashboard
+    const planMap = {
+      basic: process.env.VITE_PAYPAL_BASIC_PLAN_ID || 'P-basic',
+      group: process.env.VITE_PAYPAL_GROUP_PLAN_ID || 'P-group', 
+      individual: process.env.VITE_PAYPAL_INDIVIDUAL_PLAN_ID || 'P-individual'
+    };
+    return planMap[planId as keyof typeof planMap];
+  };
 
   return (
     <section id="precios" className="py-20 px-4 bg-nflow-navy">

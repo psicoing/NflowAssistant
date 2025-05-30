@@ -6,6 +6,11 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  email: text("email"),
+  subscriptionStatus: text("subscription_status").default("inactive"), // active, inactive, cancelled
+  subscriptionPlan: text("subscription_plan"), // basic, group, individual
+  subscriptionId: text("subscription_id"),
+  subscriptionExpiresAt: timestamp("subscription_expires_at"),
 });
 
 export const conversations = pgTable("conversations", {
