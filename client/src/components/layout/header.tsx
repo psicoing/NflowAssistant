@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Brain, Menu, X, Globe } from "lucide-react";
+import { Brain, Globe } from "lucide-react";
+import SidebarMenu from "@/components/ui/sidebar-menu";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -59,51 +60,20 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Language Selector & Mobile Menu Button */}
+          {/* Language Selector & Sidebar Menu */}
           <div className="flex items-center space-x-4">
             <div className="hidden md:flex items-center space-x-2 text-sm">
               <Globe className="w-4 h-4 text-nflow-orange" />
               <span className="text-gray-400">ES</span>
             </div>
 
-            {/* Mobile menu button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="md:hidden text-gray-400 hover:text-white"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </Button>
+            {/* Sidebar Menu Button */}
+            <SidebarMenu />
           </div>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-nflow-navy border-t border-gray-800">
-          <div className="px-4 pt-2 pb-3 space-y-1">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                  location === item.href
-                    ? "text-nflow-orange bg-nflow-orange/10"
-                    : "text-gray-300 hover:text-white hover:bg-gray-800"
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <div className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-400">
-              <Globe className="w-4 h-4 text-nflow-orange" />
-              <span>Español</span>
-            </div>
-          </div>
-        </div>
-      )}
+
     </header>
   );
 }
