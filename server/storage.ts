@@ -113,7 +113,7 @@ export class DatabaseStorage implements IStorage {
       .update(users)
       .set({
         lastLoginAt: new Date(),
-        loginCount: users.loginCount + 1,
+        loginCount: sql`${users.loginCount} + 1`,
       })
       .where(eq(users.id, userId))
       .returning();

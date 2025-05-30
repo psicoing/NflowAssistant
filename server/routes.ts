@@ -1,12 +1,142 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertConversationSchema, insertMessageSchema } from "@shared/schema";
+import { insertConversationSchema, insertMessageSchema, insertUserSchema } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
 import { paypalService } from "./paypal";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
+  // User authentication routes
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const validatedData = insertUserSchema.parse(req.body);
+      const existingUser = await storage.getUserByUsername(validatedData.username);
+      
+      if (existingUser) {
+        return res.status(400).json({ message: "Username already exists" });
+      }
+      
+      const user = await storage.createUser(validatedData);
+      res.json({ 
+        success: true, 
+        userId: user.id,
+        message: "User registered successfully" 
+      });
+    } catch (error) {
+      console.error("Error registering user:", error);
+      res.status(400).json({ message: "Error creating user account" });
+    }
+  });
+
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password required" });
+      }
+      
+      const user = await storage.getUserByUsername(username);
+      
+      if (!user || user.password !== password) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      
+      // Register login in database
+      await storage.updateUserLogin(user.id);
+      
+      res.json({ 
+        success: true,
+        userId: user.id,
+        message: "Login successful",
+        hasCompletedPayment: user.hasCompletedPayment,
+        subscriptionStatus: user.subscriptionStatus
+      });
+    } catch (error) {
+      console.error("Error during login:", error);
+      res.status(500).json({ message: "Error processing login" });
+    }
+  });
+
+  // PayPal transaction tracking routes
+  app.post("/api/paypal/create-order", async (req, res) => {
+    try {
+      const { userId, amount, currency, subscriptionPlan } = req.body;
+      
+      if (!userId || !amount || !currency || !subscriptionPlan) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      // Create PayPal order (using existing PayPal service)
+      const orderResponse = await fetch('/paypal/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount, currency, intent: 'CAPTURE' })
+      });
+      
+      const orderData = await orderResponse.json();
+      
+      // Record transaction in database
+      await storage.createPaypalTransaction({
+        userId: parseInt(userId),
+        paypalOrderId: orderData.id,
+        subscriptionPlan,
+        amount,
+        currency,
+        status: 'CREATED'
+      });
+      
+      res.json(orderData);
+    } catch (error) {
+      console.error("Error creating PayPal order:", error);
+      res.status(500).json({ message: "Error creating payment order" });
+    }
+  });
+
+  app.post("/api/paypal/capture-order/:orderId", async (req, res) => {
+    try {
+      const { orderId } = req.params;
+      const { userId } = req.body;
+      
+      // Capture PayPal order
+      const captureResponse = await fetch(`/paypal/order/${orderId}/capture`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      const captureData = await captureResponse.json();
+      
+      if (captureData.status === 'COMPLETED') {
+        // Update transaction status
+        await storage.updatePaypalTransaction(orderId, 'COMPLETED');
+        
+        // Get transaction details to update user subscription
+        const transactions = await storage.getPaypalTransactionsByUser(parseInt(userId));
+        const transaction = transactions.find(t => t.paypalOrderId === orderId);
+        
+        if (transaction) {
+          // Calculate expiration date
+          const expiresAt = new Date();
+          expiresAt.setMonth(expiresAt.getMonth() + 1);
+          
+          // Update user subscription
+          await storage.updateUserSubscription(parseInt(userId), {
+            status: 'active',
+            plan: transaction.subscriptionPlan,
+            subscriptionId: orderId,
+            expiresAt
+          });
+        }
+      }
+      
+      res.json(captureData);
+    } catch (error) {
+      console.error("Error capturing PayPal order:", error);
+      res.status(500).json({ message: "Error processing payment" });
+    }
+  });
+
   // Get all conversations
   app.get("/api/conversations", async (req, res) => {
     try {
@@ -181,6 +311,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error checking subscription:", error);
       res.status(500).json({ message: "Error checking subscription" });
+    }
+  });
+
+  // User statistics and tracking routes
+  app.get("/api/admin/user-stats/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const user = await storage.getUser(userId);
+      
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      const transactions = await storage.getPaypalTransactionsByUser(userId);
+      
+      res.json({
+        user: {
+          id: user.id,
+          username: user.username,
+          createdAt: user.createdAt,
+          lastLoginAt: user.lastLoginAt,
+          loginCount: user.loginCount,
+          hasCompletedPayment: user.hasCompletedPayment,
+          subscriptionStatus: user.subscriptionStatus,
+          subscriptionPlan: user.subscriptionPlan,
+          subscriptionExpiresAt: user.subscriptionExpiresAt
+        },
+        transactions: transactions
+      });
+    } catch (error) {
+      console.error("Error fetching user stats:", error);
+      res.status(500).json({ message: "Error fetching user statistics" });
     }
   });
 
