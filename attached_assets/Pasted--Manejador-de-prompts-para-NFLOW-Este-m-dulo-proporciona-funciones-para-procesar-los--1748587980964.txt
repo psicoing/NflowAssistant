@@ -1,0 +1,92 @@
+**
+ * Manejador de prompts para NFLOW
+ * 
+ * Este módulo proporciona funciones para procesar los mensajes de los usuarios
+ * y generar respuestas utilizando la API de OpenAI con enriquecimiento de prompts.
+ */
+
+import { generateChatResponse } from "./openai";
+import { Message } from "@shared/schema";
+
+export interface ChatResponse {
+  role: "assistant";
+  content: string;
+  timestamp: Date;
+}
+
+/**
+ * Procesa un mensaje del usuario y genera una respuesta usando OpenAI
+ * con técnicas avanzadas de prompting (few-shot learning y chain-of-thought)
+ * 
+ * @param userMessage Mensaje del usuario
+ * @param history Historial de conversación previo
+ * @returns Respuesta generada con metadatos
+ */
+export async function processUserMessage(userMessage: string, history: Message[]): Promise<ChatResponse> {
+  try {
+    console.log(`Procesando mensaje de usuario: "${userMessage.substring(0, 30)}..."`);
+    
+    // Convertir historial al formato esperado por OpenAI
+    const formattedHistory = history.map(msg => ({
+      role: msg.role,
+      content: msg.content
+    }));
+    
+    // Generar respuesta usando OpenAI con prompt mejorado
+    const responseContent = await generateChatResponse(userMessage, formattedHistory);
+    
+    console.log("Respuesta generada exitosamente");
+    
+    // Crear objeto de respuesta
+    const response: ChatResponse = {
+      role: "assistant",
+      content: responseContent,
+      timestamp: new Date()
+    };
+    
+    return response;
+  } catch (error: any) {
+    console.error("Error al procesar mensaje:", error);
+    
+    // Proporcionar una respuesta de fallback estructurada
+    return {
+      role: "assistant",
+      content: generarRespuestaFallback(userMessage, error),
+      timestamp: new Date()
+    };
+  }
+}
+
+/**
+ * Genera una respuesta de fallback en caso de error con la API de OpenAI
+ * 
+ * @param userMessage Mensaje original del usuario
+ * @param error Error producido
+ * @returns Mensaje de respuesta alternativo
+ */
+function generarRespuestaFallback(userMessage: string, error: Error): string {
+  // Comprobar si contiene palabras relacionadas con crisis
+  const crisisKeywords = ['suicidio', 'suicidarme', 'matarme', 'quitarme la vida', 'no quiero vivir', 'autolesión', 'hacerme daño', 'crisis'];
+  const containsCrisisWord = crisisKeywords.some(word => userMessage.toLowerCase().includes(word));
+  
+  if (containsCrisisWord) {
+    return `Gracias por compartir lo que estás experimentando. Aunque estoy teniendo dificultades técnicas en este momento, es muy importante que recibas apoyo adecuado.
+
+Si estás en una situación de crisis o emergencia, por favor contacta inmediatamente con:
+- Teléfono de emergencias: 112
+- Teléfono de la Esperanza: 717 003 717
+- Acude a urgencias del hospital más cercano
+
+Tu bienestar es la prioridad absoluta, y hay profesionales preparados para ayudarte en este momento. Por favor, intenta contactar con el servicio nuevamente en unos minutos.`;
+  }
+  
+  // Respuesta general para errores técnicos
+  return `Lamento no poder responder adecuadamente en este momento debido a una dificultad técnica. 
+
+Para ofrecerte la mejor ayuda posible:
+1. Intenta enviar tu mensaje nuevamente en unos minutos
+2. Considera reformular tu pregunta o consulta
+3. Si el problema persiste, puedes contactar con soporte técnico
+
+Valoramos mucho tu paciencia y te pedimos disculpas por este inconveniente.`;
+}

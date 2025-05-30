@@ -2,11 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertConversationSchema, insertMessageSchema } from "@shared/schema";
-import OpenAI from "openai";
-
-const openai = new OpenAI({ 
-  apiKey: process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY || "default_key"
-});
+import { processUserMessage } from "./prompt-handler";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
@@ -59,37 +55,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         isUser: true
       });
 
-      // Generate AI response using OpenAI
-      const systemPrompt = `Eres un asistente de salud mental empático y profesional para NFLOW. 
-      Proporciona apoyo psicológico basado en evidencia científica. 
-      Mantén un tono cálido, comprensivo y profesional.
-      Si detectas signos de crisis severa, recomienda buscar ayuda profesional inmediata.
-      Responde en español y mantén las respuestas concisas pero útiles.
-      Responde en formato JSON con la estructura: { "response": "tu respuesta aquí", "supportType": "general|anxiety|depression|stress|crisis" }`;
-
-      const aiResponse = await openai.chat.completions.create({
-        model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content }
-        ],
-        response_format: { type: "json_object" },
-        max_tokens: 500
-      });
-
-      const aiContent = JSON.parse(aiResponse.choices[0].message.content || '{"response": "Lo siento, no puedo procesar tu mensaje en este momento. ¿Podrías intentarlo de nuevo?", "supportType": "general"}');
+      // Get conversation history for context
+      const messageHistory = await storage.getMessages(conversationId);
+      
+      // Generate AI response using the advanced prompt system
+      const aiResponse = await processUserMessage(content, messageHistory);
 
       // Save AI message
       const aiMessage = await storage.createMessage({
         conversationId,
-        content: aiContent.response,
+        content: aiResponse.content,
         isUser: false
       });
 
       res.json({
         userMessage,
         aiMessage,
-        supportType: aiContent.supportType
+        supportType: aiResponse.supportType
       });
 
     } catch (error) {

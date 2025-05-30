@@ -1,0 +1,233 @@
+/**
+ * Utilidades para la gestión inteligente de prompts
+ * 
+ * Este módulo implementa funciones para mejorar la calidad de las respuestas del asistente
+ * mediante la selección dinámica de ejemplos relevantes según el contexto de la consulta.
+ */
+
+export type ExampleCategory = 
+  | 'ansiedad_adolescente' 
+  | 'comportamiento_padres' 
+  | 'caso_profesional' 
+  | 'autoestima_adolescente'
+  | 'general';
+
+export interface Example {
+  category: ExampleCategory;
+  keywords: string[];
+  userPrompt: string;
+  response: string;
+}
+
+export const examples: Example[] = [
+  {
+    category: 'ansiedad_adolescente',
+    keywords: ['examen', 'exámenes', 'bloqueo', 'ansiedad', 'nervios', 'estudiar', 'suspender', 'instituto', 'colegio', 'presentación', 'exponer'],
+    userPrompt: "No puedo con los exámenes, me bloqueo y me pongo a temblar. Creo que voy a suspender todo.",
+    response: "Es totalmente comprensible sentir esa presión y ese miedo ante los exámenes. Muchos estudiantes experimentan bloqueos similares y es una respuesta natural de nuestro cuerpo ante situaciones que percibimos como amenazantes.\n\nLa ansiedad ante exámenes está relacionada con nuestro sistema de 'lucha o huida', que activa respuestas físicas como el temblor o la sensación de bloqueo mental. Es como si nuestro cerebro estuviera tan centrado en la 'amenaza' que olvida acceder a la información que necesitamos.\n\nTe propongo tres estrategias que podrían ayudarte:\n1. Técnica 5-4-3-2-1: Cuando sientas que comienza la ansiedad, nombra mentalmente 5 cosas que puedas ver, 4 que puedas tocar, 3 que puedas oír, 2 que puedas oler y 1 que puedas saborear. Esto redirige tu atención al momento presente.\n2. Respiración cuadrada: Inhala contando hasta 4, mantén contando hasta 4, exhala contando hasta 4, y mantén contando hasta 4. Repite durante 2 minutos.\n3. Estudia utilizando la técnica de 'recordar activamente' en lugar de releer: después de estudiar un concepto, cierra el libro e intenta explicarlo en voz alta como si se lo estuvieras enseñando a alguien.\n\nRecuerda que estos bloqueos no reflejan tu capacidad real ni determinan tu futuro. Son solo una reacción temporal que puedes aprender a manejar con práctica y paciencia."
+  },
+  {
+    category: 'comportamiento_padres',
+    keywords: ['hija', 'hijo', 'aislarse', 'habitación', 'adolescente', 'enfado', 'rebelde', 'comunicación', 'no habla', 'no me habla', 'encerrado', 'encerrada'],
+    userPrompt: "Mi hija de 15 años ha empezado a aislarse completamente. Antes era sociable y ahora apenas sale de su habitación. No sé cómo acercarme a ella sin que se enfade más.",
+    response: "Entiendo su preocupación y frustración. Ver un cambio tan notable en el comportamiento de su hija puede ser desconcertante y doloroso, especialmente cuando los intentos de acercamiento parecen empeorar la situación.\n\nEn la adolescencia media (14-16 años), es normal cierto grado de distanciamiento como parte del proceso de construcción de identidad. Sin embargo, un aislamiento repentino y marcado puede indicar que está procesando dificultades emocionales que no sabe cómo manejar o comunicar.\n\nLe sugiero estas aproximaciones:\n1. Comunicación indirecta: A veces es más fácil hablar mientras se realiza otra actividad (conduciendo, cocinando, caminando). Proponga actividades donde no haya contacto visual directo para reducir la sensación de \"interrogatorio\".\n2. Observe patrones: Identifique momentos en que parece más receptiva y aproveche esas \"ventanas de oportunidad\" para pequeñas conexiones sin presión.\n3. Carta o mensaje: En algunos casos, escribirle una nota breve expresando su preocupación desde el cariño (sin reproches) puede abrir un canal cuando la comunicación verbal está bloqueada.\n\nSu presencia consistente y respetuosa es fundamental aunque parezca que no tiene efecto inmediato. Los adolescentes necesitan saber que sus padres siguen ahí, disponibles pero no invasivos, mientras exploran su independencia."
+  },
+  {
+    category: 'caso_profesional',
+    keywords: ['orientador', 'instituto', 'alumno', 'disruptivo', 'TDAH', 'TDA', 'profesora', 'docente', 'conducta', 'comportamiento', 'diagnóstico', 'evaluación', 'derivación'],
+    userPrompt: "Trabajo como orientador en un instituto y tenemos un alumno de 16 años con comportamientos disruptivos recurrentes. Alterna entre participación brillante y confrontación directa con profesores. Sospecho que podría haber un TDAH no diagnosticado.",
+    response: "Su observación sobre la inconsistencia conductual es clínicamente relevante y alineada con la presentación heterogénea que caracteriza al TDAH en adolescentes, especialmente cuando ha pasado desapercibido durante años.\n\nEl patrón que describe (alternancia entre brillantez y disrupción) es consistente con las fluctuaciones atencionales y de autorregulación emocional propias del trastorno por déficit de atención, especialmente en adolescentes con alto potencial cognitivo que han desarrollado estrategias compensatorias parcialmente efectivas.\n\nDesde el marco psicopedagógico, le sugiero:\n1. Implementación de evaluación multimodal: Además de las escalas estandarizadas para TDAH (SNAP-IV, EDAH), sería pertinente valorar funciones ejecutivas específicas mediante BRIEF-2 y descartar comorbilidades mediante instrumentos como SDQ.\n2. Adaptaciones preliminares basadas en hipótesis TDAH: Estructurar tareas en segmentos más breves, proporcionar feedback inmediato, y establecer señales discretas preacordadas para redirigir comportamientos impulsivos.\n3. Entrevista motivacional adaptada: Explorar la metacognición del estudiante respecto a sus propias fluctuaciones, identificando antecedentes y consecuentes desde un enfoque no culpabilizador.\n\nEs fundamental recordar que, aunque estas estrategias pueden optimizar el abordaje educativo, el diagnóstico formal requiere evaluación neuropsicológica y psiquiátrica comprensiva. La derivación coordinada a servicios de salud mental, manteniendo la comunicación bidireccional entre sistemas educativo y sanitario, maximizará la efectividad de las intervenciones."
+  },
+  {
+    category: 'autoestima_adolescente',
+    keywords: ['odio', 'no valgo', 'mejor que yo', 'nadie me quiere', 'feo', 'fea', 'gordo', 'gorda', 'fracaso', 'inútil', 'tonto', 'tonta', 'autoestima', 'comparación'],
+    userPrompt: "Me odio, no valgo para nada. Todos mis amigos son mejores que yo en todo y nadie me quiere realmente.",
+    response: "Puedo sentir lo doloroso que es para ti experimentar estos pensamientos tan negativos sobre ti mismo. Es realmente difícil cargar con esos sentimientos, y quiero que sepas que te escucho y que tu sufrimiento es válido.\n\nLo que estás experimentando es muy común durante la adolescencia, cuando nuestra identidad está en formación y tendemos a compararnos constantemente con los demás. El cerebro adolescente está especialmente sensible a la comparación social y puede amplificar las percepciones negativas sobre uno mismo.\n\nTe propongo algunas herramientas que podrían ayudarte:\n1. Diario de logros: Cada noche, anota tres cosas, por pequeñas que sean, que hayas hecho bien ese día. Puede ser desde haberte levantado a tiempo hasta haber ayudado a alguien o haber completado una tarea.\n2. Desafío de pensamientos: Cuando te sorprendas pensando \"no valgo para nada\", pregúntate: \"¿Es realmente cierto que no valgo PARA NADA? ¿Hay alguna evidencia, por pequeña que sea, que contradiga este pensamiento?\"\n3. Reducción de redes sociales: Limita el tiempo en plataformas que fomenten la comparación social. Si las usas, sigue cuentas que promuevan mensajes positivos y realistas.\n\nRecuerda que el valor de una persona no se mide por sus logros o por la cantidad de amigos que tiene. Eres valioso por el simple hecho de existir, con tus fortalezas y también con tus imperfecciones, que son parte de lo que te hace único."
+  },
+  {
+    category: 'general',
+    keywords: ['ayuda', 'consejo', 'problema', 'dificultad', 'situación', 'mejorar', 'superar', 'aprender', 'entender', 'manejar'],
+    userPrompt: "Estoy atravesando un momento difícil y no sé cómo manejar la situación. ¿Me puedes dar algún consejo?",
+    response: "Gracias por compartir que estás pasando por un momento difícil. Reconocer que necesitamos apoyo ya es un gran primer paso y muestra tu fortaleza interior.\n\nSin conocer los detalles específicos de tu situación, puedo ofrecerte algunas estrategias generales que suelen ser útiles cuando enfrentamos dificultades:\n\n1. Autocuidado básico: Asegúrate de mantener rutinas de sueño, alimentación y actividad física, ya que nuestro bienestar emocional está directamente conectado con nuestro bienestar físico.\n\n2. Expresión emocional: Encuentra formas seguras de procesar y expresar tus emociones, ya sea a través de la escritura, el arte, la conversación con personas de confianza o incluso el ejercicio físico.\n\n3. Perspectiva temporal: Recuerda que las situaciones difíciles, aunque parezcan permanentes cuando las estamos viviendo, suelen ser temporales. Intenta visualizar cómo será tu vida cuando hayas superado este momento.\n\nSi sientes que la situación te sobrepasa o persiste por mucho tiempo, considera buscar apoyo profesional. A veces necesitamos una guía especializada para navegar ciertos desafíos, y eso es completamente normal y saludable.\n\nEstoy aquí para escucharte si quieres compartir más sobre tu situación específica, lo que me permitiría ofrecerte orientación más personalizada."
+  }
+];
+
+/**
+ * Función que selecciona ejemplos relevantes basados en el mensaje del usuario
+ * @param userMessage Mensaje del usuario
+ * @param maxExamples Número máximo de ejemplos a devolver
+ * @returns Ejemplos relevantes formateados para el prompt
+ */
+export function selectRelevantExamples(userMessage: string, maxExamples: number = 2): string {
+  try {
+    // Validación de entrada
+    if (!userMessage || typeof userMessage !== 'string') {
+      console.log("Mensaje inválido en selectRelevantExamples, usando ejemplo por defecto");
+      return getDefaultExample();
+    }
+    
+    // Ajustar maxExamples si es inválido
+    if (typeof maxExamples !== 'number' || maxExamples < 1) {
+      maxExamples = 2;
+    }
+    
+    const normalizedMessage = userMessage.toLowerCase();
+    
+    // Calcular puntuaciones de relevancia para cada categoría
+    const relevanceScores: {category: ExampleCategory, score: number}[] = [];
+    
+    // Calculamos la relevancia de cada categoría según las palabras clave
+    for (const example of examples) {
+      try {
+        if (!Array.isArray(example.keywords)) continue;
+        
+        const keywordMatches = example.keywords.filter(keyword => {
+          try {
+            return typeof keyword === 'string' && normalizedMessage.includes(keyword.toLowerCase());
+          } catch (e) {
+            return false;
+          }
+        }).length;
+        
+        // Si ya tenemos una puntuación para esta categoría, actualizamos si es mayor
+        const existingCategoryIndex = relevanceScores.findIndex(
+          score => score.category === example.category
+        );
+        
+        if (existingCategoryIndex === -1) {
+          // Si la categoría no existe en nuestras puntuaciones, la añadimos
+          relevanceScores.push({
+            category: example.category,
+            score: keywordMatches
+          });
+        } else if (keywordMatches > relevanceScores[existingCategoryIndex].score) {
+          // Si ya existe, actualizamos la puntuación si es mayor
+          relevanceScores[existingCategoryIndex].score = keywordMatches;
+        }
+      } catch (error) {
+        console.error("Error al procesar ejemplo:", error);
+        continue;
+      }
+    }
+    
+    // Ordenar las categorías por relevancia (mayor a menor)
+    relevanceScores.sort((a, b) => b.score - a.score);
+    
+    // Seleccionar los ejemplos más relevantes, uno por categoría
+    const selectedExamples: Example[] = [];
+    for (const relevance of relevanceScores) {
+      if (selectedExamples.length >= maxExamples) break;
+      if (relevance.score > 0) {
+        try {
+          // Encontrar el mejor ejemplo de esta categoría
+          const categoryExamples = examples.filter(e => e.category === relevance.category);
+          if (categoryExamples.length > 0) {
+            selectedExamples.push(categoryExamples[0]); // Tomamos el primer ejemplo de esta categoría
+          }
+        } catch (error) {
+          console.error("Error al seleccionar ejemplo de categoría:", error);
+          continue;
+        }
+      }
+    }
+    
+    // Si no tenemos suficientes ejemplos relevantes, añadimos el ejemplo general
+    if (selectedExamples.length === 0) {
+      return getDefaultExample();
+    }
+    
+    // Formatear los ejemplos seleccionados para el prompt
+    try {
+      const formattedExamples = selectedExamples.map(example => {
+        try {
+          return `==== ${getCategoryTitle(example.category)} ====
+Usuario: "${example.userPrompt}"
+
+NFLOW: "${example.response}"
+`;
+        } catch (e) {
+          console.error("Error al formatear ejemplo específico:", e);
+          return "";
+        }
+      }).filter(text => text.length > 0).join('\n');
+      
+      // Si no pudimos formatear ningún ejemplo, devolver el ejemplo por defecto
+      if (!formattedExamples) {
+        return getDefaultExample();
+      }
+      
+      return formattedExamples;
+    } catch (error) {
+      console.error("Error al formatear ejemplos:", error);
+      return getDefaultExample();
+    }
+  } catch (error) {
+    console.error("Error general en selectRelevantExamples:", error);
+    return getDefaultExample();
+  }
+}
+
+/**
+ * Devuelve un ejemplo general para casos sin coincidencias específicas
+ */
+function getDefaultExample(): string {
+  try {
+    const generalExample = examples.find(e => e.category === 'general');
+    
+    // Verificar que el ejemplo general existe y tiene las propiedades necesarias
+    if (!generalExample || 
+        !generalExample.userPrompt || 
+        !generalExample.response) {
+      // Si no hay ejemplo general válido, devolver un ejemplo hardcodeado
+      return `==== CONSULTA GENERAL ====
+Usuario: "Estoy atravesando un momento difícil y no sé cómo manejar la situación. ¿Me puedes dar algún consejo?"
+
+NFLOW: "Gracias por compartir que estás pasando por un momento difícil. Reconocer que necesitamos apoyo ya es un gran primer paso y muestra tu fortaleza interior. Puedo ofrecerte algunas estrategias generales: 1) Mantén rutinas básicas de autocuidado, 2) Encuentra formas de expresar tus emociones de manera saludable, 3) Recuerda que las situaciones difíciles son temporales. Estoy aquí para escucharte si quieres compartir más detalles."
+`;
+    }
+    
+    // Devolver el ejemplo general encontrado
+    return `==== CONSULTA GENERAL ====
+Usuario: "${generalExample.userPrompt}"
+
+NFLOW: "${generalExample.response}"
+`;
+  } catch (error) {
+    console.error("Error en getDefaultExample:", error);
+    // Devolver un ejemplo de respaldo en caso de error
+    return `==== CONSULTA GENERAL ====
+Usuario: "Necesito ayuda con mi bienestar emocional"
+
+NFLOW: "Comprendo que estás buscando apoyo para tu bienestar emocional. Es importante reconocer que cuidar nuestra salud mental es tan fundamental como cuidar nuestra salud física. Te sugiero empezar con técnicas de mindfulness, establecer rutinas saludables y buscar conexiones sociales positivas. Recuerda que pedir ayuda es un signo de fortaleza, no de debilidad."
+`;
+  }
+}
+
+/**
+ * Convierte una categoría de ejemplo en un título legible
+ */
+function getCategoryTitle(category: ExampleCategory): string {
+  try {
+    if (!category || typeof category !== 'string') {
+      return 'EJEMPLO RELEVANTE';
+    }
+    
+    switch (category) {
+      case 'ansiedad_adolescente':
+        return 'ADOLESCENTE CON ANSIEDAD ACADÉMICA';
+      case 'comportamiento_padres':
+        return 'PADRE PREOCUPADO POR COMPORTAMIENTO';
+      case 'caso_profesional':
+        return 'PROFESIONAL EDUCATIVO CON CASO COMPLEJO';
+      case 'autoestima_adolescente':
+        return 'ADOLESCENTE CON PROBLEMAS DE AUTOESTIMA';
+      case 'general':
+        return 'CONSULTA GENERAL';
+      default:
+        return 'EJEMPLO RELEVANTE';
+    }
+  } catch (error) {
+    console.error("Error en getCategoryTitle:", error);
+    return 'EJEMPLO RELEVANTE';
+  }
+}
