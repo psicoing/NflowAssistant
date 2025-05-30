@@ -19,6 +19,8 @@ export default function Registro() {
     email: ""
   });
   const [error, setError] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [createdCredentials, setCreatedCredentials] = useState({ username: "", password: "" });
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,13 +57,22 @@ export default function Registro() {
       const data = await response.json();
 
       if (data.success) {
+        setCreatedCredentials({
+          username: formData.username,
+          password: formData.password
+        });
+        setShowSuccess(true);
+        
         toast({
-          title: "Registro exitoso",
-          description: "Tu cuenta ha sido creada. Ahora puedes iniciar sesión.",
+          title: "¡Cuenta creada exitosamente!",
+          description: `Usuario: ${formData.username} | Contraseña: ${formData.password}`,
+          duration: 8000,
         });
 
-        // Redirigir al login
-        setLocation("/login");
+        // Redirigir al login después de 5 segundos
+        setTimeout(() => {
+          setLocation("/login");
+        }, 5000);
       } else {
         setError(data.message || "Error en el registro");
       }
@@ -100,6 +111,25 @@ export default function Registro() {
                 <Alert className="border-red-600 bg-red-600/10">
                   <AlertDescription className="text-red-400">
                     {error}
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {showSuccess && (
+                <Alert className="border-green-600 bg-green-600/10">
+                  <AlertDescription className="text-green-400">
+                    <div className="text-center">
+                      <div className="font-bold mb-2">¡Cuenta creada exitosamente!</div>
+                      <div className="bg-gray-800 p-3 rounded-lg mb-2">
+                        <div className="text-sm text-gray-300">Usuario creado:</div>
+                        <div className="font-mono text-lg text-white">{createdCredentials.username}</div>
+                        <div className="text-sm text-gray-300 mt-2">Contraseña:</div>
+                        <div className="font-mono text-lg text-white">{createdCredentials.password}</div>
+                      </div>
+                      <div className="text-sm text-green-300">
+                        Serás redirigido al login en unos segundos...
+                      </div>
+                    </div>
                   </AlertDescription>
                 </Alert>
               )}
