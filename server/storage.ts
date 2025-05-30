@@ -35,6 +35,8 @@ export interface IStorage {
   createPaypalTransaction(transaction: InsertPaypalTransaction): Promise<PaypalTransaction>;
   updatePaypalTransaction(paypalOrderId: string, status: string): Promise<PaypalTransaction>;
   getPaypalTransactionsByUser(userId: number): Promise<PaypalTransaction[]>;
+  getAllUsers(): Promise<User[]>;
+  getAllPaypalTransactions(): Promise<PaypalTransaction[]>;
 }
 
 export class DatabaseStorage implements IStorage {
