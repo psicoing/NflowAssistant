@@ -4,6 +4,13 @@ import { CheckCircle, Calendar, Users, User } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 
+// Declare PayPal global type
+declare global {
+  interface Window {
+    paypal: any;
+  }
+}
+
 const pricingTiers = [
   {
     id: "basic",
@@ -58,7 +65,7 @@ export default function PricingSection() {
   const [viewType, setViewType] = useState<"cards" | "list">("cards");
 
   // Check current subscription status
-  const { data: subscriptionStatus } = useQuery({
+  const { data: subscriptionStatus } = useQuery<{hasActiveSubscription: boolean}>({
     queryKey: ["/api/subscription-status", 1], // Default user ID
   });
 

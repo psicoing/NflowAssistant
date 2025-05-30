@@ -9,7 +9,7 @@ interface SubscriptionGuardProps {
 }
 
 export default function SubscriptionGuard({ children, userId = 1 }: SubscriptionGuardProps) {
-  const { data: subscriptionStatus, isLoading } = useQuery({
+  const { data: subscriptionStatus, isLoading } = useQuery<{hasActiveSubscription: boolean}>({
     queryKey: ["/api/subscription-status", userId],
   });
 

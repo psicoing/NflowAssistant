@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MessageCircle, Plus } from "lucide-react";
 import { useLocation } from "wouter";
+import type { Conversation, Message } from "@shared/schema";
 
 export default function Chat() {
   const { id } = useParams<{ id?: string }>();
