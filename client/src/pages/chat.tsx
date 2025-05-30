@@ -3,6 +3,7 @@ import { useParams } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Header from "@/components/layout/header";
 import ChatInterface from "@/components/ui/chat-interface";
+import SubscriptionGuard from "@/components/ui/subscription-guard";
 import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -50,7 +51,7 @@ export default function Chat() {
       const response = await apiRequest(
         "POST",
         `/api/conversations/${currentConversationId}/messages`,
-        { content }
+        { content, userId: 1 }
       );
       return response.json();
     },
@@ -58,6 +59,12 @@ export default function Chat() {
       queryClient.invalidateQueries({
         queryKey: ["/api/conversations", currentConversationId, "messages"],
       });
+    },
+    onError: (error: any) => {
+      if (error.message?.includes("requiresSubscription")) {
+        alert("Necesitas una suscripción activa para usar el chat. Por favor, suscríbete en la sección de precios.");
+        window.location.href = "/#precios";
+      }
     },
   });
 
@@ -92,9 +99,10 @@ export default function Chat() {
   }, [id, currentConversationId]);
 
   return (
-    <div className="min-h-screen bg-nflow-dark">
-      <Header />
-      <div className="pt-16 h-screen flex">
+    <SubscriptionGuard>
+      <div className="min-h-screen bg-nflow-dark">
+        <Header />
+        <div className="pt-16 h-screen flex">
         {/* Sidebar */}
         <div className="w-80 bg-nflow-navy border-r border-gray-700 flex flex-col">
           <div className="p-4 border-b border-gray-700">
@@ -171,7 +179,8 @@ export default function Chat() {
             </div>
           )}
         </div>
+        </div>
       </div>
-    </div>
+    </SubscriptionGuard>
   );
 }

@@ -172,11 +172,22 @@ export default function PricingSection() {
                   ))}
                 </div>
 
-                <Button 
-                  className={`w-full py-3 rounded-xl font-semibold transition-all duration-300 ${tier.buttonClass} text-white`}
-                >
-                  {tier.buttonText}
-                </Button>
+                {subscriptionStatus?.hasActiveSubscription ? (
+                  <Button 
+                    disabled
+                    className="w-full py-3 rounded-xl font-semibold bg-green-600 text-white"
+                  >
+                    Suscripción Activa
+                  </Button>
+                ) : (
+                  <Button 
+                    onClick={() => handleSubscribe(tier.id)}
+                    className={`w-full py-3 rounded-xl font-semibold transition-all duration-300 ${tier.buttonClass} text-white`}
+                  >
+                    {tier.buttonText}
+                  </Button>
+                )}
+                <div id="paypal-button-container"></div>
               </div>
             );
           })}
