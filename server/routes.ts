@@ -351,6 +351,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ status: "ok", service: "NFLOW Psychology Bot" });
   });
 
+  // Admin routes (completely isolated)
+  app.post("/api/admin/auth", async (req, res) => {
+    const { username, password } = req.body;
+    
+    // Fixed admin credentials for security
+    const ADMIN_USER = "admin";
+    const ADMIN_PASS = "nflow2025";
+    
+    if (username === ADMIN_USER && password === ADMIN_PASS) {
+      req.session.isAdmin = true;
+      res.json({ success: true });
+    } else {
+      res.status(401).json({ success: false, message: "Credenciales incorrectas" });
+    }
+  });
+
+  app.post("/api/admin/logout", (req, res) => {
+    req.session.isAdmin = false;
+    res.json({ success: true });
+  });
+
+  app.get("/api/admin/stats", async (req, res) => {
+    if (!req.session.isAdmin) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+
+    try {
+      // Get total users
+      const users = await storage.getAllUsers();
+      const totalUsers = users.length;
+
+      // Get active subscriptions
+      const activeSubscriptions = users.filter(u => u.subscriptionStatus === "active").length;
+
+      // Get total revenue from PayPal transactions
+      const transactions = await storage.getAllPaypalTransactions();
+      const completedTransactions = transactions.filter(t => t.status === "COMPLETED");
+      const totalRevenue = completedTransactions.reduce((sum, t) => sum + parseFloat(t.amount), 0).toFixed(2);
+
+      // Get total conversations
+      const conversations = await storage.getConversations();
+      const totalConversations = conversations.length;
+
+      // Get today's registrations
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayRegistrations = users.filter(u => {
+        const userDate = new Date(u.createdAt);
+        userDate.setHours(0, 0, 0, 0);
+        return userDate.getTime() === today.getTime();
+      }).length;
+
+      // Get today's payments
+      const todayPayments = transactions.filter(t => {
+        if (!t.completedAt) return false;
+        const paymentDate = new Date(t.completedAt);
+        paymentDate.setHours(0, 0, 0, 0);
+        return paymentDate.getTime() === today.getTime() && t.status === "COMPLETED";
+      }).length;
+
+      res.json({
+        totalUsers,
+        activeSubscriptions,
+        totalRevenue,
+        totalConversations,
+        todayRegistrations,
+        todayPayments
+      });
+    } catch (error) {
+      console.error("Error fetching admin stats:", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
