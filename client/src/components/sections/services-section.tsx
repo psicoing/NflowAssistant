@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Smartphone, Info, Smile, Heart } from "lucide-react";
+import { CheckCircle, Smartphone, Info, Smile, Heart, MessageCircle } from "lucide-react";
 import { useLocation } from "wouter";
 
 export default function ServicesSection() {
@@ -66,39 +66,100 @@ export default function ServicesSection() {
 
           {/* App Mockups */}
           <div className="relative">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6">
               {/* Chat App Mockup */}
-              <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-4 rounded-3xl border border-gray-700 transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                <div className="bg-yellow-500 rounded-2xl p-3 text-center mb-3">
-                  <div className="w-8 h-8 bg-black/20 rounded-full mx-auto mb-2 flex items-center justify-center">
-                    <Smile className="w-5 h-5 text-yellow-200" />
-                  </div>
-                  <div className="text-black font-bold text-sm">NFLOW Chat</div>
-                </div>
-                <div className="space-y-2">
-                  <div className="bg-blue-600 text-white p-2 rounded-lg text-xs">
-                    ¿Cómo puedo ayudarte hoy?
-                  </div>
-                  <div className="bg-gray-700 text-gray-200 p-2 rounded-lg text-xs text-right">
-                    Me siento abrumado...
+              <div className="relative transform rotate-2 hover:rotate-0 transition-all duration-500 hover:scale-105">
+                <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-3 rounded-[2.5rem] shadow-2xl border border-gray-600">
+                  {/* Phone frame */}
+                  <div className="bg-black rounded-[2rem] p-1">
+                    <div className="bg-gradient-to-br from-nflow-orange to-yellow-500 rounded-[1.8rem] overflow-hidden">
+                      {/* Status bar */}
+                      <div className="flex justify-between items-center px-4 py-2 text-black text-xs font-medium">
+                        <span>9:41</span>
+                        <div className="flex space-x-1">
+                          <div className="w-4 h-2 bg-black/20 rounded-sm"></div>
+                          <div className="w-4 h-2 bg-black/20 rounded-sm"></div>
+                          <div className="w-4 h-2 bg-black/30 rounded-sm"></div>
+                        </div>
+                      </div>
+                      
+                      {/* App header */}
+                      <div className="bg-black/10 px-4 py-3 text-center">
+                        <div className="w-10 h-10 bg-black/20 rounded-full mx-auto mb-2 flex items-center justify-center">
+                          <MessageCircle className="w-5 h-5 text-black" />
+                        </div>
+                        <h3 className="text-black font-bold text-sm">NFLOW Chat</h3>
+                        <p className="text-black/70 text-xs">Tu psicólogo digital</p>
+                      </div>
+                      
+                      {/* Chat messages */}
+                      <div className="bg-gray-50 p-3 space-y-2 min-h-[120px]">
+                        <div className="flex justify-start">
+                          <div className="bg-white p-2 rounded-lg shadow-sm max-w-[80%]">
+                            <p className="text-xs text-gray-800">¿Cómo puedo ayudarte hoy?</p>
+                          </div>
+                        </div>
+                        <div className="flex justify-end">
+                          <div className="bg-nflow-blue text-white p-2 rounded-lg max-w-[80%]">
+                            <p className="text-xs">Me siento abrumado...</p>
+                          </div>
+                        </div>
+                        <div className="flex justify-start">
+                          <div className="bg-white p-2 rounded-lg shadow-sm max-w-[80%]">
+                            <p className="text-xs text-gray-800">Entiendo. Vamos a trabajar juntos en esto.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Mood Tracker Mockup */}
-              <div className="bg-gradient-to-br from-blue-900 to-blue-800 p-4 rounded-3xl border border-blue-700 transform -rotate-3 hover:rotate-0 transition-transform duration-300">
-                <div className="text-center mb-3">
-                  <div className="w-8 h-8 bg-white/20 rounded-full mx-auto mb-2 flex items-center justify-center">
-                    <Heart className="w-5 h-5 text-white" />
+              <div className="relative transform -rotate-2 hover:rotate-0 transition-all duration-500 hover:scale-105">
+                <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-3 rounded-[2.5rem] shadow-2xl border border-gray-600">
+                  {/* Phone frame */}
+                  <div className="bg-black rounded-[2rem] p-1">
+                    <div className="bg-gradient-to-br from-nflow-blue to-blue-600 rounded-[1.8rem] overflow-hidden">
+                      {/* Status bar */}
+                      <div className="flex justify-between items-center px-4 py-2 text-white text-xs font-medium">
+                        <span>9:41</span>
+                        <div className="flex space-x-1">
+                          <div className="w-4 h-2 bg-white/20 rounded-sm"></div>
+                          <div className="w-4 h-2 bg-white/20 rounded-sm"></div>
+                          <div className="w-4 h-2 bg-white/30 rounded-sm"></div>
+                        </div>
+                      </div>
+                      
+                      {/* App header */}
+                      <div className="bg-black/10 px-4 py-3 text-center">
+                        <div className="w-10 h-10 bg-white/20 rounded-full mx-auto mb-2 flex items-center justify-center">
+                          <Heart className="w-5 h-5 text-white" />
+                        </div>
+                        <h3 className="text-white font-bold text-sm">NFLOW Mood</h3>
+                        <p className="text-white/70 text-xs">Seguimiento emocional</p>
+                      </div>
+                      
+                      {/* Mood content */}
+                      <div className="bg-white/10 backdrop-blur-sm p-4 space-y-3 min-h-[120px]">
+                        <div className="text-center">
+                          <p className="text-white/90 text-xs mb-2">Estado actual</p>
+                          <div className="text-white font-bold text-lg">Ansiedad</div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-xs text-white/80">
+                            <span>Progreso</span>
+                            <span>75%</span>
+                          </div>
+                          <div className="w-full bg-white/20 rounded-full h-3">
+                            <div className="bg-gradient-to-r from-yellow-400 to-orange-400 h-3 rounded-full w-3/4 shadow-sm"></div>
+                          </div>
+                          <p className="text-white/70 text-xs text-center">Estás mejorando</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-white font-bold text-sm">NFLOW Mood</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-gray-300 text-xs mb-2">Ansiedad</div>
-                  <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
-                    <div className="bg-yellow-400 h-2 rounded-full w-3/4"></div>
-                  </div>
-                  <div className="text-gray-400 text-xs">Estás mejorando</div>
                 </div>
               </div>
             </div>
