@@ -12,6 +12,8 @@ import Partners from "@/pages/partners";
 import Recompensas from "@/pages/recompensas";
 import Login from "@/pages/login";
 import Registro from "@/pages/registro";
+import AdminLogin from "@/pages/admin-login";
+import AdminDashboard from "@/pages/admin-dashboard";
 
 function Router() {
   return (
@@ -25,6 +27,8 @@ function Router() {
       <Route path="/consejos" component={Consejos} />
       <Route path="/partners" component={Partners} />
       <Route path="/recompensas" component={Recompensas} />
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route component={NotFound} />
     </Switch>
   );

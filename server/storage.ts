@@ -169,6 +169,14 @@ export class DatabaseStorage implements IStorage {
       .where(eq(paypalTransactions.userId, userId))
       .orderBy(paypalTransactions.createdAt);
   }
+
+  async getAllUsers(): Promise<User[]> {
+    return await db.select().from(users);
+  }
+
+  async getAllPaypalTransactions(): Promise<PaypalTransaction[]> {
+    return await db.select().from(paypalTransactions);
+  }
 }
 
 export const storage = new DatabaseStorage();
