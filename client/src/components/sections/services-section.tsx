@@ -20,7 +20,7 @@ export default function ServicesSection() {
           {/* Content */}
           <div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="text-white">Acompañamiento emocional</span><br />
+              <span className="text-white">Apoyo</span><br />
               <span className="text-nflow-orange">moderno</span>
             </h2>
             <p className="text-xl text-gray-300 mb-8">
