@@ -35,7 +35,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 flex items-center justify-center">
-              <img src="/attached_assets/faro.png" alt="NFLOW" className="w-8 h-8" />
+              <img src="/faro.png" alt="NFLOW" className="w-8 h-8" />
             </div>
             <span className="text-xl font-bold text-white">NFLOW</span>
             <span className="text-xs bg-nflow-orange/20 text-nflow-orange px-2 py-1 rounded-full">
