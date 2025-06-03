@@ -32,9 +32,9 @@ export default function Header() {
     { code: "DE", name: "Deutsch", flag: "🇩🇪" },
     { code: "IT", name: "Italiano", flag: "🇮🇹" },
     { code: "PT", name: "Português", flag: "🇵🇹" },
-    { code: "CA", name: "Català", flag: "🏴󠁥󠁳󠁣󠁴󠁿" },
-    { code: "EU", name: "Euskera", flag: "🔴⚪🟢" },
-    { code: "GL", name: "Galego", flag: "🏴󠁥󠁳󠁧󠁡󠁿" },
+    { code: "CA", name: "Català", flag: "🔵" },
+    { code: "EU", name: "Euskera", flag: "🔵" },
+    { code: "GL", name: "Galego", flag: "🔵" },
   ];
 
   return (
