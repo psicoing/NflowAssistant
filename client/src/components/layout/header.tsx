@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Brain, Globe, LogIn, UserPlus } from "lucide-react";
+import { Brain, Globe, LogIn, UserPlus, ChevronDown } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import SidebarMenu from "@/components/ui/sidebar-menu";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("ES");
   const [location] = useLocation();
 
   useEffect(() => {
@@ -21,6 +23,18 @@ export default function Header() {
   const navigation = [
     { name: "Inicio", href: "/" },
     { name: "Chat", href: "/chat" },
+  ];
+
+  const languages = [
+    { code: "ES", name: "Español", flag: "🇪🇸" },
+    { code: "EN", name: "English", flag: "🇬🇧" },
+    { code: "FR", name: "Français", flag: "🇫🇷" },
+    { code: "DE", name: "Deutsch", flag: "🇩🇪" },
+    { code: "IT", name: "Italiano", flag: "🇮🇹" },
+    { code: "PT", name: "Português", flag: "🇵🇹" },
+    { code: "CA", name: "Català", flag: "🏴󠁥󠁳󠁣󠁴󠁿" },
+    { code: "EU", name: "Euskera", flag: "🔴⚪🟢" },
+    { code: "GL", name: "Galego", flag: "🏴󠁥󠁳󠁧󠁡󠁿" },
   ];
 
   return (
@@ -74,9 +88,31 @@ export default function Header() {
               </Link>
             </div>
 
-            <div className="hidden lg:flex items-center space-x-2 text-sm">
-              <Globe className="w-4 h-4 text-nflow-orange" />
-              <span className="text-gray-400">ES</span>
+            {/* Language Selector */}
+            <div className="hidden lg:flex">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="h-8 px-2 text-gray-300 hover:text-white hover:bg-gray-800/50">
+                    <Globe className="w-4 h-4 text-nflow-orange mr-1" />
+                    <span className="text-sm">{selectedLanguage}</span>
+                    <ChevronDown className="w-3 h-3 ml-1" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-40 bg-gray-900 border-gray-700">
+                  {languages.map((lang) => (
+                    <DropdownMenuItem
+                      key={lang.code}
+                      onClick={() => setSelectedLanguage(lang.code)}
+                      className={`cursor-pointer hover:bg-gray-800 ${
+                        selectedLanguage === lang.code ? "bg-nflow-orange/10 text-nflow-orange" : "text-gray-300"
+                      }`}
+                    >
+                      <span className="mr-2">{lang.flag}</span>
+                      <span className="text-sm">{lang.name}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             {/* Sidebar Menu Button */}
