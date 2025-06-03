@@ -41,7 +41,7 @@ export default function HeroSection() {
         </div>
 
         {/* Main Heading */}
-        <h1 className="text-5xl md:text-7xl font-bold mb-4 leading-tight">
+        <h1 className="text-5xl md:text-7xl font-bold mb-2 leading-tight">
           <span className="text-white">NFLOW,</span><br />
           <span className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light bg-clip-text text-transparent">
             un psicólogo en tu bolsillo
