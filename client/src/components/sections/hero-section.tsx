@@ -26,7 +26,7 @@ export default function HeroSection() {
 
       <div className="relative z-10 text-center max-w-4xl mx-auto">
         {/* Language Flags - Top */}
-        <div className="flex justify-center items-center gap-4 mb-1">
+        <div className="flex justify-center items-center gap-4">
           <div className="flex gap-3 p-4 rounded-xl bg-gray-800/30 border border-gray-700/50 backdrop-blur-sm">
             <button className="flex items-center justify-center w-12 h-8 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors border border-gray-600 hover:border-nflow-orange/50">
               <span className="text-2xl">🇪🇸</span>
@@ -41,7 +41,7 @@ export default function HeroSection() {
         </div>
 
         {/* Main Heading */}
-        <h1 className="text-5xl md:text-7xl font-bold mb-1 leading-tight">
+        <h1 className="text-5xl md:text-7xl font-bold leading-tight">
           <span className="text-white">NFLOW,</span><br />
           <span className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light bg-clip-text text-transparent">
             un psicólogo en tu bolsillo
