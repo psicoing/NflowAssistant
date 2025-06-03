@@ -33,6 +33,37 @@ export default function HeroSection() {
           </span>
         </h1>
 
+        {/* Language Selector */}
+        <div className="flex justify-center items-center gap-4 mb-6">
+          <span className="text-gray-400 text-sm">Idiomas disponibles:</span>
+          <div className="flex gap-3">
+            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors border border-gray-600 hover:border-nflow-orange/50">
+              <span className="text-xl">🇪🇸</span>
+              <span className="text-white text-sm">ES</span>
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
+              <span className="text-xl">🇬🇧</span>
+              <span className="text-gray-400 text-sm">EN</span>
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
+              <span className="text-xl">🇫🇷</span>
+              <span className="text-gray-400 text-sm">FR</span>
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
+              <span className="text-xl">🇩🇪</span>
+              <span className="text-gray-400 text-sm">DE</span>
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
+              <span className="text-xl">🇮🇹</span>
+              <span className="text-gray-400 text-sm">IT</span>
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
+              <span className="text-xl">🇵🇹</span>
+              <span className="text-gray-400 text-sm">PT</span>
+            </button>
+          </div>
+        </div>
+
         {/* Subtitle */}
         <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
           Nuestras soluciones están diseñadas para atender las necesidades específicas de diferentes grupos, 
