@@ -25,41 +25,40 @@ export default function HeroSection() {
       </div>
 
       <div className="relative z-10 text-center max-w-4xl mx-auto">
+        {/* Language Flags - Top */}
+        <div className="flex justify-center items-center gap-4 mb-4">
+          <div className="flex gap-3 p-4 rounded-xl bg-gray-800/30 border border-gray-700/50 backdrop-blur-sm">
+            <button className="flex items-center justify-center w-12 h-8 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors border border-gray-600 hover:border-nflow-orange/50">
+              <span className="text-2xl">🇪🇸</span>
+            </button>
+            <button className="flex items-center justify-center w-12 h-8 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
+              <span className="text-2xl">🇬🇧</span>
+            </button>
+            <button className="flex items-center justify-center w-12 h-8 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
+              <span className="text-2xl">🇫🇷</span>
+            </button>
+          </div>
+        </div>
+
         {/* Main Heading */}
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+        <h1 className="text-5xl md:text-7xl font-bold mb-4 leading-tight">
           <span className="text-white">NFLOW,</span><br />
           <span className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light bg-clip-text text-transparent">
             un psicólogo en tu bolsillo
           </span>
         </h1>
 
-        {/* Language Selector */}
+        {/* Language Flags - Bottom */}
         <div className="flex justify-center items-center gap-4 mb-6">
-          <span className="text-gray-400 text-sm">Idiomas disponibles:</span>
-          <div className="flex gap-3">
-            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors border border-gray-600 hover:border-nflow-orange/50">
-              <span className="text-xl">🇪🇸</span>
-              <span className="text-white text-sm">ES</span>
+          <div className="flex gap-3 p-4 rounded-xl bg-gray-800/30 border border-gray-700/50 backdrop-blur-sm">
+            <button className="flex items-center justify-center w-12 h-8 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
+              <span className="text-2xl">🇩🇪</span>
             </button>
-            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
-              <span className="text-xl">🇬🇧</span>
-              <span className="text-gray-400 text-sm">EN</span>
+            <button className="flex items-center justify-center w-12 h-8 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
+              <span className="text-2xl">🇮🇹</span>
             </button>
-            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
-              <span className="text-xl">🇫🇷</span>
-              <span className="text-gray-400 text-sm">FR</span>
-            </button>
-            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
-              <span className="text-xl">🇩🇪</span>
-              <span className="text-gray-400 text-sm">DE</span>
-            </button>
-            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
-              <span className="text-xl">🇮🇹</span>
-              <span className="text-gray-400 text-sm">IT</span>
-            </button>
-            <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
-              <span className="text-xl">🇵🇹</span>
-              <span className="text-gray-400 text-sm">PT</span>
+            <button className="flex items-center justify-center w-12 h-8 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
+              <span className="text-2xl">🇵🇹</span>
             </button>
           </div>
         </div>
