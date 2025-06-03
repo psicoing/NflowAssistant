@@ -37,9 +37,6 @@ export default function Header() {
               <img src="/faro.png" alt="NFLOW" className="w-8 h-8" />
             </div>
             <span className="text-xl font-bold text-white">NFLOW</span>
-            <span className="text-xs bg-nflow-orange/20 text-nflow-orange px-2 py-1 rounded-full">
-              β
-            </span>
           </Link>
 
           {/* Desktop Navigation */}
