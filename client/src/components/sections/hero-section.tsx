@@ -49,7 +49,7 @@ export default function HeroSection() {
         </h1>
 
         {/* Language Flags - Bottom */}
-        <div className="flex justify-center items-center gap-4 mb-6">
+        <div className="flex justify-center items-center gap-4 mb-6 -mt-2">
           <div className="flex gap-3 p-4 rounded-xl bg-gray-800/30 border border-gray-700/50 backdrop-blur-sm">
             <button className="flex items-center justify-center w-12 h-8 rounded-lg bg-gray-800/30 hover:bg-gray-700/50 transition-colors border border-gray-700 opacity-50">
               <span className="text-2xl">🇩🇪</span>
