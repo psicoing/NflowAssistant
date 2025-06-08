@@ -35,8 +35,7 @@ export default function HeroSection() {
 
         {/* Subtitle */}
         <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
-          Nuestras soluciones están diseñadas para atender las necesidades específicas de diferentes grupos, 
-          ofreciendo herramientas y recursos adaptados a cada situación.
+          Chatbot de psicología para adolescentes, universitarios, padres, adultos y ancianos
         </p>
 
         {/* CTA Buttons */}
