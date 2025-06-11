@@ -160,24 +160,121 @@ export default function MobileAppsSection() {
           </div>
         </div>
 
-        {/* Call to Action */}
-        <div className="text-center bg-gradient-to-r from-gray-800/50 to-gray-900/50 backdrop-blur-lg border border-gray-700/50 rounded-3xl p-12">
-          <h3 className="text-3xl font-bold text-white mb-6">
-            Descarga todas las aplicaciones
-          </h3>
-          <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-            Accede al ecosistema completo NFLOW desde cualquier dispositivo. 
-            Sincronización automática y experiencia fluida entre todas las plataformas.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light text-white border-none hover:scale-105 transition-transform">
-              <Download className="w-5 h-5 mr-2" />
-              App Store
-            </Button>
-            <Button size="lg" variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-700">
-              <Download className="w-5 h-5 mr-2" />
-              Google Play
-            </Button>
+        {/* Download Instructions */}
+        <div className="bg-gradient-to-r from-gray-800/50 to-gray-900/50 backdrop-blur-lg border border-gray-700/50 rounded-3xl p-12">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold text-white mb-6">
+              Descarga directamente en tu móvil
+            </h3>
+            <p className="text-gray-300 text-lg max-w-3xl mx-auto">
+              Obtén las aplicaciones NFLOW directamente desde tu dispositivo móvil siguiendo estos sencillos pasos
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* iOS Instructions */}
+            <div className="space-y-6">
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-12 h-12 bg-gray-600 rounded-xl flex items-center justify-center">
+                  <span className="text-2xl">📱</span>
+                </div>
+                <h4 className="text-2xl font-bold text-white">Para iOS (iPhone/iPad)</h4>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-nflow-orange rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
+                  <div>
+                    <p className="text-white font-semibold">Abrir App Store</p>
+                    <p className="text-gray-300 text-sm">Toca el icono azul de App Store en tu pantalla de inicio</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-nflow-orange rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
+                  <div>
+                    <p className="text-white font-semibold">Buscar "NFLOW"</p>
+                    <p className="text-gray-300 text-sm">Usa la lupa para buscar "NFLOW Psicología"</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-nflow-orange rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
+                  <div>
+                    <p className="text-white font-semibold">Descargar e Instalar</p>
+                    <p className="text-gray-300 text-sm">Toca "Obtener" para descargar la aplicación</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-nflow-orange rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
+                  <div>
+                    <p className="text-white font-semibold">Abrir y Registrarse</p>
+                    <p className="text-gray-300 text-sm">Abre la app y crea tu cuenta para comenzar</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Android Instructions */}
+            <div className="space-y-6">
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center">
+                  <span className="text-2xl">🤖</span>
+                </div>
+                <h4 className="text-2xl font-bold text-white">Para Android</h4>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-nflow-blue rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
+                  <div>
+                    <p className="text-white font-semibold">Abrir Google Play</p>
+                    <p className="text-gray-300 text-sm">Toca el icono colorido de Google Play Store</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-nflow-blue rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
+                  <div>
+                    <p className="text-white font-semibold">Buscar "NFLOW"</p>
+                    <p className="text-gray-300 text-sm">Escribe "NFLOW Psicología" en la barra de búsqueda</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-nflow-blue rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
+                  <div>
+                    <p className="text-white font-semibold">Instalar Aplicación</p>
+                    <p className="text-gray-300 text-sm">Presiona "Instalar" y espera la descarga</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-nflow-blue rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
+                  <div>
+                    <p className="text-white font-semibold">Configurar Cuenta</p>
+                    <p className="text-gray-300 text-sm">Inicia la app y completa tu perfil de usuario</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Info */}
+          <div className="mt-12 text-center bg-gray-800/30 rounded-2xl p-8">
+            <h5 className="text-xl font-bold text-white mb-4">¿Necesitas ayuda?</h5>
+            <p className="text-gray-300 mb-6">
+              Si tienes problemas para descargar o usar las aplicaciones, nuestro equipo de soporte está disponible 24/7
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button variant="outline" className="border-nflow-orange/30 text-nflow-orange hover:bg-nflow-orange/10">
+                💬 Chat de Soporte
+              </Button>
+              <Button variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-700">
+                📧 Contactar por Email
+              </Button>
+            </div>
           </div>
         </div>
       </div>
