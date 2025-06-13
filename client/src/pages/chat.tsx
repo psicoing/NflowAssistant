@@ -167,43 +167,67 @@ export default function Chat() {
       
       <div className="flex" style={{ height: 'calc(100vh - 80px)' }}>
         {/* Sidebar */}
-        <div className="w-80 bg-gray-800/50 border-r border-gray-700 flex flex-col">
-          <div className="p-4 border-b border-gray-700">
+        <div className="w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex flex-col backdrop-blur-sm">
+          <div className="p-6 border-b border-gray-700/50">
             <Button
               onClick={handleNewChat}
-              className="w-full bg-nflow-orange hover:bg-nflow-orange-light text-white"
+              className="w-full bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white font-semibold py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:scale-100"
               disabled={createConversationMutation.isPending}
             >
-              <Plus className="w-4 h-4 mr-2" />
+              <Plus className="w-5 h-5 mr-2" />
               Nueva Conversación
             </Button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {conversations.length === 0 ? (
-              <div className="text-center text-gray-400 py-8">
-                <MessageCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                <p>No hay conversaciones aún</p>
-                <p className="text-sm">Inicia una nueva conversación</p>
+              <div className="text-center text-gray-400 py-12">
+                <div className="relative mb-6">
+                  <MessageCircle className="w-16 h-16 mx-auto opacity-50" />
+                  <div className="absolute -inset-2 bg-gradient-to-r from-nflow-orange/10 to-nflow-blue/10 rounded-2xl blur-xl"></div>
+                </div>
+                <p className="text-lg font-medium">No hay conversaciones aún</p>
+                <p className="text-sm text-gray-500 mt-2">Inicia tu primera sesión de apoyo emocional</p>
               </div>
             ) : (
               conversations.map((conversation: Conversation) => (
                 <Card
                   key={conversation.id}
-                  className={`cursor-pointer transition-colors ${
+                  className={`cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
                     currentConversationId === conversation.id
-                      ? "bg-nflow-orange/20 border-nflow-orange"
-                      : "bg-gray-800 border-gray-700 hover:bg-gray-700"
+                      ? "bg-gradient-to-r from-nflow-orange/20 to-nflow-orange/10 border-nflow-orange/50 shadow-lg scale-[1.02]"
+                      : "bg-gradient-to-r from-gray-800/80 to-gray-700/80 border-gray-600/50 hover:from-gray-700/80 hover:to-gray-600/80 hover:border-gray-500/50"
                   }`}
                   onClick={() => handleSelectConversation(conversation.id)}
                 >
-                  <CardContent className="p-3">
-                    <h3 className="font-medium text-white text-sm truncate">
-                      {conversation.title}
-                    </h3>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {new Date(conversation.createdAt).toLocaleDateString()}
-                    </p>
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-3 h-3 rounded-full ${
+                        currentConversationId === conversation.id 
+                          ? "bg-nflow-orange animate-pulse" 
+                          : "bg-gray-500"
+                      }`}></div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-white text-sm truncate">
+                          {conversation.title}
+                        </h3>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <p className="text-xs text-gray-400">
+                            {new Date(conversation.createdAt).toLocaleDateString('es-ES', {
+                              day: 'numeric',
+                              month: 'short'
+                            })}
+                          </p>
+                          <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+                          <p className="text-xs text-gray-400">
+                            {new Date(conversation.createdAt).toLocaleTimeString('es-ES', {
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               ))
@@ -221,22 +245,28 @@ export default function Chat() {
               isLoadingMessages={isLoadingMessages}
             />
           ) : (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center">
-                <MessageCircle className="w-16 h-16 mx-auto mb-4 text-nflow-orange" />
-                <h2 className="text-2xl font-bold text-white mb-2">
-                  Bienvenido a NFLOW Chat
+            <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-900/50 to-gray-800/50">
+              <div className="text-center max-w-md px-8">
+                <div className="relative mb-8">
+                  <div className="w-24 h-24 bg-gradient-to-br from-nflow-orange to-nflow-orange-light rounded-3xl mx-auto flex items-center justify-center shadow-2xl">
+                    <MessageCircle className="w-12 h-12 text-white" />
+                  </div>
+                  <div className="absolute -inset-6 bg-gradient-to-r from-nflow-orange/20 to-nflow-blue/20 rounded-full blur-2xl"></div>
+                </div>
+                <h2 className="text-3xl font-bold text-white mb-4">
+                  Bienvenido a NFLOW
                 </h2>
-                <p className="text-gray-400 mb-6">
-                  Inicia una nueva conversación para comenzar a recibir apoyo emocional
+                <p className="text-gray-300 mb-8 leading-relaxed">
+                  Tu psicólogo digital está listo para brindarte apoyo emocional profesional.
+                  Inicia una conversación segura y confidencial.
                 </p>
                 <Button
                   onClick={handleNewChat}
-                  className="bg-nflow-orange hover:bg-nflow-orange-light text-white"
+                  className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white font-semibold px-8 py-4 rounded-xl shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:scale-100"
                   disabled={createConversationMutation.isPending}
                 >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Comenzar Chat
+                  <Plus className="w-5 h-5 mr-3" />
+                  Comenzar Nueva Sesión
                 </Button>
               </div>
             </div>
