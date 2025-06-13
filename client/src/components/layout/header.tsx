@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Brain, Globe, LogIn, UserPlus, ChevronDown, Wifi, WifiOff } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import SidebarMenu from "@/components/ui/sidebar-menu";
+import { TestFlowButton } from "@/components/ui/test-flow-button";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -103,6 +104,7 @@ export default function Header() {
             
             {/* Auth Buttons */}
             <div className="hidden md:flex items-center space-x-2">
+              <TestFlowButton />
               <Link href="/login">
                 <Button variant="outline" size="sm" className="border-nflow-orange/30 text-nflow-orange hover:bg-nflow-orange/10">
                   <LogIn className="w-4 h-4 mr-2" />

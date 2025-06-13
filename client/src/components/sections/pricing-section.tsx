@@ -70,9 +70,34 @@ export default function PricingSection() {
   const [isNewUser, setIsNewUser] = useState(false);
   const [newUserId, setNewUserId] = useState<string | null>(null);
 
+  // Check if user is coming from registration
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("newUserId");
+    const storedUsername = localStorage.getItem("newUsername");
+    
+    if (storedUserId && storedUsername) {
+      setIsNewUser(true);
+      setNewUserId(storedUserId);
+      toast({
+        title: "¡Bienvenido a NFLOW!",
+        description: `${storedUsername}, selecciona tu plan para continuar`,
+        duration: 5000,
+      });
+    }
+  }, [toast]);
+
   // Check current subscription status
+  const currentUserId = newUserId || localStorage.getItem("userId");
   const { data: subscriptionStatus } = useQuery<{hasActiveSubscription: boolean}>({
-    queryKey: ["/api/subscription-status", 1], // Default user ID
+    queryKey: ["/api/subscription-status"],
+    queryFn: async () => {
+      if (!currentUserId) return { hasActiveSubscription: false };
+      const response = await fetch(`/api/subscription-status?userId=${currentUserId}`);
+      if (!response.ok) return { hasActiveSubscription: false };
+      return response.json();
+    },
+    retry: false,
+    enabled: !!currentUserId
   });
 
   const handleSubscribe = (planId: string) => {
@@ -86,17 +111,44 @@ export default function PricingSection() {
         },
         onApprove: async function(data: any, actions: any) {
           try {
-            const response = await apiRequest("POST", "/api/subscribe", {
-              subscriptionId: data.subscriptionID,
-              userId: 1
+            // Update user subscription status
+            const response = await fetch("/api/paypal/capture-order/" + data.subscriptionID, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                userId: currentUserId,
+                planId: planId
+              }),
             });
             
             if (response.ok) {
-              alert("¡Suscripción activada exitosamente!");
-              window.location.reload();
+              // Clear registration data and set user session
+              localStorage.removeItem("newUserId");
+              localStorage.removeItem("newUsername");
+              localStorage.setItem("userId", currentUserId!);
+              
+              toast({
+                title: "¡Pago exitoso!",
+                description: "Tu suscripción está activa. Redirigiendo al chat...",
+                duration: 3000,
+              });
+              
+              setTimeout(() => {
+                setLocation("/chat");
+              }, 2000);
+            } else {
+              throw new Error("Payment processing failed");
             }
           } catch (error) {
-            alert("Error al procesar la suscripción");
+            console.error("Subscription error:", error);
+            toast({
+              title: "Error en el pago",
+              description: "Hubo un problema procesando tu pago. Intenta de nuevo.",
+              variant: "destructive",
+              duration: 5000,
+            });
           }
         }
       }).render('#paypal-button-container');
@@ -122,6 +174,13 @@ export default function PricingSection() {
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
             Desbloquea acceso completo a recursos exclusivos y servicios personalizados
           </p>
+          {isNewUser && (
+            <div className="mt-6 p-4 bg-nflow-orange/20 border border-nflow-orange/30 rounded-xl max-w-md mx-auto">
+              <p className="text-nflow-orange font-semibold">
+                ¡Último paso! Selecciona tu plan para activar tu cuenta
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="flex justify-center mb-8">
