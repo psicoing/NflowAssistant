@@ -71,7 +71,7 @@ export default function SidebarMenu() {
       </SheetTrigger>
       <SheetContent 
         side="left" 
-        className="w-80 bg-nflow-navy border-gray-700 p-0"
+        className="w-80 bg-nflow-navy border-gray-700 p-0 z-[9999]"
       >
         <div className="flex flex-col h-full">
           {/* Header */}
