@@ -51,7 +51,15 @@ export function TestFlowButton() {
           }),
         });
 
+        if (!createOrderResponse.ok) {
+          throw new Error("Failed to create PayPal order");
+        }
+
         const orderData = await createOrderResponse.json();
+        
+        if (!orderData.id) {
+          throw new Error("No order ID received from PayPal");
+        }
         
         // Simulate successful payment capture
         const subscriptionResponse = await fetch(`/api/paypal/capture-order/${orderData.id}`, {
