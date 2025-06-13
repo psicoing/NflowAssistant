@@ -42,9 +42,11 @@ export default function Chat() {
   });
 
   // Fetch messages for current conversation
-  const { data: messages = [], isLoading: isLoadingMessages } = useQuery<Message[]>({
+  const { data: messages = [], isLoading: isLoadingMessages, refetch: refetchMessages } = useQuery<Message[]>({
     queryKey: ["/api/conversations", currentConversationId, "messages"],
     enabled: !!currentConversationId && subscriptionData?.hasActiveSubscription === true,
+    refetchInterval: false,
+    staleTime: 0,
   });
 
   // Create new conversation mutation
@@ -77,9 +79,15 @@ export default function Chat() {
       return response.json();
     },
     onSuccess: () => {
+      // Invalidate both the messages and conversations queries
       queryClient.invalidateQueries({
         queryKey: ["/api/conversations", currentConversationId, "messages"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["/api/conversations"],
+      });
+      // Force refetch messages immediately
+      refetchMessages();
     },
   });
 
