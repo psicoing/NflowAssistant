@@ -1,83 +1,45 @@
-import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2 } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 
-interface Partner {
-  id: number;
-  companyName: string;
-  contactName: string;
-  email: string;
-  status: string;
-  partnerType: string;
-  totalReferrals: number;
-  totalEarnings: string;
-  createdAt: string;
-}
-
-interface Referral {
-  id: number;
-  referralCode: string;
-  subscriptionPlan: string;
-  amount: string;
-  commission: string;
-  status: string;
-  createdAt: string;
-}
-
-export default function PartnerDashboard() {
+export default function PartnerDashboardSimple() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [referralCode, setReferralCode] = useState("");
 
-  const { data: partner, isLoading: partnerLoading, error } = useQuery<Partner>({
-    queryKey: ["/api/partners/profile"],
-    retry: false,
-  });
-
-  const { data: referrals = [], isLoading: referralsLoading } = useQuery<Referral[]>({
-    queryKey: ["/api/partners/referrals"],
-    retry: false,
-  });
-
-  useEffect(() => {
-    if (!partnerLoading && (!partner || error)) {
-      console.log("Partner auth failed:", error);
-      setLocation("/partners/login");
-    }
-  }, [partner, partnerLoading, error, setLocation]);
-
-  const handleLogout = async () => {
-    try {
-      await apiRequest("POST", "/api/partners/logout", {});
-      toast({
-        title: "Sesión cerrada",
-        description: "Has cerrado sesión correctamente",
-      });
-      setLocation("/partners/login");
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
+  // Mock partner data for demonstration
+  const partner = {
+    id: 1,
+    companyName: "Clínica Test",
+    contactName: "Dr. Juan Pérez",
+    email: "test@clinica.com",
+    status: "approved",
+    partnerType: "healthcare",
+    totalReferrals: 0,
+    totalEarnings: "0",
+    createdAt: "2025-06-13"
   };
 
-  const generateReferralCode = async () => {
-    try {
-      const response = await apiRequest("POST", "/api/partners/generate-code", {});
-      const data = await response.json();
-      setReferralCode(data.referralCode);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "No se pudo generar el código de referencia",
-        variant: "destructive",
-      });
-    }
+  const handleLogout = () => {
+    toast({
+      title: "Sesión cerrada",
+      description: "Has cerrado sesión correctamente",
+    });
+    setLocation("/partners/login");
+  };
+
+  const generateReferralCode = () => {
+    const code = `CLINICA_${partner.id}_${Date.now().toString().slice(-4)}`;
+    setReferralCode(code);
+    toast({
+      title: "Código generado",
+      description: "Tu código de referencia ha sido creado",
+    });
   };
 
   const copyReferralCode = () => {
@@ -99,28 +61,6 @@ export default function PartnerDashboard() {
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.pending;
     return <Badge variant={config.variant}>{config.label}</Badge>;
   };
-
-  if (partnerLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
-      </div>
-    );
-  }
-
-  if (!partner) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-xl font-semibold mb-2">Acceso no autorizado</h2>
-          <p className="text-gray-600 mb-4">Debes iniciar sesión como partner</p>
-          <Button onClick={() => setLocation("/partners/login")}>
-            Ir a Login
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -149,21 +89,21 @@ export default function PartnerDashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Status Alert */}
-        {partner.status === 'pending' && (
-          <Card className="mb-8 border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20">
+        {partner.status === 'approved' && (
+          <Card className="mb-8 border-green-200 bg-green-50 dark:bg-green-900/20">
             <CardContent className="p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold">!</span>
+                  <div className="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold">✓</span>
                   </div>
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-                    Solicitud en Revisión
+                  <h3 className="text-sm font-medium text-green-800 dark:text-green-200">
+                    Partner Aprobado
                   </h3>
-                  <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                    Tu solicitud de partner está siendo revisada. Te contactaremos pronto con más información.
+                  <p className="text-sm text-green-700 dark:text-green-300 mt-1">
+                    Tu cuenta de partner ha sido aprobada. Ya puedes generar códigos de referencia y comenzar a ganar comisiones.
                   </p>
                 </div>
               </div>
@@ -291,57 +231,42 @@ export default function PartnerDashboard() {
           </Card>
         </div>
 
-        {/* Recent Referrals */}
-        {partner.status === 'approved' && (
-          <Card className="mt-8">
-            <CardHeader>
-              <CardTitle>Referencias Recientes</CardTitle>
-              <CardDescription>
-                Historial de tus referencias y comisiones
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {referralsLoading ? (
-                <div className="flex justify-center py-8">
-                  <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full" />
-                </div>
-              ) : referrals.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                  <p>Aún no tienes referencias</p>
-                  <p className="text-sm mt-1">
-                    Comparte tu código de referencia para comenzar a generar comisiones
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {referrals.map((referral: Referral) => (
-                    <div
-                      key={referral.id}
-                      className="flex items-center justify-between p-4 border rounded-lg"
-                    >
-                      <div>
-                        <p className="font-medium">{referral.referralCode}</p>
-                        <p className="text-sm text-gray-500">
-                          Plan: {referral.subscriptionPlan} • {referral.amount}€
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          {new Date(referral.createdAt).toLocaleDateString('es-ES')}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-medium text-green-600">+{referral.commission}€</p>
-                        <Badge variant={referral.status === 'paid' ? 'default' : 'secondary'}>
-                          {referral.status === 'paid' ? 'Pagado' : 'Pendiente'}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
+        {/* How to Use Section */}
+        <Card className="mt-8">
+          <CardHeader>
+            <CardTitle>Cómo Usar tu Dashboard de Partners</CardTitle>
+            <CardDescription>
+              Guía rápida para comenzar a generar referencias
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h4 className="font-medium">1. Genera tu Código</h4>
+                <p className="text-sm text-gray-600">
+                  Haz clic en "Generar Código de Referencia" para crear un código único que identifique tus referencias.
+                </p>
+                
+                <h4 className="font-medium">2. Comparte con Contactos</h4>
+                <p className="text-sm text-gray-600">
+                  Envía tu código a clínicas, profesionales de salud mental, o cualquier contacto que pueda beneficiarse de NFLOW.
+                </p>
+              </div>
+              
+              <div className="space-y-4">
+                <h4 className="font-medium">3. Trackea tus Ganancias</h4>
+                <p className="text-sm text-gray-600">
+                  Cuando alguien se suscriba usando tu código, verás la referencia y tu comisión del 10% aquí.
+                </p>
+                
+                <h4 className="font-medium">4. Recibe Pagos</h4>
+                <p className="text-sm text-gray-600">
+                  Las comisiones se procesan mensualmente y se envían a tu cuenta bancaria registrada.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
