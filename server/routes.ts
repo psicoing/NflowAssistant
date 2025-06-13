@@ -1,9 +1,11 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertConversationSchema, insertMessageSchema, insertUserSchema } from "@shared/schema";
+import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
 import { paypalService } from "./paypal";
+import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
+import bcrypt from "bcrypt";
 import "./types"; // Import session types
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -471,6 +473,154 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error("Error fetching admin stats:", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  });
+
+  // ======== PARTNER ROUTES (COMPLETELY SEPARATED) ========
+  
+  // Partner registration
+  app.post("/api/partners/register", async (req, res) => {
+    try {
+      const partnerData = insertPartnerSchema.parse(req.body);
+      const result = await registerPartner(partnerData);
+      
+      if (result.success) {
+        res.status(201).json(result);
+      } else {
+        res.status(400).json(result);
+      }
+    } catch (error) {
+      console.error("Error in partner registration:", error);
+      res.status(500).json({ success: false, message: "Error interno del servidor" });
+    }
+  });
+
+  // Partner login
+  app.post("/api/partners/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({ success: false, message: "Email y contraseña son requeridos" });
+      }
+
+      const result = await authenticatePartner(email, password);
+      
+      if (result.success) {
+        req.session.partnerId = result.partner!.id;
+        req.session.isPartner = true;
+        req.session.partnerStatus = result.partner!.status;
+        res.json(result);
+      } else {
+        res.status(401).json(result);
+      }
+    } catch (error) {
+      console.error("Error in partner login:", error);
+      res.status(500).json({ success: false, message: "Error interno del servidor" });
+    }
+  });
+
+  // Partner logout
+  app.post("/api/partners/logout", (req, res) => {
+    req.session.partnerId = undefined;
+    req.session.isPartner = false;
+    req.session.partnerStatus = undefined;
+    res.json({ success: true, message: "Logout exitoso" });
+  });
+
+  // Get partner profile
+  app.get("/api/partners/profile", async (req, res) => {
+    if (!req.session.isPartner || !req.session.partnerId) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+
+    try {
+      const partner = await storage.getPartner(req.session.partnerId);
+      if (!partner) {
+        return res.status(404).json({ message: "Partner no encontrado" });
+      }
+
+      // Return partner data without password
+      const { password, ...partnerData } = partner;
+      res.json(partnerData);
+    } catch (error) {
+      console.error("Error fetching partner profile:", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  });
+
+  // Get partner referrals
+  app.get("/api/partners/referrals", async (req, res) => {
+    if (!req.session.isPartner || !req.session.partnerId) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+
+    try {
+      const referrals = await storage.getPartnerReferrals(req.session.partnerId);
+      res.json(referrals);
+    } catch (error) {
+      console.error("Error fetching partner referrals:", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  });
+
+  // Generate referral code
+  app.post("/api/partners/generate-code", async (req, res) => {
+    if (!req.session.isPartner || !req.session.partnerId) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+
+    try {
+      const partner = await storage.getPartner(req.session.partnerId);
+      if (!partner) {
+        return res.status(404).json({ message: "Partner no encontrado" });
+      }
+
+      const referralCode = generateReferralCode(partner.companyName, partner.id);
+      res.json({ referralCode });
+    } catch (error) {
+      console.error("Error generating referral code:", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  });
+
+  // Admin: Get all partners
+  app.get("/api/admin/partners", async (req, res) => {
+    if (!req.session.isAdmin) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+
+    try {
+      const partners = await storage.getAllPartners();
+      // Remove passwords from response
+      const partnersData = partners.map(({ password, ...partner }) => partner);
+      res.json(partnersData);
+    } catch (error) {
+      console.error("Error fetching partners:", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  });
+
+  // Admin: Approve/reject partner
+  app.patch("/api/admin/partners/:id/status", async (req, res) => {
+    if (!req.session.isAdmin) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+
+    try {
+      const partnerId = parseInt(req.params.id);
+      const { status } = req.body;
+
+      if (!['approved', 'rejected', 'suspended'].includes(status)) {
+        return res.status(400).json({ message: "Estado inválido" });
+      }
+
+      const partner = await storage.updatePartnerStatus(partnerId, status);
+      const { password, ...partnerData } = partner;
+      res.json(partnerData);
+    } catch (error) {
+      console.error("Error updating partner status:", error);
       res.status(500).json({ message: "Error interno del servidor" });
     }
   });
