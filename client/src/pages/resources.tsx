@@ -274,28 +274,26 @@ export default function Resources() {
         {/* Modal de Recursos en Desarrollo */}
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogContent className="bg-gray-800 border-gray-700 max-w-md">
-            <DialogHeader>
-              <div className="flex items-center space-x-3 mb-4">
+            <DialogHeader className="text-center">
+              <div className="flex items-center justify-center mb-4">
                 <div className="w-12 h-12 bg-nflow-orange/20 rounded-lg flex items-center justify-center">
                   <Clock className="w-6 h-6 text-nflow-orange" />
                 </div>
-                <div>
-                  <DialogTitle className="text-white text-xl">
-                    Recursos en Desarrollo
-                  </DialogTitle>
-                </div>
               </div>
-              <DialogDescription className="text-gray-300 text-center space-y-4">
+              <DialogTitle className="text-white text-xl mb-4">
+                Recursos en Desarrollo
+              </DialogTitle>
+              <DialogDescription className="text-gray-300 space-y-4">
                 <div className="flex items-center justify-center mb-4">
                   <Gift className="w-16 h-16 text-nflow-blue" />
                 </div>
-                <p className="text-lg leading-relaxed">
+                <div className="text-lg leading-relaxed">
                   Estamos trabajando en ello, pronto dispondrá de <span className="text-nflow-orange font-semibold">recursos especializados gratuitos</span> para apoyar su bienestar mental.
-                </p>
+                </div>
                 <div className="bg-nflow-navy/50 p-4 rounded-lg border border-nflow-blue/20">
-                  <p className="text-sm text-nflow-blue">
+                  <div className="text-sm text-nflow-blue">
                     Mientras tanto, puede acceder a nuestro chat psicológico profesional las 24 horas.
-                  </p>
+                  </div>
                 </div>
               </DialogDescription>
             </DialogHeader>
