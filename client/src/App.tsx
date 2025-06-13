@@ -14,6 +14,9 @@ import Login from "@/pages/login";
 import Registro from "@/pages/registro";
 import AdminLogin from "@/pages/admin-login";
 import AdminDashboard from "@/pages/admin-dashboard";
+import PartnerLogin from "@/pages/partner-login";
+import PartnerRegister from "@/pages/partner-register";
+import PartnerDashboard from "@/pages/partner-dashboard";
 
 function Router() {
   return (
@@ -26,6 +29,9 @@ function Router() {
       <Route path="/recursos" component={Resources} />
       <Route path="/consejos" component={Consejos} />
       <Route path="/partners" component={Partners} />
+      <Route path="/partners/login" component={PartnerLogin} />
+      <Route path="/partners/register" component={PartnerRegister} />
+      <Route path="/partners/dashboard" component={PartnerDashboard} />
       <Route path="/recompensas" component={Recompensas} />
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
