@@ -7,8 +7,8 @@ import nflowFamilyImage from "@assets/image_1749802597786.png";
 export default function HeroSection() {
   const [, setLocation] = useLocation();
 
-  const handleStartChat = () => {
-    setLocation("/chat");
+  const handleStartRegistration = () => {
+    setLocation("/registro");
   };
 
   const scrollToSection = (id: string) => {
@@ -43,7 +43,7 @@ export default function HeroSection() {
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
           <Button 
-            onClick={handleStartChat}
+            onClick={handleStartRegistration}
             className="bg-nflow-orange hover:bg-nflow-orange-light text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
           >
             <MessageCircle className="w-5 h-5 mr-2" />
