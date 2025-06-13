@@ -44,9 +44,10 @@ export default function Chat() {
   // Fetch messages for current conversation
   const { data: messages = [], isLoading: isLoadingMessages, refetch: refetchMessages } = useQuery<Message[]>({
     queryKey: ["/api/conversations", currentConversationId, "messages"],
-    enabled: !!currentConversationId && subscriptionData?.hasActiveSubscription === true,
-    refetchInterval: false,
+    enabled: !!currentConversationId,
+    refetchOnWindowFocus: false,
     staleTime: 0,
+    gcTime: 0,
   });
 
   // Create new conversation mutation
@@ -78,16 +79,13 @@ export default function Chat() {
       );
       return response.json();
     },
-    onSuccess: () => {
-      // Invalidate both the messages and conversations queries
-      queryClient.invalidateQueries({
-        queryKey: ["/api/conversations", currentConversationId, "messages"],
-      });
+    onSuccess: async () => {
+      // Force refetch messages immediately
+      await refetchMessages();
+      // Invalidate conversations list to update last message timestamp
       queryClient.invalidateQueries({
         queryKey: ["/api/conversations"],
       });
-      // Force refetch messages immediately
-      refetchMessages();
     },
   });
 
@@ -118,6 +116,13 @@ export default function Chat() {
       setLocation("/");
     }
   }, [subscriptionData, isCheckingSubscription, setLocation, toast]);
+
+  // Debug messages
+  useEffect(() => {
+    console.log("Messages data:", messages);
+    console.log("Current conversation ID:", currentConversationId);
+    console.log("Is loading messages:", isLoadingMessages);
+  }, [messages, currentConversationId, isLoadingMessages]);
 
   // Loading state
   if (isCheckingSubscription) {
@@ -165,7 +170,7 @@ export default function Chat() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       <Header />
       
-      <div className="flex h-[calc(100vh-80px)]">
+      <div className="flex" style={{ height: 'calc(100vh - 80px)' }}>
         {/* Sidebar */}
         <div className="w-80 bg-gray-800/50 border-r border-gray-700 flex flex-col">
           <div className="p-4 border-b border-gray-700">
