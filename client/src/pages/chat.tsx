@@ -218,9 +218,36 @@ export default function Chat() {
         onDismiss={dismissNotification} 
       />
       
-      <div className="flex" style={{ height: 'calc(100vh - 80px)' }}>
-        {/* Sidebar */}
-        <div className="w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex flex-col backdrop-blur-sm">
+      {/* Mobile Navigation Bar */}
+      <div className="md:hidden bg-gray-800/90 border-b border-gray-700/50 p-3">
+        <div className="flex items-center justify-between">
+          <Button
+            onClick={handleNewChat}
+            size="sm"
+            className="bg-nflow-orange hover:bg-nflow-orange/90 text-black font-semibold px-4"
+            disabled={createConversationMutation.isPending}
+          >
+            <Plus className="w-4 h-4 mr-1" />
+            Nueva
+          </Button>
+          
+          {currentConversationId && (
+            <div className="flex-1 mx-3 text-center">
+              <h2 className="text-white font-medium text-sm truncate">
+                {conversations.find(c => c.id === currentConversationId)?.title || "Chat"}
+              </h2>
+            </div>
+          )}
+          
+          <div className="text-xs text-gray-400">
+            {conversations.length} chats
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col md:flex-row flex-1" style={{ height: 'calc(100vh - 80px)', minHeight: 'calc(100vh - 80px)' }}>
+        {/* Sidebar - Hidden on mobile */}
+        <div className="hidden md:flex w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex-col backdrop-blur-sm">
           <div className="p-6 border-b border-gray-700/50 space-y-4">
             <Button
               onClick={handleNewChat}
