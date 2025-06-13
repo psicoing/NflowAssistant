@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Info, Brain, User, Heart } from "lucide-react";
 import { useLocation } from "wouter";
+import nflowPackageImage from "@assets/image_1749802552043.png";
+import nflowFamilyImage from "@assets/image_1749802597786.png";
 
 export default function HeroSection() {
   const [, setLocation] = useLocation();
@@ -57,22 +59,51 @@ export default function HeroSection() {
           </Button>
         </div>
 
-        {/* App Preview */}
-        <div className="relative max-w-md mx-auto">
-          <div className="bg-gradient-to-br from-nflow-navy to-gray-800 p-6 rounded-3xl shadow-2xl border border-gray-700 transform hover:scale-105 transition-transform duration-300">
-            <div className="bg-nflow-orange rounded-2xl p-4 text-center">
-              <Brain className="w-8 h-8 text-white mx-auto mb-2" />
-              <div className="text-white font-bold text-lg">NFLOW</div>
-              <div className="text-orange-100 text-sm mb-3">Salud Mental</div>
-              <div className="flex justify-center space-x-2">
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-white" />
-                </div>
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                  <Heart className="w-4 h-4 text-white" />
-                </div>
+        {/* NFLOW Package Images */}
+        <div className="relative max-w-2xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            {/* Individual Package */}
+            <div className="relative group">
+              <div className="transform hover:scale-105 transition-transform duration-500">
+                <img 
+                  src={nflowPackageImage} 
+                  alt="NFLOW Salud Mental Individual"
+                  className="w-full h-auto rounded-3xl shadow-2xl border border-gray-700/50"
+                />
               </div>
+              
+              {/* Floating Badge */}
+              <div className="absolute -top-3 -right-3 bg-gradient-to-r from-nflow-orange to-nflow-orange-light rounded-full p-2 shadow-lg animate-bounce">
+                <User className="w-5 h-5 text-white" />
+              </div>
+              
+              {/* Glow Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-nflow-orange/20 to-nflow-orange-light/20 rounded-3xl blur-xl -z-10 group-hover:animate-pulse"></div>
             </div>
+
+            {/* Family Package */}
+            <div className="relative group">
+              <div className="transform hover:scale-105 transition-transform duration-500">
+                <img 
+                  src={nflowFamilyImage} 
+                  alt="NFLOW Salud Mental Familiar"
+                  className="w-full h-auto rounded-3xl shadow-2xl border border-gray-700/50"
+                />
+              </div>
+              
+              {/* Floating Badge */}
+              <div className="absolute -top-3 -right-3 bg-gradient-to-r from-nflow-blue to-blue-600 rounded-full p-2 shadow-lg animate-bounce delay-500">
+                <Heart className="w-5 h-5 text-white" />
+              </div>
+              
+              {/* Glow Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-nflow-blue/20 to-blue-500/20 rounded-3xl blur-xl -z-10 group-hover:animate-pulse"></div>
+            </div>
+          </div>
+          
+          {/* Central Brain Icon */}
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-nflow-orange to-nflow-blue rounded-full p-4 shadow-lg animate-pulse hidden md:block">
+            <Brain className="w-8 h-8 text-white" />
           </div>
         </div>
       </div>
