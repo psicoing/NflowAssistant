@@ -16,7 +16,7 @@ import AdminLogin from "@/pages/admin-login";
 import AdminDashboard from "@/pages/admin-dashboard";
 import PartnerLogin from "@/pages/partner-login";
 import PartnerRegister from "@/pages/partner-register";
-import PartnerDashboard from "@/pages/partner-dashboard";
+import PartnerDashboard from "@/pages/partner-dashboard-simple";
 
 function Router() {
   return (
