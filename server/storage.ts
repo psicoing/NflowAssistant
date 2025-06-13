@@ -1,10 +1,12 @@
 import { 
-  users, conversations, messages, resources, paypalTransactions,
+  users, conversations, messages, resources, paypalTransactions, partners, partnerReferrals,
   type User, type InsertUser, 
   type Conversation, type InsertConversation,
   type Message, type InsertMessage,
   type Resource, type InsertResource,
-  type PaypalTransaction, type InsertPaypalTransaction
+  type PaypalTransaction, type InsertPaypalTransaction,
+  type Partner, type InsertPartner,
+  type PartnerReferral, type InsertPartnerReferral
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql } from "drizzle-orm";
@@ -37,6 +39,20 @@ export interface IStorage {
   getPaypalTransactionsByUser(userId: number): Promise<PaypalTransaction[]>;
   getAllUsers(): Promise<User[]>;
   getAllPaypalTransactions(): Promise<PaypalTransaction[]>;
+  
+  // Partner operations
+  getPartner(id: number): Promise<Partner | undefined>;
+  getPartnerByEmail(email: string): Promise<Partner | undefined>;
+  createPartner(partner: InsertPartner): Promise<Partner>;
+  updatePartnerLogin(partnerId: number): Promise<Partner>;
+  updatePartnerStatus(partnerId: number, status: string): Promise<Partner>;
+  getAllPartners(): Promise<Partner[]>;
+  getPartnersByStatus(status: string): Promise<Partner[]>;
+  
+  // Partner referrals
+  createPartnerReferral(referral: InsertPartnerReferral): Promise<PartnerReferral>;
+  getPartnerReferrals(partnerId: number): Promise<PartnerReferral[]>;
+  updatePartnerStats(partnerId: number, referrals: number, earnings: string): Promise<Partner>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -176,6 +192,85 @@ export class DatabaseStorage implements IStorage {
 
   async getAllPaypalTransactions(): Promise<PaypalTransaction[]> {
     return await db.select().from(paypalTransactions);
+  }
+
+  // Partner operations
+  async getPartner(id: number): Promise<Partner | undefined> {
+    const [partner] = await db.select().from(partners).where(eq(partners.id, id));
+    return partner || undefined;
+  }
+
+  async getPartnerByEmail(email: string): Promise<Partner | undefined> {
+    const [partner] = await db.select().from(partners).where(eq(partners.email, email));
+    return partner || undefined;
+  }
+
+  async createPartner(insertPartner: InsertPartner): Promise<Partner> {
+    const [partner] = await db
+      .insert(partners)
+      .values(insertPartner)
+      .returning();
+    return partner;
+  }
+
+  async updatePartnerLogin(partnerId: number): Promise<Partner> {
+    const [partner] = await db
+      .update(partners)
+      .set({
+        lastLoginAt: new Date(),
+      })
+      .where(eq(partners.id, partnerId))
+      .returning();
+    return partner;
+  }
+
+  async updatePartnerStatus(partnerId: number, status: string): Promise<Partner> {
+    const [partner] = await db
+      .update(partners)
+      .set({
+        status: status,
+        approvedAt: status === 'approved' ? new Date() : null,
+      })
+      .where(eq(partners.id, partnerId))
+      .returning();
+    return partner;
+  }
+
+  async getAllPartners(): Promise<Partner[]> {
+    return await db.select().from(partners);
+  }
+
+  async getPartnersByStatus(status: string): Promise<Partner[]> {
+    return await db.select().from(partners).where(eq(partners.status, status));
+  }
+
+  // Partner referrals
+  async createPartnerReferral(insertReferral: InsertPartnerReferral): Promise<PartnerReferral> {
+    const [referral] = await db
+      .insert(partnerReferrals)
+      .values(insertReferral)
+      .returning();
+    return referral;
+  }
+
+  async getPartnerReferrals(partnerId: number): Promise<PartnerReferral[]> {
+    return await db
+      .select()
+      .from(partnerReferrals)
+      .where(eq(partnerReferrals.partnerId, partnerId))
+      .orderBy(partnerReferrals.createdAt);
+  }
+
+  async updatePartnerStats(partnerId: number, referrals: number, earnings: string): Promise<Partner> {
+    const [partner] = await db
+      .update(partners)
+      .set({
+        totalReferrals: referrals,
+        totalEarnings: earnings,
+      })
+      .where(eq(partners.id, partnerId))
+      .returning();
+    return partner;
   }
 }
 
