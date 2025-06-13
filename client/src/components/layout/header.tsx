@@ -32,10 +32,6 @@ export default function Header() {
     };
   }, []);
 
-  const navigation = [
-    { name: "Inicio", href: "/" },
-  ];
-
   const languages = [
     { code: "ES", name: "Español", flag: "🇪🇸" },
     { code: "EN", name: "English", flag: "🇬🇧" },
@@ -64,22 +60,7 @@ export default function Header() {
             <span className="text-xl font-bold text-white">NFLOW</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`transition-colors ${
-                  location === item.href
-                    ? "text-nflow-orange"
-                    : "text-gray-300 hover:text-white"
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </nav>
+
 
           {/* Auth Buttons & Language Selector & Sidebar Menu */}
           <div className="flex items-center space-x-4">
