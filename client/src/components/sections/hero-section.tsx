@@ -40,22 +40,14 @@ export default function HeroSection() {
           Chatbot de psicología para todos los públicos
         </p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+        {/* CTA Button */}
+        <div className="flex justify-center items-center mb-12">
           <Button 
             onClick={handleStartRegistration}
             className="bg-nflow-orange hover:bg-nflow-orange-light text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
           >
             <MessageCircle className="w-5 h-5 mr-2" />
             Comenzar ahora
-          </Button>
-          <Button 
-            variant="outline"
-            onClick={() => scrollToSection("servicios")}
-            className="border-2 border-gray-600 text-gray-300 hover:text-white hover:border-gray-400 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300"
-          >
-            <Info className="w-5 h-5 mr-2" />
-            Más información
           </Button>
         </div>
 

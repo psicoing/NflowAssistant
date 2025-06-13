@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Users, DollarSign, TrendingUp, Globe, Star, Shield, Gift } from "lucide-react";
+import { useLocation } from "wouter";
 
 const beneficios = [
   {
@@ -59,6 +60,11 @@ const pasos = [
 ];
 
 export default function Partners() {
+  const [, setLocation] = useLocation();
+
+  const handleStartRegistration = () => {
+    setLocation("/registro");
+  };
   return (
     <div className="min-h-screen bg-nflow-dark">
       <Header />
@@ -81,6 +87,7 @@ export default function Partners() {
             </p>
             <Button 
               size="lg" 
+              onClick={handleStartRegistration}
               className="bg-nflow-orange hover:bg-nflow-orange-light text-white px-8 py-4 text-lg rounded-xl"
             >
               Solicitar Partnership
@@ -209,6 +216,7 @@ export default function Partners() {
             </p>
             <Button 
               size="lg" 
+              onClick={handleStartRegistration}
               className="bg-white text-nflow-blue hover:bg-gray-100 px-8 py-4 text-lg rounded-xl"
             >
               Comenzar Ahora
