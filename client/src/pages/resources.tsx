@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { 
   Book, 
   FileText, 
@@ -15,7 +16,9 @@ import {
   Heart,
   Users,
   Briefcase,
-  Brain
+  Brain,
+  Clock,
+  Gift
 } from "lucide-react";
 import type { Resource } from "@shared/schema";
 
@@ -43,12 +46,61 @@ export default function Resources() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: resources = [], isLoading } = useQuery({
-    queryKey: ["/api/resources"],
-  });
+  // Create mock resources for display purposes
+  const mockResources: Resource[] = [
+    {
+      id: 1,
+      title: "Técnicas de Respiración para la Ansiedad",
+      content: "Aprende ejercicios de respiración efectivos para reducir los niveles de ansiedad y promover la relajación.",
+      category: "ansiedad",
+      type: "exercise",
+      createdAt: new Date("2024-01-15"),
+    },
+    {
+      id: 2,
+      title: "Comunicación Familiar Efectiva",
+      content: "Estrategias para mejorar la comunicación entre padres e hijos adolescentes.",
+      category: "familia",
+      type: "guide",
+      createdAt: new Date("2024-01-20"),
+    },
+    {
+      id: 3,
+      title: "Manejo del Estrés Laboral",
+      content: "Herramientas prácticas para gestionar el estrés en el entorno profesional.",
+      category: "laboral",
+      type: "article",
+      createdAt: new Date("2024-01-25"),
+    },
+    {
+      id: 4,
+      title: "Ejercicios de Mindfulness",
+      content: "Práticas de atención plena para mejorar el bienestar mental y emocional.",
+      category: "bienestar",
+      type: "exercise",
+      createdAt: new Date("2024-02-01"),
+    },
+    {
+      id: 5,
+      title: "Fortaleciendo la Autoestima",
+      content: "Actividades y reflexiones para desarrollar una imagen positiva de uno mismo.",
+      category: "autoestima",
+      type: "guide",
+      createdAt: new Date("2024-02-05"),
+    },
+    {
+      id: 6,
+      title: "Gestión de Crisis Emocionales",
+      content: "Protocolo de actuación para momentos de alta intensidad emocional.",
+      category: "ansiedad",
+      type: "article",
+      createdAt: new Date("2024-02-10"),
+    }
+  ];
 
-  const filteredResources = resources.filter((resource: Resource) => {
+  const filteredResources = mockResources.filter((resource: Resource) => {
     const matchesSearch = resource.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          resource.content.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = !selectedCategory || resource.category === selectedCategory;
@@ -57,8 +109,8 @@ export default function Resources() {
     return matchesSearch && matchesCategory && matchesType;
   });
 
-  const categories = Array.from(new Set(resources.map((r: Resource) => r.category)));
-  const types = Array.from(new Set(resources.map((r: Resource) => r.type)));
+  const categories = Array.from(new Set(mockResources.map((r: Resource) => r.category)));
+  const types = Array.from(new Set(mockResources.map((r: Resource) => r.type)));
 
   return (
     <div className="min-h-screen bg-nflow-dark">
@@ -141,25 +193,7 @@ export default function Resources() {
         {/* Resources Grid */}
         <section className="py-12 px-4">
           <div className="max-w-7xl mx-auto">
-            {isLoading ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[...Array(6)].map((_, i) => (
-                  <Card key={i} className="bg-gray-800 border-gray-700 animate-pulse">
-                    <CardHeader>
-                      <div className="h-6 bg-gray-700 rounded mb-2"></div>
-                      <div className="h-4 bg-gray-700 rounded w-1/2"></div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-2">
-                        <div className="h-4 bg-gray-700 rounded"></div>
-                        <div className="h-4 bg-gray-700 rounded"></div>
-                        <div className="h-4 bg-gray-700 rounded w-3/4"></div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            ) : filteredResources.length === 0 ? (
+            {filteredResources.length === 0 ? (
               <div className="text-center py-12">
                 <Filter className="w-12 h-12 mx-auto mb-4 text-gray-500" />
                 <h3 className="text-xl font-semibold text-white mb-2">
@@ -222,6 +256,7 @@ export default function Resources() {
                           </span>
                           <Button 
                             size="sm" 
+                            onClick={() => setIsModalOpen(true)}
                             className="bg-nflow-orange hover:bg-nflow-orange-light text-white"
                           >
                             Leer más
@@ -235,6 +270,37 @@ export default function Resources() {
             )}
           </div>
         </section>
+
+        {/* Modal de Recursos en Desarrollo */}
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent className="bg-gray-800 border-gray-700 max-w-md">
+            <DialogHeader>
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-12 h-12 bg-nflow-orange/20 rounded-lg flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-nflow-orange" />
+                </div>
+                <div>
+                  <DialogTitle className="text-white text-xl">
+                    Recursos en Desarrollo
+                  </DialogTitle>
+                </div>
+              </div>
+              <DialogDescription className="text-gray-300 text-center space-y-4">
+                <div className="flex items-center justify-center mb-4">
+                  <Gift className="w-16 h-16 text-nflow-blue" />
+                </div>
+                <p className="text-lg leading-relaxed">
+                  Estamos trabajando en ello, pronto dispondrá de <span className="text-nflow-orange font-semibold">recursos especializados gratuitos</span> para apoyar su bienestar mental.
+                </p>
+                <div className="bg-nflow-navy/50 p-4 rounded-lg border border-nflow-blue/20">
+                  <p className="text-sm text-nflow-blue">
+                    Mientras tanto, puede acceder a nuestro chat psicológico profesional las 24 horas.
+                  </p>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
       </main>
       <Footer />
     </div>
