@@ -85,13 +85,25 @@ export default function Partners() {
             <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
               Únete a nuestra red de profesionales y ayuda a expandir el acceso a la salud mental digital mientras generas ingresos adicionales.
             </p>
-            <Button 
-              size="lg" 
-              onClick={handleStartRegistration}
-              className="bg-nflow-orange hover:bg-nflow-orange-light text-white px-8 py-4 text-lg rounded-xl"
-            >
-              Solicitar Partnership
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                size="lg" 
+                onClick={handleStartRegistration}
+                className="bg-nflow-orange hover:bg-nflow-orange-light text-white px-8 py-4 text-lg rounded-xl"
+              >
+                <UserPlus className="w-5 h-5 mr-2" />
+                Registro de Partners
+              </Button>
+              <Button 
+                size="lg" 
+                onClick={() => setLocation("/partners/login")}
+                variant="outline"
+                className="border-white text-white hover:bg-white hover:text-nflow-dark px-8 py-4 text-lg rounded-xl"
+              >
+                <LogIn className="w-5 h-5 mr-2" />
+                Acceso Partners
+              </Button>
+            </div>
           </div>
         </section>
 
