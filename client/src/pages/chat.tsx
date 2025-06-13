@@ -3,6 +3,7 @@ import { useParams } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Header from "@/components/layout/header";
 import ChatInterface from "@/components/ui/chat-interface";
+import { NotificationSystem, useNotifications } from "@/components/ui/notification-system";
 import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,6 +17,7 @@ export default function Chat() {
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { notifications, addNotification, dismissNotification } = useNotifications();
   const [currentConversationId, setCurrentConversationId] = useState<number | null>(
     id ? parseInt(id) : null
   );
@@ -85,6 +87,21 @@ export default function Chat() {
       // Invalidate conversations list to update last message timestamp
       queryClient.invalidateQueries({
         queryKey: ["/api/conversations"],
+      });
+      // Add success notification
+      addNotification({
+        type: 'success',
+        title: 'Mensaje enviado',
+        message: 'Tu mensaje ha sido procesado exitosamente',
+        duration: 2000
+      });
+    },
+    onError: (error) => {
+      addNotification({
+        type: 'error',
+        title: 'Error al enviar mensaje',
+        message: 'No se pudo enviar tu mensaje. Inténtalo de nuevo.',
+        duration: 5000
       });
     },
   });
@@ -164,6 +181,10 @@ export default function Chat() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       <Header />
+      <NotificationSystem 
+        notifications={notifications} 
+        onDismiss={dismissNotification} 
+      />
       
       <div className="flex" style={{ height: 'calc(100vh - 80px)' }}>
         {/* Sidebar */}
