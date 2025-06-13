@@ -182,6 +182,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return user.subscriptionStatus === 'active';
   };
 
+  // API endpoint to check subscription status
+  app.get("/api/subscription-status", async (req, res) => {
+    try {
+      const userId = req.query.userId || req.headers['x-user-id'];
+      
+      if (!userId) {
+        return res.status(400).json({ message: "User ID required" });
+      }
+      
+      const user = await storage.getUser(parseInt(userId as string));
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      const hasActiveSubscription = await checkSubscription(parseInt(userId as string));
+      
+      res.json({
+        hasActiveSubscription,
+        subscriptionStatus: user.subscriptionStatus,
+        subscriptionPlan: user.subscriptionPlan,
+        expiresAt: user.subscriptionExpiresAt,
+        hasCompletedPayment: user.hasCompletedPayment
+      });
+    } catch (error) {
+      console.error("Error checking subscription status:", error);
+      res.status(500).json({ message: "Error checking subscription status" });
+    }
+  });
+
   // Send message and get AI response (requires active subscription)
   app.post("/api/conversations/:id/messages", async (req, res) => {
     try {

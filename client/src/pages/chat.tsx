@@ -7,25 +7,96 @@ import SubscriptionGuard from "@/components/ui/subscription-guard";
 import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MessageCircle, Plus } from "lucide-react";
+import { MessageCircle, Plus, Lock } from "lucide-react";
 import { useLocation } from "wouter";
+import { useToast } from "@/hooks/use-toast";
 import type { Conversation, Message } from "@shared/schema";
 
 export default function Chat() {
   const { id } = useParams<{ id?: string }>();
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   const [currentConversationId, setCurrentConversationId] = useState<number | null>(
     id ? parseInt(id) : null
   );
 
+  // Get user ID from localStorage
+  const userId = localStorage.getItem("userId");
+
+  // Check subscription status
+  const { data: subscriptionData, isLoading: isCheckingSubscription } = useQuery({
+    queryKey: ["/api/subscription-status"],
+    queryFn: async () => {
+      if (!userId) throw new Error("No user ID found");
+      const response = await fetch(`/api/subscription-status?userId=${userId}`);
+      if (!response.ok) throw new Error("Failed to check subscription");
+      return response.json();
+    },
+    enabled: !!userId,
+  });
+
+  // Redirect if no active subscription
+  useEffect(() => {
+    if (!isCheckingSubscription && subscriptionData && !subscriptionData.hasActiveSubscription) {
+      console.log("No active subscription detected, redirecting to pricing");
+      toast({
+        title: "Suscripción requerida",
+        description: "Para acceder al chat necesitas una suscripción activa",
+        variant: "destructive",
+      });
+      setLocation("/");
+    }
+  }, [subscriptionData, isCheckingSubscription, setLocation, toast]);
+
+  // Show loading while checking subscription
+  if (isCheckingSubscription) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+        <Header />
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <div className="animate-spin w-8 h-8 border-4 border-nflow-orange border-t-transparent rounded-full mx-auto mb-4"></div>
+            <p className="text-white">Verificando suscripción...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show subscription required message if not active
+  if (subscriptionData && !subscriptionData.hasActiveSubscription) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+        <Header />
+        <div className="flex items-center justify-center h-96">
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm max-w-md mx-4">
+            <CardContent className="text-center p-8">
+              <Lock className="w-16 h-16 text-nflow-orange mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-white mb-4">Suscripción Requerida</h2>
+              <p className="text-gray-300 mb-6">
+                Para acceder al chat de NFLOW necesitas una suscripción activa.
+              </p>
+              <Button 
+                onClick={() => setLocation("/")}
+                className="w-full bg-nflow-orange hover:bg-nflow-orange/90 text-black font-semibold"
+              >
+                Ver Planes de Suscripción
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
   // Fetch conversations list
-  const { data: conversations = [] } = useQuery({
+  const { data: conversations = [] } = useQuery<Conversation[]>({
     queryKey: ["/api/conversations"],
   });
 
   // Fetch messages for current conversation
-  const { data: messages = [], isLoading: isLoadingMessages } = useQuery({
+  const { data: messages = [], isLoading: isLoadingMessages } = useQuery<Message[]>({
     queryKey: ["/api/conversations", currentConversationId, "messages"],
     enabled: !!currentConversationId,
   });
@@ -125,7 +196,7 @@ export default function Chat() {
                 <p className="text-sm">Inicia una nueva conversación</p>
               </div>
             ) : (
-              conversations.map((conversation: any) => (
+              conversations.map((conversation: Conversation) => (
                 <Card
                   key={conversation.id}
                   className={`cursor-pointer transition-colors ${

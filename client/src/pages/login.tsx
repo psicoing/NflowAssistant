@@ -51,8 +51,15 @@ export default function Login() {
         
         // Redirigir según estado de suscripción
         if (data.hasCompletedPayment && data.subscriptionStatus === 'active') {
+          console.log("Usuario con suscripción activa, redirigiendo al chat");
           setLocation("/chat");
         } else {
+          console.log("Usuario sin suscripción activa, redirigiendo a pricing");
+          toast({
+            title: "Suscripción requerida",
+            description: "Para acceder al chat necesitas una suscripción activa",
+            variant: "destructive",
+          });
           setLocation("/");
         }
       } else {
