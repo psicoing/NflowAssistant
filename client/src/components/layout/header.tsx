@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Brain, Globe, LogIn, UserPlus, ChevronDown } from "lucide-react";
+import { Brain, Globe, LogIn, UserPlus, ChevronDown, Wifi, WifiOff } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import SidebarMenu from "@/components/ui/sidebar-menu";
 
@@ -9,6 +9,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("ES");
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [location] = useLocation();
 
   useEffect(() => {
@@ -16,8 +17,18 @@ export default function Header() {
       setIsScrolled(window.scrollY > 100);
     };
 
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
   }, []);
 
   const navigation = [
@@ -72,6 +83,24 @@ export default function Header() {
 
           {/* Auth Buttons & Language Selector & Sidebar Menu */}
           <div className="flex items-center space-x-4">
+            {/* Connection Status */}
+            {location.startsWith('/chat') && (
+              <div className="flex items-center space-x-2">
+                <div className={`flex items-center space-x-1 px-2 py-1 rounded-md ${
+                  isOnline ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'
+                }`}>
+                  {isOnline ? (
+                    <Wifi className="w-3 h-3" />
+                  ) : (
+                    <WifiOff className="w-3 h-3" />
+                  )}
+                  <span className="text-xs font-medium">
+                    {isOnline ? 'Conectado' : 'Sin conexión'}
+                  </span>
+                </div>
+              </div>
+            )}
+            
             {/* Auth Buttons */}
             <div className="hidden md:flex items-center space-x-2">
               <Link href="/login">
