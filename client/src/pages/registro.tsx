@@ -69,10 +69,13 @@ export default function Registro() {
           duration: 8000,
         });
 
-        // Redirigir al login después de 5 segundos
+        // Guardar datos del usuario y redirigir a selección de pago
+        localStorage.setItem("newUserId", data.userId.toString());
+        localStorage.setItem("newUsername", formData.username);
+        
         setTimeout(() => {
-          setLocation("/login");
-        }, 5000);
+          setLocation("/#pricing");
+        }, 3000);
       } else {
         setError(data.message || "Error en el registro");
       }

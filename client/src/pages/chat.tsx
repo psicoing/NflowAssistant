@@ -7,7 +7,7 @@ import { NotificationSystem, useNotifications } from "@/components/ui/notificati
 import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MessageCircle, Plus, Lock } from "lucide-react";
+import { MessageCircle, Plus, Lock, Search, Calendar, Clock } from "lucide-react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import type { Conversation, Message } from "@shared/schema";
@@ -21,6 +21,8 @@ export default function Chat() {
   const [currentConversationId, setCurrentConversationId] = useState<number | null>(
     id ? parseInt(id) : null
   );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedDateFilter, setSelectedDateFilter] = useState<"all" | "today" | "week" | "month">("all");
 
   // Get user ID from localStorage
   const userId = localStorage.getItem("userId");
@@ -121,6 +123,36 @@ export default function Chat() {
     setLocation(`/chat/${conversationId}`);
   };
 
+  // Filter conversations based on search and date
+  const filteredConversations = conversations.filter((conversation: Conversation) => {
+    // Search filter
+    const matchesSearch = searchQuery === "" || 
+      conversation.title.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // Date filter
+    const now = new Date();
+    const conversationDate = new Date(conversation.createdAt);
+    let matchesDate = true;
+    
+    switch (selectedDateFilter) {
+      case "today":
+        matchesDate = conversationDate.toDateString() === now.toDateString();
+        break;
+      case "week":
+        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        matchesDate = conversationDate >= weekAgo;
+        break;
+      case "month":
+        const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        matchesDate = conversationDate >= monthAgo;
+        break;
+      default:
+        matchesDate = true;
+    }
+    
+    return matchesSearch && matchesDate;
+  });
+
   // Redirect effect for non-subscribers
   useEffect(() => {
     if (!isCheckingSubscription && subscriptionData && !subscriptionData.hasActiveSubscription) {
@@ -189,7 +221,7 @@ export default function Chat() {
       <div className="flex" style={{ height: 'calc(100vh - 80px)' }}>
         {/* Sidebar */}
         <div className="w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex flex-col backdrop-blur-sm">
-          <div className="p-6 border-b border-gray-700/50">
+          <div className="p-6 border-b border-gray-700/50 space-y-4">
             <Button
               onClick={handleNewChat}
               className="w-full bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white font-semibold py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:scale-100"
@@ -198,6 +230,41 @@ export default function Chat() {
               <Plus className="w-5 h-5 mr-2" />
               Nueva Conversación
             </Button>
+            
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Buscar conversaciones..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder:text-gray-400 focus:border-nflow-orange focus:ring-1 focus:ring-nflow-orange/20 transition-all"
+              />
+            </div>
+            
+            {/* Date Filter */}
+            <div className="flex space-x-1">
+              {[
+                { key: "all", label: "Todo", icon: Calendar },
+                { key: "today", label: "Hoy", icon: Clock },
+                { key: "week", label: "Semana", icon: Calendar },
+                { key: "month", label: "Mes", icon: Calendar }
+              ].map(({ key, label, icon: Icon }) => (
+                <button
+                  key={key}
+                  onClick={() => setSelectedDateFilter(key as any)}
+                  className={`flex-1 px-2 py-1 text-xs rounded-md transition-all ${
+                    selectedDateFilter === key
+                      ? "bg-nflow-orange/20 text-nflow-orange border border-nflow-orange/30"
+                      : "bg-gray-700/30 text-gray-400 hover:text-gray-300 hover:bg-gray-700/50"
+                  }`}
+                >
+                  <Icon className="w-3 h-3 mx-auto mb-1" />
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 space-y-3">

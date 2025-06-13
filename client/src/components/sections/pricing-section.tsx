@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Calendar, Users, User } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { useLocation } from "wouter";
+import { useToast } from "@/hooks/use-toast";
 
 // Declare PayPal global type
 declare global {
@@ -63,6 +65,10 @@ const pricingTiers = [
 
 export default function PricingSection() {
   const [viewType, setViewType] = useState<"cards" | "list">("cards");
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const [isNewUser, setIsNewUser] = useState(false);
+  const [newUserId, setNewUserId] = useState<string | null>(null);
 
   // Check current subscription status
   const { data: subscriptionStatus } = useQuery<{hasActiveSubscription: boolean}>({
