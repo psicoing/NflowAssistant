@@ -43,7 +43,7 @@ export default function Chat() {
 
   // Fetch messages for current conversation
   const { data: messages = [], isLoading: isLoadingMessages, refetch: refetchMessages } = useQuery<Message[]>({
-    queryKey: ["/api/conversations", currentConversationId, "messages"],
+    queryKey: [`/api/conversations/${currentConversationId}/messages`],
     enabled: !!currentConversationId,
     refetchOnWindowFocus: false,
     staleTime: 0,
@@ -117,12 +117,7 @@ export default function Chat() {
     }
   }, [subscriptionData, isCheckingSubscription, setLocation, toast]);
 
-  // Debug messages
-  useEffect(() => {
-    console.log("Messages data:", messages);
-    console.log("Current conversation ID:", currentConversationId);
-    console.log("Is loading messages:", isLoadingMessages);
-  }, [messages, currentConversationId, isLoadingMessages]);
+
 
   // Loading state
   if (isCheckingSubscription) {
