@@ -7,13 +7,25 @@ import { Separator } from "@/components/ui/separator";
 import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2 } from "lucide-react";
 import { useLocation } from "wouter";
 
+interface Partner {
+  id: number;
+  companyName: string;
+  contactName: string;
+  email: string;
+  status: string;
+  partnerType: string;
+  totalReferrals: number;
+  totalEarnings: string;
+  createdAt: string;
+}
+
 export default function PartnerDashboardSimple() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [referralCode, setReferralCode] = useState("");
 
-  // Mock partner data for demonstration
-  const partner = {
+  // Partner data - in production this would come from authentication
+  const partner: Partner = {
     id: 1,
     companyName: "Clínica Test",
     contactName: "Dr. Juan Pérez",
@@ -24,6 +36,8 @@ export default function PartnerDashboardSimple() {
     totalEarnings: "0",
     createdAt: "2025-06-13"
   };
+
+
 
   const handleLogout = () => {
     toast({
