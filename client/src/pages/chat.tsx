@@ -3,7 +3,6 @@ import { useParams } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Header from "@/components/layout/header";
 import ChatInterface from "@/components/ui/chat-interface";
-import SubscriptionGuard from "@/components/ui/subscription-guard";
 import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -39,12 +38,13 @@ export default function Chat() {
   // Fetch conversations list
   const { data: conversations = [] } = useQuery<Conversation[]>({
     queryKey: ["/api/conversations"],
+    enabled: subscriptionData?.hasActiveSubscription === true,
   });
 
   // Fetch messages for current conversation
   const { data: messages = [], isLoading: isLoadingMessages } = useQuery<Message[]>({
     queryKey: ["/api/conversations", currentConversationId, "messages"],
-    enabled: !!currentConversationId,
+    enabled: !!currentConversationId && subscriptionData?.hasActiveSubscription === true,
   });
 
   // Create new conversation mutation
@@ -52,7 +52,7 @@ export default function Chat() {
     mutationFn: async (title: string) => {
       const response = await apiRequest("POST", "/api/conversations", {
         title,
-        userId: 1, // Default user for demo
+        userId: parseInt(userId || "1"),
       });
       return response.json();
     },
@@ -65,11 +65,14 @@ export default function Chat() {
 
   // Send message mutation
   const sendMessageMutation = useMutation({
-    mutationFn: async (content: string) => {
+    mutationFn: async ({ content }: { content: string }) => {
       const response = await apiRequest(
         "POST",
         `/api/conversations/${currentConversationId}/messages`,
-        { content, userId: 1 }
+        {
+          content,
+          userId: parseInt(userId || "1"),
+        }
       );
       return response.json();
     },
@@ -78,31 +81,16 @@ export default function Chat() {
         queryKey: ["/api/conversations", currentConversationId, "messages"],
       });
     },
-    onError: (error: any) => {
-      if (error.message?.includes("requiresSubscription")) {
-        alert("Necesitas una suscripción activa para usar el chat. Por favor, suscríbete en la sección de precios.");
-        window.location.href = "/#precios";
-      }
-    },
   });
 
-  const handleNewChat = () => {
-    const title = `Nueva conversación ${new Date().toLocaleDateString()}`;
-    createConversationMutation.mutate(title);
+  // Event handlers
+  const handleSendMessage = (content: string) => {
+    if (!currentConversationId) return;
+    sendMessageMutation.mutate({ content });
   };
 
-  const handleSendMessage = (content: string) => {
-    if (currentConversationId) {
-      sendMessageMutation.mutate(content);
-    } else {
-      // Create new conversation first
-      const title = `Conversación ${new Date().toLocaleDateString()}`;
-      createConversationMutation.mutate(title);
-      // Message will be sent after conversation is created
-      setTimeout(() => {
-        sendMessageMutation.mutate(content);
-      }, 500);
-    }
+  const handleNewChat = () => {
+    createConversationMutation.mutate("Nueva conversación");
   };
 
   const handleSelectConversation = (conversationId: number) => {
@@ -110,19 +98,68 @@ export default function Chat() {
     setLocation(`/chat/${conversationId}`);
   };
 
+  // Redirect effect for non-subscribers
   useEffect(() => {
-    if (id && parseInt(id) !== currentConversationId) {
-      setCurrentConversationId(parseInt(id));
+    if (!isCheckingSubscription && subscriptionData && !subscriptionData.hasActiveSubscription) {
+      console.log("No active subscription detected, redirecting to pricing");
+      toast({
+        title: "Suscripción requerida",
+        description: "Para acceder al chat necesitas una suscripción activa",
+        variant: "destructive",
+      });
+      setLocation("/");
     }
-  }, [id, currentConversationId]);
+  }, [subscriptionData, isCheckingSubscription, setLocation, toast]);
 
-  return (
-    <SubscriptionGuard>
-      <div className="min-h-screen bg-nflow-dark">
+  // Loading state
+  if (isCheckingSubscription) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         <Header />
-        <div className="pt-16 h-screen flex">
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <div className="animate-spin w-8 h-8 border-4 border-nflow-orange border-t-transparent rounded-full mx-auto mb-4"></div>
+            <p className="text-white">Verificando suscripción...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // No subscription state
+  if (subscriptionData && !subscriptionData.hasActiveSubscription) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+        <Header />
+        <div className="flex items-center justify-center h-96">
+          <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm max-w-md mx-4">
+            <CardContent className="text-center p-8">
+              <Lock className="w-16 h-16 text-nflow-orange mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-white mb-4">Suscripción Requerida</h2>
+              <p className="text-gray-300 mb-6">
+                Para acceder al chat de NFLOW necesitas una suscripción activa.
+              </p>
+              <Button 
+                onClick={() => setLocation("/")}
+                className="w-full bg-nflow-orange hover:bg-nflow-orange/90 text-black font-semibold"
+              >
+                Ver Planes de Suscripción
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // Main chat interface
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+      <Header />
+      
+      <div className="flex h-[calc(100vh-80px)]">
         {/* Sidebar */}
-        <div className="w-80 bg-nflow-navy border-r border-gray-700 flex flex-col">
+        <div className="w-80 bg-gray-800/50 border-r border-gray-700 flex flex-col">
           <div className="p-4 border-b border-gray-700">
             <Button
               onClick={handleNewChat}
@@ -197,8 +234,7 @@ export default function Chat() {
             </div>
           )}
         </div>
-        </div>
       </div>
-    </SubscriptionGuard>
+    </div>
   );
 }
