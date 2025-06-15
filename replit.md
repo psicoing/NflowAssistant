@@ -118,6 +118,7 @@ Changelog:
 - June 15, 2025. Added complete partner management system with admin notifications
 - June 15, 2025. Implemented elegant PWA installation prompt for mobile users
 - June 15, 2025. Removed action buttons from services section while maintaining subscription access
+- June 15, 2025. Simplified chat profile form for minors: only age and gender fields with appropriate options
 - June 15, 2025. Enhanced subscription button in navigation to auto-scroll to pricing section
 - June 15, 2025. Removed rewards program from navigation menu
 - June 15, 2025. Added detailed stress management content modal for workplace stress article

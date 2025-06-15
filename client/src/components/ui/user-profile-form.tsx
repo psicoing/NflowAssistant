@@ -4,12 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { User, Heart, Calendar } from "lucide-react";
+import { User, Calendar } from "lucide-react";
 
 interface UserProfile {
-  ageRange: string;
+  age: string;
   gender: string;
-  orientation: string;
 }
 
 interface UserProfileFormProps {
@@ -17,19 +16,18 @@ interface UserProfileFormProps {
 }
 
 export default function UserProfileForm({ onProfileSubmit }: UserProfileFormProps) {
-  const [ageRange, setAgeRange] = useState("");
+  const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
-  const [orientation, setOrientation] = useState("");
 
   const handleSubmit = () => {
-    if (ageRange && gender && orientation) {
-      onProfileSubmit({ ageRange, gender, orientation });
+    if (age && gender) {
+      onProfileSubmit({ age, gender });
       // Guardar en localStorage para futuras sesiones
-      localStorage.setItem("userProfile", JSON.stringify({ ageRange, gender, orientation }));
+      localStorage.setItem("userProfile", JSON.stringify({ age, gender }));
     }
   };
 
-  const isFormValid = ageRange && gender && orientation;
+  const isFormValid = age && gender;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
@@ -39,105 +37,64 @@ export default function UserProfileForm({ onProfileSubmit }: UserProfileFormProp
             <User className="w-8 h-8 text-white" />
           </div>
           <CardTitle className="text-2xl font-bold text-white">
-            Personaliza tu experiencia
+            Cuéntanos sobre ti
           </CardTitle>
           <CardDescription className="text-gray-300">
-            Ayúdanos a adaptar NEUROPSI-AI a tu perfil para brindarte un apoyo más personalizado
+            Para brindarte el mejor apoyo psicológico personalizado
           </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-6">
-          {/* Información importante */}
-          <div className="bg-gradient-to-r from-nflow-blue/20 to-nflow-orange/20 border border-nflow-blue/30 rounded-lg p-4">
-            <div className="flex items-start space-x-3">
-              <Heart className="w-5 h-5 text-nflow-orange mt-0.5 flex-shrink-0" />
-              <div className="text-sm text-gray-200">
-                <p className="font-medium text-white mb-1">¿Por qué es importante esta información?</p>
-                <p className="text-gray-300 leading-relaxed">
-                  La edad es fundamental en salud mental ya que cada etapa de la vida presenta desafíos únicos. 
-                  La orientación sexual también es un factor importante, pues marca significativamente el estilo 
-                  de vida de una persona y su bienestar emocional.
-                </p>
-              </div>
-            </div>
-          </div>
-
           {/* Edad */}
           <div className="space-y-3">
-            <Label className="text-white flex items-center gap-2">
-              <Calendar className="w-4 h-4" />
-              ¿Cuál es tu rango de edad?
+            <Label className="text-white font-medium flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-nflow-orange" />
+              ¿Cuál es tu edad?
             </Label>
-            <Select onValueChange={setAgeRange}>
-              <SelectTrigger className="bg-gray-700/50 border-gray-600/50 text-white">
+            <Select value={age} onValueChange={setAge}>
+              <SelectTrigger className="bg-gray-700/50 border-gray-600 text-white">
                 <SelectValue placeholder="Selecciona tu edad" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="13-17">13-17 años (Adolescente)</SelectItem>
-                <SelectItem value="18-25">18-25 años (Joven adulto)</SelectItem>
-                <SelectItem value="26-35">26-35 años (Adulto joven)</SelectItem>
-                <SelectItem value="36-50">36-50 años (Adulto)</SelectItem>
-                <SelectItem value="51-65">51-65 años (Adulto maduro)</SelectItem>
-                <SelectItem value="65+">65+ años (Adulto mayor)</SelectItem>
+              <SelectContent className="bg-gray-800 border-gray-600">
+                <SelectItem value="13-17" className="text-white hover:bg-gray-700">13-17 años</SelectItem>
+                <SelectItem value="18-25" className="text-white hover:bg-gray-700">18-25 años</SelectItem>
+                <SelectItem value="26-35" className="text-white hover:bg-gray-700">26-35 años</SelectItem>
+                <SelectItem value="36-45" className="text-white hover:bg-gray-700">36-45 años</SelectItem>
+                <SelectItem value="46-55" className="text-white hover:bg-gray-700">46-55 años</SelectItem>
+                <SelectItem value="56+" className="text-white hover:bg-gray-700">56+ años</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          {/* Género */}
+          {/* Sexo */}
           <div className="space-y-3">
-            <Label className="text-white flex items-center gap-2">
-              <User className="w-4 h-4" />
-              ¿Cómo te identificas?
+            <Label className="text-white font-medium flex items-center gap-2">
+              <User className="w-4 h-4 text-nflow-orange" />
+              Sexo
             </Label>
-            <RadioGroup value={gender} onValueChange={setGender} className="grid grid-cols-2 gap-3">
+            <RadioGroup value={gender} onValueChange={setGender} className="space-y-2">
               <div className="flex items-center space-x-2 bg-gray-700/30 p-3 rounded-lg">
-                <RadioGroupItem value="mujer" id="mujer" />
+                <RadioGroupItem value="hombre" id="hombre" className="border-gray-600 text-nflow-orange" />
+                <Label htmlFor="hombre" className="text-white cursor-pointer">Hombre</Label>
+              </div>
+              <div className="flex items-center space-x-2 bg-gray-700/30 p-3 rounded-lg">
+                <RadioGroupItem value="mujer" id="mujer" className="border-gray-600 text-nflow-orange" />
                 <Label htmlFor="mujer" className="text-white cursor-pointer">Mujer</Label>
               </div>
               <div className="flex items-center space-x-2 bg-gray-700/30 p-3 rounded-lg">
-                <RadioGroupItem value="hombre" id="hombre" />
-                <Label htmlFor="hombre" className="text-white cursor-pointer">Hombre</Label>
-              </div>
-              <div className="flex items-center space-x-2 bg-gray-700/30 p-3 rounded-lg col-span-2">
-                <RadioGroupItem value="no-binario" id="no-binario" />
-                <Label htmlFor="no-binario" className="text-white cursor-pointer">No binario / Otro</Label>
+                <RadioGroupItem value="prefiero-no-contestar" id="prefiero-no-contestar" className="border-gray-600 text-nflow-orange" />
+                <Label htmlFor="prefiero-no-contestar" className="text-white cursor-pointer">Prefiero no contestar</Label>
               </div>
             </RadioGroup>
           </div>
 
-          {/* Orientación Sexual */}
-          <div className="space-y-3">
-            <Label className="text-white flex items-center gap-2">
-              <Heart className="w-4 h-4" />
-              ¿Cuál es tu orientación sexual? (opcional pero ayuda a personalizar)
-            </Label>
-            <Select onValueChange={setOrientation}>
-              <SelectTrigger className="bg-gray-700/50 border-gray-600/50 text-white">
-                <SelectValue placeholder="Selecciona tu orientación" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="heterosexual">Heterosexual</SelectItem>
-                <SelectItem value="homosexual">Homosexual</SelectItem>
-                <SelectItem value="bisexual">Bisexual</SelectItem>
-                <SelectItem value="pansexual">Pansexual</SelectItem>
-                <SelectItem value="asexual">Asexual</SelectItem>
-                <SelectItem value="otro">Otro</SelectItem>
-                <SelectItem value="prefiero-no-decir">Prefiero no decir</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <Button
+          <Button 
             onClick={handleSubmit}
             disabled={!isFormValid}
-            className="w-full bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white font-semibold py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:scale-100"
+            className="w-full bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white font-semibold py-3 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Comenzar mi sesión con NEUROPSI-AI
+            Comenzar Chat
           </Button>
-
-          <p className="text-xs text-gray-400 text-center mt-4">
-            Esta información es confidencial y solo se usa para personalizar tu experiencia terapéutica.
-          </p>
         </CardContent>
       </Card>
     </div>
