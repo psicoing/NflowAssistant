@@ -148,7 +148,7 @@ export default function Resources() {
                   variant={selectedCategory === null ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSelectedCategory(null)}
-                  className={selectedCategory === null ? "bg-nflow-orange hover:bg-nflow-orange-light" : ""}
+                  className={selectedCategory === null ? "bg-nflow-orange hover:bg-nflow-orange-light text-white" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"}
                 >
                   Todas las categorías
                 </Button>
@@ -158,7 +158,7 @@ export default function Resources() {
                     variant={selectedCategory === category ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedCategory(category)}
-                    className={selectedCategory === category ? "bg-nflow-orange hover:bg-nflow-orange-light" : ""}
+                    className={selectedCategory === category ? "bg-nflow-orange hover:bg-nflow-orange-light text-white" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"}
                   >
                     {category.charAt(0).toUpperCase() + category.slice(1)}
                   </Button>
@@ -170,7 +170,7 @@ export default function Resources() {
                   variant={selectedType === null ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSelectedType(null)}
-                  className={selectedType === null ? "bg-nflow-blue hover:bg-nflow-blue-dark" : ""}
+                  className={selectedType === null ? "bg-nflow-blue hover:bg-nflow-blue-dark text-white" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"}
                 >
                   Todos los tipos
                 </Button>
@@ -180,7 +180,7 @@ export default function Resources() {
                     variant={selectedType === type ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedType(type)}
-                    className={selectedType === type ? "bg-nflow-blue hover:bg-nflow-blue-dark" : ""}
+                    className={selectedType === type ? "bg-nflow-blue hover:bg-nflow-blue-dark text-white" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"}
                   >
                     {typeLabels[type as keyof typeof typeLabels] || type}
                   </Button>
