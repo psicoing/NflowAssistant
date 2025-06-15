@@ -39,11 +39,29 @@ const menuItems = [
 
 export default function SidebarMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
 
   const isActiveRoute = (href: string) => {
     if (href === "/") return location === "/";
     return location.startsWith(href);
+  };
+
+  const handleSubscriptionClick = () => {
+    setIsOpen(false);
+    if (location !== "/") {
+      setLocation("/");
+      setTimeout(() => {
+        const pricingSection = document.getElementById("precios");
+        if (pricingSection) {
+          pricingSection.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      const pricingSection = document.getElementById("precios");
+      if (pricingSection) {
+        pricingSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   };
 
   return (
@@ -73,6 +91,24 @@ export default function SidebarMenu() {
               {menuItems.map((item) => {
                 const IconComponent = item.icon;
                 const isActive = isActiveRoute(item.href);
+                
+                if (item.id === "suscripcion") {
+                  return (
+                    <Button
+                      key={item.id}
+                      variant="ghost"
+                      className={`w-full justify-start h-14 text-left px-4 transition-all duration-200 ${
+                        isActive 
+                          ? "bg-nflow-blue/20 text-nflow-blue border-l-4 border-nflow-blue" 
+                          : "text-white hover:bg-white/10 hover:text-nflow-blue"
+                      }`}
+                      onClick={handleSubscriptionClick}
+                    >
+                      <IconComponent className="mr-3 h-5 w-5" />
+                      <span className="text-base">{item.name}</span>
+                    </Button>
+                  );
+                }
                 
                 return (
                   <Link key={item.id} href={item.href}>
