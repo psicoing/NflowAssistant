@@ -1,5 +1,6 @@
 import { Link } from "wouter";
-import { Brain, Twitter, Linkedin, Instagram } from "lucide-react";
+import { Brain, Twitter, Linkedin, Instagram, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Footer() {
   return (
@@ -98,6 +99,27 @@ export default function Footer() {
                 </a>
               </li>
             </ul>
+          </div>
+        </div>
+
+        {/* GRUPO JOBDA Section */}
+        <div className="border-t border-gray-800 mt-8 pt-8">
+          <div className="bg-gradient-to-r from-gray-800/50 to-gray-900/50 rounded-lg p-6 border border-gray-700/50">
+            <div className="flex flex-col md:flex-row items-center justify-between">
+              <div className="text-center md:text-left mb-4 md:mb-0">
+                <h3 className="text-xl font-bold text-white mb-2">GRUPO JOBDA</h3>
+                <p className="text-gray-300 text-sm">
+                  Soluciones empresariales innovadoras para el crecimiento de tu negocio
+                </p>
+              </div>
+              <Button 
+                onClick={() => window.open('https://jobda.biz', '_blank')}
+                className="bg-nflow-orange hover:bg-nflow-orange/90 text-black font-semibold px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Visitar JOBDA
+              </Button>
+            </div>
           </div>
         </div>
 

@@ -118,6 +118,7 @@ Changelog:
 - June 15, 2025. Added complete partner management system with admin notifications
 - June 15, 2025. Implemented elegant PWA installation prompt for mobile users
 - June 15, 2025. Removed action buttons from services section while maintaining subscription access
+- June 15, 2025. Added GRUPO JOBDA card with button to jobda.biz in footer
 - June 15, 2025. Optimized profile form to show only once per user (first time access)
 - June 15, 2025. Enhanced user profile form with educational context about age and orientation importance
 - June 15, 2025. Integrated user profile system for personalized AI responses
