@@ -3,6 +3,7 @@ import { useParams } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Header from "@/components/layout/header";
 import ChatInterface from "@/components/ui/chat-interface";
+import UserProfileForm from "@/components/ui/user-profile-form";
 import { NotificationSystem, useNotifications } from "@/components/ui/notification-system";
 import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
@@ -23,9 +24,21 @@ export default function Chat() {
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDateFilter, setSelectedDateFilter] = useState<"all" | "today" | "week" | "month">("all");
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const [showProfileForm, setShowProfileForm] = useState(false);
 
   // Get user ID from localStorage
   const userId = localStorage.getItem("userId");
+
+  // Check for existing user profile
+  useEffect(() => {
+    const savedProfile = localStorage.getItem("userProfile");
+    if (savedProfile) {
+      setUserProfile(JSON.parse(savedProfile));
+    } else {
+      setShowProfileForm(true);
+    }
+  }, []);
 
   // Check subscription status
   const { data: subscriptionData, isLoading: isCheckingSubscription } = useQuery({
@@ -112,6 +125,11 @@ export default function Chat() {
   const handleSendMessage = (content: string) => {
     if (!currentConversationId) return;
     sendMessageMutation.mutate({ content });
+  };
+
+  const handleProfileSubmit = (profile: any) => {
+    setUserProfile(profile);
+    setShowProfileForm(false);
   };
 
   const handleNewChat = () => {
@@ -207,6 +225,11 @@ export default function Chat() {
         </div>
       </div>
     );
+  }
+
+  // Show profile form if needed
+  if (showProfileForm) {
+    return <UserProfileForm onProfileSubmit={handleProfileSubmit} />;
   }
 
   // Main chat interface

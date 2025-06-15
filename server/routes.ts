@@ -233,7 +233,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/conversations/:id/messages", async (req, res) => {
     try {
       const conversationId = parseInt(req.params.id);
-      const { content, userId = 1 } = req.body; // Default userId for demo
+      const { content, userId = 1, userProfile } = req.body; // Default userId for demo
 
       if (!content) {
         return res.status(400).json({ message: "Message content is required" });
