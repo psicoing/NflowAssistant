@@ -48,6 +48,7 @@ function App() {
         <div className="min-h-screen bg-nflow-dark text-white">
           <Toaster />
           <Router />
+          <PWAInstallPrompt />
         </div>
       </TooltipProvider>
     </QueryClientProvider>

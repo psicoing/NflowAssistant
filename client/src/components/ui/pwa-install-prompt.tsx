@@ -90,91 +90,90 @@ export default function PWAInstallPrompt() {
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 100 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:right-4 md:w-96"
+        initial={{ opacity: 0, y: 100, scale: 0.9 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 100, scale: 0.9 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:right-4 md:w-80"
       >
-        <Card className="bg-gradient-to-br from-nflow-dark via-gray-800 to-nflow-navy border-nflow-orange/30 shadow-2xl backdrop-blur-xl">
-          <CardContent className="p-0">
-            {/* Header */}
-            <div className="relative bg-gradient-to-r from-nflow-orange to-nflow-orange-light p-4 rounded-t-lg">
-              <button
-                onClick={handleDismiss}
-                className="absolute top-2 right-2 text-white/80 hover:text-white transition-colors"
-              >
-                <X className="h-4 w-4" />
-              </button>
-              
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                  <Smartphone className="h-6 w-6 text-white" />
+        {/* Backdrop Blur */}
+        <div className="absolute inset-0 bg-black/20 backdrop-blur-sm rounded-2xl"></div>
+        
+        <div className="relative bg-gradient-to-br from-gray-900/95 via-nflow-dark/95 to-gray-800/95 rounded-2xl border border-nflow-orange/30 shadow-2xl backdrop-blur-xl overflow-hidden">
+          {/* Floating Orbs Background */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute -top-10 -right-10 w-20 h-20 bg-nflow-orange/10 rounded-full blur-xl"></div>
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-nflow-blue/10 rounded-full blur-xl"></div>
+          </div>
+          
+          {/* Close Button */}
+          <button
+            onClick={handleDismiss}
+            className="absolute top-3 right-3 z-10 w-8 h-8 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/20 transition-all duration-200"
+          >
+            <X className="h-4 w-4" />
+          </button>
+
+          <div className="relative p-6">
+            {/* Header with Icon */}
+            <div className="text-center mb-6">
+              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-nflow-orange to-nflow-orange-light rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                <Smartphone className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-1">Instala NFLOW</h3>
+              <p className="text-gray-300 text-sm">Tu psicólogo siempre contigo</p>
+            </div>
+
+            {/* Elegant Feature Cards */}
+            <div className="grid grid-cols-1 gap-3 mb-6">
+              <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-xl border border-white/10">
+                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                  <Zap className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-lg">Instala NFLOW</h3>
-                  <p className="text-white/90 text-sm">Tu psicólogo en el bolsillo</p>
+                  <p className="text-white font-medium text-sm">Acceso Instantáneo</p>
+                  <p className="text-gray-400 text-xs">Sin esperas, desde tu pantalla inicio</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-xl border border-white/10">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                  <Shield className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-white font-medium text-sm">Privacidad Total</p>
+                  <p className="text-gray-400 text-xs">Tus conversaciones son 100% confidenciales</p>
                 </div>
               </div>
             </div>
 
-            {/* Content */}
-            <div className="p-6 space-y-4">
-              <p className="text-gray-300 text-sm leading-relaxed">
-                Accede instantáneamente a tu asistente de salud mental desde tu pantalla de inicio. 
-                Sin descargas de tienda, sin esperas.
-              </p>
-
-              {/* Benefits */}
-              <div className="grid grid-cols-3 gap-3">
-                <div className="text-center">
-                  <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
-                    <Zap className="h-4 w-4 text-green-400" />
-                  </div>
-                  <p className="text-xs text-gray-400">Acceso Instantáneo</p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
-                    <Shield className="h-4 w-4 text-blue-400" />
-                  </div>
-                  <p className="text-xs text-gray-400">100% Segura</p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
-                    <Clock className="h-4 w-4 text-purple-400" />
-                  </div>
-                  <p className="text-xs text-gray-400">Siempre Disponible</p>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex space-x-3 pt-2">
-                <Button
-                  onClick={handleInstallClick}
-                  className="flex-1 bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white font-semibold shadow-lg"
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Instalar App
-                </Button>
-                
-                <Button
-                  onClick={handleDismiss}
-                  variant="outline"
-                  className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                >
-                  Ahora no
-                </Button>
-              </div>
-
-              {/* Small Note */}
-              <p className="text-xs text-gray-500 text-center pt-2">
-                Se instalará directamente desde tu navegador
-              </p>
+            {/* Call to Action */}
+            <div className="space-y-3">
+              <Button
+                onClick={handleInstallClick}
+                className="w-full bg-gradient-to-r from-nflow-orange via-orange-500 to-nflow-orange-light hover:shadow-lg hover:shadow-nflow-orange/30 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105"
+              >
+                <Download className="h-5 w-5 mr-2" />
+                Añadir a Pantalla de Inicio
+              </Button>
+              
+              <button
+                onClick={handleDismiss}
+                className="w-full text-gray-400 hover:text-white text-sm transition-colors py-2"
+              >
+                Quizás más tarde
+              </button>
             </div>
-          </CardContent>
-        </Card>
+
+            {/* Small Badge */}
+            <div className="text-center mt-4">
+              <div className="inline-flex items-center space-x-1 px-3 py-1 bg-white/10 rounded-full">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span className="text-xs text-gray-300">Instalación directa desde navegador</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </motion.div>
     </AnimatePresence>
   );
