@@ -298,13 +298,10 @@ export default function MobileAppsSection() {
           {/* Additional Info */}
           <div className="mt-12 text-center bg-nflow-orange/10 border border-nflow-orange/20 rounded-2xl p-8">
             <h5 className="text-xl font-bold text-white mb-4">¿No ves la opción de instalar?</h5>
-            <p className="text-gray-300 mb-6">
+            <p className="text-gray-300">
               Algunos navegadores requieren que uses la página por unos minutos antes de mostrar la opción de instalación. 
               ¡Navega un poco y vuelve a intentarlo!
             </p>
-            <Button variant="outline" className="border-nflow-orange/30 text-nflow-orange hover:bg-nflow-orange/10">
-              💬 Contactar Soporte Técnico
-            </Button>
           </div>
         </div>
       </div>
