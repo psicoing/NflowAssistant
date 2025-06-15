@@ -239,14 +239,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Message content is required" });
       }
 
-      // Check if user has active subscription
-      const hasActiveSubscription = await checkSubscription(userId);
-      if (!hasActiveSubscription) {
-        return res.status(403).json({ 
-          message: "Active subscription required to use chat",
-          requiresSubscription: true 
-        });
-      }
+      // Allow free access to chat - no subscription required
 
       // Save user message
       const userMessage = await storage.createMessage({
