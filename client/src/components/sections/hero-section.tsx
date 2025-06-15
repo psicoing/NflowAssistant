@@ -56,11 +56,20 @@ export default function HeroSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             {/* Individual Package */}
             <div className="relative group">
-              <div className="transform hover:scale-105 transition-transform duration-500">
+              <div className="transform hover:scale-105 transition-transform duration-500 nflow-package-card">
                 <img 
                   src={nflowPackageImage} 
                   alt="NFLOW Salud Mental Individual"
-                  className="w-full h-auto rounded-3xl shadow-2xl border border-gray-700/50"
+                  className="w-full h-auto rounded-3xl shadow-2xl border border-gray-700/50 
+                           select-none backface-visibility-hidden transform-gpu
+                           image-rendering-crisp-edges image-rendering-pixelated 
+                           sm:image-rendering-auto antialiased"
+                  style={{
+                    imageRendering: '-webkit-optimize-contrast',
+                    WebkitBackfaceVisibility: 'hidden',
+                    WebkitTransform: 'translateZ(0)',
+                    WebkitFontSmoothing: 'antialiased'
+                  }}
                 />
               </div>
               
@@ -75,11 +84,20 @@ export default function HeroSection() {
 
             {/* Family Package */}
             <div className="relative group">
-              <div className="transform hover:scale-105 transition-transform duration-500">
+              <div className="transform hover:scale-105 transition-transform duration-500 nflow-package-card">
                 <img 
                   src={nflowFamilyImage} 
                   alt="NFLOW Salud Mental Familiar"
-                  className="w-full h-auto rounded-3xl shadow-2xl border border-gray-700/50"
+                  className="w-full h-auto rounded-3xl shadow-2xl border border-gray-700/50
+                           select-none backface-visibility-hidden transform-gpu
+                           image-rendering-crisp-edges image-rendering-pixelated 
+                           sm:image-rendering-auto antialiased"
+                  style={{
+                    imageRendering: '-webkit-optimize-contrast',
+                    WebkitBackfaceVisibility: 'hidden',
+                    WebkitTransform: 'translateZ(0)',
+                    WebkitFontSmoothing: 'antialiased'
+                  }}
                 />
               </div>
               
