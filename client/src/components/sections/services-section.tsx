@@ -44,7 +44,26 @@ export default function ServicesSection() {
               </div>
             </div>
 
-
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button 
+                onClick={handleTryApp}
+                size="lg"
+                className="bg-nflow-orange hover:bg-nflow-orange/90 text-black font-semibold px-8 py-4 text-lg shadow-xl hover:shadow-2xl transition-all duration-300"
+              >
+                <Smartphone className="w-5 h-5 mr-2" />
+                Probar la aplicación
+              </Button>
+              <Button 
+                onClick={() => scrollToSection('pricing')}
+                variant="outline"
+                size="lg"
+                className="border-2 border-nflow-orange text-nflow-orange hover:bg-nflow-orange hover:text-black font-semibold px-8 py-4 text-lg transition-all duration-300"
+              >
+                <Info className="w-5 h-5 mr-2" />
+                Más información
+              </Button>
+            </div>
           </div>
 
           {/* App Mockups */}
