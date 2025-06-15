@@ -37,7 +37,6 @@ const pricingTiers = [
     icon: Users,
     features: [
       "Todo lo incluido en el Plan Básico",
-      "Sesiones de chat grupal quincenales con psicólogo",
       "Recursos adicionales de terapia grupal",
       "Ejercicios prácticos guiados",
       "Prioridad en soporte"
@@ -54,7 +53,6 @@ const pricingTiers = [
     icon: User,
     features: [
       "Todo lo incluido en el Plan Grupal",
-      "Sesiones de chat individual semanales con psicólogo",
       "Plan de seguimiento personalizado",
       "Acceso anticipado a nuevas funcionalidades"
     ],
