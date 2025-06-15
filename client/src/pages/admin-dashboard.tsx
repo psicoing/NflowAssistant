@@ -13,7 +13,12 @@ import {
   LogOut,
   TrendingUp,
   UserPlus,
-  CreditCard
+  CreditCard,
+  HandHeart,
+  CheckCircle,
+  XCircle,
+  Clock,
+  Bell
 } from "lucide-react";
 
 interface DashboardStats {
@@ -29,9 +34,15 @@ export default function AdminDashboard() {
   const [, setLocation] = useLocation();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [partners, setPartners] = useState<any[]>([]);
+  const [pendingPartners, setPendingPartners] = useState<any[]>([]);
 
   useEffect(() => {
     checkAuthAndFetchStats();
+  }, []);
+
+  useEffect(() => {
+    fetchPartners();
   }, []);
 
   const checkAuthAndFetchStats = async () => {
@@ -51,7 +62,31 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchPartners = async () => {
+    try {
+      const response = await fetch("/api/admin/partners");
+      if (response.ok) {
+        const data = await response.json();
+        setPartners(data);
+        setPendingPartners(data.filter((p: any) => p.status === 'pending'));
+      }
+    } catch (error) {
+      console.error("Error fetching partners:", error);
+    }
+  };
 
+  const handlePartnerAction = async (partnerId: number, action: 'approve' | 'reject') => {
+    try {
+      const response = await fetch(`/api/admin/partners/${partnerId}/${action}`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        fetchPartners(); // Refresh the list
+      }
+    } catch (error) {
+      console.error(`Error ${action}ing partner:`, error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -176,6 +211,7 @@ export default function AdminDashboard() {
           <TabsList className="bg-gray-800/50 border-gray-700">
             <TabsTrigger value="overview" className="data-[state=active]:bg-orange-600">Resumen</TabsTrigger>
             <TabsTrigger value="users" className="data-[state=active]:bg-orange-600">Usuarios</TabsTrigger>
+            <TabsTrigger value="partners" className="data-[state=active]:bg-orange-600">Partners</TabsTrigger>
             <TabsTrigger value="subscriptions" className="data-[state=active]:bg-orange-600">Suscripciones</TabsTrigger>
             <TabsTrigger value="revenue" className="data-[state=active]:bg-orange-600">Ingresos</TabsTrigger>
             <TabsTrigger value="content" className="data-[state=active]:bg-orange-600">Contenido</TabsTrigger>
@@ -237,6 +273,167 @@ export default function AdminDashboard() {
                     <FileText className="h-4 w-4 mr-2" />
                     Gestionar Contenido
                   </Button>
+                  <Button 
+                    className="w-full bg-orange-600 hover:bg-orange-700 relative"
+                    onClick={() => document.querySelector('[value="partners"]')?.click()}
+                  >
+                    <HandHeart className="h-4 w-4 mr-2" />
+                    Gestionar Partners
+                    {pendingPartners.length > 0 && (
+                      <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs">
+                        {pendingPartners.length}
+                      </Badge>
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="partners">
+            <div className="space-y-6">
+              {/* Partners Overview Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="bg-gray-800/50 border-gray-700">
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <Clock className="h-8 w-8 text-yellow-500" />
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-400">Solicitudes Pendientes</p>
+                        <p className="text-2xl font-bold text-white">{pendingPartners.length}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-gray-800/50 border-gray-700">
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <CheckCircle className="h-8 w-8 text-green-500" />
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-400">Partners Activos</p>
+                        <p className="text-2xl font-bold text-white">
+                          {partners.filter(p => p.status === 'approved').length}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-gray-800/50 border-gray-700">
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <HandHeart className="h-8 w-8 text-blue-500" />
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-400">Total Partners</p>
+                        <p className="text-2xl font-bold text-white">{partners.length}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Pending Applications Alert */}
+              {pendingPartners.length > 0 && (
+                <Card className="bg-yellow-900/20 border-yellow-600/50">
+                  <CardContent className="p-4">
+                    <div className="flex items-center">
+                      <Bell className="h-5 w-5 text-yellow-400 mr-3" />
+                      <div>
+                        <p className="text-yellow-200 font-medium">
+                          Tienes {pendingPartners.length} solicitud{pendingPartners.length !== 1 ? 'es' : ''} de partner{pendingPartners.length !== 1 ? 's' : ''} pendiente{pendingPartners.length !== 1 ? 's' : ''}
+                        </p>
+                        <p className="text-yellow-300/80 text-sm">
+                          Revisa y aprueba las solicitudes para activar nuevos partners
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Partners Management Table */}
+              <Card className="bg-gray-800/50 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <HandHeart className="h-5 w-5 mr-2" />
+                    Gestión de Partners
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Administrar solicitudes y partners activos
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {partners.length === 0 ? (
+                      <p className="text-gray-400 text-center py-8">No hay solicitudes de partners</p>
+                    ) : (
+                      partners.map((partner) => (
+                        <div
+                          key={partner.id}
+                          className="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg border border-gray-600/50"
+                        >
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-3">
+                              <div>
+                                <h4 className="text-white font-medium">{partner.companyName}</h4>
+                                <p className="text-gray-400 text-sm">{partner.contactName}</p>
+                                <p className="text-gray-400 text-sm">{partner.email}</p>
+                              </div>
+                            </div>
+                            <div className="mt-2 flex items-center space-x-2">
+                              <Badge 
+                                variant={
+                                  partner.status === 'approved' ? 'default' :
+                                  partner.status === 'pending' ? 'secondary' : 'destructive'
+                                }
+                                className={
+                                  partner.status === 'approved' ? 'bg-green-600' :
+                                  partner.status === 'pending' ? 'bg-yellow-600' : 'bg-red-600'
+                                }
+                              >
+                                {partner.status === 'approved' ? 'Aprobado' :
+                                 partner.status === 'pending' ? 'Pendiente' : 'Rechazado'}
+                              </Badge>
+                              <Badge variant="outline" className="border-gray-600 text-gray-300">
+                                {partner.partnerType}
+                              </Badge>
+                            </div>
+                            <div className="mt-2 text-sm text-gray-400">
+                              Solicitud: {new Date(partner.createdAt).toLocaleDateString('es-ES')}
+                              {partner.status === 'approved' && (
+                                <>
+                                  <span className="mx-2">•</span>
+                                  Referidos: {partner.totalReferrals} • Ganancias: €{partner.totalEarnings}
+                                </>
+                              )}
+                            </div>
+                          </div>
+                          
+                          {partner.status === 'pending' && (
+                            <div className="flex space-x-2 ml-4">
+                              <Button
+                                size="sm"
+                                className="bg-green-600 hover:bg-green-700"
+                                onClick={() => handlePartnerAction(partner.id, 'approve')}
+                              >
+                                <CheckCircle className="h-4 w-4 mr-1" />
+                                Aprobar
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => handlePartnerAction(partner.id, 'reject')}
+                              >
+                                <XCircle className="h-4 w-4 mr-1" />
+                                Rechazar
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             </div>
