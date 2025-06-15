@@ -47,6 +47,21 @@ export default function UserProfileForm({ onProfileSubmit }: UserProfileFormProp
         </CardHeader>
 
         <CardContent className="space-y-6">
+          {/* Información importante */}
+          <div className="bg-gradient-to-r from-nflow-blue/20 to-nflow-orange/20 border border-nflow-blue/30 rounded-lg p-4">
+            <div className="flex items-start space-x-3">
+              <Heart className="w-5 h-5 text-nflow-orange mt-0.5 flex-shrink-0" />
+              <div className="text-sm text-gray-200">
+                <p className="font-medium text-white mb-1">¿Por qué es importante esta información?</p>
+                <p className="text-gray-300 leading-relaxed">
+                  La edad es fundamental en salud mental ya que cada etapa de la vida presenta desafíos únicos. 
+                  La orientación sexual también es un factor importante, pues marca significativamente el estilo 
+                  de vida de una persona y su bienestar emocional.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Edad */}
           <div className="space-y-3">
             <Label className="text-white flex items-center gap-2">
