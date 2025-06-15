@@ -146,21 +146,13 @@ export default function Resources() {
               
               <div className="text-center space-y-4">
                 <div className="flex gap-2 flex-wrap justify-center">
-                  <Button
-                    variant={selectedCategory === null ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setSelectedCategory(null)}
-                    className={selectedCategory === null ? "bg-nflow-orange hover:bg-nflow-orange-light text-white rounded-full" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white rounded-full"}
-                  >
-                    Todas las categorías
-                  </Button>
                   {categories.map((category) => (
                     <Button
                       key={category}
                       variant={selectedCategory === category ? "default" : "outline"}
                       size="sm"
                       onClick={() => setSelectedCategory(category)}
-                      className={selectedCategory === category ? "bg-nflow-orange hover:bg-nflow-orange-light text-white rounded-full" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white rounded-full"}
+                      className={selectedCategory === category ? "bg-nflow-orange hover:bg-nflow-orange-light text-white border-0 rounded-full" : "border-gray-500 text-gray-200 hover:bg-nflow-orange/20 hover:text-white hover:border-nflow-orange rounded-full"}
                     >
                       {category.charAt(0).toUpperCase() + category.slice(1)}
                     </Button>
@@ -174,7 +166,7 @@ export default function Resources() {
                       variant={selectedType === type ? "default" : "outline"}
                       size="sm"
                       onClick={() => setSelectedType(type)}
-                      className={selectedType === type ? "bg-nflow-blue hover:bg-nflow-blue-dark text-white rounded-full" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white rounded-full"}
+                      className={selectedType === type ? "bg-nflow-blue hover:bg-nflow-blue-dark text-white border-0 rounded-full" : "border-gray-500 text-gray-200 hover:bg-nflow-blue/20 hover:text-white hover:border-nflow-blue rounded-full"}
                     >
                       {typeLabels[type as keyof typeof typeLabels] || type}
                     </Button>

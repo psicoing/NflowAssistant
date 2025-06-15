@@ -118,6 +118,8 @@ Changelog:
 - June 15, 2025. Added complete partner management system with admin notifications
 - June 15, 2025. Implemented elegant PWA installation prompt for mobile users
 - June 15, 2025. Removed action buttons from services section while maintaining subscription access
+- June 15, 2025. Added detailed stress management content modal for workplace stress article
+- June 15, 2025. Improved resources page filters: removed unnecessary buttons and enhanced contrast
 - June 15, 2025. Fixed white button visibility issue in resources page filters
 - June 15, 2025. Removed psychologist session references from subscription cards
 - June 15, 2025. Removed support button from PWA installation section
