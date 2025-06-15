@@ -625,6 +625,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ======== ADMIN PARTNER MANAGEMENT ROUTES ========
+  
+  // Get all partners for admin
+  app.get("/api/admin/partners", async (req, res) => {
+    if (!req.session.isAdmin) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+
+    try {
+      const partners = await storage.getAllPartners();
+      res.json(partners);
+    } catch (error) {
+      console.error("Error fetching partners:", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  });
+
+  // Approve partner
+  app.post("/api/admin/partners/:id/approve", async (req, res) => {
+    if (!req.session.isAdmin) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+
+    try {
+      const partnerId = parseInt(req.params.id);
+      await storage.updatePartnerStatus(partnerId, 'approved');
+      res.json({ success: true, message: "Partner aprobado exitosamente" });
+    } catch (error) {
+      console.error("Error approving partner:", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  });
+
+  // Reject partner
+  app.post("/api/admin/partners/:id/reject", async (req, res) => {
+    if (!req.session.isAdmin) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+
+    try {
+      const partnerId = parseInt(req.params.id);
+      await storage.updatePartnerStatus(partnerId, 'rejected');
+      res.json({ success: true, message: "Partner rechazado" });
+    } catch (error) {
+      console.error("Error rejecting partner:", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

@@ -275,7 +275,10 @@ export default function AdminDashboard() {
                   </Button>
                   <Button 
                     className="w-full bg-orange-600 hover:bg-orange-700 relative"
-                    onClick={() => document.querySelector('[value="partners"]')?.click()}
+                    onClick={() => {
+                      const partnersTab = document.querySelector('[data-state="inactive"][value="partners"]') as HTMLButtonElement;
+                      partnersTab?.click();
+                    }}
                   >
                     <HandHeart className="h-4 w-4 mr-2" />
                     Gestionar Partners
