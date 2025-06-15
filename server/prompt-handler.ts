@@ -21,7 +21,7 @@ export interface ChatResponse {
 /**
  * Genera una respuesta mejorada usando OpenAI con ejemplos contextuales
  */
-export async function generateChatResponse(userMessage: string, history: Message[]): Promise<string> {
+export async function generateChatResponse(userMessage: string, history: Message[], userProfile?: any): Promise<string> {
   try {
     // Seleccionar ejemplos relevantes basados en el mensaje del usuario
     const relevantExamples = selectRelevantExamples(userMessage, 2);
@@ -31,6 +31,26 @@ export async function generateChatResponse(userMessage: string, history: Message
       role: msg.isUser ? "user" as const : "assistant" as const,
       content: msg.content
     }));
+
+    // Construir información del perfil del usuario
+    let profileContext = "";
+    if (userProfile) {
+      profileContext = `
+PERFIL DEL USUARIO:
+- Edad: ${userProfile.ageRange}
+- Género: ${userProfile.gender}
+- Orientación: ${userProfile.orientation}
+
+ADAPTA TU RESPUESTA específicamente para:
+${userProfile.ageRange === '13-17' ? '- Adolescente: usa lenguaje cercano, valida emociones, evita sermones' : ''}
+${userProfile.ageRange === '18-25' ? '- Joven adulto: equilibra independencia con orientación, usa referencias contemporáneas' : ''}
+${userProfile.ageRange === '26-35' ? '- Adulto joven: enfoque en carrera/relaciones, consejos prácticos' : ''}
+${userProfile.ageRange === '36-50' ? '- Adulto: considera responsabilidades familiares/laborales complejas' : ''}
+${userProfile.ageRange === '51-65' ? '- Adulto maduro: respeta experiencia, considera cambios de vida/salud' : ''}
+${userProfile.ageRange === '65+' ? '- Adulto mayor: usa lenguaje respetuoso, considera contexto generacional' : ''}
+- Usa lenguaje inclusivo apropiado para ${userProfile.gender} y ${userProfile.orientation}
+`;
+    }
 
     // Prompt sistema NEUROPSI-AI inclusivo y multiestrato
     const systemPrompt = `TÚ ERES:
@@ -101,6 +121,8 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
 **EJEMPLOS CONTEXTUALES:**
 ${relevantExamples}
 
+${profileContext}
+
 🔧 **MODO DE COMUNICACIÓN CÁLIDA:**
 - Usa frases como "Te entiendo", "Es normal sentirse así", "No estás sola/solo en esto"
 - Para adolescentes: "Sé que puede ser difícil", "Lo que sientes es válido", "Has sido muy valiente al compartir esto"
@@ -163,12 +185,12 @@ Responde en formato JSON: { "response": "tu respuesta completa con formato markd
  * Procesa un mensaje del usuario y genera una respuesta usando OpenAI
  * con técnicas avanzadas de prompting (few-shot learning y chain-of-thought)
  */
-export async function processUserMessage(userMessage: string, history: Message[]): Promise<ChatResponse> {
+export async function processUserMessage(userMessage: string, history: Message[], userProfile?: any): Promise<ChatResponse> {
   try {
     console.log(`Procesando mensaje de usuario: "${userMessage.substring(0, 30)}..."`);
     
     // Generar respuesta usando OpenAI con prompt mejorado
-    const responseContent = await generateChatResponse(userMessage, history);
+    const responseContent = await generateChatResponse(userMessage, history, userProfile);
     
     console.log("Respuesta generada exitosamente");
     

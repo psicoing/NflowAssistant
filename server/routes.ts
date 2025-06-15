@@ -258,8 +258,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get conversation history for context
       const messageHistory = await storage.getMessages(conversationId);
       
-      // Generate AI response using the advanced prompt system
-      const aiResponse = await processUserMessage(content, messageHistory);
+      // Generate AI response using the advanced prompt system with user profile
+      const aiResponse = await processUserMessage(content, messageHistory, userProfile);
 
       // Save AI message
       const aiMessage = await storage.createMessage({
