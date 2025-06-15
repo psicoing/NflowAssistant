@@ -133,59 +133,53 @@ export default function Resources() {
         {/* Filters Section */}
         <section className="py-8 px-4 bg-nflow-navy">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row gap-4 items-center">
-              <div className="relative flex-1 max-w-md">
+            <div className="space-y-6">
+              <div className="relative max-w-md mx-auto">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
                   placeholder="Buscar recursos..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-gray-800 border-gray-700 text-white"
+                  className="pl-10 bg-gray-800 border-gray-700 text-white rounded-xl"
                 />
               </div>
               
-              <div className="flex gap-2 flex-wrap">
-                <Button
-                  variant={selectedCategory === null ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedCategory(null)}
-                  className={selectedCategory === null ? "bg-nflow-orange hover:bg-nflow-orange-light text-white" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"}
-                >
-                  Todas las categorías
-                </Button>
-                {categories.map((category) => (
+              <div className="text-center space-y-4">
+                <div className="flex gap-2 flex-wrap justify-center">
                   <Button
-                    key={category}
-                    variant={selectedCategory === category ? "default" : "outline"}
+                    variant={selectedCategory === null ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSelectedCategory(category)}
-                    className={selectedCategory === category ? "bg-nflow-orange hover:bg-nflow-orange-light text-white" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"}
+                    onClick={() => setSelectedCategory(null)}
+                    className={selectedCategory === null ? "bg-nflow-orange hover:bg-nflow-orange-light text-white rounded-full" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white rounded-full"}
                   >
-                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                    Todas las categorías
                   </Button>
-                ))}
-              </div>
+                  {categories.map((category) => (
+                    <Button
+                      key={category}
+                      variant={selectedCategory === category ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedCategory(category)}
+                      className={selectedCategory === category ? "bg-nflow-orange hover:bg-nflow-orange-light text-white rounded-full" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white rounded-full"}
+                    >
+                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                    </Button>
+                  ))}
+                </div>
 
-              <div className="flex gap-2">
-                <Button
-                  variant={selectedType === null ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedType(null)}
-                  className={selectedType === null ? "bg-nflow-blue hover:bg-nflow-blue-dark text-white" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"}
-                >
-                  Todos los tipos
-                </Button>
-                {types.map((type) => (
-                  <Button
-                    key={type}
-                    variant={selectedType === type ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setSelectedType(type)}
-                    className={selectedType === type ? "bg-nflow-blue hover:bg-nflow-blue-dark text-white" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"}
-                  >
-                    {typeLabels[type as keyof typeof typeLabels] || type}
-                  </Button>
-                ))}
+                <div className="flex gap-2 justify-center">
+                  {types.filter(type => type !== 'article').map((type) => (
+                    <Button
+                      key={type}
+                      variant={selectedType === type ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedType(type)}
+                      className={selectedType === type ? "bg-nflow-blue hover:bg-nflow-blue-dark text-white rounded-full" : "border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white rounded-full"}
+                    >
+                      {typeLabels[type as keyof typeof typeLabels] || type}
+                    </Button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
