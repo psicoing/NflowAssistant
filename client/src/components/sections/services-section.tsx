@@ -44,23 +44,29 @@ export default function ServicesSection() {
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            {/* Direct Chat Access */}
+            <div className="bg-gradient-to-r from-nflow-orange/10 to-nflow-blue/10 rounded-2xl p-6 border border-nflow-orange/30 backdrop-blur-sm">
+              <div className="flex items-center space-x-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-nflow-orange to-nflow-orange-light rounded-xl flex items-center justify-center">
+                  <MessageCircle className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Prueba NFLOW Gratis</h3>
+                  <p className="text-gray-300 text-sm">Conversa ahora mismo con nuestro asistente</p>
+                </div>
+              </div>
+              
               <Button 
                 onClick={handleTryApp}
-                className="bg-nflow-blue hover:bg-nflow-blue-dark text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
+                className="w-full bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
-                <Smartphone className="w-5 h-5 mr-2" />
-                Probar la aplicación
+                <MessageCircle className="w-5 h-5 mr-2" />
+                Comenzar Chat Gratuito
               </Button>
-              <Button 
-                variant="outline"
-                onClick={() => scrollToSection("recursos")}
-                className="border border-gray-600 text-gray-300 hover:text-white hover:border-gray-400 px-6 py-3 rounded-xl font-semibold transition-all duration-300"
-              >
-                <Info className="w-5 h-5 mr-2" />
-                Más información
-              </Button>
+              
+              <p className="text-xs text-gray-400 text-center mt-3">
+                Sin registro necesario • Acceso inmediato • Completamente confidencial
+              </p>
             </div>
           </div>
 
