@@ -34,12 +34,6 @@ const menuItems = [
     name: "Partners",
     href: "/partners",
     icon: Users
-  },
-  {
-    id: "recompensas",
-    name: "Programa de Recompensas",
-    href: "/recompensas",
-    icon: Gift
   }
 ];
 
