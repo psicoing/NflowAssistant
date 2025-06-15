@@ -117,6 +117,6 @@ Preferred communication style: Simple, everyday language.
 Changelog:
 - June 15, 2025. Added complete partner management system with admin notifications
 - June 15, 2025. Implemented elegant PWA installation prompt for mobile users
-- June 15, 2025. Restored original services section with all buttons and functionality
+- June 15, 2025. Removed action buttons from services section while maintaining subscription access
 - June 15, 2025. Integrated user profile system for personalized AI responses
 - June 13, 2025. Initial setup
