@@ -33,7 +33,9 @@ export default function Chat() {
   // Check for existing user profile
   useEffect(() => {
     const savedProfile = localStorage.getItem("userProfile");
-    if (savedProfile) {
+    const profileCompletedThisSession = sessionStorage.getItem("profileCompleted");
+    
+    if (savedProfile && profileCompletedThisSession) {
       setUserProfile(JSON.parse(savedProfile));
     } else {
       setShowProfileForm(true);
@@ -130,6 +132,8 @@ export default function Chat() {
   const handleProfileSubmit = (profile: any) => {
     setUserProfile(profile);
     setShowProfileForm(false);
+    // Mark profile as completed in this session
+    sessionStorage.setItem("profileCompleted", "true");
   };
 
   const handleNewChat = () => {
