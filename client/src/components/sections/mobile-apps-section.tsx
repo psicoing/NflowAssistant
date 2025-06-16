@@ -21,14 +21,14 @@ export default function MobileAppsSection() {
       features: ["Sesiones familiares", "Comunicación asertiva", "Resolución de conflictos"]
     },
     {
-      icon: Users,
-      title: "NFLOW Adolescentes",
-      description: "Apoyo juvenil especializado",
-      longDescription: "Plataforma diseñada específicamente para adolescentes con herramientas adaptadas a su etapa de desarrollo",
-      color: "from-purple-500 to-pink-600",
-      bgColor: "bg-purple-500/10",
-      borderColor: "border-purple-500/30",
-      features: ["Terapia especializada", "Gestión emocional", "Desarrollo personal"]
+      icon: Briefcase,
+      title: "INS NEURONMEG",
+      description: "Psicología del Futuro",
+      longDescription: "Instituto de psicología especializado en consultas presenciales, a domicilio y por videollamada con métodos innovadores",
+      color: "from-yellow-500 to-orange-500",
+      bgColor: "bg-yellow-500/10",
+      borderColor: "border-yellow-500/30",
+      features: ["Consultas presenciales", "Visitas a domicilio", "Videollamadas"]
     },
     {
       icon: Smartphone,
