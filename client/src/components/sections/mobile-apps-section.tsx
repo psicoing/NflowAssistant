@@ -131,15 +131,7 @@ export default function MobileAppsSection() {
                     ))}
                   </div>
 
-                  {/* Bottom section - Action button */}
-                  <div className="mt-auto">
-                    <div className={`w-full h-11 bg-gradient-to-r ${app.color} rounded-xl flex items-center justify-center text-white font-semibold text-sm transition-all duration-300 group-hover:shadow-lg group-hover:shadow-current/30 cursor-pointer relative overflow-hidden`}>
-                      {/* Shimmer effect */}
-                      <div className="absolute inset-0 -top-10 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-y-12 opacity-0 group-hover:opacity-100 group-hover:top-10 transition-all duration-700"></div>
-                      <ArrowRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" />
-                      <span className="relative z-10">Explorar</span>
-                    </div>
-                  </div>
+
                 </CardContent>
 
                 {/* Active indicator */}
