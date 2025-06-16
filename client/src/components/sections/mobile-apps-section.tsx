@@ -21,14 +21,14 @@ export default function MobileAppsSection() {
       features: ["Sesiones familiares", "Comunicación asertiva", "Resolución de conflictos"]
     },
     {
-      icon: Briefcase,
-      title: "INS NEURONMEG",
-      description: "Psicología del Futuro",
-      longDescription: "Instituto de psicología especializado en consultas presenciales, a domicilio y por videollamada con métodos innovadores",
-      color: "from-yellow-500 to-orange-500",
-      bgColor: "bg-yellow-500/10",
-      borderColor: "border-yellow-500/30",
-      features: ["Consultas presenciales", "Visitas a domicilio", "Videollamadas"]
+      icon: Users,
+      title: "NFLOW Adolescentes",
+      description: "Apoyo juvenil especializado",
+      longDescription: "Plataforma diseñada específicamente para adolescentes con herramientas adaptadas a su etapa de desarrollo",
+      color: "from-purple-500 to-pink-600",
+      bgColor: "bg-purple-500/10",
+      borderColor: "border-purple-500/30",
+      features: ["Terapia especializada", "Gestión emocional", "Desarrollo personal"]
     },
     {
       icon: Smartphone,
@@ -133,21 +133,11 @@ export default function MobileAppsSection() {
 
                   {/* Bottom section - Action button */}
                   <div className="mt-auto">
-                    <div 
-                      className={`w-full h-11 bg-gradient-to-r ${app.color} rounded-xl flex items-center justify-center text-white font-semibold text-sm transition-all duration-300 group-hover:shadow-lg group-hover:shadow-current/30 cursor-pointer relative overflow-hidden`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (app.title === "INS NEURONMEG") {
-                          window.open("https://neuronmeg.jobda.es/", "_blank");
-                        }
-                      }}
-                    >
+                    <div className={`w-full h-11 bg-gradient-to-r ${app.color} rounded-xl flex items-center justify-center text-white font-semibold text-sm transition-all duration-300 group-hover:shadow-lg group-hover:shadow-current/30 cursor-pointer relative overflow-hidden`}>
                       {/* Shimmer effect */}
                       <div className="absolute inset-0 -top-10 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-y-12 opacity-0 group-hover:opacity-100 group-hover:top-10 transition-all duration-700"></div>
                       <ArrowRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" />
-                      <span className="relative z-10">
-                        {app.title === "INS NEURONMEG" ? "Visitar Web" : "Explorar"}
-                      </span>
+                      <span className="relative z-10">Explorar</span>
                     </div>
                   </div>
                 </CardContent>
