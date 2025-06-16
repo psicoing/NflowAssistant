@@ -115,6 +115,9 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 16, 2025. Set INS NEURONMEG as default active card in showcase section
+- June 16, 2025. Updated "Cuatro Soluciones" to include: NFLOW Familias, INS NEURONMEG, NFLOW Laboral, NFLOW Adultos
+- June 16, 2025. Integrated INS NEURONMEG with direct links to neuronmeg.jobda.es for consultation booking
 - June 16, 2025. Completely redesigned "Cuatro Soluciones" cards with modern visual design
 - June 16, 2025. Implemented responsive grid layout (1-2-4 columns) with enhanced hover effects
 - June 16, 2025. Added interactive app selection with dynamic showcase section

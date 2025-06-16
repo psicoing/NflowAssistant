@@ -7,7 +7,7 @@ import appImage1 from "@assets/image_1749306853621.png";
 import appImage2 from "@assets/image_1749306865658.png";
 
 export default function MobileAppsSection() {
-  const [activeApp, setActiveApp] = useState(0);
+  const [activeApp, setActiveApp] = useState(1); // Set INS NEURONMEG as default active
 
   const appCategories = [
     {
