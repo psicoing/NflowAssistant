@@ -115,6 +115,8 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 16, 2025. Moved subscription cards above "Cuatro Soluciones" section for better user flow
+- June 16, 2025. Enhanced INS NEURONMEG showcase with custom image and clickable service buttons linking to neuronmeg.jobda.es
 - June 16, 2025. Set INS NEURONMEG as default active card in showcase section
 - June 16, 2025. Updated "Cuatro Soluciones" to include: NFLOW Familias, INS NEURONMEG, NFLOW Laboral, NFLOW Adultos
 - June 16, 2025. Integrated INS NEURONMEG with direct links to neuronmeg.jobda.es for consultation booking

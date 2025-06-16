@@ -17,8 +17,8 @@ export default function Home() {
         <ServicesSection />
         <FeaturesSection />
         <PersonasSection />
-        <MobileAppsSection />
         <PricingSection />
+        <MobileAppsSection />
         <InstitutoSection />
       </main>
       <Footer />
