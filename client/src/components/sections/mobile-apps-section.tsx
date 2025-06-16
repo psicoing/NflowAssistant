@@ -11,16 +11,6 @@ export default function MobileAppsSection() {
 
   const appCategories = [
     {
-      icon: Heart,
-      title: "NFLOW Individual",
-      description: "Salud mental personal",
-      longDescription: "Terapia personalizada con IA avanzada para el cuidado individual de la salud mental",
-      color: "from-nflow-orange to-orange-600",
-      bgColor: "bg-nflow-orange/10",
-      borderColor: "border-nflow-orange/30",
-      features: ["Terapia 24/7", "Seguimiento emocional", "Técnicas personalizadas"]
-    },
-    {
       icon: Users,
       title: "NFLOW Familiar",
       description: "Bienestar familiar",
@@ -32,13 +22,13 @@ export default function MobileAppsSection() {
     },
     {
       icon: Briefcase,
-      title: "JOBDA Personal",
-      description: "Selección de talento",
-      longDescription: "Evaluación psicológica profesional para procesos de selección y desarrollo de talento",
+      title: "INS NEURONMEG",
+      description: "Psicología del Futuro",
+      longDescription: "Instituto de psicología especializado en consultas presenciales, a domicilio y por videollamada con métodos innovadores",
       color: "from-yellow-500 to-orange-500",
       bgColor: "bg-yellow-500/10",
       borderColor: "border-yellow-500/30",
-      features: ["Evaluación psicométrica", "Perfiles de personalidad", "Análisis de competencias"]
+      features: ["Consultas presenciales", "Visitas a domicilio", "Videollamadas"]
     },
     {
       icon: Smartphone,
@@ -68,13 +58,13 @@ export default function MobileAppsSection() {
             Ecosistema Completo
           </Badge>
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-8">
-            Cuatro Soluciones
+            Tres Soluciones
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-nflow-orange via-nflow-orange-light to-nflow-blue">
               Especializadas
             </span>
           </h2>
           <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-            Cada aplicación está diseñada con un propósito específico, ofreciendo 
+            Cada servicio está diseñado con un propósito específico, ofreciendo 
             herramientas y funcionalidades adaptadas a diferentes necesidades.
           </p>
         </div>
@@ -133,11 +123,21 @@ export default function MobileAppsSection() {
 
                   {/* Bottom section - Action button */}
                   <div className="mt-auto">
-                    <div className={`w-full h-11 bg-gradient-to-r ${app.color} rounded-xl flex items-center justify-center text-white font-semibold text-sm transition-all duration-300 group-hover:shadow-lg group-hover:shadow-current/30 cursor-pointer relative overflow-hidden`}>
+                    <div 
+                      className={`w-full h-11 bg-gradient-to-r ${app.color} rounded-xl flex items-center justify-center text-white font-semibold text-sm transition-all duration-300 group-hover:shadow-lg group-hover:shadow-current/30 cursor-pointer relative overflow-hidden`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (app.title === "INS NEURONMEG") {
+                          window.open("https://neuronmeg.jobda.es/", "_blank");
+                        }
+                      }}
+                    >
                       {/* Shimmer effect */}
                       <div className="absolute inset-0 -top-10 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-y-12 opacity-0 group-hover:opacity-100 group-hover:top-10 transition-all duration-700"></div>
                       <ArrowRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" />
-                      <span className="relative z-10">Explorar</span>
+                      <span className="relative z-10">
+                        {app.title === "INS NEURONMEG" ? "Visitar Web" : "Explorar"}
+                      </span>
                     </div>
                   </div>
                 </CardContent>
@@ -182,9 +182,17 @@ export default function MobileAppsSection() {
                     ))}
                   </div>
                   
-                  <Button size="lg" className={`bg-gradient-to-r ${appCategories[activeApp].color} text-white border-none hover:scale-105 transition-transform duration-300 shadow-xl group`}>
+                  <Button 
+                    size="lg" 
+                    className={`bg-gradient-to-r ${appCategories[activeApp].color} text-white border-none hover:scale-105 transition-transform duration-300 shadow-xl group`}
+                    onClick={() => {
+                      if (appCategories[activeApp].title === "INS NEURONMEG") {
+                        window.open("https://neuronmeg.jobda.es/", "_blank");
+                      }
+                    }}
+                  >
                     <Download className="w-5 h-5 mr-2 group-hover:animate-bounce" />
-                    Descargar Ahora
+                    {appCategories[activeApp].title === "INS NEURONMEG" ? "Reservar Consulta" : "Descargar Ahora"}
                   </Button>
                 </div>
 
