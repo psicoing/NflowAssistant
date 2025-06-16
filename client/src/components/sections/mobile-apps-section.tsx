@@ -5,6 +5,7 @@ import { Smartphone, Users, Briefcase, Heart, ArrowRight, Download, Sparkles } f
 import { useState } from "react";
 import appImage1 from "@assets/image_1749306853621.png";
 import appImage2 from "@assets/image_1749306865658.png";
+import neuronmegImage from "@assets/image_1750083116326.png";
 
 export default function MobileAppsSection() {
   const [activeApp, setActiveApp] = useState(1); // Set INS NEURONMEG as default active
@@ -167,9 +168,22 @@ export default function MobileAppsSection() {
                   
                   <div className="grid grid-cols-1 gap-4 mb-8">
                     {appCategories[activeApp].features.map((feature, idx) => (
-                      <div key={idx} className="flex items-center p-4 bg-gray-800/40 rounded-xl border border-gray-700/30 hover:bg-gray-800/60 transition-colors duration-300">
+                      <div 
+                        key={idx} 
+                        className={`flex items-center p-4 bg-gray-800/40 rounded-xl border border-gray-700/30 hover:bg-gray-800/60 transition-colors duration-300 ${
+                          appCategories[activeApp].title === "INS NEURONMEG" ? "cursor-pointer hover:scale-105 hover:shadow-lg" : ""
+                        }`}
+                        onClick={() => {
+                          if (appCategories[activeApp].title === "INS NEURONMEG") {
+                            window.open("https://neuronmeg.jobda.es/", "_blank");
+                          }
+                        }}
+                      >
                         <div className={`w-3 h-3 bg-gradient-to-r ${appCategories[activeApp].color} rounded-full mr-4 shadow-sm`}></div>
                         <span className="text-gray-300 text-sm font-medium">{feature}</span>
+                        {appCategories[activeApp].title === "INS NEURONMEG" && (
+                          <ArrowRight className="w-4 h-4 ml-auto text-gray-400 group-hover:text-white transition-colors duration-300" />
+                        )}
                       </div>
                     ))}
                   </div>
@@ -187,7 +201,7 @@ export default function MobileAppsSection() {
                       <Card className="bg-gradient-to-b from-gray-800/90 to-gray-900/90 border-gray-700/50 backdrop-blur-xl overflow-hidden shadow-2xl">
                         <CardContent className="p-0">
                           <img 
-                            src={activeApp % 2 === 0 ? appImage1 : appImage2} 
+                            src={appCategories[activeApp].title === "INS NEURONMEG" ? neuronmegImage : (activeApp % 2 === 0 ? appImage1 : appImage2)} 
                             alt={`${appCategories[activeApp].title} Interface`}
                             className="w-full h-auto object-cover transition-all duration-700"
                           />
