@@ -182,18 +182,7 @@ export default function MobileAppsSection() {
                     ))}
                   </div>
                   
-                  <Button 
-                    size="lg" 
-                    className={`bg-gradient-to-r ${appCategories[activeApp].color} text-white border-none hover:scale-105 transition-transform duration-300 shadow-xl group`}
-                    onClick={() => {
-                      if (appCategories[activeApp].title === "INS NEURONMEG") {
-                        window.open("https://neuronmeg.jobda.es/", "_blank");
-                      }
-                    }}
-                  >
-                    <Download className="w-5 h-5 mr-2 group-hover:animate-bounce" />
-                    {appCategories[activeApp].title === "INS NEURONMEG" ? "Reservar Consulta" : "Descargar Ahora"}
-                  </Button>
+
                 </div>
 
                 {/* Right - App Interface */}
