@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Smartphone, Users, Briefcase, Heart, ArrowRight, Download, Star } from "lucide-react";
+import { Smartphone, Users, Briefcase, Heart, ArrowRight, Download, Sparkles } from "lucide-react";
 import { useState } from "react";
 import appImage1 from "@assets/image_1749306853621.png";
 import appImage2 from "@assets/image_1749306865658.png";
@@ -64,6 +64,7 @@ export default function MobileAppsSection() {
         {/* Header */}
         <div className="text-center mb-24">
           <Badge variant="outline" className="mb-6 border-nflow-orange/30 text-nflow-orange bg-nflow-orange/5 px-4 py-2">
+            <Sparkles className="w-4 h-4 mr-2" />
             Ecosistema Completo
           </Badge>
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-8">
@@ -78,231 +79,143 @@ export default function MobileAppsSection() {
           </p>
         </div>
 
-        {/* Interactive Apps Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
-          {/* App Cards */}
-          <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {appCategories.map((app, index) => {
-              const Icon = app.icon;
-              const isActive = activeApp === index;
-              return (
-                <Card 
-                  key={index} 
-                  className={`relative overflow-hidden transition-all duration-500 cursor-pointer group ${
-                    isActive 
-                      ? `bg-gradient-to-br ${app.bgColor} border-2 ${app.borderColor} scale-105 shadow-2xl` 
-                      : 'bg-gray-800/40 border-gray-700/50 hover:bg-gray-800/60 hover:scale-102'
-                  }`}
-                  onClick={() => setActiveApp(index)}
-                >
-                  <CardContent className="p-8">
-                    <div className={`w-16 h-16 bg-gradient-to-br ${app.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                      <Icon className="w-8 h-8 text-white" />
-                    </div>
-                    <h4 className="text-2xl font-bold text-white mb-3">{app.title}</h4>
-                    <p className="text-gray-300 mb-4">{app.description}</p>
-                    
-                    {/* Features */}
-                    <div className="space-y-2 mb-6">
-                      {app.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center text-sm text-gray-400">
-                          <Star className="w-3 h-3 text-nflow-orange mr-2" />
-                          {feature}
-                        </div>
-                      ))}
+        {/* Modern Apps Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-20">
+          {appCategories.map((app, index) => {
+            const Icon = app.icon;
+            const isActive = activeApp === index;
+            return (
+              <Card 
+                key={index} 
+                className={`relative overflow-hidden transition-all duration-500 cursor-pointer group h-[400px] ${
+                  isActive 
+                    ? 'bg-gradient-to-br from-gray-800/95 via-gray-700/90 to-gray-800/95 border-2 border-nflow-orange/50 shadow-2xl shadow-nflow-orange/20 scale-105' 
+                    : 'bg-gradient-to-br from-gray-800/80 via-gray-800/60 to-gray-900/80 border border-gray-700/40 hover:border-gray-600/60 hover:shadow-xl hover:shadow-nflow-orange/10 hover:-translate-y-1'
+                }`}
+                onClick={() => setActiveApp(index)}
+              >
+                {/* Gradient overlay que aparece on hover */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${app.bgColor} opacity-0 group-hover:opacity-30 transition-opacity duration-300`}></div>
+                
+                {/* Decorative corner accent */}
+                <div className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl ${app.color} opacity-10 rounded-bl-[80px]`}></div>
+                
+                <CardContent className="relative p-8 h-full flex flex-col justify-between">
+                  {/* Top section - Icon and title */}
+                  <div>
+                    <div className="mb-6 relative">
+                      <div className={`w-16 h-16 bg-gradient-to-br ${app.color} rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
+                        <Icon className="w-8 h-8 text-white drop-shadow-lg" />
+                      </div>
+                      
+                      {/* Floating accent dots */}
+                      <div className={`absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br ${app.color} rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 animate-bounce delay-100`}></div>
+                      <div className={`absolute -bottom-1 -left-1 w-3 h-3 bg-gradient-to-br ${app.color} rounded-full opacity-0 group-hover:opacity-70 transition-all duration-300 animate-bounce delay-200`}></div>
                     </div>
 
-                    <Button 
-                      variant={isActive ? "default" : "outline"} 
-                      size="sm" 
-                      className={isActive 
-                        ? `bg-gradient-to-r ${app.color} text-white border-none hover:scale-105` 
-                        : "border-gray-600 text-gray-300 hover:bg-gray-700"
-                      }
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Descargar
-                    </Button>
-                  </CardContent>
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-200 transition-all duration-300">
+                      {app.title}
+                    </h3>
+                    <p className="text-gray-400 mb-6 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
+                      {app.description}
+                    </p>
+                  </div>
 
-                  {/* Active indicator */}
-                  {isActive && (
-                    <div className="absolute top-4 right-4">
-                      <div className={`w-3 h-3 bg-gradient-to-r ${app.color} rounded-full animate-pulse`}></div>
+                  {/* Middle section - Features */}
+                  <div className="space-y-3 mb-8">
+                    {app.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-center text-xs text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
+                        <div className={`w-1.5 h-1.5 bg-gradient-to-r ${app.color} rounded-full mr-3 shadow-sm group-hover:shadow-md transition-shadow duration-300`}></div>
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Bottom section - Action button */}
+                  <div className="mt-auto">
+                    <div className={`w-full h-11 bg-gradient-to-r ${app.color} rounded-xl flex items-center justify-center text-white font-semibold text-sm transition-all duration-300 group-hover:shadow-lg group-hover:shadow-current/30 cursor-pointer relative overflow-hidden`}>
+                      {/* Shimmer effect */}
+                      <div className="absolute inset-0 -top-10 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-y-12 opacity-0 group-hover:opacity-100 group-hover:top-10 transition-all duration-700"></div>
+                      <ArrowRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" />
+                      <span className="relative z-10">Explorar</span>
                     </div>
-                  )}
-                </Card>
-              );
-            })}
-          </div>
+                  </div>
+                </CardContent>
 
-          {/* Phone Mockup */}
-          <div className="relative flex justify-center items-center">
-            <div className="relative">
-              <div className="transform hover:scale-105 transition-transform duration-700">
-                <Card className="bg-gradient-to-b from-gray-800/90 to-gray-900/90 border-gray-700/50 backdrop-blur-xl overflow-hidden shadow-2xl">
-                  <CardContent className="p-0">
-                    <img 
-                      src={activeApp % 2 === 0 ? appImage1 : appImage2} 
-                      alt="NFLOW App Interface"
-                      className="w-full h-auto object-cover transition-all duration-700"
-                    />
-                  </CardContent>
-                </Card>
-              </div>
-              
-              {/* Floating info */}
-              <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900/90 backdrop-blur-lg border border-gray-700 rounded-xl p-4 min-w-[280px]">
-                <h5 className="text-white font-semibold mb-1">{appCategories[activeApp].title}</h5>
-                <p className="text-gray-300 text-sm">{appCategories[activeApp].longDescription}</p>
-              </div>
-            </div>
-          </div>
+                {/* Active indicator */}
+                {isActive && (
+                  <div className="absolute top-4 right-4">
+                    <div className={`w-3 h-3 bg-gradient-to-r ${app.color} rounded-full animate-pulse shadow-lg`}></div>
+                  </div>
+                )}
+              </Card>
+            );
+          })}
         </div>
 
-        {/* PWA Installation Instructions */}
-        <div className="bg-gradient-to-r from-gray-800/50 to-gray-900/50 backdrop-blur-lg border border-gray-700/50 rounded-3xl p-12">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-white mb-6">
-              Instala NFLOW en tu móvil
-            </h3>
-            <p className="text-gray-300 text-lg max-w-3xl mx-auto">
-              Añade NFLOW a tu pantalla de inicio directamente desde el navegador web. 
-              Sin necesidad de tiendas de aplicaciones.
-            </p>
-          </div>
+        {/* Enhanced Feature Showcase - Información de la app activa */}
+        <div className="relative">
+          <Card className="bg-gradient-to-br from-gray-800/60 via-gray-800/40 to-gray-900/60 border border-gray-700/30 backdrop-blur-xl overflow-hidden">
+            <CardContent className="p-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                {/* Left - Active App Details */}
+                <div>
+                  <Badge variant="outline" className={`mb-6 ${appCategories[activeApp].bgColor} border-current px-4 py-2 text-sm`} style={{color: `hsl(${appCategories[activeApp].color.includes('orange') ? '24 95% 53%' : appCategories[activeApp].color.includes('blue') ? '217 91% 60%' : appCategories[activeApp].color.includes('yellow') ? '43 96% 56%' : '142 71% 45%'})`}}>
+                    <Sparkles className="w-3 h-3 mr-2" />
+                    Aplicación Destacada
+                  </Badge>
+                  
+                  <h3 className="text-4xl font-bold text-white mb-6">
+                    {appCategories[activeApp].title}
+                  </h3>
+                  
+                  <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+                    {appCategories[activeApp].longDescription}
+                  </p>
+                  
+                  <div className="grid grid-cols-1 gap-4 mb-8">
+                    {appCategories[activeApp].features.map((feature, idx) => (
+                      <div key={idx} className="flex items-center p-4 bg-gray-800/40 rounded-xl border border-gray-700/30 hover:bg-gray-800/60 transition-colors duration-300">
+                        <div className={`w-3 h-3 bg-gradient-to-r ${appCategories[activeApp].color} rounded-full mr-4 shadow-sm`}></div>
+                        <span className="text-gray-300 text-sm font-medium">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <Button size="lg" className={`bg-gradient-to-r ${appCategories[activeApp].color} text-white border-none hover:scale-105 transition-transform duration-300 shadow-xl group`}>
+                    <Download className="w-5 h-5 mr-2 group-hover:animate-bounce" />
+                    Descargar Ahora
+                  </Button>
+                </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* iOS Safari Instructions */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
-                  <span className="text-2xl">🧭</span>
-                </div>
-                <h4 className="text-2xl font-bold text-white">iPhone/iPad (Safari)</h4>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-nflow-orange rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
-                  <div>
-                    <p className="text-white font-semibold">Abrir en Safari</p>
-                    <p className="text-gray-300 text-sm">Visita esta página web usando Safari</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-nflow-orange rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
-                  <div>
-                    <p className="text-white font-semibold">Tocar el botón Compartir</p>
-                    <p className="text-gray-300 text-sm">Presiona el icono de compartir en la parte inferior</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-nflow-orange rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
-                  <div>
-                    <p className="text-white font-semibold">"Añadir a pantalla de inicio"</p>
-                    <p className="text-gray-300 text-sm">Busca y toca esta opción en el menú</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-nflow-orange rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
-                  <div>
-                    <p className="text-white font-semibold">Confirmar instalación</p>
-                    <p className="text-gray-300 text-sm">Toca "Añadir" para crear el acceso directo</p>
+                {/* Right - App Interface */}
+                <div className="relative flex justify-center">
+                  <div className="relative group">
+                    {/* Glowing background effect */}
+                    <div className={`absolute -inset-6 bg-gradient-to-r ${appCategories[activeApp].color} rounded-3xl opacity-20 blur-2xl group-hover:opacity-30 transition-opacity duration-500`}></div>
+                    
+                    <div className="relative transform group-hover:scale-105 transition-transform duration-700">
+                      <Card className="bg-gradient-to-b from-gray-800/90 to-gray-900/90 border-gray-700/50 backdrop-blur-xl overflow-hidden shadow-2xl">
+                        <CardContent className="p-0">
+                          <img 
+                            src={activeApp % 2 === 0 ? appImage1 : appImage2} 
+                            alt={`${appCategories[activeApp].title} Interface`}
+                            className="w-full h-auto object-cover transition-all duration-700"
+                          />
+                        </CardContent>
+                      </Card>
+                    </div>
+                    
+                    {/* Floating info badge */}
+                    <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-900/95 backdrop-blur-lg border border-gray-700 rounded-lg px-4 py-2 min-w-[200px] text-center">
+                      <p className="text-white font-semibold text-sm">{appCategories[activeApp].title}</p>
+                      <p className="text-gray-400 text-xs">{appCategories[activeApp].description}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Android Chrome Instructions */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center">
-                  <span className="text-2xl">🌐</span>
-                </div>
-                <h4 className="text-2xl font-bold text-white">Android (Chrome)</h4>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-nflow-blue rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
-                  <div>
-                    <p className="text-white font-semibold">Abrir en Chrome</p>
-                    <p className="text-gray-300 text-sm">Navega a esta página usando Google Chrome</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-nflow-blue rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
-                  <div>
-                    <p className="text-white font-semibold">Ver notificación de instalación</p>
-                    <p className="text-gray-300 text-sm">Aparecerá un banner "Instalar app" automáticamente</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-nflow-blue rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
-                  <div>
-                    <p className="text-white font-semibold">Tocar "Instalar"</p>
-                    <p className="text-gray-300 text-sm">O usar menú ⋮ → "Instalar aplicación"</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-nflow-blue rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
-                  <div>
-                    <p className="text-white font-semibold">¡Listo para usar!</p>
-                    <p className="text-gray-300 text-sm">El icono aparecerá en tu pantalla de inicio</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Benefits */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center bg-gray-800/30 rounded-2xl p-6">
-              <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">⚡</span>
-              </div>
-              <h5 className="text-lg font-bold text-white mb-2">Acceso Instantáneo</h5>
-              <p className="text-gray-300 text-sm">
-                Un toque y ya estás en NFLOW, como una app nativa
-              </p>
-            </div>
-            
-            <div className="text-center bg-gray-800/30 rounded-2xl p-6">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">💾</span>
-              </div>
-              <h5 className="text-lg font-bold text-white mb-2">Sin Espacio Perdido</h5>
-              <p className="text-gray-300 text-sm">
-                Ocupa mucho menos espacio que las apps tradicionales
-              </p>
-            </div>
-            
-            <div className="text-center bg-gray-800/30 rounded-2xl p-6">
-              <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🔄</span>
-              </div>
-              <h5 className="text-lg font-bold text-white mb-2">Siempre Actualizada</h5>
-              <p className="text-gray-300 text-sm">
-                Se actualiza automáticamente con las últimas funciones
-              </p>
-            </div>
-          </div>
-
-          {/* Additional Info */}
-          <div className="mt-12 text-center bg-nflow-orange/10 border border-nflow-orange/20 rounded-2xl p-8">
-            <h5 className="text-xl font-bold text-white mb-4">¿No ves la opción de instalar?</h5>
-            <p className="text-gray-300">
-              Algunos navegadores requieren que uses la página por unos minutos antes de mostrar la opción de instalación. 
-              ¡Navega un poco y vuelve a intentarlo!
-            </p>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>
