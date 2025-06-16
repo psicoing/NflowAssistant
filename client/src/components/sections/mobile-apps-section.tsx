@@ -11,8 +11,8 @@ export default function MobileAppsSection() {
 
   const appCategories = [
     {
-      icon: Users,
-      title: "NFLOW Familiar",
+      icon: Heart,
+      title: "NFLOW Familias",
       description: "Bienestar familiar",
       longDescription: "Herramientas especializadas para fortalecer los vínculos familiares y la comunicación",
       color: "from-nflow-blue to-blue-600",
@@ -39,6 +39,16 @@ export default function MobileAppsSection() {
       bgColor: "bg-green-500/10",
       borderColor: "border-green-500/30",
       features: ["Bienestar corporativo", "Prevención burnout", "Clima laboral"]
+    },
+    {
+      icon: Users,
+      title: "NFLOW Adultos",
+      description: "Salud mental adulta",
+      longDescription: "Terapia personalizada con IA avanzada para el cuidado individual de la salud mental en adultos",
+      color: "from-nflow-orange to-orange-600",
+      bgColor: "bg-nflow-orange/10",
+      borderColor: "border-nflow-orange/30",
+      features: ["Terapia 24/7", "Seguimiento emocional", "Técnicas personalizadas"]
     }
   ];
 
@@ -58,14 +68,14 @@ export default function MobileAppsSection() {
             Ecosistema Completo
           </Badge>
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-8">
-            Tres Soluciones
+            Cuatro Soluciones
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-nflow-orange via-nflow-orange-light to-nflow-blue">
               Especializadas
             </span>
           </h2>
           <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-            Cada servicio está diseñado con un propósito específico, ofreciendo 
-            herramientas y funcionalidades adaptadas a diferentes necesidades.
+            Cada solución está diseñada con un propósito específico, ofreciendo 
+            herramientas y funcionalidades adaptadas a diferentes grupos de edad y necesidades.
           </p>
         </div>
 
