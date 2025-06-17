@@ -52,9 +52,9 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Servicios</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/chat" className="text-gray-400 hover:text-white transition-colors">
+                <a href="#precios" className="text-gray-400 hover:text-white transition-colors">
                   Chat de Apoyo
-                </Link>
+                </a>
               </li>
               <li>
                 <Link href="/resources" className="text-gray-400 hover:text-white transition-colors">
