@@ -115,6 +115,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 16, 2025. Fixed mobile chat interface menu overlap by adjusting positioning and container heights
 - June 16, 2025. Fixed "Chat de Apoyo" footer link to redirect to pricing section instead of allowing direct chat access
 - June 16, 2025. Moved subscription cards above "Cuatro Soluciones" section for better user flow
 - June 16, 2025. Enhanced INS NEURONMEG showcase with custom image and clickable service buttons linking to neuronmeg.jobda.es

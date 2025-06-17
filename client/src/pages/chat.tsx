@@ -241,7 +241,7 @@ export default function Chat() {
       />
       
       {/* Mobile Navigation Bar */}
-      <div className="md:hidden bg-gray-800/90 border-b border-gray-700/50 p-3">
+      <div className="md:hidden bg-gray-800/90 border-b border-gray-700/50 p-3 mt-16">
         <div className="flex items-center justify-between">
           <Button
             onClick={handleNewChat}
@@ -267,7 +267,7 @@ export default function Chat() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row flex-1" style={{ height: 'calc(100vh - 80px)', minHeight: 'calc(100vh - 80px)' }}>
+      <div className="flex flex-col md:flex-row flex-1" style={{ height: 'calc(100vh - 140px)', minHeight: 'calc(100vh - 140px)' }}>
         {/* Sidebar - Hidden on mobile */}
         <div className="hidden md:flex w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex-col backdrop-blur-sm">
           <div className="p-6 border-b border-gray-700/50 space-y-4">
