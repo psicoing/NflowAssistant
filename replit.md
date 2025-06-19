@@ -117,6 +117,9 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 19, 2025. **AVISO DE EDAD MEJORADO VISUALMENTE** - Diseño moderno con gradientes vibrantes, efectos hover y mejor contraste visual
+- June 19, 2025. **SECCIÓN URGENCIAS AGREGADA AL CHAT** - Modal completo con números de emergencia de España y UE, integrado en menú contextual del usuario
+- June 19, 2025. **AVISO EDAD MÍNIMA IMPLEMENTADO** - Sección prominente en página principal clarificando uso para edades 12-95 años
 - June 19, 2025. **MENÚ CHAT OPTIMIZADO Y FINALIZADO** - ChatHeader dedicado, ChatUserMenu contextual sin elementos externos, modal informativo de planes integrado
 - June 19, 2025. **INTERFAZ USUARIO CHAT COMPLETAMENTE PERSONALIZADA** - Avatar, indicador suscripción, gestión completa sin salir del chat
 - June 19, 2025. **SISTEMA COMPLETAMENTE FUNCIONAL** - Eliminado bucle de redirección causado por integración PayPal conflictiva
