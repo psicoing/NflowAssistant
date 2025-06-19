@@ -136,6 +136,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // New endpoint for PayPal subscription capture
+  app.post("/api/paypal/capture-subscription", async (req, res) => {
+    try {
+      const { subscriptionID, subscriptionPlan } = req.body;
+      const userId = req.session.userId || 1; // Use session userId
+      
+      if (!subscriptionID) {
+        return res.status(400).json({ message: "Subscription ID is required" });
+      }
+
+      console.log(`Activating PayPal subscription: ${subscriptionID} for user: ${userId}`);
+
+      // Verify subscription with PayPal
+      const subscriptionData = await paypalService.verifySubscription(subscriptionID);
+      console.log('PayPal subscription data:', subscriptionData);
+
+      if (subscriptionData.status === 'ACTIVE') {
+        // Calculate expiration date (30 days from now)
+        const expiresAt = new Date();
+        expiresAt.setMonth(expiresAt.getMonth() + 1);
+        
+        // Update user subscription
+        await storage.updateUserSubscription(userId, {
+          status: 'active',
+          plan: subscriptionPlan || 'basic',
+          subscriptionId: subscriptionID,
+          expiresAt
+        });
+
+        // Record transaction in database
+        await storage.createPaypalTransaction({
+          userId: userId,
+          paypalOrderId: subscriptionID,
+          subscriptionPlan: subscriptionPlan || 'basic',
+          amount: '9.99',
+          currency: 'EUR',
+          status: 'COMPLETED'
+        });
+        
+        console.log(`User ${userId} subscription activated via PayPal: ${subscriptionPlan}`);
+        
+        res.json({ 
+          status: 'ACTIVE', 
+          message: 'Subscription activated successfully',
+          subscriptionID: subscriptionID,
+          expiresAt: expiresAt
+        });
+      } else {
+        res.status(400).json({ 
+          message: 'Subscription not active', 
+          status: subscriptionData.status 
+        });
+      }
+
+    } catch (error) {
+      console.error("Error activating PayPal subscription:", error);
+      res.status(500).json({ message: "Error activating subscription" });
+    }
+  });
+
   // Get all conversations
   app.get("/api/conversations", async (req, res) => {
     try {

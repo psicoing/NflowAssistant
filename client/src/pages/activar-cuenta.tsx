@@ -6,6 +6,13 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { CreditCard, MessageCircle } from "lucide-react";
 
+// PayPal configuration
+declare global {
+  interface Window {
+    paypal: any;
+  }
+}
+
 export default function ActivarCuenta() {
   const [, setLocation] = useLocation();
   const [isLoading, setIsLoading] = useState(false);
@@ -47,54 +54,86 @@ export default function ActivarCuenta() {
     checkUserStatus();
   }, [setLocation]);
 
-  const handlePayPalPayment = async (planId: string) => {
-    setIsLoading(true);
-    try {
-      const planAmounts = {
-        basic: 2.99,
-        group: 4.99,
-        individual: 9.99
-      };
+  // Initialize PayPal SDK
+  useEffect(() => {
+    const initPayPal = () => {
+      if (window.paypal && document.getElementById('paypal-button-container-basic')) {
+        window.paypal.Buttons({
+          style: {
+            shape: 'rect',
+            color: 'blue',
+            layout: 'vertical',
+            label: 'subscribe'
+          },
+          createSubscription: function(data: any, actions: any) {
+            return actions.subscription.create({
+              plan_id: 'P-8X502396U4202261ENBKC32A'
+            });
+          },
+          onApprove: async function(data: any, actions: any) {
+            try {
+              setIsLoading(true);
+              
+              // Capture subscription and activate account
+              const response = await fetch('/api/paypal/capture-subscription', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  subscriptionID: data.subscriptionID,
+                  subscriptionPlan: 'basic'
+                }),
+              });
 
-      const response = await fetch("/api/paypal/create-order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          subscriptionPlan: planId,
-          amount: planAmounts[planId as keyof typeof planAmounts],
-          currency: "EUR"
-        }),
-      });
+              if (response.ok) {
+                toast({
+                  title: "¡Cuenta Activada!",
+                  description: "Tu suscripción está activa. Redirigiendo al chat...",
+                  duration: 3000,
+                });
 
-      if (!response.ok) {
-        throw new Error("Error creating payment order");
+                setTimeout(() => {
+                  setLocation("/chat");
+                }, 2000);
+              } else {
+                throw new Error('Failed to activate subscription');
+              }
+            } catch (error) {
+              console.error('Subscription activation error:', error);
+              toast({
+                title: "Error en la activación",
+                description: "Hubo un problema activando tu cuenta. Contacta soporte.",
+                variant: "destructive",
+                duration: 10000,
+              });
+            } finally {
+              setIsLoading(false);
+            }
+          },
+          onError: function(err: any) {
+            console.error('PayPal error:', err);
+            toast({
+              title: "Error de PayPal",
+              description: "Hubo un problema con PayPal. Intenta de nuevo.",
+              variant: "destructive",
+              duration: 5000,
+            });
+          }
+        }).render('#paypal-button-container-basic');
       }
+    };
 
-      const orderData = await response.json();
-      
-      // Store payment info for return handling
-      localStorage.setItem("paymentPlan", planId);
-      localStorage.setItem("paymentAmount", planAmounts[planId as keyof typeof planAmounts].toString());
-      
-      // Redirect through our payment redirect page
-      const redirectUrl = `/payment-redirect?orderId=${orderData.id}&plan=${planId}`;
-      console.log("Redirecting to payment page:", redirectUrl);
-      window.location.href = redirectUrl;
-
-    } catch (error) {
-      console.error("Payment error:", error);
-      toast({
-        title: "Error en el pago",
-        description: "Hubo un problema iniciando el pago. Intenta de nuevo.",
-        variant: "destructive",
-        duration: 5000,
-      });
-    } finally {
-      setIsLoading(false);
+    // Load PayPal SDK if not already loaded
+    if (!window.paypal) {
+      const script = document.createElement('script');
+      script.src = 'https://www.paypal.com/sdk/js?client-id=AUfOCCtv0adF68mMpXq5rLt-yYcpZmHwe_zITYbsSTNwrdSmmhaVqCYGkmaMs1yuwVH9Wjp2-FtIsCj7&vault=true&intent=subscription';
+      script.onload = initPayPal;
+      document.head.appendChild(script);
+    } else {
+      initPayPal();
     }
-  };
+  }, [toast, setLocation]);
 
   if (!userInfo) {
     return (
@@ -134,27 +173,18 @@ export default function ActivarCuenta() {
               </div>
 
               <div className="space-y-4">
-                <Button
-                  onClick={() => handlePayPalPayment("basic")}
-                  disabled={isLoading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3"
-                >
-                  Plan Básico - €2.99
-                </Button>
-                <Button
-                  onClick={() => handlePayPalPayment("group")}
-                  disabled={isLoading}
-                  className="w-full bg-nflow-orange hover:bg-nflow-orange/90 text-white font-semibold py-3"
-                >
-                  Plan Grupal - €4.99 (Más Popular)
-                </Button>
-                <Button
-                  onClick={() => handlePayPalPayment("individual")}
-                  disabled={isLoading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3"
-                >
-                  Plan Individual - €9.99
-                </Button>
+                <div className="bg-gray-700/50 border border-nflow-blue rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-lg font-semibold text-white">Plan Básico</h4>
+                    <span className="text-xl font-bold text-nflow-blue">€9.99/mes</span>
+                  </div>
+                  <ul className="text-sm text-gray-300 mb-4 space-y-1">
+                    <li>• Chat ilimitado con IA especializada</li>
+                    <li>• Soporte psicológico 24/7</li>
+                    <li>• Recursos y ejercicios personalizados</li>
+                  </ul>
+                  <div id="paypal-button-container-basic" className="min-h-[50px]"></div>
+                </div>
               </div>
 
               {isLoading && (
