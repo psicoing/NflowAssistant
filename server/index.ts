@@ -7,14 +7,16 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Session configuration for admin panel
+// Session configuration for user authentication
 app.use(session({
   secret: "nflow-admin-secret-2025",
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true, // Changed to true to create sessions for new users
   cookie: {
     secure: false, // Set to true in production with HTTPS
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: 'lax' // Allow same-site requests
   }
 }));
 
