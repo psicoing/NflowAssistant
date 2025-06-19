@@ -1,6 +1,7 @@
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/sections/hero-section";
+import AgeNoticeSection from "@/components/sections/age-notice-section";
 import ServicesSection from "@/components/sections/services-section";
 import FeaturesSection from "@/components/sections/features-section";
 import PersonasSection from "@/components/sections/personas-section";
@@ -14,6 +15,7 @@ export default function Home() {
       <Header />
       <main>
         <HeroSection />
+        <AgeNoticeSection />
         <ServicesSection />
         <FeaturesSection />
         <PersonasSection />
