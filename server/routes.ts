@@ -250,14 +250,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/conversations", async (req, res) => {
     try {
       const userId = req.session.userId;
+      console.log("Session check - Conversations endpoint - Session ID:", req.sessionID, "UserId:", userId);
       
       if (!userId) {
+        console.log("No userId in session for conversations endpoint");
         return res.status(401).json({ message: "User not authenticated" });
       }
       
       const conversations = await storage.getConversations(userId);
+      console.log(`Fetched ${conversations.length} conversations for user ${userId}`);
       res.json(conversations);
     } catch (error) {
+      console.error("Error fetching conversations:", error);
       res.status(500).json({ message: "Error fetching conversations" });
     }
   });
