@@ -93,6 +93,9 @@ export const partnerReferrals = pgTable("partner_referrals", {
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
+  email: true,
+  subscriptionStatus: true,
+  hasCompletedPayment: true,
 });
 
 export const insertConversationSchema = createInsertSchema(conversations).omit({

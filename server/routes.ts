@@ -355,6 +355,108 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ======== PAYPAL PAYMENT ROUTES ========
+  
+  // Create PayPal order
+  app.post("/api/paypal/create-order", async (req, res) => {
+    try {
+      const { userId, subscriptionPlan, amount, currency = "EUR" } = req.body;
+      
+      if (!userId || !subscriptionPlan || !amount) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "userId, subscriptionPlan y amount son requeridos" 
+        });
+      }
+
+      // Create PayPal order using our PayPal service
+      const order = {
+        intent: "CAPTURE",
+        purchase_units: [{
+          amount: {
+            currency_code: currency,
+            value: amount
+          },
+          custom_id: `${userId}_${subscriptionPlan}`,
+          description: `NFLOW ${subscriptionPlan} subscription`
+        }],
+        application_context: {
+          return_url: `${req.protocol}://${req.get('host')}/payment-success?userId=${userId}&plan=${subscriptionPlan}`,
+          cancel_url: `${req.protocol}://${req.get('host')}/payment-cancelled`
+        }
+      };
+
+      // Create PayPal transaction record
+      await storage.createPaypalTransaction({
+        userId: parseInt(userId.toString()),
+        paypalOrderId: `temp_${Date.now()}`, // Will be updated with real ID
+        amount: parseFloat(amount.toString()),
+        currency: currency.toString(),
+        status: "pending",
+        subscriptionPlan: subscriptionPlan.toString()
+      });
+
+      // For demo purposes, simulate PayPal order creation
+      const mockOrderId = `MOCK_ORDER_${Date.now()}`;
+      
+      res.json({
+        id: mockOrderId,
+        status: "CREATED",
+        links: [{
+          href: `https://www.sandbox.paypal.com/checkoutnow?token=${mockOrderId}`,
+          rel: "approve",
+          method: "GET"
+        }]
+      });
+
+    } catch (error) {
+      console.error("Error creating PayPal order:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error creando orden de pago" 
+      });
+    }
+  });
+
+  // Handle payment success (webhook or return URL)
+  app.get("/payment-success", async (req, res) => {
+    try {
+      const { userId, plan, token } = req.query;
+      
+      if (!userId || !plan) {
+        return res.redirect("/?error=missing_params");
+      }
+
+      // Update user subscription
+      const expiresAt = new Date();
+      expiresAt.setMonth(expiresAt.getMonth() + 1); // 1 month subscription
+
+      await storage.updateUserSubscription(parseInt(userId), {
+        status: 'active',
+        plan: plan as string,
+        subscriptionId: token as string,
+        expiresAt
+      });
+
+      // Update PayPal transaction
+      if (token) {
+        await storage.updatePaypalTransaction(token as string, "completed");
+      }
+
+      // Redirect to chat with success message
+      res.redirect("/chat?payment=success");
+
+    } catch (error) {
+      console.error("Error processing payment success:", error);
+      res.redirect("/?error=payment_processing");
+    }
+  });
+
+  // Handle payment cancellation
+  app.get("/payment-cancelled", (req, res) => {
+    res.redirect("/?payment=cancelled");
+  });
+
   // User statistics and tracking routes
   app.get("/api/admin/user-stats/:userId", async (req, res) => {
     try {
