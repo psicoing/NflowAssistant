@@ -24,7 +24,7 @@ export class PayPalService {
 
   constructor() {
     this.clientId = process.env.PAYPAL_CLIENT_ID || '';
-    this.clientSecret = process.env.PAYPAL_SECRET || '';
+    this.clientSecret = process.env.PAYPAL_CLIENT_SECRET || '';
     this.baseURL = process.env.NODE_ENV === 'production' 
       ? 'https://api-m.paypal.com' 
       : 'https://api-m.sandbox.paypal.com';

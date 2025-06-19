@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
-import { paypalService } from "./paypal";
+// import { paypalService } from "./paypal"; // Temporarily disabled
 import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
@@ -106,7 +106,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // New endpoint for PayPal subscription capture
+  // New endpoint for PayPal subscription capture - TEMPORARILY DISABLED
+  /*
   app.post("/api/paypal/capture-subscription", async (req, res) => {
     try {
       const { subscriptionID, subscriptionPlan } = req.body;
@@ -165,6 +166,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Error activating subscription" });
     }
   });
+  */
 
   // Cancel subscription endpoint
   app.post("/api/subscription/cancel", async (req, res) => {
@@ -179,7 +181,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "No active subscription found" });
       }
 
-      // Cancel with PayPal
+      // Cancel with PayPal - TEMPORARILY DISABLED
+      /*
       if (user.subscriptionId) {
         try {
           await paypalService.cancelSubscription(user.subscriptionId);
@@ -188,6 +191,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.warn("PayPal cancellation failed, updating local status only:", paypalError);
         }
       }
+      */
 
       // Update user subscription status to cancelled
       await storage.updateUserSubscription(userId, {
@@ -210,6 +214,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Error cancelling subscription" });
     }
   });
+  */
 
   // Get subscription details endpoint
   app.get("/api/subscription/details", async (req, res) => {
@@ -396,7 +401,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // PayPal subscription routes
+  // PayPal subscription routes - TEMPORARILY DISABLED
+  /*
   app.post("/api/subscribe", async (req, res) => {
     try {
       const { subscriptionId, userId = 1 } = req.body;
