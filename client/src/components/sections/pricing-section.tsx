@@ -212,9 +212,9 @@ export default function PricingSection() {
             Desbloquea acceso completo a recursos exclusivos y servicios personalizados
           </p>
           {(isNewUser || isPendingPayment) && (
-            <div className="mt-6 p-4 bg-red-500/20 border border-red-500/30 rounded-xl max-w-md mx-auto">
-              <p className="text-red-300 font-semibold">
-                {isPendingPayment ? "⚠️ PAGO OBLIGATORIO: Tu cuenta se borrará si no pagas" : "¡Último paso! Selecciona tu plan para activar tu cuenta"}
+            <div className="mt-6 p-4 bg-nflow-orange/20 border border-nflow-orange/30 rounded-xl max-w-md mx-auto">
+              <p className="text-nflow-orange font-semibold">
+                ¡Selecciona tu plan para activar tu cuenta!
               </p>
             </div>
           )}

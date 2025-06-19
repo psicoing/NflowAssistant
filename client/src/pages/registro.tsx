@@ -64,9 +64,9 @@ export default function Registro() {
         setShowSuccess(true);
         
         toast({
-          title: "Cuenta temporal creada",
-          description: "IMPORTANTE: Debes completar el pago para activar tu cuenta",
-          duration: 6000,
+          title: "¡Cuenta creada!",
+          description: "Selecciona tu plan para continuar",
+          duration: 3000,
         });
 
         // Guardar datos del usuario pendiente de pago - se borrará si no paga
