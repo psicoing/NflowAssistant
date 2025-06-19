@@ -11,27 +11,7 @@ import "./types"; // Import session types
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
-  // User authentication routes
-  app.post("/api/auth/register", async (req, res) => {
-    try {
-      const validatedData = insertUserSchema.parse(req.body);
-      const existingUser = await storage.getUserByUsername(validatedData.username);
-      
-      if (existingUser) {
-        return res.status(400).json({ message: "Username already exists" });
-      }
-      
-      const user = await storage.createUser(validatedData);
-      res.json({ 
-        success: true, 
-        userId: user.id,
-        message: "User registered successfully" 
-      });
-    } catch (error) {
-      console.error("Error registering user:", error);
-      res.status(400).json({ message: "Error creating user account" });
-    }
-  });
+  // First registration endpoint removed - using the complete one below
 
   app.post("/api/auth/login", async (req, res) => {
     try {
@@ -771,6 +751,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Auto-login the user after registration
       req.session.userId = user.id;
+      console.log("Session set in registration:", req.session.userId, "Session ID:", req.sessionID);
+
+      // Force session save before responding
+      req.session.save((err) => {
+        if (err) {
+          console.error("Session save error:", err);
+        } else {
+          console.log("Session saved successfully");
+        }
+      });
 
       res.status(201).json({
         success: true,
@@ -847,9 +837,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get current authenticated user
   app.get("/api/auth/me", async (req, res) => {
     try {
+      console.log("Session check - ID:", req.sessionID, "UserId:", req.session.userId);
       const userId = req.session.userId;
       
       if (!userId) {
+        console.log("No userId in session, not authenticated");
         return res.status(401).json({ message: "Not authenticated" });
       }
       
