@@ -844,6 +844,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get current authenticated user
+  app.get("/api/auth/me", async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      
+      if (!userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const hasActiveSubscription = await checkSubscription(userId);
+      
+      res.json({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        subscriptionStatus: user.subscriptionStatus,
+        subscriptionPlan: user.subscriptionPlan,
+        hasCompletedPayment: user.hasCompletedPayment,
+        hasActiveSubscription,
+        createdAt: user.createdAt
+      });
+    } catch (error) {
+      console.error("Error getting current user:", error);
+      res.status(500).json({ message: "Error getting user info" });
+    }
+  });
+
   app.get("/api/admin/stats", async (req, res) => {
     if (!req.session.isAdmin) {
       return res.status(401).json({ message: "No autorizado" });

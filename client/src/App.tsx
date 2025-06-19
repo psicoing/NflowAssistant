@@ -1,8 +1,10 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { useAuth } from "@/hooks/useAuth";
+import { useEffect } from "react";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Chat from "@/pages/chat";
@@ -21,7 +23,34 @@ import PWAInstallPrompt from "@/components/ui/pwa-install-prompt";
 import PaymentRedirect from "@/pages/payment-redirect";
 import ActivarCuenta from "@/pages/activar-cuenta";
 
-function Router() {
+function AuthenticatedRouter() {
+  const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
+  const [location, setLocation] = useLocation();
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    // If authenticated user needs payment and is not on activation page, redirect
+    if (isAuthenticated && needsPayment && location !== "/activar-cuenta") {
+      setLocation("/activar-cuenta");
+      return;
+    }
+
+    // If not authenticated and trying to access protected routes, redirect to home
+    if (!isAuthenticated && !["/", "/login", "/registro", "/admin/login", "/partners/login", "/partners/register", "/partners"].includes(location)) {
+      setLocation("/");
+      return;
+    }
+  }, [isAuthenticated, needsPayment, location, isLoading, setLocation]);
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
   return (
     <Switch>
       <Route path="/" component={Home} />
@@ -51,7 +80,7 @@ function App() {
       <TooltipProvider>
         <div className="min-h-screen bg-nflow-dark text-white">
           <Toaster />
-          <Router />
+          <AuthenticatedRouter />
           <PWAInstallPrompt />
         </div>
       </TooltipProvider>
