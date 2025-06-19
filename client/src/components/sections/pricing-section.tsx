@@ -116,61 +116,45 @@ export default function PricingSection() {
     }
 
     try {
-      // For demo purposes, simulate successful payment
       toast({
-        title: "Procesando pago...",
-        description: "Simulando pago exitoso para demostración",
+        title: "Creando orden de pago...",
+        description: "Redirigiendo a PayPal",
         duration: 2000,
       });
 
-      // Simulate payment processing delay
-      setTimeout(async () => {
-        try {
-          // Activate subscription directly
-          const response = await fetch("/api/activate-subscription", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              userId: currentUserId,
-              subscriptionPlan: planId,
-              amount: getAmount(planId)
-            }),
-          });
+      // Create PayPal order
+      const response = await fetch("/api/paypal/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: currentUserId,
+          subscriptionPlan: planId,
+          amount: getAmount(planId),
+          currency: "EUR"
+        }),
+      });
 
-          if (!response.ok) {
-            throw new Error("Error activating subscription");
-          }
+      if (!response.ok) {
+        throw new Error("Error creating payment order");
+      }
 
-          // Clear all pending/new user data and establish active session
-          localStorage.removeItem("pendingUserId");
-          localStorage.removeItem("pendingUsername");
-          localStorage.removeItem("newUserId");
-          localStorage.removeItem("newUsername");
-          localStorage.removeItem("registrationTime");
-          localStorage.setItem("userId", currentUserId!);
-          
-          toast({
-            title: "¡Pago exitoso!",
-            description: "Tu suscripción está activa. Redirigiendo al chat...",
-            duration: 3000,
-          });
-          
-          setTimeout(() => {
-            setLocation("/chat");
-          }, 2000);
-
-        } catch (error) {
-          console.error("Subscription activation error:", error);
-          toast({
-            title: "Error en la activación",
-            description: "Hubo un problema activando tu suscripción. Intenta de nuevo.",
-            variant: "destructive",
-            duration: 5000,
-          });
-        }
-      }, 1500);
+      const orderData = await response.json();
+      
+      // Store payment info for return handling
+      localStorage.setItem("paymentPlan", planId);
+      localStorage.setItem("paymentAmount", getAmount(planId));
+      
+      // Redirect to PayPal using the approval URL from the response
+      const approvalUrl = orderData.links?.find((link: any) => link.rel === "approve")?.href;
+      if (approvalUrl) {
+        window.location.href = approvalUrl;
+      } else {
+        // Fallback to sandbox URL construction
+        const paypalUrl = `https://www.sandbox.paypal.com/checkoutnow?token=${orderData.id}`;
+        window.location.href = paypalUrl;
+      }
 
     } catch (error) {
       console.error("Payment error:", error);

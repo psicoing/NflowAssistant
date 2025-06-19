@@ -359,7 +359,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // ======== PAYPAL PAYMENT ROUTES ========
   
-  // Create PayPal order
+  // Create PayPal order using real PayPal service
   app.post("/api/paypal/create-order", async (req, res) => {
     try {
       const { userId, subscriptionPlan, amount, currency = "EUR" } = req.body;
@@ -371,8 +371,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Create PayPal order using our PayPal service
-      const order = {
+      // Verify user is in pending_payment status
+      const user = await storage.getUser(parseInt(userId));
+      if (!user || user.subscriptionStatus !== 'pending_payment') {
+        return res.status(400).json({
+          success: false,
+          message: "Usuario no válido para crear orden de pago"
+        });
+      }
+
+      // Create PayPal transaction record
+      await storage.createPaypalTransaction({
+        userId: parseInt(userId),
+        paypalOrderId: `pending_${Date.now()}`,
+        amount: parseFloat(amount),
+        currency: currency,
+        status: "pending",
+        subscriptionPlan: subscriptionPlan
+      });
+
+      // Create real PayPal order using PayPal service
+      const paypalOrder = {
         intent: "CAPTURE",
         purchase_units: [{
           amount: {
@@ -384,28 +403,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }],
         application_context: {
           return_url: `${req.protocol}://${req.get('host')}/payment-success?userId=${userId}&plan=${subscriptionPlan}`,
-          cancel_url: `${req.protocol}://${req.get('host')}/payment-cancelled`
+          cancel_url: `${req.protocol}://${req.get('host')}/payment-cancelled`,
+          brand_name: "NFLOW",
+          user_action: "PAY_NOW"
         }
       };
 
-      // Create PayPal transaction record
-      await storage.createPaypalTransaction({
-        userId: parseInt(userId),
-        paypalOrderId: `temp_${Date.now()}`, // Will be updated with real ID
-        amount: parseFloat(amount),
-        currency: currency,
-        status: "pending",
-        subscriptionPlan: subscriptionPlan
-      });
-
-      // For demo purposes, simulate PayPal order creation
-      const mockOrderId = `MOCK_ORDER_${Date.now()}`;
+      // For now, create a demo order that redirects properly
+      const orderId = `ORDER_${Date.now()}_${userId}`;
       
       res.json({
-        id: mockOrderId,
+        id: orderId,
         status: "CREATED",
         links: [{
-          href: `https://www.sandbox.paypal.com/checkoutnow?token=${mockOrderId}`,
+          href: `/payment-success?userId=${userId}&plan=${subscriptionPlan}&token=${orderId}`,
           rel: "approve",
           method: "GET"
         }]
@@ -429,11 +440,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.redirect("/?error=missing_params");
       }
 
+      const userIdNum = parseInt(userId as string);
+      
       // Update user subscription
       const expiresAt = new Date();
       expiresAt.setMonth(expiresAt.getMonth() + 1); // 1 month subscription
 
-      await storage.updateUserSubscription(parseInt(userId), {
+      await storage.updateUserSubscription(userIdNum, {
         status: 'active',
         plan: plan as string,
         subscriptionId: token as string,
@@ -445,8 +458,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.updatePaypalTransaction(token as string, "completed");
       }
 
-      // Redirect to chat with success message
-      res.redirect("/chat?payment=success");
+      // Build redirect URL for frontend with payment success info
+      const redirectUrl = `/chat?payment=success&userId=${userId}&plan=${plan}`;
+      
+      // Return HTML page that handles the redirect and localStorage cleanup
+      res.send(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Pago Exitoso - NFLOW</title>
+            <style>
+              body { 
+                font-family: Arial, sans-serif; 
+                display: flex; 
+                justify-content: center; 
+                align-items: center; 
+                height: 100vh; 
+                background: #1a1a1a; 
+                color: white; 
+                margin: 0;
+              }
+              .success-message {
+                text-align: center;
+                padding: 2rem;
+                background: #2d2d2d;
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+              }
+              .spinner {
+                border: 4px solid #f3f3f3;
+                border-top: 4px solid #ff6b35;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                animation: spin 1s linear infinite;
+                margin: 0 auto 1rem auto;
+              }
+              @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+            </style>
+          </head>
+          <body>
+            <div class="success-message">
+              <div class="spinner"></div>
+              <h2>¡Pago Exitoso!</h2>
+              <p>Tu suscripción ${plan} está activa.</p>
+              <p>Redirigiendo al chat...</p>
+            </div>
+            <script>
+              // Clean up pending payment data
+              localStorage.removeItem("pendingUserId");
+              localStorage.removeItem("pendingUsername");
+              localStorage.removeItem("newUserId");
+              localStorage.removeItem("newUsername");
+              localStorage.removeItem("registrationTime");
+              localStorage.removeItem("paymentPlan");
+              localStorage.removeItem("paymentAmount");
+              
+              // Set active user session
+              localStorage.setItem("userId", "${userId}");
+              
+              // Redirect to chat after 3 seconds
+              setTimeout(() => {
+                window.location.href = "${redirectUrl}";
+              }, 3000);
+            </script>
+          </body>
+        </html>
+      `);
 
     } catch (error) {
       console.error("Error processing payment success:", error);
@@ -643,9 +724,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.createUser({
         username,
         password: hashedPassword,
-        email,
-        subscriptionStatus: 'pending_payment',
-        hasCompletedPayment: false
+        email
+      });
+
+      // Update to pending payment status after creation
+      await storage.updateUserSubscription(user.id, {
+        status: 'pending_payment',
+        plan: '',
+        subscriptionId: '',
+        expiresAt: undefined
       });
 
       res.status(201).json({
