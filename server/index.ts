@@ -17,11 +17,11 @@ app.use(session({
   store: new memoryStore({
     checkPeriod: 86400000 // prune expired entries every 24h
   }),
-  resave: false,
-  saveUninitialized: false,
+  resave: true,
+  saveUninitialized: true,
   cookie: {
     secure: false, // Set to true in production with HTTPS
-    httpOnly: true,
+    httpOnly: false, // Allow frontend access
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     sameSite: 'lax' // Allow same-site requests
   }
