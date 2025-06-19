@@ -11,37 +11,7 @@ import "./types"; // Import session types
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
-  // First registration endpoint removed - using the complete one below
-
-  app.post("/api/auth/login", async (req, res) => {
-    try {
-      const { username, password } = req.body;
-      
-      if (!username || !password) {
-        return res.status(400).json({ message: "Username and password required" });
-      }
-      
-      const user = await storage.getUserByUsername(username);
-      
-      if (!user || user.password !== password) {
-        return res.status(401).json({ message: "Invalid credentials" });
-      }
-      
-      // Register login in database
-      await storage.updateUserLogin(user.id);
-      
-      res.json({ 
-        success: true,
-        userId: user.id,
-        message: "Login successful",
-        hasCompletedPayment: user.hasCompletedPayment,
-        subscriptionStatus: user.subscriptionStatus
-      });
-    } catch (error) {
-      console.error("Error during login:", error);
-      res.status(500).json({ message: "Error processing login" });
-    }
-  });
+  // Removed duplicate login endpoint - using the bcrypt version below
 
   // PayPal transaction tracking routes
   app.post("/api/paypal/create-order", async (req, res) => {
