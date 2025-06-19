@@ -229,14 +229,6 @@ export default function ChatUserMenu() {
             </>
           )}
           
-          <DropdownMenuItem 
-            className="text-white hover:bg-gray-700 cursor-pointer"
-            onClick={() => setLocation("/recursos")}
-          >
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Recursos</span>
-          </DropdownMenuItem>
-          
           <DropdownMenuSeparator className="bg-gray-700" />
           
           <DropdownMenuItem 
