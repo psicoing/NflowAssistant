@@ -504,6 +504,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Clean up pending payment users older than 24 hours
+  app.post("/api/cleanup-pending-users", async (req, res) => {
+    try {
+      const twentyFourHoursAgo = new Date();
+      twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+
+      // Get all pending payment users created more than 24 hours ago
+      const allUsers = await storage.getAllUsers();
+      const pendingUsers = allUsers.filter(user => 
+        user.subscriptionStatus === 'pending_payment' && 
+        user.createdAt < twentyFourHoursAgo
+      );
+
+      // Delete expired pending users
+      for (const user of pendingUsers) {
+        await execute_sql_tool({ 
+          sql_query: `DELETE FROM users WHERE id = ${user.id}` 
+        });
+      }
+
+      res.json({
+        success: true,
+        deletedCount: pendingUsers.length,
+        message: `Deleted ${pendingUsers.length} expired pending users`
+      });
+
+    } catch (error) {
+      console.error("Error cleaning up pending users:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error cleaning up expired accounts" 
+      });
+    }
+  });
+
   // User statistics and tracking routes
   app.get("/api/admin/user-stats/:userId", async (req, res) => {
     try {
