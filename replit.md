@@ -34,6 +34,8 @@ NFLOW es una plataforma web de salud mental que combina un asistente conversacio
 - **Prompt Engineering**: Sistema inteligente de selección de ejemplos relevantes
 - **Message History**: Persistencia de conversaciones por usuario
 - **Real-time Interface**: Chat interface responsive con auto-scroll
+- **User-Specific Menu**: ChatHeader dedicado con ChatUserMenu contextual para usuarios autenticados
+- **Subscription Management**: Indicadores visuales de estado y opciones de gestión integradas
 
 ### 2. User Management
 - **Registration/Login**: Sistema básico de autenticación con username/password
@@ -115,6 +117,8 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 19, 2025. **MENÚ DEDICADO USUARIO IMPLEMENTADO** - Creado ChatHeader específico con ChatUserMenu contextual, eliminado menú hamburguesa genérico
+- June 19, 2025. **INTERFAZ CHAT COMPLETAMENTE PERSONALIZADA** - Avatar usuario, indicador suscripción, opciones logout/cancelar/mejorar plan
 - June 19, 2025. **SISTEMA COMPLETAMENTE FUNCIONAL** - Eliminado bucle de redirección causado por integración PayPal conflictiva
 - June 19, 2025. **AUTENTICACIÓN TOTALMENTE OPERATIVA** - Login, sesiones y acceso al chat funcionando sin problemas
 - June 19, 2025. **SISTEMA COMPLETAMENTE OPERATIVO** - Session authentication working, user-specific chat access confirmed, 100+ daily users capacity achieved
