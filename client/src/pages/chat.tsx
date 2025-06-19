@@ -46,12 +46,11 @@ export default function Chat() {
   const { data: subscriptionData, isLoading: isCheckingSubscription } = useQuery({
     queryKey: ["/api/subscription-status"],
     queryFn: async () => {
-      if (!userId) throw new Error("No user ID found");
-      const response = await fetch(`/api/subscription-status?userId=${userId}`);
+      const response = await fetch(`/api/subscription-status`);
       if (!response.ok) throw new Error("Failed to check subscription");
       return response.json();
     },
-    enabled: !!userId,
+    retry: false,
   });
 
   // Fetch conversations list
@@ -175,6 +174,12 @@ export default function Chat() {
 
   // Redirect effect for non-subscribers
   useEffect(() => {
+    console.log("Chat subscription check:", {
+      isCheckingSubscription,
+      subscriptionData,
+      hasActiveSubscription: subscriptionData?.hasActiveSubscription
+    });
+    
     if (!isCheckingSubscription && subscriptionData && !subscriptionData.hasActiveSubscription) {
       console.log("No active subscription detected, redirecting to pricing");
       toast({
