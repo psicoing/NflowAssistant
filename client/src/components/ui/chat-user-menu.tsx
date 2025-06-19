@@ -30,7 +30,9 @@ import {
   XCircle, 
   Settings,
   Calendar,
-  Shield
+  Shield,
+  AlertTriangle,
+  Phone
 } from "lucide-react";
 
 export default function ChatUserMenu() {
@@ -41,6 +43,7 @@ export default function ChatUserMenu() {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showPlanInfoDialog, setShowPlanInfoDialog] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
+  const [showEmergencyDialog, setShowEmergencyDialog] = useState(false);
 
   const logoutMutation = useMutation({
     mutationFn: () => apiRequest("POST", "/api/auth/logout"),
@@ -171,6 +174,15 @@ export default function ChatUserMenu() {
           >
             <User className="mr-2 h-4 w-4" />
             <span>Perfil</span>
+          </DropdownMenuItem>
+          
+          <DropdownMenuItem 
+            className="text-red-400 hover:bg-gray-700 cursor-pointer"
+            onClick={() => setShowEmergencyDialog(true)}
+            onSelect={(e) => e.preventDefault()}
+          >
+            <AlertTriangle className="mr-2 h-4 w-4" />
+            <span>Urgencias</span>
           </DropdownMenuItem>
           
           {user.subscriptionStatus === 'pending_payment' && (
@@ -338,6 +350,114 @@ export default function ChatUserMenu() {
                   className="bg-nflow-orange hover:bg-nflow-orange/90 text-black"
                 >
                   Cerrar
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+          
+          <Dialog open={showEmergencyDialog} onOpenChange={setShowEmergencyDialog}>
+            <DialogTrigger asChild>
+              <div style={{ display: 'none' }} />
+            </DialogTrigger>
+            <DialogContent className="bg-gray-800 border-gray-700 max-w-2xl max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-white flex items-center">
+                  <AlertTriangle className="mr-2 h-5 w-5 text-red-400" />
+                  Números de Urgencias
+                </DialogTitle>
+                <DialogDescription className="text-gray-400">
+                  Información importante de contactos de emergencia
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="mt-4 space-y-4">
+                {/* España */}
+                <div className="p-4 bg-red-900/20 border border-red-700/50 rounded-lg">
+                  <h3 className="text-white font-semibold mb-3 flex items-center">
+                    <Phone className="mr-2 h-4 w-4 text-red-400" />
+                    España
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="p-3 bg-gray-700/50 rounded-lg">
+                      <h4 className="text-red-300 font-medium">Número General</h4>
+                      <p className="text-white text-xl font-bold">112</p>
+                      <p className="text-gray-300 text-sm">Todas las emergencias</p>
+                    </div>
+                    
+                    <div className="p-3 bg-gray-700/50 rounded-lg">
+                      <h4 className="text-red-300 font-medium">Urgencias Médicas</h4>
+                      <p className="text-white text-xl font-bold">061</p>
+                      <p className="text-gray-300 text-sm">Cataluña, País Vasco, Galicia</p>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-3 p-3 bg-blue-900/30 border border-blue-700/50 rounded-lg">
+                    <p className="text-blue-300 text-sm">
+                      <Shield className="w-4 h-4 inline mr-1" />
+                      Recomendación: Marca 112 si no estás seguro. Es gratuito y multilingüe.
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Unión Europea */}
+                <div className="p-4 bg-blue-900/20 border border-blue-700/50 rounded-lg">
+                  <h3 className="text-white font-semibold mb-3 flex items-center">
+                    <Phone className="mr-2 h-4 w-4 text-blue-400" />
+                    Unión Europea
+                  </h3>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center p-2 bg-gray-700/30 rounded">
+                      <span className="text-gray-300">Francia</span>
+                      <span className="text-white font-medium">15 / 112</span>
+                    </div>
+                    <div className="flex justify-between items-center p-2 bg-gray-700/30 rounded">
+                      <span className="text-gray-300">Alemania</span>
+                      <span className="text-white font-medium">112</span>
+                    </div>
+                    <div className="flex justify-between items-center p-2 bg-gray-700/30 rounded">
+                      <span className="text-gray-300">Italia</span>
+                      <span className="text-white font-medium">118 / 112</span>
+                    </div>
+                    <div className="flex justify-between items-center p-2 bg-gray-700/30 rounded">
+                      <span className="text-gray-300">Portugal</span>
+                      <span className="text-white font-medium">112</span>
+                    </div>
+                    <div className="flex justify-between items-center p-2 bg-gray-700/30 rounded">
+                      <span className="text-gray-300">Polonia</span>
+                      <span className="text-white font-medium">999 / 112</span>
+                    </div>
+                    <div className="flex justify-between items-center p-2 bg-gray-700/30 rounded">
+                      <span className="text-gray-300">Austria</span>
+                      <span className="text-white font-medium">144 / 112</span>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-3 p-3 bg-green-900/30 border border-green-700/50 rounded-lg">
+                    <p className="text-green-300 text-sm">
+                      <Shield className="w-4 h-4 inline mr-1" />
+                      En toda la UE: 112 funciona incluso sin cobertura (roaming de emergencia)
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Advertencia importante */}
+                <div className="p-4 bg-yellow-900/20 border border-yellow-700/50 rounded-lg">
+                  <h4 className="text-yellow-300 font-medium mb-2">⚠️ Importante</h4>
+                  <p className="text-yellow-200 text-sm">
+                    Si tienes una emergencia médica real, no uses este chat. Llama inmediatamente a los números de emergencia.
+                    Este chat es solo para apoyo psicológico no urgente.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex justify-end mt-6">
+                <Button 
+                  onClick={() => setShowEmergencyDialog(false)}
+                  className="bg-nflow-orange hover:bg-nflow-orange/90 text-black"
+                >
+                  Entendido
                 </Button>
               </div>
             </DialogContent>
