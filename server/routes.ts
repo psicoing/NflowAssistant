@@ -124,6 +124,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             subscriptionId: orderId,
             expiresAt
           });
+          
+          console.log(`User ${userId} subscription activated: ${transaction.subscriptionPlan}`);
         }
       }
       
