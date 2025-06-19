@@ -36,6 +36,11 @@ function AuthenticatedRouter() {
       return;
     }
 
+    // Allow access to activation page for preview
+    if (location === "/activar-cuenta") {
+      return;
+    }
+
     // If not authenticated and trying to access protected routes, redirect to home
     if (!isAuthenticated && !["/", "/login", "/registro", "/admin/login", "/partners/login", "/partners/register", "/partners"].includes(location)) {
       setLocation("/");
