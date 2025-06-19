@@ -46,11 +46,15 @@ export default function Login() {
           description: `Bienvenido de vuelta, ${formData.username}`,
         });
 
-        // Invalidar cache de suscripción
-        queryClient.invalidateQueries({ queryKey: ["/api/subscription-status"] });
+        // Invalidar cache de autenticación y suscripción
+        await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+        await queryClient.invalidateQueries({ queryKey: ["/api/subscription-status"] });
         
         // Debug login response
         console.log("Login response data:", JSON.stringify(data, null, 2));
+        
+        // Pequeño delay para asegurar que el cache se actualice
+        await new Promise(resolve => setTimeout(resolve, 100));
         
         // Redirigir según estado de suscripción
         if (data.hasCompletedPayment && data.subscriptionStatus === 'active' && data.hasActiveSubscription) {
