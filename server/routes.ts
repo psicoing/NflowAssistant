@@ -204,18 +204,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // API endpoint to check subscription status
   app.get("/api/subscription-status", async (req, res) => {
     try {
-      const userId = req.query.userId || req.headers['x-user-id'];
+      const userId = req.session.userId;
       
       if (!userId) {
-        return res.status(400).json({ message: "User ID required" });
+        return res.status(401).json({ message: "User not authenticated" });
       }
       
-      const user = await storage.getUser(parseInt(userId as string));
+      const user = await storage.getUser(userId);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
       
-      const hasActiveSubscription = await checkSubscription(parseInt(userId as string));
+      const hasActiveSubscription = await checkSubscription(userId);
       
       res.json({
         hasActiveSubscription,
@@ -769,6 +769,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         expiresAt: undefined
       });
 
+      // Auto-login the user after registration
+      req.session.userId = user.id;
+
       res.status(201).json({
         success: true,
         userId: user.id,
@@ -815,17 +818,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Check if user has completed payment before allowing login
-      if (user.subscriptionStatus === 'pending_payment' || !user.hasCompletedPayment) {
-        return res.status(403).json({
-          success: false,
-          userId: user.id,
-          requiresPayment: true,
-          message: "Debes completar tu pago para acceder al sistema"
-        });
-      }
+      // Set session for authenticated user
+      req.session.userId = user.id;
 
-      // Update last login only for paid users
+      // Update last login
       await storage.updateUserLogin(user.id);
 
       // Check subscription status
@@ -836,6 +832,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId: user.id,
         hasCompletedPayment: user.hasCompletedPayment,
         subscriptionStatus: user.subscriptionStatus,
+        hasActiveSubscription,
         message: "Login exitoso"
       });
     } catch (error) {
