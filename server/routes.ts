@@ -6,8 +6,7 @@ import { processUserMessage } from "./prompt-handler";
 import { paypalService } from "./paypal";
 import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
 import bcrypt from "bcrypt";
-import { db } from "./db";
-import { sql } from "drizzle-orm";
+import fetch from "node-fetch";
 import "./types"; // Import session types
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -380,18 +379,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Create PayPal transaction record
-      await storage.createPaypalTransaction({
-        userId: parseInt(userId),
-        paypalOrderId: `pending_${Date.now()}`,
-        amount: parseFloat(amount),
-        currency: currency,
-        status: "pending",
-        subscriptionPlan: subscriptionPlan
-      });
-
-      // Create real PayPal order using PayPal service
-      const paypalOrder = {
+      // Create real PayPal order using PayPal SDK
+      const orderRequest = {
         intent: "CAPTURE",
         purchase_units: [{
           amount: {
@@ -409,17 +398,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       };
 
-      // For now, create a demo order that redirects properly
-      const orderId = `ORDER_${Date.now()}_${userId}`;
+      // Create PayPal order using real PayPal API
       
+      // Get PayPal access token
+      const authResponse = await fetch(`https://api.sandbox.paypal.com/v1/oauth2/token`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Accept-Language': 'en_US',
+          'Authorization': `Basic ${Buffer.from(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`).toString('base64')}`
+        },
+        body: 'grant_type=client_credentials'
+      });
+
+      const authData = await authResponse.json();
+      
+      if (!authData.access_token) {
+        throw new Error('Failed to get PayPal access token');
+      }
+
+      // Create PayPal order
+      const orderResponse = await fetch(`https://api.sandbox.paypal.com/v2/checkout/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authData.access_token}`
+        },
+        body: JSON.stringify(orderRequest)
+      });
+
+      const orderData = await orderResponse.json();
+      
+      if (!orderResponse.ok) {
+        throw new Error(`PayPal API error: ${orderData.message || 'Unknown error'}`);
+      }
+
+      // Store transaction with real PayPal order ID
+      await storage.createPaypalTransaction({
+        userId: parseInt(userId),
+        paypalOrderId: orderData.id,
+        amount: parseFloat(amount),
+        currency: currency,
+        status: "pending",
+        subscriptionPlan: subscriptionPlan
+      });
+
+      // Return PayPal order with approval URL
       res.json({
-        id: orderId,
-        status: "CREATED",
-        links: [{
-          href: `/payment-success?userId=${userId}&plan=${subscriptionPlan}&token=${orderId}`,
-          rel: "approve",
-          method: "GET"
-        }]
+        id: orderData.id,
+        status: orderData.status,
+        links: orderData.links
       });
 
     } catch (error) {
