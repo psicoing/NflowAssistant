@@ -74,7 +74,14 @@ export default function Registro() {
         localStorage.setItem("newUsername", formData.username);
         
         setTimeout(() => {
-          setLocation("/#pricing");
+          setLocation("/");
+          // Scroll to pricing section after redirect
+          setTimeout(() => {
+            const pricingSection = document.getElementById("precios");
+            if (pricingSection) {
+              pricingSection.scrollIntoView({ behavior: "smooth" });
+            }
+          }, 100);
         }, 3000);
       } else {
         setError(data.message || "Error en el registro");

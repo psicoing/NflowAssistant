@@ -413,6 +413,110 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ success: true });
   });
 
+  // ======== USER AUTHENTICATION ROUTES ========
+  
+  // User registration
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const { username, password, email } = req.body;
+      
+      if (!username || !password || !email) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Username, password y email son requeridos" 
+        });
+      }
+
+      // Check if user already exists
+      const existingUser = await storage.getUserByUsername(username);
+      if (existingUser) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "El usuario ya existe" 
+        });
+      }
+
+      // Hash password
+      const bcrypt = require('bcrypt');
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+      // Create user
+      const user = await storage.createUser({
+        username,
+        password: hashedPassword,
+        email,
+        subscriptionStatus: 'inactive',
+        hasCompletedPayment: false
+      });
+
+      res.status(201).json({
+        success: true,
+        userId: user.id,
+        message: "Usuario creado exitosamente"
+      });
+    } catch (error) {
+      console.error("Registration error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error interno del servidor" 
+      });
+    }
+  });
+
+  // User login
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Username y password son requeridos" 
+        });
+      }
+
+      // Find user
+      const user = await storage.getUserByUsername(username);
+      if (!user) {
+        return res.status(401).json({ 
+          success: false, 
+          message: "Credenciales incorrectas" 
+        });
+      }
+
+      // Verify password
+      const bcrypt = require('bcrypt');
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ 
+          success: false, 
+          message: "Credenciales incorrectas" 
+        });
+      }
+
+      // Update last login
+      await storage.updateUserLogin(user.id);
+
+      // Check subscription status
+      const hasActiveSubscription = await checkSubscription(user.id);
+
+      res.json({
+        success: true,
+        userId: user.id,
+        hasCompletedPayment: user.hasCompletedPayment || false,
+        subscriptionStatus: user.subscriptionStatus || 'inactive',
+        message: "Login exitoso"
+      });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error interno del servidor" 
+      });
+    }
+  });
+
   app.get("/api/admin/stats", async (req, res) => {
     if (!req.session.isAdmin) {
       return res.status(401).json({ message: "No autorizado" });

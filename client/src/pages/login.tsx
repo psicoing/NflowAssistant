@@ -61,6 +61,13 @@ export default function Login() {
             variant: "destructive",
           });
           setLocation("/");
+          // Scroll to pricing section after redirect
+          setTimeout(() => {
+            const pricingSection = document.getElementById("precios");
+            if (pricingSection) {
+              pricingSection.scrollIntoView({ behavior: "smooth" });
+            }
+          }, 100);
         }
       } else {
         setError(data.message || "Error en el inicio de sesión");
