@@ -40,6 +40,7 @@ export default function ChatUserMenu() {
   const queryClient = useQueryClient();
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showPlanInfoDialog, setShowPlanInfoDialog] = useState(false);
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
 
   const logoutMutation = useMutation({
     mutationFn: () => apiRequest("POST", "/api/auth/logout"),
@@ -165,7 +166,8 @@ export default function ChatUserMenu() {
           
           <DropdownMenuItem 
             className="text-white hover:bg-gray-700 cursor-pointer"
-            onClick={() => setLocation("/")}
+            onClick={() => setShowProfileDialog(true)}
+            onSelect={(e) => e.preventDefault()}
           >
             <User className="mr-2 h-4 w-4" />
             <span>Perfil</span>
@@ -273,6 +275,73 @@ export default function ChatUserMenu() {
               </Dialog>
             </>
           )}
+          
+          <Dialog open={showProfileDialog} onOpenChange={setShowProfileDialog}>
+            <DialogTrigger asChild>
+              <div style={{ display: 'none' }} />
+            </DialogTrigger>
+            <DialogContent className="bg-gray-800 border-gray-700">
+              <DialogHeader>
+                <DialogTitle className="text-white flex items-center">
+                  <User className="mr-2 h-5 w-5 text-nflow-orange" />
+                  Perfil de Usuario
+                </DialogTitle>
+                <DialogDescription className="text-gray-400">
+                  Información de tu cuenta en NFLOW
+                </DialogDescription>
+              </DialogHeader>
+              <div className="mt-4 space-y-4">
+                <div className="flex items-center space-x-4 p-4 bg-gray-700/50 rounded-lg border border-gray-600">
+                  <Avatar className="h-12 w-12 border border-gray-600">
+                    <AvatarFallback className="bg-nflow-orange text-black font-semibold text-lg">
+                      {user?.username.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <h3 className="text-white font-semibold">{user?.username}</h3>
+                    <p className="text-gray-400 text-sm">{user?.email}</p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 gap-3">
+                  <div className="p-3 bg-gray-700/30 rounded-lg border border-gray-600/50">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-300 text-sm">Estado de Suscripción</span>
+                      <span className={`text-sm font-medium ${getSubscriptionStatusColor()}`}>
+                        {getSubscriptionStatusText()}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="p-3 bg-gray-700/30 rounded-lg border border-gray-600/50">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-300 text-sm">Plan Actual</span>
+                      <span className="text-gray-200 text-sm">
+                        {user?.subscriptionPlan || 'Básico'}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="p-3 bg-gray-700/30 rounded-lg border border-gray-600/50">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-300 text-sm">Miembro desde</span>
+                      <span className="text-gray-200 text-sm">
+                        {user?.createdAt ? new Date(user.createdAt).toLocaleDateString('es-ES') : 'N/A'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-end mt-6">
+                <Button 
+                  onClick={() => setShowProfileDialog(false)}
+                  className="bg-nflow-orange hover:bg-nflow-orange/90 text-black"
+                >
+                  Cerrar
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
           
           <DropdownMenuSeparator className="bg-gray-700" />
           
