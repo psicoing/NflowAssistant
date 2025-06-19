@@ -115,6 +115,12 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 19, 2025. Implemented real PayPal integration using live credentials for subscription payments
+- June 19, 2025. Fixed registration flow to create users with pending_payment status requiring subscription activation
+- June 19, 2025. Implemented payment-required authentication: users must complete payment before login access
+- June 19, 2025. Added PayPal order creation with real API calls to sandbox environment
+- June 19, 2025. Created payment success page with automatic session cleanup and chat redirection
+- June 19, 2025. Removed payment simulation in favor of actual PayPal checkout flow
 - June 16, 2025. Fixed mobile chat interface menu overlap by adjusting positioning and container heights
 - June 16, 2025. Fixed "Chat de Apoyo" footer link to redirect to pricing section instead of allowing direct chat access
 - June 16, 2025. Moved subscription cards above "Cuatro Soluciones" section for better user flow
