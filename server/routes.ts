@@ -170,7 +170,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           userId: userId,
           paypalOrderId: subscriptionID,
           subscriptionPlan: subscriptionPlan || 'basic',
-          amount: '9.99',
+          amount: '2.99',
           currency: 'EUR',
           status: 'COMPLETED'
         });

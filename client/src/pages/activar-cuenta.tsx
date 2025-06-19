@@ -176,7 +176,7 @@ export default function ActivarCuenta() {
                 <div className="bg-gray-700/50 border border-nflow-blue rounded-lg p-4">
                   <div className="flex items-center justify-between mb-3">
                     <h4 className="text-lg font-semibold text-white">Plan Básico</h4>
-                    <span className="text-xl font-bold text-nflow-blue">€9.99/mes</span>
+                    <span className="text-xl font-bold text-nflow-blue">€2.99/mes</span>
                   </div>
                   <ul className="text-sm text-gray-300 mb-4 space-y-1">
                     <li>• Chat ilimitado con IA especializada</li>
