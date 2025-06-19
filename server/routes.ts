@@ -730,7 +730,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Hash password
-      const bcrypt = require('bcrypt');
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -799,7 +798,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Verify password
-      const bcrypt = require('bcrypt');
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
         return res.status(401).json({ 

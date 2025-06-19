@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
+import MemoryStore from "memorystore";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
@@ -7,11 +8,17 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Create memory store for sessions
+const memoryStore = MemoryStore(session);
+
 // Session configuration for user authentication
 app.use(session({
   secret: "nflow-admin-secret-2025",
+  store: new memoryStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  }),
   resave: false,
-  saveUninitialized: true, // Changed to true to create sessions for new users
+  saveUninitialized: false,
   cookie: {
     secure: false, // Set to true in production with HTTPS
     httpOnly: true,
