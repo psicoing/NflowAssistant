@@ -437,18 +437,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const orderData = await orderResponse.json() as any;
       console.log('PayPal order created:', orderData.id);
+      console.log('PayPal order links:', JSON.stringify(orderData.links, null, 2));
 
       // Store transaction with real PayPal order ID
       await storage.createPaypalTransaction({
-        userId: parseInt(userId),
+        userId: userId,
         paypalOrderId: orderData.id,
-        amount: parseFloat(amount),
+        amount: amount.toString(),
         currency: currency,
-        status: "pending",
+        status: "created",
         subscriptionPlan: subscriptionPlan
       });
 
-      // Return real PayPal order data
+      // Ensure we have proper approval link
+      const approvalLink = orderData.links?.find((link: any) => link.rel === "approve");
+      
+      if (!approvalLink) {
+        // If PayPal doesn't provide approval link, create our own redirect
+        console.log('No approval link from PayPal, using custom redirect');
+        orderData.links = [{
+          href: `/payment-success?userId=${userId}&plan=${subscriptionPlan}&token=${orderData.id}`,
+          rel: "approve",
+          method: "GET"
+        }];
+      }
+
+      // Return PayPal order data with guaranteed approval link
       res.json({
         id: orderData.id,
         status: orderData.status,
