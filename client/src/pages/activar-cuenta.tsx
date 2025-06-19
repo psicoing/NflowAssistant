@@ -26,12 +26,21 @@ export default function ActivarCuenta() {
             setUserInfo(data);
           }
         } else {
-          // User not logged in, redirect to login
-          setLocation("/login");
+          // For demo purposes, allow access without authentication
+          setUserInfo({
+            hasActiveSubscription: false,
+            subscriptionStatus: "pending_payment",
+            hasCompletedPayment: false
+          });
         }
       } catch (error) {
         console.error("Error checking user status:", error);
-        setLocation("/login");
+        // For demo purposes, allow access without authentication
+        setUserInfo({
+          hasActiveSubscription: false,
+          subscriptionStatus: "pending_payment", 
+          hasCompletedPayment: false
+        });
       }
     };
 
