@@ -22,6 +22,7 @@ import PartnerDashboard from "@/pages/partner-dashboard-simple";
 import PWAInstallPrompt from "@/components/ui/pwa-install-prompt";
 import PaymentRedirect from "@/pages/payment-redirect";
 import ActivarCuenta from "@/pages/activar-cuenta";
+import PayPalReturn from "@/pages/paypal-return";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -31,7 +32,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/login", "/registro", "/activar-cuenta", "/admin/login", "/partners/login", "/partners/register", "/partners"];
+    const publicRoutes = ["/", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners"];
     if (publicRoutes.includes(location)) {
       return;
     }
@@ -75,6 +76,7 @@ function AuthenticatedRouter() {
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/payment-redirect" component={PaymentRedirect} />
+      <Route path="/paypal-return" component={PayPalReturn} />
       <Route component={NotFound} />
     </Switch>
   );
