@@ -17,6 +17,15 @@ export default function ActivarCuenta() {
   const [, setLocation] = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [userInfo, setUserInfo] = useState<any>(null);
+  const [paypalStatus, setPaypalStatus] = useState<{
+    sdkLoaded: boolean;
+    buttonRendered: boolean;
+    error: string | null;
+  }>({
+    sdkLoaded: false,
+    buttonRendered: false,
+    error: null
+  });
   const { toast } = useToast();
 
   useEffect(() => {
@@ -56,16 +65,37 @@ export default function ActivarCuenta() {
 
   // Initialize PayPal SDK
   useEffect(() => {
+    let paypalLoadAttempts = 0;
+    const maxAttempts = 5;
+
     const initPayPal = () => {
-      if (window.paypal && document.getElementById('paypal-button-container-basic')) {
+      const container = document.getElementById('paypal-button-container-basic');
+      console.log('PayPal initialization attempt:', paypalLoadAttempts + 1);
+      console.log('PayPal available:', !!window.paypal);
+      console.log('Container found:', !!container);
+
+      if (window.paypal && container) {
+        // Safely clear container only if it has content
+        try {
+          while (container.firstChild) {
+            container.removeChild(container.firstChild);
+          }
+        } catch (e) {
+          console.warn('Container cleanup warning:', e);
+        }
+        
+        setPaypalStatus(prev => ({ ...prev, sdkLoaded: true }));
+        
         window.paypal.Buttons({
           style: {
             shape: 'rect',
             color: 'blue',
             layout: 'vertical',
-            label: 'subscribe'
+            label: 'subscribe',
+            height: 45
           },
           createSubscription: function(data: any, actions: any) {
+            console.log('Creating PayPal subscription...');
             return actions.subscription.create({
               plan_id: 'P-8X502396U4202261ENBKC32A'
             });
@@ -73,6 +103,7 @@ export default function ActivarCuenta() {
           onApprove: async function(data: any, actions: any) {
             try {
               setIsLoading(true);
+              console.log('PayPal subscription approved:', data.subscriptionID);
               
               // Capture subscription and activate account
               const response = await fetch('/api/paypal/capture-subscription', {
@@ -120,20 +151,77 @@ export default function ActivarCuenta() {
               variant: "destructive",
               duration: 5000,
             });
+          },
+          onCancel: function(data: any) {
+            console.log('PayPal payment cancelled:', data);
+            toast({
+              title: "Pago cancelado",
+              description: "Puedes intentar de nuevo cuando quieras.",
+              duration: 3000,
+            });
           }
-        }).render('#paypal-button-container-basic');
+        }).render('#paypal-button-container-basic').then(() => {
+          console.log('PayPal button rendered successfully');
+          setPaypalStatus(prev => ({ ...prev, buttonRendered: true }));
+        }).catch((error: any) => {
+          console.error('PayPal button render error:', error);
+          setPaypalStatus(prev => ({ ...prev, error: error.toString() }));
+          toast({
+            title: "Error cargando PayPal",
+            description: "Intenta recargar la página o usa la opción de WhatsApp.",
+            variant: "destructive",
+            duration: 10000,
+          });
+        });
+      } else {
+        paypalLoadAttempts++;
+        if (paypalLoadAttempts < maxAttempts) {
+          console.log('PayPal not ready, retrying in 1 second...');
+          setTimeout(initPayPal, 1000);
+        } else {
+          console.error('PayPal failed to load after maximum attempts');
+          toast({
+            title: "Error cargando PayPal",
+            description: "Por favor, usa la opción de WhatsApp para activar tu cuenta.",
+            variant: "destructive",
+            duration: 10000,
+          });
+        }
       }
     };
 
     // Load PayPal SDK if not already loaded
     if (!window.paypal) {
+      console.log('Loading PayPal SDK...');
       const script = document.createElement('script');
       script.src = 'https://www.paypal.com/sdk/js?client-id=AUfOCCtv0adF68mMpXq5rLt-yYcpZmHwe_zITYbsSTNwrdSmmhaVqCYGkmaMs1yuwVH9Wjp2-FtIsCj7&vault=true&intent=subscription';
-      script.onload = initPayPal;
+      script.async = true;
+      script.onload = () => {
+        console.log('PayPal SDK loaded successfully');
+        initPayPal();
+      };
+      script.onerror = (error) => {
+        console.error('PayPal SDK failed to load:', error);
+        toast({
+          title: "Error cargando PayPal",
+          description: "Por favor, usa la opción de WhatsApp para activar tu cuenta.",
+          variant: "destructive",
+          duration: 10000,
+        });
+      };
       document.head.appendChild(script);
     } else {
+      console.log('PayPal SDK already loaded');
       initPayPal();
     }
+
+    // Cleanup function
+    return () => {
+      const container = document.getElementById('paypal-button-container-basic');
+      if (container) {
+        container.innerHTML = '';
+      }
+    };
   }, [toast, setLocation]);
 
   if (!userInfo) {
@@ -184,7 +272,43 @@ export default function ActivarCuenta() {
                     <li>• Soporte psicológico 24/7</li>
                     <li>• Recursos y ejercicios personalizados</li>
                   </ul>
-                  <div id="paypal-button-container-basic" className="min-h-[50px]"></div>
+                  <div id="paypal-button-container-basic" className="min-h-[50px] relative border border-gray-600/50 rounded-lg">
+                    {!paypalStatus.buttonRendered && !paypalStatus.error && (
+                      <div className="absolute inset-0 bg-gray-800/80 flex flex-col items-center justify-center rounded-lg p-4">
+                        <div className="animate-spin w-6 h-6 border-2 border-nflow-blue border-t-transparent rounded-full mb-2"></div>
+                        <span className="text-gray-300 text-sm text-center">
+                          {paypalStatus.sdkLoaded ? 'Cargando botón de pago...' : 'Cargando PayPal SDK...'}
+                        </span>
+                      </div>
+                    )}
+                    
+                    {paypalStatus.error && (
+                      <div className="absolute inset-0 bg-red-900/20 border border-red-500/30 flex flex-col items-center justify-center rounded-lg p-4">
+                        <div className="text-red-400 text-sm text-center">
+                          Error de PayPal: {paypalStatus.error}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Status indicators */}
+                  <div className="text-xs text-gray-500 mt-2 space-y-1">
+                    <div className="flex items-center space-x-2">
+                      <div className={`w-2 h-2 rounded-full ${paypalStatus.sdkLoaded ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+                      <span>SDK PayPal: {paypalStatus.sdkLoaded ? 'Cargado' : 'Cargando...'}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className={`w-2 h-2 rounded-full ${paypalStatus.buttonRendered ? 'bg-green-500' : paypalStatus.error ? 'bg-red-500' : 'bg-yellow-500'}`}></div>
+                      <span>Botón de pago: {paypalStatus.buttonRendered ? 'Listo' : paypalStatus.error ? 'Error' : 'Cargando...'}</span>
+                    </div>
+                  </div>
+                  
+                  {/* Fallback message */}
+                  {paypalStatus.error && (
+                    <div className="text-center text-sm text-yellow-400 mt-3 bg-yellow-900/20 border border-yellow-500/30 rounded p-2">
+                      PayPal no está disponible. Usa la opción de WhatsApp para activar tu cuenta.
+                    </div>
+                  )}
                 </div>
               </div>
 
