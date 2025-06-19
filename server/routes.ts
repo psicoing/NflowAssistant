@@ -222,9 +222,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Update user subscription status to cancelled
       await storage.updateUserSubscription(userId, {
         status: 'cancelled',
-        plan: user.subscriptionPlan,
-        subscriptionId: user.subscriptionId,
-        expiresAt: user.subscriptionExpiresAt // Keep original expiry date
+        plan: user.subscriptionPlan ?? 'basic',
+        subscriptionId: user.subscriptionId ?? '',
+        expiresAt: user.subscriptionExpiresAt ?? undefined
       });
 
       console.log(`User ${userId} subscription cancelled successfully`);
@@ -255,11 +255,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const daysRemaining = user.subscriptionExpiresAt ? 
         Math.max(0, Math.ceil((new Date(user.subscriptionExpiresAt).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))) : 0;
 
+      const hasActiveSubscription = user.subscriptionStatus === 'active' && 
+        user.subscriptionExpiresAt && 
+        new Date(user.subscriptionExpiresAt) > new Date();
+
       res.json({
         subscriptionId: user.subscriptionId,
         subscriptionPlan: user.subscriptionPlan,
         subscriptionStatus: user.subscriptionStatus,
-        hasActiveSubscription: user.hasActiveSubscription,
+        hasActiveSubscription: hasActiveSubscription,
         expiresAt: user.subscriptionExpiresAt,
         daysRemaining: daysRemaining,
         createdAt: user.createdAt,
