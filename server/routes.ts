@@ -449,24 +449,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         subscriptionPlan: subscriptionPlan
       });
 
-      // Ensure we have proper approval link
-      const approvalLink = orderData.links?.find((link: any) => link.rel === "approve");
-      
-      if (!approvalLink) {
-        // If PayPal doesn't provide approval link, create our own redirect
-        console.log('No approval link from PayPal, using custom redirect');
-        orderData.links = [{
-          href: `/payment-success?userId=${userId}&plan=${subscriptionPlan}&token=${orderData.id}`,
-          rel: "approve",
-          method: "GET"
-        }];
-      }
-
-      // Return PayPal order data with guaranteed approval link
+      // Return real PayPal order data
       res.json({
         id: orderData.id,
         status: orderData.status,
-        links: orderData.links
+        links: orderData.links || []
       });
 
     } catch (error) {

@@ -18,6 +18,7 @@ import PartnerLogin from "@/pages/partner-login";
 import PartnerRegister from "@/pages/partner-register";
 import PartnerDashboard from "@/pages/partner-dashboard-simple";
 import PWAInstallPrompt from "@/components/ui/pwa-install-prompt";
+import PaymentRedirect from "@/pages/payment-redirect";
 
 function Router() {
   return (
@@ -36,6 +37,7 @@ function Router() {
       <Route path="/recompensas" component={Recompensas} />
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
+      <Route path="/payment-redirect" component={PaymentRedirect} />
       <Route component={NotFound} />
     </Switch>
   );

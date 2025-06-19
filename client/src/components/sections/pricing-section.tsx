@@ -146,15 +146,10 @@ export default function PricingSection() {
       localStorage.setItem("paymentPlan", planId);
       localStorage.setItem("paymentAmount", getAmount(planId));
       
-      // Redirect to PayPal using the approval URL from the response
-      const approvalUrl = orderData.links?.find((link: any) => link.rel === "approve")?.href;
-      if (approvalUrl) {
-        window.location.href = approvalUrl;
-      } else {
-        // Fallback to sandbox URL construction
-        const paypalUrl = `https://www.sandbox.paypal.com/checkoutnow?token=${orderData.id}`;
-        window.location.href = paypalUrl;
-      }
+      // Redirect through our payment redirect page
+      const redirectUrl = `/payment-redirect?orderId=${orderData.id}&plan=${planId}`;
+      console.log("Redirecting to payment page:", redirectUrl);
+      window.location.href = redirectUrl;
 
     } catch (error) {
       console.error("Payment error:", error);
