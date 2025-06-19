@@ -89,13 +89,14 @@ export default function ActivarCuenta() {
               if (response.ok) {
                 toast({
                   title: "¡Cuenta Activada!",
-                  description: "Tu suscripción está activa. Redirigiendo al chat...",
+                  description: "Tu suscripción está activa. Acceso al chat habilitado.",
                   duration: 3000,
                 });
 
+                // Force page refresh to update authentication state
                 setTimeout(() => {
-                  setLocation("/chat");
-                }, 2000);
+                  window.location.href = "/chat";
+                }, 1500);
               } else {
                 throw new Error('Failed to activate subscription');
               }

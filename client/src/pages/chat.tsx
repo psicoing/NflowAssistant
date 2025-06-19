@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Header from "@/components/layout/header";
 import ChatInterface from "@/components/ui/chat-interface";
 import UserProfileForm from "@/components/ui/user-profile-form";
+import SubscriptionStatus from "@/components/ui/subscription-status";
 import { NotificationSystem, useNotifications } from "@/components/ui/notification-system";
 import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
@@ -271,6 +272,23 @@ export default function Chat() {
         {/* Sidebar - Hidden on mobile */}
         <div className="hidden md:flex w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex-col backdrop-blur-sm">
           <div className="p-6 border-b border-gray-700/50 space-y-4">
+            {/* Subscription Status Component */}
+            {subscriptionData && (
+              <SubscriptionStatus 
+                subscriptionData={{
+                  ...subscriptionData,
+                  daysRemaining: subscriptionData.expiresAt ? 
+                    Math.max(0, Math.ceil((new Date(subscriptionData.expiresAt).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))) : 0
+                }}
+                onRenew={() => setLocation('/activar-cuenta')}
+                onCancel={async () => {
+                  await apiRequest('POST', '/api/subscription/cancel', {});
+                  queryClient.invalidateQueries({ queryKey: ['/api/subscription-status'] });
+                }}
+                onManage={() => setLocation('/subscription')}
+              />
+            )}
+            
             <Button
               onClick={handleNewChat}
               className="w-full bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white font-semibold py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:scale-100"

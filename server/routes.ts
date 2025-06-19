@@ -196,6 +196,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Cancel subscription endpoint
+  app.post("/api/subscription/cancel", async (req, res) => {
+    try {
+      const userId = req.session.userId || 1;
+      
+      console.log(`Cancelling subscription for user: ${userId}`);
+
+      // Get user's current subscription
+      const user = await storage.getUser(userId);
+      if (!user || !user.subscriptionId) {
+        return res.status(400).json({ message: "No active subscription found" });
+      }
+
+      // Cancel with PayPal
+      if (user.subscriptionId) {
+        try {
+          await paypalService.cancelSubscription(user.subscriptionId);
+          console.log(`PayPal subscription ${user.subscriptionId} cancelled`);
+        } catch (paypalError) {
+          console.warn("PayPal cancellation failed, updating local status only:", paypalError);
+        }
+      }
+
+      // Update user subscription status to cancelled
+      await storage.updateUserSubscription(userId, {
+        status: 'cancelled',
+        plan: user.subscriptionPlan,
+        subscriptionId: user.subscriptionId,
+        expiresAt: user.subscriptionExpiresAt // Keep original expiry date
+      });
+
+      console.log(`User ${userId} subscription cancelled successfully`);
+      
+      res.json({ 
+        status: 'cancelled', 
+        message: 'Subscription cancelled successfully. Access will continue until the end of the current billing period.',
+        expiresAt: user.subscriptionExpiresAt
+      });
+
+    } catch (error) {
+      console.error("Error cancelling subscription:", error);
+      res.status(500).json({ message: "Error cancelling subscription" });
+    }
+  });
+
+  // Get subscription details endpoint
+  app.get("/api/subscription/details", async (req, res) => {
+    try {
+      const userId = req.session.userId || 1;
+      
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Calculate days remaining
+      const daysRemaining = user.subscriptionExpiresAt ? 
+        Math.max(0, Math.ceil((new Date(user.subscriptionExpiresAt).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))) : 0;
+
+      res.json({
+        subscriptionId: user.subscriptionId,
+        subscriptionPlan: user.subscriptionPlan,
+        subscriptionStatus: user.subscriptionStatus,
+        hasActiveSubscription: user.hasActiveSubscription,
+        expiresAt: user.subscriptionExpiresAt,
+        daysRemaining: daysRemaining,
+        createdAt: user.createdAt,
+        lastLoginAt: user.lastLoginAt
+      });
+
+    } catch (error) {
+      console.error("Error fetching subscription details:", error);
+      res.status(500).json({ message: "Error fetching subscription details" });
+    }
+  });
+
   // Get all conversations
   app.get("/api/conversations", async (req, res) => {
     try {
