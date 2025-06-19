@@ -39,6 +39,7 @@ export default function ChatUserMenu() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [showPlanInfoDialog, setShowPlanInfoDialog] = useState(false);
 
   const logoutMutation = useMutation({
     mutationFn: () => apiRequest("POST", "/api/auth/logout"),
@@ -184,7 +185,8 @@ export default function ChatUserMenu() {
             <>
               <DropdownMenuItem 
                 className="text-blue-400 hover:bg-gray-700 cursor-pointer"
-                onClick={() => setLocation("/#precios")}
+                onClick={() => setShowPlanInfoDialog(true)}
+                onSelect={(e) => e.preventDefault()}
               >
                 <Crown className="mr-2 h-4 w-4" />
                 <span>Mejorar Plan</span>
@@ -222,6 +224,49 @@ export default function ChatUserMenu() {
                       className="bg-red-600 hover:bg-red-700"
                     >
                       {cancelSubscriptionMutation.isPending ? "Cancelando..." : "Confirmar Cancelación"}
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+
+              <Dialog open={showPlanInfoDialog} onOpenChange={setShowPlanInfoDialog}>
+                <DialogTrigger asChild>
+                  <div style={{ display: 'none' }} />
+                </DialogTrigger>
+                <DialogContent className="bg-gray-800 border-gray-700">
+                  <DialogHeader>
+                    <DialogTitle className="text-white flex items-center">
+                      <Crown className="mr-2 h-5 w-5 text-nflow-orange" />
+                      Planes Disponibles
+                    </DialogTitle>
+                    <DialogDescription className="text-gray-400">
+                      Información sobre los planes de suscripción de NFLOW
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="mt-4 p-4 bg-gray-700/50 rounded-lg border border-gray-600">
+                    <div className="flex items-center mb-3">
+                      <Crown className="w-6 h-6 text-nflow-orange mr-3" />
+                      <div>
+                        <h3 className="text-white font-semibold">Plan Básico</h3>
+                        <p className="text-sm text-gray-400">€2.99/mes</p>
+                      </div>
+                    </div>
+                    <p className="text-gray-300 text-sm mb-3">
+                      Actualmente solo está disponible el Plan Básico, que incluye acceso completo al chat de apoyo con IA.
+                    </p>
+                    <div className="bg-blue-900/30 border border-blue-700/50 rounded-lg p-3">
+                      <p className="text-blue-300 text-sm">
+                        <Shield className="w-4 h-4 inline mr-1" />
+                        Próximamente: Nuevos planes con características adicionales
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex justify-end mt-4">
+                    <Button 
+                      onClick={() => setShowPlanInfoDialog(false)}
+                      className="bg-nflow-orange hover:bg-nflow-orange/90 text-black"
+                    >
+                      Entendido
                     </Button>
                   </div>
                 </DialogContent>
