@@ -49,12 +49,18 @@ export default function Login() {
         // Invalidar cache de suscripción
         queryClient.invalidateQueries({ queryKey: ["/api/subscription-status"] });
         
+        // Debug login response
+        console.log("Login response data:", JSON.stringify(data, null, 2));
+        
         // Redirigir según estado de suscripción
-        if (data.hasCompletedPayment && data.subscriptionStatus === 'active') {
+        if (data.hasCompletedPayment && data.subscriptionStatus === 'active' && data.hasActiveSubscription) {
           console.log("Usuario con suscripción activa, redirigiendo al chat");
           setLocation("/chat");
         } else {
           console.log("Usuario sin suscripción activa, redirigiendo a pricing");
+          console.log("hasCompletedPayment:", data.hasCompletedPayment);
+          console.log("subscriptionStatus:", data.subscriptionStatus);
+          console.log("hasActiveSubscription:", data.hasActiveSubscription);
           toast({
             title: "Suscripción requerida",
             description: "Para acceder al chat necesitas una suscripción activa",
