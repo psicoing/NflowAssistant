@@ -22,7 +22,7 @@ export function useAuth() {
     user,
     isLoading,
     isAuthenticated: !!user && !error,
-    needsPayment: user?.subscriptionStatus === 'pending_payment' || !user?.hasCompletedPayment,
+    needsPayment: user?.subscriptionStatus === 'pending_payment' && !user?.hasActiveSubscription,
     hasActiveSubscription: user?.hasActiveSubscription || false,
   };
 }
