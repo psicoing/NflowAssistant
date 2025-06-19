@@ -19,6 +19,7 @@ import PartnerRegister from "@/pages/partner-register";
 import PartnerDashboard from "@/pages/partner-dashboard-simple";
 import PWAInstallPrompt from "@/components/ui/pwa-install-prompt";
 import PaymentRedirect from "@/pages/payment-redirect";
+import ActivarCuenta from "@/pages/activar-cuenta";
 
 function Router() {
   return (
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/login" component={Login} />
       <Route path="/registro" component={Registro} />
+      <Route path="/activar-cuenta" component={ActivarCuenta} />
       <Route path="/chat" component={Chat} />
       <Route path="/chat/:id" component={Chat} />
       <Route path="/recursos" component={Resources} />

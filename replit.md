@@ -115,6 +115,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 19, 2025. Created dedicated activation page (/activar-cuenta) separating payment options from main pricing section
 - June 19, 2025. Added dual activation options in registration page: PayPal automatic (1st) and WhatsApp manual (2nd)
 - June 19, 2025. Added WhatsApp contact option (+34 660 45 21 36) as PayPal alternative for manual account activation
 - June 19, 2025. Implemented payment redirect page for improved PayPal checkout flow handling
