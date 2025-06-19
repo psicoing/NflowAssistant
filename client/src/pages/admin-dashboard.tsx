@@ -36,6 +36,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [partners, setPartners] = useState<any[]>([]);
   const [pendingPartners, setPendingPartners] = useState<any[]>([]);
+  const [pendingUsers, setPendingUsers] = useState<any[]>([]);
 
   useEffect(() => {
     checkAuthAndFetchStats();
