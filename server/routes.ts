@@ -388,12 +388,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Create PayPal transaction record
       await storage.createPaypalTransaction({
-        userId: parseInt(userId.toString()),
+        userId: parseInt(userId),
         paypalOrderId: `temp_${Date.now()}`, // Will be updated with real ID
-        amount: parseFloat(amount.toString()),
-        currency: currency.toString(),
+        amount: parseFloat(amount),
+        currency: currency,
         status: "pending",
-        subscriptionPlan: subscriptionPlan.toString()
+        subscriptionPlan: subscriptionPlan
       });
 
       // For demo purposes, simulate PayPal order creation

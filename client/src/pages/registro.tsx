@@ -64,14 +64,15 @@ export default function Registro() {
         setShowSuccess(true);
         
         toast({
-          title: "¡Cuenta creada exitosamente!",
-          description: `Usuario: ${formData.username} | Contraseña: ${formData.password}`,
-          duration: 8000,
+          title: "Cuenta temporal creada",
+          description: "IMPORTANTE: Debes completar el pago para activar tu cuenta",
+          duration: 6000,
         });
 
-        // Guardar datos del usuario y redirigir a selección de pago
-        localStorage.setItem("newUserId", data.userId.toString());
-        localStorage.setItem("newUsername", formData.username);
+        // Guardar datos del usuario pendiente de pago - se borrará si no paga
+        localStorage.setItem("pendingUserId", data.userId.toString());
+        localStorage.setItem("pendingUsername", formData.username);
+        localStorage.setItem("registrationTime", Date.now().toString());
         
         setTimeout(() => {
           setLocation("/");
@@ -82,7 +83,7 @@ export default function Registro() {
               pricingSection.scrollIntoView({ behavior: "smooth" });
             }
           }, 100);
-        }, 3000);
+        }, 2000);
       } else {
         setError(data.message || "Error en el registro");
       }

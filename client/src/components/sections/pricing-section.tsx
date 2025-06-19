@@ -84,8 +84,15 @@ export default function PricingSection() {
     }
   }, [toast]);
 
+  // Check for pending user (requires payment) or existing user
+  const pendingUserId = localStorage.getItem("pendingUserId");
+  const existingUserId = localStorage.getItem("userId");
+  
+  // Priority: pendingUserId (needs payment) > newUserId > existingUserId
+  const currentUserId = pendingUserId || newUserId || existingUserId;
+  const isPendingPayment = !!pendingUserId;
+  
   // Check current subscription status
-  const currentUserId = newUserId || localStorage.getItem("userId");
   const { data: subscriptionStatus } = useQuery<{hasActiveSubscription: boolean}>({
     queryKey: ["/api/subscription-status"],
     queryFn: async () => {
@@ -136,9 +143,12 @@ export default function PricingSection() {
             throw new Error("Error activating subscription");
           }
 
-          // Clear registration data and set user session
+          // Clear all pending/new user data and establish active session
+          localStorage.removeItem("pendingUserId");
+          localStorage.removeItem("pendingUsername");
           localStorage.removeItem("newUserId");
           localStorage.removeItem("newUsername");
+          localStorage.removeItem("registrationTime");
           localStorage.setItem("userId", currentUserId!);
           
           toast({
@@ -201,10 +211,10 @@ export default function PricingSection() {
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
             Desbloquea acceso completo a recursos exclusivos y servicios personalizados
           </p>
-          {isNewUser && (
-            <div className="mt-6 p-4 bg-nflow-orange/20 border border-nflow-orange/30 rounded-xl max-w-md mx-auto">
-              <p className="text-nflow-orange font-semibold">
-                ¡Último paso! Selecciona tu plan para activar tu cuenta
+          {(isNewUser || isPendingPayment) && (
+            <div className="mt-6 p-4 bg-red-500/20 border border-red-500/30 rounded-xl max-w-md mx-auto">
+              <p className="text-red-300 font-semibold">
+                {isPendingPayment ? "⚠️ PAGO OBLIGATORIO: Tu cuenta se borrará si no pagas" : "¡Último paso! Selecciona tu plan para activar tu cuenta"}
               </p>
             </div>
           )}
