@@ -246,10 +246,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get all conversations
+  // Get conversations for logged-in user
   app.get("/api/conversations", async (req, res) => {
     try {
-      const conversations = await storage.getConversations();
+      const userId = req.session.userId;
+      
+      if (!userId) {
+        return res.status(401).json({ message: "User not authenticated" });
+      }
+      
+      const conversations = await storage.getConversations(userId);
       res.json(conversations);
     } catch (error) {
       res.status(500).json({ message: "Error fetching conversations" });

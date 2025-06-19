@@ -58,17 +58,21 @@ export default function Chat() {
   // Create new conversation mutation
   const createConversationMutation = useMutation({
     mutationFn: async (title: string) => {
-      const response = await apiRequest("POST", "/api/conversations", {
-        title,
-        userId: parseInt(userId || "0"),
+      const response = await fetch("/api/conversations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          userId: parseInt(userId || "0"),
+        }),
       });
-      return response;
+      return response.json();
     },
-    onSuccess: (newConversation) => {
+    onSuccess: (newConversation: any) => {
       queryClient.invalidateQueries({ queryKey: ["/api/conversations"] });
       setCurrentConversationId(newConversation.id);
       setLocation(`/chat/${newConversation.id}`);
-      addNotification("Nueva conversación creada", "success");
+      addNotification({ message: "Nueva conversación creada", type: "success" });
     },
     onError: (error) => {
       toast({
@@ -83,12 +87,10 @@ export default function Chat() {
   const sendMessageMutation = useMutation({
     mutationFn: async ({ conversationId, content }: { conversationId: number; content: string }) => {
       const messageData = {
-        conversationId,
         content,
-        role: "user" as const,
         userProfile,
       };
-      return await apiRequest("POST", "/api/messages", messageData);
+      return await apiRequest("POST", `/api/conversations/${conversationId}/messages`, messageData);
     },
     onSuccess: () => {
       refetchMessages();
@@ -114,7 +116,7 @@ export default function Chat() {
     localStorage.setItem("userProfile", JSON.stringify(profileData));
     setShowProfileForm(false);
     
-    addNotification("Perfil guardado correctamente", "success");
+    addNotification({ message: "Perfil guardado correctamente", type: "success" });
   };
 
   // Handle send message
