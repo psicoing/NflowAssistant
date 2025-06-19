@@ -457,6 +457,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.redirect("/?payment=cancelled");
   });
 
+  // Activate subscription after payment (for demo)
+  app.post("/api/activate-subscription", async (req, res) => {
+    try {
+      const { userId, subscriptionPlan, amount } = req.body;
+      
+      if (!userId || !subscriptionPlan) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "userId y subscriptionPlan son requeridos" 
+        });
+      }
+
+      // Update user subscription to active
+      const expiresAt = new Date();
+      expiresAt.setMonth(expiresAt.getMonth() + 1); // 1 month subscription
+
+      await storage.updateUserSubscription(parseInt(userId), {
+        status: 'active',
+        plan: subscriptionPlan,
+        subscriptionId: `demo_${Date.now()}`,
+        expiresAt
+      });
+
+      // Create transaction record
+      await storage.createPaypalTransaction({
+        userId: parseInt(userId),
+        paypalOrderId: `demo_order_${Date.now()}`,
+        amount: parseFloat(amount || "0"),
+        currency: "EUR",
+        status: "completed",
+        subscriptionPlan
+      });
+
+      res.json({
+        success: true,
+        message: "Suscripción activada exitosamente"
+      });
+
+    } catch (error) {
+      console.error("Error activating subscription:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error activando suscripción" 
+      });
+    }
+  });
+
   // User statistics and tracking routes
   app.get("/api/admin/user-stats/:userId", async (req, res) => {
     try {
@@ -543,19 +590,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-      // Create user
+      // Create user with pending status - requires payment to activate
       const user = await storage.createUser({
         username,
         password: hashedPassword,
         email,
-        subscriptionStatus: 'inactive',
+        subscriptionStatus: 'pending_payment',
         hasCompletedPayment: false
       });
 
       res.status(201).json({
         success: true,
         userId: user.id,
-        message: "Usuario creado exitosamente"
+        requiresPayment: true,
+        message: "Usuario creado. Completa el pago para activar tu cuenta"
       });
     } catch (error) {
       console.error("Registration error:", error);
@@ -597,7 +645,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Update last login
+      // Check if user has completed payment before allowing login
+      if (user.subscriptionStatus === 'pending_payment' || !user.hasCompletedPayment) {
+        return res.status(403).json({
+          success: false,
+          userId: user.id,
+          requiresPayment: true,
+          message: "Debes completar tu pago para acceder al sistema"
+        });
+      }
+
+      // Update last login only for paid users
       await storage.updateUserLogin(user.id);
 
       // Check subscription status
@@ -606,8 +664,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         success: true,
         userId: user.id,
-        hasCompletedPayment: user.hasCompletedPayment || false,
-        subscriptionStatus: user.subscriptionStatus || 'inactive',
+        hasCompletedPayment: user.hasCompletedPayment,
+        subscriptionStatus: user.subscriptionStatus,
         message: "Login exitoso"
       });
     } catch (error) {
