@@ -4,8 +4,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Header from "@/components/layout/header";
 import ChatInterface from "@/components/ui/chat-interface";
 import UserProfileForm from "@/components/ui/user-profile-form";
-import { NotificationSystem, useNotifications } from "@/components/ui/notification-system";
-import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MessageCircle, Plus, Search, Calendar, Clock } from "lucide-react";
@@ -18,7 +16,6 @@ export default function Chat() {
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const { notifications, addNotification, dismissNotification } = useNotifications();
   const [currentConversationId, setCurrentConversationId] = useState<number | null>(
     id ? parseInt(id) : null
   );
@@ -72,7 +69,10 @@ export default function Chat() {
       queryClient.invalidateQueries({ queryKey: ["/api/conversations"] });
       setCurrentConversationId(newConversation.id);
       setLocation(`/chat/${newConversation.id}`);
-      addNotification({ message: "Nueva conversación creada", type: "success" });
+      toast({
+        title: "Éxito",
+        description: "Nueva conversación creada",
+      });
     },
     onError: (error) => {
       toast({
@@ -86,11 +86,15 @@ export default function Chat() {
   // Send message mutation
   const sendMessageMutation = useMutation({
     mutationFn: async ({ conversationId, content }: { conversationId: number; content: string }) => {
-      const messageData = {
-        content,
-        userProfile,
-      };
-      return await apiRequest("POST", `/api/conversations/${conversationId}/messages`, messageData);
+      const response = await fetch(`/api/conversations/${conversationId}/messages`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content,
+          userProfile,
+        }),
+      });
+      return response.json();
     },
     onSuccess: () => {
       refetchMessages();
@@ -116,7 +120,10 @@ export default function Chat() {
     localStorage.setItem("userProfile", JSON.stringify(profileData));
     setShowProfileForm(false);
     
-    addNotification({ message: "Perfil guardado correctamente", type: "success" });
+    toast({
+      title: "Éxito",
+      description: "Perfil guardado correctamente",
+    });
   };
 
   // Handle send message
@@ -185,10 +192,6 @@ export default function Chat() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       <Header />
-      <NotificationSystem 
-        notifications={notifications} 
-        onDismiss={dismissNotification} 
-      />
       
       {/* Mobile Navigation Bar */}
       <div className="md:hidden bg-gray-800/90 border-b border-gray-700/50 p-3 mt-16">
@@ -321,7 +324,6 @@ export default function Chat() {
         <div className="flex-1 flex flex-col">
           {currentConversationId ? (
             <ChatInterface
-              conversationId={currentConversationId}
               messages={messages}
               onSendMessage={handleSendMessage}
               isLoading={sendMessageMutation.isPending}
