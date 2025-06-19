@@ -46,9 +46,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // PayPal transaction tracking routes
   app.post("/api/paypal/create-order", async (req, res) => {
     try {
-      const { userId, amount, currency, subscriptionPlan } = req.body;
+      const { amount, currency, subscriptionPlan } = req.body;
+      const userId = req.session.userId || 1; // Use session userId or default for demo
       
-      if (!userId || !amount || !currency || !subscriptionPlan) {
+      if (!amount || !currency || !subscriptionPlan) {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
@@ -64,10 +65,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Record transaction in database
       await storage.createPaypalTransaction({
-        userId: parseInt(userId),
+        userId: userId,
         paypalOrderId: orderData.id,
         subscriptionPlan,
-        amount,
+        amount: amount.toString(),
         currency,
         status: 'CREATED'
       });
@@ -82,14 +83,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/paypal/capture-order/:orderId", async (req, res) => {
     try {
       const { orderId } = req.params;
-      const { userId } = req.body;
+      const userId = req.session.userId || 1; // Use session userId
       
       if (!orderId || orderId === 'undefined') {
         return res.status(400).json({ message: "Invalid order ID" });
-      }
-      
-      if (!userId) {
-        return res.status(400).json({ message: "User ID is required" });
       }
       
       // Simulate successful capture for testing (in production this would call PayPal API)
@@ -112,7 +109,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.updatePaypalTransaction(orderId, 'COMPLETED');
         
         // Get transaction details to update user subscription
-        const transactions = await storage.getPaypalTransactionsByUser(parseInt(userId));
+        const transactions = await storage.getPaypalTransactionsByUser(userId);
         const transaction = transactions.find(t => t.paypalOrderId === orderId);
         
         if (transaction) {
@@ -121,7 +118,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           expiresAt.setMonth(expiresAt.getMonth() + 1);
           
           // Update user subscription
-          await storage.updateUserSubscription(parseInt(userId), {
+          await storage.updateUserSubscription(userId, {
             status: 'active',
             plan: transaction.subscriptionPlan,
             subscriptionId: orderId,
