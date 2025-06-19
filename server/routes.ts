@@ -283,11 +283,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const user = await storage.getUser(userId);
     if (!user) return false;
     
-    if (user.subscriptionStatus === 'active' && user.subscriptionExpiresAt) {
-      return new Date() < user.subscriptionExpiresAt;
+    // If subscription status is active
+    if (user.subscriptionStatus === 'active') {
+      // If there's an expiration date, check if it's still valid
+      if (user.subscriptionExpiresAt) {
+        return new Date() < new Date(user.subscriptionExpiresAt);
+      }
+      // If no expiration date, consider it active
+      return true;
     }
     
-    return user.subscriptionStatus === 'active';
+    return false;
   };
 
   // API endpoint to check subscription status
