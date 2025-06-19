@@ -398,74 +398,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       };
 
-      // Verify PayPal credentials and create working payment flow
-      try {
-        // Test PayPal authentication first
-        const authResponse = await fetch(`https://api.sandbox.paypal.com/v1/oauth2/token`, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Accept-Language': 'en_US',
-            'Authorization': `Basic ${Buffer.from(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`).toString('base64')}`
-          },
-          body: 'grant_type=client_credentials'
-        });
+      // Create real PayPal order with proper error handling
+      const authResponse = await fetch(`https://api.sandbox.paypal.com/v1/oauth2/token`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Accept-Language': 'en_US',
+          'Authorization': `Basic ${Buffer.from(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`).toString('base64')}`
+        },
+        body: 'grant_type=client_credentials'
+      });
 
-        const authData = await authResponse.json() as any;
-        
-        if (authData.access_token) {
-          console.log('PayPal credentials verified successfully');
-          
-          // Create functional order that bypasses sandbox issues
-          const orderId = `VERIFIED_ORDER_${Date.now()}_${userId}`;
-          
-          await storage.createPaypalTransaction({
-            userId: parseInt(userId),
-            paypalOrderId: orderId,
-            amount: parseFloat(amount),
-            currency: currency,
-            status: "pending",
-            subscriptionPlan: subscriptionPlan
-          });
-
-          // Return working payment flow
-          res.json({
-            id: orderId,
-            status: "CREATED",
-            links: [{
-              href: `/payment-success?userId=${userId}&plan=${subscriptionPlan}&token=${orderId}`,
-              rel: "approve",
-              method: "GET"
-            }]
-          });
-        } else {
-          throw new Error('PayPal authentication failed');
-        }
-      } catch (error) {
-        console.error('PayPal integration error:', error);
-        
-        // Fallback working payment flow
-        const orderId = `BACKUP_ORDER_${Date.now()}_${userId}`;
-        
-        await storage.createPaypalTransaction({
-          userId: parseInt(userId),
-          paypalOrderId: orderId,
-          amount: parseFloat(amount),
-          currency: currency,
-          status: "pending",
-          subscriptionPlan: subscriptionPlan
-        });
-
-        res.json({
-          id: orderId,
-          status: "CREATED",
-          links: [{
-            href: `/payment-success?userId=${userId}&plan=${subscriptionPlan}&token=${orderId}`,
-            rel: "approve",
-            method: "GET"
-          }]
-        });
+      if (!authResponse.ok) {
+        const authError = await authResponse.text();
+        console.error('PayPal auth failed:', authError);
+        throw new Error(`PayPal authentication failed: ${authResponse.status}`);
       }
+
+      const authData = await authResponse.json() as any;
+      console.log('PayPal access token obtained');
+
+      // Create PayPal order
+      const orderResponse = await fetch(`https://api.sandbox.paypal.com/v2/checkout/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authData.access_token}`,
+          'PayPal-Request-Id': `${userId}_${Date.now()}`
+        },
+        body: JSON.stringify(orderRequest)
+      });
+
+      if (!orderResponse.ok) {
+        const orderError = await orderResponse.text();
+        console.error('PayPal order creation failed:', orderError);
+        throw new Error(`PayPal order creation failed: ${orderResponse.status}`);
+      }
+
+      const orderData = await orderResponse.json() as any;
+      console.log('PayPal order created:', orderData.id);
+
+      // Store transaction with real PayPal order ID
+      await storage.createPaypalTransaction({
+        userId: parseInt(userId),
+        paypalOrderId: orderData.id,
+        amount: parseFloat(amount),
+        currency: currency,
+        status: "pending",
+        subscriptionPlan: subscriptionPlan
+      });
+
+      // Return real PayPal order data
+      res.json({
+        id: orderData.id,
+        status: orderData.status,
+        links: orderData.links
+      });
 
     } catch (error) {
       console.error("Error creating PayPal order:", error);
