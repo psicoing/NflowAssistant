@@ -4,12 +4,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Header from "@/components/layout/header";
 import ChatInterface from "@/components/ui/chat-interface";
 import UserProfileForm from "@/components/ui/user-profile-form";
-import SubscriptionStatus from "@/components/ui/subscription-status";
 import { NotificationSystem, useNotifications } from "@/components/ui/notification-system";
 import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MessageCircle, Plus, Lock, Search, Calendar, Clock } from "lucide-react";
+import { MessageCircle, Plus, Search, Calendar, Clock } from "lucide-react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import type { Conversation, Message } from "@shared/schema";
@@ -61,70 +60,85 @@ export default function Chat() {
     mutationFn: async (title: string) => {
       const response = await apiRequest("POST", "/api/conversations", {
         title,
-        userId: parseInt(userId || "1"),
+        userId: parseInt(userId || "0"),
       });
-      return response.json();
+      return response;
     },
-    onSuccess: (conversation) => {
+    onSuccess: (newConversation) => {
       queryClient.invalidateQueries({ queryKey: ["/api/conversations"] });
-      setCurrentConversationId(conversation.id);
-      setLocation(`/chat/${conversation.id}`);
+      setCurrentConversationId(newConversation.id);
+      setLocation(`/chat/${newConversation.id}`);
+      addNotification("Nueva conversación creada", "success");
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "No se pudo crear la conversación",
+        variant: "destructive",
+      });
     },
   });
 
   // Send message mutation
   const sendMessageMutation = useMutation({
-    mutationFn: async ({ content }: { content: string }) => {
-      const response = await apiRequest(
-        "POST",
-        `/api/conversations/${currentConversationId}/messages`,
-        {
-          content,
-          userId: parseInt(userId || "1"),
-        }
-      );
-      return response.json();
+    mutationFn: async ({ conversationId, content }: { conversationId: number; content: string }) => {
+      const messageData = {
+        conversationId,
+        content,
+        role: "user" as const,
+        userProfile,
+      };
+      return await apiRequest("POST", "/api/messages", messageData);
     },
-    onSuccess: async () => {
-      // Force refetch messages immediately
-      await refetchMessages();
-      // Invalidate conversations list to update last message timestamp
-      queryClient.invalidateQueries({
-        queryKey: ["/api/conversations"],
-      });
-      // Add success notification
-      addNotification({
-        type: 'success',
-        title: 'Mensaje enviado',
-        message: 'Tu mensaje ha sido procesado exitosamente',
-        duration: 2000
-      });
+    onSuccess: () => {
+      refetchMessages();
     },
     onError: (error) => {
-      addNotification({
-        type: 'error',
-        title: 'Error al enviar mensaje',
-        message: 'No se pudo enviar tu mensaje. Inténtalo de nuevo.',
-        duration: 5000
+      toast({
+        title: "Error",
+        description: "No se pudo enviar el mensaje",
+        variant: "destructive",
       });
     },
   });
 
-  // Event handlers
-  const handleSendMessage = (content: string) => {
-    if (!currentConversationId) return;
-    sendMessageMutation.mutate({ content });
-  };
-
-  const handleProfileSubmit = (profile: any) => {
-    setUserProfile(profile);
-    setShowProfileForm(false);
-  };
-
+  // Handle new chat creation
   const handleNewChat = () => {
-    createConversationMutation.mutate("Nueva conversación");
+    const title = `Conversación ${new Date().toLocaleDateString("es-ES")} ${new Date().toLocaleTimeString("es-ES", { hour: '2-digit', minute: '2-digit' })}`;
+    createConversationMutation.mutate(title);
   };
 
+  // Handle profile form submission
+  const handleProfileSubmit = (profileData: any) => {
+    setUserProfile(profileData);
+    localStorage.setItem("userProfile", JSON.stringify(profileData));
+    setShowProfileForm(false);
+    
+    addNotification("Perfil guardado correctamente", "success");
+  };
+
+  // Handle send message
+  const handleSendMessage = (content: string) => {
+    if (!currentConversationId) {
+      toast({
+        title: "Error",
+        description: "Selecciona una conversación primero",
+        variant: "destructive",
+      });
+      return;
+    }
+    sendMessageMutation.mutate({ conversationId: currentConversationId, content });
+  };
+
+  // Auto-select conversation from URL
+  useEffect(() => {
+    if (id) {
+      const conversationId = parseInt(id);
+      setCurrentConversationId(conversationId);
+    }
+  }, [id]);
+
+  // Handle conversation selection
   const handleSelectConversation = (conversationId: number) => {
     setCurrentConversationId(conversationId);
     setLocation(`/chat/${conversationId}`);
@@ -160,8 +174,6 @@ export default function Chat() {
     return matchesSearch && matchesDate;
   });
 
-  // Subscription already verified in login - proceed directly to chat interface
-
   // Show profile form if needed
   if (showProfileForm) {
     return <UserProfileForm onProfileSubmit={handleProfileSubmit} />;
@@ -189,41 +201,21 @@ export default function Chat() {
             Nueva
           </Button>
           
-          {currentConversationId && (
-            <div className="flex-1 mx-3 text-center">
-              <h2 className="text-white font-medium text-sm truncate">
-                {conversations.find(c => c.id === currentConversationId)?.title || "Chat"}
-              </h2>
-            </div>
-          )}
-          
-          <div className="text-xs text-gray-400">
-            {conversations.length} chats
-          </div>
+          <span className="text-white text-sm font-medium">
+            {currentConversationId ? 
+              conversations.find(c => c.id === currentConversationId)?.title || "Chat" 
+              : "Selecciona una conversación"
+            }
+          </span>
         </div>
       </div>
 
+      {/* Main Content */}
       <div className="flex flex-col md:flex-row flex-1" style={{ height: 'calc(100vh - 140px)', minHeight: 'calc(100vh - 140px)' }}>
         {/* Sidebar - Hidden on mobile */}
         <div className="hidden md:flex w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex-col backdrop-blur-sm">
           <div className="p-6 border-b border-gray-700/50 space-y-4">
-            {/* Subscription Status Component */}
-            {subscriptionData && (
-              <SubscriptionStatus 
-                subscriptionData={{
-                  ...subscriptionData,
-                  daysRemaining: subscriptionData.expiresAt ? 
-                    Math.max(0, Math.ceil((new Date(subscriptionData.expiresAt).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))) : 0
-                }}
-                onRenew={() => setLocation('/activar-cuenta')}
-                onCancel={async () => {
-                  await apiRequest('POST', '/api/subscription/cancel', {});
-                  queryClient.invalidateQueries({ queryKey: ['/api/subscription-status'] });
-                }}
-                onManage={() => setLocation('/subscription')}
-              />
-            )}
-            
+            {/* New Chat Button */}
             <Button
               onClick={handleNewChat}
               className="w-full bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white font-semibold py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:scale-100"
@@ -244,22 +236,22 @@ export default function Chat() {
                 className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder:text-gray-400 focus:border-nflow-orange focus:ring-1 focus:ring-nflow-orange/20 transition-all"
               />
             </div>
-            
+
             {/* Date Filter */}
-            <div className="flex space-x-1">
+            <div className="flex gap-2">
               {[
-                { key: "all", label: "Todo", icon: Calendar },
-                { key: "today", label: "Hoy", icon: Clock },
+                { key: "all", label: "Todo", icon: Clock },
+                { key: "today", label: "Hoy", icon: Calendar },
                 { key: "week", label: "Semana", icon: Calendar },
-                { key: "month", label: "Mes", icon: Calendar }
+                { key: "month", label: "Mes", icon: Calendar },
               ].map(({ key, label, icon: Icon }) => (
                 <button
                   key={key}
                   onClick={() => setSelectedDateFilter(key as any)}
-                  className={`flex-1 px-2 py-1 text-xs rounded-md transition-all ${
+                  className={`flex-1 px-2 py-1.5 text-xs rounded-lg border transition-all duration-200 ${
                     selectedDateFilter === key
-                      ? "bg-nflow-orange/20 text-nflow-orange border border-nflow-orange/30"
-                      : "bg-gray-700/30 text-gray-400 hover:text-gray-300 hover:bg-gray-700/50"
+                      ? "bg-nflow-orange/20 border-nflow-orange text-nflow-orange"
+                      : "bg-gray-700/30 border-gray-600/50 text-gray-300 hover:bg-gray-600/50"
                   }`}
                 >
                   <Icon className="w-3 h-3 mx-auto mb-1" />
@@ -269,55 +261,53 @@ export default function Chat() {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
-            {conversations.length === 0 ? (
-              <div className="text-center text-gray-400 py-12">
-                <div className="relative mb-6">
-                  <MessageCircle className="w-16 h-16 mx-auto opacity-50" />
-                  <div className="absolute -inset-2 bg-gradient-to-r from-nflow-orange/10 to-nflow-blue/10 rounded-2xl blur-xl"></div>
-                </div>
-                <p className="text-lg font-medium">No hay conversaciones aún</p>
-                <p className="text-sm text-gray-500 mt-2">Inicia tu primera sesión de apoyo emocional</p>
+          {/* Conversations List */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+            {filteredConversations.length === 0 ? (
+              <div className="text-center py-8">
+                <MessageCircle className="w-12 h-12 text-gray-500 mx-auto mb-3" />
+                <p className="text-gray-400 text-sm mb-2">
+                  {searchQuery || selectedDateFilter !== "all" 
+                    ? "No se encontraron conversaciones" 
+                    : "No tienes conversaciones aún"
+                  }
+                </p>
+                <Button
+                  onClick={handleNewChat}
+                  size="sm"
+                  variant="outline"
+                  className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                  disabled={createConversationMutation.isPending}
+                >
+                  Crear primera conversación
+                </Button>
               </div>
             ) : (
-              conversations.map((conversation: Conversation) => (
+              filteredConversations.map((conversation: Conversation) => (
                 <Card
                   key={conversation.id}
-                  className={`cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
+                  className={`cursor-pointer transition-all duration-200 border ${
                     currentConversationId === conversation.id
-                      ? "bg-gradient-to-r from-nflow-orange/20 to-nflow-orange/10 border-nflow-orange/50 shadow-lg scale-[1.02]"
-                      : "bg-gradient-to-r from-gray-800/80 to-gray-700/80 border-gray-600/50 hover:from-gray-700/80 hover:to-gray-600/80 hover:border-gray-500/50"
+                      ? "bg-nflow-orange/10 border-nflow-orange/50 shadow-lg shadow-nflow-orange/20"
+                      : "bg-gray-800/50 border-gray-700/50 hover:bg-gray-700/50 hover:border-gray-600/50"
                   }`}
                   onClick={() => handleSelectConversation(conversation.id)}
                 >
                   <CardContent className="p-4">
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-3 h-3 rounded-full ${
-                        currentConversationId === conversation.id 
-                          ? "bg-nflow-orange animate-pulse" 
-                          : "bg-gray-500"
-                      }`}></div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-white text-sm truncate">
-                          {conversation.title}
-                        </h3>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <p className="text-xs text-gray-400">
-                            {new Date(conversation.createdAt).toLocaleDateString('es-ES', {
-                              day: 'numeric',
-                              month: 'short'
-                            })}
-                          </p>
-                          <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-                          <p className="text-xs text-gray-400">
-                            {new Date(conversation.createdAt).toLocaleTimeString('es-ES', {
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                    <h3 className={`font-medium text-sm mb-2 line-clamp-2 ${
+                      currentConversationId === conversation.id ? "text-nflow-orange" : "text-white"
+                    }`}>
+                      {conversation.title}
+                    </h3>
+                    <p className="text-xs text-gray-400">
+                      {new Date(conversation.createdAt).toLocaleDateString("es-ES", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
                   </CardContent>
                 </Card>
               ))
@@ -325,38 +315,33 @@ export default function Chat() {
           </div>
         </div>
 
-        {/* Chat Area */}
+        {/* Chat Interface */}
         <div className="flex-1 flex flex-col">
           {currentConversationId ? (
             <ChatInterface
+              conversationId={currentConversationId}
               messages={messages}
               onSendMessage={handleSendMessage}
               isLoading={sendMessageMutation.isPending}
               isLoadingMessages={isLoadingMessages}
             />
           ) : (
-            <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-900/50 to-gray-800/50">
-              <div className="text-center max-w-md px-8">
-                <div className="relative mb-8">
-                  <div className="w-24 h-24 bg-gradient-to-br from-nflow-orange to-nflow-orange-light rounded-3xl mx-auto flex items-center justify-center shadow-2xl">
-                    <MessageCircle className="w-12 h-12 text-white" />
-                  </div>
-                  <div className="absolute -inset-6 bg-gradient-to-r from-nflow-orange/20 to-nflow-blue/20 rounded-full blur-2xl"></div>
-                </div>
-                <h2 className="text-3xl font-bold text-white mb-4">
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center max-w-md mx-4">
+                <MessageCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+                <h2 className="text-xl font-semibold text-white mb-2">
                   Bienvenido a NFLOW
                 </h2>
-                <p className="text-gray-300 mb-8 leading-relaxed">
-                  Tu psicólogo digital está listo para brindarte apoyo emocional profesional.
-                  Inicia una conversación segura y confidencial.
+                <p className="text-gray-400 mb-6">
+                  Selecciona una conversación existente o crea una nueva para comenzar a chatear con tu asistente de salud mental.
                 </p>
                 <Button
                   onClick={handleNewChat}
-                  className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white font-semibold px-8 py-4 rounded-xl shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:scale-100"
+                  className="bg-nflow-orange hover:bg-nflow-orange/90 text-black font-semibold"
                   disabled={createConversationMutation.isPending}
                 >
-                  <Plus className="w-5 h-5 mr-3" />
-                  Comenzar Nueva Sesión
+                  <Plus className="w-4 h-4 mr-2" />
+                  Crear Nueva Conversación
                 </Button>
               </div>
             </div>
