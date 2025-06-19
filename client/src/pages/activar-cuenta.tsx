@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,6 +27,8 @@ export default function ActivarCuenta() {
     error: null
   });
   const { toast } = useToast();
+  const paypalContainerRef = useRef<HTMLDivElement>(null);
+  const paypalRenderedRef = useRef(false);
 
   useEffect(() => {
     // Check if user is logged in and has pending payment
@@ -65,24 +67,22 @@ export default function ActivarCuenta() {
 
   // Initialize PayPal SDK
   useEffect(() => {
+    if (paypalRenderedRef.current) return; // Prevent multiple initializations
+
     let paypalLoadAttempts = 0;
-    const maxAttempts = 5;
+    const maxAttempts = 3;
 
     const initPayPal = () => {
-      const container = document.getElementById('paypal-button-container-basic');
+      if (paypalRenderedRef.current) return;
+      
+      const container = paypalContainerRef.current;
       console.log('PayPal initialization attempt:', paypalLoadAttempts + 1);
       console.log('PayPal available:', !!window.paypal);
       console.log('Container found:', !!container);
 
       if (window.paypal && container) {
-        // Safely clear container only if it has content
-        try {
-          while (container.firstChild) {
-            container.removeChild(container.firstChild);
-          }
-        } catch (e) {
-          console.warn('Container cleanup warning:', e);
-        }
+        // Mark as rendered to prevent multiple initializations
+        paypalRenderedRef.current = true;
         
         setPaypalStatus(prev => ({ ...prev, sdkLoaded: true }));
         
@@ -160,11 +160,12 @@ export default function ActivarCuenta() {
               duration: 3000,
             });
           }
-        }).render('#paypal-button-container-basic').then(() => {
+        }).render(container).then(() => {
           console.log('PayPal button rendered successfully');
           setPaypalStatus(prev => ({ ...prev, buttonRendered: true }));
         }).catch((error: any) => {
           console.error('PayPal button render error:', error);
+          paypalRenderedRef.current = false; // Reset on error
           setPaypalStatus(prev => ({ ...prev, error: error.toString() }));
           toast({
             title: "Error cargando PayPal",
@@ -272,12 +273,14 @@ export default function ActivarCuenta() {
                     <li>• Soporte psicológico 24/7</li>
                     <li>• Recursos y ejercicios personalizados</li>
                   </ul>
-                  <div id="paypal-button-container-basic" className="min-h-[50px] relative border border-gray-600/50 rounded-lg">
+                  
+                  {/* PayPal Button Container */}
+                  <div ref={paypalContainerRef} className="min-h-[50px] relative border border-gray-600/50 rounded-lg">
                     {!paypalStatus.buttonRendered && !paypalStatus.error && (
                       <div className="absolute inset-0 bg-gray-800/80 flex flex-col items-center justify-center rounded-lg p-4">
                         <div className="animate-spin w-6 h-6 border-2 border-nflow-blue border-t-transparent rounded-full mb-2"></div>
                         <span className="text-gray-300 text-sm text-center">
-                          {paypalStatus.sdkLoaded ? 'Cargando botón de pago...' : 'Cargando PayPal SDK...'}
+                          Cargando PayPal...
                         </span>
                       </div>
                     )}
@@ -285,28 +288,26 @@ export default function ActivarCuenta() {
                     {paypalStatus.error && (
                       <div className="absolute inset-0 bg-red-900/20 border border-red-500/30 flex flex-col items-center justify-center rounded-lg p-4">
                         <div className="text-red-400 text-sm text-center">
-                          Error de PayPal: {paypalStatus.error}
+                          PayPal no disponible
                         </div>
                       </div>
                     )}
                   </div>
                   
-                  {/* Status indicators */}
-                  <div className="text-xs text-gray-500 mt-2 space-y-1">
-                    <div className="flex items-center space-x-2">
-                      <div className={`w-2 h-2 rounded-full ${paypalStatus.sdkLoaded ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
-                      <span>SDK PayPal: {paypalStatus.sdkLoaded ? 'Cargado' : 'Cargando...'}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className={`w-2 h-2 rounded-full ${paypalStatus.buttonRendered ? 'bg-green-500' : paypalStatus.error ? 'bg-red-500' : 'bg-yellow-500'}`}></div>
-                      <span>Botón de pago: {paypalStatus.buttonRendered ? 'Listo' : paypalStatus.error ? 'Error' : 'Cargando...'}</span>
-                    </div>
-                  </div>
-                  
-                  {/* Fallback message */}
+                  {/* Fallback button if PayPal fails */}
                   {paypalStatus.error && (
-                    <div className="text-center text-sm text-yellow-400 mt-3 bg-yellow-900/20 border border-yellow-500/30 rounded p-2">
-                      PayPal no está disponible. Usa la opción de WhatsApp para activar tu cuenta.
+                    <div className="mt-4">
+                      <a
+                        href="https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-8X502396U4202261ENBKC32A"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+                      >
+                        Pagar con PayPal (enlace directo)
+                      </a>
+                      <p className="text-xs text-gray-400 mt-2 text-center">
+                        Después del pago, vuelve aquí para activar tu cuenta
+                      </p>
                     </div>
                   )}
                 </div>
