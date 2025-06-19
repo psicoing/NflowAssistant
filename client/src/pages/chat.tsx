@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Header from "@/components/layout/header";
+import ChatHeader from "@/components/ui/chat-header";
 import ChatInterface from "@/components/ui/chat-interface";
 import UserProfileForm from "@/components/ui/user-profile-form";
 import { Button } from "@/components/ui/button";
@@ -191,7 +191,7 @@ export default function Chat() {
   // Main chat interface
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-      <Header />
+      <ChatHeader />
       
       {/* Mobile Navigation Bar */}
       <div className="md:hidden bg-gray-800/90 border-b border-gray-700/50 p-3 mt-16">
