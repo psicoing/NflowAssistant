@@ -115,6 +115,10 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 19, 2025. Fixed registration flow with automatic user authentication after account creation
+- June 19, 2025. Corrected session management to prevent login redirect loops for pending payment users
+- June 19, 2025. Updated subscription status endpoint to use authenticated sessions instead of user ID parameters
+- June 19, 2025. Registration now auto-authenticates users and redirects to activation page seamlessly
 - June 19, 2025. Created dedicated activation page (/activar-cuenta) separating payment options from main pricing section
 - June 19, 2025. Added dual activation options in registration page: PayPal automatic (1st) and WhatsApp manual (2nd)
 - June 19, 2025. Added WhatsApp contact option (+34 660 45 21 36) as PayPal alternative for manual account activation
