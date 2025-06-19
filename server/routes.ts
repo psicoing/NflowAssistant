@@ -630,7 +630,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await storage.createPaypalTransaction({
         userId: parseInt(userId),
         paypalOrderId: `demo_order_${Date.now()}`,
-        amount: parseFloat(amount || "0"),
+        amount: amount || "0",
         currency: "EUR",
         status: "completed",
         subscriptionPlan
