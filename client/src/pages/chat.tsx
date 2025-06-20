@@ -29,14 +29,16 @@ export default function Chat() {
 
   // Check for existing user profile
   useEffect(() => {
-    const savedProfile = localStorage.getItem("userProfile");
-    
-    if (savedProfile) {
-      setUserProfile(JSON.parse(savedProfile));
-    } else {
-      setShowProfileForm(true);
+    if (userId) {
+      const savedProfile = localStorage.getItem(`userProfile_${userId}`);
+      
+      if (savedProfile) {
+        setUserProfile(JSON.parse(savedProfile));
+      } else {
+        setShowProfileForm(true);
+      }
     }
-  }, []);
+  }, [userId]);
 
   // Fetch conversations list (subscription already verified in login)
   const { data: conversations = [] } = useQuery<Conversation[]>({
@@ -117,7 +119,9 @@ export default function Chat() {
   // Handle profile form submission
   const handleProfileSubmit = (profileData: any) => {
     setUserProfile(profileData);
-    localStorage.setItem("userProfile", JSON.stringify(profileData));
+    if (userId) {
+      localStorage.setItem(`userProfile_${userId}`, JSON.stringify(profileData));
+    }
     setShowProfileForm(false);
     
     toast({

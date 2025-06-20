@@ -22,8 +22,6 @@ export default function UserProfileForm({ onProfileSubmit }: UserProfileFormProp
   const handleSubmit = () => {
     if (age && gender) {
       onProfileSubmit({ age, gender });
-      // Guardar en localStorage para futuras sesiones
-      localStorage.setItem("userProfile", JSON.stringify({ age, gender }));
     }
   };
 
