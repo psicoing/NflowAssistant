@@ -441,40 +441,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Stripe webhook (ligero)
-  app.post("/api/stripe/webhook", async (req, res) => {
-    try {
-      const event = req.body;
-      if (event.type === 'checkout.session.completed') {
-        const customerEmail = event.data.object.customer_details?.email;
-        if (customerEmail) {
-          const users = await storage.getAllUsers();
-          const user = users.find(u => u.email === customerEmail);
-          if (user) {
-            await storage.updateUserSubscription(user.id, {
-              status: 'active',
-              plan: 'basic', 
-              subscriptionId: event.data.object.id,
-              expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-            });
-          }
-        }
-      }
-      res.json({ received: true });
-    } catch (error) {
-      res.status(400).json({ error: 'Webhook error' });
-    }
-  });
 
-  app.get("/api/stripe/success", async (req, res) => {
-    // Redirigir al chat después de pago exitoso
-    res.redirect("/chat");
-  });
-
-  app.get("/api/stripe/cancel", async (req, res) => {
-    // Redirigir a activación si se cancela
-    res.redirect("/activar-cuenta");
-  });
 
   // PayPal endpoints
   app.get("/api/paypal/config", async (req, res) => {
