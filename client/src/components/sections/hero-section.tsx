@@ -60,7 +60,7 @@ export default function HeroSection() {
                 <img 
                   src={nflowPackageImage} 
                   alt="NFLOW Salud Mental Individual"
-                  className="w-full h-auto rounded-3xl shadow-2xl border border-gray-700/50 select-none"
+                  className="w-4/5 mx-auto h-auto rounded-3xl shadow-2xl border border-gray-700/50 select-none"
                 />
               </div>
               
@@ -79,7 +79,7 @@ export default function HeroSection() {
                 <img 
                   src={nflowFamilyImage} 
                   alt="NFLOW Salud Mental Familiar"
-                  className="w-full h-auto rounded-3xl shadow-2xl border border-gray-700/50 select-none"
+                  className="w-4/5 mx-auto h-auto rounded-3xl shadow-2xl border border-gray-700/50 select-none"
                 />
               </div>
               
