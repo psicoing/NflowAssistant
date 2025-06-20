@@ -62,7 +62,6 @@ const pricingTiers = [
 ];
 
 export default function PricingSection() {
-  const [viewType, setViewType] = useState<"cards" | "list">("cards");
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [isNewUser, setIsNewUser] = useState(false);
@@ -193,24 +192,7 @@ export default function PricingSection() {
 
         </div>
 
-        <div className="flex justify-center mb-8">
-          <div className="bg-gray-800 rounded-xl p-1 flex">
-            <Button
-              variant={viewType === "cards" ? "default" : "ghost"}
-              onClick={() => setViewType("cards")}
-              className={viewType === "cards" ? "bg-nflow-orange text-white" : "text-gray-400 hover:text-white"}
-            >
-              Vista Tarjetas
-            </Button>
-            <Button
-              variant={viewType === "list" ? "default" : "ghost"}
-              onClick={() => setViewType("list")}
-              className={viewType === "list" ? "bg-nflow-orange text-white" : "text-gray-400 hover:text-white"}
-            >
-              Vista Lista
-            </Button>
-          </div>
-        </div>
+
 
         <div className="grid md:grid-cols-3 gap-8">
           {pricingTiers.map((tier) => {
