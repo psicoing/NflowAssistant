@@ -2,7 +2,7 @@
 
 ## Overview
 
-NFLOW es una plataforma web de salud mental que combina un asistente conversacional basado en IA con recursos educativos y un sistema de suscripciones. La aplicación está construida como un full-stack con React + TypeScript en el frontend y Express + Node.js en el backend, utilizando PostgreSQL como base de datos.
+NFLOW es una plataforma web de salud mental que combina un asistente conversacional basado en IA con recursos educativos y un sistema de suscripciones completamente automatizado. La aplicación está construida como un full-stack con React + TypeScript en el frontend y Express + Node.js en el backend, utilizando PostgreSQL como base de datos. Soporta capacidad ilimitada de usuarios con activación automática vía PayPal y gestión administrativa desde consola.
 
 ## System Architecture
 
@@ -141,7 +141,7 @@ Changelog:
 - June 19, 2025. Added subscription management within chat: time remaining, renewal, cancellation
 - June 19, 2025. Set Plan Básico pricing to €2.99/mes with direct PayPal subscription buttons
 - June 19, 2025. Built endpoint /api/paypal/capture-subscription for automatic user activation
-- June 19, 2025. System now supports 100+ daily users with zero manual intervention required
+- June 19, 2025. **CAPACIDAD ILIMITADA DE USUARIOS** - Sistema automatizado sin restricciones + gestión administrativa desde consola Replit
 - June 19, 2025. Added visual status indicators for PayPal loading and error handling
 - June 19, 2025. Completed authentication system with MemoryStore sessions - registration and login fully functional
 - June 19, 2025. Fixed bcrypt imports and session persistence with secure cookie handling
