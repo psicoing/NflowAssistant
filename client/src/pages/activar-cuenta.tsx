@@ -244,48 +244,7 @@ export default function ActivarCuenta() {
 
 
 
-          {/* Opción 3: Activación Manual */}
-          <Card className="bg-gray-800/50 border-green-500 backdrop-blur-sm">
-            <CardHeader className="text-center">
-              <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="w-8 h-8 text-white" />
-              </div>
-              <CardTitle className="text-xl text-white">Activación Manual</CardTitle>
-              <CardDescription className="text-gray-300">
-                Si tienes problemas con los pagos automáticos
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="text-center">
-                <p className="text-gray-300 mb-6">
-                  Contáctanos directamente por WhatsApp para activar tu cuenta manualmente
-                </p>
-                
-                <div className="bg-gray-700/50 border border-green-500 rounded-lg p-4 mb-6">
-                  <h4 className="text-lg font-semibold text-white mb-2">Información necesaria:</h4>
-                  <ul className="text-sm text-gray-300 space-y-1 text-left max-w-sm mx-auto">
-                    <li>• Tu nombre de usuario registrado</li>
-                    <li>• Método de pago preferido</li>
-                    <li>• Cualquier problema técnico</li>
-                  </ul>
-                </div>
 
-                <a
-                  href="https://wa.me/34660452136?text=Hola,%20necesito%20activar%20mi%20cuenta%20NFLOW"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
-                >
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Contactar por WhatsApp
-                </a>
-                
-                <p className="text-xs text-gray-400 mt-4">
-                  Número: +34 660 45 21 36
-                </p>
-              </div>
-            </CardContent>
-          </Card>
 
           {/* Suscripción Activa Info - Menos prominente */}
           <div className="mt-8 p-4 bg-gray-700/30 border border-gray-600/50 rounded-lg">
