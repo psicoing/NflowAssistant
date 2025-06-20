@@ -126,15 +126,15 @@ export default function ActivarCuenta() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 mb-8">
-            {/* Opción 1: PayPal */}
+            {/* Opción 1: PayPal (Principal - Ya funcionaba) */}
             <Card className="bg-gray-800/50 border-nflow-orange backdrop-blur-sm">
               <CardHeader className="text-center">
                 <div className="w-16 h-16 bg-nflow-orange rounded-full flex items-center justify-center mx-auto mb-4">
                   <CreditCard className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle className="text-xl text-white">PayPal</CardTitle>
+                <CardTitle className="text-xl text-white">1º Opción: PayPal</CardTitle>
                 <CardDescription className="text-gray-300">
-                  Pago tradicional con PayPal
+                  Recomendado - Activación automática
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -187,15 +187,15 @@ export default function ActivarCuenta() {
               </CardContent>
             </Card>
 
-            {/* Opción 2: Stripe */}
+            {/* Opción 2: Stripe (Alternativa) */}
             <Card className="bg-gray-800/50 border-purple-500 backdrop-blur-sm">
               <CardHeader className="text-center">
                 <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Zap className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle className="text-xl text-white">Stripe</CardTitle>
+                <CardTitle className="text-xl text-white">2º Opción: Stripe</CardTitle>
                 <CardDescription className="text-gray-300">
-                  Pago moderno y seguro
+                  Alternativa moderna si PayPal no funciona
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
