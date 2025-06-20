@@ -441,6 +441,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // PayPal endpoints
+  app.get("/api/paypal/create-subscription-button", async (req, res) => {
+    try {
+      res.json({ 
+        success: true, 
+        subscriptionId: "temp",
+        message: "PayPal button ready" 
+      });
+    } catch (error) {
+      console.error("PayPal button error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error loading PayPal" 
+      });
+    }
+  });
+
+  app.post("/api/paypal/capture-subscription", async (req, res) => {
+    try {
+      const { subscriptionId } = req.body;
+      const userId = req.session.userId;
+
+      if (!userId) {
+        return res.status(401).json({ 
+          success: false, 
+          message: "Usuario no autenticado" 
+        });
+      }
+
+      // Update user subscription status
+      await storage.updateUserSubscription(userId, {
+        status: "active",
+        plan: "basic",
+        subscriptionId: subscriptionId,
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+      });
+
+      res.json({ 
+        success: true, 
+        message: "Suscripción activada" 
+      });
+    } catch (error) {
+      console.error("PayPal capture error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error procesando pago" 
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

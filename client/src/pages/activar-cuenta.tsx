@@ -44,68 +44,52 @@ export default function ActivarCuenta() {
     }
   }, []);
 
-  // Configurar PayPal
+  // Configurar PayPal (restaurar funcionamiento original)
   useEffect(() => {
     const loadPayPal = async () => {
       if (window.paypal && paypalContainerRef.current && !paypalStatus.buttonRendered) {
         try {
-          const response = await fetch('/api/paypal/create-subscription-button');
-          const data = await response.json();
-          
-          if (data.success && data.subscriptionId) {
-            await window.paypal.Buttons({
-              createSubscription: function(data: any, actions: any) {
-                return actions.subscription.create({
-                  'plan_id': 'P-8X502396U4202261ENBKC32A'
-                });
-              },
-              onApprove: async function(data: any, actions: any) {
-                setIsLoading(true);
-                try {
-                  const response = await fetch('/api/paypal/capture-subscription', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                      subscriptionId: data.subscriptionID
-                    })
-                  });
-
-                  const result = await response.json();
-                  
-                  if (result.success) {
-                    setLocation('/chat');
-                  } else {
-                    setPaypalStatus(prev => ({
-                      ...prev,
-                      error: true,
-                      errorMessage: result.message || 'Error al procesar el pago'
-                    }));
-                  }
-                } catch (error) {
-                  console.error('Error:', error);
-                  setPaypalStatus(prev => ({
-                    ...prev,
-                    error: true,
-                    errorMessage: 'Error de conexión'
-                  }));
-                } finally {
-                  setIsLoading(false);
-                }
-              },
-              onError: function(err: any) {
-                console.error('PayPal Error:', err);
+          await window.paypal.Buttons({
+            createSubscription: function(data: any, actions: any) {
+              return actions.subscription.create({
+                'plan_id': 'P-8X502396U4202261ENBKC32A'
+              });
+            },
+            onApprove: async function(data: any, actions: any) {
+              setIsLoading(true);
+              try {
+                // Usar el flujo original que funcionaba
+                window.location.href = `/paypal-return?subscription_id=${data.subscriptionID}&token=${data.orderID}`;
+              } catch (error) {
+                console.error('Error:', error);
                 setPaypalStatus(prev => ({
                   ...prev,
                   error: true,
-                  errorMessage: 'Error en el proceso de pago'
+                  errorMessage: 'Error de conexión'
                 }));
+              } finally {
+                setIsLoading(false);
               }
-            }).render(paypalContainerRef.current);
+            },
+            onError: function(err: any) {
+              console.error('PayPal Error:', err);
+              setPaypalStatus(prev => ({
+                ...prev,
+                error: true,
+                errorMessage: 'Error en el proceso de pago'
+              }));
+            },
+            onCancel: function(data: any) {
+              console.log('PayPal payment cancelled:', data);
+              setPaypalStatus(prev => ({
+                ...prev,
+                error: true,
+                errorMessage: 'Pago cancelado'
+              }));
+            }
+          }).render(paypalContainerRef.current);
 
-            setPaypalStatus(prev => ({ ...prev, buttonRendered: true }));
-          }
+          setPaypalStatus(prev => ({ ...prev, buttonRendered: true }));
         } catch (error) {
           console.error('Error loading PayPal:', error);
           setPaypalStatus(prev => ({
@@ -126,7 +110,7 @@ export default function ActivarCuenta() {
     };
 
     checkPayPal();
-  }, [setLocation, paypalStatus.buttonRendered]);
+  }, [paypalStatus.buttonRendered]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
