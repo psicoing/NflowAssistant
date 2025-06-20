@@ -268,7 +268,7 @@ export default function ActivarCuenta() {
                 </ul>
                 
                 <a
-                  href="https://buy.stripe.com/4gM4gy32A5bp9b32aE"
+                  href="https://buy.stripe.com/4gM4gy32A5bp9b32aEfIs0M"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full inline-flex items-center justify-center px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors"
