@@ -1,4 +1,4 @@
-import { Brain, Sparkles } from "lucide-react";
+import { Calendar, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function AgeNoticeSection() {
@@ -19,17 +19,13 @@ export default function AgeNoticeSection() {
             <div className="flex items-center justify-between gap-8 md:flex-row flex-col">
               {/* Left side - Icon and title */}
               <div className="flex items-center gap-6">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-nflow-orange/30 rounded-full blur-lg animate-pulse"></div>
-                  <div className="relative p-3 bg-gradient-to-br from-nflow-orange to-orange-600 rounded-full shadow-lg">
-                    <Brain className="w-8 h-8 text-white" />
-                  </div>
-                  <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-yellow-400 animate-bounce" />
+                <div className="p-3 bg-nflow-orange rounded-lg">
+                  <Calendar className="w-8 h-8 text-white" />
                 </div>
                 
                 <div>
                   <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-nflow-orange via-orange-400 to-yellow-400 bg-clip-text text-transparent">
-                    🧠 Chat disponible a partir de los 12 años
+                    Chat disponible a partir de los 12 años
                   </h2>
                   <p className="text-gray-300 mt-2">
                     Edad suficiente para leer, escribir y reflexionar
@@ -39,8 +35,11 @@ export default function AgeNoticeSection() {
 
               {/* Right side - Age range display */}
               <div className="text-center bg-gray-700/80 border-2 border-nflow-orange/60 rounded-2xl p-6 min-w-fit">
-                <div className="text-4xl font-bold text-nflow-orange mb-2">
-                  12 a 95
+                <div className="flex items-center justify-center mb-2">
+                  <Users className="w-6 h-6 text-nflow-orange mr-2" />
+                  <div className="text-4xl font-bold text-nflow-orange">
+                    12 a 95
+                  </div>
                 </div>
                 <div className="text-sm font-medium text-white">años</div>
               </div>
