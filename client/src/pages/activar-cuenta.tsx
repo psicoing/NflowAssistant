@@ -44,21 +44,25 @@ export default function ActivarCuenta() {
     }
   }, []);
 
-  // Configurar PayPal (restaurar funcionamiento original)
+  // Configurar PayPal - Simplificado sin dependencias del servidor
   useEffect(() => {
     const loadPayPal = async () => {
       if (window.paypal && paypalContainerRef.current && !paypalStatus.buttonRendered) {
         try {
+          console.log('Iniciando renderizado de PayPal...');
+          
           await window.paypal.Buttons({
             createSubscription: function(data: any, actions: any) {
+              console.log('Creando suscripción PayPal...');
               return actions.subscription.create({
                 'plan_id': 'P-8X502396U4202261ENBKC32A'
               });
             },
             onApprove: async function(data: any, actions: any) {
+              console.log('PayPal aprobado:', data);
               setIsLoading(true);
               try {
-                // Usar el flujo original que funcionaba
+                // Redirigir directamente sin llamadas al servidor
                 window.location.href = `/paypal-return?subscription_id=${data.subscriptionID}&token=${data.orderID}`;
               } catch (error) {
                 console.error('Error:', error);
@@ -89,13 +93,14 @@ export default function ActivarCuenta() {
             }
           }).render(paypalContainerRef.current);
 
+          console.log('PayPal buttons renderizado exitosamente');
           setPaypalStatus(prev => ({ ...prev, buttonRendered: true }));
         } catch (error) {
           console.error('Error loading PayPal:', error);
           setPaypalStatus(prev => ({
             ...prev,
             error: true,
-            errorMessage: 'Error al cargar PayPal'
+            errorMessage: 'Error al cargar PayPal: ' + error.message
           }));
         }
       }
@@ -103,14 +108,19 @@ export default function ActivarCuenta() {
 
     const checkPayPal = () => {
       if (window.paypal) {
+        console.log('PayPal SDK disponible, cargando botones...');
         loadPayPal();
       } else {
-        setTimeout(checkPayPal, 100);
+        console.log('Esperando PayPal SDK...');
+        setTimeout(checkPayPal, 500);
       }
     };
 
-    checkPayPal();
-  }, [paypalStatus.buttonRendered]);
+    // Solo intentar una vez
+    if (!paypalStatus.buttonRendered && !paypalStatus.error) {
+      checkPayPal();
+    }
+  }, [paypalStatus.buttonRendered, paypalStatus.error]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
