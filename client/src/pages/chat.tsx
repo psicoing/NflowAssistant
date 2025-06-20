@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
 import ChatHeader from "@/components/ui/chat-header";
 import ChatInterface from "@/components/ui/chat-interface";
 import UserProfileForm from "@/components/ui/user-profile-form";
@@ -24,13 +25,13 @@ export default function Chat() {
   const [userProfile, setUserProfile] = useState<any>(null);
   const [showProfileForm, setShowProfileForm] = useState(false);
 
-  // Get user ID from localStorage
-  const userId = localStorage.getItem("userId");
+  // Authentication handled by session-based auth
+  const { user, isLoading: isAuthLoading } = useAuth();
 
   // Check for existing user profile
   useEffect(() => {
-    if (userId) {
-      const savedProfile = localStorage.getItem(`userProfile_${userId}`);
+    if (user?.id) {
+      const savedProfile = localStorage.getItem(`userProfile_${user.id}`);
       
       if (savedProfile) {
         setUserProfile(JSON.parse(savedProfile));
@@ -38,7 +39,7 @@ export default function Chat() {
         setShowProfileForm(true);
       }
     }
-  }, [userId]);
+  }, [user?.id]);
 
   // Fetch conversations list (subscription already verified in login)
   const { data: conversations = [] } = useQuery<Conversation[]>({
@@ -62,9 +63,12 @@ export default function Chat() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title,
-          userId: parseInt(userId || "0"),
         }),
+        credentials: 'include', // Include session cookies
       });
+      if (!response.ok) {
+        throw new Error('Failed to create conversation');
+      }
       return response.json();
     },
     onSuccess: (newConversation: any) => {
@@ -77,6 +81,7 @@ export default function Chat() {
       });
     },
     onError: (error) => {
+      console.error("Error creating conversation:", error);
       toast({
         title: "Error",
         description: "No se pudo crear la conversación",
@@ -119,8 +124,8 @@ export default function Chat() {
   // Handle profile form submission
   const handleProfileSubmit = (profileData: any) => {
     setUserProfile(profileData);
-    if (userId) {
-      localStorage.setItem(`userProfile_${userId}`, JSON.stringify(profileData));
+    if (user?.id) {
+      localStorage.setItem(`userProfile_${user.id}`, JSON.stringify(profileData));
     }
     setShowProfileForm(false);
     

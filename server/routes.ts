@@ -204,10 +204,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create new conversation
   app.post("/api/conversations", async (req, res) => {
     try {
-      const validatedData = insertConversationSchema.parse(req.body);
+      const userId = req.session.userId;
+      
+      if (!userId) {
+        return res.status(401).json({ message: "User not authenticated" });
+      }
+
+      const { title } = req.body;
+      const conversationData = {
+        title: title || `Conversación ${new Date().toLocaleDateString("es-ES")}`,
+        userId: userId
+      };
+
+      const validatedData = insertConversationSchema.parse(conversationData);
       const conversation = await storage.createConversation(validatedData);
+      console.log(`Created conversation ${conversation.id} for user ${userId}`);
       res.json(conversation);
     } catch (error) {
+      console.error("Error creating conversation:", error);
       res.status(400).json({ message: "Invalid conversation data" });
     }
   });
