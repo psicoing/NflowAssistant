@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Bot, User, Loader2 } from "lucide-react";
+import { Send, Bot, User, Loader2, Copy, RotateCcw, Zap, Clock } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import type { Message } from "@shared/schema";
 
 interface ChatInterfaceProps {
@@ -10,24 +11,63 @@ interface ChatInterfaceProps {
   onSendMessage: (content: string) => void;
   isLoading: boolean;
   isLoadingMessages: boolean;
+  onRegenerateResponse?: (messageId: number) => void;
 }
 
 export default function ChatInterface({ 
   messages, 
   onSendMessage, 
   isLoading, 
-  isLoadingMessages 
+  isLoadingMessages,
+  onRegenerateResponse
 }: ChatInterfaceProps) {
   const [inputValue, setInputValue] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [responseTime, setResponseTime] = useState<number | null>(null);
+  const [characterCount, setCharacterCount] = useState(0);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputValue.trim() && !isLoading) {
+      const startTime = Date.now();
+      setIsTyping(true);
       onSendMessage(inputValue.trim());
       setInputValue("");
+      setCharacterCount(0);
+      
+      // Simulate response time tracking
+      setTimeout(() => {
+        setIsTyping(false);
+        setResponseTime(Date.now() - startTime);
+      }, 2000);
     }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && e.ctrlKey) {
+      handleSubmit(e);
+    }
+    if (e.key === 'Escape') {
+      setInputValue("");
+      setCharacterCount(0);
+    }
+  };
+
+  const copyMessage = (content: string) => {
+    navigator.clipboard.writeText(content);
+    toast({
+      title: "Mensaje copiado",
+      description: "El contenido se ha copiado al portapapeles",
+    });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    setCharacterCount(value.length);
   };
 
   // Scroll to bottom when new messages arrive
@@ -145,21 +185,54 @@ export default function ChatInterface({
                 )}
                 
                 <div
-                  className={`max-w-[280px] md:max-w-xs lg:max-w-2xl xl:max-w-3xl p-3 md:p-4 rounded-2xl shadow-lg ${
+                  className={`group relative max-w-[280px] md:max-w-xs lg:max-w-2xl xl:max-w-3xl p-3 md:p-4 rounded-2xl shadow-lg transition-all duration-200 hover:shadow-xl ${
                     message.isUser
                       ? "bg-gradient-to-br from-nflow-blue to-blue-600 text-white rounded-tr-md"
                       : "bg-gradient-to-br from-gray-800 to-gray-700 text-gray-100 rounded-tl-md border border-gray-600/30"
                   }`}
+                  onDoubleClick={() => copyMessage(message.content)}
                 >
                   <p className="text-sm md:text-sm leading-relaxed whitespace-pre-wrap">
                     {message.content}
                   </p>
-                  <p className={`text-xs mt-2 md:mt-3 ${message.isUser ? 'text-blue-100' : 'text-gray-400'}`}>
-                    {new Date(message.timestamp).toLocaleTimeString('es-ES', {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </p>
+                  
+                  <div className="flex justify-between items-center mt-2 md:mt-3">
+                    <p className={`text-xs ${message.isUser ? 'text-blue-100' : 'text-gray-400'}`}>
+                      {new Date(message.timestamp).toLocaleTimeString('es-ES', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                      {responseTime && !message.isUser && (
+                        <span className="ml-2 opacity-70">
+                          <Clock className="inline w-3 h-3 mr-1" />
+                          {(responseTime / 1000).toFixed(1)}s
+                        </span>
+                      )}
+                    </p>
+                    
+                    {/* Action Buttons */}
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex space-x-1">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-6 w-6 p-0 hover:bg-white/10"
+                        onClick={() => copyMessage(message.content)}
+                      >
+                        <Copy className="w-3 h-3" />
+                      </Button>
+                      
+                      {!message.isUser && onRegenerateResponse && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-6 w-6 p-0 hover:bg-white/10"
+                          onClick={() => onRegenerateResponse(message.id)}
+                        >
+                          <RotateCcw className="w-3 h-3" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
                 {message.isUser && (
@@ -171,20 +244,26 @@ export default function ChatInterface({
             ))
           )}
           
-          {isLoading && (
+          {(isLoading || isTyping) && (
             <div className="flex items-start space-x-4 animate-in slide-in-from-bottom-2 duration-300">
               <div className="w-10 h-10 bg-gradient-to-br from-nflow-orange to-nflow-orange-light rounded-xl flex items-center justify-center shadow-lg">
                 <Bot className="w-5 h-5 text-white" />
               </div>
               <div className="bg-gradient-to-br from-gray-800 to-gray-700 text-gray-100 p-4 rounded-2xl rounded-tl-md border border-gray-600/30 shadow-lg">
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-3">
                   <div className="flex space-x-1">
                     <div className="w-2 h-2 bg-nflow-orange rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-nflow-orange rounded-full animate-bounce delay-75"></div>
-                    <div className="w-2 h-2 bg-nflow-orange rounded-full animate-bounce delay-150"></div>
+                    <div className="w-2 h-2 bg-nflow-orange rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-nflow-orange rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                   </div>
-                  <span className="text-sm text-gray-300">NFLOW está escribiendo...</span>
+                  <div className="flex items-center space-x-2">
+                    <Zap className="w-4 h-4 text-nflow-orange" />
+                    <span className="text-sm font-medium">NEUROPSI-AI está analizando...</span>
+                  </div>
                 </div>
+                <p className="text-xs text-gray-400 mt-2">
+                  Procesando tu consulta con inteligencia emocional
+                </p>
               </div>
             </div>
           )}
@@ -193,15 +272,39 @@ export default function ChatInterface({
         </div>
       </ScrollArea>
 
-      {/* Input Area - Mobile Optimized */}
+      {/* Input Area - Enhanced */}
       <div className="p-3 md:p-6 border-t border-gray-700/50 bg-gradient-to-r from-gray-800 to-gray-700 backdrop-blur-sm">
+        {/* Status Bar */}
+        <div className="flex justify-between items-center mb-3 text-xs text-gray-400">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-1">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span>Conectado</span>
+            </div>
+            {responseTime && (
+              <div className="flex items-center space-x-1">
+                <Clock className="w-3 h-3" />
+                <span>Última respuesta: {(responseTime / 1000).toFixed(1)}s</span>
+              </div>
+            )}
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className={`${characterCount > 500 ? 'text-orange-400' : characterCount > 400 ? 'text-yellow-400' : 'text-gray-400'}`}>
+              {characterCount}/500
+            </span>
+            <span className="hidden md:inline text-gray-500">Ctrl+Enter para enviar</span>
+          </div>
+        </div>
+        
         <form onSubmit={handleSubmit} className="flex space-x-2 md:space-x-3">
           <div className="flex-1 relative">
             <Input
               value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Comparte lo que te preocupa..."
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Comparte lo que te preocupa... (máx. 500 caracteres)"
               disabled={isLoading}
+              maxLength={500}
               className="w-full bg-gray-900/50 border-gray-600/50 text-white placeholder:text-gray-400 focus:border-nflow-orange focus:ring-2 focus:ring-nflow-orange/20 rounded-xl py-2.5 md:py-3 px-3 md:px-4 pr-10 md:pr-12 transition-all duration-300 text-sm md:text-base"
             />
             <div className="absolute right-2 md:right-3 top-1/2 transform -translate-y-1/2">
