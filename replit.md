@@ -117,6 +117,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 20, 2025. **IMÁGENES HERO OPTIMIZADAS** - Reducido tamaño al 80% para eliminar borrosidad por interpolación del navegador, mejorando significativamente la nitidez visual
 - June 20, 2025. **SECCIÓN PROMOCIONAL DE EJEMPLOS AGREGADA** - Nueva sección en página principal que promociona los ejemplos del chat con diseño atractivo y CTA directo
 - June 19, 2025. **CHAT UX PREMIUM IMPLEMENTADO** - Indicadores profesionales de escritura, botones de copia, contador de caracteres, atajos de teclado (Ctrl+Enter), tiempo de respuesta, barra de estado
 - June 19, 2025. **OPENAI INTEGRACIÓN VERIFICADA** - Sistema de mensajes funcionando correctamente con respuestas en ~10s, guardado automático de conversaciones
