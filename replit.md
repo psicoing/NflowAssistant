@@ -118,7 +118,8 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
-- June 20, 2025. **MÉTODOS MANUALES ELIMINADOS** - Removidas todas las referencias a WhatsApp y activación manual, sistema 100% automatizado con PayPal y Stripe únicamente
+- June 20, 2025. **STRIPE REMOVIDO COMPLETAMENTE** - Eliminado Stripe para acelerar redeploy, sistema optimizado solo con PayPal como método único y confiable
+- June 20, 2025. **MÉTODOS MANUALES ELIMINADOS** - Removidas todas las referencias a WhatsApp y activación manual, sistema 100% automatizado
 - June 20, 2025. **STRIPE FLUJO COMPLETO IMPLEMENTADO** - Webhook activación automática, página éxito personalizada, redirección al chat, ambos métodos pagos funcionando simultáneamente
 - June 20, 2025. **PAYPAL FUNCIONALIDAD RESTAURADA** - Resuelto problema carga SDK dinámicamente, botones renderizando exitosamente, mantiene posición principal
 - June 20, 2025. **TARJETAS PAGO EQUILIBRADAS** - Ajustada altura mínima y alineación entre opciones PayPal y Stripe para presentación uniforme

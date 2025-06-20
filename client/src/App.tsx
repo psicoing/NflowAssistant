@@ -24,7 +24,6 @@ import PWAInstallPrompt from "@/components/ui/pwa-install-prompt";
 import PaymentRedirect from "@/pages/payment-redirect";
 import ActivarCuenta from "@/pages/activar-cuenta";
 import PayPalReturn from "@/pages/paypal-return";
-import StripeSuccess from "@/pages/stripe-success";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -34,7 +33,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/consejos", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/stripe-success", "/admin/login", "/partners/login", "/partners/register", "/partners"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/consejos", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners"];
     if (publicRoutes.includes(location)) {
       return;
     }
@@ -80,7 +79,6 @@ function AuthenticatedRouter() {
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/payment-redirect" component={PaymentRedirect} />
       <Route path="/paypal-return" component={PayPalReturn} />
-      <Route path="/stripe-success" component={StripeSuccess} />
       <Route component={NotFound} />
     </Switch>
   );

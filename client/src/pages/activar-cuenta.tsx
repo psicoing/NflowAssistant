@@ -142,7 +142,7 @@ export default function ActivarCuenta() {
               Activar Tu Cuenta NFLOW
             </h1>
             <p className="text-xl text-gray-300">
-              Elige tu método de pago preferido para comenzar
+              Activa tu cuenta para acceder al chat de apoyo psicológico
             </p>
           </div>
 
