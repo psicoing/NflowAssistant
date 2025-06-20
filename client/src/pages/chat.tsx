@@ -216,7 +216,7 @@ export default function Chat() {
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-col md:flex-row flex-1" style={{ height: 'calc(100vh - 140px)', minHeight: 'calc(100vh - 140px)' }}>
+      <div className="flex flex-col md:flex-row flex-1 pt-16" style={{ height: 'calc(100vh - 80px)', minHeight: 'calc(100vh - 80px)' }}>
         {/* Sidebar - Hidden on mobile */}
         <div className="hidden md:flex w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex-col backdrop-blur-sm">
           <div className="p-6 border-b border-gray-700/50 space-y-4">
