@@ -237,6 +237,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Send message to conversation with AI processing
+  app.post("/api/conversations/:id/messages", async (req, res) => {
+    try {
+      const conversationId = parseInt(req.params.id);
+      const { content, userProfile } = req.body;
+      const userId = req.session.userId;
+
+      console.log(`Processing message for conversation ${conversationId}, user ${userId}`);
+
+      if (!userId) {
+        return res.status(401).json({ message: "User not authenticated" });
+      }
+
+      // Check if user has active subscription
+      const hasActiveSubscription = await checkSubscription(userId);
+      if (!hasActiveSubscription) {
+        return res.status(402).json({ 
+          message: "Subscription required",
+          needsPayment: true 
+        });
+      }
+
+      // Save user message
+      const userMessage = await storage.createMessage({
+        conversationId,
+        content,
+        isUser: true
+      });
+
+      // Get conversation history for AI context
+      const history = await storage.getMessages(conversationId);
+
+      // Process the message with AI
+      console.log("Calling processUserMessage with:", content);
+      const aiResponse = await processUserMessage(content, history, userProfile);
+      console.log("AI Response received:", aiResponse);
+
+      // Save AI response
+      const aiMessage = await storage.createMessage({
+        conversationId,
+        content: aiResponse.content,
+        isUser: false
+      });
+
+      res.json({
+        userMessage,
+        aiMessage,
+        supportType: aiResponse.supportType
+      });
+    } catch (error) {
+      console.error("Error processing conversation message:", error);
+      res.status(500).json({ message: "Error processing message" });
+    }
+  });
+
   // Create new message
   app.post("/api/messages", async (req, res) => {
     try {
