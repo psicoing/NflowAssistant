@@ -140,12 +140,18 @@ export default function PaymentSuccess() {
           
           {!activationComplete && (
             <div className="text-center space-y-4">
-              <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
-                <p className="text-yellow-400 text-sm">
-                  Tu pago se procesó pero necesitamos activar tu cuenta manualmente.
-                  Contacta soporte para activación inmediata.
+              <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+                <p className="text-red-400 text-sm">
+                  Hubo un error procesando tu pago. Por favor intenta de nuevo o contacta soporte técnico.
                 </p>
               </div>
+              
+              <Button 
+                onClick={() => setLocation("/activar-cuenta")}
+                className="w-full bg-nflow-orange hover:bg-nflow-orange/90 text-white"
+              >
+                Intentar de Nuevo
+              </Button>
               
               <Button 
                 onClick={() => setLocation("/")}
