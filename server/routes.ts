@@ -441,6 +441,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Stripe endpoints
+  app.post("/api/stripe/webhook", async (req, res) => {
+    try {
+      const event = req.body;
+      
+      if (event.type === 'checkout.session.completed') {
+        const session = event.data.object;
+        const customerEmail = session.customer_details?.email;
+        
+        if (customerEmail) {
+          // Buscar usuario por email y activar suscripción
+          const users = await storage.getAllUsers();
+          const user = users.find(u => u.email === customerEmail);
+          
+          if (user) {
+            await storage.updateUserSubscription(user.id, {
+              status: 'active',
+              plan: 'basic',
+              subscriptionId: session.subscription || session.id,
+              expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 días
+            });
+            
+            console.log(`Usuario ${user.username} activado vía Stripe`);
+          }
+        }
+      }
+      
+      res.json({ received: true });
+    } catch (error) {
+      console.error("Stripe webhook error:", error);
+      res.status(400).json({ error: 'Webhook error' });
+    }
+  });
+
+  app.get("/api/stripe/success", async (req, res) => {
+    // Redirigir al chat después de pago exitoso
+    res.redirect("/chat");
+  });
+
+  app.get("/api/stripe/cancel", async (req, res) => {
+    // Redirigir a activación si se cancela
+    res.redirect("/activar-cuenta");
+  });
+
   // PayPal endpoints
   app.get("/api/paypal/config", async (req, res) => {
     try {

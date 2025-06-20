@@ -252,7 +252,7 @@ export default function ActivarCuenta() {
                   </ul>
                   
                   {/* Stripe Buy Button */}
-                  <div className="border border-gray-600/50 rounded-lg p-2 bg-white/5">
+                  <div className="min-h-[50px] relative border border-gray-600/50 rounded-lg p-2 bg-white/5 flex items-center justify-center">
                     <stripe-buy-button
                       buy-button-id="buy_btn_1Rc7kCCmvVkETA1m5aYwB4IH"
                       publishable-key="pk_live_51JIZjtCmvVkETA1mxdBylAQvElIPw0haPvP3mutq99SezEZVrFryWzz5zbX5gU2RFP15uFsR2XTKx5yYgkcJhADM00sR04papy"
