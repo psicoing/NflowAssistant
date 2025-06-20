@@ -12,6 +12,12 @@ const menuItems = [
     icon: Home
   },
   {
+    id: "ejemplos-chat",
+    name: "Ejemplos del chat",
+    href: "/ejemplos-chat",
+    icon: MessageCircle
+  },
+  {
     id: "recursos",
     name: "Recursos",
     href: "/recursos",

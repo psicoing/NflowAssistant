@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Chat from "@/pages/chat";
+import EjemplosChat from "@/pages/ejemplos-chat";
 import Resources from "@/pages/resources";
 import Consejos from "@/pages/consejos";
 import Partners from "@/pages/partners";
@@ -32,7 +33,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/consejos", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners"];
     if (publicRoutes.includes(location)) {
       return;
     }
@@ -61,6 +62,7 @@ function AuthenticatedRouter() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/ejemplos-chat" component={EjemplosChat} />
       <Route path="/login" component={Login} />
       <Route path="/registro" component={Registro} />
       <Route path="/activar-cuenta" component={ActivarCuenta} />
