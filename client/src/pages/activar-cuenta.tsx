@@ -246,41 +246,7 @@ export default function ActivarCuenta() {
 
 
 
-          {/* Suscripción Activa Info - Menos prominente */}
-          <div className="mt-8 p-4 bg-gray-700/30 border border-gray-600/50 rounded-lg">
-            <details className="group">
-              <summary className="flex items-center justify-between cursor-pointer text-white hover:text-green-400 transition-colors">
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="w-5 h-5 text-green-400" />
-                  <span className="font-medium">¿Ya tienes una suscripción activa?</span>
-                </div>
-                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
-              </summary>
-              <div className="mt-4 pt-4 border-t border-gray-600/50">
-                <p className="text-gray-300 text-sm mb-3">
-                  Si ya completaste el pago, puedes acceder directamente al chat o gestionar tu suscripción.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Link href="/chat">
-                    <Button className="bg-green-600 hover:bg-green-700 text-white flex-1">
-                      <CheckCircle className="w-4 h-4 mr-2" />
-                      Acceder al Chat
-                    </Button>
-                  </Link>
-                  <a 
-                    href="https://billing.stripe.com/p/subscription/update_payment_method_link/CBcQARoXChVhY2N0XzFKSVpqdENtdlZrRVRBMW0o1JfWwgYyBlU03kjHSjo61jsH-NVencA-GeZ-iH9BExkF5snvYZPXI8uSWFOulnMvYIskBxzGkKq-PZXwzQrGdPLLRN_SygGy8w"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1"
-                  >
-                    <Button variant="outline" className="w-full border-green-500 text-green-400 hover:bg-green-500/10">
-                      Portal de Gestión
-                    </Button>
-                  </a>
-                </div>
-              </div>
-            </details>
-          </div>
+
 
           <div className="text-center mt-8">
             <Link href="/">
