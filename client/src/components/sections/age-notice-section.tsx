@@ -10,7 +10,7 @@ export default function AgeNoticeSection() {
         <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-blue-500 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
       
-      <div className="max-w-5xl mx-auto relative z-10">
+      <div className="max-w-2xl mx-auto relative z-10">
         <Card className="bg-gray-800/95 border-2 border-nflow-orange/50 shadow-2xl backdrop-blur-sm overflow-hidden">
           {/* Glow effect */}
           <div className="absolute inset-0 bg-gradient-to-r from-nflow-orange/10 to-blue-500/10"></div>
