@@ -117,6 +117,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 20, 2025. **INS NEURONMEG REEMPLAZADO** - Cambiado por "NFLOW Adolescentes" en sección de servicios con enfoque en gestión emocional y estrés escolar
 - June 20, 2025. **TARJETA EDAD OPTIMIZADA** - Rediseñada completamente en layout horizontal: icono+texto izquierda, edad derecha, reducida altura 40%
 - June 20, 2025. **BOTONES VISTA ELIMINADOS** - Removidos botones "Vista Tarjetas" y "Vista Lista" no funcionales de la sección de precios para mejor UX
 - June 20, 2025. **IMÁGENES HERO OPTIMIZADAS** - Reducido tamaño al 80% para eliminar borrosidad por interpolación del navegador, mejorando significativamente la nitidez visual

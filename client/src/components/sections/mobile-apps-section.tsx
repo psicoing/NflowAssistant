@@ -8,7 +8,7 @@ import appImage2 from "@assets/image_1749306865658.png";
 import neuronmegImage from "@assets/image_1750083116326.png";
 
 export default function MobileAppsSection() {
-  const [activeApp, setActiveApp] = useState(1); // Set INS NEURONMEG as default active
+  const [activeApp, setActiveApp] = useState(1); // Set NFLOW Adolescentes as default active
 
   const appCategories = [
     {
@@ -22,14 +22,14 @@ export default function MobileAppsSection() {
       features: ["Sesiones familiares", "Comunicación asertiva", "Resolución de conflictos"]
     },
     {
-      icon: Briefcase,
-      title: "INS NEURONMEG",
-      description: "Psicología del Futuro",
-      longDescription: "Instituto de psicología especializado en consultas presenciales, a domicilio y por videollamada con métodos innovadores",
-      color: "from-yellow-500 to-orange-500",
-      bgColor: "bg-yellow-500/10",
-      borderColor: "border-yellow-500/30",
-      features: ["Consultas presenciales", "Visitas a domicilio", "Videollamadas"]
+      icon: Users,
+      title: "NFLOW Adolescentes",
+      description: "Apoyo para gestionar emociones, estrés escolar y relaciones sociales",
+      longDescription: "Herramientas especializadas para adolescentes, enfocadas en desarrollo emocional y bienestar mental",
+      color: "from-purple-500 to-pink-500",
+      bgColor: "bg-purple-500/10",
+      borderColor: "border-purple-500/30",
+      features: ["Gestión emocional", "Estrés escolar", "Relaciones sociales"]
     },
     {
       icon: Smartphone,
@@ -42,7 +42,7 @@ export default function MobileAppsSection() {
       features: ["Bienestar corporativo", "Prevención burnout", "Clima laboral"]
     },
     {
-      icon: Users,
+      icon: Heart,
       title: "NFLOW Adultos",
       description: "Salud mental adulta",
       longDescription: "Terapia personalizada con IA avanzada para el cuidado individual de la salud mental en adultos",
@@ -170,20 +170,10 @@ export default function MobileAppsSection() {
                     {appCategories[activeApp].features.map((feature, idx) => (
                       <div 
                         key={idx} 
-                        className={`flex items-center p-4 bg-gray-800/40 rounded-xl border border-gray-700/30 hover:bg-gray-800/60 transition-colors duration-300 ${
-                          appCategories[activeApp].title === "INS NEURONMEG" ? "cursor-pointer hover:scale-105 hover:shadow-lg" : ""
-                        }`}
-                        onClick={() => {
-                          if (appCategories[activeApp].title === "INS NEURONMEG") {
-                            window.open("https://neuronmeg.jobda.es/", "_blank");
-                          }
-                        }}
+                        className="flex items-center p-4 bg-gray-800/40 rounded-xl border border-gray-700/30 hover:bg-gray-800/60 transition-colors duration-300"
                       >
                         <div className={`w-3 h-3 bg-gradient-to-r ${appCategories[activeApp].color} rounded-full mr-4 shadow-sm`}></div>
                         <span className="text-gray-300 text-sm font-medium">{feature}</span>
-                        {appCategories[activeApp].title === "INS NEURONMEG" && (
-                          <ArrowRight className="w-4 h-4 ml-auto text-gray-400 group-hover:text-white transition-colors duration-300" />
-                        )}
                       </div>
                     ))}
                   </div>
@@ -201,7 +191,7 @@ export default function MobileAppsSection() {
                       <Card className="bg-gradient-to-b from-gray-800/90 to-gray-900/90 border-gray-700/50 backdrop-blur-xl overflow-hidden shadow-2xl">
                         <CardContent className="p-0">
                           <img 
-                            src={appCategories[activeApp].title === "INS NEURONMEG" ? neuronmegImage : (activeApp % 2 === 0 ? appImage1 : appImage2)} 
+                            src={activeApp % 2 === 0 ? appImage1 : appImage2} 
                             alt={`${appCategories[activeApp].title} Interface`}
                             className="w-full h-auto object-cover transition-all duration-700"
                           />
