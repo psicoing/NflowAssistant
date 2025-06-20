@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Info, Brain, User, Heart } from "lucide-react";
 import { useLocation } from "wouter";
-import nflowPackageImage from "@assets/PAQUETE01.png";
-import nflowFamilyImage from "@assets/PAQUETE02.png";
+import nflowPackageImage from "@assets/image_1749802552043.png";
+import nflowFamilyImage from "@assets/image_1749802597786.png";
 
 export default function HeroSection() {
   const [, setLocation] = useLocation();
@@ -60,17 +60,7 @@ export default function HeroSection() {
                 <img 
                   src={nflowPackageImage} 
                   alt="NFLOW Salud Mental Individual"
-                  className="w-full h-auto rounded-3xl shadow-2xl border border-gray-700/50 
-                           select-none transform-gpu antialiased"
-                  style={{
-                    imageRendering: 'auto',
-                    WebkitBackfaceVisibility: 'hidden',
-                    WebkitTransform: 'translate3d(0, 0, 0)',
-                    WebkitFontSmoothing: 'antialiased',
-                    objectFit: 'contain',
-                    maxWidth: '100%',
-                    height: 'auto'
-                  }}
+                  className="w-full h-auto rounded-3xl shadow-2xl border border-gray-700/50 select-none"
                 />
               </div>
               
@@ -89,17 +79,7 @@ export default function HeroSection() {
                 <img 
                   src={nflowFamilyImage} 
                   alt="NFLOW Salud Mental Familiar"
-                  className="w-full h-auto rounded-3xl shadow-2xl border border-gray-700/50
-                           select-none transform-gpu antialiased"
-                  style={{
-                    imageRendering: 'auto',
-                    WebkitBackfaceVisibility: 'hidden',
-                    WebkitTransform: 'translate3d(0, 0, 0)',
-                    WebkitFontSmoothing: 'antialiased',
-                    objectFit: 'contain',
-                    maxWidth: '100%',
-                    height: 'auto'
-                  }}
+                  className="w-full h-auto rounded-3xl shadow-2xl border border-gray-700/50 select-none"
                 />
               </div>
               
