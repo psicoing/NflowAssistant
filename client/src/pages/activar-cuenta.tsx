@@ -34,13 +34,22 @@ export default function ActivarCuenta() {
   const [isLoading, setIsLoading] = useState(false);
   const paypalContainerRef = useRef<HTMLDivElement>(null);
 
-  // Solo PayPal - Stripe removido para acelerar redeploy
+  // Cargar scripts de forma ligera (sin dependencias npm)
   useEffect(() => {
+    // PayPal
     if (!window.paypal && !document.querySelector('script[src*="paypal.com/sdk"]')) {
-      const script = document.createElement('script');
-      script.src = 'https://www.paypal.com/sdk/js?client-id=sb&vault=true&intent=subscription';
-      script.async = true;
-      document.head.appendChild(script);
+      const paypalScript = document.createElement('script');
+      paypalScript.src = 'https://www.paypal.com/sdk/js?client-id=sb&vault=true&intent=subscription';
+      paypalScript.async = true;
+      document.head.appendChild(paypalScript);
+    }
+    
+    // Stripe (solo CDN, sin npm)
+    if (!document.querySelector('script[src*="stripe.com"]')) {
+      const stripeScript = document.createElement('script');
+      stripeScript.src = 'https://js.stripe.com/v3/buy-button.js';
+      stripeScript.async = true;
+      document.head.appendChild(stripeScript);
     }
   }, []);
 
@@ -142,20 +151,20 @@ export default function ActivarCuenta() {
               Activar Tu Cuenta NFLOW
             </h1>
             <p className="text-xl text-gray-300">
-              Activa tu cuenta para acceder al chat de apoyo psicológico
+              Elige tu método de pago preferido para comenzar
             </p>
           </div>
 
-          <div className="max-w-2xl mx-auto mb-8">
-            {/* PayPal único método */}
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            {/* Opción 1: PayPal */}
             <Card className="bg-gray-800/50 border-nflow-orange backdrop-blur-sm">
               <CardHeader className="text-center">
                 <div className="w-16 h-16 bg-nflow-orange rounded-full flex items-center justify-center mx-auto mb-4">
                   <CreditCard className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle className="text-xl text-white">Activar con PayPal</CardTitle>
+                <CardTitle className="text-xl text-white">1º Opción: PayPal</CardTitle>
                 <CardDescription className="text-gray-300">
-                  Método seguro con activación automática
+                  Recomendado - Activación automática
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -208,7 +217,43 @@ export default function ActivarCuenta() {
               </CardContent>
             </Card>
 
-
+            {/* Opción 2: Stripe (Liviano - Solo CDN) */}
+            <Card className="bg-gray-800/50 border-purple-500 backdrop-blur-sm">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CreditCard className="w-8 h-8 text-white" />
+                </div>
+                <CardTitle className="text-xl text-white">2º Opción: Stripe</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Alternativa rápida si PayPal no funciona
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="bg-gray-700/50 border border-purple-500 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-lg font-semibold text-white">Plan Básico</h4>
+                    <span className="text-lg font-bold text-purple-400">€2.99/mes</span>
+                  </div>
+                  <ul className="text-sm text-gray-300 mb-4 space-y-1">
+                    <li>• Chat ilimitado con IA</li>
+                    <li>• Soporte 24/7</li>
+                    <li>• Activación instantánea</li>
+                  </ul>
+                  
+                  {/* Stripe Button (solo CDN) */}
+                  <div className="min-h-[50px] relative border border-gray-600/50 rounded-lg p-2 bg-white/5 flex items-center justify-center">
+                    <stripe-buy-button
+                      buy-button-id="buy_btn_1Rc7kCCmvVkETA1m5aYwB4IH"
+                      publishable-key="pk_live_51JIZjtCmvVkETA1mxdBylAQvElIPw0haPvP3mutq99SezEZVrFryWzz5zbX5gU2RFP15uFsR2XTKx5yYgkcJhADM00sR04papy"
+                    />
+                  </div>
+                  
+                  <p className="text-xs text-gray-400 mt-2 text-center">
+                    Procesado por Stripe (sin dependencias npm)
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
 

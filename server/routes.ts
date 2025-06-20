@@ -443,6 +443,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
 
 
+  // Stripe webhook liviano (sin dependencias npm)
+  app.post("/api/stripe/webhook", async (req, res) => {
+    try {
+      const event = req.body;
+      if (event.type === 'checkout.session.completed') {
+        const customerEmail = event.data.object.customer_details?.email;
+        if (customerEmail) {
+          const users = await storage.getAllUsers();
+          const user = users.find(u => u.email === customerEmail);
+          if (user) {
+            await storage.updateUserSubscription(user.id, {
+              status: 'active',
+              plan: 'basic',
+              subscriptionId: event.data.object.id,
+              expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+            });
+          }
+        }
+      }
+      res.json({ received: true });
+    } catch (error) {
+      res.status(400).json({ error: 'Webhook error' });
+    }
+  });
+
   // PayPal endpoints
   app.get("/api/paypal/config", async (req, res) => {
     try {
