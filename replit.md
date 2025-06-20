@@ -103,6 +103,7 @@ NFLOW es una plataforma web de salud mental que combina un asistente conversacio
 - **Backend**: ESBuild bundle to `dist/index.js`
 - **Deployment**: Autoscale deployment target
 - **Port Configuration**: Internal port 5000, external port 80
+- **Production URL**: rough-heart-79938129.replit.app
 
 ### Environment Variables
 - `DATABASE_URL`: PostgreSQL connection string
@@ -117,7 +118,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
-- June 20, 2025. **SISTEMA CONVERSACIONES COMPLETADO** - Implementado guardado automático de conversaciones, filtros por fecha funcionales (hoy, semana, mes), creación automática al enviar primer mensaje
+- June 20, 2025. **SISTEMA CONVERSACIONES VERIFICADO EN PRODUCCIÓN** - 7 conversaciones guardadas exitosamente para testuser, filtros funcionando, base de datos Neon optimizada, deployment activo en rough-heart-79938129.replit.app
 - June 20, 2025. **PERFIL USUARIO PERSISTENCIA CORREGIDA** - Formulario edad/sexo ahora aparece solo una vez por usuario usando localStorage específico por userId
 - June 20, 2025. **INS NEURONMEG REEMPLAZADO** - Cambiado por "NFLOW Adolescentes" en sección de servicios con enfoque en gestión emocional y estrés escolar
 - June 20, 2025. **TARJETA EDAD OPTIMIZADA** - Rediseñada completamente en layout horizontal: icono+texto izquierda, edad derecha, reducida altura 40%
