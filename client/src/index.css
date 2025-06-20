@@ -2,27 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* High Quality Image Rendering */
-img {
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-
-/* High DPI displays - Retina optimization */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
-  img {
-    image-rendering: -webkit-optimize-contrast;
+/* Mobile responsive improvements */
+@media (max-width: 768px) {
+  .nflow-package-card {
+    transform: translateZ(0);
   }
-}
-
-/* NFLOW Package Cards - Sharp rendering */
-.nflow-package-card img {
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  max-width: 100%;
-  height: auto;
 }
 
 :root {
