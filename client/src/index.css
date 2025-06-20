@@ -2,35 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Mobile Image Quality Optimization */
-@media (max-width: 768px) {
+/* Image Quality Optimization for All Devices */
+img {
+  image-rendering: auto;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* High DPI displays - Retina optimization */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
   img {
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    -webkit-backface-visibility: hidden;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    image-rendering: auto;
+    -webkit-font-smoothing: subpixel-antialiased;
   }
-  
-  /* High DPI displays */
-  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    img {
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: auto;
-    }
-  }
-  
-  /* NFLOW Package Cards - Enhanced quality */
-  .nflow-package-card {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    -webkit-perspective: 1000px;
-    perspective: 1000px;
-  }
+}
+
+/* NFLOW Package Cards - Enhanced quality and performance */
+.nflow-package-card {
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+  will-change: transform;
+}
+
+.nflow-package-card img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  image-rendering: auto;
+  -webkit-font-smoothing: antialiased;
 }
 
 :root {
