@@ -117,7 +117,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
-- June 20, 2025. **TARJETA EDAD OPTIMIZADA** - Reducido ancho de tarjeta "12 a 95 años" a la mitad para mejor proporción visual
+- June 20, 2025. **TARJETA EDAD OPTIMIZADA** - Rediseñada completamente en layout horizontal: icono+texto izquierda, edad derecha, reducida altura 40%
 - June 20, 2025. **BOTONES VISTA ELIMINADOS** - Removidos botones "Vista Tarjetas" y "Vista Lista" no funcionales de la sección de precios para mejor UX
 - June 20, 2025. **IMÁGENES HERO OPTIMIZADAS** - Reducido tamaño al 80% para eliminar borrosidad por interpolación del navegador, mejorando significativamente la nitidez visual
 - June 20, 2025. **SECCIÓN PROMOCIONAL DE EJEMPLOS AGREGADA** - Nueva sección en página principal que promociona los ejemplos del chat con diseño atractivo y CTA directo
