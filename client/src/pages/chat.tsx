@@ -42,8 +42,10 @@ export default function Chat() {
   }, [user?.id]);
 
   // Fetch conversations list (subscription already verified in login)
-  const { data: conversations = [] } = useQuery<Conversation[]>({
+  const { data: conversations = [], isLoading: isLoadingConversations } = useQuery<Conversation[]>({
     queryKey: ["/api/conversations"],
+    enabled: !!user && user.hasActiveSubscription,
+    refetchOnWindowFocus: false,
   });
 
   // Fetch messages for current conversation
@@ -90,7 +92,7 @@ export default function Chat() {
     },
   });
 
-  // Send message mutation
+  // Send message mutation with auto-conversation creation
   const sendMessageMutation = useMutation({
     mutationFn: async ({ conversationId, content }: { conversationId: number; content: string }) => {
       const response = await fetch(`/api/conversations/${conversationId}/messages`, {
@@ -100,13 +102,21 @@ export default function Chat() {
           content,
           userProfile,
         }),
+        credentials: 'include',
       });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
       return response.json();
     },
     onSuccess: () => {
       refetchMessages();
+      queryClient.invalidateQueries({ queryKey: ["/api/conversations"] });
     },
     onError: (error) => {
+      console.error("Error sending message:", error);
       toast({
         title: "Error",
         description: "No se pudo enviar el mensaje",
@@ -135,14 +145,22 @@ export default function Chat() {
     });
   };
 
-  // Handle send message
-  const handleSendMessage = (content: string) => {
+  // Handle send message with auto-conversation creation
+  const handleSendMessage = async (content: string) => {
     if (!currentConversationId) {
-      toast({
-        title: "Error",
-        description: "Selecciona una conversación primero",
-        variant: "destructive",
-      });
+      // Auto-create conversation if none exists
+      const title = `Conversación ${new Date().toLocaleDateString("es-ES")} ${new Date().toLocaleTimeString("es-ES", { hour: '2-digit', minute: '2-digit' })}`;
+      try {
+        const newConversation = await createConversationMutation.mutateAsync(title);
+        // Wait for conversation to be created, then send message
+        sendMessageMutation.mutate({ conversationId: newConversation.id, content });
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "No se pudo crear la conversación",
+          variant: "destructive",
+        });
+      }
       return;
     }
     sendMessageMutation.mutate({ conversationId: currentConversationId, content });
@@ -162,38 +180,52 @@ export default function Chat() {
     setLocation(`/chat/${conversationId}`);
   };
 
-  // Filter conversations based on search and date
-  const filteredConversations = conversations.filter((conversation: Conversation) => {
-    // Search filter
-    const matchesSearch = searchQuery === "" || 
-      conversation.title.toLowerCase().includes(searchQuery.toLowerCase());
+  // Helper function to filter conversations by date
+  const isConversationInDateRange = (conversation: Conversation) => {
+    if (selectedDateFilter === "all") return true;
     
-    // Date filter
     const now = new Date();
     const conversationDate = new Date(conversation.createdAt);
-    let matchesDate = true;
+    
+    // Set time to start of day for accurate comparison
+    now.setHours(0, 0, 0, 0);
+    conversationDate.setHours(0, 0, 0, 0);
     
     switch (selectedDateFilter) {
       case "today":
-        matchesDate = conversationDate.toDateString() === now.toDateString();
-        break;
+        return conversationDate.getTime() === now.getTime();
       case "week":
         const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        matchesDate = conversationDate >= weekAgo;
-        break;
+        return conversationDate >= weekAgo;
       case "month":
         const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-        matchesDate = conversationDate >= monthAgo;
-        break;
+        return conversationDate >= monthAgo;
       default:
-        matchesDate = true;
+        return true;
     }
+  };
+
+  // Filter conversations based on search and date
+  const filteredConversations = conversations.filter((conversation: Conversation) => {
+    const matchesSearch = searchQuery === "" || 
+      conversation.title.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesDate = isConversationInDateRange(conversation);
     
     return matchesSearch && matchesDate;
   });
 
+  // Show loading state while checking authentication
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-4 border-nflow-orange border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
   // Show profile form if needed
-  if (showProfileForm) {
+  if (showProfileForm && user) {
     return <UserProfileForm onProfileSubmit={handleProfileSubmit} />;
   }
 

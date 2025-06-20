@@ -117,6 +117,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 20, 2025. **SISTEMA CONVERSACIONES EN DESARROLLO** - Implementando guardado automático de conversaciones y filtros por fecha (hoy, semana, mes)
 - June 20, 2025. **PERFIL USUARIO PERSISTENCIA CORREGIDA** - Formulario edad/sexo ahora aparece solo una vez por usuario usando localStorage específico por userId
 - June 20, 2025. **INS NEURONMEG REEMPLAZADO** - Cambiado por "NFLOW Adolescentes" en sección de servicios con enfoque en gestión emocional y estrés escolar
 - June 20, 2025. **TARJETA EDAD OPTIMIZADA** - Rediseñada completamente en layout horizontal: icono+texto izquierda, edad derecha, reducida altura 40%
