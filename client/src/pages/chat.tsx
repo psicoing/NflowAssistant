@@ -309,24 +309,32 @@ export default function Chat() {
 
           {/* Conversations List */}
           <div className="flex-1 overflow-y-auto p-4 space-y-2">
-            {filteredConversations.length === 0 ? (
+            {isLoadingConversations ? (
+              <div className="text-center py-8">
+                <div className="animate-spin w-8 h-8 border-4 border-nflow-orange border-t-transparent rounded-full mx-auto mb-3" />
+                <p className="text-gray-400 text-sm">Cargando conversaciones...</p>
+              </div>
+            ) : filteredConversations.length === 0 ? (
               <div className="text-center py-8">
                 <MessageCircle className="w-12 h-12 text-gray-500 mx-auto mb-3" />
                 <p className="text-gray-400 text-sm mb-2">
                   {searchQuery || selectedDateFilter !== "all" 
-                    ? "No se encontraron conversaciones" 
+                    ? "No se encontraron conversaciones con estos filtros" 
                     : "No tienes conversaciones aún"
                   }
                 </p>
-                <Button
-                  onClick={handleNewChat}
-                  size="sm"
-                  variant="outline"
-                  className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                  disabled={createConversationMutation.isPending}
-                >
-                  Crear primera conversación
-                </Button>
+                {!searchQuery && selectedDateFilter === "all" && (
+                  <Button
+                    onClick={handleNewChat}
+                    size="sm"
+                    variant="outline"
+                    className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                    disabled={createConversationMutation.isPending}
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    {createConversationMutation.isPending ? "Creando..." : "Crear primera conversación"}
+                  </Button>
+                )}
               </div>
             ) : (
               filteredConversations.map((conversation: Conversation) => (
