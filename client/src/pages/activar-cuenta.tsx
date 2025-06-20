@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
-import { CreditCard, MessageCircle } from "lucide-react";
+import { CreditCard, MessageCircle, Zap } from "lucide-react";
 
 // PayPal configuration
 declare global {
@@ -243,36 +243,68 @@ export default function ActivarCuenta() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Opción 1: PayPal Automático */}
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6">
+          {/* Opción 1: Stripe */}
+          <Card className="bg-gray-800/50 border-purple-500 backdrop-blur-sm">
+            <CardHeader className="text-center">
+              <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-white" />
+              </div>
+              <CardTitle className="text-xl text-white">Stripe</CardTitle>
+              <CardDescription className="text-gray-300">
+                Más rápido - Tarjeta de crédito
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="bg-gray-700/50 border border-purple-500 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="text-lg font-semibold text-white">Plan Básico</h4>
+                  <span className="text-lg font-bold text-purple-400">€2.99/mes</span>
+                </div>
+                <ul className="text-sm text-gray-300 mb-4 space-y-1">
+                  <li>• Chat ilimitado con IA</li>
+                  <li>• Soporte 24/7</li>
+                  <li>• Activación instantánea</li>
+                </ul>
+                
+                <a
+                  href="https://buy.stripe.com/4gM4gy32A5bp9b32aE"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full inline-flex items-center justify-center px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors"
+                >
+                  <Zap className="w-4 h-4 mr-2" />
+                  Pagar con Stripe
+                </a>
+                <p className="text-xs text-gray-400 mt-2 text-center">
+                  Seguro y cifrado
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Opción 2: PayPal */}
           <Card className="bg-gray-800/50 border-nflow-orange backdrop-blur-sm">
             <CardHeader className="text-center">
               <div className="w-16 h-16 bg-nflow-orange rounded-full flex items-center justify-center mx-auto mb-4">
                 <CreditCard className="w-8 h-8 text-white" />
               </div>
-              <CardTitle className="text-2xl text-white">1º Opción: Pago Automático</CardTitle>
+              <CardTitle className="text-xl text-white">PayPal</CardTitle>
               <CardDescription className="text-gray-300">
-                Recomendado - Activación inmediata con PayPal
+                Pago tradicional con PayPal
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="text-center">
-                <p className="text-gray-300 mb-6">
-                  Selecciona tu plan y paga de forma segura con PayPal. Tu cuenta se activará automáticamente.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                <div className="bg-gray-700/50 border border-nflow-blue rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-lg font-semibold text-white">Plan Básico</h4>
-                    <span className="text-xl font-bold text-nflow-blue">€2.99/mes</span>
-                  </div>
-                  <ul className="text-sm text-gray-300 mb-4 space-y-1">
-                    <li>• Chat ilimitado con IA especializada</li>
-                    <li>• Soporte psicológico 24/7</li>
-                    <li>• Recursos y ejercicios personalizados</li>
-                  </ul>
+            <CardContent className="space-y-4">
+              <div className="bg-gray-700/50 border border-nflow-orange rounded-lg p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="text-lg font-semibold text-white">Plan Básico</h4>
+                  <span className="text-lg font-bold text-nflow-orange">€2.99/mes</span>
+                </div>
+                <ul className="text-sm text-gray-300 mb-4 space-y-1">
+                  <li>• Chat ilimitado con IA</li>
+                  <li>• Soporte 24/7</li>
+                  <li>• Activación automática</li>
+                </ul>
                   
                   {/* PayPal Button Container */}
                   <div ref={paypalContainerRef} className="min-h-[50px] relative border border-gray-600/50 rounded-lg">
