@@ -441,36 +441,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Stripe endpoints
+  // Stripe webhook (ligero)
   app.post("/api/stripe/webhook", async (req, res) => {
     try {
       const event = req.body;
-      
       if (event.type === 'checkout.session.completed') {
-        const session = event.data.object;
-        const customerEmail = session.customer_details?.email;
-        
+        const customerEmail = event.data.object.customer_details?.email;
         if (customerEmail) {
-          // Buscar usuario por email y activar suscripción
           const users = await storage.getAllUsers();
           const user = users.find(u => u.email === customerEmail);
-          
           if (user) {
             await storage.updateUserSubscription(user.id, {
               status: 'active',
-              plan: 'basic',
-              subscriptionId: session.subscription || session.id,
-              expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 días
+              plan: 'basic', 
+              subscriptionId: event.data.object.id,
+              expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             });
-            
-            console.log(`Usuario ${user.username} activado vía Stripe`);
           }
         }
       }
-      
       res.json({ received: true });
     } catch (error) {
-      console.error("Stripe webhook error:", error);
       res.status(400).json({ error: 'Webhook error' });
     }
   });

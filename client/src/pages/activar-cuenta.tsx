@@ -34,9 +34,8 @@ export default function ActivarCuenta() {
   const [isLoading, setIsLoading] = useState(false);
   const paypalContainerRef = useRef<HTMLDivElement>(null);
 
-  // Cargar scripts dinámicamente
+  // Cargar script de Stripe de forma simple
   useEffect(() => {
-    // Cargar Stripe
     if (!document.querySelector('script[src="https://js.stripe.com/v3/buy-button.js"]')) {
       const stripeScript = document.createElement('script');
       stripeScript.src = 'https://js.stripe.com/v3/buy-button.js';
