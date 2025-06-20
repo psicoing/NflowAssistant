@@ -3,6 +3,7 @@ import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/sections/hero-section";
 import AgeNoticeSection from "@/components/sections/age-notice-section";
 import ServicesSection from "@/components/sections/services-section";
+import ChatExamplesSection from "@/components/sections/chat-examples-section";
 import FeaturesSection from "@/components/sections/features-section";
 import PersonasSection from "@/components/sections/personas-section";
 import MobileAppsSection from "@/components/sections/mobile-apps-section";
@@ -17,6 +18,7 @@ export default function Home() {
         <HeroSection />
         <AgeNoticeSection />
         <ServicesSection />
+        <ChatExamplesSection />
         <FeaturesSection />
         <PersonasSection />
         <PricingSection />
