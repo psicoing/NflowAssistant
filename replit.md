@@ -117,6 +117,8 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 19, 2025. **CHAT UX PREMIUM IMPLEMENTADO** - Indicadores profesionales de escritura, botones de copia, contador de caracteres, atajos de teclado (Ctrl+Enter), tiempo de respuesta, barra de estado
+- June 19, 2025. **OPENAI INTEGRACIÓN VERIFICADA** - Sistema de mensajes funcionando correctamente con respuestas en ~10s, guardado automático de conversaciones
 - June 19, 2025. **AVISO DE EDAD MEJORADO VISUALMENTE** - Diseño moderno con gradientes vibrantes, efectos hover y mejor contraste visual
 - June 19, 2025. **SECCIÓN URGENCIAS AGREGADA AL CHAT** - Modal completo con números de emergencia de España y UE, integrado en menú contextual del usuario
 - June 19, 2025. **AVISO EDAD MÍNIMA IMPLEMENTADO** - Sección prominente en página principal clarificando uso para edades 12-95 años
