@@ -442,6 +442,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // PayPal endpoints
+  app.get("/api/paypal/config", async (req, res) => {
+    try {
+      res.json({ 
+        clientId: process.env.PAYPAL_CLIENT_ID,
+        success: true
+      });
+    } catch (error) {
+      console.error("PayPal config error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error getting PayPal config" 
+      });
+    }
+  });
+
   app.get("/api/paypal/create-subscription-button", async (req, res) => {
     try {
       res.json({ 

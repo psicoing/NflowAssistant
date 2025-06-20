@@ -34,13 +34,33 @@ export default function ActivarCuenta() {
   const [isLoading, setIsLoading] = useState(false);
   const paypalContainerRef = useRef<HTMLDivElement>(null);
 
-  // Cargar script de Stripe
+  // Cargar scripts dinámicamente
   useEffect(() => {
+    // Cargar Stripe
     if (!document.querySelector('script[src="https://js.stripe.com/v3/buy-button.js"]')) {
-      const script = document.createElement('script');
-      script.src = 'https://js.stripe.com/v3/buy-button.js';
-      script.async = true;
-      document.head.appendChild(script);
+      const stripeScript = document.createElement('script');
+      stripeScript.src = 'https://js.stripe.com/v3/buy-button.js';
+      stripeScript.async = true;
+      document.head.appendChild(stripeScript);
+    }
+
+    // Cargar PayPal dinámicamente con client-id directo
+    if (!document.querySelector('script[src*="paypal.com/sdk"]')) {
+      const paypalScript = document.createElement('script');
+      paypalScript.src = 'https://www.paypal.com/sdk/js?client-id=sb&vault=true&intent=subscription';
+      paypalScript.async = true;
+      paypalScript.onload = () => {
+        console.log('PayPal SDK cargado exitosamente');
+      };
+      paypalScript.onerror = () => {
+        console.error('Error cargando PayPal SDK');
+        setPaypalStatus(prev => ({
+          ...prev,
+          error: true,
+          errorMessage: 'Error cargando PayPal SDK - Usar Stripe en su lugar'
+        }));
+      };
+      document.head.appendChild(paypalScript);
     }
   }, []);
 
@@ -100,19 +120,30 @@ export default function ActivarCuenta() {
           setPaypalStatus(prev => ({
             ...prev,
             error: true,
-            errorMessage: 'Error al cargar PayPal: ' + error.message
+            errorMessage: 'Error al cargar PayPal: ' + (error instanceof Error ? error.message : 'Unknown error')
           }));
         }
       }
     };
 
+    let attempts = 0;
+    const maxAttempts = 20; // máximo 10 segundos
+
     const checkPayPal = () => {
+      attempts++;
       if (window.paypal) {
         console.log('PayPal SDK disponible, cargando botones...');
         loadPayPal();
-      } else {
-        console.log('Esperando PayPal SDK...');
+      } else if (attempts < maxAttempts) {
+        console.log(`Esperando PayPal SDK... (${attempts}/${maxAttempts})`);
         setTimeout(checkPayPal, 500);
+      } else {
+        console.error('Timeout esperando PayPal SDK');
+        setPaypalStatus(prev => ({
+          ...prev,
+          error: true,
+          errorMessage: 'PayPal no se pudo cargar. Intenta recargar la página.'
+        }));
       }
     };
 
