@@ -126,7 +126,8 @@ Changelog:
 - June 20, 2025. **TARJETAS PAGO EQUILIBRADAS** - Ajustada altura mínima y alineación entre opciones PayPal y Stripe para presentación uniforme
 - June 20, 2025. **STRIPE INTEGRACIÓN COMPLETADA** - Agregado botón Stripe buy-button-id "buy_btn_1Rc7kCCmvVkETA1m5aYwB4IH" con pk_live, suscripción activa si_Rt5ExuGN4XYV9l, portal gestión incluido
 - June 20, 2025. **SISTEMA CONVERSACIONES VERIFICADO EN PRODUCCIÓN** - 7 conversaciones guardadas exitosamente para testuser, filtros funcionando, base de datos Neon optimizada, deployment activo en rough-heart-79938129.replit.app
-- June 20, 2025. **PERFIL USUARIO PERSISTENCIA CORREGIDA** - Formulario edad/sexo ahora aparece solo una vez por usuario usando localStorage específico por userId
+- June 21, 2025. **STRIPE/PAYPAL ACTIVACIÓN MANUAL IMPLEMENTADA** - Creadas rutas /stripe-manual y /paypal-manual para activar usuarios que completaron pago pero no fueron redirigidos automáticamente
+- June 21, 2025. **PERFIL USUARIO PERSISTENCIA CORREGIDA** - Formulario edad/sexo ahora aparece solo una vez por usuario, guardado en base de datos con campos ageRange, gender, profileCompleted
 - June 20, 2025. **INS NEURONMEG REEMPLAZADO** - Cambiado por "NFLOW Adolescentes" en sección de servicios con enfoque en gestión emocional y estrés escolar
 - June 20, 2025. **TARJETA EDAD OPTIMIZADA** - Rediseñada completamente en layout horizontal: icono+texto izquierda, edad derecha, reducida altura 40%
 - June 20, 2025. **BOTONES VISTA ELIMINADOS** - Removidos botones "Vista Tarjetas" y "Vista Lista" no funcionales de la sección de precios para mejor UX

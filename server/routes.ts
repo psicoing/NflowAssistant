@@ -696,6 +696,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Manual PayPal activation by username (for support/admin use)
+  app.post("/api/paypal/manual-activate", async (req, res) => {
+    try {
+      const { username } = req.body;
+
+      if (!username) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Username requerido" 
+        });
+      }
+
+      // Find user by username
+      const user = await storage.getUserByUsername(username);
+      if (!user) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Usuario no encontrado" 
+        });
+      }
+
+      // Check if user already has active subscription
+      if (user.subscriptionStatus === 'active') {
+        return res.json({ 
+          success: true, 
+          message: "Usuario ya tiene suscripción activa" 
+        });
+      }
+
+      // Activate subscription
+      await storage.updateUserSubscription(user.id, {
+        status: "active",
+        plan: "basic",
+        subscriptionId: "paypal_manual_" + Date.now(),
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+      });
+
+      res.json({ 
+        success: true, 
+        message: `Usuario ${username} activado exitosamente con PayPal` 
+      });
+    } catch (error) {
+      console.error("PayPal manual activation error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error en activación manual PayPal" 
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
