@@ -2,7 +2,7 @@
 
 ## Overview
 
-NFLOW es una plataforma web de salud mental que combina un asistente conversacional basado en IA con recursos educativos y un sistema de suscripciones completamente automatizado. La aplicación está construida como un full-stack con React + TypeScript en el frontend y Express + Node.js en el backend, utilizando PostgreSQL como base de datos. Soporta capacidad ilimitada de usuarios con activación automática vía PayPal y gestión administrativa desde consola.
+NFLOW es una plataforma web de salud mental que combina un asistente conversacional basado en IA con recursos educativos y un sistema de suscripciones completamente automatizado. La aplicación está construida como un full-stack con React + TypeScript en el frontend y Express + Node.js en el backend, utilizando PostgreSQL como base de datos. Soporta capacidad ilimitada de usuarios con activación automática vía PayPal y Stripe mediante webhooks automatizados, sin intervención manual requerida.
 
 ## System Architecture
 
@@ -43,9 +43,11 @@ NFLOW es una plataforma web de salud mental que combina un asistente conversacio
 - **Session Tracking**: Login count y last login tracking
 
 ### 3. Subscription System
-- **Payment Integration**: PayPal SDK para pagos y suscripciones
+- **Payment Integration**: PayPal y Stripe SDK para pagos y suscripciones
+- **Webhook Automation**: Activación automática via webhooks sin intervención manual
 - **Subscription Plans**: basic, group, individual
 - **Access Control**: Verificación de suscripción activa para acceso al chat
+- **Production Ready**: Claves live configuradas para ambos proveedores
 
 ### 4. Content Management
 - **Resources**: Sistema de artículos, guías y ejercicios categorizados
@@ -122,6 +124,7 @@ Preferred communication style: Simple, everyday language.
 - Manual database fixes: COMPLETED (users rstripe and rdefinitivo activated)
 - Production keys: CONFIGURED (Stripe live keys integrated)
 - Automatic payment flow: FULLY OPERATIONAL (both providers working)
+- System ready for production deployment with complete automation
 
 ## Changelog
 
