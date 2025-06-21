@@ -28,6 +28,7 @@ import StripeReturn from "@/pages/stripe-return";
 import ActivarStripe from "@/pages/activar-stripe";
 import StripeActivateManual from "@/pages/stripe-activate-manual";
 import PayPalActivateManual from "@/pages/paypal-activate-manual";
+import QuickActivate from "@/pages/quick-activate";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -87,6 +88,7 @@ function AuthenticatedRouter() {
       <Route path="/activar-stripe" component={ActivarStripe} />
       <Route path="/stripe-manual" component={StripeActivateManual} />
       <Route path="/paypal-manual" component={PayPalActivateManual} />
+      <Route path="/activar" component={QuickActivate} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -61,15 +61,29 @@ export default function Login() {
           console.log("Usuario con suscripción activa, redirigiendo al chat");
           setLocation("/chat");
         } else {
-          console.log("Usuario sin suscripción activa, redirigiendo a pricing");
+          console.log("Usuario sin suscripción activa");
           console.log("hasCompletedPayment:", data.hasCompletedPayment);
           console.log("subscriptionStatus:", data.subscriptionStatus);
           console.log("hasActiveSubscription:", data.hasActiveSubscription);
-          toast({
-            title: "Suscripción requerida",
-            description: "Para acceder al chat necesitas una suscripción activa",
-            variant: "destructive",
-          });
+          
+          // Si hay indicios de pago pero no está activo, sugerir activación
+          if (data.subscriptionStatus === 'pending_payment' || !data.hasActiveSubscription) {
+            toast({
+              title: "¿Completaste el pago?",
+              description: "Si ya pagaste, activa tu cuenta para acceder al chat",
+              action: {
+                label: "Activar cuenta",
+                onClick: () => setLocation("/activar")
+              },
+            });
+          } else {
+            toast({
+              title: "Suscripción requerida",
+              description: "Para acceder al chat necesitas una suscripción activa",
+              variant: "destructive",
+            });
+          }
+          
           setLocation("/");
           // Scroll to pricing section after redirect
           setTimeout(() => {
