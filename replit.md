@@ -115,6 +115,13 @@ NFLOW es una plataforma web de salud mental que combina un asistente conversacio
 
 Preferred communication style: Simple, everyday language.
 
+## Testing Status
+
+- Stripe webhook automation: VERIFIED (user rmacanet activated successfully)
+- PayPal webhook automation: PENDING (user rprueba ready for testing)
+- Manual database fixes: COMPLETED (users rstripe and rdefinitivo activated)
+- Production keys: CONFIGURED (Stripe live keys integrated)
+
 ## Changelog
 
 Changelog:
