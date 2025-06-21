@@ -70,16 +70,35 @@ export default function ActivarCuenta() {
             onApprove: async function(data: any, actions: any) {
               console.log('PayPal aprobado:', data);
               setIsLoading(true);
+              
               try {
-                // Redirigir directamente sin llamadas al servidor
-                window.location.href = `/paypal-return?subscription_id=${data.subscriptionID}&token=${data.orderID}`;
-              } catch (error) {
-                console.error('Error:', error);
-                setPaypalStatus(prev => ({
-                  ...prev,
-                  error: true,
-                  errorMessage: 'Error de conexión'
+                const details = await actions.order.capture();
+                console.log('PayPal capture completed:', details);
+                
+                // Store payment info for webhook processing
+                localStorage.setItem('paypal_payment_data', JSON.stringify({
+                  orderID: data.orderID,
+                  payerEmail: details.payer.email_address,
+                  status: 'completed',
+                  timestamp: Date.now()
                 }));
+                
+                // Webhook will handle activation automatically
+                // Redirect directly to chat - activation happens via webhook
+                toast({
+                  title: "¡Pago Completado!",
+                  description: "Activando tu cuenta automáticamente...",
+                  duration: 3000,
+                });
+                
+                setTimeout(() => {
+                  window.location.href = '/chat';
+                }, 2000);
+                
+              } catch (error) {
+                console.error('PayPal approval error:', error);
+                // Fallback to return page
+                window.location.href = `/paypal-return?orderID=${data.orderID}`;
               } finally {
                 setIsLoading(false);
               }

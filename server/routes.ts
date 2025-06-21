@@ -483,7 +483,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Stripe webhook automático - activación inmediata de suscripciones
   app.post("/api/stripe/webhook", async (req, res) => {
     try {
-      console.log("Stripe webhook received:", req.body);
+      console.log("=== STRIPE WEBHOOK RECEIVED ===");
+      console.log("Event type:", req.body.type);
+      console.log("Event data:", JSON.stringify(req.body.data, null, 2));
+      
       const event = req.body;
       
       // Múltiples eventos de Stripe que indican pago exitoso
@@ -502,7 +505,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const user = users.find(u => u.email === customerEmail);
           
           if (user) {
-            console.log("Activating Stripe subscription for user:", user.username);
+            console.log("=== ACTIVATING STRIPE SUBSCRIPTION ===");
+            console.log("User:", user.username, "ID:", user.id);
+            
             await storage.updateUserSubscription(user.id, {
               status: 'active',
               plan: 'basic',
@@ -510,16 +515,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
               expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             });
             
-            console.log("Stripe subscription activated successfully for:", user.username);
+            console.log("✅ Stripe subscription activated successfully for:", user.username);
           } else {
-            console.log("User not found for email:", customerEmail);
+            console.log("❌ User not found for email:", customerEmail);
+            
+            // Log all users for debugging
+            console.log("Available users:", users.map(u => ({ id: u.id, username: u.username, email: u.email })));
           }
+        } else {
+          console.log("❌ No customer email found in Stripe event");
         }
+      } else {
+        console.log("ℹ️ Stripe event type not handled:", event.type);
       }
       
       res.json({ received: true });
     } catch (error) {
-      console.error("Stripe webhook error:", error);
+      console.error("❌ Stripe webhook error:", error);
       res.status(400).json({ error: 'Webhook error' });
     }
   });
