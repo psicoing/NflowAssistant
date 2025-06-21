@@ -570,6 +570,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Stripe subscription capture (for return page)
+  app.post("/api/stripe/capture-subscription", async (req, res) => {
+    try {
+      const { sessionId } = req.body;
+      const userId = req.session.userId;
+
+      if (!userId) {
+        return res.status(401).json({ 
+          success: false, 
+          message: "Usuario no autenticado" 
+        });
+      }
+
+      // Update user subscription status
+      await storage.updateUserSubscription(userId, {
+        status: "active",
+        plan: "basic",
+        subscriptionId: sessionId || ("stripe_" + Date.now()),
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+      });
+
+      res.json({ 
+        success: true, 
+        message: "Suscripción activada exitosamente" 
+      });
+    } catch (error) {
+      console.error("Stripe capture error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error procesando pago" 
+      });
+    }
+  });
+
+  // Stripe auto-activation (for users with successful payments)
+  app.post("/api/stripe/auto-activate", async (req, res) => {
+    try {
+      const userId = req.session.userId;
+
+      if (!userId) {
+        return res.status(401).json({ 
+          success: false, 
+          message: "Usuario no autenticado" 
+        });
+      }
+
+      // Check if user already has active subscription
+      const user = await storage.getUser(userId);
+      if (user?.subscriptionStatus === 'active') {
+        return res.json({ 
+          success: true, 
+          message: "Suscripción ya activa" 
+        });
+      }
+
+      // Auto-activate subscription
+      await storage.updateUserSubscription(userId, {
+        status: "active",
+        plan: "basic",
+        subscriptionId: "stripe_auto_" + Date.now(),
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+      });
+
+      res.json({ 
+        success: true, 
+        message: "Suscripción activada automáticamente" 
+      });
+    } catch (error) {
+      console.error("Stripe auto-activation error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error en activación automática" 
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

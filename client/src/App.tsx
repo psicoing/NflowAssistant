@@ -24,6 +24,7 @@ import PWAInstallPrompt from "@/components/ui/pwa-install-prompt";
 import PaymentRedirect from "@/pages/payment-redirect";
 import ActivarCuenta from "@/pages/activar-cuenta";
 import PayPalReturn from "@/pages/paypal-return";
+import StripeReturn from "@/pages/stripe-return";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -79,6 +80,7 @@ function AuthenticatedRouter() {
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/payment-redirect" component={PaymentRedirect} />
       <Route path="/paypal-return" component={PayPalReturn} />
+      <Route path="/stripe-return" component={StripeReturn} />
       <Route component={NotFound} />
     </Switch>
   );
