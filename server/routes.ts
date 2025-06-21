@@ -485,7 +485,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log("=== STRIPE WEBHOOK RECEIVED ===");
       console.log("Event type:", req.body.type);
-      console.log("Event data:", JSON.stringify(req.body.data, null, 2));
+      console.log("Full event data:", JSON.stringify(req.body, null, 2));
       
       const event = req.body;
       
@@ -496,7 +496,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         const customerEmail = event.data.object.customer_details?.email || 
                              event.data.object.customer_email ||
-                             event.data.object.receipt_email;
+                             event.data.object.receipt_email ||
+                             event.email; // Para pruebas manuales
         
         console.log("Processing Stripe payment for email:", customerEmail);
         
@@ -506,7 +507,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           if (user) {
             console.log("=== ACTIVATING STRIPE SUBSCRIPTION ===");
-            console.log("User:", user.username, "ID:", user.id);
+            console.log("User found:", user.username, "ID:", user.id, "Current status:", user.subscriptionStatus);
             
             await storage.updateUserSubscription(user.id, {
               status: 'active',
@@ -516,23 +517,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
             });
             
             console.log("✅ Stripe subscription activated successfully for:", user.username);
+            
+            // Return success with user info
+            res.json({ 
+              received: true, 
+              activated: true,
+              user: { username: user.username, email: user.email }
+            });
+            return;
           } else {
             console.log("❌ User not found for email:", customerEmail);
             
-            // Log all users for debugging
-            console.log("Available users:", users.map(u => ({ id: u.id, username: u.username, email: u.email })));
+            // Log available users for debugging
+            console.log("Available users with emails:", users.filter(u => u.email).map(u => ({ 
+              id: u.id, 
+              username: u.username, 
+              email: u.email 
+            })));
           }
         } else {
           console.log("❌ No customer email found in Stripe event");
+          console.log("Available email fields:", {
+            'customer_details.email': event.data.object.customer_details?.email,
+            'customer_email': event.data.object.customer_email,
+            'receipt_email': event.data.object.receipt_email
+          });
         }
       } else {
         console.log("ℹ️ Stripe event type not handled:", event.type);
       }
       
-      res.json({ received: true });
+      res.json({ received: true, activated: false });
     } catch (error) {
       console.error("❌ Stripe webhook error:", error);
-      res.status(400).json({ error: 'Webhook error' });
+      res.status(400).json({ error: 'Webhook error', details: error.message });
     }
   });
 
