@@ -130,6 +130,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         hasCompletedPayment: user.hasCompletedPayment,
         subscriptionStatus: user.subscriptionStatus,
         hasActiveSubscription,
+        profileCompleted: user.profileCompleted || false,
+        ageRange: user.ageRange,
+        gender: user.gender,
         message: "Login exitoso"
       });
     } catch (error) {
@@ -167,11 +170,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
         subscriptionPlan: user.subscriptionPlan,
         hasCompletedPayment: user.hasCompletedPayment,
         hasActiveSubscription,
+        profileCompleted: user.profileCompleted || false,
+        ageRange: user.ageRange,
+        gender: user.gender,
         createdAt: user.createdAt
       });
     } catch (error) {
       console.error("Error getting current user:", error);
       res.status(500).json({ message: "Error getting user info" });
+    }
+  });
+
+  // Update user profile endpoint
+  app.post("/api/auth/update-profile", async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      if (!userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      const { ageRange, gender } = req.body;
+      
+      if (!ageRange || !gender) {
+        return res.status(400).json({ message: "Age range and gender are required" });
+      }
+
+      const user = await storage.updateUserProfile(userId, {
+        ageRange,
+        gender
+      });
+
+      res.json({
+        success: true,
+        profileCompleted: true,
+        ageRange: user.ageRange,
+        gender: user.gender
+      });
+    } catch (error) {
+      console.error("Profile update error:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
   });
 

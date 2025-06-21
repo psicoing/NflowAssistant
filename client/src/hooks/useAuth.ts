@@ -8,6 +8,9 @@ export interface User {
   subscriptionPlan: string;
   hasCompletedPayment: boolean;
   hasActiveSubscription: boolean;
+  profileCompleted: boolean;
+  ageRange?: string;
+  gender?: string;
   createdAt: string;
 }
 

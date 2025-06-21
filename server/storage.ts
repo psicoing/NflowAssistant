@@ -162,6 +162,22 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
+  async updateUserProfile(userId: number, profileData: {
+    ageRange: string;
+    gender: string;
+  }): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({
+        ageRange: profileData.ageRange,
+        gender: profileData.gender,
+        profileCompleted: true,
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
+  }
+
   async createPaypalTransaction(transaction: InsertPaypalTransaction): Promise<PaypalTransaction> {
     const [paypalTransaction] = await db
       .insert(paypalTransactions)

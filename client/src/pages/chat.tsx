@@ -141,18 +141,47 @@ export default function Chat() {
     createConversationMutation.mutate(title);
   };
 
-  // Handle profile form submission
-  const handleProfileSubmit = (profileData: any) => {
-    setUserProfile(profileData);
-    if (user?.id) {
-      localStorage.setItem(`userProfile_${user.id}`, JSON.stringify(profileData));
+  // Handle profile submission
+  const handleProfileSubmit = async (profile: any) => {
+    try {
+      // Save to database
+      const response = await fetch("/api/auth/update-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ageRange: profile.age,
+          gender: profile.gender
+        }),
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save profile');
+      }
+
+      const result = await response.json();
+      
+      setUserProfile(profile);
+      setShowProfileForm(false);
+      
+      // Save to localStorage as backup
+      localStorage.setItem(`userProfile_${user?.id}`, JSON.stringify(profile));
+      
+      // Invalidate auth cache to refresh user data
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+      
+      toast({
+        title: "Perfil completado",
+        description: "Tu información ha sido guardada exitosamente.",
+      });
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo guardar el perfil. Intenta de nuevo.",
+        variant: "destructive",
+      });
     }
-    setShowProfileForm(false);
-    
-    toast({
-      title: "Éxito",
-      description: "Perfil guardado correctamente",
-    });
   };
 
   // Handle send message with auto-conversation creation
