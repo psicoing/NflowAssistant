@@ -31,15 +31,25 @@ export default function Chat() {
   // Check for existing user profile
   useEffect(() => {
     if (user?.id) {
-      const savedProfile = localStorage.getItem(`userProfile_${user.id}`);
-      
-      if (savedProfile) {
-        setUserProfile(JSON.parse(savedProfile));
+      // Check if profile is completed in database
+      if (user.profileCompleted && user.ageRange && user.gender) {
+        setUserProfile({
+          age: user.ageRange,
+          gender: user.gender
+        });
+        setShowProfileForm(false);
       } else {
-        setShowProfileForm(true);
+        // Check localStorage as fallback
+        const savedProfile = localStorage.getItem(`userProfile_${user.id}`);
+        if (savedProfile) {
+          setUserProfile(JSON.parse(savedProfile));
+          setShowProfileForm(false);
+        } else {
+          setShowProfileForm(true);
+        }
       }
     }
-  }, [user?.id]);
+  }, [user?.id, user?.profileCompleted, user?.ageRange, user?.gender]);
 
   // Fetch conversations list (subscription already verified in login)
   const { data: conversations = [], isLoading: isLoadingConversations } = useQuery<Conversation[]>({

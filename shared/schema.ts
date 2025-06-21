@@ -12,6 +12,10 @@ export const users = pgTable("users", {
   subscriptionPlan: text("subscription_plan"), // basic, group, individual
   subscriptionId: text("subscription_id"),
   subscriptionExpiresAt: timestamp("subscription_expires_at"),
+  // Campos de perfil de usuario
+  ageRange: text("age_range"), // 13-17, 18-25, 26-35, 36-45, 46-55, 56+
+  gender: text("gender"), // hombre, mujer, prefiero-no-contestar
+  profileCompleted: boolean("profile_completed").default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   lastLoginAt: timestamp("last_login_at"),
   loginCount: integer("login_count").default(0),

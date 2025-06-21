@@ -22,6 +22,10 @@ export interface IStorage {
     subscriptionId: string;
     expiresAt?: Date;
   }): Promise<User>;
+  updateUserProfile(userId: number, profileData: {
+    ageRange: string;
+    gender: string;
+  }): Promise<User>;
   
   createConversation(conversation: InsertConversation): Promise<Conversation>;
   getConversations(userId?: number): Promise<Conversation[]>;
