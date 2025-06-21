@@ -240,12 +240,21 @@ export default function ActivarCuenta() {
                     <li>• Activación instantánea</li>
                   </ul>
                   
-                  {/* Stripe Button (solo CDN) */}
+                  {/* Stripe Button (solo CDN) con redirección automática */}
                   <div className="min-h-[50px] relative border border-gray-600/50 rounded-lg p-2 bg-white/5 flex items-center justify-center">
                     <stripe-buy-button
                       buy-button-id="buy_btn_1Rc7kCCmvVkETA1m5aYwB4IH"
                       publishable-key="pk_live_51JIZjtCmvVkETA1mxdBylAQvElIPw0haPvP3mutq99SezEZVrFryWzz5zbX5gU2RFP15uFsR2XTKx5yYgkcJhADM00sR04papy"
+                      success-url={`${window.location.origin}/stripe-return?session_id={CHECKOUT_SESSION_ID}`}
+                      cancel-url={`${window.location.origin}/activar-cuenta`}
+                      customer-email={pendingUserId && existingUser ? existingUser.email : ''}
                     />
+                  </div>
+                  
+                  <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-3 mt-3">
+                    <p className="text-green-300 text-xs text-center">
+                      ⚡ Activación automática tras el pago y redirección a /stripe-return
+                    </p>
                   </div>
                   
                   <p className="text-xs text-gray-400 mt-2 text-center">

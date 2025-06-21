@@ -480,27 +480,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
 
 
-  // Stripe webhook liviano (sin dependencias npm)
+  // Stripe webhook automático - activación inmediata de suscripciones
   app.post("/api/stripe/webhook", async (req, res) => {
     try {
+      console.log("Stripe webhook received:", req.body);
       const event = req.body;
-      if (event.type === 'checkout.session.completed') {
-        const customerEmail = event.data.object.customer_details?.email;
+      
+      // Múltiples eventos de Stripe que indican pago exitoso
+      if (event.type === 'checkout.session.completed' || 
+          event.type === 'payment_intent.succeeded' ||
+          event.type === 'invoice.payment_succeeded') {
+        
+        const customerEmail = event.data.object.customer_details?.email || 
+                             event.data.object.customer_email ||
+                             event.data.object.receipt_email;
+        
+        console.log("Processing Stripe payment for email:", customerEmail);
+        
         if (customerEmail) {
           const users = await storage.getAllUsers();
           const user = users.find(u => u.email === customerEmail);
+          
           if (user) {
+            console.log("Activating Stripe subscription for user:", user.username);
             await storage.updateUserSubscription(user.id, {
               status: 'active',
               plan: 'basic',
-              subscriptionId: event.data.object.id,
+              subscriptionId: event.data.object.id || `stripe_${Date.now()}`,
               expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
             });
+            
+            console.log("Stripe subscription activated successfully for:", user.username);
+          } else {
+            console.log("User not found for email:", customerEmail);
           }
         }
       }
+      
       res.json({ received: true });
     } catch (error) {
+      console.error("Stripe webhook error:", error);
       res.status(400).json({ error: 'Webhook error' });
     }
   });
