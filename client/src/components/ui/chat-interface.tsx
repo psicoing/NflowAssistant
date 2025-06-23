@@ -12,6 +12,7 @@ interface ChatInterfaceProps {
   isLoading: boolean;
   isLoadingMessages: boolean;
   onRegenerateResponse?: (messageId: number) => void;
+  isQuestionLimitReached?: boolean;
 }
 
 export default function ChatInterface({ 
@@ -19,7 +20,8 @@ export default function ChatInterface({
   onSendMessage, 
   isLoading, 
   isLoadingMessages,
-  onRegenerateResponse
+  onRegenerateResponse,
+  isQuestionLimitReached = false
 }: ChatInterfaceProps) {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -31,7 +33,7 @@ export default function ChatInterface({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputValue.trim() && !isLoading) {
+    if (inputValue.trim() && !isLoading && !isQuestionLimitReached) {
       const startTime = Date.now();
       setIsTyping(true);
       onSendMessage(inputValue.trim());

@@ -825,6 +825,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get user question limit status
+  app.get("/api/question-limit", async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      if (!userId) {
+        return res.status(401).json({ message: "User not authenticated" });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Check if we need to reset monthly counter
+      const now = new Date();
+      const lastReset = user.lastQuestionResetDate ? new Date(user.lastQuestionResetDate) : new Date();
+      const isNewMonth = now.getMonth() !== lastReset.getMonth() || now.getFullYear() !== lastReset.getFullYear();
+
+      if (isNewMonth) {
+        await storage.resetMonthlyQuestions(userId);
+        const updatedUser = await storage.getUser(userId);
+        return res.json({
+          limit: updatedUser?.monthlyQuestionLimit || 10,
+          remaining: updatedUser?.monthlyQuestionLimit || 10,
+          used: 0,
+          canAsk: true,
+          resetDate: new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString()
+        });
+      }
+
+      const used = user.questionsUsedThisMonth || 0;
+      const limit = user.monthlyQuestionLimit || 10;
+      const remaining = Math.max(0, limit - used);
+      
+      res.json({
+        limit,
+        remaining,
+        used,
+        canAsk: remaining > 0,
+        resetDate: new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString()
+      });
+    } catch (error) {
+      console.error("Error checking question limit:", error);
+      res.status(500).json({ message: "Error checking question limit" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

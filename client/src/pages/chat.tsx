@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import ChatHeader from "@/components/ui/chat-header";
 import ChatInterface from "@/components/ui/chat-interface";
 import UserProfileForm from "@/components/ui/user-profile-form";
+import QuestionLimitIndicator from "@/components/ui/question-limit-indicator";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MessageCircle, Plus, Search, Calendar, Clock } from "lucide-react";
@@ -300,6 +301,9 @@ export default function Chat() {
         {/* Sidebar - Hidden on mobile */}
         <div className="hidden md:flex w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex-col backdrop-blur-sm">
           <div className="p-6 border-b border-gray-700/50 space-y-4">
+            {/* Question Limit Indicator */}
+            <QuestionLimitIndicator />
+            
             {/* New Chat Button */}
             <Button
               onClick={handleNewChat}
