@@ -32,7 +32,11 @@ import {
   Calendar,
   Shield,
   AlertTriangle,
-  Phone
+  Phone,
+  Receipt,
+  MapPin,
+  Mail,
+  Clock
 } from "lucide-react";
 
 export default function ChatUserMenu() {
@@ -44,6 +48,7 @@ export default function ChatUserMenu() {
   const [showPlanInfoDialog, setShowPlanInfoDialog] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [showEmergencyDialog, setShowEmergencyDialog] = useState(false);
+  const [showBillingDialog, setShowBillingDialog] = useState(false);
 
   const logoutMutation = useMutation({
     mutationFn: () => apiRequest("POST", "/api/auth/logout"),
@@ -206,6 +211,15 @@ export default function ChatUserMenu() {
                 <span>Mejorar Plan</span>
               </DropdownMenuItem>
               
+              <DropdownMenuItem 
+                className="text-green-400 hover:bg-gray-700 cursor-pointer"
+                onClick={() => setShowBillingDialog(true)}
+                onSelect={(e) => e.preventDefault()}
+              >
+                <Receipt className="mr-2 h-4 w-4" />
+                <span>Facturación</span>
+              </DropdownMenuItem>
+              
               <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
                 <DialogTrigger asChild>
                   <DropdownMenuItem 
@@ -347,6 +361,106 @@ export default function ChatUserMenu() {
               <div className="flex justify-end mt-6">
                 <Button 
                   onClick={() => setShowProfileDialog(false)}
+                  className="bg-nflow-orange hover:bg-nflow-orange/90 text-black"
+                >
+                  Cerrar
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+          
+          {/* Dialog de Facturación */}
+          <Dialog open={showBillingDialog} onOpenChange={setShowBillingDialog}>
+            <DialogTrigger asChild>
+              <div style={{ display: 'none' }} />
+            </DialogTrigger>
+            <DialogContent className="bg-gray-800 border-gray-700 max-w-lg">
+              <DialogHeader>
+                <DialogTitle className="text-white flex items-center">
+                  <Receipt className="mr-2 h-5 w-5 text-green-400" />
+                  Facturación
+                </DialogTitle>
+                <DialogDescription className="text-gray-400">
+                  Información de contacto para facturación
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="mt-6 space-y-6">
+                {/* Header con icono de empresa */}
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <Receipt className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-1">EMPORDAJOBS SL</h3>
+                  <p className="text-gray-400 text-sm">CIF: B02701100</p>
+                </div>
+                
+                {/* Información de contacto */}
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-4 p-4 bg-gray-700/30 rounded-lg border border-gray-600/50">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <MapPin className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-medium">Ubicación</h4>
+                      <p className="text-gray-300 text-sm">Portbou, Girona, España</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-4 p-4 bg-gray-700/30 rounded-lg border border-gray-600/50">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Phone className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-medium">Teléfono</h4>
+                      <p className="text-gray-300 text-sm">+34 660 45 21 36</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-4 p-4 bg-gray-700/30 rounded-lg border border-gray-600/50">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Mail className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-medium">Email</h4>
+                      <p className="text-blue-400 text-sm">empordajobs@gmail.com</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-4 p-4 bg-gray-700/30 rounded-lg border border-gray-600/50">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Clock className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-medium">Horario</h4>
+                      <p className="text-gray-300 text-sm">Lunes a Viernes: 9:00 - 18:00</p>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Botones de acción */}
+                <div className="flex space-x-2">
+                  <Button 
+                    variant="outline" 
+                    className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-700"
+                    onClick={() => window.open('tel:+34660452136', '_self')}
+                  >
+                    <Phone className="w-4 h-4 mr-2" />
+                    Llamar
+                  </Button>
+                  <Button 
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                    onClick={() => window.open('mailto:empordajobs@gmail.com', '_blank')}
+                  >
+                    <Mail className="w-4 h-4 mr-2" />
+                    Enviar email
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="flex justify-end mt-6">
+                <Button 
+                  onClick={() => setShowBillingDialog(false)}
                   className="bg-nflow-orange hover:bg-nflow-orange/90 text-black"
                 >
                   Cerrar
