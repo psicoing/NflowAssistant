@@ -55,13 +55,12 @@ export default function QuestionLimitIndicator() {
       </div>
       
       <div className="space-y-2">
-        <Progress 
-          value={percentage} 
-          className="h-2 bg-gray-700"
-          style={{
-            background: 'rgb(55 65 81)', // gray-700
-          }}
-        />
+        <div className="w-full bg-gray-700 rounded-full h-2">
+          <div 
+            className={`h-2 rounded-full transition-all duration-300 ${getProgressColor()}`}
+            style={{ width: `${Math.min(percentage, 100)}%` }}
+          />
+        </div>
         <div className="flex justify-between items-center text-xs text-gray-400">
           <span>Usadas: {used}</span>
           <span>Se reinicia: {formatResetDate(resetDate)}</span>

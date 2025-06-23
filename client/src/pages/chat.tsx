@@ -125,9 +125,22 @@ export default function Chat() {
     onSuccess: () => {
       refetchMessages();
       queryClient.invalidateQueries({ queryKey: ["/api/conversations"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/question-limit"] });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error("Error sending message:", error);
+      
+      // Handle question limit exceeded (429 status)
+      if (error.message?.includes("429")) {
+        toast({
+          title: "Límite alcanzado",
+          description: "Has alcanzado tu límite de preguntas mensuales",
+          variant: "destructive",
+        });
+        queryClient.invalidateQueries({ queryKey: ["/api/question-limit"] });
+        return;
+      }
+      
       toast({
         title: "Error",
         description: "No se pudo enviar el mensaje",
