@@ -310,6 +310,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
+      // Check question limit
+      const limitCheck = await storage.checkQuestionLimit(userId);
+      if (!limitCheck.canAsk) {
+        return res.status(429).json({ 
+          message: "Límite de preguntas mensuales alcanzado",
+          limit: limitCheck.limit,
+          remaining: 0,
+          resetDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).toISOString()
+        });
+      }
+
       // Save user message
       const userMessage = await storage.createMessage({
         conversationId,
@@ -325,6 +336,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const aiResponse = await processUserMessage(content, history, userProfile);
       console.log("AI Response received:", aiResponse);
 
+      // Increment question count after successful message processing
+      await storage.incrementQuestionCount(userId);
+
       // Save AI response
       const aiMessage = await storage.createMessage({
         conversationId,
@@ -335,7 +349,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         userMessage,
         aiMessage,
-        supportType: aiResponse.supportType
+        supportType: aiResponse.supportType,
+        questionsRemaining: limitCheck.remaining
       });
     } catch (error) {
       console.error("Error processing conversation message:", error);
@@ -373,15 +388,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
+      // Check question limit
+      const limitCheck = await storage.checkQuestionLimit(userId);
+      if (!limitCheck.canAsk) {
+        return res.status(429).json({ 
+          message: "Límite de preguntas mensuales alcanzado",
+          limit: limitCheck.limit,
+          remaining: 0,
+          resetDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).toISOString()
+        });
+      }
+
       // Get conversation history
       const history = await storage.getMessages(conversationId);
 
       // Process the message with AI
       const aiResponse = await processUserMessage(message, history, userProfile);
 
+      // Increment question count after successful processing
+      await storage.incrementQuestionCount(userId);
+
       res.json({
         content: aiResponse.content,
-        supportType: aiResponse.supportType
+        supportType: aiResponse.supportType,
+        questionsRemaining: limitCheck.remaining
       });
     } catch (error) {
       console.error("Error processing chat message:", error);

@@ -27,6 +27,11 @@ export interface IStorage {
     gender: string;
   }): Promise<User>;
   
+  // Question limit management
+  checkQuestionLimit(userId: number): Promise<{ canAsk: boolean; remaining: number; limit: number }>;
+  incrementQuestionCount(userId: number): Promise<User>;
+  resetMonthlyQuestions(userId: number): Promise<User>;
+  
   createConversation(conversation: InsertConversation): Promise<Conversation>;
   getConversations(userId?: number): Promise<Conversation[]>;
   getConversation(id: number): Promise<Conversation | undefined>;
@@ -291,6 +296,66 @@ export class DatabaseStorage implements IStorage {
       .where(eq(partners.id, partnerId))
       .returning();
     return partner;
+  }
+
+  // Question limit management
+  async checkQuestionLimit(userId: number): Promise<{ canAsk: boolean; remaining: number; limit: number }> {
+    const user = await this.getUser(userId);
+    if (!user) {
+      throw new Error("Usuario no encontrado");
+    }
+
+    // Check if we need to reset monthly counter
+    const now = new Date();
+    const lastReset = user.lastQuestionResetDate ? new Date(user.lastQuestionResetDate) : new Date();
+    const isNewMonth = now.getMonth() !== lastReset.getMonth() || now.getFullYear() !== lastReset.getFullYear();
+
+    if (isNewMonth) {
+      await this.resetMonthlyQuestions(userId);
+      return { 
+        canAsk: true, 
+        remaining: (user.monthlyQuestionLimit || 10) - 1, 
+        limit: user.monthlyQuestionLimit || 10 
+      };
+    }
+
+    const used = user.questionsUsedThisMonth || 0;
+    const limit = user.monthlyQuestionLimit || 10;
+    const remaining = Math.max(0, limit - used);
+
+    return {
+      canAsk: remaining > 0,
+      remaining: remaining - 1, // After this question
+      limit
+    };
+  }
+
+  async incrementQuestionCount(userId: number): Promise<User> {
+    const user = await this.getUser(userId);
+    if (!user) {
+      throw new Error("Usuario no encontrado");
+    }
+
+    const [updatedUser] = await db
+      .update(users)
+      .set({
+        questionsUsedThisMonth: (user.questionsUsedThisMonth || 0) + 1,
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return updatedUser;
+  }
+
+  async resetMonthlyQuestions(userId: number): Promise<User> {
+    const [updatedUser] = await db
+      .update(users)
+      .set({
+        questionsUsedThisMonth: 0,
+        lastQuestionResetDate: new Date(),
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return updatedUser;
   }
 }
 

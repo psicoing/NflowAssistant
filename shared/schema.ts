@@ -20,6 +20,10 @@ export const users = pgTable("users", {
   lastLoginAt: timestamp("last_login_at"),
   loginCount: integer("login_count").default(0),
   hasCompletedPayment: boolean("has_completed_payment").default(false),
+  // Límites de uso mensual
+  monthlyQuestionLimit: integer("monthly_question_limit").default(10),
+  questionsUsedThisMonth: integer("questions_used_this_month").default(0),
+  lastQuestionResetDate: timestamp("last_question_reset_date").defaultNow(),
 });
 
 export const conversations = pgTable("conversations", {
