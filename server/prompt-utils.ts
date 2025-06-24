@@ -10,6 +10,8 @@ export type ExampleCategory =
   | 'comportamiento_padres' 
   | 'caso_profesional' 
   | 'autoestima_adolescente'
+  | 'salud_mental_laboral'
+  | 'riesgo_psicosocial'
   | 'general';
 
 export interface Example {

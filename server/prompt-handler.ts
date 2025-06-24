@@ -16,6 +16,7 @@ const openai = new OpenAI({
 export interface ChatResponse {
   content: string;
   supportType: string;
+  tags?: string[];
 }
 
 /**

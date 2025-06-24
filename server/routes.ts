@@ -350,7 +350,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userMessage,
         aiMessage,
         supportType: aiResponse.supportType,
-        questionsRemaining: limitCheck.remaining
+        questionsRemaining: limitCheck.remaining,
+        tags: aiResponse.tags || []
       });
     } catch (error) {
       console.error("Error processing conversation message:", error);
@@ -411,7 +412,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         content: aiResponse.content,
         supportType: aiResponse.supportType,
-        questionsRemaining: limitCheck.remaining
+        questionsRemaining: limitCheck.remaining,
+        tags: aiResponse.tags || []
       });
     } catch (error) {
       console.error("Error processing chat message:", error);
