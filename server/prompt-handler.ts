@@ -198,9 +198,18 @@ export async function processUserMessage(userMessage: string, history: Message[]
     // Determinar el tipo de soporte basado en el contenido
     const supportType = determineSupportType(userMessage);
     
+    // Agregar etiquetas internas para consultas laborales
+    const tags = [];
+    if (supportType === 'riesgo_psicosocial') {
+      tags.push('riesgo_psicosocial_identificado', 'consulta_laboral', 'seguimiento_sugerido');
+    } else if (supportType === 'salud_mental_laboral') {
+      tags.push('consulta_laboral', 'salud_mental_trabajo');
+    }
+
     return {
       content: responseContent,
-      supportType
+      supportType,
+      tags
     };
   } catch (error: any) {
     console.error("Error al procesar mensaje:", error);
@@ -208,7 +217,8 @@ export async function processUserMessage(userMessage: string, history: Message[]
     // Proporcionar una respuesta de fallback estructurada
     return {
       content: generarRespuestaFallback(userMessage, error),
-      supportType: "general"
+      supportType: "general",
+      tags: []
     };
   }
 }
@@ -218,6 +228,21 @@ export async function processUserMessage(userMessage: string, history: Message[]
  */
 function determineSupportType(userMessage: string): string {
   const message = userMessage.toLowerCase();
+  
+  // Detectar riesgos psicosociales específicos
+  const psychosocialRiskKeywords = ['mobbing', 'acoso laboral', 'hostigamiento', 'maltrato trabajo', 'exclusión trabajo', 'discriminación trabajo'];
+  if (psychosocialRiskKeywords.some(word => message.includes(word))) {
+    return 'riesgo_psicosocial';
+  }
+  
+  // Detectar salud mental laboral general
+  const workplaceKeywords = ['trabajo', 'laboral', 'jefe', 'curro'];
+  const mentalHealthKeywords = ['estresado', 'agotado', 'no duermo', 'ansiedad', 'burnout', 'presión', 'horario'];
+  
+  if (workplaceKeywords.some(word => message.includes(word)) && 
+      mentalHealthKeywords.some(word => message.includes(word))) {
+    return 'salud_mental_laboral';
+  }
   
   const crisisKeywords = ['suicidio', 'suicidarme', 'matarme', 'quitarme la vida', 'no quiero vivir', 'autolesión', 'hacerme daño'];
   const anxietyKeywords = ['ansiedad', 'nervios', 'nervioso', 'preocupación', 'pánico', 'angustia'];
