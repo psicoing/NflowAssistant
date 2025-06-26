@@ -445,10 +445,10 @@ export default function Chat() {
               <div className="text-center max-w-md mx-4">
                 <MessageCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
                 <h2 className="text-xl font-semibold text-white mb-2">
-                  Bienvenido a NFLOW
+                  {t('chat.welcome.title')}
                 </h2>
                 <p className="text-gray-400 mb-6">
-                  Selecciona una conversación existente o crea una nueva para comenzar a chatear con tu asistente de salud mental.
+                  {t('chat.welcome.description')}
                 </p>
                 <Button
                   onClick={handleNewChat}
@@ -456,7 +456,7 @@ export default function Chat() {
                   disabled={createConversationMutation.isPending}
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Crear Nueva Conversación
+                  {t('chat.welcome.cta')}
                 </Button>
               </div>
             </div>
