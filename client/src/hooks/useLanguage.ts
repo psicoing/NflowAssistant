@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 export type SupportedLanguage = 'es' | 'en' | 'fr' | 'de' | 'it' | 'pt' | 'ca' | 'eu' | 'gl';
 
@@ -49,9 +49,13 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'hero.subtitle': 'Chatbot de psicología para todos los públicos',
     'hero.cta': 'Comenzar ahora',
     'pricing.title': 'Planes de Suscripción',
+    'pricing.subtitle': 'Elige el plan que mejor se adapte a tus necesidades',
     'pricing.basic': 'Plan Básico',
-    'pricing.price': '€2.99/mes',
+    'pricing.price': '€2.99',
     'pricing.features.questions': '10 preguntas mensuales',
+    'pricing.features.support': 'Soporte 24/7',
+    'pricing.features.conversations': 'Conversaciones ilimitadas',
+    'pricing.features.mobile': 'Acceso móvil',
     'pricing.features.ai': 'IA especializada en salud mental',
     'pricing.features.support': 'Soporte 24/7',
     
@@ -89,9 +93,13 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'hero.subtitle': 'Psychology chatbot for all audiences',
     'hero.cta': 'Start now',
     'pricing.title': 'Subscription Plans',
+    'pricing.subtitle': 'Choose the plan that best fits your needs',
     'pricing.basic': 'Basic Plan',
-    'pricing.price': '€2.99/month',
+    'pricing.price': '€2.99',
     'pricing.features.questions': '10 monthly questions',
+    'pricing.features.support': '24/7 Support',
+    'pricing.features.conversations': 'Unlimited conversations',
+    'pricing.features.mobile': 'Mobile access',
     'pricing.features.ai': 'Mental health specialized AI',
     'pricing.features.support': '24/7 support',
     
@@ -420,10 +428,10 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
 
   const contextValue = { currentLanguage, setLanguage, t };
 
-  return (
-    <LanguageContext.Provider value={contextValue}>
-      {children}
-    </LanguageContext.Provider>
+  return React.createElement(
+    LanguageContext.Provider,
+    { value: contextValue },
+    children
   );
 }
 

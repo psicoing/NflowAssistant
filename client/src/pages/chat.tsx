@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { MessageCircle, Plus, Search, Calendar, Clock } from "lucide-react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/hooks/useLanguage";
 import type { Conversation, Message } from "@shared/schema";
 
 export default function Chat() {
@@ -18,6 +19,7 @@ export default function Chat() {
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { currentLanguage } = useLanguage();
   const [currentConversationId, setCurrentConversationId] = useState<number | null>(
     id ? parseInt(id) : null
   );
@@ -108,7 +110,10 @@ export default function Chat() {
     mutationFn: async ({ conversationId, content }: { conversationId: number; content: string }) => {
       const response = await fetch(`/api/conversations/${conversationId}/messages`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          'Accept-Language': currentLanguage + '-' + currentLanguage.toUpperCase()
+        },
         body: JSON.stringify({
           content,
           userProfile,
