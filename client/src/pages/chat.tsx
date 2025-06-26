@@ -303,13 +303,13 @@ export default function Chat() {
             disabled={createConversationMutation.isPending}
           >
             <Plus className="w-4 h-4 mr-1" />
-            Nueva
+            {t('chat.conversations.new')}
           </Button>
           
           <span className="text-white text-sm font-medium">
             {currentConversationId ? 
               conversations.find(c => c.id === currentConversationId)?.title || "Chat" 
-              : "Selecciona una conversación"
+              : t('chat.select.conversation')
             }
           </span>
         </div>
@@ -330,7 +330,7 @@ export default function Chat() {
               disabled={createConversationMutation.isPending}
             >
               <Plus className="w-5 h-5 mr-2" />
-              Nueva Conversación
+              {t('chat.conversations.new')}
             </Button>
             
             {/* Search */}
@@ -338,7 +338,7 @@ export default function Chat() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Buscar conversaciones..."
+                placeholder={t('chat.conversations.search')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder:text-gray-400 focus:border-nflow-orange focus:ring-1 focus:ring-nflow-orange/20 transition-all"
@@ -348,10 +348,10 @@ export default function Chat() {
             {/* Date Filter */}
             <div className="flex gap-2">
               {[
-                { key: "all", label: "Todo", icon: Clock },
-                { key: "today", label: "Hoy", icon: Calendar },
-                { key: "week", label: "Semana", icon: Calendar },
-                { key: "month", label: "Mes", icon: Calendar },
+                { key: "all", label: t('chat.filters.all'), icon: Clock },
+                { key: "today", label: t('chat.filters.today'), icon: Calendar },
+                { key: "week", label: t('chat.filters.week'), icon: Calendar },
+                { key: "month", label: t('chat.filters.month'), icon: Calendar },
               ].map(({ key, label, icon: Icon }) => (
                 <button
                   key={key}
@@ -381,8 +381,8 @@ export default function Chat() {
                 <MessageCircle className="w-12 h-12 text-gray-500 mx-auto mb-3" />
                 <p className="text-gray-400 text-sm mb-2">
                   {searchQuery || selectedDateFilter !== "all" 
-                    ? "No se encontraron conversaciones con estos filtros" 
-                    : "No tienes conversaciones aún"
+                    ? t('chat.conversations.noResults') 
+                    : t('chat.conversations.empty')
                   }
                 </p>
                 {!searchQuery && selectedDateFilter === "all" && (
@@ -394,7 +394,7 @@ export default function Chat() {
                     disabled={createConversationMutation.isPending}
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    {createConversationMutation.isPending ? "Creando..." : "Crear primera conversación"}
+                    {createConversationMutation.isPending ? t('chat.conversations.creating') : t('chat.conversations.createFirst')}
                   </Button>
                 )}
               </div>

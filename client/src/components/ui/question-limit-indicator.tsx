@@ -3,6 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { MessageCircle, AlertTriangle, CheckCircle } from "lucide-react";
 
 export default function QuestionLimitIndicator() {
+  const { t } = useLanguage();
   const { data: limitData, isLoading } = useQuery({
     queryKey: ["/api/question-limit"],
     refetchInterval: 30000, // Refresh every 30 seconds
