@@ -2,6 +2,7 @@ import { Calendar, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function AgeNoticeSection() {
+  const { t } = useLanguage();
   return (
     <section className="py-12 px-4 bg-gray-900 relative overflow-hidden">
       {/* Background Effects */}
