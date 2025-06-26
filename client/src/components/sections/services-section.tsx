@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Smartphone, Info, Smile, Heart, MessageCircle } from "lucide-react";
 import { useLocation } from "wouter";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function ServicesSection() {
   const [, setLocation] = useLocation();
+  const { t } = useLanguage();
 
   const handleTryApp = () => {
     setLocation("/chat");
@@ -20,27 +22,26 @@ export default function ServicesSection() {
           {/* Content */}
           <div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="text-white">Apoyo</span><br />
-              <span className="text-nflow-orange">moderno</span>
+              <span className="text-white">{t('services.modern.title1')}</span><br />
+              <span className="text-nflow-orange">{t('services.modern.title2')}</span>
             </h2>
             <p className="text-xl text-gray-300 mb-8">
-              NFLOW te ofrece herramientas psicológicas basadas en evidencia científica 
-              y adaptadas a tu estilo de vida digital.
+              {t('services.modern.description')}
             </p>
 
             {/* Features List */}
             <div className="space-y-4 mb-8">
               <div className="flex items-center space-x-3">
                 <CheckCircle className="w-6 h-6 text-nflow-orange flex-shrink-0" />
-                <span className="text-gray-200">Chat de apoyo psicológico 24/7</span>
+                <span className="text-gray-200">{t('services.modern.feature1')}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <CheckCircle className="w-6 h-6 text-nflow-orange flex-shrink-0" />
-                <span className="text-gray-200">Seguimiento de tu bienestar emocional</span>
+                <span className="text-gray-200">{t('services.modern.feature2')}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <CheckCircle className="w-6 h-6 text-nflow-orange flex-shrink-0" />
-                <span className="text-gray-200">Recursos para adolescentes, padres y profesionales</span>
+                <span className="text-gray-200">{t('services.modern.feature3')}</span>
               </div>
             </div>
 

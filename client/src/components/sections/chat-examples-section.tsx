@@ -2,8 +2,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Brain, ArrowRight, Eye, Users, Sparkles } from "lucide-react";
 import { Link } from "wouter";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function ChatExamplesSection() {
+  const { t } = useLanguage();
   return (
     <section className="py-16 px-4 bg-gradient-to-b from-nflow-dark to-nflow-navy">
       <div className="max-w-6xl mx-auto">
@@ -15,12 +17,11 @@ export default function ChatExamplesSection() {
           </div>
           
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            ¿Cómo responde nuestro asistente?
+            {t('examples.assistant.title')}
           </h2>
           
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Descubre ejemplos reales de cómo NEUROPSI-AI adapta sus respuestas según tu edad, 
-            desde adolescentes hasta adultos mayores.
+            {t('examples.assistant.description')}
           </p>
         </div>
 
@@ -33,11 +34,10 @@ export default function ChatExamplesSection() {
               </div>
               <div>
                 <h3 className="text-white font-semibold text-lg mb-2">
-                  Lenguaje Adaptado por Edad
+                  {t('examples.features.language.title')}
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Desde un lenguaje cercano y comprensible para adolescentes hasta análisis 
-                  psicológicos profundos para adultos.
+                  {t('examples.features.language.description')}
                 </p>
               </div>
             </div>
@@ -48,11 +48,10 @@ export default function ChatExamplesSection() {
               </div>
               <div>
                 <h3 className="text-white font-semibold text-lg mb-2">
-                  16 Franjas de Edad Diferentes
+                  {t('examples.features.ages.title')}
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Ejemplos específicos para cada etapa vital, desde 12 hasta 80 años, 
-                  con situaciones y desafíos reales de cada edad.
+                  {t('examples.features.ages.description')}
                 </p>
               </div>
             </div>
@@ -63,11 +62,10 @@ export default function ChatExamplesSection() {
               </div>
               <div>
                 <h3 className="text-white font-semibold text-lg mb-2">
-                  Respuestas Profesionales
+                  {t('examples.features.professional.title')}
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Consejos estructurados, técnicas específicas y bibliografía 
-                  especializada para cada situación.
+                  {t('examples.features.professional.description')}
                 </p>
               </div>
             </div>

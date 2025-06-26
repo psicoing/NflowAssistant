@@ -1,5 +1,6 @@
 import { Calendar, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function AgeNoticeSection() {
   const { t } = useLanguage();
@@ -26,10 +27,10 @@ export default function AgeNoticeSection() {
                 
                 <div>
                   <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-nflow-orange via-orange-400 to-yellow-400 bg-clip-text text-transparent">
-                    Chat disponible a partir de los 12 años
+                    {t('ageWarning.title')}
                   </h2>
                   <p className="text-gray-300 mt-2">
-                    Edad suficiente para leer, escribir y reflexionar
+                    {t('ageWarning.subtitle')}
                   </p>
                 </div>
               </div>
