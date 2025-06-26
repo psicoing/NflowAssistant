@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 export type SupportedLanguage = 'es' | 'en' | 'fr' | 'de' | 'it' | 'pt' | 'ca' | 'eu' | 'gl';
 
@@ -420,10 +420,10 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
 
   const contextValue = { currentLanguage, setLanguage, t };
 
-  return React.createElement(
-    LanguageContext.Provider,
-    { value: contextValue },
-    children
+  return (
+    <LanguageContext.Provider value={contextValue}>
+      {children}
+    </LanguageContext.Provider>
   );
 }
 

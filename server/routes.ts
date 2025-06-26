@@ -331,9 +331,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get conversation history for AI context
       const history = await storage.getMessages(conversationId);
 
+      // Get user language from request headers or default to Spanish
+      const userLanguage = req.headers['accept-language']?.split(',')[0]?.split('-')[0] || 'es';
+      
       // Process the message with AI
       console.log("Calling processUserMessage with:", content);
-      const aiResponse = await processUserMessage(content, history, userProfile);
+      const aiResponse = await processUserMessage(content, history, userProfile, userLanguage);
       console.log("AI Response received:", aiResponse);
 
       // Increment question count after successful message processing
@@ -403,8 +406,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get conversation history
       const history = await storage.getMessages(conversationId);
 
+      // Get user language from request headers or default to Spanish  
+      const userLanguage = req.headers['accept-language']?.split(',')[0]?.split('-')[0] || 'es';
+      
       // Process the message with AI
-      const aiResponse = await processUserMessage(message, history, userProfile);
+      const aiResponse = await processUserMessage(message, history, userProfile, userLanguage);
 
       // Increment question count after successful processing
       await storage.incrementQuestionCount(userId);

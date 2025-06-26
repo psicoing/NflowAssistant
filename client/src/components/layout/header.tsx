@@ -13,7 +13,6 @@ export default function Header() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [location] = useLocation();
   const { currentLanguage, setLanguage, t } = useLanguage();
-  const { currentLanguage, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
