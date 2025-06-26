@@ -130,6 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 26, 2025. **PREGUNTAS AGREGADAS A USUARIO** - Incrementado límite mensual de mpajaron de 10 a 20 preguntas mediante actualización directa en base de datos
 - June 26, 2025. **TRADUCTOR DE CHAT IMPLEMENTADO** - Selector de idiomas prominente integrado en header del chat, banner informativo en cada conversación, traducciones completas para todas las secciones del chat, sistema adaptativo por conversación individual
 - June 26, 2025. **SISTEMA MULTIIDIOMA COMPLETADO** - Implementado soporte completo para 9 idiomas (ES, EN, FR, DE, IT, PT, CA, EU, GL) con detección automática, cambio en tiempo real, respuestas IA adaptadas por idioma
 - June 20, 2025. **REDEPLOY EXITOSO CONFIRMADO** - Sistema dual PayPal + Stripe liviano funcionando, redeploy rápido sin problemas de promote
