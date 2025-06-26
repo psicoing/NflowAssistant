@@ -22,7 +22,7 @@ export interface ChatResponse {
 /**
  * Genera una respuesta mejorada usando OpenAI con ejemplos contextuales
  */
-export async function generateChatResponse(userMessage: string, history: Message[], userProfile?: any): Promise<string> {
+export async function generateChatResponse(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es'): Promise<string> {
   try {
     // Seleccionar ejemplos relevantes basados en el mensaje del usuario
     const relevantExamples = selectRelevantExamples(userMessage, 2);
@@ -53,8 +53,13 @@ ${userProfile.ageRange === '65+' ? '- Adulto mayor: usa lenguaje respetuoso, con
 `;
     }
 
+    // Detectar idioma y adaptar prompt
+    const languageInstructions = getLanguageInstructions(userLanguage);
+    
     // Prompt sistema NEUROPSI-AI inclusivo y multiestrato
-    const systemPrompt = `TÚ ERES:
+    const systemPrompt = `${languageInstructions}
+    
+TÚ ERES:
 NEUROPSI-AI, un asistente conversacional experto en psicología clínica, educativa, familiar y de la salud mental pública.
 
 🧭 **MISIÓN PRINCIPAL:**
@@ -186,12 +191,12 @@ Responde en formato JSON: { "response": "tu respuesta completa con formato markd
  * Procesa un mensaje del usuario y genera una respuesta usando OpenAI
  * con técnicas avanzadas de prompting (few-shot learning y chain-of-thought)
  */
-export async function processUserMessage(userMessage: string, history: Message[], userProfile?: any): Promise<ChatResponse> {
+export async function processUserMessage(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es'): Promise<ChatResponse> {
   try {
     console.log(`Procesando mensaje de usuario: "${userMessage.substring(0, 30)}..."`);
     
     // Generar respuesta usando OpenAI con prompt mejorado
-    const responseContent = await generateChatResponse(userMessage, history, userProfile);
+    const responseContent = await generateChatResponse(userMessage, history, userProfile, userLanguage);
     
     console.log("Respuesta generada exitosamente");
     
@@ -255,6 +260,25 @@ function determineSupportType(userMessage: string): string {
   if (stressKeywords.some(word => message.includes(word))) return "stress";
   
   return "general";
+}
+
+/**
+ * Obtiene instrucciones de idioma para el prompt
+ */
+function getLanguageInstructions(language: string): string {
+  const instructions = {
+    es: 'RESPONDE SIEMPRE EN ESPAÑOL. Usa un lenguaje natural, cálido y profesional apropiado para hispanohablantes.',
+    en: 'ALWAYS RESPOND IN ENGLISH. Use natural, warm and professional language appropriate for English speakers.',
+    fr: 'RÉPONDS TOUJOURS EN FRANÇAIS. Utilise un langage naturel, chaleureux et professionnel approprié pour les francophones.',
+    de: 'ANTWORTE IMMER AUF DEUTSCH. Verwende eine natürliche, warme und professionelle Sprache, die für Deutschsprachige geeignet ist.',
+    it: 'RISPONDI SEMPRE IN ITALIANO. Usa un linguaggio naturale, caloroso e professionale appropriato per gli italofoni.',
+    pt: 'RESPONDA SEMPRE EM PORTUGUÊS. Use linguagem natural, calorosa e profissional apropriada para falantes de português.',
+    ca: 'RESPON SEMPRE EN CATALÀ. Utilitza un llenguatge natural, càlid i professional apropiat per als catalanoparlants.',
+    eu: 'ERANTZUN BETI EUSKERAZ. Erabili hizkuntza naturala, berotsua eta profesionala euskaldunendako egokia.',
+    gl: 'RESPONDE SEMPRE EN GALEGO. Usa unha linguaxe natural, cálida e profesional apropiada para galegofalantes.'
+  };
+  
+  return instructions[language as keyof typeof instructions] || instructions.es;
 }
 
 /**

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Info, Brain, User, Heart } from "lucide-react";
 import { useLocation } from "wouter";
+import { useLanguage } from "@/hooks/useLanguage";
 import nflowPackageImage from "@assets/image_1749802552043.png";
 import nflowFamilyImage from "@assets/image_1749802597786.png";
 
@@ -32,13 +33,13 @@ export default function HeroSection() {
         <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
           <span className="text-white">NFLOW,</span><br />
           <span className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light bg-clip-text text-transparent">
-            un psicólogo en tu bolsillo
+            {t('hero.title')}
           </span>
         </h1>
 
         {/* Subtitle */}
         <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
-          Chatbot de psicología para todos los públicos
+          {t('hero.subtitle')}
         </p>
 
         {/* CTA Button */}
@@ -48,7 +49,7 @@ export default function HeroSection() {
             className="bg-nflow-orange hover:bg-nflow-orange-light text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
           >
             <MessageCircle className="w-5 h-5 mr-2" />
-            Comenzar ahora
+            {t('hero.cta')}
           </Button>
         </div>
 

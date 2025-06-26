@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/hooks/useLanguage";
+import { ClientLanguageProvider } from "@/components/ui/language-provider";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 import NotFound from "@/pages/not-found";
@@ -98,13 +99,17 @@ function AuthenticatedRouter() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <div className="min-h-screen bg-nflow-dark text-white">
-          <Toaster />
-          <AuthenticatedRouter />
-          <PWAInstallPrompt />
-        </div>
-      </TooltipProvider>
+      <LanguageProvider>
+        <ClientLanguageProvider>
+          <TooltipProvider>
+            <div className="min-h-screen bg-nflow-dark text-white">
+              <Toaster />
+              <AuthenticatedRouter />
+              <PWAInstallPrompt />
+            </div>
+          </TooltipProvider>
+        </ClientLanguageProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }

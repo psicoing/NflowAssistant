@@ -106,7 +106,7 @@ export default function Header() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="h-8 px-2 text-gray-300 hover:text-white hover:bg-gray-800/50">
                     <Globe className="w-4 h-4 text-nflow-orange mr-1" />
-                    <span className="text-sm">{selectedLanguage}</span>
+                    <span className="text-sm">{languages.find(l => l.code === currentLanguage)?.flag}</span>
                     <ChevronDown className="w-3 h-3 ml-1" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -114,9 +114,9 @@ export default function Header() {
                   {languages.map((lang) => (
                     <DropdownMenuItem
                       key={lang.code}
-                      onClick={() => setSelectedLanguage(lang.code)}
+                      onClick={() => setLanguage(lang.code as any)}
                       className={`cursor-pointer hover:bg-gray-800 ${
-                        selectedLanguage === lang.code ? "bg-nflow-orange/10 text-nflow-orange" : "text-gray-300"
+                        currentLanguage === lang.code ? "bg-nflow-orange/10 text-nflow-orange" : "text-gray-300"
                       }`}
                     >
                       <span className="mr-2">{lang.flag}</span>

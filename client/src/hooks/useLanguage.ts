@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 export type SupportedLanguage = 'es' | 'en' | 'fr' | 'de' | 'it' | 'pt' | 'ca' | 'eu' | 'gl';
 
@@ -45,9 +45,9 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'nav.disconnected': 'Sin conexión',
     
     // Main page
-    'hero.title': 'Tu Psicólogo de Bolsillo',
-    'hero.subtitle': 'Apoyo emocional profesional disponible 24/7 con inteligencia artificial especializada en salud mental',
-    'hero.cta': 'Comenzar Chat',
+    'hero.title': 'un psicólogo en tu bolsillo',
+    'hero.subtitle': 'Chatbot de psicología para todos los públicos',
+    'hero.cta': 'Comenzar ahora',
     'pricing.title': 'Planes de Suscripción',
     'pricing.basic': 'Plan Básico',
     'pricing.price': '€2.99/mes',
@@ -85,9 +85,9 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'nav.disconnected': 'Offline',
     
     // Main page
-    'hero.title': 'Your Pocket Psychologist',
-    'hero.subtitle': 'Professional emotional support available 24/7 with AI specialized in mental health',
-    'hero.cta': 'Start Chat',
+    'hero.title': 'a psychologist in your pocket',
+    'hero.subtitle': 'Psychology chatbot for all audiences',
+    'hero.cta': 'Start now',
     'pricing.title': 'Subscription Plans',
     'pricing.basic': 'Basic Plan',
     'pricing.price': '€2.99/month',
@@ -420,10 +420,10 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
 
   const contextValue = { currentLanguage, setLanguage, t };
 
-  return (
-    <LanguageContext.Provider value={contextValue}>
-      {children}
-    </LanguageContext.Provider>
+  return React.createElement(
+    LanguageContext.Provider,
+    { value: contextValue },
+    children
   );
 }
 
