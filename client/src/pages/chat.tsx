@@ -20,7 +20,7 @@ export default function Chat() {
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const { currentLanguage } = useLanguage();
+  const { currentLanguage, t } = useLanguage();
   const [currentConversationId, setCurrentConversationId] = useState<number | null>(
     id ? parseInt(id) : null
   );

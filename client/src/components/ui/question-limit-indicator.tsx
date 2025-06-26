@@ -1,10 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { Progress } from "@/components/ui/progress";
 import { MessageCircle, AlertTriangle, CheckCircle } from "lucide-react";
+import { useLanguage } from "@/hooks/useLanguage";
+
+interface QuestionLimitData {
+  limit: number;
+  remaining: number;
+  used: number;
+  canAsk: boolean;
+  resetDate: string;
+}
 
 export default function QuestionLimitIndicator() {
   const { t } = useLanguage();
-  const { data: limitData, isLoading } = useQuery({
+  const { data: limitData, isLoading } = useQuery<QuestionLimitData>({
     queryKey: ["/api/question-limit"],
     refetchInterval: 30000, // Refresh every 30 seconds
   });
