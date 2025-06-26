@@ -57,7 +57,6 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'pricing.features.conversations': 'Conversaciones ilimitadas',
     'pricing.features.mobile': 'Acceso móvil',
     'pricing.features.ai': 'IA especializada en salud mental',
-    'pricing.features.support': 'Soporte 24/7',
     
     // Chat
     'chat.placeholder': 'Escribe tu consulta sobre salud mental...',
@@ -101,7 +100,6 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'pricing.features.conversations': 'Unlimited conversations',
     'pricing.features.mobile': 'Mobile access',
     'pricing.features.ai': 'Mental health specialized AI',
-    'pricing.features.support': '24/7 support',
     
     // Chat
     'chat.placeholder': 'Write your mental health question...',
