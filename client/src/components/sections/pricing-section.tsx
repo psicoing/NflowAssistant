@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/hooks/useLanguage";
 
 // Declare PayPal global type
 declare global {
@@ -64,6 +65,7 @@ const pricingTiers = [
 export default function PricingSection() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [isNewUser, setIsNewUser] = useState(false);
   const [newUserId, setNewUserId] = useState<string | null>(null);
 

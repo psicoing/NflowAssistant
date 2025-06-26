@@ -5,6 +5,7 @@ import nflowPackageImage from "@assets/image_1749802552043.png";
 import nflowFamilyImage from "@assets/image_1749802597786.png";
 
 export default function HeroSection() {
+  const { t } = useLanguage();
   const [, setLocation] = useLocation();
 
   const handleStartRegistration = () => {

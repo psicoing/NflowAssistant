@@ -4,14 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Brain, Globe, LogIn, UserPlus, ChevronDown, Wifi, WifiOff } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import SidebarMenu from "@/components/ui/sidebar-menu";
+import { useLanguage } from "@/hooks/useLanguage";
 
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState("ES");
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [location] = useLocation();
+  const { currentLanguage, setLanguage, t } = useLanguage();
+  const { currentLanguage, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,15 +35,15 @@ export default function Header() {
   }, []);
 
   const languages = [
-    { code: "ES", name: "Español", flag: "🇪🇸" },
-    { code: "EN", name: "English", flag: "🇬🇧" },
-    { code: "FR", name: "Français", flag: "🇫🇷" },
-    { code: "DE", name: "Deutsch", flag: "🇩🇪" },
-    { code: "IT", name: "Italiano", flag: "🇮🇹" },
-    { code: "PT", name: "Português", flag: "🇵🇹" },
-    { code: "CA", name: "Català", flag: "🔵" },
-    { code: "EU", name: "Euskera", flag: "🔵" },
-    { code: "GL", name: "Galego", flag: "🔵" },
+    { code: "es", name: "Español", flag: "🇪🇸" },
+    { code: "en", name: "English", flag: "🇬🇧" },
+    { code: "fr", name: "Français", flag: "🇫🇷" },
+    { code: "de", name: "Deutsch", flag: "🇩🇪" },
+    { code: "it", name: "Italiano", flag: "🇮🇹" },
+    { code: "pt", name: "Português", flag: "🇵🇹" },
+    { code: "ca", name: "Català", flag: "🔵" },
+    { code: "eu", name: "Euskera", flag: "🔵" },
+    { code: "gl", name: "Galego", flag: "🔵" },
   ];
 
   return (
@@ -76,7 +78,7 @@ export default function Header() {
                     <WifiOff className="w-3 h-3" />
                   )}
                   <span className="text-xs font-medium">
-                    {isOnline ? 'Conectado' : 'Sin conexión'}
+                    {isOnline ? t('nav.connected') : t('nav.disconnected')}
                   </span>
                 </div>
               </div>
@@ -87,13 +89,13 @@ export default function Header() {
               <Link href="/login">
                 <Button variant="outline" size="sm" className="border-nflow-orange/30 text-nflow-orange hover:bg-nflow-orange/10">
                   <LogIn className="w-4 h-4 mr-2" />
-                  Login
+                  {t('nav.login')}
                 </Button>
               </Link>
               <Link href="/registro">
                 <Button size="sm" className="bg-nflow-blue hover:bg-nflow-blue/90 text-white">
                   <UserPlus className="w-4 h-4 mr-2" />
-                  Registro
+                  {t('nav.register')}
                 </Button>
               </Link>
             </div>
