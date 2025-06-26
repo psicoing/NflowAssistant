@@ -156,8 +156,11 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     
     // Emergency
     'emergency.title': 'Números de Emergencia',
-    'emergency.spain': 'España - Emergencias: 112',
-    'emergency.hope': 'Teléfono de la Esperanza: 717 003 717',
+    'emergency.description': 'Si necesitas ayuda inmediata, contacta con estos servicios de emergencia',
+    'emergency.spain': 'España - Emergencias',
+    'emergency.hope': 'Teléfono de la Esperanza',
+    'emergency.general': 'Servicio de emergencias general',
+    'emergency.suicide': 'Prevención del suicidio y apoyo emocional',
     
     // Footer
     'footer.company': 'EMPORDAJOBS SL',
@@ -286,8 +289,11 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     
     // Emergency
     'emergency.title': 'Emergency Numbers',
-    'emergency.spain': 'Spain - Emergency: 112',
-    'emergency.hope': 'Hope Phone: 717 003 717',
+    'emergency.description': 'If you need immediate help, contact these emergency services',
+    'emergency.spain': 'Spain - Emergency',
+    'emergency.hope': 'Hope Phone',
+    'emergency.general': 'General emergency service',
+    'emergency.suicide': 'Suicide prevention and emotional support',
     
     // Footer
     'footer.company': 'EMPORDAJOBS SL',
