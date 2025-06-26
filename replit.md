@@ -130,6 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 26, 2025. **TRADUCTOR DE CHAT IMPLEMENTADO** - Selector de idiomas prominente integrado en header del chat, banner informativo en cada conversación, traducciones completas para todas las secciones del chat, sistema adaptativo por conversación individual
 - June 26, 2025. **SISTEMA MULTIIDIOMA COMPLETADO** - Implementado soporte completo para 9 idiomas (ES, EN, FR, DE, IT, PT, CA, EU, GL) con detección automática, cambio en tiempo real, respuestas IA adaptadas por idioma
 - June 20, 2025. **REDEPLOY EXITOSO CONFIRMADO** - Sistema dual PayPal + Stripe liviano funcionando, redeploy rápido sin problemas de promote
 - June 20, 2025. **STRIPE RESTAURADO LIVIANO** - Reimplementado Stripe sin dependencias npm, solo CDN externo para redeploy rápido, webhook simplificado funcional

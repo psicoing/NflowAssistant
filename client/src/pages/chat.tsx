@@ -6,6 +6,7 @@ import ChatHeader from "@/components/ui/chat-header";
 import ChatInterface from "@/components/ui/chat-interface";
 import UserProfileForm from "@/components/ui/user-profile-form";
 import QuestionLimitIndicator from "@/components/ui/question-limit-indicator";
+import ChatLanguageBanner from "@/components/ui/chat-language-banner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MessageCircle, Plus, Search, Calendar, Clock } from "lucide-react";
