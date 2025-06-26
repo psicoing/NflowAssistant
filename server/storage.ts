@@ -31,6 +31,7 @@ export interface IStorage {
   checkQuestionLimit(userId: number): Promise<{ canAsk: boolean; remaining: number; limit: number }>;
   incrementQuestionCount(userId: number): Promise<User>;
   resetMonthlyQuestions(userId: number): Promise<User>;
+  addQuestionsToUser(userId: number, additionalQuestions: number): Promise<User>;
   
   createConversation(conversation: InsertConversation): Promise<Conversation>;
   getConversations(userId?: number): Promise<Conversation[]>;
@@ -352,6 +353,24 @@ export class DatabaseStorage implements IStorage {
       .set({
         questionsUsedThisMonth: 0,
         lastQuestionResetDate: new Date(),
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return updatedUser;
+  }
+
+  async addQuestionsToUser(userId: number, additionalQuestions: number): Promise<User> {
+    const user = await this.getUser(userId);
+    if (!user) {
+      throw new Error("Usuario no encontrado");
+    }
+
+    const newLimit = (user.monthlyQuestionLimit || 10) + additionalQuestions;
+    
+    const [updatedUser] = await db
+      .update(users)
+      .set({
+        monthlyQuestionLimit: newLimit,
       })
       .where(eq(users.id, userId))
       .returning();
