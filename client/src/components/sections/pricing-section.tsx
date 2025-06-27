@@ -68,9 +68,6 @@ export default function PricingSection() {
       buttonClass: "bg-nflow-orange hover:bg-nflow-orange-light"
     }
   ];
-  const { t } = useLanguage();
-  const [isNewUser, setIsNewUser] = useState(false);
-  const [newUserId, setNewUserId] = useState<string | null>(null);
 
   // Check if user is coming from registration
   useEffect(() => {
@@ -189,15 +186,12 @@ export default function PricingSection() {
     <section id="precios" className="py-20 px-4 bg-nflow-navy">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">NFLOW Premium</h2>
-          <h3 className="text-2xl font-semibold text-gray-300 mb-6">Suscripción Premium</h3>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">{t('pricing.title')}</h2>
+          <h3 className="text-2xl font-semibold text-gray-300 mb-6">{t('pricing.subtitle')}</h3>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Desbloquea acceso completo a recursos exclusivos y servicios personalizados
+            {t('pricing.description')}
           </p>
-
         </div>
-
-
 
         <div className="grid md:grid-cols-3 gap-8">
           {pricingTiers.map((tier) => {
@@ -214,7 +208,7 @@ export default function PricingSection() {
               >
                 {tier.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-nflow-orange text-white px-4 py-1 rounded-full text-sm font-semibold">
-                    Más Popular
+                    {t('pricing.popular')}
                   </div>
                 )}
                 
@@ -227,7 +221,7 @@ export default function PricingSection() {
                     {tier.description}
                   </p>
                   <div className="text-4xl font-bold text-white">{tier.price}</div>
-                  <div className={`text-sm ${tier.popular ? 'text-blue-200' : 'text-gray-400'}`}>por mes</div>
+                  <div className={`text-sm ${tier.popular ? 'text-blue-200' : 'text-gray-400'}`}>{t('pricing.perMonth')}</div>
                 </div>
 
                 <div className="space-y-4 mb-8">
@@ -246,7 +240,7 @@ export default function PricingSection() {
                     disabled
                     className="w-full py-3 rounded-xl font-semibold bg-green-600 text-white"
                   >
-                    Suscripción Activa
+                    {t('pricing.activeSubscription')}
                   </Button>
                 ) : (
                   <Button 

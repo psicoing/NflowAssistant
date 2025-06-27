@@ -82,21 +82,20 @@ export default function ChatExamplesSection() {
                   
                   <div>
                     <h3 className="text-2xl font-bold text-white mb-3">
-                      Ver Ejemplos Reales
+                      {t('examples.cta.title')}
                     </h3>
                     <p className="text-gray-300 leading-relaxed mb-6">
-                      Explora cómo nuestro asistente de psicología responde a diferentes 
-                      consultas según tu edad y situación personal.
+                      {t('examples.cta.description')}
                     </p>
                   </div>
 
                   <div className="bg-gray-700/30 rounded-lg p-4 text-left">
-                    <div className="text-sm text-gray-400 mb-2">Ejemplos incluyen:</div>
+                    <div className="text-sm text-gray-400 mb-2">{t('examples.cta.includes')}</div>
                     <ul className="text-sm text-gray-300 space-y-1">
-                      <li>• Ansiedad en adolescentes</li>
-                      <li>• Crisis profesional en adultos</li>
-                      <li>• Duelo en la tercera edad</li>
-                      <li>• Problemas familiares</li>
+                      <li>• {t('examples.cta.item1')}</li>
+                      <li>• {t('examples.cta.item2')}</li>
+                      <li>• {t('examples.cta.item3')}</li>
+                      <li>• {t('examples.cta.item4')}</li>
                     </ul>
                   </div>
 
@@ -104,13 +103,13 @@ export default function ChatExamplesSection() {
                     <Button 
                       className="w-full bg-nflow-orange hover:bg-nflow-orange-light text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 group"
                     >
-                      Ver ejemplos del chat
+                      {t('examples.cta.button')}
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </Link>
 
                   <p className="text-xs text-gray-500">
-                    Gratis • Sin necesidad de registro
+                    {t('examples.cta.note')}
                   </p>
                 </div>
               </CardContent>

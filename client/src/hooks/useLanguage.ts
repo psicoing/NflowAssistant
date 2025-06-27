@@ -42,6 +42,7 @@ const translations = {
     'age.emergency': 'En caso de emergencia, contacta inmediatamente con los servicios de emergencia (112 en España).',
     'ageWarning.title': '⚠️ Aviso Importante: Edad Mínima',
     'ageWarning.subtitle': 'Este servicio está diseñado para personas de 12 a 95 años. Si eres menor de 18, recomendamos supervisión adulta.',
+    'ageWarning.years': 'años',
     
     // Services
     'services.title': 'Cuatro Soluciones Especializadas',
@@ -62,6 +63,15 @@ const translations = {
     'examples.features.ages.description': 'Adaptado para adolescentes y adultos',
     'examples.features.professional.title': 'Respuestas Profesionales',
     'examples.features.professional.description': 'Basado en psicología clínica',
+    'examples.cta.title': 'Ver Ejemplos Reales',
+    'examples.cta.description': 'Explora cómo nuestro asistente de psicología responde a diferentes consultas según tu edad y situación personal.',
+    'examples.cta.includes': 'Ejemplos incluyen:',
+    'examples.cta.item1': 'Ansiedad en adolescentes',
+    'examples.cta.item2': 'Crisis profesional en adultos',
+    'examples.cta.item3': 'Duelo en la tercera edad',
+    'examples.cta.item4': 'Problemas familiares',
+    'examples.cta.button': 'Ver ejemplos del chat',
+    'examples.cta.note': 'Gratis • Sin necesidad de registro',
     
     // Pricing Section
     'pricing.title': 'NFLOW Premium',
@@ -106,6 +116,18 @@ const translations = {
     'chat.suggestions.stress': '¿Cómo puedo manejar el estrés?',
     'chat.suggestions.stressShort': 'Manejo del estrés',
     
+    // PWA Install
+    'pwa.title': 'Instalar NFLOW',
+    'pwa.subtitle': 'Descarga la app para acceso rápido',
+    'pwa.install': 'Instalar App',
+    'pwa.dismiss': 'Ahora no',
+    'pwa.feature1': 'Acceso Instantáneo',
+    'pwa.feature1.desc': 'Sin esperas, desde tu pantalla inicio',
+    'pwa.feature2': 'Privacidad Total',
+    'pwa.feature2.desc': 'Tus conversaciones son 100% confidenciales',
+    'pwa.feature3': 'Funciona Sin Internet',
+    'pwa.feature3.desc': 'Accede a recursos guardados offline',
+
     // Emergency
     'emergency.title': 'Números de Emergencia',
     'emergency.description': 'Si necesitas ayuda inmediata, contacta con estos servicios de emergencia',
@@ -142,6 +164,7 @@ const translations = {
     'age.emergency': 'In case of emergency, immediately contact emergency services (112 in Spain).',
     'ageWarning.title': '⚠️ Important Notice: Minimum Age',
     'ageWarning.subtitle': 'This service is designed for people aged 12 to 95. If you are under 18, we recommend adult supervision.',
+    'ageWarning.years': 'years old',
     
     // Services
     'services.title': 'Four Specialized Solutions',
@@ -162,6 +185,15 @@ const translations = {
     'examples.features.ages.description': 'Adapted for teenagers and adults',
     'examples.features.professional.title': 'Professional Responses',
     'examples.features.professional.description': 'Based on clinical psychology',
+    'examples.cta.title': 'See Real Examples',
+    'examples.cta.description': 'Explore how our psychology assistant responds to different queries based on your age and personal situation.',
+    'examples.cta.includes': 'Examples include:',
+    'examples.cta.item1': 'Teen anxiety',
+    'examples.cta.item2': 'Adult career crisis',
+    'examples.cta.item3': 'Senior grief support',
+    'examples.cta.item4': 'Family problems',
+    'examples.cta.button': 'View chat examples',
+    'examples.cta.note': 'Free • No registration required',
     
     // Pricing Section
     'pricing.title': 'NFLOW Premium',

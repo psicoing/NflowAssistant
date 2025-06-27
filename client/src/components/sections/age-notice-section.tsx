@@ -43,7 +43,7 @@ export default function AgeNoticeSection() {
                     12 a 95
                   </div>
                 </div>
-                <div className="text-sm font-medium text-white">años</div>
+                <div className="text-sm font-medium text-white">{t('ageWarning.years')}</div>
               </div>
             </div>
           </CardContent>
