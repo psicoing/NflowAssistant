@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { X, Download, Smartphone, Zap, Shield, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -10,6 +11,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export default function PWAInstallPrompt() {
+  const { t } = useLanguage();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
@@ -120,8 +122,8 @@ export default function PWAInstallPrompt() {
               <div className="mx-auto w-16 h-16 bg-gradient-to-br from-nflow-orange to-nflow-orange-light rounded-2xl flex items-center justify-center mb-4 shadow-lg">
                 <Smartphone className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-1">Instala NFLOW</h3>
-              <p className="text-gray-300 text-sm">Tu psicólogo siempre contigo</p>
+              <h3 className="text-xl font-bold text-white mb-1">{t('pwa.title')}</h3>
+              <p className="text-gray-300 text-sm">{t('pwa.subtitle')}</p>
             </div>
 
             {/* Elegant Feature Cards */}
@@ -131,8 +133,8 @@ export default function PWAInstallPrompt() {
                   <Zap className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <p className="text-white font-medium text-sm">Acceso Instantáneo</p>
-                  <p className="text-gray-400 text-xs">Sin esperas, desde tu pantalla inicio</p>
+                  <p className="text-white font-medium text-sm">{t('pwa.feature1')}</p>
+                  <p className="text-gray-400 text-xs">{t('pwa.feature1.desc')}</p>
                 </div>
               </div>
               
@@ -141,8 +143,8 @@ export default function PWAInstallPrompt() {
                   <Shield className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <p className="text-white font-medium text-sm">Privacidad Total</p>
-                  <p className="text-gray-400 text-xs">Tus conversaciones son 100% confidenciales</p>
+                  <p className="text-white font-medium text-sm">{t('pwa.feature2')}</p>
+                  <p className="text-gray-400 text-xs">{t('pwa.feature2.desc')}</p>
                 </div>
               </div>
             </div>
@@ -154,14 +156,14 @@ export default function PWAInstallPrompt() {
                 className="w-full bg-gradient-to-r from-nflow-orange via-orange-500 to-nflow-orange-light hover:shadow-lg hover:shadow-nflow-orange/30 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105"
               >
                 <Download className="h-5 w-5 mr-2" />
-                Añadir a Pantalla de Inicio
+                {t('pwa.install')}
               </Button>
               
               <button
                 onClick={handleDismiss}
                 className="w-full text-gray-400 hover:text-white text-sm transition-colors py-2"
               >
-                Quizás más tarde
+                {t('pwa.dismiss')}
               </button>
             </div>
 

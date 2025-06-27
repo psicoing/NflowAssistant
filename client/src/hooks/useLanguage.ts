@@ -238,6 +238,18 @@ const translations = {
     'chat.suggestions.stress': 'How can I manage stress?',
     'chat.suggestions.stressShort': 'Stress management',
     
+    // PWA Install
+    'pwa.title': 'Install NFLOW',
+    'pwa.subtitle': 'Download the app for quick access',
+    'pwa.install': 'Install App',
+    'pwa.dismiss': 'Not now',
+    'pwa.feature1': 'Instant Access',
+    'pwa.feature1.desc': 'No waiting, from your home screen',
+    'pwa.feature2': 'Total Privacy',
+    'pwa.feature2.desc': 'Your conversations are 100% confidential',
+    'pwa.feature3': 'Works Offline',
+    'pwa.feature3.desc': 'Access saved resources without internet',
+
     // Emergency
     'emergency.title': 'Emergency Numbers',
     'emergency.description': 'If you need immediate help, contact these emergency services',
@@ -305,3 +317,4 @@ export function useLanguage() {
     languages
   };
 }
+
