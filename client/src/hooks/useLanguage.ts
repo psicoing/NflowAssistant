@@ -176,6 +176,12 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     // Services
     'services.title': 'Four Specialized Solutions',
     'services.subtitle': 'Each designed to address specific mental health needs',
+    'services.modern.title1': 'Four Specialized',
+    'services.modern.title2': 'Solutions',
+    'services.modern.description': 'Each designed to address specific mental health needs',
+    'services.modern.feature1': 'NFLOW Families - Support for the whole family',
+    'services.modern.feature2': 'NFLOW Workplace - Mental health at work',
+    'services.modern.feature3': 'NFLOW Adults - Personalized therapy',
     
     // Pricing
     'pricing.title': 'Choose Your Plan',
@@ -233,6 +239,16 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'chat.suggestions.sleepShort': 'Sleep problems',
     'chat.suggestions.stress': 'How can I manage stress?',
     'chat.suggestions.stressShort': 'Stress management',
+    
+    // Examples Section
+    'examples.assistant.title': 'Your Specialized AI Assistant',
+    'examples.assistant.description': 'Experience natural conversations with our mental health assistant',
+    'examples.features.language.title': 'Multilingual',
+    'examples.features.language.description': 'Responses in 9 different languages',
+    'examples.features.ages.title': 'For All Ages',
+    'examples.features.ages.description': 'Adapted for teenagers and adults',
+    'examples.features.professional.title': 'Professional Responses',
+    'examples.features.professional.description': 'Based on clinical psychology',
     
     // Emergency
     'emergency.title': 'Emergency Numbers',
