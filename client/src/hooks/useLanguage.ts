@@ -1,40 +1,20 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useState, useEffect } from 'react';
 
-export type SupportedLanguage = 'es' | 'en' | 'fr' | 'de' | 'it' | 'pt' | 'ca' | 'eu' | 'gl';
+export type Language = 'es' | 'en' | 'fr' | 'de' | 'it' | 'pt' | 'ca' | 'eu' | 'gl';
 
-interface LanguageContextType {
-  currentLanguage: SupportedLanguage;
-  setLanguage: (lang: SupportedLanguage) => void;
-  t: (key: string) => string;
-}
+export const languages = [
+  { code: 'es' as Language, name: 'Español', flag: '🇪🇸' },
+  { code: 'en' as Language, name: 'English', flag: '🇺🇸' },
+  { code: 'fr' as Language, name: 'Français', flag: '🇫🇷' },
+  { code: 'de' as Language, name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'it' as Language, name: 'Italiano', flag: '🇮🇹' },
+  { code: 'pt' as Language, name: 'Português', flag: '🇵🇹' },
+  { code: 'ca' as Language, name: 'Català', flag: '🏴' },
+  { code: 'eu' as Language, name: 'Euskera', flag: '🏴' },
+  { code: 'gl' as Language, name: 'Galego', flag: '🏴' }
+];
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
-
-// Detect user's preferred language
-function detectUserLanguage(): SupportedLanguage {
-  // Check localStorage first
-  const saved = localStorage.getItem('nflow-language') as SupportedLanguage;
-  if (saved && ['es', 'en', 'fr', 'de', 'it', 'pt', 'ca', 'eu', 'gl'].includes(saved)) {
-    return saved;
-  }
-
-  // Check browser language
-  const browserLang = navigator.language.toLowerCase();
-  if (browserLang.startsWith('es')) return 'es';
-  if (browserLang.startsWith('en')) return 'en';
-  if (browserLang.startsWith('fr')) return 'fr';
-  if (browserLang.startsWith('de')) return 'de';
-  if (browserLang.startsWith('it')) return 'it';
-  if (browserLang.startsWith('pt')) return 'pt';
-  if (browserLang.startsWith('ca')) return 'ca';
-  if (browserLang.startsWith('eu')) return 'eu';
-  if (browserLang.startsWith('gl')) return 'gl';
-  
-  // Default to Spanish
-  return 'es';
-}
-
-const translations: Record<SupportedLanguage, Record<string, string>> = {
+const translations = {
   es: {
     // Navigation
     'nav.home': 'Inicio',
@@ -44,89 +24,34 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'nav.subscribe': 'Suscribirse',
     'nav.login': 'Iniciar Sesión',
     'nav.register': 'Registrarse',
+    'nav.connected': 'Conectado',
+    'nav.disconnected': 'Desconectado',
     
     // Hero Section
     'hero.title': 'Tu psicólogo personal',
     'hero.subtitle': 'disponible 24/7',
     'hero.description': 'Apoyo profesional en salud mental con inteligencia artificial avanzada. Conversaciones confidenciales y respuestas personalizadas para tu bienestar emocional.',
-    'hero.cta.primary': 'Comenzar Chat Gratis',
+    'hero.cta.primary': 'Empezar Chat Gratis',
     'hero.cta.secondary': 'Ver Ejemplos',
-    'hero.cta': 'Comenzar Chat Gratis',
+    'hero.cta': 'Empezar Chat Gratis',
     'hero.trusted': 'Confiado por más de 1,000 usuarios',
     
     // Age Notice
     'age.title': '⚠️ Aviso Importante: Edad Mínima',
-    'age.description': 'Este servicio está diseñado para personas de 12 a 95 años. Si tienes menos de 18 años, recomendamos supervisión de un adulto.',
+    'age.description': 'Este servicio está diseñado para personas de 12 a 95 años. Si eres menor de 18, recomendamos supervisión adulta.',
     'age.emergency': 'En caso de emergencia, contacta inmediatamente con los servicios de emergencia (112 en España).',
     'ageWarning.title': '⚠️ Aviso Importante: Edad Mínima',
-    'ageWarning.subtitle': 'Este servicio está diseñado para personas de 12 a 95 años. Si tienes menos de 18 años, recomendamos supervisión de un adulto.',
+    'ageWarning.subtitle': 'Este servicio está diseñado para personas de 12 a 95 años. Si eres menor de 18, recomendamos supervisión adulta.',
     
     // Services
     'services.title': 'Cuatro Soluciones Especializadas',
-    'services.subtitle': 'Cada una diseñada para atender necesidades específicas de salud mental',
+    'services.subtitle': 'Cada una diseñada para abordar necesidades específicas de salud mental',
     'services.modern.title1': 'Cuatro Soluciones',
     'services.modern.title2': 'Especializadas',
-    'services.modern.description': 'Cada una diseñada para atender necesidades específicas de salud mental',
+    'services.modern.description': 'Cada una diseñada para abordar necesidades específicas de salud mental',
     'services.modern.feature1': 'NFLOW Familias - Apoyo para toda la familia',
     'services.modern.feature2': 'NFLOW Laboral - Salud mental en el trabajo',
     'services.modern.feature3': 'NFLOW Adultos - Terapia personalizada',
-    
-    // Pricing
-    'pricing.title': 'Elige Tu Plan',
-    'pricing.subtitle': 'Acceso completo a todas las funciones premium',
-    'pricing.basic.title': 'Plan Básico',
-    'pricing.basic.price': '€2.99',
-    'pricing.basic.period': '/mes',
-    'pricing.basic.description': 'Perfecto para uso personal',
-    'pricing.basic.feature1': '10 preguntas por mes',
-    'pricing.basic.feature2': 'Respuestas especializadas',
-    'pricing.basic.feature3': 'Historial de conversaciones',
-    'pricing.basic.feature4': 'Soporte multiidioma',
-    'pricing.basic.cta': 'Empezar Ahora',
-    
-    // Footer
-    'footer.company': 'EMPORDAJOBS SL',
-    'footer.cif': 'CIF: B02701100',
-    'footer.address': 'C/ Ejemplo 123, 17001 Girona',
-    'footer.phone': 'Tel: +34 660 45 21 36',
-    'footer.email': 'info@empordajobs.com',
-    'footer.copyright': '© 2025 NFLOW - EMPORDAJOBS SL. Todos los derechos reservados.',
-    'footer.developed': 'Desarrollado con',
-    'footer.tagline': 'para tu bienestar mental',
-    
-    // Chat
-    'chat.placeholder': 'Escribe tu consulta sobre salud mental...',
-    'chat.send': 'Enviar',
-    'chat.limit.reached': 'Has alcanzado tu límite mensual de preguntas',
-    'chat.limit.remaining': 'preguntas restantes',
-    'chat.limit.of': 'de',
-    'chat.emergency': 'Emergencias',
-    'chat.billing': 'Facturación',
-    'chat.logout': 'Cerrar Sesión',
-    'chat.support.title': 'Chat de Apoyo',
-    'chat.conversations.title': 'Conversaciones',
-    'chat.conversations.new': 'Nueva',
-    'chat.conversations.empty': 'No tienes conversaciones aún',
-    'chat.conversations.search': 'Buscar conversaciones...',
-    'chat.conversations.noResults': 'No se encontraron conversaciones con estos filtros',
-    'chat.conversations.creating': 'Creando...',
-    'chat.conversations.createFirst': 'Crear primera conversación',
-    'chat.filters.all': 'Todo',
-    'chat.filters.today': 'Hoy',
-    'chat.filters.week': 'Semana',
-    'chat.filters.month': 'Mes',
-    'chat.language.banner.title': 'Idioma de las Respuestas',
-    'chat.language.banner.description': 'El asistente responderá en el idioma seleccionado. Cambia el idioma en cualquier momento para recibir respuestas personalizadas.',
-    'chat.welcome.title': 'Bienvenido al Chat de NFLOW',
-    'chat.welcome.description': 'Selecciona una conversación existente o crea una nueva para empezar a chatear con nuestro asistente de IA.',
-    'chat.welcome.cta': 'Crear Nueva Conversación',
-    'chat.select.conversation': 'Selecciona una conversación',
-    'chat.assistant.greeting': '¡Hola! Soy tu asistente de salud mental especializado. Puedes preguntarme sobre:',
-    'chat.suggestions.anxiety': 'Me siento ansioso',
-    'chat.suggestions.sleep': 'Necesito consejos para dormir mejor',
-    'chat.suggestions.sleepShort': 'Problemas para dormir',
-    'chat.suggestions.stress': '¿Cómo puedo manejar el estrés?',
-    'chat.suggestions.stressShort': 'Manejo del estrés',
     
     // Examples Section
     'examples.assistant.title': 'Tu Asistente de IA Especializado',
@@ -137,6 +62,49 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'examples.features.ages.description': 'Adaptado para adolescentes y adultos',
     'examples.features.professional.title': 'Respuestas Profesionales',
     'examples.features.professional.description': 'Basado en psicología clínica',
+    
+    // Pricing Section
+    'pricing.title': 'NFLOW Premium',
+    'pricing.subtitle': 'Suscripción Premium',
+    'pricing.description': 'Desbloquea acceso completo a recursos exclusivos y servicios personalizados',
+    'pricing.popular': 'Más Popular',
+    'pricing.perMonth': 'por mes',
+    'pricing.activeSubscription': 'Suscripción Activa',
+    'pricing.selectPlan': 'Seleccionar Plan',
+    
+    // Pricing Plans
+    'pricing.basic.name': 'Plan Básico',
+    'pricing.basic.description': 'Acceso a recursos premium',
+    'pricing.basic.feature1': 'Acceso completo a todos los recursos premium',
+    'pricing.basic.feature2': 'Consejos personalizados',
+    'pricing.basic.feature3': 'Contenido actualizado semanalmente',
+    'pricing.basic.feature4': 'Sin publicidad',
+    
+    'pricing.group.name': 'Plan Grupal',
+    'pricing.group.description': 'Chat grupal quincenal',
+    'pricing.group.feature1': 'Todo lo incluido en el Plan Básico',
+    'pricing.group.feature2': 'Recursos adicionales de terapia grupal',
+    'pricing.group.feature3': 'Ejercicios prácticos guiados',
+    'pricing.group.feature4': 'Prioridad en soporte',
+    
+    'pricing.individual.name': 'Plan Individual',
+    'pricing.individual.description': 'Chat semanal personalizado',
+    'pricing.individual.feature1': 'Todo lo incluido en el Plan Grupal',
+    'pricing.individual.feature2': 'Plan de seguimiento personalizado',
+    'pricing.individual.feature3': 'Acceso anticipado a nuevas funcionalidades',
+    
+    // Chat
+    'chat.welcome.title': 'Bienvenido a NFLOW Chat',
+    'chat.welcome.description': 'Selecciona una conversación existente o crea una nueva para comenzar a chatear con nuestro asistente de IA.',
+    'chat.welcome.cta': 'Crear Nueva Conversación',
+    'chat.select.conversation': 'Seleccionar conversación',
+    'chat.conversations.new': 'Nuevo',
+    'chat.conversations.search': 'Buscar conversaciones...',
+    'chat.suggestions.anxiety': 'Me siento ansioso',
+    'chat.suggestions.sleep': 'Necesito consejos para dormir mejor',
+    'chat.suggestions.sleepShort': 'Problemas para dormir',
+    'chat.suggestions.stress': '¿Cómo puedo manejar el estrés?',
+    'chat.suggestions.stressShort': 'Manejo del estrés',
     
     // Emergency
     'emergency.title': 'Números de Emergencia',
@@ -156,6 +124,8 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'nav.subscribe': 'Subscribe',
     'nav.login': 'Login',
     'nav.register': 'Register',
+    'nav.connected': 'Connected',
+    'nav.disconnected': 'Disconnected',
     
     // Hero Section
     'hero.title': 'Your personal psychologist',
@@ -183,63 +153,6 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'services.modern.feature2': 'NFLOW Workplace - Mental health at work',
     'services.modern.feature3': 'NFLOW Adults - Personalized therapy',
     
-    // Pricing
-    'pricing.title': 'Choose Your Plan',
-    'pricing.subtitle': 'Complete access to all premium features',
-    'pricing.basic.title': 'Basic Plan',
-    'pricing.basic.price': '€2.99',
-    'pricing.basic.period': '/month',
-    'pricing.basic.description': 'Perfect for personal use',
-    'pricing.basic.feature1': '10 questions per month',
-    'pricing.basic.feature2': 'Specialized responses',
-    'pricing.basic.feature3': 'Conversation history',
-    'pricing.basic.feature4': 'Multilingual support',
-    'pricing.basic.cta': 'Start Now',
-    
-    // Footer
-    'footer.company': 'EMPORDAJOBS SL',
-    'footer.cif': 'CIF: B02701100',
-    'footer.address': 'C/ Example 123, 17001 Girona',
-    'footer.phone': 'Tel: +34 660 45 21 36',
-    'footer.email': 'info@empordajobs.com',
-    'footer.copyright': '© 2025 NFLOW - EMPORDAJOBS SL. All rights reserved.',
-    'footer.developed': 'Developed with',
-    'footer.tagline': 'for your mental wellbeing',
-    
-    // Chat
-    'chat.placeholder': 'Write your mental health question...',
-    'chat.send': 'Send',
-    'chat.limit.reached': 'You have reached your monthly question limit',
-    'chat.limit.remaining': 'questions remaining',
-    'chat.limit.of': 'of',
-    'chat.emergency': 'Emergency',
-    'chat.billing': 'Billing',
-    'chat.logout': 'Logout',
-    'chat.support.title': 'Support Chat',
-    'chat.conversations.title': 'Conversations',
-    'chat.conversations.new': 'New',
-    'chat.conversations.empty': 'You have no conversations yet',
-    'chat.conversations.search': 'Search conversations...',
-    'chat.conversations.noResults': 'No conversations found with these filters',
-    'chat.conversations.creating': 'Creating...',
-    'chat.conversations.createFirst': 'Create first conversation',
-    'chat.filters.all': 'All',
-    'chat.filters.today': 'Today',
-    'chat.filters.week': 'Week',
-    'chat.filters.month': 'Month',
-    'chat.language.banner.title': 'Response Language',
-    'chat.language.banner.description': 'The assistant will respond in the selected language. Change the language at any time to receive personalized responses.',
-    'chat.welcome.title': 'Welcome to NFLOW Chat',
-    'chat.welcome.description': 'Select an existing conversation or create a new one to start chatting with our AI assistant.',
-    'chat.welcome.cta': 'Create New Conversation',
-    'chat.select.conversation': 'Select a conversation',
-    'chat.assistant.greeting': 'Hello! I am your specialized mental health assistant. You can ask me about:',
-    'chat.suggestions.anxiety': 'I feel anxious',
-    'chat.suggestions.sleep': 'I need advice to sleep better',
-    'chat.suggestions.sleepShort': 'Sleep problems',
-    'chat.suggestions.stress': 'How can I manage stress?',
-    'chat.suggestions.stressShort': 'Stress management',
-    
     // Examples Section
     'examples.assistant.title': 'Your Specialized AI Assistant',
     'examples.assistant.description': 'Experience natural conversations with our mental health assistant',
@@ -250,6 +163,49 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'examples.features.professional.title': 'Professional Responses',
     'examples.features.professional.description': 'Based on clinical psychology',
     
+    // Pricing Section
+    'pricing.title': 'NFLOW Premium',
+    'pricing.subtitle': 'Premium Subscription',
+    'pricing.description': 'Unlock complete access to exclusive resources and personalized services',
+    'pricing.popular': 'Most Popular',
+    'pricing.perMonth': 'per month',
+    'pricing.activeSubscription': 'Active Subscription',
+    'pricing.selectPlan': 'Select Plan',
+    
+    // Pricing Plans
+    'pricing.basic.name': 'Basic Plan',
+    'pricing.basic.description': 'Access to premium resources',
+    'pricing.basic.feature1': 'Complete access to all premium resources',
+    'pricing.basic.feature2': 'Personalized advice',
+    'pricing.basic.feature3': 'Weekly updated content',
+    'pricing.basic.feature4': 'Ad-free experience',
+    
+    'pricing.group.name': 'Group Plan',
+    'pricing.group.description': 'Bi-weekly group chat',
+    'pricing.group.feature1': 'Everything included in Basic Plan',
+    'pricing.group.feature2': 'Additional group therapy resources',
+    'pricing.group.feature3': 'Guided practical exercises',
+    'pricing.group.feature4': 'Priority support',
+    
+    'pricing.individual.name': 'Individual Plan',
+    'pricing.individual.description': 'Weekly personalized chat',
+    'pricing.individual.feature1': 'Everything included in Group Plan',
+    'pricing.individual.feature2': 'Personalized follow-up plan',
+    'pricing.individual.feature3': 'Early access to new features',
+    
+    // Chat
+    'chat.welcome.title': 'Welcome to NFLOW Chat',
+    'chat.welcome.description': 'Select an existing conversation or create a new one to start chatting with our AI assistant.',
+    'chat.welcome.cta': 'Create New Conversation',
+    'chat.select.conversation': 'Select conversation',
+    'chat.conversations.new': 'New',
+    'chat.conversations.search': 'Search conversations...',
+    'chat.suggestions.anxiety': 'I feel anxious',
+    'chat.suggestions.sleep': 'I need advice to sleep better',
+    'chat.suggestions.sleepShort': 'Sleep problems',
+    'chat.suggestions.stress': 'How can I manage stress?',
+    'chat.suggestions.stressShort': 'Stress management',
+    
     // Emergency
     'emergency.title': 'Emergency Numbers',
     'emergency.description': 'If you need immediate help, contact these emergency services',
@@ -259,245 +215,61 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'emergency.close': 'Close',
   },
   
-  // Placeholder for other languages - they would follow the same structure
+  // Placeholder for other languages
   fr: {
     'nav.home': 'Accueil',
     'chat.welcome.title': 'Bienvenue dans NFLOW Chat',
-    'chat.welcome.description': 'Sélectionnez une conversation existante ou créez-en une nouvelle pour commencer à discuter avec notre assistant IA.',
-    'chat.welcome.cta': 'Créer une Nouvelle Conversation',
-    'chat.select.conversation': 'Sélectionner une conversation',
-    'chat.conversations.new': 'Nouveau',
-    'chat.conversations.search': 'Rechercher des conversations...',
-    'chat.conversations.empty': 'Vous n\'avez pas encore de conversations',
-    'chat.filters.all': 'Tout',
-    'chat.filters.today': 'Aujourd\'hui',
-    'chat.filters.week': 'Semaine',
-    'chat.filters.month': 'Mois',
-    'chat.conversations.noResults': 'Aucune conversation trouvée avec ces filtres',
-    'chat.conversations.creating': 'Création...',
-    'chat.conversations.createFirst': 'Créer la première conversation',
-    'chat.assistant.greeting': 'Bonjour! Je suis votre assistant spécialisé en santé mentale. Vous pouvez me demander:',
-    'chat.suggestions.anxiety': 'Je me sens anxieux',
-    'chat.suggestions.sleep': 'J\'ai besoin de conseils pour mieux dormir',
-    'chat.suggestions.sleepShort': 'Problèmes de sommeil',
-    'chat.suggestions.stress': 'Comment puis-je gérer le stress?',
-    'chat.suggestions.stressShort': 'Gestion du stress',
-    'chat.placeholder': 'Écrivez votre question sur la santé mentale...',
-    'chat.send': 'Envoyer',
-    'chat.limit.reached': 'Vous avez atteint votre limite mensuelle de questions',
-    'chat.limit.remaining': 'questions restantes',
-    'chat.limit.of': 'de',
   },
-  
   de: {
     'nav.home': 'Startseite',
-    'chat.welcome.title': 'Willkommen im NFLOW Chat',
-    'chat.welcome.description': 'Wählen Sie ein bestehendes Gespräch aus oder erstellen Sie ein neues, um mit unserem KI-Assistenten zu chatten.',
-    'chat.welcome.cta': 'Neues Gespräch erstellen',
-    'chat.select.conversation': 'Gespräch auswählen',
-    'chat.conversations.new': 'Neu',
-    'chat.conversations.search': 'Gespräche suchen...',
-    'chat.conversations.empty': 'Sie haben noch keine Gespräche',
-    'chat.filters.all': 'Alle',
-    'chat.filters.today': 'Heute',
-    'chat.filters.week': 'Woche',
-    'chat.filters.month': 'Monat',
-    'chat.conversations.noResults': 'Keine Gespräche mit diesen Filtern gefunden',
-    'chat.conversations.creating': 'Erstellen...',
-    'chat.conversations.createFirst': 'Erstes Gespräch erstellen',
-    'chat.assistant.greeting': 'Hallo! Ich bin Ihr spezialisierter Assistent für psychische Gesundheit. Sie können mich fragen zu:',
-    'chat.suggestions.anxiety': 'Ich fühle mich ängstlich',
-    'chat.suggestions.sleep': 'Ich brauche Rat zum besseren Schlafen',
-    'chat.suggestions.sleepShort': 'Schlafprobleme',
-    'chat.suggestions.stress': 'Wie kann ich Stress bewältigen?',
-    'chat.suggestions.stressShort': 'Stressbewältigung',
-    'chat.placeholder': 'Schreiben Sie Ihre Frage zur psychischen Gesundheit...',
-    'chat.send': 'Senden',
-    'chat.limit.reached': 'Sie haben Ihr monatliches Fragenlimit erreicht',
-    'chat.limit.remaining': 'Fragen verbleibend',
-    'chat.limit.of': 'von',
+    'chat.welcome.title': 'Willkommen bei NFLOW Chat',
   },
-  
   it: {
-    'nav.home': 'Home',
-    'chat.welcome.title': 'Benvenuto nella Chat NFLOW',
-    'chat.welcome.description': 'Seleziona una conversazione esistente o creane una nuova per iniziare a chattare con il nostro assistente AI.',
-    'chat.welcome.cta': 'Crea Nuova Conversazione',
-    'chat.select.conversation': 'Seleziona una conversazione',
-    'chat.conversations.new': 'Nuovo',
-    'chat.conversations.search': 'Cerca conversazioni...',
-    'chat.conversations.empty': 'Non hai ancora conversazioni',
-    'chat.filters.all': 'Tutto',
-    'chat.filters.today': 'Oggi',
-    'chat.filters.week': 'Settimana',
-    'chat.filters.month': 'Mese',
-    'chat.conversations.noResults': 'Nessuna conversazione trovata con questi filtri',
-    'chat.conversations.creating': 'Creazione...',
-    'chat.conversations.createFirst': 'Crea prima conversazione',
-    'chat.assistant.greeting': 'Ciao! Sono il tuo assistente specializzato in salute mentale. Puoi chiedermi di:',
-    'chat.suggestions.anxiety': 'Mi sento ansioso',
-    'chat.suggestions.sleep': 'Ho bisogno di consigli per dormire meglio',
-    'chat.suggestions.sleepShort': 'Problemi di sonno',
-    'chat.suggestions.stress': 'Come posso gestire lo stress?',
-    'chat.suggestions.stressShort': 'Gestione dello stress',
-    'chat.placeholder': 'Scrivi la tua domanda sulla salute mentale...',
-    'chat.send': 'Invia',
-    'chat.limit.reached': 'Hai raggiunto il tuo limite mensile di domande',
-    'chat.limit.remaining': 'domande rimanenti',
-    'chat.limit.of': 'di',
+    'nav.home': 'Casa',
+    'chat.welcome.title': 'Benvenuto in NFLOW Chat',
   },
-  
   pt: {
     'nav.home': 'Início',
-    'chat.welcome.title': 'Bem-vindo ao Chat NFLOW',
-    'chat.welcome.description': 'Selecione uma conversa existente ou crie uma nova para começar a conversar com nosso assistente de IA.',
-    'chat.welcome.cta': 'Criar Nova Conversa',
-    'chat.select.conversation': 'Selecionar uma conversa',
-    'chat.conversations.new': 'Nova',
-    'chat.conversations.search': 'Buscar conversas...',
-    'chat.conversations.empty': 'Você ainda não tem conversas',
-    'chat.filters.all': 'Todas',
-    'chat.filters.today': 'Hoje',
-    'chat.filters.week': 'Semana',
-    'chat.filters.month': 'Mês',
-    'chat.conversations.noResults': 'Nenhuma conversa encontrada com estes filtros',
-    'chat.conversations.creating': 'Criando...',
-    'chat.conversations.createFirst': 'Criar primeira conversa',
-    'chat.assistant.greeting': 'Olá! Sou seu assistente especializado em saúde mental. Você pode me perguntar sobre:',
-    'chat.suggestions.anxiety': 'Estou me sentindo ansioso',
-    'chat.suggestions.sleep': 'Preciso de conselhos para dormir melhor',
-    'chat.suggestions.sleepShort': 'Problemas de sono',
-    'chat.suggestions.stress': 'Como posso lidar com o estresse?',
-    'chat.suggestions.stressShort': 'Gestão do estresse',
-    'chat.placeholder': 'Escreva sua pergunta sobre saúde mental...',
-    'chat.send': 'Enviar',
-    'chat.limit.reached': 'Você atingiu seu limite mensal de perguntas',
-    'chat.limit.remaining': 'perguntas restantes',
-    'chat.limit.of': 'de',
+    'chat.welcome.title': 'Bem-vindo ao NFLOW Chat',
   },
-  
   ca: {
     'nav.home': 'Inici',
-    'chat.welcome.title': 'Benvingut al Xat NFLOW',
-    'chat.welcome.description': 'Selecciona una conversa existent o crea\'n una de nova per començar a xerrar amb el nostre assistent d\'IA.',
-    'chat.welcome.cta': 'Crear Nova Conversa',
-    'chat.select.conversation': 'Seleccionar una conversa',
-    'chat.conversations.new': 'Nova',
-    'chat.conversations.search': 'Buscar converses...',
-    'chat.conversations.empty': 'Encara no tens converses',
-    'chat.filters.all': 'Tot',
-    'chat.filters.today': 'Avui',
-    'chat.filters.week': 'Setmana',
-    'chat.filters.month': 'Mes',
-    'chat.conversations.noResults': 'No s\'han trobat converses amb aquests filtres',
-    'chat.conversations.creating': 'Creant...',
-    'chat.conversations.createFirst': 'Crear primera conversa',
-    'chat.assistant.greeting': 'Hola! Sóc el teu assistent especialitzat en salut mental. Pots preguntar-me sobre:',
-    'chat.suggestions.anxiety': 'Em sento ansiós',
-    'chat.suggestions.sleep': 'Necessito consells per dormir millor',
-    'chat.suggestions.sleepShort': 'Problemes de son',
-    'chat.suggestions.stress': 'Com puc gestionar l\'estrès?',
-    'chat.suggestions.stressShort': 'Gestió de l\'estrès',
-    'chat.placeholder': 'Escriu la teva pregunta sobre salut mental...',
-    'chat.send': 'Enviar',
-    'chat.limit.reached': 'Has arribat al teu límit mensual de preguntes',
-    'chat.limit.remaining': 'preguntes restants',
-    'chat.limit.of': 'de',
+    'chat.welcome.title': 'Benvingut a NFLOW Chat',
   },
-  
   eu: {
     'nav.home': 'Hasiera',
-    'chat.welcome.title': 'Ongi etorri NFLOW Txatera',
-    'chat.welcome.description': 'Hautatu existitzen den elkarrizketa bat edo sortu berri bat gure AI laguntzailearekin hitz egiten hasteko.',
-    'chat.welcome.cta': 'Elkarrizketa Berria Sortu',
-    'chat.select.conversation': 'Elkarrizketa bat hautatu',
-    'chat.conversations.new': 'Berria',
-    'chat.conversations.search': 'Bilatu elkarrizketak...',
-    'chat.conversations.empty': 'Oraindik ez duzu elkarrizketarik',
-    'chat.filters.all': 'Guztiak',
-    'chat.filters.today': 'Gaur',
-    'chat.filters.week': 'Astea',
-    'chat.filters.month': 'Hilabetea',
-    'chat.conversations.noResults': 'Ez da elkarrizketarik aurkitu iragazki hauekin',
-    'chat.conversations.creating': 'Sortzen...',
-    'chat.conversations.createFirst': 'Lehen elkarrizketa sortu',
-    'chat.assistant.greeting': 'Kaixo! Osasun mentaleko laguntzaile espezializatua naiz. Galde diezadakezu:',
-    'chat.suggestions.anxiety': 'Antsietatea sentitzen dut',
-    'chat.suggestions.sleep': 'Hobeto lotzeko aholkuak behar ditut',
-    'chat.suggestions.sleepShort': 'Lo hartzeko arazoak',
-    'chat.suggestions.stress': 'Nola kudeatu estresa?',
-    'chat.suggestions.stressShort': 'Estres kudeaketa',
-    'chat.placeholder': 'Idatzi zure osasun mentalari buruzko galdera...',
-    'chat.send': 'Bidali',
-    'chat.limit.reached': 'Zure hilabeteko galdera muga bete duzu',
-    'chat.limit.remaining': 'galdera geratzen dira',
-    'chat.limit.of': '-tik',
+    'chat.welcome.title': 'Ongi etorri NFLOW Chat-era',
   },
-  
   gl: {
     'nav.home': 'Inicio',
-    'chat.welcome.title': 'Benvido ao Chat NFLOW',
-    'chat.welcome.description': 'Selecciona unha conversa existente ou crea unha nova para comezar a falar co noso asistente de IA.',
-    'chat.welcome.cta': 'Crear Nova Conversa',
-    'chat.select.conversation': 'Seleccionar unha conversa',
-    'chat.conversations.new': 'Nova',
-    'chat.conversations.search': 'Buscar conversas...',
-    'chat.conversations.empty': 'Aínda non tes conversas',
-    'chat.filters.all': 'Todo',
-    'chat.filters.today': 'Hoxe',
-    'chat.filters.week': 'Semana',
-    'chat.filters.month': 'Mes',
-    'chat.conversations.noResults': 'Non se atoparon conversas con estes filtros',
-    'chat.conversations.creating': 'Creando...',
-    'chat.conversations.createFirst': 'Crear primeira conversa',
-    'chat.assistant.greeting': 'Ola! Son o teu asistente especializado en saúde mental. Podes preguntarme sobre:',
-    'chat.suggestions.anxiety': 'Síntome ansioso',
-    'chat.suggestions.sleep': 'Necesito consellos para durmir mellor',
-    'chat.suggestions.sleepShort': 'Problemas de sono',
-    'chat.suggestions.stress': 'Como podo xestionar o estrés?',
-    'chat.suggestions.stressShort': 'Xestión do estrés',
-    'chat.placeholder': 'Escribe a túa pregunta sobre saúde mental...',
-    'chat.send': 'Enviar',
-    'chat.limit.reached': 'Alcanzaches o teu límite mensual de preguntas',
-    'chat.limit.remaining': 'preguntas restantes',
-    'chat.limit.of': 'de',
+    'chat.welcome.title': 'Benvido a NFLOW Chat',
   }
 };
 
-interface LanguageProviderProps {
-  children: ReactNode;
-}
+export function useLanguage() {
+  const [currentLanguage, setCurrentLanguage] = useState<Language>('es');
 
-export function LanguageProvider({ children }: LanguageProviderProps) {
-  const [currentLanguage, setCurrentLanguage] = useState<SupportedLanguage>(() => detectUserLanguage());
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('nflow-language') as Language;
+    if (savedLanguage && languages.find(lang => lang.code === savedLanguage)) {
+      setCurrentLanguage(savedLanguage);
+    }
+  }, []);
 
-  const setLanguage = (lang: SupportedLanguage) => {
-    setCurrentLanguage(lang);
-    localStorage.setItem('nflow-language', lang);
+  const changeLanguage = (language: Language) => {
+    setCurrentLanguage(language);
+    localStorage.setItem('nflow-language', language);
   };
 
   const t = (key: string): string => {
-    const translation = translations[currentLanguage]?.[key] || translations['es']?.[key];
-    return translation || key;
+    const translation = translations[currentLanguage]?.[key as keyof typeof translations[typeof currentLanguage]];
+    return translation || translations.es[key as keyof typeof translations.es] || key;
   };
 
-  useEffect(() => {
-    document.documentElement.lang = currentLanguage;
-  }, [currentLanguage]);
-
-  const contextValue = { currentLanguage, setLanguage, t };
-
-  return React.createElement(
-    LanguageContext.Provider,
-    { value: contextValue },
-    children
-  );
-}
-
-export function useLanguage(): LanguageContextType {
-  const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
+  return {
+    currentLanguage,
+    changeLanguage,
+    t,
+    languages
+  };
 }

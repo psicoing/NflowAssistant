@@ -14,57 +14,60 @@ declare global {
   }
 }
 
-const pricingTiers = [
-  {
-    id: "basic",
-    name: "Plan Básico",
-    price: "€2.99",
-    description: "Acceso a recursos premium",
-    icon: Calendar,
-    features: [
-      "Acceso completo a todos los recursos premium",
-      "Consejos personalizados",
-      "Contenido actualizado semanalmente",
-      "Sin publicidad"
-    ],
-    buttonText: "Seleccionar Plan",
-    buttonClass: "bg-nflow-blue hover:bg-nflow-blue-dark"
-  },
-  {
-    id: "group",
-    name: "Plan Grupal",
-    price: "€5.99",
-    description: "Chat grupal quincenal",
-    icon: Users,
-    features: [
-      "Todo lo incluido en el Plan Básico",
-      "Recursos adicionales de terapia grupal",
-      "Ejercicios prácticos guiados",
-      "Prioridad en soporte"
-    ],
-    buttonText: "Seleccionar Plan",
-    buttonClass: "bg-nflow-orange hover:bg-nflow-orange-light",
-    popular: true
-  },
-  {
-    id: "individual",
-    name: "Plan Individual",
-    price: "€7.99",
-    description: "Chat semanal personalizado",
-    icon: User,
-    features: [
-      "Todo lo incluido en el Plan Grupal",
-      "Plan de seguimiento personalizado",
-      "Acceso anticipado a nuevas funcionalidades"
-    ],
-    buttonText: "Seleccionar Plan",
-    buttonClass: "bg-nflow-orange hover:bg-nflow-orange-light"
-  }
-];
-
 export default function PricingSection() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { t } = useLanguage();
+  const [isNewUser, setIsNewUser] = useState(false);
+  const [newUserId, setNewUserId] = useState<string | null>(null);
+
+  const pricingTiers = [
+    {
+      id: "basic",
+      name: t('pricing.basic.name'),
+      price: "€2.99",
+      description: t('pricing.basic.description'),
+      icon: Calendar,
+      features: [
+        t('pricing.basic.feature1'),
+        t('pricing.basic.feature2'),
+        t('pricing.basic.feature3'),
+        t('pricing.basic.feature4')
+      ],
+      buttonText: t('pricing.selectPlan'),
+      buttonClass: "bg-nflow-blue hover:bg-nflow-blue-dark"
+    },
+    {
+      id: "group",
+      name: t('pricing.group.name'),
+      price: "€5.99",
+      description: t('pricing.group.description'),
+      icon: Users,
+      features: [
+        t('pricing.group.feature1'),
+        t('pricing.group.feature2'),
+        t('pricing.group.feature3'),
+        t('pricing.group.feature4')
+      ],
+      buttonText: t('pricing.selectPlan'),
+      buttonClass: "bg-nflow-orange hover:bg-nflow-orange-light",
+      popular: true
+    },
+    {
+      id: "individual",
+      name: t('pricing.individual.name'),
+      price: "€7.99",
+      description: t('pricing.individual.description'),
+      icon: User,
+      features: [
+        t('pricing.individual.feature1'),
+        t('pricing.individual.feature2'),
+        t('pricing.individual.feature3')
+      ],
+      buttonText: t('pricing.selectPlan'),
+      buttonClass: "bg-nflow-orange hover:bg-nflow-orange-light"
+    }
+  ];
   const { t } = useLanguage();
   const [isNewUser, setIsNewUser] = useState(false);
   const [newUserId, setNewUserId] = useState<string | null>(null);
