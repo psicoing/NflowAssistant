@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useLanguageContext } from "@/components/LanguageProvider";
 
 export default function AgeNoticeSection() {
-  const { t } = useLanguage();
+  const { t } = useLanguageContext();
   return (
     <section className="py-12 px-4 bg-gray-900 relative overflow-hidden">
       {/* Background Effects */}

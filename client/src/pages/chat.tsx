@@ -12,7 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { MessageCircle, Plus, Search, Calendar, Clock } from "lucide-react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
-import { useLanguage } from "@/hooks/useLanguage";
+import { useLanguageContext } from "@/components/LanguageProvider";
 import type { Conversation, Message } from "@shared/schema";
 
 export default function Chat() {
@@ -20,7 +20,7 @@ export default function Chat() {
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const { currentLanguage, t } = useLanguage();
+  const { currentLanguage, t } = useLanguageContext();
   const [currentConversationId, setCurrentConversationId] = useState<number | null>(
     id ? parseInt(id) : null
   );

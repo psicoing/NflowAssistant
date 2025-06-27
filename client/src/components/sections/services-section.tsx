@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Smartphone, Info, Smile, Heart, MessageCircle } from "lucide-react";
 import { useLocation } from "wouter";
-import { useLanguage } from "@/hooks/useLanguage";
+import { useLanguageContext } from "@/components/LanguageProvider";
 
 export default function ServicesSection() {
   const [, setLocation] = useLocation();
-  const { t } = useLanguage();
+  const { t } = useLanguageContext();
 
   const handleTryApp = () => {
     setLocation("/chat");
