@@ -14,7 +14,7 @@ export const languages = [
   { code: 'gl' as Language, name: 'Galego', flag: '🏴' }
 ];
 
-const translations = {
+export const translations = {
   es: {
     // Navigation
     'nav.home': 'Inicio',
@@ -295,14 +295,18 @@ export function useLanguage() {
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem('nflow-language') as Language;
+    console.log('🔍 Loading saved language:', savedLanguage);
     if (savedLanguage && languages.find(lang => lang.code === savedLanguage)) {
       setCurrentLanguage(savedLanguage);
+      console.log('✅ Language set to:', savedLanguage);
     }
   }, []);
 
   const changeLanguage = (language: Language) => {
     setCurrentLanguage(language);
     localStorage.setItem('nflow-language', language);
+    // Force re-render by triggering a state change event
+    window.dispatchEvent(new CustomEvent('languageChanged', { detail: language }));
   };
 
   const t = (key: string): string => {

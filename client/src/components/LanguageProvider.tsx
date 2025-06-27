@@ -1,24 +1,58 @@
-import { createContext, useContext, ReactNode } from 'react';
-import { useLanguage } from '@/hooks/useLanguage';
+import { createContext, useContext, ReactNode, useState, useEffect } from 'react';
+import { Language, languages, translations } from '@/hooks/useLanguage';
 
-const LanguageContext = createContext<ReturnType<typeof useLanguage> | null>(null);
+interface LanguageContextType {
+  currentLanguage: Language;
+  changeLanguage: (language: Language) => void;
+  t: (key: string) => string;
+  languages: typeof languages;
+}
+
+const LanguageContext = createContext<LanguageContextType | null>(null);
 
 interface LanguageProviderProps {
   children: ReactNode;
 }
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
-  const languageValue = useLanguage();
+  const [currentLanguage, setCurrentLanguage] = useState<Language>('es');
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('nflow-language') as Language;
+    if (savedLanguage && languages.find(lang => lang.code === savedLanguage)) {
+      setCurrentLanguage(savedLanguage);
+    }
+  }, []);
+
+  const changeLanguage = (language: Language) => {
+    setCurrentLanguage(language);
+    localStorage.setItem('nflow-language', language);
+  };
+
+  const t = (key: string): string => {
+    const translation = translations[currentLanguage]?.[key as keyof typeof translations[typeof currentLanguage]];
+    return translation || translations.es[key as keyof typeof translations.es] || key;
+  };
+
+  const value = {
+    currentLanguage,
+    changeLanguage,
+    t,
+    languages
+  };
   
   return (
-    <LanguageContext.Provider value={languageValue}>
+    <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   );
 }
 
-// Hook to use language context (optional - components can use useLanguage directly)
+// Hook to use language context
 export function useLanguageContext() {
   const context = useContext(LanguageContext);
-  return context || useLanguage();
+  if (!context) {
+    throw new Error('useLanguageContext must be used within a LanguageProvider');
+  }
+  return context;
 }

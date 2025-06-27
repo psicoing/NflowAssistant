@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Brain, Globe, LogIn, UserPlus, ChevronDown, Wifi, WifiOff } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import SidebarMenu from "@/components/ui/sidebar-menu";
-import { useLanguage } from "@/hooks/useLanguage";
+import { useLanguageContext } from "@/components/LanguageProvider";
 
 
 export default function Header() {
@@ -12,7 +12,7 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [location] = useLocation();
-  const { currentLanguage, changeLanguage, t, languages } = useLanguage();
+  const { currentLanguage, changeLanguage, t, languages } = useLanguageContext();
 
   useEffect(() => {
     const handleScroll = () => {
