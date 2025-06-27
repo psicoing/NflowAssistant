@@ -12,7 +12,7 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [location] = useLocation();
-  const { currentLanguage, setLanguage, t } = useLanguage();
+  const { currentLanguage, changeLanguage, t, languages } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,18 +32,6 @@ export default function Header() {
       window.removeEventListener("offline", handleOffline);
     };
   }, []);
-
-  const languages = [
-    { code: "es", name: "Español", flag: "🇪🇸" },
-    { code: "en", name: "English", flag: "🇬🇧" },
-    { code: "fr", name: "Français", flag: "🇫🇷" },
-    { code: "de", name: "Deutsch", flag: "🇩🇪" },
-    { code: "it", name: "Italiano", flag: "🇮🇹" },
-    { code: "pt", name: "Português", flag: "🇵🇹" },
-    { code: "ca", name: "Català", flag: "🔵" },
-    { code: "eu", name: "Euskera", flag: "🔵" },
-    { code: "gl", name: "Galego", flag: "🔵" },
-  ];
 
   return (
     <header 
@@ -113,7 +101,7 @@ export default function Header() {
                   {languages.map((lang) => (
                     <DropdownMenuItem
                       key={lang.code}
-                      onClick={() => setLanguage(lang.code as any)}
+                      onClick={() => changeLanguage(lang.code as any)}
                       className={`cursor-pointer hover:bg-gray-800 ${
                         currentLanguage === lang.code ? "bg-nflow-orange/10 text-nflow-orange" : "text-gray-300"
                       }`}

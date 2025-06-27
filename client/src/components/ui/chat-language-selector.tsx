@@ -4,7 +4,7 @@ import { Languages, Globe } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 
 export default function ChatLanguageSelector() {
-  const { currentLanguage, setLanguage } = useLanguage();
+  const { currentLanguage, changeLanguage } = useLanguage();
 
   const languageOptions = [
     { code: 'es', name: 'Español', flag: '🇪🇸' },
@@ -27,7 +27,7 @@ export default function ChatLanguageSelector() {
         <span className="text-sm font-medium text-blue-300">Idioma:</span>
       </div>
       
-      <Select value={currentLanguage} onValueChange={(value) => setLanguage(value as any)}>
+      <Select value={currentLanguage} onValueChange={(value) => changeLanguage(value as any)}>
         <SelectTrigger className="w-[140px] h-8 bg-white/10 border-blue-400/30 text-white hover:bg-white/20 transition-colors">
           <SelectValue>
             <div className="flex items-center space-x-2">
