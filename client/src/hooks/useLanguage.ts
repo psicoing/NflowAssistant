@@ -43,6 +43,7 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'nav.examples': 'Ejemplos',
     'nav.subscribe': 'Suscribirse',
     'nav.login': 'Iniciar Sesión',
+    'nav.register': 'Registrarse',
     
     // Hero Section
     'hero.title': 'Tu psicólogo personal',
@@ -50,16 +51,25 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'hero.description': 'Apoyo profesional en salud mental con inteligencia artificial avanzada. Conversaciones confidenciales y respuestas personalizadas para tu bienestar emocional.',
     'hero.cta.primary': 'Comenzar Chat Gratis',
     'hero.cta.secondary': 'Ver Ejemplos',
+    'hero.cta': 'Comenzar Chat Gratis',
     'hero.trusted': 'Confiado por más de 1,000 usuarios',
     
     // Age Notice
     'age.title': '⚠️ Aviso Importante: Edad Mínima',
     'age.description': 'Este servicio está diseñado para personas de 12 a 95 años. Si tienes menos de 18 años, recomendamos supervisión de un adulto.',
     'age.emergency': 'En caso de emergencia, contacta inmediatamente con los servicios de emergencia (112 en España).',
+    'ageWarning.title': '⚠️ Aviso Importante: Edad Mínima',
+    'ageWarning.subtitle': 'Este servicio está diseñado para personas de 12 a 95 años. Si tienes menos de 18 años, recomendamos supervisión de un adulto.',
     
     // Services
     'services.title': 'Cuatro Soluciones Especializadas',
     'services.subtitle': 'Cada una diseñada para atender necesidades específicas de salud mental',
+    'services.modern.title1': 'Cuatro Soluciones',
+    'services.modern.title2': 'Especializadas',
+    'services.modern.description': 'Cada una diseñada para atender necesidades específicas de salud mental',
+    'services.modern.feature1': 'NFLOW Familias - Apoyo para toda la familia',
+    'services.modern.feature2': 'NFLOW Laboral - Salud mental en el trabajo',
+    'services.modern.feature3': 'NFLOW Adultos - Terapia personalizada',
     
     // Pricing
     'pricing.title': 'Elige Tu Plan',
@@ -118,6 +128,16 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'chat.suggestions.stress': '¿Cómo puedo manejar el estrés?',
     'chat.suggestions.stressShort': 'Manejo del estrés',
     
+    // Examples Section
+    'examples.assistant.title': 'Tu Asistente de IA Especializado',
+    'examples.assistant.description': 'Experimenta conversaciones naturales con nuestro asistente de salud mental',
+    'examples.features.language.title': 'Multiidioma',
+    'examples.features.language.description': 'Respuestas en 9 idiomas diferentes',
+    'examples.features.ages.title': 'Para Todas las Edades',
+    'examples.features.ages.description': 'Adaptado para adolescentes y adultos',
+    'examples.features.professional.title': 'Respuestas Profesionales',
+    'examples.features.professional.description': 'Basado en psicología clínica',
+    
     // Emergency
     'emergency.title': 'Números de Emergencia',
     'emergency.description': 'Si necesitas ayuda inmediata, contacta con estos servicios de emergencia',
@@ -135,6 +155,7 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'nav.examples': 'Examples',
     'nav.subscribe': 'Subscribe',
     'nav.login': 'Login',
+    'nav.register': 'Register',
     
     // Hero Section
     'hero.title': 'Your personal psychologist',
@@ -142,12 +163,15 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'hero.description': 'Professional mental health support with advanced artificial intelligence. Confidential conversations and personalized responses for your emotional wellbeing.',
     'hero.cta.primary': 'Start Free Chat',
     'hero.cta.secondary': 'View Examples',
+    'hero.cta': 'Start Free Chat',
     'hero.trusted': 'Trusted by over 1,000 users',
     
     // Age Notice
     'age.title': '⚠️ Important Notice: Minimum Age',
     'age.description': 'This service is designed for people aged 12 to 95. If you are under 18, we recommend adult supervision.',
     'age.emergency': 'In case of emergency, immediately contact emergency services (112 in Spain).',
+    'ageWarning.title': '⚠️ Important Notice: Minimum Age',
+    'ageWarning.subtitle': 'This service is designed for people aged 12 to 95. If you are under 18, we recommend adult supervision.',
     
     // Services
     'services.title': 'Four Specialized Solutions',
@@ -437,15 +461,8 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   };
 
   const t = (key: string): string => {
-    // Debug logging
-    console.log('Translation key:', key, 'Current language:', currentLanguage);
-    console.log('Available translations for key:', translations[currentLanguage]?.[key]);
-    
     const translation = translations[currentLanguage]?.[key] || translations['es']?.[key];
-    const result = translation || key;
-    
-    console.log('Final translation result:', result);
-    return result;
+    return translation || key;
   };
 
   useEffect(() => {
