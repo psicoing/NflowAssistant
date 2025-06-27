@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Info, Brain, User, Heart } from "lucide-react";
 import { useLocation } from "wouter";
-import { useLanguage } from "@/hooks/useLanguage";
+import { useLanguageContext } from "@/components/LanguageProvider";
 import nflowPackageImage from "@assets/image_1749802552043.png";
 import nflowFamilyImage from "@assets/image_1749802597786.png";
 
 export default function HeroSection() {
-  const { t } = useLanguage();
+  const { t } = useLanguageContext();
   const [, setLocation] = useLocation();
 
   const handleStartRegistration = () => {

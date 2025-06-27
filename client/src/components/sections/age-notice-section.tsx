@@ -1,6 +1,6 @@
 import { Calendar, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { useLanguage } from "@/hooks/useLanguage";
+import { useLanguageContext } from "@/components/LanguageProvider";
 
 export default function AgeNoticeSection() {
   const { t } = useLanguage();

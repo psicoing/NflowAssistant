@@ -1,9 +1,9 @@
 import { Globe, Sparkles } from "lucide-react";
-import { useLanguage } from "@/hooks/useLanguage";
+import { useLanguageContext } from "@/components/LanguageProvider";
 import ChatLanguageSelector from "./chat-language-selector";
 
 export default function ChatLanguageBanner() {
-  const { t } = useLanguage();
+  const { t } = useLanguageContext();
 
   return (
     <div className="bg-gradient-to-r from-indigo-600/30 via-purple-600/30 to-blue-600/30 border border-blue-500/20 rounded-lg p-4 mb-4">

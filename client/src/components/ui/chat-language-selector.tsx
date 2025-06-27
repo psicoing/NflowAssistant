@@ -1,10 +1,10 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Languages, Globe } from "lucide-react";
-import { useLanguage } from "@/hooks/useLanguage";
+import { useLanguageContext } from "@/components/LanguageProvider";
 
 export default function ChatLanguageSelector() {
-  const { currentLanguage, changeLanguage } = useLanguage();
+  const { currentLanguage, changeLanguage } = useLanguageContext();
 
   const languageOptions = [
     { code: 'es', name: 'Español', flag: '🇪🇸' },

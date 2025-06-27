@@ -2,10 +2,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Brain, ArrowRight, Eye, Users, Sparkles } from "lucide-react";
 import { Link } from "wouter";
-import { useLanguage } from "@/hooks/useLanguage";
+import { useLanguageContext } from "@/components/LanguageProvider";
 
 export default function ChatExamplesSection() {
-  const { t } = useLanguage();
+  const { t } = useLanguageContext();
   return (
     <section className="py-16 px-4 bg-gradient-to-b from-nflow-dark to-nflow-navy">
       <div className="max-w-6xl mx-auto">
