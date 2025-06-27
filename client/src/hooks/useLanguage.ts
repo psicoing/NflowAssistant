@@ -437,7 +437,15 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   };
 
   const t = (key: string): string => {
-    return translations[currentLanguage]?.[key] || translations.es[key] || key;
+    // Debug logging
+    console.log('Translation key:', key, 'Current language:', currentLanguage);
+    console.log('Available translations for key:', translations[currentLanguage]?.[key]);
+    
+    const translation = translations[currentLanguage]?.[key] || translations['es']?.[key];
+    const result = translation || key;
+    
+    console.log('Final translation result:', result);
+    return result;
   };
 
   useEffect(() => {
