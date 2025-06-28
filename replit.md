@@ -130,6 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 29, 2025. **HEADER MÓVIL OPTIMIZADO** - Reestructurado para pantallas pequeñas: idiomas, login y register movidos al menú hamburguesa, diseño responsive perfeccionado
 - June 29, 2025. **SISTEMA TRADUCCIONES REESTRUCTURADO** - Migrado completo a React Context para gestión centralizada, eliminados errores "setLanguage is not a function", texto botón principal simplificado a "Empezar Chat"
 - June 26, 2025. **PREGUNTAS AGREGADAS A USUARIO** - Incrementado límite mensual de mpajaron de 10 a 20 preguntas mediante actualización directa en base de datos
 - June 26, 2025. **TRADUCTOR DE CHAT IMPLEMENTADO** - Selector de idiomas prominente integrado en header del chat, banner informativo en cada conversación, traducciones completas para todas las secciones del chat, sistema adaptativo por conversación individual
