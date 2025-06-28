@@ -51,11 +51,11 @@ export default function Header() {
 
 
 
-          {/* Auth Buttons & Language Selector & Sidebar Menu */}
+          {/* Desktop and Mobile Navigation */}
           <div className="flex items-center space-x-4">
-            {/* Connection Status */}
+            {/* Connection Status - Show only in chat */}
             {location.startsWith('/chat') && (
-              <div className="flex items-center space-x-2">
+              <div className="hidden sm:flex items-center space-x-2">
                 <div className={`flex items-center space-x-1 px-2 py-1 rounded-md ${
                   isOnline ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'
                 }`}>
@@ -71,8 +71,8 @@ export default function Header() {
               </div>
             )}
             
-            {/* Auth Buttons */}
-            <div className="hidden md:flex items-center space-x-2">
+            {/* Desktop Auth Buttons - Hidden on tablets and mobile */}
+            <div className="hidden lg:flex items-center space-x-2">
               <Link href="/login">
                 <Button variant="outline" size="sm" className="border-nflow-orange/30 text-nflow-orange hover:bg-nflow-orange/10">
                   <LogIn className="w-4 h-4 mr-2" />
@@ -87,7 +87,7 @@ export default function Header() {
               </Link>
             </div>
 
-            {/* Language Selector */}
+            {/* Desktop Language Selector - Hidden on mobile */}
             <div className="hidden lg:flex">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -114,7 +114,7 @@ export default function Header() {
               </DropdownMenu>
             </div>
 
-            {/* Sidebar Menu Button */}
+            {/* Hamburger Menu - Always visible */}
             <SidebarMenu />
           </div>
         </div>
