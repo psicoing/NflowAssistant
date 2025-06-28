@@ -316,9 +316,9 @@ export default function Chat() {
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-col md:flex-row flex-1 pt-16" style={{ height: 'calc(100vh - 80px)', minHeight: 'calc(100vh - 80px)' }}>
+      <div className="flex flex-col md:flex-row flex-1 pt-16 overflow-hidden" style={{ height: 'calc(100vh - 64px)', minHeight: 'calc(100vh - 64px)' }}>
         {/* Sidebar - Hidden on mobile */}
-        <div className="hidden md:flex w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex-col backdrop-blur-sm">
+        <div className="hidden md:flex w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex-col backdrop-blur-sm flex-shrink-0">
           <div className="p-6 border-b border-gray-700/50 space-y-4">
             {/* Question Limit Indicator */}
             <QuestionLimitIndicator />
@@ -432,7 +432,7 @@ export default function Chat() {
         </div>
 
         {/* Chat Interface */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col overflow-hidden min-w-0">
           {currentConversationId ? (
             <ChatInterface
               messages={messages}
@@ -441,7 +441,7 @@ export default function Chat() {
               isLoadingMessages={isLoadingMessages}
             />
           ) : (
-            <div className="flex-1 flex items-center justify-center">
+            <div className="flex-1 flex items-center justify-center overflow-hidden">
               <div className="text-center max-w-md mx-4">
                 <MessageCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
                 <h2 className="text-xl font-semibold text-white mb-2">
