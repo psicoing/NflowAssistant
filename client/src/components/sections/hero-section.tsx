@@ -31,7 +31,6 @@ export default function HeroSection() {
       <div className="relative z-10 text-center max-w-4xl mx-auto">
         {/* Main Heading */}
         <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
-          <span className="text-white">NFLOW,</span><br />
           <span className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light bg-clip-text text-transparent">
             {t('hero.title')}
           </span>
