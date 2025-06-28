@@ -31,9 +31,9 @@ export const translations = {
     'hero.title': 'Tu psicólogo personal',
     'hero.subtitle': 'disponible 24/7',
     'hero.description': 'Apoyo profesional en salud mental con inteligencia artificial avanzada. Conversaciones confidenciales y respuestas personalizadas para tu bienestar emocional.',
-    'hero.cta.primary': 'Empezar Chat Gratis',
+    'hero.cta.primary': 'Empezar Chat',
     'hero.cta.secondary': 'Ver Ejemplos',
-    'hero.cta': 'Empezar Chat Gratis',
+    'hero.cta': 'Empezar Chat',
     'hero.trusted': 'Confiado por más de 1,000 usuarios',
     
     // Age Notice
@@ -153,9 +153,9 @@ export const translations = {
     'hero.title': 'Your personal psychologist',
     'hero.subtitle': 'available 24/7',
     'hero.description': 'Professional mental health support with advanced artificial intelligence. Confidential conversations and personalized responses for your emotional wellbeing.',
-    'hero.cta.primary': 'Start Free Chat',
+    'hero.cta.primary': 'Start Chat',
     'hero.cta.secondary': 'View Examples',
-    'hero.cta': 'Start Free Chat',
+    'hero.cta': 'Start Chat',
     'hero.trusted': 'Trusted by over 1,000 users',
     
     // Age Notice
@@ -262,30 +262,37 @@ export const translations = {
   // Placeholder for other languages
   fr: {
     'nav.home': 'Accueil',
+    'hero.cta': 'Commencer Chat',
     'chat.welcome.title': 'Bienvenue dans NFLOW Chat',
   },
   de: {
     'nav.home': 'Startseite',
+    'hero.cta': 'Chat Starten',
     'chat.welcome.title': 'Willkommen bei NFLOW Chat',
   },
   it: {
     'nav.home': 'Casa',
+    'hero.cta': 'Inizia Chat',
     'chat.welcome.title': 'Benvenuto in NFLOW Chat',
   },
   pt: {
     'nav.home': 'Início',
+    'hero.cta': 'Iniciar Chat',
     'chat.welcome.title': 'Bem-vindo ao NFLOW Chat',
   },
   ca: {
     'nav.home': 'Inici',
+    'hero.cta': 'Començar Chat',
     'chat.welcome.title': 'Benvingut a NFLOW Chat',
   },
   eu: {
     'nav.home': 'Hasiera',
+    'hero.cta': 'Txata Hasi',
     'chat.welcome.title': 'Ongi etorri NFLOW Chat-era',
   },
   gl: {
     'nav.home': 'Inicio',
+    'hero.cta': 'Comezar Chat',
     'chat.welcome.title': 'Benvido a NFLOW Chat',
   }
 };
