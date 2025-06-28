@@ -130,6 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 29, 2025. **TRADUCCIONES CHAT COMPLETADAS** - Agregadas todas las traducciones faltantes para filtros y casillas en 9 idiomas, sistema 100% funcional
 - June 29, 2025. **CHAT LAYOUT CORREGIDO** - Solucionado desbordamiento del sidebar que invadía área principal, estructura contenida restaurada
 - June 29, 2025. **HEADER MÓVIL OPTIMIZADO** - Reestructurado para pantallas pequeñas: idiomas, login y register movidos al menú hamburguesa, diseño responsive perfeccionado
 - June 29, 2025. **SISTEMA TRADUCCIONES REESTRUCTURADO** - Migrado completo a React Context para gestión centralizada, eliminados errores "setLanguage is not a function", texto botón principal simplificado a "Empezar Chat"
