@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Brain, Globe, LogIn, UserPlus, ChevronDown, Wifi, WifiOff } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import SidebarMenu from "@/components/ui/sidebar-menu";
-import { useLanguageContext } from "@/components/LanguageProvider";
+import { GoogleTranslateDialog } from "@/components/ui/google-translate-dialog";
 
 
 export default function Header() {
@@ -12,7 +11,6 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [location] = useLocation();
-  const { currentLanguage, changeLanguage, t, languages } = useLanguageContext();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,7 +63,7 @@ export default function Header() {
                     <WifiOff className="w-3 h-3" />
                   )}
                   <span className="text-xs font-medium">
-                    {isOnline ? t('nav.connected') : t('nav.disconnected')}
+                    {isOnline ? 'Conectado' : 'Desconectado'}
                   </span>
                 </div>
               </div>
@@ -76,42 +74,23 @@ export default function Header() {
               <Link href="/login">
                 <Button variant="outline" size="sm" className="border-nflow-orange/30 text-nflow-orange hover:bg-nflow-orange/10">
                   <LogIn className="w-4 h-4 mr-2" />
-                  {t('nav.login')}
+                  Acceso
                 </Button>
               </Link>
               <Link href="/registro">
                 <Button size="sm" className="bg-nflow-blue hover:bg-nflow-blue/90 text-white">
                   <UserPlus className="w-4 h-4 mr-2" />
-                  {t('nav.register')}
+                  Registro
                 </Button>
               </Link>
             </div>
 
-            {/* Desktop Language Selector - Hidden on mobile */}
+            {/* Desktop Google Translate Dialog - Hidden on mobile */}
             <div className="hidden lg:flex">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-8 px-2 text-gray-300 hover:text-white hover:bg-gray-800/50">
-                    <Globe className="w-4 h-4 text-nflow-orange mr-1" />
-                    <span className="text-sm">{languages.find(l => l.code === currentLanguage)?.flag}</span>
-                    <ChevronDown className="w-3 h-3 ml-1" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-40 bg-gray-900 border-gray-700">
-                  {languages.map((lang) => (
-                    <DropdownMenuItem
-                      key={lang.code}
-                      onClick={() => changeLanguage(lang.code as any)}
-                      className={`cursor-pointer hover:bg-gray-800 ${
-                        currentLanguage === lang.code ? "bg-nflow-orange/10 text-nflow-orange" : "text-gray-300"
-                      }`}
-                    >
-                      <span className="mr-2">{lang.flag}</span>
-                      <span className="text-sm">{lang.name}</span>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <GoogleTranslateDialog 
+                buttonText="Idiomas"
+                size="sm"
+              />
             </div>
 
             {/* Hamburger Menu - Always visible */}
