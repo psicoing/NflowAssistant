@@ -130,6 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 29, 2025. **FOOTER SIMPLIFICADO A LINKEDIN ÚNICAMENTE** - Eliminados iconos Twitter e Instagram, conservado solo LinkedIn con enlace https://www.linkedin.com/in/empordajobs/
 - June 29, 2025. **VARIABLES TRADUCCIÓN COMPLETAMENTE ELIMINADAS** - Corregidos todos los errores t() en chat-header.tsx y chat-interface.tsx, sistema 100% funcional con texto estático español
 - June 29, 2025. **PROMPT CÁNCER MEJORADO** - Sistema especializado de apoyo emocional oncológico integrado con detección automática, protocolos diferenciados para adultos/niños, ejemplos específicos y personaje mágico "Lumo" para menores
 - June 29, 2025. **GUIÑO MULTIIDIOMA AGREGADO** - Badge prominente "Speaking 150+ languages • 支持150多种语言" en hero section para conectar con comunidades internacional y china
