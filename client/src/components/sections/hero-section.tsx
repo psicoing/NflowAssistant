@@ -27,6 +27,15 @@ export default function HeroSection() {
       </div>
 
       <div className="relative z-10 text-center max-w-4xl mx-auto">
+        {/* Multilingual Badge */}
+        <div className="mb-6">
+          <div className="inline-block bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-sm border border-blue-400/30 rounded-full px-6 py-2">
+            <p className="text-sm md:text-base text-white font-medium tracking-wide">
+              Speaking 150+ languages • 支持150多种语言
+            </p>
+          </div>
+        </div>
+
         {/* Main Heading */}
         <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
           <span className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light bg-clip-text text-transparent">
