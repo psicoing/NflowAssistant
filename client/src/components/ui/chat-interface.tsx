@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Bot, User, Loader2, Copy, RotateCcw, Zap, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useLanguage } from "@/hooks/useLanguage";
 import type { Message } from "@shared/schema";
 
 interface ChatInterfaceProps {
@@ -31,7 +30,6 @@ export default function ChatInterface({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-  const { t } = useLanguage();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,26 +149,26 @@ export default function ChatInterface({
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => onSendMessage(t('chat.suggestions.anxiety'))}
+                  onClick={() => onSendMessage('Me siento muy ansioso últimamente y no sé cómo manejarlo')}
                   className="border-nflow-orange/30 bg-nflow-orange/10 text-white hover:bg-nflow-orange/20 hover:border-nflow-orange/50 transition-all duration-300 text-xs md:text-sm py-2 px-3"
                 >
-                  {t('chat.suggestions.anxiety')}
+                  Ansiedad
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => onSendMessage(t('chat.suggestions.sleep'))}
+                  onClick={() => onSendMessage('Tengo problemas para dormir y me afecta mi día a día')}
                   className="border-nflow-blue/30 bg-nflow-blue/10 text-white hover:bg-nflow-blue/20 hover:border-nflow-blue/50 transition-all duration-300 text-xs md:text-sm py-2 px-3"
                 >
-                  {t('chat.suggestions.sleepShort')}
+                  Sueño
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => onSendMessage(t('chat.suggestions.stress'))}
+                  onClick={() => onSendMessage('Estoy muy estresado con el trabajo y la vida diaria')}
                   className="border-purple-500/30 bg-purple-500/10 text-white hover:bg-purple-500/20 hover:border-purple-500/50 transition-all duration-300 text-xs md:text-sm py-2 px-3"
                 >
-                  {t('chat.suggestions.stressShort')}
+                  Estrés
                 </Button>
               </div>
             </div>
