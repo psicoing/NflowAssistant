@@ -1,40 +1,29 @@
 ═══════════════════════════════════════════════════════════════
-              INFORMACIÓN PARTNER - DR. MARCOS PAJARON
+              PARTNER ANULADO - DR. MARCOS PAJARON
 ═══════════════════════════════════════════════════════════════
 
 🏥 DATOS DEL PARTNER:
    • Nombre: Dr. Marcos Pajaron
    • Email: marcos.pajaron@empordajobs.com
-   • Contraseña: NFlow2025!
    • Empresa: Consulta Privada Dr. Pajaron
    • Teléfono: +34 660 45 21 36
    • Tipo: Healthcare Professional
-   • Estado: APROBADO ✅
-   • Comisión: 15% por referencia
+   • Estado: ANULADO ❌
+   • Fecha de anulación: 29 de Junio 2025
 
-🔗 ENLACE COMERCIAL PARA CLIENTES:
-   https://rough-heart-79938129.replit.app/registro?ref=DRMARCOSPAJARON
+🚫 ACCESOS DESHABILITADOS:
+   • Enlace comercial: INACTIVO
+   • Dashboard partner: ACCESO DENEGADO
+   • Comisiones: SUSPENDIDAS
 
-📋 CÓMO USAR EL ENLACE:
-   1. Comparte este enlace con tus pacientes/clientes
-   2. Cuando se registren y paguen, recibes 15% de comisión
-   3. Puedes acceder a tu dashboard en:
-      https://rough-heart-79938129.replit.app/partner-login
+📋 MOTIVO DE ANULACIÓN:
+   Partner anulado por solicitud administrativa
 
-💰 INFORMACIÓN COMERCIAL:
-   • Plan Básico: €2.99/mes → Tu comisión: €0.45/mes
-   • Plan Familiar: €4.99/mes → Tu comisión: €0.75/mes
-   • Plan Individual: €6.99/mes → Tu comisión: €1.05/mes
-
-🎯 MATERIAL PROMOCIONAL SUGERIDO:
-   "Accede a apoyo psicológico profesional 24/7 con NFLOW.
-    Psicología de bolsillo con IA especializada.
-    Regístrate aquí: [TU ENLACE]"
+⚠️ NOTA IMPORTANTE:
+   Todas las referencias pendientes quedan anuladas.
+   No se procesarán nuevas comisiones.
+   El acceso al dashboard ha sido revocado.
 
 ═══════════════════════════════════════════════════════════════
-              CREDENCIALES PARA DASHBOARD PARTNER
-═══════════════════════════════════════════════════════════════
-Email: marcos.pajaron@empordajobs.com
-Contraseña: NFlow2025!
-URL Dashboard: https://rough-heart-79938129.replit.app/partner-login
+                        PARTNER ANULADO
 ═══════════════════════════════════════════════════════════════
