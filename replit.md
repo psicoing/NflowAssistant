@@ -130,6 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 29, 2025. **DIÁLOGO GOOGLE TRANSLATE CORREGIDO** - Solucionado problema de visualización en móviles reemplazando Dialog de Radix UI por modal personalizado completamente funcional
 - June 29, 2025. **MIGRACIÓN A GOOGLE TRANSLATE** - Reemplazado sistema de traducciones interno por diálogos informativos que guían al usuario a usar Google Translate integrado del navegador
 - June 29, 2025. **TRADUCCIONES CHAT COMPLETADAS** - Agregadas todas las traducciones faltantes para filtros y casillas en 9 idiomas, sistema 100% funcional
 - June 29, 2025. **CHAT LAYOUT CORREGIDO** - Solucionado desbordamiento del sidebar que invadía área principal, estructura contenida restaurada

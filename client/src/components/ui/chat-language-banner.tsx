@@ -1,10 +1,7 @@
 import { Globe, Sparkles } from "lucide-react";
-import { useLanguageContext } from "@/components/LanguageProvider";
 import ChatLanguageSelector from "./chat-language-selector";
 
 export default function ChatLanguageBanner() {
-  const { t } = useLanguageContext();
-
   return (
     <div className="bg-gradient-to-r from-indigo-600/30 via-purple-600/30 to-blue-600/30 border border-blue-500/20 rounded-lg p-4 mb-4">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-3 md:space-y-0">
@@ -14,11 +11,11 @@ export default function ChatLanguageBanner() {
           </div>
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-1">
-              <h3 className="text-white font-semibold text-sm">{t('chat.language.banner.title')}</h3>
+              <h3 className="text-white font-semibold text-sm">Traducir conversación</h3>
               <Sparkles className="w-4 h-4 text-blue-400" />
             </div>
             <p className="text-blue-200 text-xs leading-relaxed">
-              {t('chat.language.banner.description')}
+              Usa Google Translate de tu navegador para ver esta conversación en tu idioma. Las respuestas de NEUROPSI-AI se adaptarán automáticamente.
             </p>
           </div>
         </div>
