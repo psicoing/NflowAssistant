@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Home, MessageCircle, Book, Lightbulb, CreditCard, Users, Gift, Globe, LogIn, UserPlus } from "lucide-react";
 import { Link, useLocation } from "wouter";
-import { useLanguageContext } from "@/components/LanguageProvider";
+import { GoogleTranslateDialog } from "@/components/ui/google-translate-dialog";
 
 const menuItems = [
   {
@@ -47,7 +47,6 @@ const menuItems = [
 export default function SidebarMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [location, setLocation] = useLocation();
-  const { currentLanguage, changeLanguage, t, languages } = useLanguageContext();
 
   const isActiveRoute = (href: string) => {
     if (href === "/") return location === "/";
@@ -146,7 +145,7 @@ export default function SidebarMenu() {
                       onClick={() => setIsOpen(false)}
                     >
                       <LogIn className="mr-3 h-5 w-5" />
-                      <span className="text-base">{t('nav.login')}</span>
+                      <span className="text-base">Acceso</span>
                     </Button>
                   </Link>
                   <Link href="/registro">
@@ -156,39 +155,26 @@ export default function SidebarMenu() {
                       onClick={() => setIsOpen(false)}
                     >
                       <UserPlus className="mr-3 h-5 w-5" />
-                      <span className="text-base">{t('nav.register')}</span>
+                      <span className="text-base">Registro</span>
                     </Button>
                   </Link>
                 </div>
               </div>
 
-              {/* Mobile-only Language Section */}
+              {/* Mobile-only Google Translate Section */}
               <div className="lg:hidden mt-4 pt-4 border-t border-gray-700">
-                <div className="mb-3">
-                  <div className="flex items-center text-gray-400 text-sm font-medium mb-2 px-4">
-                    <Globe className="mr-2 h-4 w-4" />
-                    Idioma / Language
-                  </div>
-                  <div className="space-y-1">
-                    {languages.map((lang) => (
+                <div className="mb-3 px-4">
+                  <GoogleTranslateDialog 
+                    trigger={
                       <Button
-                        key={lang.code}
                         variant="ghost"
-                        className={`w-full justify-start h-10 text-left px-4 transition-all duration-200 ${
-                          currentLanguage === lang.code 
-                            ? "bg-nflow-orange/20 text-nflow-orange border-l-4 border-nflow-orange" 
-                            : "text-white hover:bg-white/10 hover:text-nflow-orange"
-                        }`}
-                        onClick={() => {
-                          changeLanguage(lang.code as any);
-                          setIsOpen(false);
-                        }}
+                        className="w-full justify-start h-10 text-left px-0 text-white hover:bg-white/10 hover:text-nflow-orange transition-all duration-200"
                       >
-                        <span className="mr-3 text-lg">{lang.flag}</span>
-                        <span className="text-sm">{lang.name}</span>
+                        <Globe className="mr-3 h-4 w-4" />
+                        <span className="text-sm">Traducir página</span>
                       </Button>
-                    ))}
-                  </div>
+                    }
+                  />
                 </div>
               </div>
             </nav>
