@@ -2,14 +2,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Brain, ArrowRight, Eye, Users, Sparkles } from "lucide-react";
 import { Link } from "wouter";
-import { useLanguageContext } from "@/components/LanguageProvider";
 
 export default function ChatExamplesSection() {
-  const { t } = useLanguageContext();
   return (
     <section className="py-16 px-4 bg-gradient-to-b from-nflow-dark to-nflow-navy">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
+          {/* Multilingual Welcome */}
+          <div className="mb-6">
+            <p className="text-lg text-blue-300 font-medium mb-2">
+              Speaking 150+ languages • 支持150多种语言
+            </p>
+            <div className="w-20 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto"></div>
+          </div>
+
           <div className="flex justify-center mb-6">
             <div className="p-3 bg-gradient-to-br from-nflow-orange to-orange-600 rounded-2xl shadow-lg">
               <Eye className="w-8 h-8 text-white" />
@@ -17,11 +23,11 @@ export default function ChatExamplesSection() {
           </div>
           
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            {t('examples.assistant.title')}
+            Conoce tu Asistente Psicológico
           </h2>
           
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            {t('examples.assistant.description')}
+            Descubre ejemplos reales de conversaciones con nuestro asistente de IA especializado en salud mental. Respuestas profesionales adaptadas a cada situación específica.
           </p>
         </div>
 
@@ -34,10 +40,10 @@ export default function ChatExamplesSection() {
               </div>
               <div>
                 <h3 className="text-white font-semibold text-lg mb-2">
-                  {t('examples.features.language.title')}
+                  Respuestas Multiidioma
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  {t('examples.features.language.description')}
+                  El asistente adapta automáticamente sus respuestas al idioma detectado en tu consulta, proporcionando apoyo psicológico natural y culturalmente apropiado.
                 </p>
               </div>
             </div>
@@ -48,10 +54,10 @@ export default function ChatExamplesSection() {
               </div>
               <div>
                 <h3 className="text-white font-semibold text-lg mb-2">
-                  {t('examples.features.ages.title')}
+                  Para Todas las Edades
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  {t('examples.features.ages.description')}
+                  Desde adolescentes hasta adultos mayores, el asistente ajusta su enfoque terapéutico según la etapa vital y las necesidades específicas de cada usuario.
                 </p>
               </div>
             </div>
@@ -62,10 +68,10 @@ export default function ChatExamplesSection() {
               </div>
               <div>
                 <h3 className="text-white font-semibold text-lg mb-2">
-                  {t('examples.features.professional.title')}
+                  Enfoque Profesional
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  {t('examples.features.professional.description')}
+                  Basado en técnicas de psicología clínica y terapia cognitivo-conductual, proporcionando orientación profesional con fundamento científico.
                 </p>
               </div>
             </div>
@@ -82,20 +88,20 @@ export default function ChatExamplesSection() {
                   
                   <div>
                     <h3 className="text-2xl font-bold text-white mb-3">
-                      {t('examples.cta.title')}
+                      Ejemplos de Conversaciones
                     </h3>
                     <p className="text-gray-300 leading-relaxed mb-6">
-                      {t('examples.cta.description')}
+                      Descubre cómo NEUROPSI-AI puede ayudarte con situaciones reales. Cada respuesta está diseñada para ofrecer apoyo psicológico profesional.
                     </p>
                   </div>
 
                   <div className="bg-gray-700/30 rounded-lg p-4 text-left">
-                    <div className="text-sm text-gray-400 mb-2">{t('examples.cta.includes')}</div>
+                    <div className="text-sm text-gray-400 mb-2">Ejemplos incluyen:</div>
                     <ul className="text-sm text-gray-300 space-y-1">
-                      <li>• {t('examples.cta.item1')}</li>
-                      <li>• {t('examples.cta.item2')}</li>
-                      <li>• {t('examples.cta.item3')}</li>
-                      <li>• {t('examples.cta.item4')}</li>
+                      <li>• Ansiedad en adolescentes</li>
+                      <li>• Crisis profesional en adultos</li>
+                      <li>• Duelo en la tercera edad</li>
+                      <li>• Problemas familiares</li>
                     </ul>
                   </div>
 
@@ -103,13 +109,13 @@ export default function ChatExamplesSection() {
                     <Button 
                       className="w-full bg-nflow-orange hover:bg-nflow-orange-light text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 group"
                     >
-                      {t('examples.cta.button')}
+                      Ver ejemplos del chat
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </Link>
 
                   <p className="text-xs text-gray-500">
-                    {t('examples.cta.note')}
+                    Gratis • Sin necesidad de registro
                   </p>
                 </div>
               </CardContent>
