@@ -307,7 +307,7 @@ export default function Chat() {
           <span className="text-white text-sm font-medium">
             {currentConversationId ? 
               conversations.find(c => c.id === currentConversationId)?.title || "Chat" 
-              : t('chat.select.conversation')
+              : "Selecciona conversación"
             }
           </span>
         </div>
@@ -328,7 +328,7 @@ export default function Chat() {
               disabled={createConversationMutation.isPending}
             >
               <Plus className="w-5 h-5 mr-2" />
-              {t('chat.conversations.new')}
+              Nuevo
             </Button>
             
             {/* Search */}
@@ -336,7 +336,7 @@ export default function Chat() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
-                placeholder={t('chat.conversations.search')}
+                placeholder="Buscar conversaciones..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder:text-gray-400 focus:border-nflow-orange focus:ring-1 focus:ring-nflow-orange/20 transition-all"
@@ -346,10 +346,10 @@ export default function Chat() {
             {/* Date Filter */}
             <div className="flex gap-2">
               {[
-                { key: "all", label: t('chat.filters.all'), icon: Clock },
-                { key: "today", label: t('chat.filters.today'), icon: Calendar },
-                { key: "week", label: t('chat.filters.week'), icon: Calendar },
-                { key: "month", label: t('chat.filters.month'), icon: Calendar },
+                { key: "all", label: "Todos", icon: Clock },
+                { key: "today", label: "Hoy", icon: Calendar },
+                { key: "week", label: "Semana", icon: Calendar },
+                { key: "month", label: "Mes", icon: Calendar },
               ].map(({ key, label, icon: Icon }) => (
                 <button
                   key={key}
@@ -379,8 +379,8 @@ export default function Chat() {
                 <MessageCircle className="w-12 h-12 text-gray-500 mx-auto mb-3" />
                 <p className="text-gray-400 text-sm mb-2">
                   {searchQuery || selectedDateFilter !== "all" 
-                    ? t('chat.conversations.noResults') 
-                    : t('chat.conversations.empty')
+                    ? "No se encontraron conversaciones" 
+                    : "Aún no tienes conversaciones"
                   }
                 </p>
                 {!searchQuery && selectedDateFilter === "all" && (
@@ -392,7 +392,7 @@ export default function Chat() {
                     disabled={createConversationMutation.isPending}
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    {createConversationMutation.isPending ? t('chat.conversations.creating') : t('chat.conversations.createFirst')}
+                    {createConversationMutation.isPending ? "Creando..." : "Crear primera conversación"}
                   </Button>
                 )}
               </div>
@@ -443,10 +443,10 @@ export default function Chat() {
               <div className="text-center max-w-md mx-4">
                 <MessageCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
                 <h2 className="text-xl font-semibold text-white mb-2">
-                  {t('chat.welcome.title')}
+                  Bienvenido a NFLOW Chat
                 </h2>
                 <p className="text-gray-400 mb-6">
-                  {t('chat.welcome.description')}
+                  Selecciona una conversación existente o crea una nueva para comenzar a chatear con nuestro asistente de IA.
                 </p>
                 <Button
                   onClick={handleNewChat}
@@ -454,7 +454,7 @@ export default function Chat() {
                   disabled={createConversationMutation.isPending}
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  {t('chat.welcome.cta')}
+                  Crear nueva conversación
                 </Button>
               </div>
             </div>

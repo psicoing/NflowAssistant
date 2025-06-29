@@ -11,7 +11,6 @@ interface QuestionLimitData {
 }
 
 export default function QuestionLimitIndicator() {
-  const { t } = useLanguageContext();
   const { data: limitData, isLoading } = useQuery<QuestionLimitData>({
     queryKey: ["/api/question-limit"],
     refetchInterval: 30000, // Refresh every 30 seconds
