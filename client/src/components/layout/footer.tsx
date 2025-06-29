@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Brain, Twitter, Linkedin, Instagram, ExternalLink } from "lucide-react";
+import { Brain, Linkedin, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Footer() {
@@ -24,25 +24,13 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               <a 
-                href="#" 
-                className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-nflow-orange transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter className="w-4 h-4 text-gray-400 hover:text-white" />
-              </a>
-              <a 
-                href="#" 
+                href="https://www.linkedin.com/in/empordajobs/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-nflow-orange transition-colors"
                 aria-label="LinkedIn"
               >
                 <Linkedin className="w-4 h-4 text-gray-400 hover:text-white" />
-              </a>
-              <a 
-                href="#" 
-                className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-nflow-orange transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-4 h-4 text-gray-400 hover:text-white" />
               </a>
             </div>
           </div>
