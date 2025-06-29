@@ -9,11 +9,13 @@ export default function ChatExamplesSection() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           {/* Multilingual Welcome */}
-          <div className="mb-6">
-            <p className="text-lg text-blue-300 font-medium mb-2">
-              Speaking 150+ languages • 支持150多种语言
-            </p>
-            <div className="w-20 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto"></div>
+          <div className="mb-8">
+            <div className="inline-block bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-sm border border-blue-400/30 rounded-full px-6 py-3 mb-4">
+              <p className="text-xl text-white font-semibold tracking-wide">
+                Speaking 150+ languages • 支持150多种语言
+              </p>
+            </div>
+            <div className="w-32 h-1 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto rounded-full"></div>
           </div>
 
           <div className="flex justify-center mb-6">
