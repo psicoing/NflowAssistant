@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Progress } from "@/components/ui/progress";
 import { MessageCircle, AlertTriangle, CheckCircle } from "lucide-react";
-import { useLanguageContext } from "@/components/LanguageProvider";
 
 interface QuestionLimitData {
   limit: number;

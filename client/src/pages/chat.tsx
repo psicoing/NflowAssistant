@@ -12,7 +12,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { MessageCircle, Plus, Search, Calendar, Clock } from "lucide-react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
-import { useLanguageContext } from "@/components/LanguageProvider";
 import type { Conversation, Message } from "@shared/schema";
 
 export default function Chat() {
@@ -20,7 +19,6 @@ export default function Chat() {
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const { currentLanguage, t } = useLanguageContext();
   const [currentConversationId, setCurrentConversationId] = useState<number | null>(
     id ? parseInt(id) : null
   );
@@ -113,7 +111,7 @@ export default function Chat() {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          'Accept-Language': currentLanguage + '-' + currentLanguage.toUpperCase()
+          'Accept-Language': 'es-ES'
         },
         body: JSON.stringify({
           content,
@@ -303,7 +301,7 @@ export default function Chat() {
             disabled={createConversationMutation.isPending}
           >
             <Plus className="w-4 h-4 mr-1" />
-            {t('chat.conversations.new')}
+            Nuevo
           </Button>
           
           <span className="text-white text-sm font-medium">
