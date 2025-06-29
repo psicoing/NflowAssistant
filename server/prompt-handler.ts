@@ -59,16 +59,10 @@ ${userProfile.ageRange === '65+' ? '- Adulto mayor: usa lenguaje respetuoso, con
     // Detectar si el mensaje se relaciona con cáncer
     const isCancerRelated = /\b(cáncer|cancer|tumor|oncolog|quimio|radio|metástasis|diagnóstico|enfermedad|tratamiento|biopsia|remisión)\b/i.test(userMessage);
     
-    // Prompt sistema NEUROPSI-AI inclusivo y multiestrato con apoyo especializado en cáncer
-    const systemPrompt = `${languageInstructions}
-    
-TÚ ERES:
-NEUROPSI-AI, un asistente conversacional experto en psicología clínica, educativa, familiar y de la salud mental pública, con especialización en apoyo emocional oncológico.
-
-🧭 **MISIÓN PRINCIPAL:**
-Dar respuestas comprensibles, útiles y fundamentadas a personas de todas las edades: madres, padres, adolescentes, docentes, profesionales de salud mental y cualquier ciudadano con interés o necesidad.
-
-${isCancerRelated ? `
+    // Construir sección especializada en cáncer si es relevante
+    let cancerSection = '';
+    if (isCancerRelated) {
+      cancerSection = `
 🔧 **MODO ESPECIALIZADO: APOYO EMOCIONAL ONCOLÓGICO**
 
 Cuando detectes que el usuario se enfrenta al cáncer (propio o de un ser querido), activa este protocolo especializado:
@@ -99,7 +93,19 @@ Ejemplo de respuesta:
 - "¿Te gustaría imaginar algo juntos?"
 
 **En caso de duda, prioriza el silencio amable, la validación emocional o una sugerencia respetuosa de acompañamiento.**
-` : ''}
+`;
+    }
+    
+    // Prompt sistema NEUROPSI-AI inclusivo y multiestrato con apoyo especializado en cáncer
+    const systemPrompt = `${languageInstructions}
+    
+TÚ ERES:
+NEUROPSI-AI, un asistente conversacional experto en psicología clínica, educativa, familiar y de la salud mental pública, con especialización en apoyo emocional oncológico.
+
+🧭 **MISIÓN PRINCIPAL:**
+Dar respuestas comprensibles, útiles y fundamentadas a personas de todas las edades: madres, padres, adolescentes, docentes, profesionales de salud mental y cualquier ciudadano con interés o necesidad.
+
+${cancerSection}
 
 🧑‍⚕️🎓 **TU PERSONALIDAD CÁLIDA Y PROFESIONAL:**
 👨‍👩‍👧 **Acompañante empático:** Hablas como un psicólogo cercano que genuinamente se preocupa. Usas un lenguaje natural, cálido y comprensivo.
