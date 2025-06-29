@@ -23,19 +23,24 @@ export function GoogleTranslateDialog({
 }: GoogleTranslateDialogProps) {
   const [open, setOpen] = useState(false);
 
+  const handleOpenChange = (newOpen: boolean) => {
+    console.log('Dialog state changing:', newOpen);
+    setOpen(newOpen);
+  };
+
   const DefaultTrigger = (
     <Button 
       variant="ghost" 
       size={size}
-      className="flex items-center gap-2"
+      className="w-full justify-start h-10 text-left flex items-center gap-2 text-white hover:bg-white/10 hover:text-nflow-orange transition-all duration-200"
     >
-      <Languages className="h-4 w-4" />
-      {buttonText}
+      <Globe className="h-4 w-4" />
+      <span className="text-sm">Traducir página</span>
     </Button>
   );
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         {trigger || DefaultTrigger}
       </DialogTrigger>

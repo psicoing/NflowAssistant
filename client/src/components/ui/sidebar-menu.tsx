@@ -164,17 +164,7 @@ export default function SidebarMenu() {
               {/* Mobile-only Google Translate Section */}
               <div className="lg:hidden mt-4 pt-4 border-t border-gray-700">
                 <div className="mb-3 px-4">
-                  <GoogleTranslateDialog 
-                    trigger={
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start h-10 text-left px-0 text-white hover:bg-white/10 hover:text-nflow-orange transition-all duration-200"
-                      >
-                        <Globe className="mr-3 h-4 w-4" />
-                        <span className="text-sm">Traducir página</span>
-                      </Button>
-                    }
-                  />
+                  <GoogleTranslateDialog />
                 </div>
               </div>
             </nav>
