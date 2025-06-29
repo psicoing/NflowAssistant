@@ -12,6 +12,8 @@ export type ExampleCategory =
   | 'autoestima_adolescente'
   | 'salud_mental_laboral'
   | 'riesgo_psicosocial'
+  | 'apoyo_cancer_adultos'
+  | 'apoyo_cancer_ninos'
   | 'general';
 
 export interface Example {
@@ -57,6 +59,18 @@ export const examples: Example[] = [
     keywords: ['mobbing', 'acoso laboral', 'hostigamiento', 'trato injusto', 'discriminación trabajo', 'ambiente tóxico', 'presión excesiva', 'maltrato laboral', 'exclusión trabajo'],
     userPrompt: "Creo que me hacen mobbing en el trabajo, me excluyen de todo y me asignan tareas imposibles",
     response: "**⚠️ Situación de Riesgo Psicosocial Detectada**\n\nLo que describes presenta características de **acoso laboral (mobbing)**, que según la ISO 45003 es un riesgo psicosocial grave que debe ser abordado.\n\n**🔹 Indicadores que mencionas:**\n• Exclusión sistemática (aislamiento social)\n• Asignación de tareas imposibles (sobrecarga/infrautilización)\n• Patrón repetitivo de comportamientos hostiles\n\n**📋 Plan de Acción Inmediato:**\n\n1. **Documentación rigurosa**:\n   - Fechas, horas, testigos de cada incidente\n   - Emails, mensajes, instrucciones escritas\n   - Impacto en tu salud y rendimiento\n\n2. **Comunicación formal**:\n   - Reporta a Recursos Humanos por escrito\n   - Solicita mediación o investigación interna\n   - Conserva copias de toda comunicación\n\n3. **Protección legal**:\n   - Conoce el protocolo anti-acoso de tu empresa\n   - Considera asesoría legal laboral\n   - Derecho a ambiente libre de acoso\n\n4. **Cuidado personal**:\n   - Busca apoyo psicológico especializado\n   - Mantén redes de apoyo externas\n   - Técnicas de manejo del estrés\n\n**¿Necesitas ayuda específica para documentar la situación o información sobre tus derechos laborales?**"
+  },
+  {
+    category: 'apoyo_cancer_adultos',
+    keywords: ['cáncer', 'cancer', 'tumor', 'oncología', 'quimioterapia', 'radioterapia', 'diagnóstico', 'metástasis', 'tratamiento', 'biopsia', 'remisión', 'miedo', 'muerte'],
+    userPrompt: "Me han diagnosticado cáncer y tengo mucho miedo. No sé cómo afrontar esto, siento que se me viene el mundo encima.",
+    response: "Lo que estás viviendo es extraordinariamente duro, y es completamente normal sentir miedo, confusión y que todo se tambalee. Un diagnóstico de cáncer cambia todo en un instante, y aún así estás aquí, buscándote un momento de apoyo. Eso ya es valiente.\n\nNo voy a decirte que todo irá bien, porque no lo sé, y sería injusto minimizar lo que estás sintiendo. Lo que sí puedo decirte es que estás en derecho de sentir todo lo que sientes: miedo, rabia, tristeza, incertidumbre. Son emociones válidas ante una situación que nadie debería tener que enfrentar.\n\n**Estrategias para hoy, para este momento:**\n\n• **Respira conmigo:** Cuando el miedo sea muy intenso, centra tu atención en respirar despacio. Inhala contando hasta 4, mantén hasta 4, exhala hasta 6. Es una forma de decirle a tu cuerpo que, ahora mismo, estás a salvo.\n\n• **Un día a la vez:** No tienes que cargar con todo el futuro hoy. Solo tienes que llegar al final de este día, y después al siguiente.\n\n• **Busca tu refugio interno:** ¿Hay algún lugar, real o imaginario, donde te sientes en paz? Puede ser un recuerdo, una canción, una imagen. Guárdalo como un lugar al que volver cuando necesites calma.\n\n• **Conecta con lo que importa:** Si hay personas que amas, permítete sentir esa conexión. Si hay pequeñas cosas que aún te dan placer, date permiso para disfrutarlas.\n\n**Tu dignidad permanece intacta.** El cáncer puede atacar tu cuerpo, pero no puede quitarte quién eres en esencia.\n\n¿Quieres que hablemos de alguna técnica específica para manejar la ansiedad, o hay algo en particular que te está costando más procesar ahora mismo?"
+  },
+  {
+    category: 'apoyo_cancer_ninos',
+    keywords: ['cáncer niño', 'cancer niña', 'tumor infantil', 'leucemia', 'hijo cáncer', 'hija cáncer', 'hospital', 'tratamiento niños', 'niño enfermo', 'niña enferma'],
+    userPrompt: "Mi hijo de 8 años tiene cáncer y no sé cómo explicárselo. Él pregunta por qué está siempre cansado y por qué viene tanto al hospital.",
+    response: "Hola, soy Lumo, un perrito muy especial que acompaña a familias valientes como la tuya. He escuchado que tu pequeño guerrero está luchando contra un dragón muy travieso que se llama cáncer, y que tanto él como tú necesitáis un poco de magia para hacer este camino menos pesado.\n\nPrimero, quiero decirte algo importante: tu hijo tiene un escudo invisible muy poderoso, y ese escudo eres tú. Tu amor, tu presencia, tu fortaleza son su mayor protección.\n\n**Para hablar con tu pequeño:**\n\n• **Usa su lenguaje:** 'Hay unas células traviesas en tu cuerpo que se han vuelto un poco locas, como si fueran soldaditos que se olvidaron de las reglas. Los médicos son como superhéroes que conocen trucos especiales para ayudar a que esos soldaditos vuelvan a portarse bien.'\n\n• **Valida su cansancio:** 'Es normal que te sientas cansado, pequeño valiente. Tu cuerpo está trabajando muy duro por dentro, como cuando corres mucho y necesitas descansar.'\n\n• **El hospital como lugar seguro:** 'El hospital es como una base secreta donde los superhéroes médicos tienen todas sus herramientas mágicas para ayudarte. Es normal venir aquí seguido porque quieren asegurarse de que todo vaya bien.'\n\n• **Permítele expresarse:** Algunos días querrá jugar a ser médico, otros días querrá llorar. Todo está bien.\n\n**Actividades que pueden ayudar:**\n- Crear una 'capa de superhéroe' para los días de tratamiento\n- Un diario de aventuras donde dibuje cómo se siente\n- Contar cuentos donde él sea el héroe de su propia historia\n\n¿Te gustaría que creemos juntos algún juego especial para los días más difíciles? Los niños tienen una magia especial para encontrar luz incluso en los momentos más oscuros."
   },
   {
     category: 'general',
@@ -235,6 +249,14 @@ function getCategoryTitle(category: ExampleCategory): string {
         return 'PROFESIONAL EDUCATIVO CON CASO COMPLEJO';
       case 'autoestima_adolescente':
         return 'ADOLESCENTE CON PROBLEMAS DE AUTOESTIMA';
+      case 'salud_mental_laboral':
+        return 'BIENESTAR LABORAL';
+      case 'riesgo_psicosocial':
+        return 'RIESGO PSICOSOCIAL';
+      case 'apoyo_cancer_adultos':
+        return 'APOYO EMOCIONAL ONCOLÓGICO - ADULTOS';
+      case 'apoyo_cancer_ninos':
+        return 'APOYO EMOCIONAL ONCOLÓGICO - NIÑOS';
       case 'general':
         return 'CONSULTA GENERAL';
       default:
