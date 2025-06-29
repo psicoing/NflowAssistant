@@ -1,10 +1,8 @@
 import ChatUserMenu from "./chat-user-menu";
 import ChatLanguageSelector from "./chat-language-selector";
 import { MessageCircle, Brain } from "lucide-react";
-import { useLanguage } from "@/hooks/useLanguage";
 
 export default function ChatHeader() {
-  const { t } = useLanguage();
   
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700/50">
@@ -19,7 +17,7 @@ export default function ChatHeader() {
           </div>
           <div className="hidden md:flex items-center space-x-2 text-gray-400">
             <MessageCircle className="w-4 h-4" />
-            <span className="text-sm">{t('chat.support.title')}</span>
+            <span className="text-sm">Chat de Apoyo</span>
           </div>
         </div>
 
