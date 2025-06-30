@@ -62,29 +62,29 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Legal */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Soporte</h4>
+            <h4 className="text-white font-semibold mb-4">Legal</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  Centro de Ayuda
-                </a>
+                <Link href="/legal/terminos" className="text-gray-400 hover:text-white transition-colors">
+                  Términos y condiciones
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  Contacto
-                </a>
+                <Link href="/legal/privacidad" className="text-gray-400 hover:text-white transition-colors">
+                  Política de privacidad
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  Privacidad
-                </a>
+                <Link href="/legal/cookies" className="text-gray-400 hover:text-white transition-colors">
+                  Política de cookies
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  Términos
-                </a>
+                <Link href="/legal/aviso-legal" className="text-gray-400 hover:text-white transition-colors">
+                  Aviso legal
+                </Link>
               </li>
             </ul>
           </div>
@@ -112,13 +112,23 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm">
-            © 2024 Instituto NeuronMeg. Todos los derechos reservados.
-          </p>
-          <p className="text-gray-400 text-sm mt-4 md:mt-0">
-            Desarrollado con ❤️ para mejorar la salud mental
-          </p>
+        <div className="border-t border-gray-800 mt-8 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-4">
+            <p className="text-gray-400 text-sm">
+              © 2025 EMPORDAJOBS SL. Todos los derechos reservados.
+            </p>
+            <p className="text-gray-400 text-sm mt-2 md:mt-0">
+              Desarrollado con ❤️ para mejorar la salud mental
+            </p>
+          </div>
+          <div className="text-center md:text-left">
+            <p className="text-gray-500 text-xs">
+              EMPORDAJOBS SL • CIF: B02701100 • Portbou, Girona, España
+            </p>
+            <p className="text-gray-500 text-xs mt-1">
+              Email: empordajobs@gmail.com • Teléfono: +34 660 45 21 36
+            </p>
+          </div>
         </div>
       </div>
     </footer>

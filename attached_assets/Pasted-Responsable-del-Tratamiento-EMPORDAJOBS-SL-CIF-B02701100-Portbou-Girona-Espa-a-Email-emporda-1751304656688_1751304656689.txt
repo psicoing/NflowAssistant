@@ -1,0 +1,119 @@
+Responsable del Tratamiento
+EMPORDAJOBS SL
+CIF: B02701100
+Portbou, Girona, España
+Email: empordajobs@gmail.com
+Teléfono: +34 660 45 21 36
+
+¿Qué son las cookies?
+Las cookies son pequeños archivos de texto que se almacenan en su dispositivo cuando visita un sitio web. Las cookies son ampliamente utilizadas para hacer que los sitios web funcionen de manera más eficiente, así como para proporcionar información a los propietarios del sitio.
+
+En Saludalia utilizamos cookies para mejorar su experiencia de usuario, personalizar contenido y analizar el tráfico de nuestro sitio web.
+
+Tipos de cookies que utilizamos
+Cookies Técnicas (Necesarias)
+Siempre activas
+Estas cookies son esenciales para el funcionamiento básico del sitio web y no se pueden desactivar.
+
+Sesión de usuario: Mantienen su sesión iniciada durante la navegación
+Seguridad: Protegen contra ataques CSRF y otros riesgos de seguridad
+Carrito de compras: Guardan los servicios seleccionados
+Preferencias técnicas: Idioma, zona horaria y configuración básica
+Cookies de Funcionalidad
+Configurables
+Mejoran la funcionalidad del sitio web y personalizan su experiencia.
+
+Preferencias de usuario: Tema visual, configuración del dashboard
+Filtros de búsqueda: Recordar especialidades y ubicaciones preferidas
+Configuración PWA: Datos de aplicaciones web personalizadas
+Accesibilidad: Tamaño de fuente y contraste
+Cookies Analíticas
+Configurables
+Nos ayudan a entender cómo interactúa con el sitio web mediante información anónima.
+
+Google Analytics: Análisis de tráfico y comportamiento de usuarios
+Métricas de rendimiento: Tiempo de carga y errores técnicos
+Mapas de calor: Zonas más utilizadas de la interfaz
+Conversiones: Seguimiento de registros y citas programadas
+Cookies de Marketing
+Configurables
+Se utilizan para mostrar contenido relevante y medir la eficacia de nuestras campañas.
+
+Remarketing: Anuncios personalizados en otros sitios web
+Redes sociales: Integración con Facebook, LinkedIn, Twitter
+Afiliados: Seguimiento de enlaces de partners profesionales
+Email marketing: Personalización de newsletters
+Cookies de terceros
+Algunas cookies son establecidas por servicios de terceros que utilizamos para mejorar la funcionalidad de nuestro sitio web:
+
+Google Analytics
+Análisis de tráfico web y comportamiento de usuarios
+
+Duración: 2 años | Finalidad: Estadísticas
+
+PayPal
+Procesamiento seguro de pagos
+
+Duración: Sesión | Finalidad: Transacciones
+
+Calendly
+Sistema de reserva de citas integrado
+
+Duración: 1 año | Finalidad: Funcionalidad
+
+SendGrid
+Envío de emails transaccionales
+
+Duración: 30 días | Finalidad: Comunicación
+
+Gestión de cookies
+Puede gestionar sus preferencias de cookies en cualquier momento a través de:
+
+🍪 Panel de Configuración de Cookies
+Acceda al panel de configuración desde cualquier página del sitio web
+
+Configurar Cookies
+⚙️ Configuración del Navegador
+También puede gestionar cookies directamente desde su navegador:
+
+• Chrome: Configuración → Privacidad y seguridad → Cookies
+• Firefox: Opciones → Privacidad y seguridad → Cookies
+• Safari: Preferencias → Privacidad → Cookies
+• Edge: Configuración → Privacidad → Cookies
+Duración de las cookies
+Cookies de Sesión
+Temporal
+
+Se eliminan al cerrar el navegador
+
+Cookies Funcionales
+30 días
+
+Preferencias y configuración
+
+Cookies Analíticas
+2 años
+
+Estadísticas y análisis
+
+Consentimiento y derechos
+En cumplimiento del RGPD y la LSSI, solicitamos su consentimiento para el uso de cookies no esenciales. Puede:
+
+Aceptar o rechazar cookies específicas
+Modificar sus preferencias en cualquier momento
+Solicitar información sobre las cookies utilizadas
+Retirar el consentimiento previamente otorgado
+Para ejercer estos derechos, contacte con nosotros en empordajobs@gmail.com
+
+Actualizaciones
+Esta política de cookies puede actualizarse periódicamente para reflejar cambios en nuestras prácticas o por motivos legales. Le notificaremos cualquier cambio significativo a través de nuestro sitio web.
+
+Última actualización: 29 de enero de 2025
+
+Contacto
+Si tiene preguntas sobre nuestra política de cookies, puede contactarnos:
+
+EMPORDAJOBS SL
+Email: empordajobs@gmail.com
+Teléfono: +34 660 45 21 36
+Horario: Lunes a Viernes, 9:00 - 18:00

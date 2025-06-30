@@ -1,0 +1,194 @@
+Responsable del Tratamiento
+Datos del Responsable
+Denominación: EMPORDAJOBS SL
+CIF: B02701100
+Domicilio: Portbou, Girona, España
+Actividad: Servicios digitales sanitarios
+
+Contacto DPO
+Email: empordajobs@gmail.com
+Teléfono: +34 660 45 21 36
+Asunto: "Protección de Datos"
+Horario: L-V 9:00-18:00
+
+1. Información General
+En cumplimiento del Reglamento (UE) 2016/679 del Parlamento Europeo (RGPD) y la Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales, EMPORDAJOBS SL informa sobre el tratamiento de datos personales que realizamos a través de la plataforma Saludalia.
+
+Compromiso: Tratamos sus datos personales con las máximas garantías de seguridad, confidencialidad y transparencia, aplicando las medidas técnicas y organizativas más avanzadas.
+
+2. Datos Personales que Tratamos
+2.1 Datos de Identificación
+Nombre y apellidos
+Documento de identidad (DNI/NIE/Pasaporte)
+Fecha de nacimiento
+Nacionalidad
+Fotografía (opcional)
+2.2 Datos de Contacto
+Dirección postal completa
+Teléfono móvil y fijo
+Dirección de correo electrónico
+Preferencias de comunicación
+2.3 Datos Profesionales (Especialistas)
+Número de colegiación profesional
+Especialidad médica
+Titulaciones y certificaciones
+Experiencia profesional
+Centro(s) de trabajo
+Horarios de consulta
+2.4 Datos de Salud (Pacientes)Especial Protección
+Historia clínica digital
+Antecedentes médicos
+Medicación actual
+Alergias e intolerancias
+Informes médicos
+Resultados de pruebas diagnósticas
+Nota: Los datos de salud reciben especial protección conforme al artículo 9 del RGPD.
+
+2.5 Datos Técnicos y de Navegación
+Dirección IP
+Tipo de navegador y dispositivo
+Páginas visitadas y tiempo de navegación
+Cookies y tecnologías similares
+Geolocalización (si se autoriza)
+3. Finalidades del Tratamiento
+Gestión de la Plataforma
+• Registro y autenticación de usuarios
+• Verificación de profesionales sanitarios
+• Gestión de perfiles y preferencias
+• Soporte técnico y atención al cliente
+Servicios Sanitarios
+• Facilitación de citas médicas
+• Gestión de historiales médicos
+• Videoconsultas y telemedicina
+• Comunicación paciente-especialista
+Comercial y Marketing
+• Procesamiento de suscripciones
+• Facturación y cobros
+• Envío de newsletters (con consentimiento)
+• Análisis de mercado y mejoras
+Legal y Cumplimiento
+• Cumplimiento de obligaciones legales
+• Seguridad y prevención de fraudes
+• Ejercicio de derechos
+• Archivo y conservación legal
+4. Base Jurídica del Tratamiento
+Consentimiento (Art. 6.1.a RGPD)
+Para el tratamiento de datos de salud, envío de comunicaciones comerciales y cookies no esenciales.
+
+Ejecución de Contrato (Art. 6.1.b RGPD)
+Para la prestación de servicios de la plataforma, gestión de suscripciones y procesamiento de pagos.
+
+Interés Legítimo (Art. 6.1.f RGPD)
+Para análisis estadísticos, mejoras técnicas, seguridad de la plataforma y prevención de fraudes.
+
+Obligación Legal (Art. 6.1.c RGPD)
+Para cumplimiento de obligaciones fiscales, contables y sanitarias.
+
+5. Destinatarios de los Datos
+Sus datos personales pueden ser comunicados a:
+
+Profesionales Sanitarios
+Solo los datos necesarios para la prestación del servicio médico solicitado.
+
+Proveedores de Servicios
+PayPal (pagos), SendGrid (emails), Google Analytics (estadísticas) - con garantías adecuadas.
+
+Autoridades Competentes
+Solo cuando sea requerido por ley (autoridades sanitarias, fiscales, judiciales).
+
+Importante: No vendemos, alquilamos ni compartimos sus datos personales con terceros para fines comerciales.
+
+6. Transferencias Internacionales
+Algunos de nuestros proveedores pueden estar ubicados fuera del Espacio Económico Europeo (EEE). En estos casos, garantizamos que:
+
+Se realizan únicamente a países con decisión de adecuación de la UE
+Se establecen cláusulas contractuales tipo aprobadas por la Comisión Europea
+Se implementan medidas técnicas y organizativas complementarias
+Se informa específicamente al usuario cuando sea necesario
+7. Conservación de Datos
+Datos de Usuario
+Mientras mantenga activa su cuenta en la plataforma
+
++ 1 año tras baja para posibles reclamaciones
+
+Datos de Salud
+Conforme a normativa sanitaria aplicable
+
+Mínimo 5 años desde última consulta
+
+Datos Fiscales
+6 años desde finalización del ejercicio fiscal
+
+Según legislación tributaria vigente
+
+Datos Navegación
+Máximo 13 meses para cookies analíticas
+
+Logs de acceso: 1 año
+
+8. Sus Derechos
+Derechos Reconocidos por el RGPD
+🔍 Acceso
+Obtener información sobre qué datos tratamos y cómo
+
+✏️ Rectificación
+Corregir datos inexactos o incompletos
+
+🗑️ Supresión
+Eliminar sus datos cuando sea legalmente posible
+
+⏸️ Limitación
+Restringir el tratamiento en determinadas circunstancias
+
+📦 Portabilidad
+Recibir sus datos en formato estructurado
+
+❌ Oposición
+Oponerse al tratamiento por motivos particulares
+
+📧 Cómo ejercer sus derechos
+Envíe un email a: empordajobs@gmail.com
+
+Incluya: Asunto "Ejercicio de Derechos RGPD", copia de DNI y descripción clara del derecho que desea ejercer
+
+9. Medidas de Seguridad
+Implementamos medidas técnicas y organizativas apropiadas para garantizar un nivel de seguridad adecuado al riesgo:
+
+🔒 Medidas Técnicas
+• Cifrado SSL/TLS en todas las comunicaciones
+• Sistemas de autenticación robustos
+• Copias de seguridad regulares
+• Monitorización de seguridad 24/7
+• Actualizaciones periódicas de software
+👥 Medidas Organizativas
+• Formación regular del personal
+• Políticas de acceso por roles
+• Auditorías internas periódicas
+• Procedimientos de gestión de incidentes
+• Evaluaciones de impacto en la privacidad
+10. Reclamaciones
+Tiene derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD) si considera que el tratamiento de sus datos personales infringe la normativa aplicable.
+
+Agencia Española de Protección de Datos
+Web: www.aepd.es
+Teléfono: 912 663 517
+Dirección: Calle Jorge Juan, 6 - 28001 Madrid
+
+11. Actualizaciones
+Esta política de privacidad puede ser actualizada para reflejar cambios en nuestras prácticas o en la legislación aplicable. Le notificaremos cualquier cambio significativo a través de la plataforma o por email.
+
+Fecha de última actualización: 29 de enero de 2025
+Versión: 1.0
+
+12. Contacto
+Para cualquier consulta sobre esta política de privacidad o el tratamiento de sus datos personales, puede contactarnos:
+
+Email
+empordajobs@gmail.com
+
+Asunto: "Protección de Datos"
+
+Teléfono
++34 660 45 21 36
+
+Lunes a Viernes: 9:00 - 18:00
