@@ -36,21 +36,20 @@ export default function PartnerLogin() {
       if (data.success) {
         toast({
           title: "Login exitoso",
-          description: "Bienvenido al dashboard de partners",
+          description: `Bienvenido ${data.partner.contactName}`,
         });
         setLocation("/partners/dashboard");
       } else {
         toast({
-          title: "Error de autenticación",
-          description: data.message || "Credenciales incorrectas",
+          title: "Error",
+          description: data.message,
           variant: "destructive",
         });
       }
     } catch (error) {
-      console.error("Login error:", error);
       toast({
         title: "Error",
-        description: "Error al conectar con el servidor",
+        description: "Error de conexión. Intenta de nuevo.",
         variant: "destructive",
       });
     } finally {
@@ -152,58 +151,58 @@ export default function PartnerLogin() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="partner@empresa.com"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Contraseña</Label>
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      value={formData.password}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="••••••••"
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
-                  </Button>
-                </form>
-                
-                <div className="mt-6 text-center space-y-2">
-                  <p className="text-sm text-gray-600">
-                    ¿No tienes cuenta de partner?{" "}
-                    <Link href="/partners/register">
-                      <a className="text-blue-600 hover:underline font-medium">
-                        Solicitar acceso
-                      </a>
-                    </Link>
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <Link href="/">
-                      <a className="text-gray-500 hover:underline">
-                        ← Volver al inicio
-                      </a>
-                    </Link>
-                  </p>
-                </div>
-              </CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                placeholder="partner@empresa.com"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Contraseña</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+                placeholder="••••••••"
+              />
+            </div>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isLoading}
+            >
+              {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
+            </Button>
+          </form>
+          
+          <div className="mt-6 text-center space-y-2">
+            <p className="text-sm text-gray-600">
+              ¿No tienes cuenta de partner?{" "}
+              <Link href="/partners/register">
+                <a className="text-blue-600 hover:underline font-medium">
+                  Solicitar acceso
+                </a>
+              </Link>
+            </p>
+            <p className="text-sm text-gray-600">
+              <Link href="/">
+                <a className="text-gray-500 hover:underline">
+                  ← Volver al inicio
+                </a>
+              </Link>
+            </p>
+          </div>
+        </CardContent>
             </Card>
           </div>
         </div>
