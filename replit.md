@@ -130,6 +130,9 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- June 30, 2025. **SECCIÓN LEGAL COMPLETA AÑADIDA** - Implementadas 4 páginas legales completas: Términos y Condiciones, Política de Privacidad, Política de Cookies y Aviso Legal con toda la información corporativa de EMPORDAJOBS SL (CIF: B02701100)
+- June 30, 2025. **FOOTER ACTUALIZADO CON INFORMACIÓN LEGAL** - Añadida sección "Legal" con enlaces a todas las páginas legales, actualizada información de la empresa y datos de contacto oficiales
+- June 30, 2025. **AVISO INVERSIÓN PARTNERS INTEGRADO** - Página de login de partners ahora muestra prominentemente los requisitos de inversión (SAFE €4,000 o notarial €5,000) con diseño profesional en dos columnas
 - June 29, 2025. **PARTNER MARCOS PAJARON ANULADO** - Partner Dr. Marcos Pajaron deshabilitado completamente del sistema por solicitud administrativa
 - June 29, 2025. **FOOTER SIMPLIFICADO A LINKEDIN ÚNICAMENTE** - Eliminados iconos Twitter e Instagram, conservado solo LinkedIn con enlace https://www.linkedin.com/in/empordajobs/
 - June 29, 2025. **VARIABLES TRADUCCIÓN COMPLETAMENTE ELIMINADAS** - Corregidos todos los errores t() en chat-header.tsx y chat-interface.tsx, sistema 100% funcional con texto estático español

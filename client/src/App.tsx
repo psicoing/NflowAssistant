@@ -30,6 +30,10 @@ import ActivarStripe from "@/pages/activar-stripe";
 import StripeActivateManual from "@/pages/stripe-activate-manual";
 import PayPalActivateManual from "@/pages/paypal-activate-manual";
 import QuickActivate from "@/pages/quick-activate";
+import TerminosCondiciones from "@/pages/legal/terminos";
+import PoliticaPrivacidad from "@/pages/legal/privacidad";
+import PoliticaCookies from "@/pages/legal/cookies";
+import AvisoLegal from "@/pages/legal/aviso-legal";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -39,7 +43,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/consejos", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/consejos", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
     if (publicRoutes.includes(location)) {
       return;
     }
@@ -90,6 +94,10 @@ function AuthenticatedRouter() {
       <Route path="/stripe-manual" component={StripeActivateManual} />
       <Route path="/paypal-manual" component={PayPalActivateManual} />
       <Route path="/activar" component={QuickActivate} />
+      <Route path="/legal/terminos" component={TerminosCondiciones} />
+      <Route path="/legal/privacidad" component={PoliticaPrivacidad} />
+      <Route path="/legal/cookies" component={PoliticaCookies} />
+      <Route path="/legal/aviso-legal" component={AvisoLegal} />
       <Route component={NotFound} />
     </Switch>
   );
