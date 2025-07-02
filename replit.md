@@ -130,6 +130,8 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- July 2, 2025. **USUARIO MARCOS PAJARON BLOQUEADO** - Usuario mpajaron (ID: 34) bloqueado completamente del sistema, suscripción cancelada y acceso revocado por solicitud administrativa
+- July 2, 2025. **PARTNER MARCOS PAJARON DESHABILITADO** - Partner Dr. Marcos Pajaron (ID: 2) deshabilitado con status "disabled" y documentos no verificados, acceso al sistema de partners completamente revocado
 - June 30, 2025. **SECCIÓN LEGAL COMPLETA AÑADIDA** - Implementadas 4 páginas legales completas: Términos y Condiciones, Política de Privacidad, Política de Cookies y Aviso Legal con toda la información corporativa de EMPORDAJOBS SL (CIF: B02701100)
 - June 30, 2025. **FOOTER ACTUALIZADO CON INFORMACIÓN LEGAL** - Añadida sección "Legal" con enlaces a todas las páginas legales, actualizada información de la empresa y datos de contacto oficiales
 - June 30, 2025. **AVISO INVERSIÓN PARTNERS INTEGRADO** - Página de login de partners ahora muestra prominentemente los requisitos de inversión (SAFE €4,000 o notarial €5,000) con diseño profesional en dos columnas
