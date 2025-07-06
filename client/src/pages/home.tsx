@@ -6,7 +6,7 @@ import ServicesSection from "@/components/sections/services-section";
 import ChatExamplesSection from "@/components/sections/chat-examples-section";
 import FeaturesSection from "@/components/sections/features-section";
 import PersonasSection from "@/components/sections/personas-section";
-import MobileAppsSection from "@/components/sections/mobile-apps-section";
+import PackagesSection from "@/components/sections/packages-section";
 import PricingSection from "@/components/sections/pricing-section";
 import InstitutoSection from "@/components/sections/instituto-section";
 
@@ -22,7 +22,7 @@ export default function Home() {
         <FeaturesSection />
         <PersonasSection />
         <PricingSection />
-        <MobileAppsSection />
+        <PackagesSection />
         <InstitutoSection />
       </main>
       <Footer />
