@@ -2,8 +2,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, Heart, Briefcase, Building2, ArrowRight, Sparkles, Gift, User, UserCheck, Monitor, Headphones } from "lucide-react";
+import { useLocation } from "wouter";
 
 export default function PackagesSection() {
+  const [, setLocation] = useLocation();
   const packageCategories = [];
 
   return (
@@ -61,6 +63,7 @@ export default function PackagesSection() {
               
               <Button 
                 size="lg" 
+                onClick={() => setLocation("/register")}
                 className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white font-semibold px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
               >
                 Comenzar ahora
