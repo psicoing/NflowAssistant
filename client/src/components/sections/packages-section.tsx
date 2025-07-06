@@ -40,17 +40,7 @@ export default function PackagesSection() {
       brand: "JOBDA",
       footerText: "Selección de Personal"
     },
-    {
-      icon: Headphones,
-      title: "Salud Laboral",
-      subtitle: "SALUD MENTAL LABORAL", 
-      description: "Soporte para el manejo del estrés, ansiedad y bienestar en el entorno profesional",
-      bgColor: "from-orange-400 to-orange-600",
-      headerColor: "from-orange-500 to-orange-600",
-      character: "👩‍💼", // Professional woman character
-      items: ["🎧", "💡", "🔥", "📊", "⭐", "🎯"],
-      features: ["Prevención burnout", "Bienestar laboral", "Gestión estrés"]
-    }
+
   ];
 
   return (
@@ -81,7 +71,7 @@ export default function PackagesSection() {
         </div>
 
         {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mb-20 max-w-6xl mx-auto">
           {packageCategories.map((pkg, index) => {
             const brandName = pkg.brand || "NFLOW";
             const footerText = pkg.footerText || "Salud Mental";
