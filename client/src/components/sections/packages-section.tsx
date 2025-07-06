@@ -1,52 +1,54 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, Heart, Briefcase, Building2, ArrowRight, Sparkles, Gift } from "lucide-react";
+import { Users, Heart, Briefcase, Building2, ArrowRight, Sparkles, Gift, User, UserCheck, Monitor, Headphones } from "lucide-react";
 
 export default function PackagesSection() {
   const packageCategories = [
     {
-      icon: Users,
+      icon: User,
       title: "Adolescentes",
       subtitle: "SALUD MENTAL",
       description: "Apoyo para gestionar emociones, estrés escolar y relaciones sociales",
-      color: "from-orange-500 to-red-500",
-      bgColor: "bg-orange-500/10",
-      borderColor: "border-orange-500/30",
-      packageImage: "📦", // Will be replaced with actual package design
+      bgColor: "from-orange-400 to-orange-600",
+      headerColor: "from-orange-500 to-orange-600",
+      character: "👩‍🦱", // Young woman character
+      items: ["💬", "📱", "🎯", "🔥", "📊", "⚙️"],
       features: ["Gestión emocional", "Estrés escolar", "Relaciones sociales"]
     },
     {
-      icon: Heart,
+      icon: Users,
       title: "Padres y Madres",
-      subtitle: "SALUD MENTAL",
+      subtitle: "SALUD MENTAL FAMILIAR",
       description: "Orientación para comprender y apoyar el desarrollo emocional de los hijos",
-      color: "from-orange-500 to-red-500",
-      bgColor: "bg-orange-500/10",
-      borderColor: "border-orange-500/30",
-      packageImage: "📦",
+      bgColor: "from-orange-400 to-orange-600",
+      headerColor: "from-orange-500 to-orange-600",
+      character: "👨‍👩‍👧", // Family characters
+      items: ["❤️", "🏠", "🎯", "💬", "📊", "🔧"],
       features: ["Comunicación familiar", "Apoyo emocional", "Resolución conflictos"]
     },
     {
       icon: Briefcase,
       title: "Empresas",
-      subtitle: "DESARROLLO PROFESIONAL",
+      subtitle: "SELECCIÓN DE PERSONAL",
       description: "Servicio de desarrollo personalizado de apps con IA para la transformación digital de tu empresa",
-      color: "from-yellow-500 to-orange-500",
-      bgColor: "bg-yellow-500/10",
-      borderColor: "border-yellow-500/30",
-      packageImage: "📦",
-      features: ["Desarrollo IA", "Apps empresariales", "Transformación digital"]
+      bgColor: "from-yellow-400 to-yellow-600",
+      headerColor: "from-yellow-500 to-yellow-600",
+      character: "👨‍💼", // Business man character
+      items: ["📋", "📁", "🔍", "💼", "📈", "⚡"],
+      features: ["Desarrollo IA", "Apps empresariales", "Transformación digital"],
+      brand: "JOBDA",
+      footerText: "Selección de Personal"
     },
     {
-      icon: Building2,
+      icon: Headphones,
       title: "Salud Laboral",
-      subtitle: "SALUD MENTAL LABORAL",
+      subtitle: "SALUD MENTAL LABORAL", 
       description: "Soporte para el manejo del estrés, ansiedad y bienestar en el entorno profesional",
-      color: "from-orange-500 to-red-500",
-      bgColor: "bg-orange-500/10",
-      borderColor: "border-orange-500/30",
-      packageImage: "📦",
+      bgColor: "from-orange-400 to-orange-600",
+      headerColor: "from-orange-500 to-orange-600",
+      character: "👩‍💼", // Professional woman character
+      items: ["🎧", "💡", "🔥", "📊", "⭐", "🎯"],
       features: ["Prevención burnout", "Bienestar laboral", "Gestión estrés"]
     }
   ];
@@ -81,82 +83,58 @@ export default function PackagesSection() {
         {/* Packages Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-20">
           {packageCategories.map((pkg, index) => {
-            const Icon = pkg.icon;
+            const brandName = pkg.brand || "NFLOW";
+            const footerText = pkg.footerText || "Salud Mental";
+            const itemBgColor = pkg.brand === "JOBDA" ? "bg-yellow-200/60" : "bg-orange-200/60";
+            
             return (
               <Card 
                 key={index} 
-                className="relative overflow-hidden transition-all duration-500 cursor-pointer group h-[500px] bg-gradient-to-br from-gray-800/90 via-gray-700/80 to-gray-800/90 border border-gray-700/40 hover:border-gray-600/60 hover:shadow-2xl hover:shadow-nflow-orange/20 hover:-translate-y-2"
+                className="relative overflow-hidden transition-all duration-500 cursor-pointer group h-[500px] bg-gray-300 border-4 border-gray-400 hover:shadow-2xl hover:shadow-nflow-orange/20 hover:-translate-y-2 rounded-3xl"
               >
-                {/* Package Box Design */}
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-transparent to-orange-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                
-                <CardContent className="relative p-6 h-full flex flex-col">
-                  {/* Package Header - NFLOW Branding */}
-                  <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-center py-2 px-4 rounded-t-lg mb-4 -mx-6 -mt-6">
-                    <div className="text-sm font-bold tracking-wider">NFLOW</div>
-                    <div className="text-xs opacity-90">{pkg.subtitle}</div>
+                {/* Package Box Design - Outer Frame */}
+                <div className={`absolute inset-2 bg-gradient-to-b ${pkg.bgColor} rounded-2xl shadow-xl`}>
+                  {/* Package Header - Brand */}
+                  <div className={`bg-gradient-to-r ${pkg.headerColor} text-white text-center py-3 px-4 rounded-t-2xl`}>
+                    <div className="text-lg font-bold tracking-wider">{brandName}</div>
+                    <div className="text-xs opacity-90 font-medium">{pkg.subtitle}</div>
                   </div>
 
-                  {/* Package Content Area */}
-                  <div className="bg-white/95 backdrop-blur-sm rounded-lg p-6 flex-1 flex flex-col">
-                    {/* Icon and Character */}
+                  {/* Main Content Area */}
+                  <div className="p-6 h-full relative flex flex-col justify-between">
+                    {/* Character Display */}
                     <div className="text-center mb-4">
-                      <div className="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center">
-                        <Icon className="w-8 h-8 text-orange-600" />
-                      </div>
-                      
-                      {/* Package Icons/Elements */}
-                      <div className="grid grid-cols-3 gap-2 mb-4">
-                        <div className="w-8 h-8 bg-purple-100 rounded flex items-center justify-center">
-                          <div className="w-4 h-4 bg-purple-400 rounded"></div>
-                        </div>
-                        <div className="w-8 h-8 bg-pink-100 rounded flex items-center justify-center">
-                          <div className="w-4 h-4 bg-pink-400 rounded-full"></div>
-                        </div>
-                        <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
-                          <div className="w-4 h-4 bg-blue-400 rounded"></div>
-                        </div>
-                        <div className="w-8 h-8 bg-green-100 rounded flex items-center justify-center">
-                          <div className="w-4 h-4 bg-green-400 rounded"></div>
-                        </div>
-                        <div className="w-8 h-8 bg-yellow-100 rounded flex items-center justify-center">
-                          <div className="w-4 h-4 bg-yellow-400 rounded-full"></div>
-                        </div>
-                        <div className="w-8 h-8 bg-indigo-100 rounded flex items-center justify-center">
-                          <div className="w-4 h-4 bg-indigo-400 rounded"></div>
-                        </div>
-                      </div>
+                      <div className="text-6xl mb-3 drop-shadow-lg">{pkg.character}</div>
                     </div>
 
-                    {/* Package Title */}
-                    <h3 className="text-xl font-bold text-gray-900 text-center mb-3">
-                      {pkg.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-sm text-gray-700 text-center mb-4 leading-relaxed flex-1">
-                      {pkg.description}
-                    </p>
-
-                    {/* Features */}
-                    <div className="space-y-2">
-                      {pkg.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center text-xs text-gray-600">
-                          <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mr-2"></div>
-                          {feature}
+                    {/* Items Grid - 3x2 layout like in images */}
+                    <div className="grid grid-cols-3 gap-3 mb-6 flex-1 content-start">
+                      {pkg.items.map((item, idx) => (
+                        <div key={idx} className={`w-10 h-10 ${itemBgColor} rounded-lg flex items-center justify-center hover:scale-110 transition-all duration-200 shadow-sm`}>
+                          <span className="text-lg">{item}</span>
                         </div>
                       ))}
                     </div>
+
+                    {/* Package Title */}
+                    <div className="text-center mb-4">
+                      <h3 className="text-white font-bold text-lg drop-shadow-lg">
+                        {pkg.title}
+                      </h3>
+                    </div>
                   </div>
 
-                  {/* Package Footer/Bottom */}
-                  <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-center py-2 px-4 rounded-b-lg mt-4 -mx-6 -mb-6">
-                    <div className="text-xs font-medium">Herramientas especializadas</div>
+                  {/* Package Footer */}
+                  <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-r ${pkg.headerColor} text-white text-center py-2 rounded-b-2xl`}>
+                    <div className="text-xs font-medium opacity-90">{footerText}</div>
                   </div>
-                </CardContent>
+                </div>
 
-                {/* Hover Effect Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-nflow-orange/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                {/* Shine Effect on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl"></div>
+                
+                {/* Glow Effect */}
+                <div className={`absolute -inset-1 bg-gradient-to-r ${pkg.bgColor} rounded-3xl opacity-0 group-hover:opacity-30 blur-xl transition-opacity duration-500 pointer-events-none`}></div>
               </Card>
             );
           })}
