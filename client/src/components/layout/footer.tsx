@@ -15,7 +15,7 @@ export default function Footer() {
               </div>
               <span className="text-xl font-bold text-white">NFLOW</span>
               <span className="text-xs bg-nflow-orange/20 text-nflow-orange px-2 py-1 rounded-full">
-                β
+                versión beta 1-04
               </span>
             </div>
             <p className="text-gray-400 mb-6 max-w-md">
