@@ -24,6 +24,7 @@ import type { Resource } from "@shared/schema";
 
 const categoryIcons = {
   ansiedad: Brain,
+  depresion: Heart,
   familia: Users,
   bienestar: Heart,
   laboral: Briefcase,
@@ -44,6 +45,7 @@ const typeLabels = {
 
 const categoryLabels = {
   ansiedad: "Ansiedad & Crisis",
+  depresion: "Depresión",
   familia: "Familia", 
   bienestar: "Bienestar",
   laboral: "Laboral",
@@ -82,6 +84,30 @@ export default function Resources() {
       category: "ansiedad",
       type: "article", 
       createdAt: new Date("2024-02-15"),
+    },
+    {
+      id: 9,
+      title: "Guía Oficial sobre Depresión",
+      content: "Información completa sobre depresión basada en guías clínicas del Sistema Nacional de Salud y protocolos de atención primaria.",
+      category: "depresion",
+      type: "guide",
+      createdAt: new Date("2024-02-20"),
+    },
+    {
+      id: 10,
+      title: "Detección Temprana de Síntomas Depresivos",
+      content: "Recursos de autodetección y cuestionarios validados para identificar signos tempranos de depresión.",
+      category: "depresion",
+      type: "article",
+      createdAt: new Date("2024-02-25"),
+    },
+    {
+      id: 11,
+      title: "Recursos de Apoyo Profesional",
+      content: "Directorio de recursos profesionales y líneas de ayuda especializadas en salud mental y depresión.",
+      category: "depresion",
+      type: "guide",
+      createdAt: new Date("2024-03-01"),
     },
     {
       id: 2,
@@ -176,7 +202,7 @@ export default function Resources() {
                 </div>
 
                 <div className="flex gap-2 justify-center">
-                  {types.filter(type => type !== 'article').map((type) => (
+                  {types.filter(type => type !== 'exercise').map((type) => (
                     <Button
                       key={type}
                       variant={selectedType === type ? "default" : "outline"}
@@ -584,6 +610,158 @@ export default function Resources() {
                     <h4 className="font-bold text-yellow-400 mb-2">⚠️ Aviso:</h4>
                     <p className="text-sm">
                       Si los síntomas empeoran o tienes pensamientos graves, acude a tu médico o a Urgencias.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : selectedResource?.category === "depresion" ? (
+              // Modal específico para recursos de depresión
+              <div>
+                <DialogHeader>
+                  <DialogTitle className="text-white text-2xl mb-4 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-purple-600/20 rounded-lg flex items-center justify-center">
+                      <Heart className="w-5 h-5 text-purple-400" />
+                    </div>
+                    Recursos Fiables para la Depresión
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300">
+                    Basados en Guías Clínicas Oficiales y Protocolos de Atención Primaria
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="space-y-6 text-gray-300">
+                  {/* Introducción */}
+                  <div className="bg-gradient-to-r from-purple-900/30 to-purple-800/30 p-4 rounded-lg border border-purple-700/30">
+                    <p className="text-sm leading-relaxed">
+                      La depresión es un trastorno de salud mental frecuente que requiere atención profesional. 
+                      Esta información está basada en las guías clínicas del Sistema Nacional de Salud y 
+                      protocolos de atención primaria. <strong className="text-yellow-400">No sustituye el diagnóstico ni tratamiento profesional.</strong>
+                    </p>
+                  </div>
+
+                  {/* ¿Qué es la depresión? */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">¿Qué es la depresión?</h3>
+                    <p className="text-gray-300 mb-3">
+                      La depresión es más que sentirse triste. Es un trastorno del estado de ánimo que afecta 
+                      cómo piensas, sientes y manejas las actividades diarias. Puede interferir significativamente 
+                      con la vida cotidiana y requiere tratamiento profesional.
+                    </p>
+                    <Button variant="outline" size="sm" className="text-purple-400 border-purple-400 hover:bg-purple-400/10">
+                      📄 Guía Clínica Depresión – SNS (PDF)
+                    </Button>
+                  </div>
+
+                  {/* Síntomas principales */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Síntomas principales:</h3>
+                    <div className="grid md:grid-cols-2 gap-3">
+                      {[
+                        "Estado de ánimo deprimido la mayor parte del día",
+                        "Pérdida de interés o placer en actividades", 
+                        "Cambios significativos en el peso o apetito",
+                        "Problemas de sueño (insomnio o hipersomnia)",
+                        "Fatiga o pérdida de energía",
+                        "Sentimientos de inutilidad o culpa excesiva",
+                        "Dificultad para concentrarse o tomar decisiones",
+                        "Pensamientos recurrentes de muerte"
+                      ].map((sintoma, idx) => (
+                        <div key={idx} className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                          <span className="text-sm">{sintoma}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Cuándo buscar ayuda URGENTE */}
+                  <div className="bg-gradient-to-r from-red-900/40 to-red-800/40 p-4 rounded-lg border border-red-700/50">
+                    <h3 className="text-xl font-semibold text-white mb-3">⚠️ Busca ayuda INMEDIATA si:</h3>
+                    <ul className="space-y-2">
+                      {[
+                        "Tienes pensamientos de autolesión o suicidio",
+                        "Has hecho planes específicos para hacerte daño", 
+                        "Sientes que no puedes garantizar tu seguridad",
+                        "Experimentas síntomas psicóticos (alucinaciones, delirios)"
+                      ].map((item, idx) => (
+                        <li key={idx} className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                          <span className="text-sm font-medium">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mt-4 space-y-2">
+                      <Button variant="outline" size="sm" className="text-red-400 border-red-400 hover:bg-red-400/10 w-full">
+                        🚨 Emergencias: 112
+                      </Button>
+                      <Button variant="outline" size="sm" className="text-red-400 border-red-400 hover:bg-red-400/10 w-full">
+                        📞 Teléfono de la Esperanza: 717 003 717
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Herramientas de detección */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Herramientas de autoevaluación:</h3>
+                    <div className="space-y-3">
+                      <Button variant="outline" className="w-full justify-start text-purple-400 border-purple-400 hover:bg-purple-400/10">
+                        ✅ Cuestionario PHQ-9 (Patient Health Questionnaire)
+                      </Button>
+                      <Button variant="outline" className="w-full justify-start text-blue-400 border-blue-400 hover:bg-blue-400/10">
+                        📋 Escala de Hamilton para la Depresión (HAM-D)
+                      </Button>
+                      <Button variant="outline" className="w-full justify-start text-green-400 border-green-400 hover:bg-green-400/10">
+                        🔍 Test de Beck para la Depresión (BDI-II)
+                      </Button>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-2">
+                      * Estas herramientas son orientativas. Un profesional debe realizar el diagnóstico.
+                    </p>
+                  </div>
+
+                  {/* Recursos profesionales */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Recursos profesionales:</h3>
+                    <div className="space-y-3">
+                      <Button variant="outline" className="w-full justify-start text-nflow-blue border-nflow-blue hover:bg-nflow-blue/10">
+                        🏥 Atención Primaria - Tu centro de salud
+                      </Button>
+                      <Button variant="outline" className="w-full justify-start text-purple-400 border-purple-400 hover:bg-purple-400/10">
+                        🧠 Salud Mental - Derivación especializada
+                      </Button>
+                      <Button variant="outline" className="w-full justify-start text-green-400 border-green-400 hover:bg-green-400/10">
+                        📞 Líneas de ayuda especializadas
+                      </Button>
+                      <Button variant="outline" className="w-full justify-start text-orange-400 border-orange-400 hover:bg-orange-400/10">
+                        🌐 Plataforma de Salud Mental online
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Descargables oficiales */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Descargables oficiales:</h3>
+                    <div className="grid gap-2">
+                      {[
+                        "Guía para pacientes con depresión (SNS)",
+                        "Manual de autoayuda basado en TCC",
+                        "Cuestionarios de seguimiento (PHQ-9, BDI-II)",
+                        "Recursos para familiares y cuidadores"
+                      ].map((item, idx) => (
+                        <Button key={idx} variant="outline" size="sm" className="justify-start text-gray-300 border-gray-600 hover:bg-gray-700/50">
+                          📥 {item}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Aviso importante */}
+                  <div className="bg-gradient-to-r from-yellow-900/30 to-yellow-800/30 p-4 rounded-lg border border-yellow-700/30">
+                    <h4 className="font-bold text-yellow-400 mb-2">⚠️ Importante:</h4>
+                    <p className="text-sm">
+                      La depresión es un trastorno médico que requiere tratamiento profesional. 
+                      No dudes en contactar con tu médico de atención primaria o el servicio de urgencias 
+                      si experimentas síntomas graves.
                     </p>
                   </div>
                 </div>
