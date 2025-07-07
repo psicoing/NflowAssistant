@@ -42,6 +42,14 @@ const typeLabels = {
   exercise: "Ejercicio",
 };
 
+const categoryLabels = {
+  ansiedad: "Ansiedad & Crisis",
+  familia: "Familia", 
+  bienestar: "Bienestar",
+  laboral: "Laboral",
+  autoestima: "Autoestima",
+};
+
 export default function Resources() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -54,10 +62,26 @@ export default function Resources() {
     {
       id: 1,
       title: "Técnicas de Respiración para la Ansiedad",
-      content: "Aprende ejercicios de respiración efectivos para reducir los niveles de ansiedad y promover la relajación.",
+      content: "Ejercicios de respiración oficiales basados en las guías del Sistema Nacional de Salud para reducir los niveles de ansiedad de forma efectiva.",
       category: "ansiedad",
       type: "exercise",
       createdAt: new Date("2024-01-15"),
+    },
+    {
+      id: 7,
+      title: "Gestión de Crisis Emocionales",
+      content: "Estrategias inmediatas para manejar crisis de ansiedad y ataques de pánico según protocolos clínicos oficiales.",
+      category: "ansiedad", 
+      type: "guide",
+      createdAt: new Date("2024-02-10"),
+    },
+    {
+      id: 8,
+      title: "Autoevaluación GAD-7 y Herramientas",
+      content: "Recursos de autoevaluación validados por el Ministerio de Sanidad para monitorizar tu nivel de ansiedad.",
+      category: "ansiedad",
+      type: "article", 
+      createdAt: new Date("2024-02-15"),
     },
     {
       id: 2,
@@ -154,7 +178,7 @@ export default function Resources() {
                       onClick={() => setSelectedCategory(category)}
                       className={selectedCategory === category ? "bg-nflow-orange hover:bg-nflow-orange-light text-black border-0 rounded-full" : "border-gray-500 text-black bg-white hover:bg-nflow-orange/90 hover:text-black hover:border-nflow-orange rounded-full"}
                     >
-                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                      {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
                     </Button>
                   ))}
                 </div>
@@ -406,6 +430,169 @@ export default function Resources() {
                         <span><strong>Formación y protocolos</strong> corporativos para prevenir entornos tóxicos y burnout.</span>
                       </li>
                     </ul>
+                  </div>
+                </div>
+              </div>
+            ) : selectedResource?.category === "ansiedad" ? (
+              // Modal específico para recursos de ansiedad
+              <div>
+                <DialogHeader>
+                  <DialogTitle className="text-white text-2xl mb-4 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-nflow-blue/20 rounded-lg flex items-center justify-center">
+                      <Brain className="w-5 h-5 text-nflow-blue" />
+                    </div>
+                    Recursos Fiables para la Ansiedad
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300">
+                    Basados en Guías Oficiales de Salud
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="space-y-6 text-gray-300">
+                  {/* Introducción */}
+                  <div className="bg-gradient-to-r from-blue-900/30 to-blue-800/30 p-4 rounded-lg border border-blue-700/30">
+                    <p className="text-sm leading-relaxed">
+                      La ansiedad es un problema de salud frecuente. Aquí tienes información y recursos 
+                      recomendados por el Sistema Nacional de Salud y las principales guías clínicas, 
+                      organizados de forma clara y sencilla. <strong className="text-yellow-400">No sustituyen el diagnóstico profesional.</strong>
+                    </p>
+                  </div>
+
+                  {/* ¿Qué es la ansiedad? */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">¿Qué es la ansiedad?</h3>
+                    <p className="text-gray-300 mb-3">
+                      La ansiedad es una respuesta normal del organismo ante situaciones de peligro o incertidumbre. 
+                      Se vuelve un problema cuando es excesiva, constante o interfiere en la vida diaria.
+                    </p>
+                    <Button variant="outline" size="sm" className="text-nflow-blue border-nflow-blue hover:bg-nflow-blue/10">
+                      📄 Más información – GuíaSalud (PDF)
+                    </Button>
+                  </div>
+
+                  {/* Tipos de ansiedad */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Tipos de ansiedad más frecuentes:</h3>
+                    <ul className="space-y-2">
+                      {[
+                        "Trastorno de Ansiedad Generalizada",
+                        "Crisis de pánico", 
+                        "Fobias (social, agorafobia, etc.)",
+                        "Trastorno obsesivo-compulsivo",
+                        "Estrés postraumático"
+                      ].map((tipo, idx) => (
+                        <li key={idx} className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-nflow-blue rounded-full"></div>
+                          <span>{tipo}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Síntomas comunes */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Síntomas comunes:</h3>
+                    <div className="grid md:grid-cols-2 gap-2">
+                      {[
+                        "Palpitaciones, temblores, sudoración",
+                        "Miedo, inquietud, preocupación", 
+                        "Problemas para dormir",
+                        "Sensación de ahogo",
+                        "Dificultad para concentrarse"
+                      ].map((sintoma, idx) => (
+                        <div key={idx} className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                          <span className="text-sm">{sintoma}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* ¿Cuándo pedir ayuda? */}
+                  <div className="bg-gradient-to-r from-red-900/30 to-red-800/30 p-4 rounded-lg border border-red-700/30">
+                    <h3 className="text-xl font-semibold text-white mb-3">¿Cuándo pedir ayuda?</h3>
+                    <ul className="space-y-2">
+                      {[
+                        "Si los síntomas son intensos o persisten",
+                        "Si interfieren en el trabajo o la vida personal", 
+                        "Si tienes pensamientos de autolesión"
+                      ].map((item, idx) => (
+                        <li key={idx} className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                          <span className="text-sm">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Button variant="outline" size="sm" className="mt-3 text-red-400 border-red-400 hover:bg-red-400/10">
+                      📄 Consulta rápida – Ministerio de Sanidad (PDF)
+                    </Button>
+                  </div>
+
+                  {/* ¿Qué puedes hacer en casa? */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">¿Qué puedes hacer en casa?</h3>
+                    <ul className="space-y-2">
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-green-400 rounded-full mt-2"></div>
+                        <div>
+                          <span className="font-medium">Practicar técnicas de respiración y relajación:</span>
+                          <br />
+                          <Button variant="outline" size="sm" className="mt-1 text-green-400 border-green-400 hover:bg-green-400/10">
+                            🧘 Ejercicio guiado – Andalucía Salud (PDF)
+                          </Button>
+                        </div>
+                      </li>
+                      {[
+                        "Mantener rutinas diarias (dormir, comer, ejercicio regular)",
+                        "Evitar cafeína, alcohol y tabaco",
+                        "Hablar con personas de confianza"
+                      ].map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-3">
+                          <div className="w-2 h-2 bg-green-400 rounded-full mt-2"></div>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Recursos profesionales */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Recursos profesionales y de autoayuda:</h3>
+                    <div className="space-y-3">
+                      <Button variant="outline" className="w-full justify-start text-nflow-blue border-nflow-blue hover:bg-nflow-blue/10">
+                        📋 Guía de Práctica Clínica para Trastornos de Ansiedad – Atención Primaria
+                      </Button>
+                      <Button variant="outline" className="w-full justify-start text-purple-400 border-purple-400 hover:bg-purple-400/10">
+                        📞 Teléfono de la Esperanza – 717 003 717
+                      </Button>
+                      <Button variant="outline" className="w-full justify-start text-orange-400 border-orange-400 hover:bg-orange-400/10">
+                        ✅ Escala GAD-7 online (autoevaluación)
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Descargables */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Descargables y enlaces útiles:</h3>
+                    <div className="grid gap-2">
+                      {[
+                        "Guía para pacientes y cuidadores (PDF)",
+                        "Ejercicios prácticos y autoayuda (PDF)",
+                        "Escala GAD-7 y otras herramientas (PDF)"
+                      ].map((item, idx) => (
+                        <Button key={idx} variant="outline" size="sm" className="justify-start text-gray-300 border-gray-600 hover:bg-gray-700/50">
+                          📥 {item}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Aviso importante */}
+                  <div className="bg-gradient-to-r from-yellow-900/30 to-yellow-800/30 p-4 rounded-lg border border-yellow-700/30">
+                    <h4 className="font-bold text-yellow-400 mb-2">⚠️ Aviso:</h4>
+                    <p className="text-sm">
+                      Si los síntomas empeoran o tienes pensamientos graves, acude a tu médico o a Urgencias.
+                    </p>
                   </div>
                 </div>
               </div>
