@@ -114,14 +114,6 @@ export default function Resources() {
       category: "autoestima",
       type: "guide",
       createdAt: new Date("2024-02-05"),
-    },
-    {
-      id: 6,
-      title: "Gestión de Crisis Emocionales",
-      content: "Protocolo de actuación para momentos de alta intensidad emocional.",
-      category: "ansiedad",
-      type: "article",
-      createdAt: new Date("2024-02-10"),
     }
   ];
 
