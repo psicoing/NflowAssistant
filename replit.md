@@ -130,6 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- July 8, 2025. **RECURSOS ANSIEDAD DESARROLLADOS** - Implementada sección completa de recursos para ansiedad basada en guías oficiales del Sistema Nacional de Salud, incluyendo técnicas de respiración, gestión de crisis emocionales, herramientas GAD-7, y recursos profesionales como Teléfono de la Esperanza
 - July 8, 2025. **PLANES SUSCRIPCIÓN MEJORADOS** - Rediseño completo de la sección de precios con tres planes específicos: Básico (€2.99), Pro (€5.99), Premium (€7.99) con características detalladas, número de preguntas por mes claramente definido (10, 20, 30), y filosofía NFLOW integrada
 - July 8, 2025. **SECCIÓN PAQUETES SIMPLIFICADA** - Eliminadas todas las tarjetas de paquetes, reemplazadas por mensaje "Próximamente disponibles" con botón redirección a registro
 - July 8, 2025. **VERSIÓN BETA ACTUALIZADA** - Cambiado símbolo β por "versión beta 1-04" en footer para mayor claridad
