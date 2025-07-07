@@ -130,6 +130,9 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- July 8, 2025. **PLANES SUSCRIPCIÓN MEJORADOS** - Rediseño completo de la sección de precios con tres planes específicos: Básico (€2.99), Pro (€5.99), Premium (€7.99) con características detalladas, número de preguntas por mes claramente definido (10, 20, 30), y filosofía NFLOW integrada
+- July 8, 2025. **SECCIÓN PAQUETES SIMPLIFICADA** - Eliminadas todas las tarjetas de paquetes, reemplazadas por mensaje "Próximamente disponibles" con botón redirección a registro
+- July 8, 2025. **VERSIÓN BETA ACTUALIZADA** - Cambiado símbolo β por "versión beta 1-04" en footer para mayor claridad
 - July 2, 2025. **USUARIO MARCOS PAJARON BLOQUEADO** - Usuario mpajaron (ID: 34) bloqueado completamente del sistema, suscripción cancelada y acceso revocado por solicitud administrativa
 - July 2, 2025. **PARTNER MARCOS PAJARON DESHABILITADO** - Partner Dr. Marcos Pajaron (ID: 2) deshabilitado con status "disabled" y documentos no verificados, acceso al sistema de partners completamente revocado
 - June 30, 2025. **SECCIÓN LEGAL COMPLETA AÑADIDA** - Implementadas 4 páginas legales completas: Términos y Condiciones, Política de Privacidad, Política de Cookies y Aviso Legal con toda la información corporativa de EMPORDAJOBS SL (CIF: B02701100)
