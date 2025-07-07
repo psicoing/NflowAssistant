@@ -24,48 +24,62 @@ export default function PricingSection() {
   const pricingTiers = [
     {
       id: "basic",
-      name: t('pricing.basic.name'),
+      name: "Plan Básico",
       price: "€2.99",
-      description: t('pricing.basic.description'),
+      description: "Perfecto para quienes quieren probar NFLOW o solo necesitan orientación puntual",
       icon: Calendar,
+      questions: "10 al mes",
       features: [
-        t('pricing.basic.feature1'),
-        t('pricing.basic.feature2'),
-        t('pricing.basic.feature3'),
-        t('pricing.basic.feature4')
+        "10 preguntas al chatbot IA",
+        "Acceso a recursos premium", 
+        "Consejos personalizados IA",
+        "Contenido actualizado semanalmente",
+        "Sin publicidad",
+        "Respuesta estándar"
       ],
-      buttonText: t('pricing.selectPlan'),
+      buttonText: "Seleccionar Plan",
       buttonClass: "bg-nflow-blue hover:bg-nflow-blue-dark"
     },
     {
-      id: "group",
-      name: t('pricing.group.name'),
+      id: "pro",
+      name: "Plan Pro",
       price: "€5.99",
-      description: t('pricing.group.description'),
+      description: "El punto óptimo para quienes quieren avanzar y sacar más partido a la plataforma",
       icon: Users,
+      questions: "20 al mes",
       features: [
-        t('pricing.group.feature1'),
-        t('pricing.group.feature2'),
-        t('pricing.group.feature3'),
-        t('pricing.group.feature4')
+        "20 preguntas al chatbot IA",
+        "Acceso a recursos premium",
+        "Consejos personalizados IA", 
+        "Contenido actualizado semanalmente",
+        "Sin publicidad",
+        "Ejercicios y retos personalizados IA",
+        "Respuesta prioritaria"
       ],
-      buttonText: t('pricing.selectPlan'),
+      buttonText: "Seleccionar Plan",
       buttonClass: "bg-nflow-orange hover:bg-nflow-orange-light",
       popular: true
     },
     {
-      id: "individual",
-      name: t('pricing.individual.name'),
+      id: "premium",
+      name: "Plan Premium",
       price: "€7.99",
-      description: t('pricing.individual.description'),
+      description: "Para los que buscan lo mejor y lo quieren ya. Máxima interacción y seguimiento automático",
       icon: User,
+      questions: "30 al mes",
       features: [
-        t('pricing.individual.feature1'),
-        t('pricing.individual.feature2'),
-        t('pricing.individual.feature3')
+        "30 preguntas al chatbot IA",
+        "Acceso a recursos premium",
+        "Consejos personalizados IA",
+        "Contenido actualizado semanalmente", 
+        "Sin publicidad",
+        "Ejercicios y retos personalizados IA",
+        "Respuesta ultra rápida y preferente",
+        "Plan de seguimiento automático",
+        "Acceso anticipado a nuevas funciones"
       ],
-      buttonText: t('pricing.selectPlan'),
-      buttonClass: "bg-nflow-orange hover:bg-nflow-orange-light"
+      buttonText: "Seleccionar Plan",
+      buttonClass: "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800"
     }
   ];
 
@@ -166,8 +180,8 @@ export default function PricingSection() {
   const getAmount = (planId: string) => {
     const priceMap = {
       basic: "2.99",
-      group: "5.99",
-      individual: "7.99"
+      pro: "5.99",
+      premium: "7.99"
     };
     return priceMap[planId as keyof typeof priceMap];
   };
@@ -176,8 +190,8 @@ export default function PricingSection() {
     // These would be your actual PayPal plan IDs from PayPal dashboard
     const planMap = {
       basic: process.env.VITE_PAYPAL_BASIC_PLAN_ID || 'P-basic',
-      group: process.env.VITE_PAYPAL_GROUP_PLAN_ID || 'P-group', 
-      individual: process.env.VITE_PAYPAL_INDIVIDUAL_PLAN_ID || 'P-individual'
+      pro: process.env.VITE_PAYPAL_PRO_PLAN_ID || 'P-pro', 
+      premium: process.env.VITE_PAYPAL_PREMIUM_PLAN_ID || 'P-premium'
     };
     return planMap[planId as keyof typeof planMap];
   };
@@ -186,10 +200,10 @@ export default function PricingSection() {
     <section id="precios" className="py-20 px-4 bg-nflow-navy">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">{t('pricing.title')}</h2>
-          <h3 className="text-2xl font-semibold text-gray-300 mb-6">{t('pricing.subtitle')}</h3>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            {t('pricing.description')}
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Planes de Suscripción NFLOW</h2>
+          <h3 className="text-2xl font-semibold text-gray-300 mb-6">Salud mental digital sin postureo</h3>
+          <p className="text-xl text-gray-400 max-w-4xl mx-auto">
+            Solo tú, tu mejora personal y la IA. Todo 100% automático, seguro y privado. Aquí lo que ves es lo que hay.
           </p>
         </div>
 
@@ -217,11 +231,16 @@ export default function PricingSection() {
                     <IconComponent className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-2">{tier.name}</h3>
-                  <p className={`text-sm mb-4 ${tier.popular ? 'text-blue-100' : 'text-gray-400'}`}>
+                  <p className={`text-sm mb-4 ${tier.popular ? 'text-blue-100' : 'text-gray-400'} leading-relaxed`}>
                     {tier.description}
                   </p>
                   <div className="text-4xl font-bold text-white">{tier.price}</div>
-                  <div className={`text-sm ${tier.popular ? 'text-blue-200' : 'text-gray-400'}`}>{t('pricing.perMonth')}</div>
+                  <div className={`text-sm ${tier.popular ? 'text-blue-200' : 'text-gray-400'} mb-2`}>por mes</div>
+                  <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
+                    tier.popular ? 'bg-nflow-orange/20 text-nflow-orange' : 'bg-nflow-blue/20 text-nflow-blue'
+                  }`}>
+                    {tier.questions}
+                  </div>
                 </div>
 
                 <div className="space-y-4 mb-8">
@@ -254,6 +273,56 @@ export default function PricingSection() {
               </div>
             );
           })}
+        </div>
+
+        {/* How to Choose Section */}
+        <div className="mt-16 bg-gradient-to-br from-gray-800/60 to-gray-900/60 rounded-3xl p-8 border border-gray-700/50">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-white mb-4">¿Cómo elegir tu plan?</h3>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-nflow-blue rounded-xl flex items-center justify-center mx-auto mb-3">
+                <Calendar className="w-6 h-6 text-white" />
+              </div>
+              <h4 className="text-lg font-semibold text-white mb-2">Plan Básico</h4>
+              <p className="text-sm text-gray-300">
+                Acceso mensual limitado, perfecto para quienes quieren probar NFLOW o solo necesitan orientación puntual.
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-12 h-12 bg-nflow-orange rounded-xl flex items-center justify-center mx-auto mb-3">
+                <Users className="w-6 h-6 text-white" />
+              </div>
+              <h4 className="text-lg font-semibold text-white mb-2">Plan Pro</h4>
+              <p className="text-sm text-gray-300">
+                Doble de preguntas, ejercicios personalizados y prioridad de respuesta. El punto óptimo para quienes quieren avanzar.
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <User className="w-6 h-6 text-white" />
+              </div>
+              <h4 className="text-lg font-semibold text-white mb-2">Plan Premium</h4>
+              <p className="text-sm text-gray-300">
+                El plan más completo: máxima interacción mensual, seguimiento automático y respuestas preferentes.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Philosophy Section */}
+        <div className="mt-8 text-center">
+          <div className="inline-block bg-gradient-to-r from-nflow-orange/10 to-orange-600/10 rounded-2xl p-6 border border-nflow-orange/20">
+            <h4 className="text-lg font-bold text-white mb-2">Filosofía NFLOW</h4>
+            <p className="text-gray-300 text-sm max-w-2xl">
+              NFLOW es salud mental digital sin postureo: sin grupos, sin coach, sin promesas mágicas.<br/>
+              <span className="text-nflow-orange font-medium">Solo tú, tu mejora personal y la IA.</span>
+            </p>
+          </div>
         </div>
       </div>
     </section>
