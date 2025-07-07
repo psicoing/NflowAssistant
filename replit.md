@@ -131,7 +131,7 @@ Preferred communication style: Simple, everyday language.
 
 Changelog:
 - July 8, 2025. **RECURSOS DEPRESIÓN AÑADIDOS** - Nueva categoría "Depresión" con modal especializado incluyendo síntomas principales, herramientas de autoevaluación profesionales (PHQ-9, HAM-D, BDI-II), recursos de emergencia y atención primaria basados en protocolos clínicos oficiales
-- July 8, 2025. **FILTROS RECURSOS OPTIMIZADOS** - Eliminada pestaña "Ejercicio" de filtros, manteniendo solo "Artículo" y "Guía" para mejor organización de contenidos
+- July 8, 2025. **FILTROS RECURSOS SIMPLIFICADOS** - Eliminados completamente los filtros de tipo ("Ejercicio", "Artículo", "Guía"), navegación solo por categorías temáticas para mejor experiencia de usuario
 - July 8, 2025. **RECURSOS ANSIEDAD DESARROLLADOS** - Implementada sección completa de recursos para ansiedad basada en guías oficiales del Sistema Nacional de Salud, incluyendo técnicas de respiración, gestión de crisis emocionales, herramientas GAD-7, y recursos profesionales como Teléfono de la Esperanza
 - July 8, 2025. **PLANES SUSCRIPCIÓN MEJORADOS** - Rediseño completo de la sección de precios con tres planes específicos: Básico (€2.99), Pro (€5.99), Premium (€7.99) con características detalladas, número de preguntas por mes claramente definido (10, 20, 30), y filosofía NFLOW integrada
 - July 8, 2025. **SECCIÓN PAQUETES SIMPLIFICADA** - Eliminadas todas las tarjetas de paquetes, reemplazadas por mensaje "Próximamente disponibles" con botón redirección a registro

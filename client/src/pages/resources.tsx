@@ -201,19 +201,7 @@ export default function Resources() {
                   ))}
                 </div>
 
-                <div className="flex gap-2 justify-center">
-                  {types.filter(type => type !== 'exercise').map((type) => (
-                    <Button
-                      key={type}
-                      variant={selectedType === type ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setSelectedType(type)}
-                      className={selectedType === type ? "bg-nflow-blue hover:bg-nflow-blue-dark text-black border-0 rounded-full" : "border-gray-500 text-black bg-white hover:bg-nflow-blue/90 hover:text-black hover:border-nflow-blue rounded-full"}
-                    >
-                      {typeLabels[type as keyof typeof typeLabels] || type}
-                    </Button>
-                  ))}
-                </div>
+
               </div>
             </div>
           </div>
