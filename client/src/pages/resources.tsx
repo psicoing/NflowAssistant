@@ -110,6 +110,22 @@ export default function Resources() {
       createdAt: new Date("2024-03-01"),
     },
     {
+      id: 12,
+      title: "Ejercicios de Mindfulness Profesionales",
+      content: "Técnicas estructuradas de mindfulness basadas en protocolos MBSR, MBCT y estándares clínicos internacionales.",
+      category: "bienestar",
+      type: "guide",
+      createdAt: new Date("2024-03-05"),
+    },
+    {
+      id: 13,
+      title: "Formato Técnico para Ejercicios de Atención Plena",
+      content: "Guía profesional para la estructuración de ejercicios con fundamento neurobiológico y objetivos terapéuticos.",
+      category: "bienestar",
+      type: "article",
+      createdAt: new Date("2024-03-10"),
+    },
+    {
       id: 2,
       title: "Comunicación Familiar Efectiva",
       content: "Estrategias para mejorar la comunicación entre padres e hijos adolescentes.",
@@ -750,6 +766,147 @@ export default function Resources() {
                       La depresión es un trastorno médico que requiere tratamiento profesional. 
                       No dudes en contactar con tu médico de atención primaria o el servicio de urgencias 
                       si experimentas síntomas graves.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : selectedResource?.category === "bienestar" ? (
+              // Modal específico para ejercicios de mindfulness
+              <div>
+                <DialogHeader>
+                  <DialogTitle className="text-white text-2xl mb-4 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-green-600/20 rounded-lg flex items-center justify-center">
+                      <Heart className="w-5 h-5 text-green-400" />
+                    </div>
+                    Ejercicios de Mindfulness Profesionales
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300">
+                    Basados en evidencia científica y estándares clínicos internacionales
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="space-y-6 text-gray-300">
+                  {/* Introducción */}
+                  <div className="bg-gradient-to-r from-green-900/30 to-green-800/30 p-4 rounded-lg border border-green-700/30">
+                    <p className="text-sm leading-relaxed">
+                      Ejercicios de mindfulness estructurados siguiendo protocolos MBSR (Mindfulness-Based Stress Reduction), 
+                      MBCT y estándares de la APA, NICE y OMS. <strong className="text-yellow-400">Diseñados con fundamento neurobiológico y objetivos terapéuticos específicos.</strong>
+                    </p>
+                  </div>
+
+                  {/* Estructuración Técnica */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Formato Técnico de Ejercicios</h3>
+                    <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-600/30">
+                      <div className="space-y-3 text-sm">
+                        <div className="flex items-start gap-3">
+                          <div className="w-2 h-2 bg-green-400 rounded-full mt-2"></div>
+                          <div>
+                            <strong className="text-green-400">Nombre del ejercicio</strong> - Identificación clara y profesional
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="w-2 h-2 bg-blue-400 rounded-full mt-2"></div>
+                          <div>
+                            <strong className="text-blue-400">Objetivo neuropsicológico</strong> - Meta específica basada en neurociencia
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="w-2 h-2 bg-purple-400 rounded-full mt-2"></div>
+                          <div>
+                            <strong className="text-purple-400">Fundamento científico</strong> - Base neurobiológica con referencias
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2"></div>
+                          <div>
+                            <strong className="text-yellow-400">Instrucciones detalladas</strong> - Paso a paso, lenguaje profesional
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Prompt para IA */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Prompt para Generación Automática</h3>
+                    <div className="bg-gray-900/50 p-4 rounded-lg border border-gray-600/30 font-mono text-xs">
+                      <div className="text-green-400 mb-2">PROMPT: Estructuración Técnica de Ejercicios de Mindfulness</div>
+                      <div className="text-gray-300 space-y-2">
+                        <p><strong className="text-blue-400">INSTRUCCIONES PARA LA IA:</strong></p>
+                        <p>Eres un experto en mindfulness, neurociencia y psicoeducación, con capacidad para crear ejercicios de mindfulness basados en evidencia científica y estándares clínicos internacionales (MBSR, MBCT, APA, NICE, OMS).</p>
+                        
+                        <p className="text-yellow-400 mt-3"><strong>FORMATO DE RESPUESTA:</strong></p>
+                        <ul className="space-y-1 text-xs">
+                          <li>• Nombre del ejercicio</li>
+                          <li>• Objetivo neuropsicológico</li>
+                          <li>• Fundamento científico/neurobiológico (2-4 líneas, referencias si es posible)</li>
+                          <li>• Materiales necesarios (si aplica)</li>
+                          <li>• Duración estimada</li>
+                          <li>• Población diana (adultos, adolescentes, mayores, etc.)</li>
+                          <li>• Instrucciones detalladas (paso a paso, lenguaje claro y profesional)</li>
+                          <li>• Indicadores de progreso/registro (cómo medir avance)</li>
+                          <li>• Contraindicaciones o advertencias</li>
+                          <li>• Variante avanzada/opcional (si aplica)</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Requisitos Adicionales */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Requisitos de Calidad</h3>
+                    <div className="space-y-3">
+                      {[
+                        "Utiliza siempre un lenguaje técnico, respetuoso y basado en la evidencia",
+                        "Evita simplificaciones excesivas o metáforas infantiles",
+                        "Referencia guías reconocidas (MBSR de Jon Kabat-Zinn, NICE, UpToDate, OMS)",
+                        "Si la evidencia es limitada, indícalo claramente",
+                        "Adapta la propuesta a la modalidad: presencial, online, grupal o individual",
+                        "Incluye adaptación para deterioro cognitivo, dolor crónico o ansiedad si se solicita"
+                      ].map((item, idx) => (
+                        <div key={idx} className="flex items-start gap-3">
+                          <div className="w-2 h-2 bg-green-400 rounded-full mt-2"></div>
+                          <span className="text-sm">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Ejemplo de uso */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Ejemplo de Petición</h3>
+                    <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-700/30">
+                      <div className="text-sm italic text-blue-300">
+                        "Genera 3 ejercicios de mindfulness enfocados en mejorar la atención sostenida en adultos mayores, siguiendo el formato solicitado."
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Población diana específica */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Adaptaciones por población:</h3>
+                    <div className="grid gap-2">
+                      {[
+                        "Adultos jóvenes - Enfoque en gestión del estrés laboral",
+                        "Adultos mayores - Ejercicios adaptados con deterioro cognitivo",
+                        "Adolescentes - Técnicas para ansiedad académica",
+                        "Pacientes con dolor crónico - Mindfulness terapéutico especializado"
+                      ].map((item, idx) => (
+                        <Button key={idx} variant="outline" size="sm" className="justify-start text-gray-300 border-gray-600 hover:bg-gray-700/50">
+                          🧠 {item}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Aviso profesional */}
+                  <div className="bg-gradient-to-r from-yellow-900/30 to-yellow-800/30 p-4 rounded-lg border border-yellow-700/30">
+                    <h4 className="font-bold text-yellow-400 mb-2">⚠️ Uso Profesional:</h4>
+                    <p className="text-sm">
+                      Este formato está diseñado para profesionales de la salud mental. 
+                      Los ejercicios generados deben ser supervisados por un terapeuta cualificado 
+                      cuando se apliquen en contextos clínicos.
                     </p>
                   </div>
                 </div>

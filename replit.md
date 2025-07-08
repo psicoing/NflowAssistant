@@ -130,6 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- July 8, 2025. **EJERCICIOS MINDFULNESS PROFESIONALES IMPLEMENTADOS** - Sección bienestar actualizada con prompt técnico completo para generación de ejercicios de mindfulness basados en MBSR, MBCT y estándares APA/NICE/OMS, incluyendo formato estructurado con fundamento neurobiológico
 - July 8, 2025. **RECURSOS DEPRESIÓN AÑADIDOS** - Nueva categoría "Depresión" con modal especializado incluyendo síntomas principales, herramientas de autoevaluación profesionales (PHQ-9, HAM-D, BDI-II), recursos de emergencia y atención primaria basados en protocolos clínicos oficiales
 - July 8, 2025. **FILTROS RECURSOS SIMPLIFICADOS** - Eliminados completamente los filtros de tipo ("Ejercicio", "Artículo", "Guía"), navegación solo por categorías temáticas para mejor experiencia de usuario
 - July 8, 2025. **RECURSOS ANSIEDAD DESARROLLADOS** - Implementada sección completa de recursos para ansiedad basada en guías oficiales del Sistema Nacional de Salud, incluyendo técnicas de respiración, gestión de crisis emocionales, herramientas GAD-7, y recursos profesionales como Teléfono de la Esperanza
