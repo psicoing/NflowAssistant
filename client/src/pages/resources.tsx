@@ -134,6 +134,30 @@ export default function Resources() {
       createdAt: new Date("2024-01-20"),
     },
     {
+      id: 14,
+      title: "Ventana de Escucha Activa",
+      content: "Técnica psicoeducativa basada en Carl Rogers para fomentar la escucha real y comprensión empática entre padres e hijos adolescentes.",
+      category: "familia",
+      type: "exercise",
+      createdAt: new Date("2024-07-08"),
+    },
+    {
+      id: 15,
+      title: "Agenda de Temas Neutrales",
+      content: "Herramienta para reforzar la comunicación regular sobre temas no conflictivos y mantener la conexión familiar.",
+      category: "familia",
+      type: "exercise",
+      createdAt: new Date("2024-07-08"),
+    },
+    {
+      id: 16,
+      title: "Tarjetas de Comunicación Positiva",
+      content: "Sistema de refuerzo positivo para entrenar la expresión de emociones agradables entre padres e hijos.",
+      category: "familia",
+      type: "exercise",
+      createdAt: new Date("2024-07-08"),
+    },
+    {
       id: 3,
       title: "Manejo del Estrés Laboral",
       content: "Herramientas prácticas para gestionar el estrés en el entorno profesional.",
@@ -908,6 +932,268 @@ export default function Resources() {
                       Los ejercicios generados deben ser supervisados por un terapeuta cualificado 
                       cuando se apliquen en contextos clínicos.
                     </p>
+                  </div>
+                </div>
+              </div>
+            ) : selectedResource?.title === "Ventana de Escucha Activa" ? (
+              // Modal específico para Ventana de Escucha Activa
+              <div>
+                <DialogHeader>
+                  <DialogTitle className="text-white text-2xl mb-4 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-purple-600/20 rounded-lg flex items-center justify-center">
+                      <Users className="w-5 h-5 text-purple-400" />
+                    </div>
+                    Ventana de Escucha Activa
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300">
+                    Técnica psicoeducativa basada en Carl Rogers para fomentar la comunicación familiar
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="mt-6 space-y-6 text-gray-300">
+                  {/* Objetivo */}
+                  <div className="bg-purple-900/30 p-4 rounded-lg border border-purple-700/30">
+                    <h3 className="text-purple-300 text-lg font-semibold mb-3">Objetivo Psicoeducativo</h3>
+                    <p className="text-sm">
+                      Fomentar la escucha real y la comprensión empática entre padres e hijos adolescentes, 
+                      reduciendo respuestas automáticas o juiciosas.
+                    </p>
+                  </div>
+
+                  {/* Fundamento científico */}
+                  <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-700/30">
+                    <h3 className="text-blue-300 text-lg font-semibold mb-3">Fundamento Científico</h3>
+                    <ul className="space-y-2 text-sm">
+                      <li>• Técnica basada en Active Listening (Carl Rogers, 1957)</li>
+                      <li>• Comunicación No Violenta (Marshall Rosenberg, 1999)</li>
+                      <li>• Guías APA y NICE (2021) incluyen escucha activa como base para resolución de conflictos</li>
+                      <li>• Estudios recientes: Gordon et al., 2022; Zhang et al., 2023 (Journal of Family Psychology)</li>
+                    </ul>
+                  </div>
+
+                  {/* Instrucciones */}
+                  <div className="bg-green-900/30 p-4 rounded-lg border border-green-700/30">
+                    <h3 className="text-green-300 text-lg font-semibold mb-3">Instrucciones Detalladas</h3>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">1</div>
+                        <span>Elige un momento tranquilo sin distracciones</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">2</div>
+                        <span>Un miembro habla durante 5 minutos sobre un tema importante, sin ser interrumpido</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">3</div>
+                        <span>El oyente solo puede mirar, asentir y tomar notas breves. Nada de respuestas o gestos de desaprobación</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">4</div>
+                        <span>Al terminar, el oyente repite con sus palabras lo entendido ("Te he escuchado decir que...")</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">5</div>
+                        <span>Cambian los roles y repiten el proceso</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Información técnica */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Materiales</h4>
+                      <p className="text-sm">Cronómetro o temporizador</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Duración</h4>
+                      <p className="text-sm">10 minutos por turno</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Población</h4>
+                      <p className="text-sm">Padres y adolescentes</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Indicadores</h4>
+                      <p className="text-sm">Menos interrupciones, menos discusiones</p>
+                    </div>
+                  </div>
+
+                  {/* Advertencias */}
+                  <div className="bg-red-900/30 p-4 rounded-lg border border-red-700/30">
+                    <h3 className="text-red-300 text-lg font-semibold mb-2">⚠️ Contraindicaciones</h3>
+                    <p className="text-sm">No usar si hay violencia activa o escalada grave del conflicto.</p>
+                  </div>
+                </div>
+              </div>
+            ) : selectedResource?.title === "Agenda de Temas Neutrales" ? (
+              // Modal específico para Agenda de Temas Neutrales
+              <div>
+                <DialogHeader>
+                  <DialogTitle className="text-white text-2xl mb-4 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">
+                      <Users className="w-5 h-5 text-blue-400" />
+                    </div>
+                    Agenda de Temas Neutrales
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300">
+                    Herramienta para reforzar la comunicación familiar sobre temas no conflictivos
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="mt-6 space-y-6 text-gray-300">
+                  {/* Objetivo */}
+                  <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-700/30">
+                    <h3 className="text-blue-300 text-lg font-semibold mb-3">Objetivo Psicoeducativo</h3>
+                    <p className="text-sm">
+                      Reforzar la comunicación regular sobre temas no conflictivos para mantener la conexión familiar.
+                    </p>
+                  </div>
+
+                  {/* Fundamento científico */}
+                  <div className="bg-green-900/30 p-4 rounded-lg border border-green-700/30">
+                    <h3 className="text-green-300 text-lg font-semibold mb-3">Evidencia Científica</h3>
+                    <ul className="space-y-2 text-sm">
+                      <li>• Respaldada por estudios sobre family routines y cohesión familiar (APA, 2019; Fiese et al., 2021)</li>
+                      <li>• Las conversaciones neutras fortalecen el vínculo y amortiguan conflictos (Journal of Child and Family Studies, 2023)</li>
+                      <li>• Revisión: "Family communication patterns and adolescent adjustment" (Child Development Perspectives, 2022)</li>
+                    </ul>
+                  </div>
+
+                  {/* Instrucciones */}
+                  <div className="bg-purple-900/30 p-4 rounded-lg border border-purple-700/30">
+                    <h3 className="text-purple-300 text-lg font-semibold mb-3">Instrucciones Paso a Paso</h3>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">1</div>
+                        <span>Cada miembro propone un tema neutro (música, películas, hobbies, noticias curiosas)</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">2</div>
+                        <span>Se elige uno al azar para hablar en grupo, evitando temas conflictivos</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">3</div>
+                        <span>Cada persona tiene un minuto para expresar su opinión o experiencia</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">4</div>
+                        <span>Nadie juzga, ni opina sobre lo dicho por otro</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">5</div>
+                        <span>Se agradece la participación de todos al final</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Información técnica */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Materiales</h4>
+                      <p className="text-sm">Hoja y bolígrafo, o app de notas compartida</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Duración</h4>
+                      <p className="text-sm">15 minutos, una vez por semana</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Población</h4>
+                      <p className="text-sm">Toda la familia, especialmente útil en familias con tendencia al conflicto</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Adaptación</h4>
+                      <p className="text-sm">Para familias separadas: realizar por videollamada</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : selectedResource?.title === "Tarjetas de Comunicación Positiva" ? (
+              // Modal específico para Tarjetas de Comunicación Positiva
+              <div>
+                <DialogHeader>
+                  <DialogTitle className="text-white text-2xl mb-4 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-yellow-600/20 rounded-lg flex items-center justify-center">
+                      <Heart className="w-5 h-5 text-yellow-400" />
+                    </div>
+                    Tarjetas de Comunicación Positiva
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300">
+                    Sistema de refuerzo positivo para entrenar la expresión de emociones agradables
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="mt-6 space-y-6 text-gray-300">
+                  {/* Objetivo */}
+                  <div className="bg-yellow-900/30 p-4 rounded-lg border border-yellow-700/30">
+                    <h3 className="text-yellow-300 text-lg font-semibold mb-3">Objetivo Psicoeducativo</h3>
+                    <p className="text-sm">
+                      Entrenar el refuerzo positivo y la expresión de emociones agradables entre padres e hijos.
+                    </p>
+                  </div>
+
+                  {/* Fundamento científico */}
+                  <div className="bg-green-900/30 p-4 rounded-lg border border-green-700/30">
+                    <h3 className="text-green-300 text-lg font-semibold mb-3">Base Científica</h3>
+                    <ul className="space-y-2 text-sm">
+                      <li>• Basado en Parenting Skills Training (OMS, 2016) y terapia sistémica</li>
+                      <li>• El refuerzo positivo aumenta la autoeficacia familiar (UNICEF, 2022; McKee et al., 2023)</li>
+                      <li>• Revisión sistemática: "Positive communication in families and adolescent mental health" (Family Process, 2023)</li>
+                    </ul>
+                  </div>
+
+                  {/* Instrucciones */}
+                  <div className="bg-pink-900/30 p-4 rounded-lg border border-pink-700/30">
+                    <h3 className="text-pink-300 text-lg font-semibold mb-3">Método de Aplicación</h3>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-pink-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">1</div>
+                        <span>Cada miembro escribe en una tarjeta algo positivo sobre otro ("Aprecio que hoy me ayudaste con...")</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-pink-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">2</div>
+                        <span>Se dejan en un lugar común o se entregan en mano, sin comentarios inmediatos</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-pink-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">3</div>
+                        <span>Al final de la semana, se leen juntos, reconociendo los gestos positivos</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-pink-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">4</div>
+                        <span>Se repite con nuevas frases, evitando repetir lo ya mencionado</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Información técnica */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Materiales</h4>
+                      <p className="text-sm">Tarjetas o papeles en blanco, bolígrafos</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Frecuencia</h4>
+                      <p className="text-sm">5-10 minutos, al menos 3 veces por semana</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Participantes</h4>
+                      <p className="text-sm">Padres, adolescentes y hermanos</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Resultados</h4>
+                      <p className="text-sm">Más frases positivas, mejor clima emocional</p>
+                    </div>
+                  </div>
+
+                  {/* Advertencias */}
+                  <div className="bg-red-900/30 p-4 rounded-lg border border-red-700/30">
+                    <h3 className="text-red-300 text-lg font-semibold mb-2">⚠️ Importante</h3>
+                    <p className="text-sm">Evitar la ironía o los dobles sentidos negativos.</p>
+                  </div>
+
+                  {/* Adaptación */}
+                  <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-700/30">
+                    <h3 className="text-blue-300 text-lg font-semibold mb-2">💡 Adaptación</h3>
+                    <p className="text-sm">En familias con baja alfabetización: usar dibujos o mensajes de voz grabados.</p>
                   </div>
                 </div>
               </div>

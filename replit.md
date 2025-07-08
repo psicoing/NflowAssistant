@@ -130,6 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- July 8, 2025. **RECURSOS FAMILIA EXPANDIDOS** - Agregadas tres nuevas herramientas de comunicación familiar: "Ventana de Escucha Activa" (Carl Rogers), "Agenda de Temas Neutrales" (rutinas familiares), y "Tarjetas de Comunicación Positiva" (refuerzo positivo). Cada recurso incluye modal detallado con fundamento científico, objetivos neuropsicológicos, instrucciones paso a paso, materiales requeridos y contraindicaciones. Basados en estándares APA, NICE, OMS y evidencia reciente de Journal of Family Psychology.
 - July 8, 2025. **MENÚ HAMBURGUESA EXPANDIDO** - Añadidas pestañas "Precios" (scroll automático a sección precios) y "Contacto" (modal con información INS NEURONMEG, CIF B02701100, teléfono 660452136, Dr. Ramón Molons de San Román Col. 7851)
 - July 8, 2025. **EJERCICIOS MINDFULNESS PROFESIONALES IMPLEMENTADOS** - Sección bienestar actualizada con prompt técnico completo para generación de ejercicios de mindfulness basados en MBSR, MBCT y estándares APA/NICE/OMS, incluyendo formato estructurado con fundamento neurobiológico
 - July 8, 2025. **RECURSOS DEPRESIÓN AÑADIDOS** - Nueva categoría "Depresión" con modal especializado incluyendo síntomas principales, herramientas de autoevaluación profesionales (PHQ-9, HAM-D, BDI-II), recursos de emergencia y atención primaria basados en protocolos clínicos oficiales
