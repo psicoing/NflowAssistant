@@ -130,6 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- July 8, 2025. **MENÚ HAMBURGUESA EXPANDIDO** - Añadidas pestañas "Precios" (scroll automático a sección precios) y "Contacto" (modal con información INS NEURONMEG, CIF B02701100, teléfono 660452136, Dr. Ramón Molons de San Román Col. 7851)
 - July 8, 2025. **EJERCICIOS MINDFULNESS PROFESIONALES IMPLEMENTADOS** - Sección bienestar actualizada con prompt técnico completo para generación de ejercicios de mindfulness basados en MBSR, MBCT y estándares APA/NICE/OMS, incluyendo formato estructurado con fundamento neurobiológico
 - July 8, 2025. **RECURSOS DEPRESIÓN AÑADIDOS** - Nueva categoría "Depresión" con modal especializado incluyendo síntomas principales, herramientas de autoevaluación profesionales (PHQ-9, HAM-D, BDI-II), recursos de emergencia y atención primaria basados en protocolos clínicos oficiales
 - July 8, 2025. **FILTROS RECURSOS SIMPLIFICADOS** - Eliminados completamente los filtros de tipo ("Ejercicio", "Artículo", "Guía"), navegación solo por categorías temáticas para mejor experiencia de usuario
