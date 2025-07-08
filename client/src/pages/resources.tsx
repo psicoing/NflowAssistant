@@ -18,7 +18,9 @@ import {
   Briefcase,
   Brain,
   Clock,
-  Gift
+  Gift,
+  Target,
+  Mail
 } from "lucide-react";
 import type { Resource } from "@shared/schema";
 
@@ -180,6 +182,30 @@ export default function Resources() {
       category: "autoestima",
       type: "guide",
       createdAt: new Date("2024-02-05"),
+    },
+    {
+      id: 17,
+      title: "Registro de Logros Reales",
+      content: "Técnica psicoeducativa para incrementar la percepción de competencia mediante el registro consciente de logros objetivos.",
+      category: "autoestima",
+      type: "exercise",
+      createdAt: new Date("2024-07-08"),
+    },
+    {
+      id: 18,
+      title: "Reto de Autodiálogo Constructivo",
+      content: "Método de reestructuración cognitiva para modificar patrones de autodiálogo negativo y favorecer la autovaloración objetiva.",
+      category: "autoestima",
+      type: "exercise",
+      createdAt: new Date("2024-07-08"),
+    },
+    {
+      id: 19,
+      title: "Cartas al Yo del Futuro",
+      content: "Intervención de visualización positiva para fortalecer la autovaloración basada en la proyección personal a largo plazo.",
+      category: "autoestima",
+      type: "exercise",
+      createdAt: new Date("2024-07-08"),
     }
   ];
 
@@ -1194,6 +1220,276 @@ export default function Resources() {
                   <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-700/30">
                     <h3 className="text-blue-300 text-lg font-semibold mb-2">💡 Adaptación</h3>
                     <p className="text-sm">En familias con baja alfabetización: usar dibujos o mensajes de voz grabados.</p>
+                  </div>
+                </div>
+              </div>
+            ) : selectedResource?.title === "Registro de Logros Reales" ? (
+              // Modal específico para Registro de Logros Reales
+              <div>
+                <DialogHeader>
+                  <DialogTitle className="text-white text-2xl mb-4 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-green-600/20 rounded-lg flex items-center justify-center">
+                      <Target className="w-5 h-5 text-green-400" />
+                    </div>
+                    Registro de Logros Reales
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300">
+                    Técnica de autoobservación positiva para incrementar la percepción de competencia personal
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="mt-6 space-y-6 text-gray-300">
+                  {/* Objetivo */}
+                  <div className="bg-green-900/30 p-4 rounded-lg border border-green-700/30">
+                    <h3 className="text-green-300 text-lg font-semibold mb-3">Objetivo Psicoeducativo</h3>
+                    <p className="text-sm">
+                      Incrementar la percepción de competencia y valor personal mediante la identificación y registro consciente de logros objetivos, grandes o pequeños.
+                    </p>
+                  </div>
+
+                  {/* Fundamento científico */}
+                  <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-700/30">
+                    <h3 className="text-blue-300 text-lg font-semibold mb-3">Fundamento Científico</h3>
+                    <ul className="space-y-2 text-sm">
+                      <li>• Basado en técnicas de autoobservación positiva y autorreforzamiento (Bandura, 1977; Fennell, 2021)</li>
+                      <li>• La evidencia muestra que registrar logros reales disminuye la autocrítica y aumenta la autoconfianza (Owens & Patterson, 2013; Orth & Robins, 2022)</li>
+                      <li>• Revisión sistemática: "Interventions to improve self-esteem: A systematic review and meta-analysis" (Psychological Bulletin, 2021)</li>
+                    </ul>
+                  </div>
+
+                  {/* Instrucciones */}
+                  <div className="bg-purple-900/30 p-4 rounded-lg border border-purple-700/30">
+                    <h3 className="text-purple-300 text-lg font-semibold mb-3">Instrucciones Detalladas</h3>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">1</div>
+                        <span>Cada día, al final de la jornada, anota tres logros objetivos (pueden ser simples, como "he cumplido con mis tareas" o "he dicho lo que pensaba en clase")</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">2</div>
+                        <span>Evita juicios de valor o comparaciones con otros</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">3</div>
+                        <span>Cada semana, revisa el listado y subraya aquellos logros que consideres más significativos para ti</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">4</div>
+                        <span>Reflexiona: ¿Qué habilidades o valores se reflejan en estos logros?</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Información técnica */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Materiales</h4>
+                      <p className="text-sm">Cuaderno o app de notas</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Duración</h4>
+                      <p className="text-sm">5-10 minutos diarios, durante al menos 4 semanas</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Población</h4>
+                      <p className="text-sm">Adolescentes y adultos</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Indicadores</h4>
+                      <p className="text-sm">Aumento del número de logros identificados, mayor facilidad para reconocer méritos propios</p>
+                    </div>
+                  </div>
+
+                  {/* Advertencias */}
+                  <div className="bg-red-900/30 p-4 rounded-lg border border-red-700/30">
+                    <h3 className="text-red-300 text-lg font-semibold mb-2">⚠️ Contraindicaciones</h3>
+                    <p className="text-sm">Evitar la comparación social ("X ha hecho más que yo"); si se detecta ansiedad o bloqueo, consultar con un profesional.</p>
+                  </div>
+
+                  {/* Adaptación */}
+                  <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-700/30">
+                    <h3 className="text-blue-300 text-lg font-semibold mb-2">💡 Adaptación</h3>
+                    <p className="text-sm">En baja alfabetización, puede hacerse mediante grabaciones de voz o dibujos.</p>
+                  </div>
+                </div>
+              </div>
+            ) : selectedResource?.title === "Reto de Autodiálogo Constructivo" ? (
+              // Modal específico para Reto de Autodiálogo Constructivo
+              <div>
+                <DialogHeader>
+                  <DialogTitle className="text-white text-2xl mb-4 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-orange-600/20 rounded-lg flex items-center justify-center">
+                      <Brain className="w-5 h-5 text-orange-400" />
+                    </div>
+                    Reto de Autodiálogo Constructivo
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300">
+                    Método de reestructuración cognitiva para modificar patrones de autodiálogo negativo
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="mt-6 space-y-6 text-gray-300">
+                  {/* Objetivo */}
+                  <div className="bg-orange-900/30 p-4 rounded-lg border border-orange-700/30">
+                    <h3 className="text-orange-300 text-lg font-semibold mb-3">Objetivo Psicoeducativo</h3>
+                    <p className="text-sm">
+                      Modificar patrones de autodiálogo negativo y favorecer la autovaloración objetiva.
+                    </p>
+                  </div>
+
+                  {/* Fundamento científico */}
+                  <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-700/30">
+                    <h3 className="text-blue-300 text-lg font-semibold mb-3">Fundamento Científico</h3>
+                    <ul className="space-y-2 text-sm">
+                      <li>• Basado en Cognitive Behavioral Therapy (CBT) y técnicas de reestructuración cognitiva (Beck, 2011; Hofmann et al., 2012)</li>
+                      <li>• Estudios recientes confirman que el cambio en el autodiálogo mejora la autoestima y reduce la sintomatología ansioso-depresiva (Kuster et al., 2019; Sowislo & Orth, 2023)</li>
+                      <li>• NICE Guideline [CG90]: Depression in adults (2022)</li>
+                    </ul>
+                  </div>
+
+                  {/* Instrucciones */}
+                  <div className="bg-purple-900/30 p-4 rounded-lg border border-purple-700/30">
+                    <h3 className="text-purple-300 text-lg font-semibold mb-3">Instrucciones Detalladas</h3>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">1</div>
+                        <span>Identifica pensamientos negativos recurrentes sobre ti mismo durante el día</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">2</div>
+                        <span>Anótalos textualmente</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">3</div>
+                        <span>Redacta una alternativa objetiva y más amable ("No sirvo para nada" → "Tengo dificultades en X, pero soy capaz en Y y Z")</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">4</div>
+                        <span>Al final de la semana, revisa las alternativas y observa qué cambios notas en tu estado de ánimo</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Información técnica */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Materiales</h4>
+                      <p className="text-sm">Plantilla de registro (puede ser digital o papel)</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Duración</h4>
+                      <p className="text-sm">10 minutos, 3 veces por semana, durante 6 semanas</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Población</h4>
+                      <p className="text-sm">Adolescentes, adultos y mayores</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Indicadores</h4>
+                      <p className="text-sm">Disminución de autocrítica, aparición espontánea de pensamientos más equilibrados</p>
+                    </div>
+                  </div>
+
+                  {/* Advertencias */}
+                  <div className="bg-red-900/30 p-4 rounded-lg border border-red-700/30">
+                    <h3 className="text-red-300 text-lg font-semibold mb-2">⚠️ Contraindicaciones</h3>
+                    <p className="text-sm">No recomendable en trastornos graves de autopercepción sin supervisión profesional.</p>
+                  </div>
+
+                  {/* Adaptación */}
+                  <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-700/30">
+                    <h3 className="text-blue-300 text-lg font-semibold mb-2">💡 Adaptación</h3>
+                    <p className="text-sm">En personas con baja motivación, comenzar con una sola idea al día.</p>
+                  </div>
+                </div>
+              </div>
+            ) : selectedResource?.title === "Cartas al Yo del Futuro" ? (
+              // Modal específico para Cartas al Yo del Futuro
+              <div>
+                <DialogHeader>
+                  <DialogTitle className="text-white text-2xl mb-4 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-violet-600/20 rounded-lg flex items-center justify-center">
+                      <Mail className="w-5 h-5 text-violet-400" />
+                    </div>
+                    Cartas al Yo del Futuro
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300">
+                    Intervención de visualización positiva para fortalecer la autovaloración a largo plazo
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="mt-6 space-y-6 text-gray-300">
+                  {/* Objetivo */}
+                  <div className="bg-violet-900/30 p-4 rounded-lg border border-violet-700/30">
+                    <h3 className="text-violet-300 text-lg font-semibold mb-3">Objetivo Psicoeducativo</h3>
+                    <p className="text-sm">
+                      Fomentar la visión positiva de uno mismo a largo plazo y fortalecer la autovaloración basada en la proyección personal.
+                    </p>
+                  </div>
+
+                  {/* Fundamento científico */}
+                  <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-700/30">
+                    <h3 className="text-blue-300 text-lg font-semibold mb-3">Fundamento Científico</h3>
+                    <ul className="space-y-2 text-sm">
+                      <li>• Inspirado en técnicas de mental contrasting y future-self intervention (Oettingen & Gollwitzer, 2010; Oyserman & James, 2012)</li>
+                      <li>• Demostrado que visualizar el "yo futuro" mejora la autoestima y la persistencia en metas personales (Luszczynska et al., 2021)</li>
+                      <li>• Artículo clave: "Best possible self interventions: A meta-analysis" (Journal of Positive Psychology, 2021)</li>
+                    </ul>
+                  </div>
+
+                  {/* Instrucciones */}
+                  <div className="bg-green-900/30 p-4 rounded-lg border border-green-700/30">
+                    <h3 className="text-green-300 text-lg font-semibold mb-3">Instrucciones Detalladas</h3>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">1</div>
+                        <span>Escribe una carta a tu "yo dentro de 1 año" describiendo tus cualidades actuales, tus valores y tus metas alcanzadas</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">2</div>
+                        <span>Sé específico, realista y positivo. Incluye qué cosas te gustaría agradecerte en el futuro</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">3</div>
+                        <span>Guarda la carta en un sobre, agenda su lectura en el calendario (o programa un email con fecha futura)</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-xs font-bold text-white mt-1">4</div>
+                        <span>Al abrir la carta, reflexiona sobre los cambios logrados y actualiza tus metas</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Información técnica */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Materiales</h4>
+                      <p className="text-sm">Papel y sobre, o email programado</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Duración</h4>
+                      <p className="text-sm">30 minutos, una vez cada 2-3 meses</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Población</h4>
+                      <p className="text-sm">Adolescentes y adultos</p>
+                    </div>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-white font-semibold mb-2">Indicadores</h4>
+                      <p className="text-sm">Incremento de la esperanza y la autoaceptación, mayor claridad en metas personales</p>
+                    </div>
+                  </div>
+
+                  {/* Advertencias */}
+                  <div className="bg-red-900/30 p-4 rounded-lg border border-red-700/30">
+                    <h3 className="text-red-300 text-lg font-semibold mb-2">⚠️ Contraindicaciones</h3>
+                    <p className="text-sm">No recomendable en casos de desesperanza grave o ideación suicida activa; derivar a profesional.</p>
+                  </div>
+
+                  {/* Adaptación */}
+                  <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-700/30">
+                    <h3 className="text-blue-300 text-lg font-semibold mb-2">💡 Adaptación</h3>
+                    <p className="text-sm">En grupo, pueden leerse extractos voluntarios y trabajar las emociones que surgen.</p>
                   </div>
                 </div>
               </div>
