@@ -63,7 +63,7 @@ export default function PackagesSection() {
               
               <Button 
                 size="lg" 
-                onClick={() => setLocation("/register")}
+                onClick={() => setLocation("/registro")}
                 className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white font-semibold px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
               >
                 Comenzar ahora
