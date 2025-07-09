@@ -537,7 +537,12 @@ export default function Resources() {
                       La ansiedad es una respuesta normal del organismo ante situaciones de peligro o incertidumbre. 
                       Se vuelve un problema cuando es excesiva, constante o interfiere en la vida diaria.
                     </p>
-                    <Button variant="outline" size="sm" className="text-nflow-blue border-nflow-blue hover:bg-nflow-blue/10">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-nflow-blue border-nflow-blue hover:bg-nflow-blue/10"
+                      onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                    >
                       📄 Más información – GuíaSalud (PDF)
                     </Button>
                   </div>
@@ -595,7 +600,12 @@ export default function Resources() {
                         </li>
                       ))}
                     </ul>
-                    <Button variant="outline" size="sm" className="mt-3 text-red-400 border-red-400 hover:bg-red-400/10">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="mt-3 text-red-400 border-red-400 hover:bg-red-400/10"
+                      onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                    >
                       📄 Consulta rápida – Ministerio de Sanidad (PDF)
                     </Button>
                   </div>
@@ -609,7 +619,12 @@ export default function Resources() {
                         <div>
                           <span className="font-medium">Practicar técnicas de respiración y relajación:</span>
                           <br />
-                          <Button variant="outline" size="sm" className="mt-1 text-green-400 border-green-400 hover:bg-green-400/10">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="mt-1 text-green-400 border-green-400 hover:bg-green-400/10"
+                            onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                          >
                             🧘 Ejercicio guiado – Andalucía Salud (PDF)
                           </Button>
                         </div>
@@ -631,13 +646,25 @@ export default function Resources() {
                   <div>
                     <h3 className="text-xl font-semibold text-white mb-3">Recursos profesionales y de autoayuda:</h3>
                     <div className="space-y-3">
-                      <Button variant="outline" className="w-full justify-start text-nflow-blue border-nflow-blue hover:bg-nflow-blue/10">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start text-nflow-blue border-nflow-blue hover:bg-nflow-blue/10"
+                        onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                      >
                         📋 Guía de Práctica Clínica para Trastornos de Ansiedad – Atención Primaria
                       </Button>
-                      <Button variant="outline" className="w-full justify-start text-purple-400 border-purple-400 hover:bg-purple-400/10">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start text-purple-400 border-purple-400 hover:bg-purple-400/10"
+                        onClick={() => window.open('tel:717003717')}
+                      >
                         📞 Teléfono de la Esperanza – 717 003 717
                       </Button>
-                      <Button variant="outline" className="w-full justify-start text-orange-400 border-orange-400 hover:bg-orange-400/10">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start text-orange-400 border-orange-400 hover:bg-orange-400/10"
+                        onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                      >
                         ✅ Escala GAD-7 online (autoevaluación)
                       </Button>
                     </div>
@@ -652,7 +679,13 @@ export default function Resources() {
                         "Ejercicios prácticos y autoayuda (PDF)",
                         "Escala GAD-7 y otras herramientas (PDF)"
                       ].map((item, idx) => (
-                        <Button key={idx} variant="outline" size="sm" className="justify-start text-gray-300 border-gray-600 hover:bg-gray-700/50">
+                        <Button 
+                          key={idx} 
+                          variant="outline" 
+                          size="sm" 
+                          className="justify-start text-gray-300 border-gray-600 hover:bg-gray-700/50"
+                          onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                        >
                           📥 {item}
                         </Button>
                       ))}
@@ -745,10 +778,20 @@ export default function Resources() {
                       ))}
                     </ul>
                     <div className="mt-4 space-y-2">
-                      <Button variant="outline" size="sm" className="text-red-400 border-red-400 hover:bg-red-400/10 w-full">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="text-red-400 border-red-400 hover:bg-red-400/10 w-full"
+                        onClick={() => window.open('tel:112')}
+                      >
                         🚨 Emergencias: 112
                       </Button>
-                      <Button variant="outline" size="sm" className="text-red-400 border-red-400 hover:bg-red-400/10 w-full">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="text-red-400 border-red-400 hover:bg-red-400/10 w-full"
+                        onClick={() => window.open('tel:717003717')}
+                      >
                         📞 Teléfono de la Esperanza: 717 003 717
                       </Button>
                     </div>
@@ -758,13 +801,25 @@ export default function Resources() {
                   <div>
                     <h3 className="text-xl font-semibold text-white mb-3">Herramientas de autoevaluación:</h3>
                     <div className="space-y-3">
-                      <Button variant="outline" className="w-full justify-start text-purple-400 border-purple-400 hover:bg-purple-400/10">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start text-purple-400 border-purple-400 hover:bg-purple-400/10"
+                        onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                      >
                         ✅ Cuestionario PHQ-9 (Patient Health Questionnaire)
                       </Button>
-                      <Button variant="outline" className="w-full justify-start text-blue-400 border-blue-400 hover:bg-blue-400/10">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start text-blue-400 border-blue-400 hover:bg-blue-400/10"
+                        onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                      >
                         📋 Escala de Hamilton para la Depresión (HAM-D)
                       </Button>
-                      <Button variant="outline" className="w-full justify-start text-green-400 border-green-400 hover:bg-green-400/10">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start text-green-400 border-green-400 hover:bg-green-400/10"
+                        onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                      >
                         🔍 Test de Beck para la Depresión (BDI-II)
                       </Button>
                     </div>
@@ -777,16 +832,32 @@ export default function Resources() {
                   <div>
                     <h3 className="text-xl font-semibold text-white mb-3">Recursos profesionales:</h3>
                     <div className="space-y-3">
-                      <Button variant="outline" className="w-full justify-start text-nflow-blue border-nflow-blue hover:bg-nflow-blue/10">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start text-nflow-blue border-nflow-blue hover:bg-nflow-blue/10"
+                        onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                      >
                         🏥 Atención Primaria - Tu centro de salud
                       </Button>
-                      <Button variant="outline" className="w-full justify-start text-purple-400 border-purple-400 hover:bg-purple-400/10">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start text-purple-400 border-purple-400 hover:bg-purple-400/10"
+                        onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                      >
                         🧠 Salud Mental - Derivación especializada
                       </Button>
-                      <Button variant="outline" className="w-full justify-start text-green-400 border-green-400 hover:bg-green-400/10">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start text-green-400 border-green-400 hover:bg-green-400/10"
+                        onClick={() => window.open('tel:717003717')}
+                      >
                         📞 Líneas de ayuda especializadas
                       </Button>
-                      <Button variant="outline" className="w-full justify-start text-orange-400 border-orange-400 hover:bg-orange-400/10">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start text-orange-400 border-orange-400 hover:bg-orange-400/10"
+                        onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                      >
                         🌐 Plataforma de Salud Mental online
                       </Button>
                     </div>
