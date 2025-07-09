@@ -20,7 +20,9 @@ import {
   Clock,
   Gift,
   Target,
-  Mail
+  Mail,
+  Utensils,
+  Puzzle
 } from "lucide-react";
 import type { Resource } from "@shared/schema";
 
@@ -31,6 +33,8 @@ const categoryIcons = {
   bienestar: Heart,
   laboral: Briefcase,
   autoestima: Heart,
+  "anorexia-bulimia": Utensils,
+  autismo: Puzzle,
 };
 
 const typeIcons = {
@@ -52,6 +56,8 @@ const categoryLabels = {
   bienestar: "Bienestar",
   laboral: "Laboral",
   autoestima: "Autoestima",
+  "anorexia-bulimia": "Anorexia-Bulimia",
+  autismo: "Autismo",
 };
 
 export default function Resources() {
@@ -204,6 +210,54 @@ export default function Resources() {
       title: "Cartas al Yo del Futuro",
       content: "Intervención de visualización positiva para fortalecer la autovaloración basada en la proyección personal a largo plazo.",
       category: "autoestima",
+      type: "exercise",
+      createdAt: new Date("2024-07-08"),
+    },
+    {
+      id: 20,
+      title: "Guía Oficial sobre Trastornos Alimentarios",
+      content: "Información completa sobre anorexia y bulimia basada en protocolos clínicos del Sistema Nacional de Salud y guías de práctica clínica.",
+      category: "anorexia-bulimia",
+      type: "guide",
+      createdAt: new Date("2024-07-08"),
+    },
+    {
+      id: 21,
+      title: "Detección Temprana de TCA",
+      content: "Herramientas de identificación precoz y recursos de apoyo para trastornos de conducta alimentaria según estándares oficiales.",
+      category: "anorexia-bulimia",
+      type: "article",
+      createdAt: new Date("2024-07-08"),
+    },
+    {
+      id: 22,
+      title: "Protocolo de Intervención Familiar TCA",
+      content: "Estrategias familiares basadas en evidencia para el apoyo en trastornos alimentarios y recuperación nutricional.",
+      category: "anorexia-bulimia",
+      type: "exercise",
+      createdAt: new Date("2024-07-08"),
+    },
+    {
+      id: 23,
+      title: "Guía Oficial TEA - Trastorno del Espectro Autista",
+      content: "Información completa sobre autismo basada en protocolos del Ministerio de Sanidad y guías de práctica clínica especializadas.",
+      category: "autismo",
+      type: "guide",
+      createdAt: new Date("2024-07-08"),
+    },
+    {
+      id: 24,
+      title: "Herramientas de Detección TEA",
+      content: "Recursos oficiales para la identificación temprana del espectro autista y derivación a servicios especializados.",
+      category: "autismo",
+      type: "article",
+      createdAt: new Date("2024-07-08"),
+    },
+    {
+      id: 25,
+      title: "Estrategias de Apoyo Familiar TEA",
+      content: "Técnicas validadas para el apoyo familiar en trastornos del espectro autista y promoción del desarrollo.",
+      category: "autismo",
       type: "exercise",
       createdAt: new Date("2024-07-08"),
     }
@@ -1561,6 +1615,198 @@ export default function Resources() {
                   <div className="bg-blue-900/30 p-4 rounded-lg border border-blue-700/30">
                     <h3 className="text-blue-300 text-lg font-semibold mb-2">💡 Adaptación</h3>
                     <p className="text-sm">En grupo, pueden leerse extractos voluntarios y trabajar las emociones que surgen.</p>
+                  </div>
+                </div>
+              </div>
+            ) : selectedResource?.category === "anorexia-bulimia" ? (
+              // Modal específico para Anorexia-Bulimia
+              <div>
+                <DialogHeader>
+                  <DialogTitle className="text-white text-2xl mb-4 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-nflow-orange/20 rounded-lg flex items-center justify-center">
+                      <Utensils className="w-5 h-5 text-nflow-orange" />
+                    </div>
+                    Trastornos de Conducta Alimentaria
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300">
+                    Información especializada sobre anorexia y bulimia basada en protocolos oficiales
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="mt-6 space-y-6 text-gray-300">
+                  {/* Información Principal */}
+                  <div className="bg-red-900/20 p-6 rounded-lg border border-red-700/30">
+                    <h3 className="text-red-300 text-lg font-semibold mb-4">📍 Información Importante</h3>
+                    <p className="text-sm mb-4">
+                      Los Trastornos de Conducta Alimentaria (TCA) son patologías graves que requieren atención médica especializada. 
+                      Esta información complementa pero no sustituye el tratamiento profesional.
+                    </p>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-orange-300 font-semibold mb-2">Principales TCA:</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>• <strong>Anorexia nerviosa</strong>: Restricción alimentaria severa y distorsión de la imagen corporal</li>
+                        <li>• <strong>Bulimia nerviosa</strong>: Ciclos de atracones seguidos de conductas compensatorias</li>
+                        <li>• <strong>Trastorno por atracón</strong>: Episodios recurrentes de ingesta excesiva sin compensación</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Señales de Alerta */}
+                  <div className="bg-yellow-900/20 p-6 rounded-lg border border-yellow-700/30">
+                    <h3 className="text-yellow-300 text-lg font-semibold mb-4">⚠️ Señales de Alerta</h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="text-white font-semibold mb-2">Físicas:</h4>
+                        <ul className="space-y-1 text-sm">
+                          <li>• Pérdida de peso rápida</li>
+                          <li>• Fatiga y debilidad</li>
+                          <li>• Problemas dentales</li>
+                          <li>• Amenorrea</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h4 className="text-white font-semibold mb-2">Conductuales:</h4>
+                        <ul className="space-y-1 text-sm">
+                          <li>• Evitar comidas sociales</li>
+                          <li>• Ejercicio compulsivo</li>
+                          <li>• Preocupación excesiva por el peso</li>
+                          <li>• Uso de laxantes/diuréticos</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Recursos Profesionales */}
+                  <div className="bg-blue-900/20 p-6 rounded-lg border border-blue-700/30">
+                    <h3 className="text-blue-300 text-lg font-semibold mb-4">🏥 Recursos Especializados</h3>
+                    <div className="space-y-3">
+                      <Button 
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white justify-start"
+                        onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                      >
+                        <FileText className="w-4 h-4 mr-2" />
+                        Guías Clínicas Oficiales - Sistema Nacional de Salud
+                      </Button>
+                      <div className="bg-gray-800/50 p-4 rounded-lg">
+                        <h4 className="text-green-300 font-semibold mb-2">Contactos de Urgencia:</h4>
+                        <p className="text-sm">
+                          <strong>Emergencias:</strong> <a href="tel:112" className="text-nflow-orange">112</a><br/>
+                          <strong>Teléfono de la Esperanza:</strong> <a href="tel:717003717" className="text-nflow-orange">717 003 717</a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Apoyo Familiar */}
+                  <div className="bg-green-900/20 p-6 rounded-lg border border-green-700/30">
+                    <h3 className="text-green-300 text-lg font-semibold mb-4">👥 Apoyo Familiar</h3>
+                    <p className="text-sm mb-3">
+                      La familia juega un papel fundamental en la recuperación:
+                    </p>
+                    <ul className="space-y-2 text-sm">
+                      <li>• Evitar comentarios sobre peso o apariencia física</li>
+                      <li>• Buscar ayuda profesional especializada</li>
+                      <li>• Mantener un ambiente familiar estable y comprensivo</li>
+                      <li>• No forzar la alimentación ni establecer luchas de poder</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ) : selectedResource?.category === "autismo" ? (
+              // Modal específico para Autismo
+              <div>
+                <DialogHeader>
+                  <DialogTitle className="text-white text-2xl mb-4 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-nflow-orange/20 rounded-lg flex items-center justify-center">
+                      <Puzzle className="w-5 h-5 text-nflow-orange" />
+                    </div>
+                    Trastorno del Espectro Autista (TEA)
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300">
+                    Información oficial sobre autismo basada en protocolos del Ministerio de Sanidad
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="mt-6 space-y-6 text-gray-300">
+                  {/* Información Principal */}
+                  <div className="bg-purple-900/20 p-6 rounded-lg border border-purple-700/30">
+                    <h3 className="text-purple-300 text-lg font-semibold mb-4">🧩 ¿Qué es el TEA?</h3>
+                    <p className="text-sm mb-4">
+                      El Trastorno del Espectro Autista (TEA) es una condición neurológica y del desarrollo que afecta 
+                      la comunicación, la interacción social y el comportamiento. Es un "espectro" porque presenta 
+                      una amplia variedad de síntomas y niveles de gravedad.
+                    </p>
+                    <div className="bg-gray-800/50 p-4 rounded-lg">
+                      <h4 className="text-purple-300 font-semibold mb-2">Características principales:</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li>• Dificultades en la comunicación social</li>
+                        <li>• Patrones de comportamiento repetitivos</li>
+                        <li>• Intereses restringidos o muy específicos</li>
+                        <li>• Sensibilidades sensoriales</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Señales Tempranas */}
+                  <div className="bg-orange-900/20 p-6 rounded-lg border border-orange-700/30">
+                    <h3 className="text-orange-300 text-lg font-semibold mb-4">🔍 Señales Tempranas</h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="text-white font-semibold mb-2">0-2 años:</h4>
+                        <ul className="space-y-1 text-sm">
+                          <li>• Poco contacto visual</li>
+                          <li>• Retraso en el lenguaje</li>
+                          <li>• No responde a su nombre</li>
+                          <li>• Movimientos repetitivos</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h4 className="text-white font-semibold mb-2">3+ años:</h4>
+                        <ul className="space-y-1 text-sm">
+                          <li>• Dificultades para hacer amigos</li>
+                          <li>• Problemas con cambios de rutina</li>
+                          <li>• Intereses muy específicos</li>
+                          <li>• Sensibilidad sensorial</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Recursos Profesionales */}
+                  <div className="bg-blue-900/20 p-6 rounded-lg border border-blue-700/30">
+                    <h3 className="text-blue-300 text-lg font-semibold mb-4">🏥 Recursos Especializados</h3>
+                    <div className="space-y-3">
+                      <Button 
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white justify-start"
+                        onClick={() => window.open('https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria', '_blank')}
+                      >
+                        <FileText className="w-4 h-4 mr-2" />
+                        Guías Clínicas TEA - Sistema Nacional de Salud
+                      </Button>
+                      <div className="bg-gray-800/50 p-4 rounded-lg">
+                        <h4 className="text-green-300 font-semibold mb-2">Evaluación Profesional:</h4>
+                        <p className="text-sm">
+                          La evaluación debe realizarla un equipo multidisciplinar especializado en TEA, 
+                          incluyendo psicólogos clínicos, neuropediatras y logopedas.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Apoyo Familiar */}
+                  <div className="bg-green-900/20 p-6 rounded-lg border border-green-700/30">
+                    <h3 className="text-green-300 text-lg font-semibold mb-4">👨‍👩‍👧‍👦 Apoyo Familiar</h3>
+                    <p className="text-sm mb-3">
+                      Estrategias para apoyar a personas con TEA:
+                    </p>
+                    <ul className="space-y-2 text-sm">
+                      <li>• Mantener rutinas predecibles y estructuradas</li>
+                      <li>• Usar comunicación clara y directa</li>
+                      <li>• Respetar las necesidades sensoriales</li>
+                      <li>• Celebrar los logros, por pequeños que sean</li>
+                      <li>• Buscar apoyo profesional especializado</li>
+                      <li>• Conectar con grupos de apoyo familiar</li>
+                    </ul>
                   </div>
                 </div>
               </div>
