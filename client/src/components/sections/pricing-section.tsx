@@ -104,9 +104,9 @@ export default function PricingSection() {
         "Respuesta ultra rápida y preferente",
         "Plan de seguimiento automático",
         "Acceso anticipado a nuevas funciones y betas",
-        "Prioridad en el soporte técnico y de usuario",
-        "1 sesión de orientación inicial con experto real",
-        "Cancelación fácil en cualquier momento"
+        "Pago único - sin renovación automática",
+        "365 días de acceso completo garantizado",
+        "Sin sorpresas ni cobros adicionales"
       ],
       buttonText: "Seleccionar Plan Anual",
       buttonClass: "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700",
@@ -114,17 +114,17 @@ export default function PricingSection() {
       philosophy: {
         title: "Filosofía del Plan Anual",
         points: [
-          "Sin complicaciones: pagas una vez, olvidas los cobros mensuales y disfrutas sin interrupciones",
-          "A tu ritmo, sin prisas ni postureo: tú decides cuándo y cómo usar tus preguntas mensuales",
-          "Compromiso con tu mejora: premia a los que apuestan por su salud mental de verdad"
+          "Pago único: pagas una vez y olvidas renovaciones por todo el año",
+          "A tu ritmo, sin prisas ni postureo: tú decides cuándo y cómo usar tus 40 preguntas mensuales",
+          "Sin compromisos automáticos: después del año decides si continúas o no"
         ]
       },
       whyChoose: {
         title: "¿Por qué elegir el Anual?",
         points: [
           "Porque sale mucho más a cuenta que cualquier plan mensual",
-          "Porque todo el contenido, soporte y funciones avanzadas están incluidas desde el primer día",
-          "Porque la tranquilidad de la salud mental no tiene por qué renovarse cada 30 días"
+          "Porque todo el contenido y funciones avanzadas están incluidas desde el primer día",
+          "Porque pagas una vez y te olvidas durante todo el año"
         ]
       }
     }
@@ -356,7 +356,7 @@ export default function PricingSection() {
             </div>
             <div className="mt-6 bg-gray-800/50 p-4 rounded-lg">
               <p className="text-sm text-gray-300 italic">
-                "Elige el Plan Anual y olvídate de pagar cada mes. Porque lo bueno, si es de verdad, mejor sin postureo y sin sorpresas. Aquí lo que ves es lo que hay."
+                "Elige el Plan Anual y págalo una sola vez. Un año completo sin renovaciones automáticas, sin sustos ni sorpresas. Aquí lo que ves es lo que hay."
               </p>
             </div>
           </div>
