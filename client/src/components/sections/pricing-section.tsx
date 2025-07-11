@@ -35,7 +35,8 @@ export default function PricingSection() {
         "Consejos personalizados IA",
         "Contenido actualizado semanalmente",
         "Sin publicidad",
-        "Respuesta estándar"
+        "Respuesta estándar",
+        "Cancelación fácil en cualquier momento"
       ],
       buttonText: "Seleccionar Plan",
       buttonClass: "bg-nflow-blue hover:bg-nflow-blue-dark"
@@ -54,7 +55,8 @@ export default function PricingSection() {
         "Contenido actualizado semanalmente",
         "Sin publicidad",
         "Ejercicios y retos personalizados IA",
-        "Respuesta prioritaria"
+        "Respuesta prioritaria",
+        "Cancelación fácil en cualquier momento"
       ],
       buttonText: "Seleccionar Plan",
       buttonClass: "bg-nflow-orange hover:bg-nflow-orange-light",
@@ -76,7 +78,8 @@ export default function PricingSection() {
         "Ejercicios y retos personalizados IA",
         "Respuesta ultra rápida y preferente",
         "Plan de seguimiento automático",
-        "Acceso anticipado a nuevas funciones"
+        "Acceso anticipado a nuevas funciones",
+        "Cancelación fácil en cualquier momento"
       ],
       buttonText: "Seleccionar Plan",
       buttonClass: "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800"
@@ -310,6 +313,30 @@ export default function PricingSection() {
               <p className="text-sm text-gray-300">
                 El plan más completo: máxima interacción mensual, seguimiento automático y respuestas preferentes.
               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Cancellation Policy Section */}
+        <div className="mt-8 bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-2xl p-6 border border-green-700/30">
+          <div className="text-center">
+            <h4 className="text-xl font-bold text-green-300 mb-3">✓ Sin Compromisos a Largo Plazo</h4>
+            <p className="text-gray-300 text-base mb-4 max-w-3xl mx-auto">
+              <strong>Cancela cuando quieras, sin penalizaciones ni complicaciones.</strong> Entendemos que tus necesidades pueden cambiar.
+            </p>
+            <div className="grid md:grid-cols-3 gap-4 mt-6">
+              <div className="bg-gray-800/50 rounded-lg p-4">
+                <div className="text-green-400 font-semibold mb-1">Cancelación Inmediata</div>
+                <div className="text-sm text-gray-300">Desde tu cuenta o contactando con nosotros</div>
+              </div>
+              <div className="bg-gray-800/50 rounded-lg p-4">
+                <div className="text-green-400 font-semibold mb-1">Sin Preguntas</div>
+                <div className="text-sm text-gray-300">No te pedimos motivos ni justificaciones</div>
+              </div>
+              <div className="bg-gray-800/50 rounded-lg p-4">
+                <div className="text-green-400 font-semibold mb-1">Acceso Hasta el Final</div>
+                <div className="text-sm text-gray-300">Mantén el servicio hasta que termine tu período</div>
+              </div>
             </div>
           </div>
         </div>
