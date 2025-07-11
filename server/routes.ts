@@ -547,11 +547,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
             console.log("=== ACTIVATING STRIPE SUBSCRIPTION ===");
             console.log("User found:", user.username, "ID:", user.id, "Current status:", user.subscriptionStatus);
             
+            // Determine plan based on price or subscription data
+            const subscriptionPlan = event.data.object.amount_total >= 6900 ? 'annual' : 'basic';
+            const expiresAt = subscriptionPlan === 'annual' 
+              ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 365 days
+              : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+
             await storage.updateUserSubscription(user.id, {
               status: 'active',
-              plan: 'basic',
+              plan: subscriptionPlan,
               subscriptionId: event.data.object.id || `stripe_${Date.now()}`,
-              expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+              expiresAt: expiresAt
             });
             
             console.log("✅ Stripe subscription activated successfully for:", user.username);
@@ -626,7 +632,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/paypal/capture-subscription", async (req, res) => {
     try {
-      const { subscriptionId } = req.body;
+      const { subscriptionId, subscriptionPlan = "basic" } = req.body;
       const userId = req.session.userId;
 
       if (!userId) {
@@ -636,17 +642,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
+      // Determine expiration date based on plan
+      let expiresAt;
+      if (subscriptionPlan === 'annual') {
+        expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000); // 365 days
+      } else {
+        expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+      }
+
       // Update user subscription status
       await storage.updateUserSubscription(userId, {
         status: "active",
-        plan: "basic",
+        plan: subscriptionPlan,
         subscriptionId: subscriptionId,
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+        expiresAt: expiresAt
       });
 
       res.json({ 
         success: true, 
-        message: "Suscripción activada" 
+        message: "Suscripción activada",
+        plan: subscriptionPlan,
+        expiresAt: expiresAt.toISOString()
       });
     } catch (error) {
       console.error("PayPal capture error:", error);

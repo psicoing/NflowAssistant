@@ -83,6 +83,50 @@ export default function PricingSection() {
       ],
       buttonText: "Seleccionar Plan",
       buttonClass: "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800"
+    },
+    {
+      id: "annual",
+      name: "Plan Anual \"Total\"",
+      price: "€69",
+      priceDetail: "año",
+      savings: "Ahorra hasta un 28% respecto a Premium mensual",
+      equivalentPrice: "(Equivalente a solo €5,75/mes)",
+      description: "La salud mental, sin postureos, a lo grande y sin sustos de precio",
+      icon: User,
+      questions: "40 al mes",
+      features: [
+        "Hasta 40 preguntas al chatbot IA cada mes",
+        "Acceso ilimitado a todos los recursos premium",
+        "Consejos personalizados IA",
+        "Contenido actualizado semanalmente",
+        "Sin publicidad",
+        "Ejercicios y retos personalizados IA",
+        "Respuesta ultra rápida y preferente",
+        "Plan de seguimiento automático",
+        "Acceso anticipado a nuevas funciones y betas",
+        "Prioridad en el soporte técnico y de usuario",
+        "1 sesión de orientación inicial con experto real",
+        "Cancelación fácil en cualquier momento"
+      ],
+      buttonText: "Seleccionar Plan Anual",
+      buttonClass: "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700",
+      annual: true,
+      philosophy: {
+        title: "Filosofía del Plan Anual",
+        points: [
+          "Sin complicaciones: pagas una vez, olvidas los cobros mensuales y disfrutas sin interrupciones",
+          "A tu ritmo, sin prisas ni postureo: tú decides cuándo y cómo usar tus preguntas mensuales",
+          "Compromiso con tu mejora: premia a los que apuestan por su salud mental de verdad"
+        ]
+      },
+      whyChoose: {
+        title: "¿Por qué elegir el Anual?",
+        points: [
+          "Porque sale mucho más a cuenta que cualquier plan mensual",
+          "Porque todo el contenido, soporte y funciones avanzadas están incluidas desde el primer día",
+          "Porque la tranquilidad de la salud mental no tiene por qué renovarse cada 30 días"
+        ]
+      }
     }
   ];
 
@@ -184,7 +228,8 @@ export default function PricingSection() {
     const priceMap = {
       basic: "2.99",
       pro: "5.99",
-      premium: "7.99"
+      premium: "7.99",
+      annual: "69.00"
     };
     return priceMap[planId as keyof typeof priceMap];
   };
@@ -194,7 +239,8 @@ export default function PricingSection() {
     const planMap = {
       basic: process.env.VITE_PAYPAL_BASIC_PLAN_ID || 'P-basic',
       pro: process.env.VITE_PAYPAL_PRO_PLAN_ID || 'P-pro', 
-      premium: process.env.VITE_PAYPAL_PREMIUM_PLAN_ID || 'P-premium'
+      premium: process.env.VITE_PAYPAL_PREMIUM_PLAN_ID || 'P-premium',
+      annual: process.env.VITE_PAYPAL_ANNUAL_PLAN_ID || 'P-annual'
     };
     return planMap[planId as keyof typeof planMap];
   };
@@ -210,7 +256,7 @@ export default function PricingSection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {pricingTiers.map((tier) => {
             const IconComponent = tier.icon;
             
@@ -238,7 +284,15 @@ export default function PricingSection() {
                     {tier.description}
                   </p>
                   <div className="text-4xl font-bold text-white">{tier.price}</div>
-                  <div className={`text-sm ${tier.popular ? 'text-blue-200' : 'text-gray-400'} mb-2`}>por mes</div>
+                  <div className={`text-sm ${tier.popular ? 'text-blue-200' : 'text-gray-400'} mb-2`}>
+                    {tier.priceDetail || 'por mes'}
+                  </div>
+                  {tier.savings && (
+                    <div className="text-xs text-green-400 font-semibold mb-1">{tier.savings}</div>
+                  )}
+                  {tier.equivalentPrice && (
+                    <div className="text-xs text-gray-400 mb-2">{tier.equivalentPrice}</div>
+                  )}
                   <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
                     tier.popular ? 'bg-nflow-orange/20 text-nflow-orange' : 'bg-nflow-blue/20 text-nflow-blue'
                   }`}>
@@ -276,6 +330,36 @@ export default function PricingSection() {
               </div>
             );
           })}
+        </div>
+
+        {/* Plan Anual Special Section */}
+        <div className="mt-12 bg-gradient-to-br from-green-900/30 to-emerald-900/30 rounded-3xl p-8 border border-green-700/40">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-green-300 mb-4">Plan Anual "Total" - Filosofía Sin Postureo</h3>
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <h4 className="text-lg font-semibold text-white mb-4">Filosofía del Plan Anual</h4>
+                <ul className="space-y-3 text-sm text-gray-300">
+                  <li>• <strong>Sin complicaciones:</strong> pagas una vez, olvidas los cobros mensuales y disfrutas sin interrupciones</li>
+                  <li>• <strong>A tu ritmo, sin prisas ni postureo:</strong> tú decides cuándo y cómo usar tus preguntas mensuales</li>
+                  <li>• <strong>Compromiso con tu mejora:</strong> premia a los que apuestan por su salud mental de verdad</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-lg font-semibold text-white mb-4">¿Por qué elegir el Anual?</h4>
+                <ul className="space-y-3 text-sm text-gray-300">
+                  <li>• Porque sale mucho más a cuenta que cualquier plan mensual</li>
+                  <li>• Porque todo el contenido, soporte y funciones avanzadas están incluidas desde el primer día</li>
+                  <li>• Porque la tranquilidad de la salud mental no tiene por qué renovarse cada 30 días</li>
+                </ul>
+              </div>
+            </div>
+            <div className="mt-6 bg-gray-800/50 p-4 rounded-lg">
+              <p className="text-sm text-gray-300 italic">
+                "Elige el Plan Anual y olvídate de pagar cada mes. Porque lo bueno, si es de verdad, mejor sin postureo y sin sorpresas. Aquí lo que ves es lo que hay."
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* How to Choose Section */}

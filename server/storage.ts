@@ -148,12 +148,25 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
+  // Helper function to determine monthly question limit based on plan
+  private getQuestionLimitByPlan(plan: string): number {
+    const planLimits = {
+      'basic': 10,
+      'pro': 20, 
+      'premium': 30,
+      'annual': 40
+    };
+    return planLimits[plan as keyof typeof planLimits] || 10;
+  }
+
   async updateUserSubscription(userId: number, subscriptionData: {
     status: string;
     plan: string;
     subscriptionId: string;
     expiresAt?: Date;
   }): Promise<User> {
+    const questionLimit = this.getQuestionLimitByPlan(subscriptionData.plan);
+    
     const [user] = await db
       .update(users)
       .set({
@@ -162,6 +175,10 @@ export class DatabaseStorage implements IStorage {
         subscriptionId: subscriptionData.subscriptionId,
         subscriptionExpiresAt: subscriptionData.expiresAt,
         hasCompletedPayment: subscriptionData.status === 'active',
+        monthlyQuestionLimit: questionLimit,
+        // Reset question counter when activating new plan
+        questionsUsedThisMonth: 0,
+        lastQuestionResetDate: new Date()
       })
       .where(eq(users.id, userId))
       .returning();
