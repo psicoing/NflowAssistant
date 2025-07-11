@@ -327,7 +327,7 @@ export default function PricingSection() {
             <div className="grid md:grid-cols-3 gap-4 mt-6">
               <div className="bg-gray-800/50 rounded-lg p-4">
                 <div className="text-green-400 font-semibold mb-1">Cancelación Inmediata</div>
-                <div className="text-sm text-gray-300">Desde tu cuenta o contactando con nosotros</div>
+                <div className="text-sm text-gray-300">Desde tu cuenta de usuario</div>
               </div>
               <div className="bg-gray-800/50 rounded-lg p-4">
                 <div className="text-green-400 font-semibold mb-1">Sin Preguntas</div>
