@@ -1,6 +1,7 @@
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/sections/hero-section";
+import PaidAppNotice from "@/components/sections/paid-app-notice";
 import AgeNoticeSection from "@/components/sections/age-notice-section";
 import ServicesSection from "@/components/sections/services-section";
 import ChatExamplesSection from "@/components/sections/chat-examples-section";
@@ -16,6 +17,7 @@ export default function Home() {
       <Header />
       <main>
         <HeroSection />
+        <PaidAppNotice />
         <AgeNoticeSection />
         <ServicesSection />
         <ChatExamplesSection />

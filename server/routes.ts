@@ -234,7 +234,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const hasActiveSubscription = await checkSubscription(userId);
       if (!hasActiveSubscription) {
         return res.status(403).json({ 
-          message: "Active subscription required to access chat",
+          message: "NFLOW es aplicación de pago - Suscripción requerida",
           requiresPayment: true 
         });
       }
@@ -261,7 +261,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const hasActiveSubscription = await checkSubscription(userId);
       if (!hasActiveSubscription) {
         return res.status(403).json({ 
-          message: "Active subscription required to access chat",
+          message: "NFLOW es aplicación de pago - Suscripción requerida",
           requiresPayment: true 
         });
       }
@@ -309,7 +309,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const hasActiveSubscription = await checkSubscription(userId);
       if (!hasActiveSubscription) {
         return res.status(403).json({ 
-          message: "Active subscription required to access chat",
+          message: "NFLOW es aplicación de pago - Suscripción requerida",
           requiresPayment: true 
         });
       }
@@ -339,7 +339,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const hasActiveSubscription = await checkSubscription(userId);
       if (!hasActiveSubscription) {
         return res.status(402).json({ 
-          message: "Subscription required",
+          message: "NFLOW es aplicación de pago - Suscripción requerida",
           needsPayment: true 
         });
       }

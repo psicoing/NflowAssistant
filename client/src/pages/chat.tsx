@@ -34,10 +34,10 @@ export default function Chat() {
   useEffect(() => {
     if (!isAuthLoading && user && !user.hasActiveSubscription) {
       toast({
-        title: "Suscripción requerida",
-        description: "Necesitas una suscripción activa para acceder al chat",
+        title: "Aplicación de pago",
+        description: "NFLOW es de pago. Debes comprar una suscripción para usar el chat",
         variant: "destructive",
-        duration: 3000,
+        duration: 5000,
       });
       setLocation("/#precios");
       return;
@@ -302,9 +302,9 @@ export default function Chat() {
         <Card className="max-w-md mx-4 bg-gray-800 border-gray-700">
           <CardContent className="p-8 text-center">
             <MessageCircle className="w-16 h-16 mx-auto mb-4 text-nflow-orange" />
-            <h2 className="text-2xl font-bold mb-2 text-white">Suscripción Requerida</h2>
+            <h2 className="text-2xl font-bold mb-2 text-white">Chat Solo Para Suscriptores</h2>
             <p className="text-gray-300 mb-6">
-              Para acceder al chat necesitas una suscripción activa. Los recursos gratuitos están disponibles en la página principal.
+              <strong>NFLOW es una aplicación de pago.</strong> El chat con IA requiere suscripción activa. Sin excepción, sin pruebas gratuitas.
             </p>
             <Button 
               onClick={() => setLocation("/#precios")}

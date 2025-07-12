@@ -55,7 +55,7 @@ export default function HeroSection() {
             className="bg-nflow-orange hover:bg-nflow-orange-light text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
           >
             <MessageCircle className="w-5 h-5 mr-2" />
-            Empezar Chat
+            Comprar Suscripción
           </Button>
         </div>
 
