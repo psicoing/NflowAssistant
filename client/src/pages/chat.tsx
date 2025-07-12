@@ -30,9 +30,23 @@ export default function Chat() {
   // Authentication handled by session-based auth
   const { user, isLoading: isAuthLoading } = useAuth();
 
+  // Check subscription status and redirect if needed
+  useEffect(() => {
+    if (!isAuthLoading && user && !user.hasActiveSubscription) {
+      toast({
+        title: "Suscripción requerida",
+        description: "Necesitas una suscripción activa para acceder al chat",
+        variant: "destructive",
+        duration: 3000,
+      });
+      setLocation("/#precios");
+      return;
+    }
+  }, [user, isAuthLoading, setLocation, toast]);
+
   // Check for existing user profile
   useEffect(() => {
-    if (user?.id) {
+    if (user?.id && user.hasActiveSubscription) {
       // Check if profile is completed in database
       if (user.profileCompleted && user.ageRange && user.gender) {
         setUserProfile({
@@ -51,7 +65,7 @@ export default function Chat() {
         }
       }
     }
-  }, [user?.id, user?.profileCompleted, user?.ageRange, user?.gender]);
+  }, [user?.id, user?.hasActiveSubscription, user?.profileCompleted, user?.ageRange, user?.gender]);
 
   // Fetch conversations list (subscription already verified in login)
   const { data: conversations = [], isLoading: isLoadingConversations } = useQuery<Conversation[]>({
@@ -277,6 +291,29 @@ export default function Chat() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
         <div className="animate-spin w-8 h-8 border-4 border-nflow-orange border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
+  // Block access for users without active subscription
+  if (user && !user.hasActiveSubscription) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
+        <Card className="max-w-md mx-4 bg-gray-800 border-gray-700">
+          <CardContent className="p-8 text-center">
+            <MessageCircle className="w-16 h-16 mx-auto mb-4 text-nflow-orange" />
+            <h2 className="text-2xl font-bold mb-2 text-white">Suscripción Requerida</h2>
+            <p className="text-gray-300 mb-6">
+              Para acceder al chat necesitas una suscripción activa. Los recursos gratuitos están disponibles en la página principal.
+            </p>
+            <Button 
+              onClick={() => setLocation("/#precios")}
+              className="w-full bg-nflow-orange hover:bg-orange-600 text-white"
+            >
+              Ver Planes de Suscripción
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }

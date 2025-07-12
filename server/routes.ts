@@ -58,13 +58,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Hash password
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Create user with pending payment status
+      // Create user with pending payment status and NO free questions
       const newUser = await storage.createUser({
         username,
         password: hashedPassword,
         email,
         subscriptionStatus: 'pending_payment',
-        hasCompletedPayment: false
+        hasCompletedPayment: false,
+        monthlyQuestionLimit: 0  // No free questions - subscription required
       });
 
       // Set session for newly registered user
@@ -229,6 +230,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "User not authenticated" });
       }
       
+      // Check if user has active subscription
+      const hasActiveSubscription = await checkSubscription(userId);
+      if (!hasActiveSubscription) {
+        return res.status(403).json({ 
+          message: "Active subscription required to access chat",
+          requiresPayment: true 
+        });
+      }
+      
       const conversations = await storage.getConversations(userId);
       console.log(`Fetched ${conversations.length} conversations for user ${userId}`);
       res.json(conversations);
@@ -245,6 +255,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (!userId) {
         return res.status(401).json({ message: "User not authenticated" });
+      }
+
+      // Check if user has active subscription
+      const hasActiveSubscription = await checkSubscription(userId);
+      if (!hasActiveSubscription) {
+        return res.status(403).json({ 
+          message: "Active subscription required to access chat",
+          requiresPayment: true 
+        });
       }
 
       const { title } = req.body;
@@ -280,6 +299,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get messages for a conversation
   app.get("/api/conversations/:id/messages", async (req, res) => {
     try {
+      const userId = req.session.userId;
+      
+      if (!userId) {
+        return res.status(401).json({ message: "User not authenticated" });
+      }
+
+      // Check if user has active subscription
+      const hasActiveSubscription = await checkSubscription(userId);
+      if (!hasActiveSubscription) {
+        return res.status(403).json({ 
+          message: "Active subscription required to access chat",
+          requiresPayment: true 
+        });
+      }
+
       const conversationId = parseInt(req.params.id);
       const messages = await storage.getMessages(conversationId);
       res.json(messages);
