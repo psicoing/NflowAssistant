@@ -65,7 +65,7 @@ export default function NosotrosPage() {
                 </div>
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-nflow-orange mb-2">
-                    Dr. Ramón Molons de San Román
+                    Llic. Ramón Molons de San Román
                   </h2>
                   <p className="text-gray-600 dark:text-gray-300 mb-4 text-lg">
                     Director y Fundador de NFLOW • NeuroEngineer & PsychoClinic
