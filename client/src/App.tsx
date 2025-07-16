@@ -34,6 +34,7 @@ import TerminosCondiciones from "@/pages/legal/terminos";
 import PoliticaPrivacidad from "@/pages/legal/privacidad";
 import PoliticaCookies from "@/pages/legal/cookies";
 import AvisoLegal from "@/pages/legal/aviso-legal";
+import NosotrosPage from "@/pages/nosotros";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -43,7 +44,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/consejos", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/consejos", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners", "/nosotros", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
     if (publicRoutes.includes(location)) {
       return;
     }
@@ -98,6 +99,7 @@ function AuthenticatedRouter() {
       <Route path="/legal/privacidad" component={PoliticaPrivacidad} />
       <Route path="/legal/cookies" component={PoliticaCookies} />
       <Route path="/legal/aviso-legal" component={AvisoLegal} />
+      <Route path="/nosotros" component={NosotrosPage} />
       <Route component={NotFound} />
     </Switch>
   );

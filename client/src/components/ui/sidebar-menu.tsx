@@ -5,7 +5,6 @@ import { Menu, Home, MessageCircle, Book, Lightbulb, CreditCard, Users, Gift, Gl
 import { Link, useLocation } from "wouter";
 import { GoogleTranslateDialog } from "@/components/ui/google-translate-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import AboutUsModal from "@/components/modals/about-us-modal";
 
 const menuItems = [
   {
@@ -53,9 +52,8 @@ const menuItems = [
   {
     id: "nosotros",
     name: "Nosotros",
-    href: "#",
-    icon: Info,
-    isModal: true
+    href: "/nosotros",
+    icon: Info
   },
   {
     id: "contacto",
@@ -182,29 +180,7 @@ export default function SidebarMenu() {
                     );
                   }
 
-                  if (item.id === "nosotros") {
-                    return (
-                      <div key={item.id}>
-                        <AboutUsModal 
-                          trigger={
-                            <Button
-                              variant="ghost"
-                              className="w-full justify-start h-14 text-left px-4 transition-all duration-200 text-white hover:bg-white/10 hover:text-nflow-blue"
-                            >
-                              <IconComponent className="mr-3 h-5 w-5" />
-                              <span className="text-base">{item.name}</span>
-                            </Button>
-                          }
-                          onOpenChange={(open) => {
-                            if (open) {
-                              // Cerrar el sidebar cuando se abre el modal
-                              setIsOpen(false);
-                            }
-                          }}
-                        />
-                      </div>
-                    );
-                  }
+
 
                   if (item.id === "contacto") {
                     return (
