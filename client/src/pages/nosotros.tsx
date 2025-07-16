@@ -257,9 +257,10 @@ export default function NosotrosPage() {
 
           {/* Call to Action */}
           <div className="text-center py-8">
-            <Link href="/#precios">
-              <Button size="lg" className="bg-nflow-orange hover:bg-nflow-orange/90 text-white px-8 py-3 text-lg">
-                Conoce nuestros planes de suscripción
+            <Link href="/">
+              <Button size="lg" className="bg-nflow-orange hover:bg-nflow-orange/90 text-white px-8 py-3 text-lg flex items-center gap-2">
+                <Home className="h-5 w-5" />
+                Volver a la página de inicio
               </Button>
             </Link>
           </div>
