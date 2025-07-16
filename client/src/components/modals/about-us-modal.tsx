@@ -24,9 +24,10 @@ import {
 
 interface AboutUsModalProps {
   trigger?: React.ReactNode;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export default function AboutUsModal({ trigger }: AboutUsModalProps) {
+export default function AboutUsModal({ trigger, onOpenChange }: AboutUsModalProps) {
   const DefaultTrigger = (
     <Button variant="ghost" className="w-full justify-start text-white hover:bg-white/10">
       <Users className="h-4 w-4 mr-2" />
@@ -35,7 +36,7 @@ export default function AboutUsModal({ trigger }: AboutUsModalProps) {
   );
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         {trigger || DefaultTrigger}
       </DialogTrigger>

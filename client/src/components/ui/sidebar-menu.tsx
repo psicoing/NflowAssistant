@@ -184,7 +184,7 @@ export default function SidebarMenu() {
 
                   if (item.id === "nosotros") {
                     return (
-                      <div key={item.id} onClick={() => setIsOpen(false)}>
+                      <div key={item.id}>
                         <AboutUsModal 
                           trigger={
                             <Button
@@ -195,6 +195,12 @@ export default function SidebarMenu() {
                               <span className="text-base">{item.name}</span>
                             </Button>
                           }
+                          onOpenChange={(open) => {
+                            if (open) {
+                              // Cerrar el sidebar cuando se abre el modal
+                              setIsOpen(false);
+                            }
+                          }}
                         />
                       </div>
                     );
