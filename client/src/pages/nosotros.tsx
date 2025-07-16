@@ -33,7 +33,7 @@ export default function NosotrosPage() {
             <Link href="/">
               <Button variant="ghost" className="flex items-center gap-2">
                 <ArrowLeft className="h-4 w-4" />
-                Volver al inicio
+                Volver a la página principal
               </Button>
             </Link>
             <div className="flex items-center gap-2">
@@ -81,7 +81,7 @@ export default function NosotrosPage() {
                     </Badge>
                     <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 py-1 px-3">
                       <Star className="h-3 w-3 mr-1" />
-                      Mejor Psicólogo Doctoralia
+                      Mejor Psicólogo Doctoralia 2016
                     </Badge>
                   </div>
                 </div>
