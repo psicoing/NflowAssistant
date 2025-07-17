@@ -130,6 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- July 17, 2025. **ENLACE "APLICACIÓN MÓVIL" AGREGADO AL MENÚ** - Añadido enlace "Aplicación Móvil" en menú hamburguesa con ícono Smartphone que lleva directamente a la sección PWA (#app-movil) para fácil acceso a las instrucciones de instalación.
 - July 17, 2025. **SECCIÓN PWA INSTALACIÓN IMPLEMENTADA** - Creada nueva sección PWAInstallationSection con guías visuales paso a paso para instalar NFLOW como aplicación móvil sin tiendas. Incluye instrucciones específicas para Android/Chrome e iPhone/Safari con iconografía clara y ventajas destacadas. Posicionada en el medio de la página principal para máximo impacto.
 - July 17, 2025. **HEROSECTION MOVIDA A TERCERA POSICIÓN** - Reposicionada la tarjeta inicial (HeroSection) dos posiciones hacia abajo: ahora aparece después de GlobalSupportSection y AgeNoticeSection para optimizar el flujo de navegación.
 - July 17, 2025. **SECCIÓN PAQUETES TEMPORALMENTE DESHABILITADA** - PackagesSection comentada debido a problemas de posicionamiento en webview que causaba aparición incorrecta al principio de página.

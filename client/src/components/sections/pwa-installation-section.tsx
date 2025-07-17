@@ -5,7 +5,7 @@ import { Smartphone, Download, Chrome, Share, Plus, Home, CheckCircle } from "lu
 
 export default function PWAInstallationSection() {
   return (
-    <section className="py-20 bg-gradient-to-b from-gray-900 via-nflow-dark to-gray-800 relative overflow-hidden">
+    <section id="app-movil" className="py-20 bg-gradient-to-b from-gray-900 via-nflow-dark to-gray-800 relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/3 w-[400px] h-[400px] bg-gradient-to-r from-nflow-orange/10 to-nflow-blue/10 rounded-full blur-3xl animate-pulse"></div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Home, MessageCircle, Book, Lightbulb, CreditCard, Users, Gift, Globe, LogIn, UserPlus, DollarSign, Phone, Info } from "lucide-react";
+import { Menu, Home, MessageCircle, Book, Lightbulb, CreditCard, Users, Gift, Globe, LogIn, UserPlus, DollarSign, Phone, Info, Smartphone } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { GoogleTranslateDialog } from "@/components/ui/google-translate-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -48,6 +48,12 @@ const menuItems = [
     name: "Precios",
     href: "/#precios",
     icon: DollarSign
+  },
+  {
+    id: "app-movil",
+    name: "Aplicación Móvil",
+    href: "/#app-movil",
+    icon: Smartphone
   },
   {
     id: "nosotros",
