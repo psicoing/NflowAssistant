@@ -18,12 +18,12 @@ export default function Home() {
       <Header />
       <main>
         <HeroSection />
+        <GlobalSupportSection />
         <AgeNoticeSection />
         <ServicesSection />
         <ChatExamplesSection />
         <FeaturesSection />
         <PersonasSection />
-        <GlobalSupportSection />
         <PricingSection />
         <PaidAppNotice />
         <PackagesSection />
