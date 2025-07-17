@@ -110,7 +110,7 @@ export default function YouthMentalHealthSection() {
             {/* CTA */}
             <div className="pt-6">
               <button 
-                onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => window.location.href = '/ejemplos-chat'}
                 className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300 hover:from-emerald-700 hover:to-teal-700"
               >
                 Apoyo para Jóvenes
