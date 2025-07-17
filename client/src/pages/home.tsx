@@ -14,6 +14,7 @@ import InstitutoSection from "@/components/sections/instituto-section";
 import PWAInstallationSection from "@/components/sections/pwa-installation-section";
 import LanguageBannerSection from "@/components/sections/language-banner-section";
 import MentalHealthHeroSection from "@/components/sections/mental-health-hero-section";
+import YouthMentalHealthSection from "@/components/sections/youth-mental-health-section";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
       <main>
         <LanguageBannerSection />
         <MentalHealthHeroSection />
+        <YouthMentalHealthSection />
         <GlobalSupportSection />
         <AgeNoticeSection />
         <HeroSection />
