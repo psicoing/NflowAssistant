@@ -13,12 +13,14 @@ import PricingSection from "@/components/sections/pricing-section";
 import InstitutoSection from "@/components/sections/instituto-section";
 import PWAInstallationSection from "@/components/sections/pwa-installation-section";
 import LanguageBannerSection from "@/components/sections/language-banner-section";
+import MentalHealthHeroSection from "@/components/sections/mental-health-hero-section";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-nflow-dark">
       <Header />
       <main>
+        <MentalHealthHeroSection />
         <LanguageBannerSection />
         <GlobalSupportSection />
         <AgeNoticeSection />
