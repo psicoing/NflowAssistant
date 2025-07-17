@@ -20,8 +20,8 @@ export default function Home() {
     <div className="min-h-screen bg-nflow-dark">
       <Header />
       <main>
-        <MentalHealthHeroSection />
         <LanguageBannerSection />
+        <MentalHealthHeroSection />
         <GlobalSupportSection />
         <AgeNoticeSection />
         <HeroSection />
