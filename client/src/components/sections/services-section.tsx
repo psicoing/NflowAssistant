@@ -43,6 +43,10 @@ export default function ServicesSection() {
                 <CheckCircle className="w-6 h-6 text-nflow-orange flex-shrink-0" />
                 <span className="text-gray-200">{t('services.modern.feature3')}</span>
               </div>
+              <div className="flex items-center space-x-3">
+                <CheckCircle className="w-6 h-6 text-nflow-orange flex-shrink-0" />
+                <span className="text-gray-200">{t('services.modern.feature4')}</span>
+              </div>
             </div>
 
 

@@ -51,8 +51,9 @@ export const translations = {
     'services.modern.title2': 'Especializadas',
     'services.modern.description': 'Cada una diseñada para abordar necesidades específicas de salud mental',
     'services.modern.feature1': 'NFLOW Familias - Apoyo para toda la familia',
-    'services.modern.feature2': 'NFLOW Laboral - Salud mental en el trabajo',
-    'services.modern.feature3': 'NFLOW Adultos - Terapia personalizada',
+    'services.modern.feature2': 'NFLOW Adolescentes - Apoyo personalizado a partir 12 años',
+    'services.modern.feature3': 'NFLOW Laboral - Salud mental en el trabajo',
+    'services.modern.feature4': 'NFLOW Adultos - Terapia personalizada',
     
     // Examples Section
     'examples.assistant.title': 'Tu Asistente de IA Especializado',
