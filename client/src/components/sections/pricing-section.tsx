@@ -87,10 +87,10 @@ export default function PricingSection() {
     {
       id: "annual",
       name: "Plan Anual \"Total\"",
-      price: "€69",
+      price: "€49",
       priceDetail: "año",
-      savings: "Ahorra hasta un 28% respecto a Premium mensual",
-      equivalentPrice: "(Equivalente a solo €5,75/mes)",
+      savings: "Ahorra hasta un 48% respecto a Premium mensual",
+      equivalentPrice: "(Equivalente a solo €4,08/mes)",
       description: "La salud mental, sin postureos, a lo grande y sin sustos de precio",
       icon: User,
       questions: "40 al mes",
