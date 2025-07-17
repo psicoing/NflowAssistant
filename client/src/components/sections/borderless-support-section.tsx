@@ -12,7 +12,7 @@ export default function BorderlessSupportSection() {
               SIN
             </span>
           </span>{" "}
-          Tiene Fronteras
+          Fronteras
         </h2>
         
         <div className="space-y-4">
