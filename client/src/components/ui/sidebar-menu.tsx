@@ -52,7 +52,7 @@ const menuItems = [
   {
     id: "app-movil",
     name: "Aplicación Móvil",
-    href: "/#app-movil",
+    href: "/app-movil",
     icon: Smartphone
   },
   {
