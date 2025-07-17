@@ -159,6 +159,38 @@ export default function NosotrosPage() {
                   </div>
                   <p className="text-gray-700 dark:text-gray-300">Consulta de Psicología especializada a domicilio</p>
                 </div>
+
+                <div className="border-l-4 border-green-500 pl-6">
+                  <div className="mb-2">
+                    <h4 className="font-semibold text-lg text-green-600">Psicólogo Forense - Juzgados de Girona</h4>
+                    <p className="text-gray-600 dark:text-gray-400">Girona, La Bisbal, Sant Feliu de Guíxols y Figueres (7 años)</p>
+                  </div>
+                  <p className="text-gray-700 dark:text-gray-300">Peritajes psicológicos forenses y evaluaciones psicológicas judiciales</p>
+                </div>
+
+                <div className="border-l-4 border-red-500 pl-6">
+                  <div className="mb-2">
+                    <h4 className="font-semibold text-lg text-red-600">Psicólogo - Institutos Públicos de Cataluña</h4>
+                    <p className="text-gray-600 dark:text-gray-400">Sistema Educativo Catalán (6 años)</p>
+                  </div>
+                  <p className="text-gray-700 dark:text-gray-300">Psicología educativa y apoyo psicopedagógico en centros públicos</p>
+                </div>
+
+                <div className="border-l-4 border-yellow-500 pl-6">
+                  <div className="mb-2">
+                    <h4 className="font-semibold text-lg text-yellow-600">Psicólogo - Colegio Cor De Maria</h4>
+                    <p className="text-gray-600 dark:text-gray-400">Centro Educativo Privado (3 años)</p>
+                  </div>
+                  <p className="text-gray-700 dark:text-gray-300">Psicología escolar y orientación educativa especializada</p>
+                </div>
+
+                <div className="border-l-4 border-indigo-500 pl-6">
+                  <div className="mb-2">
+                    <h4 className="font-semibold text-lg text-indigo-600">Psicólogo - Centro Alzheimer de Figueres</h4>
+                    <p className="text-gray-600 dark:text-gray-400">Figueres, Girona (1 año)</p>
+                  </div>
+                  <p className="text-gray-700 dark:text-gray-300">Neuropsicología geriátrica y terapias cognitivas para demencias</p>
+                </div>
                 
                 <div className="border-l-4 border-purple-500 pl-6">
                   <div className="mb-2">
