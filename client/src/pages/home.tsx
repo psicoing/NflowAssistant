@@ -27,7 +27,7 @@ export default function Home() {
         <PricingSection />
         <PaidAppNotice />
         <InstitutoSection />
-        <PackagesSection />
+        {/* <PackagesSection /> */}
       </main>
       <Footer />
     </div>
