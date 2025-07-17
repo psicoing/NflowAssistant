@@ -11,6 +11,7 @@ import GlobalSupportSection from "@/components/sections/global-support-section";
 import PackagesSection from "@/components/sections/packages-section";
 import PricingSection from "@/components/sections/pricing-section";
 import InstitutoSection from "@/components/sections/instituto-section";
+import PWAInstallationSection from "@/components/sections/pwa-installation-section";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
         <HeroSection />
         <ServicesSection />
         <ChatExamplesSection />
+        <PWAInstallationSection />
         <FeaturesSection />
         <PersonasSection />
         <PricingSection />
