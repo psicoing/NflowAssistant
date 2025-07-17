@@ -18,8 +18,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-nflow-dark">
       <Header />
-      <LanguageBannerSection />
       <main>
+        <LanguageBannerSection />
         <GlobalSupportSection />
         <AgeNoticeSection />
         <HeroSection />

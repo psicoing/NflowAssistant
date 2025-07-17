@@ -3,7 +3,7 @@ import { Globe } from "lucide-react";
 
 export default function LanguageBannerSection() {
   return (
-    <section className="py-3 bg-gradient-to-r from-blue-900/30 via-blue-800/20 to-blue-900/30 border-b border-blue-700/20">
+    <section className="pt-20 pb-4 bg-gradient-to-r from-blue-900/30 via-blue-800/20 to-blue-900/30 border-b border-blue-700/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-center">
           <Badge 
