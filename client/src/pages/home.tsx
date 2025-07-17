@@ -17,13 +17,13 @@ export default function Home() {
       <Header />
       <main>
         <HeroSection />
-        <PaidAppNotice />
         <AgeNoticeSection />
         <ServicesSection />
         <ChatExamplesSection />
         <FeaturesSection />
         <PersonasSection />
         <PricingSection />
+        <PaidAppNotice />
         <PackagesSection />
         <InstitutoSection />
       </main>

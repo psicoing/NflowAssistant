@@ -130,6 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- July 17, 2025. **AVISO DE PAGO REPOSICIONADO** - Movido el aviso "NFLOW es una Aplicación de Pago" desde posición inicial (después del hero) a posición final (después de la sección de precios) para mejorar el flujo de usuario y permitir que vean primero el contenido antes del mensaje de restricción.
 - July 17, 2025. **PLAN ANUAL REESTRUCTURADO A €49** - Reducido precio del Plan Anual "Total" de €69 a €49, aumentando el ahorro a 48% respecto al Premium mensual. Precio equivalente actualizado a €4,08/mes. Cambio aplicado en sección de precios y documentación para mejorar la accesibilidad económica de la suscripción anual.
 - July 16, 2025. **PÁGINA "NOSOTROS" PROFESIONAL IMPLEMENTADA** - Creada página dedicada `/nosotros` con información completa del Dr. Ramón Molons de San Román (Colegiado Barcelona #7851). Incluye formación académica (UAB, UOC, UB, UdG), experiencia profesional 30+ años, especialización en neuroingeniería e IA clínica, información corporativa EMPORDAJOBS SL, y diseño profesional con cards y gradientes. Integrada en menú hamburguesa como enlace directo, eliminando conflictos del modal anterior.
 - July 13, 2025. **GOOGLE SEARCH CONSOLE INTEGRADO** - Agregada verificación completa de Google Search Console con meta tag ovYmUyEk3tIkbO3iXmY5jSnUWJbqQTejvxjUfPt_U0U y archivo HTML de respaldo. Sistema de monitoreo SEO listo para análisis de rendimiento, indexación y optimización en motores de búsqueda.
