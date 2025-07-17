@@ -17,9 +17,9 @@ export default function Home() {
     <div className="min-h-screen bg-nflow-dark">
       <Header />
       <main>
-        <HeroSection />
         <GlobalSupportSection />
         <AgeNoticeSection />
+        <HeroSection />
         <ServicesSection />
         <ChatExamplesSection />
         <FeaturesSection />

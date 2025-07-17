@@ -130,6 +130,8 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- July 17, 2025. **HEROSECTION MOVIDA A TERCERA POSICIÓN** - Reposicionada la tarjeta inicial (HeroSection) dos posiciones hacia abajo: ahora aparece después de GlobalSupportSection y AgeNoticeSection para optimizar el flujo de navegación.
+- July 17, 2025. **SECCIÓN PAQUETES TEMPORALMENTE DESHABILITADA** - PackagesSection comentada debido a problemas de posicionamiento en webview que causaba aparición incorrecta al principio de página.
 - July 17, 2025. **SECCIÓN PAQUETES REPOSICIONADA AL FINAL** - Movida la sección PackagesSection (tarjetas de productos NFLOW) desde posición media a la posición final de la página, después de InstitutoSection, para enfocar la navegación en contenido principal antes que productos.
 - July 17, 2025. **NUEVA SECCIÓN "SALUD MENTAL SIN FRONTERAS"** - Creada sección GlobalSupportSection con diseño moderno destacando la naturaleza global e inclusiva de NFLOW. Incluye dos tarjetas principales con las imágenes personalizadas: "Apoyo Sin Límites" (completamente anónimo, sin estigma) y "Primera Línea de Apoyo" (confianza de millones). Agregada grid de características (150+ idiomas, 100% anónimo, inclusivo, 24/7). Posicionada al inicio de la página, justo después del HeroSection, para máximo impacto visual.
 - July 17, 2025. **AVISO DE PAGO REPOSICIONADO** - Movido el aviso "NFLOW es una Aplicación de Pago" desde posición inicial (después del hero) a posición final (después de la sección de precios) para mejorar el flujo de usuario y permitir que vean primero el contenido antes del mensaje de restricción.
