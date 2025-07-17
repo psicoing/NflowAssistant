@@ -26,8 +26,8 @@ export default function Home() {
         <PersonasSection />
         <PricingSection />
         <PaidAppNotice />
-        <PackagesSection />
         <InstitutoSection />
+        <PackagesSection />
       </main>
       <Footer />
     </div>
