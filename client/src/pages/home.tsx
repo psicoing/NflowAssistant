@@ -12,11 +12,13 @@ import PackagesSection from "@/components/sections/packages-section";
 import PricingSection from "@/components/sections/pricing-section";
 import InstitutoSection from "@/components/sections/instituto-section";
 import PWAInstallationSection from "@/components/sections/pwa-installation-section";
+import LanguageBannerSection from "@/components/sections/language-banner-section";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-nflow-dark">
       <Header />
+      <LanguageBannerSection />
       <main>
         <GlobalSupportSection />
         <AgeNoticeSection />

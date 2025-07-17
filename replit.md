@@ -130,6 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
+- July 17, 2025. **BANNER MULTIIDIOMA AGREGADO** - Implementado banner prominente "Speaking 150+ languages • 支持150多种语言" en la parte superior de la página principal, posicionado arriba del header con diseño azul gradiente y icono Globe para destacar el soporte global multiidioma.
 - July 17, 2025. **PÁGINA DEDICADA APLICACIÓN MÓVIL CREADA** - Implementada página completa `/app-movil` con guías detalladas de instalación PWA para Android/Chrome e iPhone/Safari. Incluye sección explicativa de PWA, beneficios, FAQ completa, ejemplos visuales y llamadas a la acción. Enlace del menú actualizado para dirigir a esta página dedicada.
 - July 17, 2025. **ENLACE "APLICACIÓN MÓVIL" AGREGADO AL MENÚ** - Añadido enlace "Aplicación Móvil" en menú hamburguesa con ícono Smartphone que lleva directamente a la sección PWA para fácil acceso a las instrucciones de instalación.
 - July 17, 2025. **SECCIÓN PWA INSTALACIÓN IMPLEMENTADA** - Creada nueva sección PWAInstallationSection con guías visuales paso a paso para instalar NFLOW como aplicación móvil sin tiendas. Incluye instrucciones específicas para Android/Chrome e iPhone/Safari con iconografía clara y ventajas destacadas. Posicionada en el medio de la página principal para máximo impacto.
