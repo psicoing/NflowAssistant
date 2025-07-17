@@ -130,7 +130,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Changelog:
-- July 17, 2025. **TARJETA SALUD MENTAL AGREGADA COMO PRIMERA** - Implementada nueva sección MentalHealthHeroSection con imagen elegante de familia usando NFLOW. Incluye gradientes modernos, características clave (Para Toda la Familia, 100% Confidencial, Profesional, Disponible 24/7), indicador de apoyo activo y elementos decorativos. Posicionada después del banner multiidioma como segunda sección para óptima jerarquía visual.
+- July 17, 2025. **TARJETA SALUD MENTAL CON TÍTULO AMIGABLE** - Implementada nueva sección MentalHealthHeroSection con imagen elegante de familia usando NFLOW y título "Para Todos, Una Robot Muy Lista!" para tono más amigable y tecnológico. Incluye gradientes modernos, características clave (Para Toda la Familia, 100% Confidencial, Profesional, Disponible 24/7), indicador de apoyo activo y elementos decorativos. Posicionada después del banner multiidioma como segunda sección para óptima jerarquía visual.
 - July 17, 2025. **CUATRO SOLUCIONES COMPLETADAS** - Agregado "NFLOW Adolescentes - Apoyo personalizado a partir 12 años" como cuarta solución en services-section, completando las Cuatro Soluciones Especializadas (Familias, Adolescentes, Laboral, Adultos).
 - July 17, 2025. **BANNER MULTIIDIOMA REPOSICIONADO** - Banner "Speaking 150+ languages • 支持150多种语言" movido debajo del header para mejor visualización en móvil, con espaciado superior adecuado (pt-20) y posicionado como primera sección del main.
 - July 17, 2025. **BANNER MULTIIDIOMA AGREGADO** - Implementado banner prominente "Speaking 150+ languages • 支持150多种语言" en la página principal con diseño azul gradiente y icono Globe para destacar el soporte global multiidioma.

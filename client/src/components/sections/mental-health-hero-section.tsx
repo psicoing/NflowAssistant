@@ -10,8 +10,8 @@ export default function MentalHealthHeroSection() {
           <div className="space-y-8">
             <div>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-nflow-dark to-nflow-navy bg-clip-text text-transparent">
-                Salud Mental<br />
-                <span className="text-nflow-orange">Para Todos</span>
+                Para Todos,<br />
+                <span className="text-nflow-orange">Una Robot Muy Lista!</span>
               </h2>
               <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
                 Cada persona merece apoyo emocional profesional. NFLOW conecta familias, 
