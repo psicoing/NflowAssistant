@@ -187,9 +187,9 @@ export default function NosotrosPage() {
                 <div className="border-l-4 border-red-500 pl-6">
                   <div className="mb-2">
                     <h4 className="font-semibold text-lg text-red-600">Psicólogo - Institutos Públicos de Cataluña</h4>
-                    <p className="text-gray-600 dark:text-gray-400">2003 - 2023 • Sistema Educativo Catalán (20 años)</p>
+                    <p className="text-gray-600 dark:text-gray-400">2003 - 2023 • 23 centros educativos • 6 años trabajados en intervalo de 20 años como sustituto interino</p>
                   </div>
-                  <p className="text-gray-700 dark:text-gray-300">Psicología educativa y apoyo psicopedagógico en centros públicos</p>
+                  <p className="text-gray-700 dark:text-gray-300">Psicología educativa y apoyo psicopedagógico en centros públicos catalanes</p>
                 </div>
                 
                 <div className="border-l-4 border-purple-500 pl-6">
