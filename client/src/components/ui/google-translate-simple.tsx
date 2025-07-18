@@ -16,10 +16,10 @@ export function GoogleTranslateSimple({ className = "" }: GoogleTranslateSimpleP
   useEffect(() => {
     // Function to initialize Google Translate
     const initializeTranslate = () => {
-      if (window.google?.translate) {
-        const element = document.getElementById('google_translate_simple');
-        if (element && !element.hasChildNodes()) {
-          try {
+      try {
+        if (window.google?.translate?.TranslateElement) {
+          const element = document.getElementById('google_translate_simple');
+          if (element && !element.hasChildNodes()) {
             new window.google.translate.TranslateElement(
               {
                 pageLanguage: 'es',
@@ -29,31 +29,41 @@ export function GoogleTranslateSimple({ className = "" }: GoogleTranslateSimpleP
               },
               'google_translate_simple'
             );
-          } catch (error) {
-            // Silent error handling for production
           }
         }
+      } catch (error) {
+        // Silent error handling for production
       }
     };
 
-    // Set global callback
-    window.googleTranslateElementInit = initializeTranslate;
+    // Set global callback safely
+    if (typeof window !== 'undefined') {
+      window.googleTranslateElementInit = initializeTranslate;
+    }
 
     // Check if script is already loaded
     const existingScript = document.getElementById('google-translate-script');
     
-    if (!existingScript) {
+    if (!existingScript && typeof window !== 'undefined') {
       const script = document.createElement('script');
       script.id = 'google-translate-script';
       script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
       script.async = true;
+      script.onerror = () => {
+        // Silent error handling
+      };
       document.head.appendChild(script);
-    } else {
+    } else if (existingScript) {
       // Try to initialize directly if script already exists
-      setTimeout(() => {
-        initializeTranslate();
-      }, 100);
+      setTimeout(initializeTranslate, 100);
     }
+
+    return () => {
+      // Cleanup on unmount
+      if (typeof window !== 'undefined' && window.googleTranslateElementInit) {
+        delete window.googleTranslateElementInit;
+      }
+    };
   }, []);
 
   return (
