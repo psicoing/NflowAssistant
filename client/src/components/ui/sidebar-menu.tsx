@@ -248,12 +248,14 @@ export default function SidebarMenu() {
 
                 {/* Mobile-only Google Translate Section */}
                 <div className="lg:hidden mt-4 pt-4 border-t border-gray-700">
-                  <div className="mb-3 px-4">
+                  <div className="px-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Globe className="h-4 w-4 text-gray-400" />
-                      <span className="text-sm text-gray-300 font-medium">Idiomas</span>
+                      <span className="text-sm text-gray-300 font-medium">Seleccionar Idioma</span>
                     </div>
-                    <GoogleTranslateMobile />
+                    <div className="pl-6">
+                      <GoogleTranslateMobile />
+                    </div>
                   </div>
                 </div>
               </nav>

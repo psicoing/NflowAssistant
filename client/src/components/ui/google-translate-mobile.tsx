@@ -59,11 +59,10 @@ export function GoogleTranslateMobile({ className = "" }: GoogleTranslateMobileP
   }, []);
 
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
-      <Globe className="h-4 w-4 text-gray-400" />
+    <div className={`flex items-center ${className}`}>
       <div 
         id="google_translate_mobile" 
-        className="min-w-[140px] h-8 flex items-center"
+        className="w-full min-w-[160px] h-8 flex items-center"
         style={{ color: 'white !important' }}
       />
       <style dangerouslySetInnerHTML={{
