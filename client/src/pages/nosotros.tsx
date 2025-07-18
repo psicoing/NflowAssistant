@@ -109,7 +109,7 @@ export default function NosotrosPage() {
                     <Computer className="h-5 w-5 text-purple-500 mt-1" />
                     <div>
                       <h4 className="font-semibold text-lg">Ingeniería de Telecomunicaciones</h4>
-                      <p className="text-gray-600 dark:text-gray-400">Universidad Oberta de Catalunya</p>
+                      <p className="text-gray-600 dark:text-gray-400">Universidad Oberta de Catalunya (en curso)</p>
                     </div>
                   </div>
                 </div>
@@ -117,14 +117,14 @@ export default function NosotrosPage() {
                   <div className="flex items-start gap-4">
                     <Brain className="h-5 w-5 text-green-500 mt-1" />
                     <div>
-                      <h4 className="font-semibold text-lg">Biomatemática y Bioinformática</h4>
-                      <p className="text-gray-600 dark:text-gray-400">Universidad de Barcelona (2020-2021)</p>
+                      <h4 className="font-semibold text-lg">Máster Bioestadística</h4>
+                      <p className="text-gray-600 dark:text-gray-400">Universidad de Barcelona (en curso)</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
                     <BookOpen className="h-5 w-5 text-orange-500 mt-1" />
                     <div>
-                      <h4 className="font-semibold text-lg">Psicología de la Salud</h4>
+                      <h4 className="font-semibold text-lg">Postgrado Psicología de la Salud</h4>
                       <p className="text-gray-600 dark:text-gray-400">Universidad de Girona (1994-1995)</p>
                     </div>
                   </div>
