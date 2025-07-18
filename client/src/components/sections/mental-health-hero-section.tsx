@@ -1,4 +1,4 @@
-import { Heart, Users, Shield, Clock } from "lucide-react";
+import { Heart, Users, Shield, Clock, Brain, Zap } from "lucide-react";
 import mentalHealthImage from "@assets/ChatGPT Image 17 jul 2025, 17_53_59_1752767672221.png";
 
 export default function MentalHealthHeroSection() {
@@ -9,11 +9,13 @@ export default function MentalHealthHeroSection() {
           {/* Content */}
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
-                Ayuda psicológica en tu bolsillo
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-3">
+                <Brain className="w-12 h-12 text-nflow-orange" />
+                Ayuda psicológica en tu bolsillo!
               </h1>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-nflow-orange">
-                una robot muy lista
+              <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-nflow-orange flex items-center gap-3">
+                <Zap className="w-8 h-8" />
+                una robot muy lista!
               </h2>
               <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
                 Cada persona merece apoyo emocional profesional. NFLOW conecta familias, 
