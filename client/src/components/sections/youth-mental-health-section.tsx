@@ -23,7 +23,7 @@ export default function YouthMentalHealthSection() {
                   <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
                   <div>
                     <p className="text-sm font-semibold text-gray-900">NFLOW Adolescentes</p>
-                    <p className="text-xs text-gray-600">Apoyo especializado 12+ años</p>
+                    <p className="text-xs text-gray-600">Control Parental</p>
                   </div>
                 </div>
               </div>
