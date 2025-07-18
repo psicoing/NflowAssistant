@@ -69,6 +69,11 @@ export default function Header() {
               </div>
             )}
             
+            {/* Google Translate Widget - Always visible */}
+            <div className="flex">
+              <GoogleTranslateSimple className="text-white" />
+            </div>
+
             {/* Desktop Auth Buttons - Hidden on tablets and mobile */}
             <div className="hidden lg:flex items-center space-x-2">
               <Link href="/login">
@@ -83,11 +88,6 @@ export default function Header() {
                   Registro
                 </Button>
               </Link>
-            </div>
-
-            {/* Desktop Google Translate Widget - Hidden on mobile */}
-            <div className="hidden lg:flex">
-              <GoogleTranslateSimple className="text-white" />
             </div>
 
             {/* Hamburger Menu - Always visible */}
