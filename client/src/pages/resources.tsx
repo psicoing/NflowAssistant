@@ -22,7 +22,10 @@ import {
   Target,
   Mail,
   Utensils,
-  Puzzle
+  Puzzle,
+  Shield,
+  CheckCircle,
+  Globe
 } from "lucide-react";
 import type { Resource } from "@shared/schema";
 
@@ -289,6 +292,102 @@ export default function Resources() {
               Accede a una biblioteca completa de contenidos y herramientas psicológicas 
               cuidadosamente seleccionadas para apoyar tu bienestar emocional.
             </p>
+          </div>
+        </section>
+
+        {/* NFLOW Explicativa Section */}
+        <section className="py-16 px-4 bg-gradient-to-br from-nflow-dark via-gray-900 to-nflow-navy">
+          <div className="max-w-5xl mx-auto">
+            <Card className="bg-gradient-to-br from-gray-800/60 via-gray-800/40 to-gray-900/60 border border-nflow-orange/30 backdrop-blur-xl shadow-2xl">
+              <CardContent className="p-8 md:p-12">
+                <div className="text-center mb-8">
+                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 flex items-center justify-center gap-3">
+                    <div className="w-12 h-12 bg-nflow-orange/20 rounded-xl flex items-center justify-center">
+                      <Brain className="w-7 h-7 text-nflow-orange" />
+                    </div>
+                    NFLOW: Pensado para Personas y Empresas
+                  </h2>
+                  <p className="text-xl text-gray-300 leading-relaxed">
+                    NFLOW nace con una misión clara: Ofrecer apoyo psicológico profesional, inmediato y asequible tanto para personas como para empresas. Porque todos merecen bienestar mental, sin importar su tamaño, edad o situación.
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8 mb-8">
+                  {/* Para Particulares */}
+                  <div className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 p-6 rounded-xl border border-blue-500/30">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                        <Users className="w-5 h-5 text-blue-400" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-white">Para Particulares</h3>
+                    </div>
+                    <p className="text-gray-300 mb-4">
+                      Si eres particular, aquí tienes ayuda real y sin barreras económicas. Sabemos que todos necesitamos apoyo alguna vez. Olvida lo de "ya iré cuando pueda permitírmelo". El momento es ahora y el precio ya no es el problema.
+                    </p>
+                    <div className="text-sm text-blue-300">
+                      ✓ Precio al alcance de todos: Si puedes pagar Netflix, puedes pagar NFLOW
+                    </div>
+                  </div>
+
+                  {/* Para Empresas */}
+                  <div className="bg-gradient-to-br from-orange-900/30 to-orange-800/20 p-6 rounded-xl border border-orange-500/30">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center">
+                        <Briefcase className="w-5 h-5 text-orange-400" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-white">Para Empresas</h3>
+                    </div>
+                    <p className="text-gray-300 mb-4">
+                      Si eres empresa, NFLOW es la solución práctica y ética para cuidar de tu equipo sin arruinar tus cuentas. ¿Quieres de verdad cuidar la salud mental de tu equipo? Da un paso al frente con NFLOW.
+                    </p>
+                    <div className="text-sm text-orange-300">
+                      ✓ No más programas carísimos que nadie usa. Soluciones prácticas a coste de café
+                    </div>
+                  </div>
+                </div>
+
+                {/* Características Principales */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                  <div className="text-center p-4 bg-gray-800/50 rounded-lg">
+                    <Clock className="w-6 h-6 text-nflow-orange mx-auto mb-2" />
+                    <p className="text-sm text-gray-300">Disponible 24/7</p>
+                    <p className="text-xs text-gray-400">Sin esperas, sin cita previa</p>
+                  </div>
+                  <div className="text-center p-4 bg-gray-800/50 rounded-lg">
+                    <Shield className="w-6 h-6 text-nflow-orange mx-auto mb-2" />
+                    <p className="text-sm text-gray-300">Profesional y seguro</p>
+                    <p className="text-xs text-gray-400">30+ años experiencia</p>
+                  </div>
+                  <div className="text-center p-4 bg-gray-800/50 rounded-lg">
+                    <CheckCircle className="w-6 h-6 text-nflow-orange mx-auto mb-2" />
+                    <p className="text-sm text-gray-300">Sin letra pequeña</p>
+                    <p className="text-xs text-gray-400">Sin permanencias ni trucos</p>
+                  </div>
+                  <div className="text-center p-4 bg-gray-800/50 rounded-lg">
+                    <Globe className="w-6 h-6 text-nflow-orange mx-auto mb-2" />
+                    <p className="text-sm text-gray-300">Para todos</p>
+                    <p className="text-xs text-gray-400">150+ idiomas</p>
+                  </div>
+                </div>
+
+                {/* Call to Action */}
+                <div className="text-center bg-gradient-to-r from-nflow-orange/10 to-nflow-blue/10 p-6 rounded-xl border border-nflow-orange/20">
+                  <p className="text-lg font-semibold text-white mb-2">
+                    El bienestar mental ya no tiene excusa. NFLOW es para todos.
+                  </p>
+                  <p className="text-gray-300 mb-4">
+                    La salud mental profesional ya no es un lujo. Con NFLOW, el bienestar está en el bolsillo de todos.
+                  </p>
+                  <Button 
+                    className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white px-8 py-3 text-lg font-semibold rounded-xl"
+                    onClick={() => window.open('https://nflow.biz', '_blank')}
+                  >
+                    <Globe className="w-5 h-5 mr-2" />
+                    Visita nflow.biz
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
