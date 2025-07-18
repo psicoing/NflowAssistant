@@ -30,7 +30,7 @@ export function GoogleTranslateSimple({ className = "" }: GoogleTranslateSimpleP
               'google_translate_simple'
             );
           } catch (error) {
-            console.error('Google Translate initialization error:', error);
+            // Silent error handling for production
           }
         }
       }
