@@ -16,6 +16,7 @@ import LanguageBannerSection from "@/components/sections/language-banner-section
 import MentalHealthHeroSection from "@/components/sections/mental-health-hero-section";
 import BorderlessSupportSection from "@/components/sections/borderless-support-section";
 import YouthMentalHealthSection from "@/components/sections/youth-mental-health-section";
+import LGBTISupportSection from "@/components/sections/lgbti-support-section";
 
 export default function Home() {
   return (
@@ -36,6 +37,7 @@ export default function Home() {
         <PersonasSection />
         <PricingSection />
         <PaidAppNotice />
+        <LGBTISupportSection />
         <InstitutoSection />
         {/* <PackagesSection /> */}
       </main>
