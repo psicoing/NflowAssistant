@@ -223,6 +223,7 @@
   font-size: 12px !important;
   padding: 4px 8px !important;
   min-width: 100px !important;
+  font-family: inherit !important;
 }
 
 .goog-te-combo:hover {
@@ -237,6 +238,7 @@
 
 .goog-te-gadget {
   font-family: inherit !important;
+  color: white !important;
 }
 
 .goog-te-gadget-simple {
@@ -244,20 +246,54 @@
   border: none !important;
   margin: 0 !important;
   padding: 0 !important;
+  font-family: inherit !important;
 }
 
 .goog-te-gadget-simple .goog-te-menu-value {
   color: white !important;
   font-size: 12px !important;
+  font-family: inherit !important;
 }
 
 .goog-te-gadget-simple .goog-te-menu-value span {
   color: white !important;
+  font-family: inherit !important;
 }
 
 .goog-te-gadget-simple .goog-te-menu-value span[style] {
   color: white !important;
   border: none !important;
+  font-family: inherit !important;
+}
+
+.goog-te-gadget-simple .goog-te-menu-value:before {
+  color: white !important;
+}
+
+.goog-te-gadget-simple .goog-te-menu-value:after {
+  color: white !important;
+}
+
+/* Force white text for all Google Translate elements */
+#google_translate_simple * {
+  color: white !important;
+  font-family: inherit !important;
+}
+
+#google_translate_simple .goog-te-gadget {
+  color: white !important;
+}
+
+#google_translate_simple .goog-te-gadget-simple {
+  color: white !important;
+}
+
+#google_translate_simple .goog-te-menu-value {
+  color: white !important;
+}
+
+#google_translate_simple .goog-te-menu-value span {
+  color: white !important;
 }
 
 /* Hide Google Translate banner */
