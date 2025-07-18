@@ -16,12 +16,27 @@ export default function Registro() {
     username: "",
     password: "",
     confirmPassword: "",
-    email: ""
+    email: "",
+    birthDate: ""
   });
   const [error, setError] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [createdCredentials, setCreatedCredentials] = useState({ username: "", password: "" });
   const { toast } = useToast();
+
+  // Función para calcular la edad
+  const calculateAge = (birthDate: string) => {
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    
+    return age;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,6 +56,26 @@ export default function Registro() {
       return;
     }
 
+    // Validación de fecha de nacimiento
+    if (!formData.birthDate) {
+      setError("Por favor, ingresa tu fecha de nacimiento");
+      setIsLoading(false);
+      return;
+    }
+
+    const age = calculateAge(formData.birthDate);
+    if (age < 18) {
+      setError("Para registrarte debes tener al menos 18 años. Si eres menor de edad, consulta con tus padres o tutores para el uso supervisado de la plataforma.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (age > 95) {
+      setError("La plataforma está diseñada para personas de 18 a 95 años");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch("/api/auth/register", {
         method: "POST",
@@ -50,7 +85,8 @@ export default function Registro() {
         body: JSON.stringify({
           username: formData.username,
           password: formData.password,
-          email: formData.email
+          email: formData.email,
+          birthDate: formData.birthDate
         }),
       });
 
@@ -167,6 +203,25 @@ export default function Registro() {
                   onChange={handleChange}
                   className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-nflow-blue"
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="birthDate" className="text-gray-200">
+                  Fecha de Nacimiento *
+                </Label>
+                <Input
+                  id="birthDate"
+                  name="birthDate"
+                  type="date"
+                  value={formData.birthDate}
+                  onChange={handleChange}
+                  required
+                  max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
+                  className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-nflow-blue"
+                />
+                <p className="text-xs text-gray-400">
+                  Debes tener al menos 18 años para registrarte
+                </p>
               </div>
 
               <div className="space-y-2">

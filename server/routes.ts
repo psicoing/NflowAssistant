@@ -37,12 +37,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User registration
   app.post("/api/auth/register", async (req, res) => {
     try {
-      const { username, password, email } = req.body;
+      const { username, password, email, birthDate } = req.body;
       
-      if (!username || !password || !email) {
+      if (!username || !password || !birthDate) {
         return res.status(400).json({ 
           success: false, 
-          message: "Username, password y email son requeridos" 
+          message: "Username, password y fecha de nacimiento son requeridos" 
+        });
+      }
+
+      // Validar edad mínima
+      const calculateAge = (birthDate: string) => {
+        const today = new Date();
+        const birth = new Date(birthDate);
+        let age = today.getFullYear() - birth.getFullYear();
+        const monthDiff = today.getMonth() - birth.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+          age--;
+        }
+        
+        return age;
+      };
+
+      const age = calculateAge(birthDate);
+      if (age < 18) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Debes tener al menos 18 años para registrarte. Si eres menor de edad, consulta con tus padres o tutores." 
+        });
+      }
+
+      if (age > 95) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "La plataforma está diseñada para personas de 18 a 95 años" 
         });
       }
 
@@ -63,6 +92,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         username,
         password: hashedPassword,
         email,
+        birthDate,
         subscriptionStatus: 'pending_payment',
         hasCompletedPayment: false,
         monthlyQuestionLimit: 0  // No free questions - subscription required

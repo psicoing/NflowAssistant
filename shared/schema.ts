@@ -7,6 +7,7 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   email: text("email"),
+  birthDate: text("birth_date"), // YYYY-MM-DD format
   role: text("role").default("user"), // user, admin, partner
   subscriptionStatus: text("subscription_status").default("inactive"), // active, inactive, cancelled
   subscriptionPlan: text("subscription_plan"), // basic, group, individual
