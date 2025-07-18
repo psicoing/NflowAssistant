@@ -14,12 +14,19 @@ declare global {
 
 export function GoogleTranslateMobile({ className = "" }: GoogleTranslateMobileProps) {
   useEffect(() => {
+    let initialized = false;
+    
     // Function to initialize Google Translate for mobile
     const initializeTranslateMobile = () => {
+      if (initialized) return;
+      
+      console.log('Mobile GT: Attempting initialization...');
       if (window.google?.translate) {
         const element = document.getElementById('google_translate_mobile');
+        console.log('Mobile GT: Element found:', !!element);
         if (element && !element.hasChildNodes()) {
           try {
+            console.log('Mobile GT: Creating TranslateElement...');
             new window.google.translate.TranslateElement(
               {
                 pageLanguage: 'es',
@@ -29,32 +36,50 @@ export function GoogleTranslateMobile({ className = "" }: GoogleTranslateMobileP
               },
               'google_translate_mobile'
             );
+            initialized = true;
+            console.log('Mobile GT: TranslateElement created successfully!');
           } catch (error) {
             console.error('Google Translate Mobile initialization error:', error);
           }
+        } else if (element?.hasChildNodes()) {
+          console.log('Mobile GT: Element already has children, marking as initialized');
+          initialized = true;
         }
+      } else {
+        console.log('Mobile GT: Google Translate API not available yet');
       }
     };
 
-    // Use the same global callback as desktop version to avoid conflicts
-    if (!window.googleTranslateElementInit) {
-      window.googleTranslateElementInit = initializeTranslateMobile;
-    }
+    // Set up global callback
+    const originalCallback = window.googleTranslateElementInit;
+    window.googleTranslateElementInit = () => {
+      if (originalCallback) originalCallback();
+      setTimeout(initializeTranslateMobile, 200);
+    };
 
     // Check if script is already loaded
     const existingScript = document.getElementById('google-translate-script');
+    console.log('Mobile GT: Existing script found:', !!existingScript);
     
     if (!existingScript) {
+      console.log('Mobile GT: Loading script...');
       const script = document.createElement('script');
       script.id = 'google-translate-script';
       script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
       script.async = true;
+      script.onload = () => console.log('Mobile GT: Script loaded');
+      script.onerror = () => console.error('Mobile GT: Script failed to load');
       document.head.appendChild(script);
     } else {
-      // Try to initialize directly if script already exists
-      setTimeout(() => {
+      console.log('Mobile GT: Script already exists, trying direct initialization...');
+      // Try multiple initialization attempts
+      const tryInit = () => {
         initializeTranslateMobile();
-      }, 100);
+        if (!initialized) {
+          setTimeout(tryInit, 500);
+        }
+      };
+      setTimeout(tryInit, 100);
     }
   }, []);
 
