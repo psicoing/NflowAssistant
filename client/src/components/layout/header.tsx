@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Brain, Globe, LogIn, UserPlus, ChevronDown, Wifi, WifiOff } from "lucide-react";
 import SidebarMenu from "@/components/ui/sidebar-menu";
-import { GoogleTranslateDialog } from "@/components/ui/google-translate-dialog";
+import { GoogleTranslateWidget } from "@/components/ui/google-translate-widget";
 
 
 export default function Header() {
@@ -85,12 +85,9 @@ export default function Header() {
               </Link>
             </div>
 
-            {/* Desktop Google Translate Dialog - Hidden on mobile */}
+            {/* Desktop Google Translate Widget - Hidden on mobile */}
             <div className="hidden lg:flex">
-              <GoogleTranslateDialog 
-                buttonText="Idiomas"
-                size="sm"
-              />
+              <GoogleTranslateWidget className="text-white" />
             </div>
 
             {/* Hamburger Menu - Always visible */}

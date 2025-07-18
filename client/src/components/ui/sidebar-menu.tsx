@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Home, MessageCircle, Book, Lightbulb, CreditCard, Users, Gift, Globe, LogIn, UserPlus, DollarSign, Phone, Info, Smartphone } from "lucide-react";
 import { Link, useLocation } from "wouter";
-import { GoogleTranslateDialog } from "@/components/ui/google-translate-dialog";
+import { GoogleTranslateWidget } from "@/components/ui/google-translate-widget";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 const menuItems = [
@@ -249,7 +249,7 @@ export default function SidebarMenu() {
                 {/* Mobile-only Google Translate Section */}
                 <div className="lg:hidden mt-4 pt-4 border-t border-gray-700">
                   <div className="mb-3 px-4">
-                    <GoogleTranslateDialog />
+                    <GoogleTranslateWidget />
                   </div>
                 </div>
               </nav>
