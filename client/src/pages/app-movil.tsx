@@ -143,7 +143,7 @@ export default function AppMovil() {
                           <h4 className="text-white font-semibold mb-2">Abre NFLOW en Chrome</h4>
                           <p className="text-gray-300 text-sm">Navega a la página web de NFLOW usando Google Chrome en tu Android</p>
                           <div className="mt-3 p-3 bg-gray-800/50 rounded-lg">
-                            <p className="text-nflow-orange text-sm font-mono">https://nflow.app</p>
+                            <p className="text-nflow-orange text-sm font-mono">https://nflow.biz/</p>
                           </div>
                         </div>
                       </div>
@@ -225,7 +225,7 @@ export default function AppMovil() {
                           <h4 className="text-white font-semibold mb-2">Abre NFLOW en Safari</h4>
                           <p className="text-gray-300 text-sm">Es importante usar Safari (navegador nativo de iOS) para la instalación</p>
                           <div className="mt-3 p-3 bg-gray-800/50 rounded-lg">
-                            <p className="text-nflow-orange text-sm font-mono">https://nflow.app</p>
+                            <p className="text-nflow-orange text-sm font-mono">https://nflow.biz/</p>
                           </div>
                         </div>
                       </div>
