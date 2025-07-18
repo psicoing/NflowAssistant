@@ -89,13 +89,12 @@ export default function MentalHealthHeroSection() {
               {/* Overlay with subtle gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
               
-              {/* Floating badge */}
-              <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 shadow-lg">
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+              {/* Floating badge - smaller and positioned at top right */}
+              <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">Apoyo Activo</p>
-                    <p className="text-xs text-gray-600">Miles de conversaciones diarias</p>
+                    <p className="text-xs font-semibold text-gray-900">Apoyo Activo</p>
                   </div>
                 </div>
               </div>
