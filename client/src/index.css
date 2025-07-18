@@ -274,7 +274,15 @@
   color: white !important;
 }
 
-/* Force white text for all Google Translate elements */
+/* Force white text and proper sizing for all Google Translate elements */
+#google_translate_simple {
+  width: 140px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  overflow: visible !important;
+}
+
 #google_translate_simple * {
   color: white !important;
   font-family: inherit !important;
@@ -282,18 +290,47 @@
 
 #google_translate_simple .goog-te-gadget {
   color: white !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 #google_translate_simple .goog-te-gadget-simple {
   color: white !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  background: transparent !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 #google_translate_simple .goog-te-menu-value {
   color: white !important;
+  width: 100% !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  display: flex !important;
+  align-items: center !important;
+  font-size: 12px !important;
 }
 
 #google_translate_simple .goog-te-menu-value span {
   color: white !important;
+}
+
+#google_translate_simple .goog-te-combo {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 6px !important;
+  color: white !important;
+  font-size: 12px !important;
+  padding: 4px 8px !important;
+  width: 140px !important;
+  height: 32px !important;
 }
 
 /* Hide Google Translate banner */
