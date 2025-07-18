@@ -1,4 +1,4 @@
-import { Heart, Users, Shield, Clock, Brain, Zap, MessageSquare } from "lucide-react";
+import { Heart, Users, Shield, Clock, Brain, Zap, MessageSquare, Bot } from "lucide-react";
 import { Link } from "wouter";
 import mentalHealthImage from "@assets/ChatGPT Image 17 jul 2025, 17_53_59_1752767672221.png";
 
@@ -114,9 +114,19 @@ export default function MentalHealthHeroSection() {
                     {/* Decorative border */}
                     <div className="absolute inset-0 bg-gradient-to-r from-nflow-orange to-yellow-500 rounded-xl blur-sm opacity-50 animate-pulse"></div>
                     <div className="relative bg-white text-blue-600 px-10 py-5 rounded-xl font-bold hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-blue-500/30 hover:border-blue-500 cursor-pointer w-full text-center">
-                      <div className="flex items-center justify-center gap-3">
-                        <MessageSquare className="w-6 h-6" />
-                        <span className="text-lg">Ejemplos de NFlow</span>
+                      <div className="flex flex-col items-center justify-center gap-3">
+                        <div className="flex items-center gap-3">
+                          <MessageSquare className="w-6 h-6" />
+                          <span className="text-lg">Ejemplos de NFlow</span>
+                        </div>
+                        {/* Robot icons */}
+                        <div className="flex items-center gap-2 mt-2">
+                          <Bot className="w-4 h-4 text-blue-500" />
+                          <Bot className="w-4 h-4 text-blue-500" />
+                          <Bot className="w-4 h-4 text-blue-500" />
+                          <Bot className="w-4 h-4 text-blue-500" />
+                          <Bot className="w-4 h-4 text-blue-500" />
+                        </div>
                       </div>
                     </div>
                   </div>
