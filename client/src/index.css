@@ -333,6 +333,65 @@
   height: 32px !important;
 }
 
+/* Mobile Google Translate Styles */
+#google_translate_mobile {
+  width: 140px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  overflow: visible !important;
+}
+
+#google_translate_mobile * {
+  color: white !important;
+  font-family: inherit !important;
+}
+
+#google_translate_mobile .goog-te-gadget {
+  color: white !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+#google_translate_mobile .goog-te-gadget-simple {
+  color: white !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  background: transparent !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#google_translate_mobile .goog-te-menu-value {
+  color: white !important;
+  width: 100% !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  display: flex !important;
+  align-items: center !important;
+  font-size: 12px !important;
+}
+
+#google_translate_mobile .goog-te-menu-value span {
+  color: white !important;
+}
+
+#google_translate_mobile .goog-te-combo {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 6px !important;
+  color: white !important;
+  font-size: 12px !important;
+  padding: 4px 8px !important;
+  width: 140px !important;
+  height: 32px !important;
+}
+
 /* Hide Google Translate banner */
 .goog-te-banner-frame {
   display: none !important;
