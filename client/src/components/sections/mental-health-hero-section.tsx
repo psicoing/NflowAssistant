@@ -1,4 +1,5 @@
-import { Heart, Users, Shield, Clock, Brain, Zap } from "lucide-react";
+import { Heart, Users, Shield, Clock, Brain, Zap, MessageSquare } from "lucide-react";
+import { Link } from "wouter";
 import mentalHealthImage from "@assets/ChatGPT Image 17 jul 2025, 17_53_59_1752767672221.png";
 
 export default function MentalHealthHeroSection() {
@@ -107,13 +108,19 @@ export default function MentalHealthHeroSection() {
               </div>
 
               {/* CTA */}
-              <div className="pt-4">
-                <button 
-                  onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="bg-gradient-to-r from-nflow-orange to-yellow-500 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
-                >
-                  Comenzar Ahora
-                </button>
+              <div className="pt-6">
+                <Link href="/ejemplos-chat">
+                  <div className="relative inline-block">
+                    {/* Decorative border */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-nflow-orange to-yellow-500 rounded-xl blur-sm opacity-50 animate-pulse"></div>
+                    <div className="relative bg-gradient-to-r from-nflow-orange to-yellow-500 text-white px-8 py-4 rounded-xl font-bold hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-white/20 hover:border-white/40 cursor-pointer">
+                      <div className="flex items-center gap-3">
+                        <MessageSquare className="w-5 h-5" />
+                        <span>Ejemplos de NFlow</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
               </div>
             </div>
           </div>
