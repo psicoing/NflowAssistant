@@ -9,7 +9,7 @@ export default function MentalHealthHeroSection() {
           {/* Content */}
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-nflow-dark to-nflow-navy bg-clip-text text-transparent">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
                 Ayuda psicológica en tu bolsillo
               </h1>
               <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-nflow-orange">
