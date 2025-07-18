@@ -110,13 +110,13 @@ export default function MentalHealthHeroSection() {
               {/* CTA */}
               <div className="pt-6">
                 <Link href="/ejemplos-chat">
-                  <div className="relative inline-block">
+                  <div className="relative inline-block w-full max-w-xs">
                     {/* Decorative border */}
                     <div className="absolute inset-0 bg-gradient-to-r from-nflow-orange to-yellow-500 rounded-xl blur-sm opacity-50 animate-pulse"></div>
-                    <div className="relative bg-gradient-to-r from-nflow-orange to-yellow-500 text-white px-8 py-4 rounded-xl font-bold hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-white/20 hover:border-white/40 cursor-pointer">
-                      <div className="flex items-center gap-3">
-                        <MessageSquare className="w-5 h-5" />
-                        <span>Ejemplos de NFlow</span>
+                    <div className="relative bg-gradient-to-r from-nflow-orange to-yellow-500 text-white px-10 py-5 rounded-xl font-bold hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-white/20 hover:border-white/40 cursor-pointer w-full text-center">
+                      <div className="flex items-center justify-center gap-3">
+                        <MessageSquare className="w-6 h-6" />
+                        <span className="text-lg">Ejemplos de NFlow</span>
                       </div>
                     </div>
                   </div>
