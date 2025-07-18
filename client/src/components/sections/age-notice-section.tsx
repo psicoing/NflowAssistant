@@ -40,7 +40,7 @@ export default function AgeNoticeSection() {
                 <div className="flex items-center justify-center mb-2">
                   <Users className="w-6 h-6 text-nflow-orange mr-2" />
                   <div className="text-4xl font-bold text-nflow-orange">
-                    12 a 95
+                    18 a 95
                   </div>
                 </div>
                 <div className="text-sm font-medium text-white">{t('ageWarning.years')}</div>

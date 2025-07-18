@@ -38,10 +38,10 @@ export const translations = {
     
     // Age Notice
     'age.title': '⚠️ Aviso Importante: Edad Mínima',
-    'age.description': 'Este servicio está diseñado para personas de 12 a 95 años. Si eres menor de 18, recomendamos supervisión adulta.',
+    'age.description': 'Este servicio está diseñado para personas de 18 a 95 años. Los menores de edad deben usar la plataforma bajo supervisión y con consentimiento de sus padres o tutores.',
     'age.emergency': 'En caso de emergencia, contacta inmediatamente con los servicios de emergencia (112 en España).',
     'ageWarning.title': '⚠️ Aviso Importante: Edad Mínima',
-    'ageWarning.subtitle': 'Este servicio está diseñado para personas de 12 a 95 años. Si eres menor de 18, recomendamos supervisión adulta.',
+    'ageWarning.subtitle': 'Este servicio está diseñado para personas de 18 a 95 años. Los menores de edad deben usar la plataforma bajo supervisión y con consentimiento de sus padres o tutores.',
     'ageWarning.years': 'años',
     
     // Services
@@ -51,7 +51,7 @@ export const translations = {
     'services.modern.title2': 'Especializadas',
     'services.modern.description': 'Cada una diseñada para abordar necesidades específicas de salud mental',
     'services.modern.feature1': 'NFLOW Familias - Apoyo para toda la familia',
-    'services.modern.feature2': 'NFLOW Adolescentes - Apoyo personalizado a partir 12 años',
+    'services.modern.feature2': 'NFLOW Adolescentes - Apoyo personalizado (supervisión parental requerida)',
     'services.modern.feature3': 'NFLOW Laboral - Salud mental en el trabajo',
     'services.modern.feature4': 'NFLOW Adultos - Terapia personalizada',
     
@@ -169,10 +169,10 @@ export const translations = {
     
     // Age Notice
     'age.title': '⚠️ Important Notice: Minimum Age',
-    'age.description': 'This service is designed for people aged 12 to 95. If you are under 18, we recommend adult supervision.',
+    'age.description': 'This service is designed for people aged 18 to 95. Minors must use the platform under supervision and with consent from their parents or guardians.',
     'age.emergency': 'In case of emergency, immediately contact emergency services (112 in Spain).',
     'ageWarning.title': '⚠️ Important Notice: Minimum Age',
-    'ageWarning.subtitle': 'This service is designed for people aged 12 to 95. If you are under 18, we recommend adult supervision.',
+    'ageWarning.subtitle': 'This service is designed for people aged 18 to 95. Minors must use the platform under supervision and with consent from their parents or guardians.',
     'ageWarning.years': 'years old',
     
     // Services
