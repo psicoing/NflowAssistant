@@ -19,9 +19,10 @@ export default function MentalHealthHeroSection() {
             </h2>
           </div>
 
-          {/* Image Section */}
-          <div className="flex justify-center">
-            <div className="relative max-w-2xl w-full">
+          {/* Main Content Grid - Image left, Text right */}
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Image Section - Left Side */}
+            <div className="relative">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <img 
                   src={mentalHealthImage} 
@@ -46,10 +47,8 @@ export default function MentalHealthHeroSection() {
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-nflow-orange/10 rounded-full blur-xl"></div>
               <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-nflow-navy/10 rounded-full blur-xl"></div>
             </div>
-          </div>
 
-          {/* Content Grid - below image */}
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            {/* Content Section - Right Side */}
             <div className="space-y-8">
               <div>
                 <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -59,7 +58,7 @@ export default function MentalHealthHeroSection() {
                 </p>
               </div>
 
-              {/* Features Grid */}
+              {/* All Features Grid */}
               <div className="grid grid-cols-1 gap-4">
                 <div className="flex items-start space-x-3">
                   <div className="w-10 h-10 bg-nflow-orange/10 rounded-full flex items-center justify-center flex-shrink-0">
@@ -80,12 +79,7 @@ export default function MentalHealthHeroSection() {
                     <p className="text-sm text-gray-600 dark:text-gray-400">Privacidad y anonimato garantizados</p>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="space-y-8">
-              {/* Features Grid */}
-              <div className="grid grid-cols-1 gap-4">
                 <div className="flex items-start space-x-3">
                   <div className="w-10 h-10 bg-nflow-orange/10 rounded-full flex items-center justify-center flex-shrink-0">
                     <Heart className="w-5 h-5 text-nflow-orange" />
