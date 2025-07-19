@@ -265,6 +265,69 @@ export default function NosotrosPage() {
             </CardContent>
           </Card>
 
+          {/* Grupo JOBDA */}
+          <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/10 dark:to-indigo-950/10 shadow-lg">
+            <CardContent className="p-8">
+              <h3 className="text-2xl font-semibold mb-6 flex items-center gap-3">
+                <Building className="h-6 w-6 text-blue-600" />
+                Grupo JOBDA - Plataforma de Multiservicios
+              </h3>
+              
+              <div className="space-y-6">
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-blue-100 dark:border-blue-900">
+                  <h4 className="text-xl font-semibold text-blue-700 dark:text-blue-400 mb-4">
+                    JOBDA.BIZ - Ecosistema Integral de Servicios
+                  </h4>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                    NFLOW forma parte del <strong>Grupo JOBDA</strong>, una plataforma integral de multiservicios 
+                    que opera bajo la marca <strong>JOBDA.BIZ</strong>. Este ecosistema empresarial está 
+                    legalmente constituido bajo <strong>EMPORDAJOBS SL</strong> (CIF: B02701100).
+                  </p>
+                  
+                  <div className="grid md:grid-cols-2 gap-6 mt-6">
+                    <div className="space-y-3">
+                      <h5 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                        <TrendingUp className="h-4 w-4 text-green-600" />
+                        Servicios del Grupo
+                      </h5>
+                      <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                        <li>• Consultoría en Salud Mental</li>
+                        <li>• Desarrollo de Tecnología IA</li>
+                        <li>• Servicios Psicológicos Especializados</li>
+                        <li>• Formación y Capacitación</li>
+                        <li>• Innovación en NeuroTecnología</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <h5 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                        <Shield className="h-4 w-4 text-blue-600" />
+                        Información Corporativa
+                      </h5>
+                      <div className="space-y-2 text-sm">
+                        <p><strong>Razón Social:</strong> EMPORDAJOBS SL</p>
+                        <p><strong>CIF:</strong> B02701100</p>
+                        <p><strong>Domicilio:</strong> Portbou, Girona, España</p>
+                        <p><strong>Plataforma:</strong> <span className="text-blue-600 font-medium">JOBDA.BIZ</span></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="text-center bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-6">
+                  <p className="text-gray-700 dark:text-gray-300 text-lg italic">
+                    "Un grupo empresarial comprometido con la innovación en salud mental y el desarrollo tecnológico al servicio del bienestar humano"
+                  </p>
+                  <div className="mt-4">
+                    <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 py-2 px-4">
+                      Parte del Ecosistema JOBDA.BIZ
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Misión NFLOW */}
           <Card className="border-nflow-orange/30 bg-gradient-to-r from-orange-50 to-blue-50 dark:from-orange-950/10 dark:to-blue-950/10 shadow-lg">
             <CardContent className="p-8">
