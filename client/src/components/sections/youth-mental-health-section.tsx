@@ -56,11 +56,7 @@ export default function YouthMentalHealthSection() {
                   adversidades en la vida adulta.
                 </p>
                 
-                <p className="text-emerald-700 dark:text-emerald-400 font-semibold">
-                  Invertir en salud mental joven es invertir en el futuro de la sociedad. No hay atajo ni sustituto: 
-                  una base sólida en estos años puede prevenir sufrimientos innecesarios y allanar el camino hacia 
-                  una vida plena y equilibrada.
-                </p>
+
               </div>
             </div>
 
