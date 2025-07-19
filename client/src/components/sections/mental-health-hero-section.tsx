@@ -22,7 +22,7 @@ export default function MentalHealthHeroSection() {
           {/* Main Content Grid - Image left, Text right */}
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Image Section - Left Side */}
-            <div className="relative">
+            <div className="relative transform scale-115">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <img 
                   src={mentalHealthImage} 
