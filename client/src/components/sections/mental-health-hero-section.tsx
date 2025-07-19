@@ -50,14 +50,6 @@ export default function MentalHealthHeroSection() {
 
             {/* Content Section - Right Side */}
             <div className="space-y-8">
-              <div>
-                <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
-                  Cada persona merece apoyo emocional profesional. NFLOW conecta familias, 
-                  adolescentes, trabajadores y adultos con herramientas de bienestar mental 
-                  respaldadas por la ciencia y la experiencia clínica.
-                </p>
-              </div>
-
               {/* All Features Grid */}
               <div className="grid grid-cols-1 gap-4">
                 <div className="flex items-start space-x-3">
