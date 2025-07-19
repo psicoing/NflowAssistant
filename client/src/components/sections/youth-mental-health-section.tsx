@@ -37,7 +37,7 @@ export default function YouthMentalHealthSection() {
           {/* Content on right */}
           <div className="space-y-8 order-1 lg:order-2">
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent leading-tight">
+              <h2 className="text-2xl md:text-2xl font-bold mb-6 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent leading-tight">
                 Juventud y Salud Mental:<br />
                 <span className="text-emerald-700">El Momento Decisivo</span>
               </h2>
