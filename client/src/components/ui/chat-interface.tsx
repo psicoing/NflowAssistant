@@ -194,9 +194,11 @@ export default function ChatInterface({
                   }`}
                   onDoubleClick={() => copyMessage(message.content)}
                 >
-                  <p className="text-sm md:text-sm leading-relaxed whitespace-pre-wrap">
-                    {message.content}
-                  </p>
+                  <div className="max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-700">
+                    <p className="text-sm md:text-sm leading-relaxed whitespace-pre-wrap">
+                      {message.content}
+                    </p>
+                  </div>
                   
                   <div className="flex justify-between items-center mt-2 md:mt-3">
                     <p className={`text-xs ${message.isUser ? 'text-blue-100' : 'text-gray-400'}`}>
