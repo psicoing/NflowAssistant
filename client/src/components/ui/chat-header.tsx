@@ -1,4 +1,4 @@
-import ChatUserMenu from "./chat-user-menu";
+import ChatUserMenu from "./chat-user-menu-fixed";
 import ChatLanguageSelector from "./chat-language-selector";
 import { MessageCircle, Brain } from "lucide-react";
 

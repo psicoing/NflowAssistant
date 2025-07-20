@@ -131,136 +131,151 @@ export default function ChatUserMenu() {
   if (!user) return null;
 
   return (
-    <div className="flex items-center space-x-4">
-      {/* Subscription Status Indicator */}
-      <div className="hidden md:flex items-center space-x-2 px-3 py-1 rounded-full bg-gray-800/50 border border-gray-700/50">
-        <Crown className={`w-4 h-4 ${getSubscriptionStatusColor()}`} />
-        <span className={`text-sm font-medium ${getSubscriptionStatusColor()}`}>
-          {getSubscriptionStatusText()}
-        </span>
+    <>
+      <div className="flex items-center space-x-4">
+        {/* Subscription Status Indicator */}
+        <div className="hidden md:flex items-center space-x-2 px-3 py-1 rounded-full bg-gray-800/50 border border-gray-700/50">
+          <Crown className={`w-4 h-4 ${getSubscriptionStatusColor()}`} />
+          <span className={`text-sm font-medium ${getSubscriptionStatusColor()}`}>
+            {getSubscriptionStatusText()}
+          </span>
+        </div>
+
+        {/* User Menu */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0 hover:bg-gray-800/50">
+              <Avatar className="h-10 w-10 border border-gray-600">
+                <AvatarFallback className="bg-nflow-orange text-black font-semibold">
+                  {user.username.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          
+          <DropdownMenuContent className="w-64 bg-gray-800 border-gray-700" align="end" forceMount>
+            <DropdownMenuLabel className="font-normal">
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium leading-none text-white">
+                  {user.username}
+                </p>
+                <p className="text-xs leading-none text-gray-400">
+                  {user.email}
+                </p>
+                <div className="flex items-center space-x-2 mt-2">
+                  <Crown className={`w-3 h-3 ${getSubscriptionStatusColor()}`} />
+                  <span className={`text-xs ${getSubscriptionStatusColor()}`}>
+                    {getSubscriptionStatusText()}
+                  </span>
+                </div>
+              </div>
+            </DropdownMenuLabel>
+            
+            <DropdownMenuSeparator className="bg-gray-700" />
+            
+            <DropdownMenuItem 
+              className="text-white hover:bg-gray-700 cursor-pointer"
+              onClick={() => setShowProfileDialog(true)}
+              onSelect={(e) => e.preventDefault()}
+            >
+              <User className="mr-2 h-4 w-4" />
+              <span>Perfil</span>
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem 
+              className="text-red-400 hover:bg-gray-700 cursor-pointer"
+              onClick={() => setShowEmergencyDialog(true)}
+              onSelect={(e) => e.preventDefault()}
+            >
+              <AlertTriangle className="mr-2 h-4 w-4" />
+              <span>Urgencias</span>
+            </DropdownMenuItem>
+            
+            {user.subscriptionStatus === 'pending_payment' && (
+              <DropdownMenuItem 
+                className="text-yellow-400 hover:bg-gray-700 cursor-pointer"
+                onClick={() => setLocation("/#precios")}
+              >
+                <CreditCard className="mr-2 h-4 w-4" />
+                <span>Activar Suscripción</span>
+              </DropdownMenuItem>
+            )}
+            
+            {user.subscriptionStatus === 'active' && (
+              <>
+                <DropdownMenuItem 
+                  className="text-blue-400 hover:bg-gray-700 cursor-pointer"
+                  onClick={() => setShowPlanInfoDialog(true)}
+                  onSelect={(e) => e.preventDefault()}
+                >
+                  <Crown className="mr-2 h-4 w-4" />
+                  <span>Mejorar Plan</span>
+                </DropdownMenuItem>
+                
+                <DropdownMenuItem 
+                  className="text-green-400 hover:bg-gray-700 cursor-pointer"
+                  onClick={() => setShowBillingDialog(true)}
+                  onSelect={(e) => e.preventDefault()}
+                >
+                  <Receipt className="mr-2 h-4 w-4" />
+                  <span>Facturación</span>
+                </DropdownMenuItem>
+                
+                <DropdownMenuItem 
+                  className="text-red-400 hover:bg-gray-700 cursor-pointer"
+                  onClick={() => setShowCancelDialog(true)}
+                  onSelect={(e) => e.preventDefault()}
+                >
+                  <XCircle className="mr-2 h-4 w-4" />
+                  <span>Cancelar Suscripción</span>
+                </DropdownMenuItem>
+              </>
+            )}
+            
+            <DropdownMenuSeparator className="bg-gray-700" />
+            
+            <DropdownMenuItem 
+              className="text-red-400 hover:bg-gray-700 cursor-pointer"
+              onClick={handleLogout}
+              disabled={logoutMutation.isPending}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>{logoutMutation.isPending ? "Cerrando..." : "Cerrar Sesión"}</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
-      {/* User Menu */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0 hover:bg-gray-800/50">
-            <Avatar className="h-10 w-10 border border-gray-600">
-              <AvatarFallback className="bg-nflow-orange text-black font-semibold">
-                {user.username.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-          </Button>
-        </DropdownMenuTrigger>
-        
-        <DropdownMenuContent className="w-64 bg-gray-800 border-gray-700" align="end" forceMount>
-          <DropdownMenuLabel className="font-normal">
-            <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none text-white">
-                {user.username}
-              </p>
-              <p className="text-xs leading-none text-gray-400">
-                {user.email}
-              </p>
-              <div className="flex items-center space-x-2 mt-2">
-                <Crown className={`w-3 h-3 ${getSubscriptionStatusColor()}`} />
-                <span className={`text-xs ${getSubscriptionStatusColor()}`}>
-                  {getSubscriptionStatusText()}
-                </span>
-              </div>
-            </div>
-          </DropdownMenuLabel>
-          
-          <DropdownMenuSeparator className="bg-gray-700" />
-          
-          <DropdownMenuItem 
-            className="text-white hover:bg-gray-700 cursor-pointer"
-            onClick={() => setShowProfileDialog(true)}
-            onSelect={(e) => e.preventDefault()}
-          >
-            <User className="mr-2 h-4 w-4" />
-            <span>Perfil</span>
-          </DropdownMenuItem>
-          
-          <DropdownMenuItem 
-            className="text-red-400 hover:bg-gray-700 cursor-pointer"
-            onClick={() => setShowEmergencyDialog(true)}
-            onSelect={(e) => e.preventDefault()}
-          >
-            <AlertTriangle className="mr-2 h-4 w-4" />
-            <span>Urgencias</span>
-          </DropdownMenuItem>
-          
-          {user.subscriptionStatus === 'pending_payment' && (
-            <DropdownMenuItem 
-              className="text-yellow-400 hover:bg-gray-700 cursor-pointer"
-              onClick={() => setLocation("/#precios")}
+      {/* All Dialogs moved outside and properly structured */}
+      <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+        <DialogContent className="bg-gray-800 border-gray-700">
+          <DialogHeader>
+            <DialogTitle className="text-white">Cancelar Suscripción</DialogTitle>
+            <DialogDescription className="text-gray-400">
+              ¿Estás seguro de que quieres cancelar tu suscripción? Mantendrás acceso hasta el final de tu período de facturación actual.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end space-x-2 mt-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowCancelDialog(false)}
+              className="border-gray-600 text-gray-300 hover:bg-gray-700"
             >
-              <CreditCard className="mr-2 h-4 w-4" />
-              <span>Activar Suscripción</span>
-            </DropdownMenuItem>
-          )}
-          
-          {user.subscriptionStatus === 'active' && (
-            <>
-              <DropdownMenuItem 
-                className="text-blue-400 hover:bg-gray-700 cursor-pointer"
-                onClick={() => setShowPlanInfoDialog(true)}
-                onSelect={(e) => e.preventDefault()}
-              >
-                <Crown className="mr-2 h-4 w-4" />
-                <span>Mejorar Plan</span>
-              </DropdownMenuItem>
-              
-              <DropdownMenuItem 
-                className="text-green-400 hover:bg-gray-700 cursor-pointer"
-                onClick={() => setShowBillingDialog(true)}
-                onSelect={(e) => e.preventDefault()}
-              >
-                <Receipt className="mr-2 h-4 w-4" />
-                <span>Facturación</span>
-              </DropdownMenuItem>
-              
-              <DropdownMenuItem 
-                className="text-red-400 hover:bg-gray-700 cursor-pointer"
-                onClick={() => setShowCancelDialog(true)}
-                onSelect={(e) => e.preventDefault()}
-              >
-                <XCircle className="mr-2 h-4 w-4" />
-                <span>Cancelar Suscripción</span>
-              </DropdownMenuItem>
+              Cancelar
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleCancelSubscription}
+              disabled={cancelSubscriptionMutation.isPending}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {cancelSubscriptionMutation.isPending ? "Cancelando..." : "Confirmar Cancelación"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
-              <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
-                <DialogContent className="bg-gray-800 border-gray-700">
-                  <DialogHeader>
-                    <DialogTitle className="text-white">Cancelar Suscripción</DialogTitle>
-                    <DialogDescription className="text-gray-400">
-                      ¿Estás seguro de que quieres cancelar tu suscripción? Mantendrás acceso hasta el final de tu período de facturación actual.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="flex justify-end space-x-2 mt-4">
-                    <Button 
-                      variant="outline" 
-                      onClick={() => setShowCancelDialog(false)}
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                    >
-                      Cancelar
-                    </Button>
-                    <Button 
-                      variant="destructive" 
-                      onClick={handleCancelSubscription}
-                      disabled={cancelSubscriptionMutation.isPending}
-                      className="bg-red-600 hover:bg-red-700"
-                    >
-                      {cancelSubscriptionMutation.isPending ? "Cancelando..." : "Confirmar Cancelación"}
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-
-              <Dialog open={showPlanInfoDialog} onOpenChange={setShowPlanInfoDialog}>
-                <DialogTrigger asChild>
-                  <div style={{ display: 'none' }} />
-                </DialogTrigger>
+      <Dialog open={showPlanInfoDialog} onOpenChange={setShowPlanInfoDialog}>
                 <DialogContent className="bg-gray-800 border-gray-700">
                   <DialogHeader>
                     <DialogTitle className="text-white flex items-center">
@@ -299,8 +314,6 @@ export default function ChatUserMenu() {
                   </div>
                 </DialogContent>
               </Dialog>
-            </>
-          )}
           
           <Dialog open={showProfileDialog} onOpenChange={setShowProfileDialog}>
             <DialogTrigger asChild>
