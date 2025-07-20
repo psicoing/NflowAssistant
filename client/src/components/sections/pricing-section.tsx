@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Calendar, Users, User, Building, Shield, TrendingUp, Phone } from "lucide-react";
+import { CheckCircle, Calendar, Users, User, Building, Shield, TrendingUp, Phone, Mail, X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useLanguageContext } from "@/components/LanguageProvider";
 
 // Declare PayPal global type
@@ -20,6 +21,8 @@ export default function PricingSection() {
   const { t } = useLanguageContext();
   const [isNewUser, setIsNewUser] = useState(false);
   const [newUserId, setNewUserId] = useState<string | null>(null);
+  const [isContactDialogOpen, setIsContactDialogOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<string>("");
 
   const pricingTiers = [
     {
@@ -146,6 +149,11 @@ export default function PricingSection() {
     }
   }, [toast]);
 
+  const handleEnterpriseContact = (planName: string) => {
+    setSelectedPlan(planName);
+    setIsContactDialogOpen(true);
+  };
+
   // Check for pending user (requires payment) or existing user
   const pendingUserId = localStorage.getItem("pendingUserId");
   const existingUserId = localStorage.getItem("userId");
@@ -246,7 +254,8 @@ export default function PricingSection() {
   };
 
   return (
-    <section id="precios" className="py-20 px-4 bg-nflow-navy">
+    <>
+      <section id="precios" className="py-20 px-4 bg-nflow-navy">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Planes de Suscripción NFLOW</h2>
@@ -492,7 +501,11 @@ export default function PricingSection() {
                     <td className="py-4 px-4 text-right font-semibold text-green-400">1.044,17 €</td>
                     <td className="py-4 px-4 text-right text-green-400 font-semibold">10%</td>
                     <td className="py-4 px-4 text-center">
-                      <Button size="sm" className="bg-nflow-blue hover:bg-nflow-blue-dark text-white">
+                      <Button 
+                        size="sm" 
+                        className="bg-nflow-blue hover:bg-nflow-blue-dark text-white"
+                        onClick={() => handleEnterpriseContact("10 usuarios")}
+                      >
                         Consultar
                       </Button>
                     </td>
@@ -506,7 +519,11 @@ export default function PricingSection() {
                     <td className="py-4 px-4 text-right font-semibold text-green-400">1.947,14 €</td>
                     <td className="py-4 px-4 text-right text-green-400 font-semibold">10%</td>
                     <td className="py-4 px-4 text-center">
-                      <Button size="sm" className="bg-nflow-orange hover:bg-nflow-orange-light text-white">
+                      <Button 
+                        size="sm" 
+                        className="bg-nflow-orange hover:bg-nflow-orange-light text-white"
+                        onClick={() => handleEnterpriseContact("Pack Pyme - 25 usuarios")}
+                      >
                         Consultar
                       </Button>
                     </td>
@@ -517,7 +534,11 @@ export default function PricingSection() {
                     <td className="py-4 px-4 text-right font-semibold text-green-400">3.907,33 €</td>
                     <td className="py-4 px-4 text-right text-green-400 font-semibold">10%</td>
                     <td className="py-4 px-4 text-center">
-                      <Button size="sm" className="bg-nflow-blue hover:bg-nflow-blue-dark text-white">
+                      <Button 
+                        size="sm" 
+                        className="bg-nflow-blue hover:bg-nflow-blue-dark text-white"
+                        onClick={() => handleEnterpriseContact("50 usuarios")}
+                      >
                         Consultar
                       </Button>
                     </td>
@@ -531,7 +552,11 @@ export default function PricingSection() {
                     <td className="py-4 px-4 text-right font-semibold text-green-400">5.214,13 €</td>
                     <td className="py-4 px-4 text-right text-green-400 font-semibold">10%</td>
                     <td className="py-4 px-4 text-center">
-                      <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
+                      <Button 
+                        size="sm" 
+                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                        onClick={() => handleEnterpriseContact("Pack Empresa - 100 usuarios")}
+                      >
                         Consultar
                       </Button>
                     </td>
@@ -542,7 +567,11 @@ export default function PricingSection() {
                     <td className="py-4 px-4 text-right font-semibold text-green-400">11.748,01 €</td>
                     <td className="py-4 px-4 text-right text-green-400 font-semibold">10%</td>
                     <td className="py-4 px-4 text-center">
-                      <Button size="sm" className="bg-nflow-blue hover:bg-nflow-blue-dark text-white">
+                      <Button 
+                        size="sm" 
+                        className="bg-nflow-blue hover:bg-nflow-blue-dark text-white"
+                        onClick={() => handleEnterpriseContact("250 usuarios")}
+                      >
                         Consultar
                       </Button>
                     </td>
@@ -556,7 +585,11 @@ export default function PricingSection() {
                     <td className="py-4 px-4 text-right font-semibold text-green-400">18.282,13 €</td>
                     <td className="py-4 px-4 text-right text-green-400 font-semibold">10%</td>
                     <td className="py-4 px-4 text-center">
-                      <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
+                      <Button 
+                        size="sm" 
+                        className="bg-green-600 hover:bg-green-700 text-white"
+                        onClick={() => handleEnterpriseContact("Institución - 500 usuarios")}
+                      >
                         Consultar
                       </Button>
                     </td>
@@ -570,7 +603,11 @@ export default function PricingSection() {
                     <td className="py-4 px-4 text-right text-gray-300">A consultar</td>
                     <td className="py-4 px-4 text-right text-yellow-400 font-semibold">Especial</td>
                     <td className="py-4 px-4 text-center">
-                      <Button size="sm" className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white">
+                      <Button 
+                        size="sm" 
+                        className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white"
+                        onClick={() => handleEnterpriseContact("Premium - 1000+ usuarios")}
+                      >
                         Contactar
                       </Button>
                     </td>
@@ -633,6 +670,69 @@ export default function PricingSection() {
           </div>
         </div>
       </div>
-    </section>
+      </section>
+
+      {/* Enterprise Contact Dialog */}
+    <Dialog open={isContactDialogOpen} onOpenChange={setIsContactDialogOpen}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-center">
+            Consulta Empresarial
+          </DialogTitle>
+          <DialogDescription className="text-center">
+            {selectedPlan && (
+              <span className="block font-semibold text-nflow-blue mb-2">
+                Plan: {selectedPlan}
+              </span>
+            )}
+            Solicita información personalizada para tu empresa
+          </DialogDescription>
+        </DialogHeader>
+        
+        <div className="space-y-4">
+          <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+            <div className="text-center">
+              <h4 className="font-semibold text-gray-800 mb-2">Contacta con nuestro equipo</h4>
+              <p className="text-sm text-gray-600 mb-3">
+                Respuesta en menos de 24 horas • Consulta sin compromiso
+              </p>
+            </div>
+            
+            <div className="space-y-2">
+              <Button 
+                className="w-full bg-nflow-blue hover:bg-nflow-blue-dark text-white"
+                onClick={() => {
+                  const subject = `Consulta NFLOW Empresas - ${selectedPlan || 'Plan empresarial'}`;
+                  const body = `Hola,\n\nMe interesa conocer más sobre ${selectedPlan || 'los planes empresariales'} de NFLOW.\n\nPor favor, envíenme información detallada sobre:\n- Precios y condiciones\n- Proceso de implementación\n- Soporte técnico\n- Funcionalidades específicas\n\nGracias.`;
+                  window.open(`mailto:empordajobs@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+                  setIsContactDialogOpen(false);
+                }}
+              >
+                ✉️ Enviar Email
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                className="w-full border-nflow-blue text-nflow-blue hover:bg-nflow-blue/10"
+                onClick={() => {
+                  window.open('tel:+34660452136', '_blank');
+                  setIsContactDialogOpen(false);
+                }}
+              >
+                📞 Llamar: +34 660 45 21 36
+              </Button>
+            </div>
+            
+            <div className="text-center pt-2 border-t">
+              <p className="text-xs text-gray-500">
+                EMPORDAJOBS SL • CIF: B02701100<br />
+                Especialistas en salud mental empresarial
+              </p>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+    </>
   );
 }
