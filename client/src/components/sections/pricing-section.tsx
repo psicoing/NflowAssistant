@@ -479,18 +479,18 @@ export default function PricingSection() {
                 <thead>
                   <tr className="border-b border-gray-600">
                     <th className="text-left py-3 px-4 font-semibold text-gray-300">Nº Usuarios</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-300">Precio Base</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-300">Total con IVA (21%)</th>
-                    <th className="text-right py-3 px-4 font-semibold text-gray-300">Por Usuario</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-300">Precio Mensual</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-300">Precio Anual</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-300">% Ahorro</th>
                     <th className="text-center py-3 px-4 font-semibold text-gray-300">Acción</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-700">
                   <tr className="hover:bg-gray-800/50">
                     <td className="py-4 px-4 font-medium text-white">10 usuarios</td>
-                    <td className="py-4 px-4 text-right text-gray-300">79,90 €</td>
                     <td className="py-4 px-4 text-right font-semibold text-white">96,68 €</td>
-                    <td className="py-4 px-4 text-right text-nflow-orange font-semibold">9,67 €</td>
+                    <td className="py-4 px-4 text-right font-semibold text-green-400">1.044,17 €</td>
+                    <td className="py-4 px-4 text-right text-green-400 font-semibold">10%</td>
                     <td className="py-4 px-4 text-center">
                       <Button size="sm" className="bg-nflow-blue hover:bg-nflow-blue-dark text-white">
                         Consultar
@@ -502,9 +502,9 @@ export default function PricingSection() {
                       25 usuarios
                       <span className="ml-2 px-2 py-1 bg-nflow-orange text-white text-xs rounded-full">Pack Pyme</span>
                     </td>
-                    <td className="py-4 px-4 text-right text-gray-300">149,00 €</td>
                     <td className="py-4 px-4 text-right font-semibold text-white">180,29 €</td>
-                    <td className="py-4 px-4 text-right text-nflow-orange font-semibold">7,21 €</td>
+                    <td className="py-4 px-4 text-right font-semibold text-green-400">1.947,14 €</td>
+                    <td className="py-4 px-4 text-right text-green-400 font-semibold">10%</td>
                     <td className="py-4 px-4 text-center">
                       <Button size="sm" className="bg-nflow-orange hover:bg-nflow-orange-light text-white">
                         Consultar
@@ -513,9 +513,9 @@ export default function PricingSection() {
                   </tr>
                   <tr className="hover:bg-gray-800/50">
                     <td className="py-4 px-4 font-medium text-white">50 usuarios</td>
-                    <td className="py-4 px-4 text-right text-gray-300">299,00 €</td>
                     <td className="py-4 px-4 text-right font-semibold text-white">361,79 €</td>
-                    <td className="py-4 px-4 text-right text-nflow-orange font-semibold">7,24 €</td>
+                    <td className="py-4 px-4 text-right font-semibold text-green-400">3.907,33 €</td>
+                    <td className="py-4 px-4 text-right text-green-400 font-semibold">10%</td>
                     <td className="py-4 px-4 text-center">
                       <Button size="sm" className="bg-nflow-blue hover:bg-nflow-blue-dark text-white">
                         Consultar
@@ -527,9 +527,9 @@ export default function PricingSection() {
                       100 usuarios
                       <span className="ml-2 px-2 py-1 bg-purple-600 text-white text-xs rounded-full">Pack Empresa</span>
                     </td>
-                    <td className="py-4 px-4 text-right text-gray-300">399,00 €</td>
                     <td className="py-4 px-4 text-right font-semibold text-white">482,79 €</td>
-                    <td className="py-4 px-4 text-right text-green-400 font-semibold">4,83 €</td>
+                    <td className="py-4 px-4 text-right font-semibold text-green-400">5.214,13 €</td>
+                    <td className="py-4 px-4 text-right text-green-400 font-semibold">10%</td>
                     <td className="py-4 px-4 text-center">
                       <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
                         Consultar
@@ -538,9 +538,9 @@ export default function PricingSection() {
                   </tr>
                   <tr className="hover:bg-gray-800/50">
                     <td className="py-4 px-4 font-medium text-white">250 usuarios</td>
-                    <td className="py-4 px-4 text-right text-gray-300">899,00 €</td>
                     <td className="py-4 px-4 text-right font-semibold text-white">1.087,79 €</td>
-                    <td className="py-4 px-4 text-right text-green-400 font-semibold">4,35 €</td>
+                    <td className="py-4 px-4 text-right font-semibold text-green-400">11.748,01 €</td>
+                    <td className="py-4 px-4 text-right text-green-400 font-semibold">10%</td>
                     <td className="py-4 px-4 text-center">
                       <Button size="sm" className="bg-nflow-blue hover:bg-nflow-blue-dark text-white">
                         Consultar
@@ -552,9 +552,9 @@ export default function PricingSection() {
                       500 usuarios
                       <span className="ml-2 px-2 py-1 bg-green-600 text-white text-xs rounded-full">Institución</span>
                     </td>
-                    <td className="py-4 px-4 text-right text-gray-300">1.399,00 €</td>
                     <td className="py-4 px-4 text-right font-semibold text-white">1.692,79 €</td>
-                    <td className="py-4 px-4 text-right text-green-400 font-semibold">3,39 €</td>
+                    <td className="py-4 px-4 text-right font-semibold text-green-400">18.282,13 €</td>
+                    <td className="py-4 px-4 text-right text-green-400 font-semibold">10%</td>
                     <td className="py-4 px-4 text-center">
                       <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
                         Consultar
@@ -567,8 +567,8 @@ export default function PricingSection() {
                       <span className="ml-2 px-2 py-1 bg-gradient-to-r from-yellow-600 to-orange-600 text-white text-xs rounded-full">Premium</span>
                     </td>
                     <td className="py-4 px-4 text-right text-gray-300">A consultar</td>
-                    <td className="py-4 px-4 text-right font-semibold text-white">A consultar</td>
-                    <td className="py-4 px-4 text-right text-yellow-400 font-semibold">¡Precio especial!</td>
+                    <td className="py-4 px-4 text-right text-gray-300">A consultar</td>
+                    <td className="py-4 px-4 text-right text-yellow-400 font-semibold">Especial</td>
                     <td className="py-4 px-4 text-center">
                       <Button size="sm" className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white">
                         Contactar
@@ -579,9 +579,31 @@ export default function PricingSection() {
               </table>
             </div>
 
+            {/* Pricing Explanation */}
+            <div className="mt-6 grid md:grid-cols-2 gap-6">
+              <div className="bg-blue-900/20 rounded-lg p-4 border border-blue-700/30">
+                <h5 className="font-semibold text-blue-300 mb-2">💳 Plan Mensual</h5>
+                <ul className="text-blue-200 text-sm space-y-1">
+                  <li>• Mayor flexibilidad y sin compromiso</li>
+                  <li>• Ideal para proyectos temporales</li>
+                  <li>• Cancela cuando quieras</li>
+                  <li>• Pago mensual recurrente</li>
+                </ul>
+              </div>
+              <div className="bg-green-900/20 rounded-lg p-4 border border-green-700/30">
+                <h5 className="font-semibold text-green-300 mb-2">💰 Plan Anual (Recomendado)</h5>
+                <ul className="text-green-200 text-sm space-y-1">
+                  <li>• <strong>10% de descuento garantizado</strong></li>
+                  <li>• Pago único anual - sin sorpresas</li>
+                  <li>• Presupuesto fijo para todo el año</li>
+                  <li>• Prioridad en soporte técnico</li>
+                </ul>
+              </div>
+            </div>
+
             {/* Small Business Note */}
-            <div className="mt-6 bg-blue-900/20 rounded-lg p-4 border border-blue-700/30">
-              <p className="text-blue-300 text-sm text-center">
+            <div className="mt-6 bg-purple-900/20 rounded-lg p-4 border border-purple-700/30">
+              <p className="text-purple-300 text-sm text-center">
                 <strong>¿Menos de 10 usuarios?</strong> Utiliza los planes individuales estándar mostrados arriba.
               </p>
             </div>
