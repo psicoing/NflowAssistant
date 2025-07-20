@@ -9,7 +9,7 @@ import FeaturesSection from "@/components/sections/features-section";
 import PersonasSection from "@/components/sections/personas-section";
 import GlobalSupportSection from "@/components/sections/global-support-section";
 import PackagesSection from "@/components/sections/packages-section";
-import PricingSection from "@/components/sections/pricing-section";
+
 import InstitutoSection from "@/components/sections/instituto-section";
 import PWAInstallationSection from "@/components/sections/pwa-installation-section";
 import LanguageBannerSection from "@/components/sections/language-banner-section";
@@ -35,7 +35,7 @@ export default function Home() {
         <PWAInstallationSection />
         <FeaturesSection />
         <PersonasSection />
-        <PricingSection />
+
         <PaidAppNotice />
         <LGBTISupportSection />
         <InstitutoSection />
