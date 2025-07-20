@@ -71,11 +71,12 @@ export default function Login() {
             toast({
               title: "¿Completaste el pago?",
               description: "Si ya pagaste, activa tu cuenta para acceder al chat",
-              action: {
-                label: "Activar cuenta",
-                onClick: () => setLocation("/activar")
-              },
             });
+            
+            // Redirigir automáticamente a activación después de un momento
+            setTimeout(() => {
+              setLocation("/activar");
+            }, 2000);
           } else {
             toast({
               title: "Suscripción requerida",
