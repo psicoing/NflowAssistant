@@ -220,16 +220,16 @@ export default function ChatUserMenu() {
                 <span>Facturación</span>
               </DropdownMenuItem>
               
+              <DropdownMenuItem 
+                className="text-red-400 hover:bg-gray-700 cursor-pointer"
+                onClick={() => setShowCancelDialog(true)}
+                onSelect={(e) => e.preventDefault()}
+              >
+                <XCircle className="mr-2 h-4 w-4" />
+                <span>Cancelar Suscripción</span>
+              </DropdownMenuItem>
+
               <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
-                <DialogTrigger asChild>
-                  <DropdownMenuItem 
-                    className="text-red-400 hover:bg-gray-700 cursor-pointer"
-                    onSelect={(e) => e.preventDefault()}
-                  >
-                    <XCircle className="mr-2 h-4 w-4" />
-                    <span>Cancelar Suscripción</span>
-                  </DropdownMenuItem>
-                </DialogTrigger>
                 <DialogContent className="bg-gray-800 border-gray-700">
                   <DialogHeader>
                     <DialogTitle className="text-white">Cancelar Suscripción</DialogTitle>
