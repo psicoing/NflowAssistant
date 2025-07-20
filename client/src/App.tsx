@@ -36,6 +36,7 @@ import PoliticaCookies from "@/pages/legal/cookies";
 import AvisoLegal from "@/pages/legal/aviso-legal";
 import NosotrosPage from "@/pages/nosotros";
 import AppMovil from "@/pages/app-movil";
+import PreciosPage from "@/pages/precios";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -45,7 +46,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/consejos", "/app-movil", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners", "/nosotros", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/consejos", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners", "/nosotros", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
     if (publicRoutes.includes(location)) {
       return;
     }
@@ -82,6 +83,7 @@ function AuthenticatedRouter() {
       <Route path="/chat/:id" component={Chat} />
       <Route path="/recursos" component={Resources} />
       <Route path="/consejos" component={Consejos} />
+      <Route path="/precios" component={PreciosPage} />
       <Route path="/partners" component={Partners} />
       <Route path="/partners/login" component={PartnerLogin} />
       <Route path="/partners/register" component={PartnerRegister} />

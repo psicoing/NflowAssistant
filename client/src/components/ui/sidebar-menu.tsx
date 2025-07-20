@@ -32,22 +32,16 @@ const menuItems = [
     icon: Lightbulb
   },
   {
-    id: "suscripcion",
-    name: "Suscripción",
-    href: "/#precios",
-    icon: CreditCard
+    id: "precios",
+    name: "Precios",
+    href: "/precios",
+    icon: DollarSign
   },
   {
     id: "partners",
     name: "Partners",
     href: "/partners",
     icon: Users
-  },
-  {
-    id: "precios",
-    name: "Precios",
-    href: "/#precios",
-    icon: DollarSign
   },
   {
     id: "app-movil",
@@ -80,41 +74,7 @@ export default function SidebarMenu() {
     return location.startsWith(href);
   };
 
-  const handleSubscriptionClick = () => {
-    setIsOpen(false);
-    if (location !== "/") {
-      setLocation("/");
-      setTimeout(() => {
-        const pricingSection = document.getElementById("precios");
-        if (pricingSection) {
-          pricingSection.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 100);
-    } else {
-      const pricingSection = document.getElementById("precios");
-      if (pricingSection) {
-        pricingSection.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  };
 
-  const handlePricingClick = () => {
-    setIsOpen(false);
-    if (location !== "/") {
-      setLocation("/");
-      setTimeout(() => {
-        const pricingSection = document.getElementById("precios");
-        if (pricingSection) {
-          pricingSection.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 100);
-    } else {
-      const pricingSection = document.getElementById("precios");
-      if (pricingSection) {
-        pricingSection.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  };
 
   const handleContactClick = () => {
     setIsOpen(false);
@@ -150,41 +110,7 @@ export default function SidebarMenu() {
                   const IconComponent = item.icon;
                   const isActive = isActiveRoute(item.href);
                   
-                  if (item.id === "suscripcion") {
-                    return (
-                      <Button
-                        key={item.id}
-                        variant="ghost"
-                        className={`w-full justify-start h-14 text-left px-4 transition-all duration-200 ${
-                          isActive 
-                            ? "bg-nflow-blue/20 text-nflow-blue border-l-4 border-nflow-blue" 
-                            : "text-white hover:bg-white/10 hover:text-nflow-blue"
-                        }`}
-                        onClick={handleSubscriptionClick}
-                      >
-                        <IconComponent className="mr-3 h-5 w-5" />
-                        <span className="text-base">{item.name}</span>
-                      </Button>
-                    );
-                  }
 
-                  if (item.id === "precios") {
-                    return (
-                      <Button
-                        key={item.id}
-                        variant="ghost"
-                        className={`w-full justify-start h-14 text-left px-4 transition-all duration-200 ${
-                          isActive 
-                            ? "bg-nflow-blue/20 text-nflow-blue border-l-4 border-nflow-blue" 
-                            : "text-white hover:bg-white/10 hover:text-nflow-blue"
-                        }`}
-                        onClick={handlePricingClick}
-                      >
-                        <IconComponent className="mr-3 h-5 w-5" />
-                        <span className="text-base">{item.name}</span>
-                      </Button>
-                    );
-                  }
 
 
 
