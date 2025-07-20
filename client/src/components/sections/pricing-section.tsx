@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Calendar, Users, User } from "lucide-react";
+import { CheckCircle, Calendar, Users, User, Building, Shield, TrendingUp, Phone } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
@@ -433,6 +433,181 @@ export default function PricingSection() {
               NFLOW es salud mental digital sin postureo: sin grupos, sin coach, sin promesas mágicas.<br/>
               <span className="text-nflow-orange font-medium">Solo tú, tu mejora personal y la IA.</span>
             </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Enterprise Section */}
+      <div className="max-w-6xl mx-auto mt-20">
+        <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-3xl p-8 border border-gray-700/50">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center mb-4">
+              <Building className="w-8 h-8 text-nflow-orange mr-3" />
+              <h2 className="text-3xl md:text-4xl font-bold text-white">Planes NFLOW Empresas & Instituciones</h2>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-300 mb-6">¿Por qué NFLOW para tu organización?</h3>
+            <p className="text-lg text-gray-400 max-w-4xl mx-auto mb-6">
+              Mejora la salud mental de tus equipos con IA, sin postureo ni complicaciones.
+            </p>
+            
+            {/* Key Benefits */}
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-gray-800/50 rounded-lg p-4">
+                <Shield className="w-6 h-6 text-green-400 mx-auto mb-2" />
+                <h4 className="font-semibold text-white mb-1">100% Privado y Seguro</h4>
+                <p className="text-sm text-gray-300">Informes agregados para RRHH sin datos personales</p>
+              </div>
+              <div className="bg-gray-800/50 rounded-lg p-4">
+                <TrendingUp className="w-6 h-6 text-blue-400 mx-auto mb-2" />
+                <h4 className="font-semibold text-white mb-1">Sin Permanencia</h4>
+                <p className="text-sm text-gray-300">Paga solo por los empleados que uses cada mes</p>
+              </div>
+              <div className="bg-gray-800/50 rounded-lg p-4">
+                <Phone className="w-6 h-6 text-orange-400 mx-auto mb-2" />
+                <h4 className="font-semibold text-white mb-1">Soporte Especializado</h4>
+                <p className="text-sm text-gray-300">Atención directa para implementación y seguimiento</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Pricing Table */}
+          <div className="bg-gray-900/70 rounded-2xl p-6 border border-gray-600/30">
+            <h4 className="text-xl font-bold text-white mb-6 text-center">Tabla de Precios (IVA incluido)</h4>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-600">
+                    <th className="text-left py-3 px-4 font-semibold text-gray-300">Nº Usuarios</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-300">Precio Base</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-300">Total con IVA (21%)</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-300">Por Usuario</th>
+                    <th className="text-center py-3 px-4 font-semibold text-gray-300">Acción</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-700">
+                  <tr className="hover:bg-gray-800/50">
+                    <td className="py-4 px-4 font-medium text-white">10 usuarios</td>
+                    <td className="py-4 px-4 text-right text-gray-300">79,90 €</td>
+                    <td className="py-4 px-4 text-right font-semibold text-white">96,68 €</td>
+                    <td className="py-4 px-4 text-right text-nflow-orange font-semibold">9,67 €</td>
+                    <td className="py-4 px-4 text-center">
+                      <Button size="sm" className="bg-nflow-blue hover:bg-nflow-blue-dark text-white">
+                        Consultar
+                      </Button>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-800/50 bg-nflow-blue/10 border-l-4 border-nflow-orange">
+                    <td className="py-4 px-4 font-medium text-white">
+                      25 usuarios
+                      <span className="ml-2 px-2 py-1 bg-nflow-orange text-white text-xs rounded-full">Pack Pyme</span>
+                    </td>
+                    <td className="py-4 px-4 text-right text-gray-300">149,00 €</td>
+                    <td className="py-4 px-4 text-right font-semibold text-white">180,29 €</td>
+                    <td className="py-4 px-4 text-right text-nflow-orange font-semibold">7,21 €</td>
+                    <td className="py-4 px-4 text-center">
+                      <Button size="sm" className="bg-nflow-orange hover:bg-nflow-orange-light text-white">
+                        Consultar
+                      </Button>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-800/50">
+                    <td className="py-4 px-4 font-medium text-white">50 usuarios</td>
+                    <td className="py-4 px-4 text-right text-gray-300">299,00 €</td>
+                    <td className="py-4 px-4 text-right font-semibold text-white">361,79 €</td>
+                    <td className="py-4 px-4 text-right text-nflow-orange font-semibold">7,24 €</td>
+                    <td className="py-4 px-4 text-center">
+                      <Button size="sm" className="bg-nflow-blue hover:bg-nflow-blue-dark text-white">
+                        Consultar
+                      </Button>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-800/50 bg-purple-900/20 border-l-4 border-purple-500">
+                    <td className="py-4 px-4 font-medium text-white">
+                      100 usuarios
+                      <span className="ml-2 px-2 py-1 bg-purple-600 text-white text-xs rounded-full">Pack Empresa</span>
+                    </td>
+                    <td className="py-4 px-4 text-right text-gray-300">399,00 €</td>
+                    <td className="py-4 px-4 text-right font-semibold text-white">482,79 €</td>
+                    <td className="py-4 px-4 text-right text-green-400 font-semibold">4,83 €</td>
+                    <td className="py-4 px-4 text-center">
+                      <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
+                        Consultar
+                      </Button>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-800/50">
+                    <td className="py-4 px-4 font-medium text-white">250 usuarios</td>
+                    <td className="py-4 px-4 text-right text-gray-300">899,00 €</td>
+                    <td className="py-4 px-4 text-right font-semibold text-white">1.087,79 €</td>
+                    <td className="py-4 px-4 text-right text-green-400 font-semibold">4,35 €</td>
+                    <td className="py-4 px-4 text-center">
+                      <Button size="sm" className="bg-nflow-blue hover:bg-nflow-blue-dark text-white">
+                        Consultar
+                      </Button>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-800/50 bg-green-900/20 border-l-4 border-green-500">
+                    <td className="py-4 px-4 font-medium text-white">
+                      500 usuarios
+                      <span className="ml-2 px-2 py-1 bg-green-600 text-white text-xs rounded-full">Institución</span>
+                    </td>
+                    <td className="py-4 px-4 text-right text-gray-300">1.399,00 €</td>
+                    <td className="py-4 px-4 text-right font-semibold text-white">1.692,79 €</td>
+                    <td className="py-4 px-4 text-right text-green-400 font-semibold">3,39 €</td>
+                    <td className="py-4 px-4 text-center">
+                      <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
+                        Consultar
+                      </Button>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-800/50 bg-gradient-to-r from-gold-900/20 to-yellow-900/20 border-l-4 border-yellow-500">
+                    <td className="py-4 px-4 font-medium text-white">
+                      1000+ usuarios
+                      <span className="ml-2 px-2 py-1 bg-gradient-to-r from-yellow-600 to-orange-600 text-white text-xs rounded-full">Premium</span>
+                    </td>
+                    <td className="py-4 px-4 text-right text-gray-300">A consultar</td>
+                    <td className="py-4 px-4 text-right font-semibold text-white">A consultar</td>
+                    <td className="py-4 px-4 text-right text-yellow-400 font-semibold">¡Precio especial!</td>
+                    <td className="py-4 px-4 text-center">
+                      <Button size="sm" className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white">
+                        Contactar
+                      </Button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Small Business Note */}
+            <div className="mt-6 bg-blue-900/20 rounded-lg p-4 border border-blue-700/30">
+              <p className="text-blue-300 text-sm text-center">
+                <strong>¿Menos de 10 usuarios?</strong> Utiliza los planes individuales estándar mostrados arriba.
+              </p>
+            </div>
+
+            {/* Contact Information */}
+            <div className="mt-8 text-center">
+              <h5 className="text-lg font-semibold text-white mb-4">¿Listo para mejorar el bienestar de tu equipo?</h5>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Button 
+                  className="bg-nflow-orange hover:bg-nflow-orange-light text-white px-8 py-3"
+                  onClick={() => window.open('mailto:empordajobs@gmail.com?subject=Consulta%20NFLOW%20Empresas&body=Hola,%20me%20interesa%20conocer%20más%20sobre%20los%20planes%20de%20NFLOW%20para%20empresas.', '_blank')}
+                >
+                  Solicitar Información
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="border-gray-500 text-gray-300 hover:bg-gray-800 px-8 py-3"
+                  onClick={() => window.open('tel:+34660452136', '_blank')}
+                >
+                  Llamar: +34 660 45 21 36
+                </Button>
+              </div>
+              <p className="text-sm text-gray-400 mt-4">
+                Respuesta en menos de 24 horas • Implementación personalizada • Soporte técnico incluido
+              </p>
+            </div>
           </div>
         </div>
       </div>
