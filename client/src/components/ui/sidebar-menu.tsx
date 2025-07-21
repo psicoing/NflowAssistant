@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Home, MessageCircle, Book, Lightbulb, CreditCard, Users, Gift, Globe, LogIn, UserPlus, DollarSign, Phone, Info, Smartphone } from "lucide-react";
+import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Gift, Globe, LogIn, UserPlus, DollarSign, Phone, Info, Smartphone } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -20,16 +20,10 @@ const menuItems = [
     icon: MessageCircle
   },
   {
-    id: "recursos",
-    name: "Recursos",
-    href: "/recursos",
-    icon: Book
-  },
-  {
-    id: "consejos",
-    name: "Consejos",
-    href: "/consejos",
-    icon: Lightbulb
+    id: "blog",
+    name: "Blog",
+    href: "/blog",
+    icon: BookOpen
   },
   {
     id: "precios",
