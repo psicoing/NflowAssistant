@@ -3,7 +3,7 @@ import Footer from "@/components/layout/footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Users, DollarSign, TrendingUp, Globe, Star, Shield, Gift, LogIn, UserPlus } from "lucide-react";
+import { Users, DollarSign, TrendingUp, Globe, Star, Shield, Gift, LogIn, UserPlus, ExternalLink, Info } from "lucide-react";
 import { useLocation } from "wouter";
 
 const beneficios = [
@@ -70,6 +70,79 @@ export default function Partners() {
       <Header />
       
       <main className="pt-16">
+        {/* Banner Informativo Partners */}
+        <section className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 py-4 border-b border-blue-500/30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                  <Info className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold text-lg">Programa de Partners JOBDA</h3>
+                  <p className="text-blue-100 text-sm">
+                    Únete a nuestro ecosistema de partners y accede a oportunidades exclusivas de colaboración
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 min-w-fit">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => window.open('https://jobda.es/partners', '_blank')}
+                  className="bg-white text-blue-700 hover:bg-blue-50 font-medium"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  Información Completa
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.open('https://jobda.es/partners', '_blank')}
+                  className="border-white/30 text-white hover:bg-white/10"
+                >
+                  Requisitos & Beneficios
+                </Button>
+              </div>
+            </div>
+            
+            {/* Información básica en cards pequeñas */}
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
+                <div className="flex items-center gap-2 text-white">
+                  <DollarSign className="w-4 h-4 text-blue-200" />
+                  <span className="text-sm font-medium">Comisiones competitivas</span>
+                </div>
+                <p className="text-blue-100 text-xs mt-1">Hasta 30% por referido activo</p>
+              </div>
+              
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
+                <div className="flex items-center gap-2 text-white">
+                  <Globe className="w-4 h-4 text-blue-200" />
+                  <span className="text-sm font-medium">Alcance global</span>
+                </div>
+                <p className="text-blue-100 text-xs mt-1">Mercado hispanohablante mundial</p>
+              </div>
+              
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
+                <div className="flex items-center gap-2 text-white">
+                  <Shield className="w-4 h-4 text-blue-200" />
+                  <span className="text-sm font-medium">Respaldo profesional</span>
+                </div>
+                <p className="text-blue-100 text-xs mt-1">Soporte técnico especializado</p>
+              </div>
+              
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
+                <div className="flex items-center gap-2 text-white">
+                  <TrendingUp className="w-4 h-4 text-blue-200" />
+                  <span className="text-sm font-medium">Crecimiento sostenible</span>
+                </div>
+                <p className="text-blue-100 text-xs mt-1">Sector salud mental en expansión</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-nflow-navy to-nflow-dark py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
