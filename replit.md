@@ -1,88 +1,50 @@
 # NFLOW - Asistente de Salud Mental con IA
 
 ## Overview
+NFLOW es una plataforma web de salud mental que integra un asistente conversacional basado en IA con recursos educativos y un sistema de suscripciones completamente automatizado. Su objetivo es proporcionar apoyo de salud mental accesible, profesional y anónimo. La plataforma está diseñada para una capacidad ilimitada de usuarios, con activación automática de suscripciones a través de PayPal y Stripe, sin requerir intervención manual.
 
-NFLOW es una plataforma web de salud mental que combina un asistente conversacional basado en IA con recursos educativos y un sistema de suscripciones completamente automatizado. La aplicación está construida como un full-stack con React + TypeScript en el frontend y Express + Node.js en el backend, utilizando PostgreSQL como base de datos. Soporta capacidad ilimitada de usuarios con activación automática vía PayPal y Stripe mediante webhooks automatizados, sin intervención manual requerida.
+## User Preferences
+Preferred communication style: Simple, everyday language.
 
 ## System Architecture
 
-### Frontend Architecture
+### Frontend
 - **Framework**: React 18 con TypeScript
-- **Build Tool**: Vite para desarrollo y empaquetado
+- **Build Tool**: Vite
 - **UI Framework**: Shadcn/ui components con Tailwind CSS
-- **State Management**: TanStack Query (React Query) para manejo de estado del servidor
-- **Routing**: Wouter para navegación client-side
-- **Styling**: Tailwind CSS con variables CSS personalizadas para el tema NFLOW
+- **State Management**: TanStack Query (React Query) para estado del servidor
+- **Routing**: Wouter
+- **Styling**: Tailwind CSS con variables CSS personalizadas
 
-### Backend Architecture
+### Backend
 - **Runtime**: Node.js con TypeScript
 - **Framework**: Express.js
 - **Session Management**: Express-session para autenticación de admin y partners
 - **Authentication**: bcrypt para hash de contraseñas
 - **API Design**: RESTful endpoints con validación mediante Zod schemas
 
-### Database Architecture
+### Database
 - **Database**: PostgreSQL (configurado para Neon serverless)
 - **ORM**: Drizzle ORM con migraciones automáticas
 - **Connection**: Pool de conexiones con @neondatabase/serverless
-- **Schema Location**: `shared/schema.ts` para tipos compartidos
+- **Schema Location**: `shared/schema.ts`
 
-## Key Components
-
-### 1. Chat System
-- **AI Integration**: OpenAI GPT-4o para generar respuestas contextuales
-- **Prompt Engineering**: Sistema inteligente de selección de ejemplos relevantes
-- **Message History**: Persistencia de conversaciones por usuario
-- **Real-time Interface**: Chat interface responsive con auto-scroll
-- **User-Specific Menu**: ChatHeader dedicado con ChatUserMenu contextual para usuarios autenticados
-- **Subscription Management**: Indicadores visuales de estado y opciones de gestión integradas
-- **Multilingual Support**: Automatic language detection and AI responses in user's preferred language
-
-### 2. User Management
-- **Registration/Login**: Sistema básico de autenticación con username/password
-- **User Roles**: user, admin, partner con diferentes niveles de acceso
-- **Session Tracking**: Login count y last login tracking
-
-### 3. Subscription System
-- **Payment Integration**: PayPal y Stripe SDK para pagos y suscripciones
-- **Webhook Automation**: Activación automática via webhooks sin intervención manual
-- **Subscription Plans**: basic, group, individual
-- **Access Control**: Verificación de suscripción activa para acceso al chat
-- **Production Ready**: Claves live configuradas para ambos proveedores
-
-### 4. Content Management
-- **Resources**: Sistema de artículos, guías y ejercicios categorizados
-- **Categories**: ansiedad, familia, bienestar, laboral, autoestima
-- **Content Types**: article, guide, exercise con íconos diferenciados
-
-### 5. Partner Program
-- **Partner Registration**: Sistema de aplicación y aprobación para partners
-- **Referral System**: Códigos de referencia y tracking de comisiones
-- **Partner Dashboard**: Interface para gestión de referidos y ganancias
-
-## Data Flow
-
-### User Journey
-1. **Registration** → User creates account → Stored in users table
-2. **Subscription** → PayPal payment → Updates user subscription status
-3. **Chat Access** → Subscription verified → Access to chat interface
-4. **Conversation** → Messages sent to OpenAI → Responses stored in messages table
-
-### Admin Flow
-1. **Admin Login** → Session-based authentication → Access to dashboard
-2. **User Management** → View all users and transactions
-3. **Content Management** → Create/edit resources and content
-
-### Partner Flow
-1. **Partner Application** → Registration with company details
-2. **Approval Process** → Admin review and status update
-3. **Referral Tracking** → Generate codes and track conversions
+### Key Features
+- **AI Chat System**: Integración con OpenAI GPT-4o, prompt engineering contextual, persistencia de conversaciones, interfaz responsiva y soporte multi-idioma.
+- **User Management**: Registro/login, roles de usuario (user, admin, partner), seguimiento de sesión.
+- **Subscription System**: Integración con PayPal y Stripe SDK para pagos y suscripciones, activación automática vía webhooks, planes de suscripción (basic, group, individual), control de acceso al chat.
+- **Content Management**: Sistema de artículos, guías y ejercicios categorizados (ansiedad, familia, bienestar, laboral, autoestima).
+- **Partner Program**: Sistema de aplicación y aprobación de partners, referidos, y dashboard de gestión.
+- **UI/UX Decisions**: Diseño profesional con componentes Shadcn/ui y Tailwind CSS, uso de gradientes y elementos visuales para mejorar la experiencia del usuario, navegación simplificada.
+- **Technical Implementations**: PWA instalación guiada para acceso móvil, integración de Google Translate para soporte multi-idioma.
+- **System Design Choices**: Soporte para arquitectura serverless con Neon, énfasis en automatización completa del flujo de usuarios y pagos, modularidad de componentes frontend y backend.
 
 ## External Dependencies
 
 ### AI and APIs
 - **OpenAI API**: GPT-4o model for chat responses
 - **PayPal SDK**: Payment processing and subscription management
+- **Stripe**: Payment processing and subscription management
 
 ### UI and Styling
 - **Radix UI**: Headless components for accessibility
@@ -93,197 +55,3 @@ NFLOW es una plataforma web de salud mental que combina un asistente conversacio
 - **TypeScript**: Type safety across frontend and backend
 - **ESBuild**: Fast bundling for production
 - **Drizzle Kit**: Database migrations and schema management
-
-## Deployment Strategy
-
-### Development Environment
-- **Platform**: Replit with Node.js 20 runtime
-- **Development Server**: Vite dev server with HMR
-- **Database**: PostgreSQL 16 module on Replit
-
-### Production Build
-- **Frontend**: Vite build output to `dist/public`
-- **Backend**: ESBuild bundle to `dist/index.js`
-- **Deployment**: Autoscale deployment target
-- **Port Configuration**: Internal port 5000, external port 80
-- **Production URL**: rough-heart-79938129.replit.app
-
-### Environment Variables
-- `DATABASE_URL`: PostgreSQL connection string
-- `OPENAI_API_KEY`: OpenAI API access
-- `PAYPAL_CLIENT_ID` & `PAYPAL_SECRET`: PayPal integration
-- `NODE_ENV`: Environment detection
-
-## User Preferences
-
-Preferred communication style: Simple, everyday language.
-
-## Testing Status
-
-- Stripe webhook automation: VERIFIED (user rmacanet activated successfully)
-- PayPal webhook automation: VERIFIED (user rprueba activated successfully)
-- Manual database fixes: COMPLETED (users rstripe and rdefinitivo activated)
-- Production keys: CONFIGURED (Stripe live keys integrated)
-- Automatic payment flow: FULLY OPERATIONAL (both providers working)
-- System ready for production deployment with complete automation
-
-## Changelog
-
-Changelog:
-- July 26, 2025. **BANNER PARTNERS JOBDA IMPLEMENTADO** - Agregado banner prominente en página /partners con redirección a https://jobda.es/partners. Incluye información básica del programa de partners (comisiones hasta 30%, alcance global, respaldo profesional, crecimiento sostenible), botones de acción directos y diseño profesional con gradientes azules. Banner posicionado en la parte superior para máxima visibilidad e integración con ecosistema JOBDA.
-- July 21, 2025. **BLOG UNIFICADO IMPLEMENTADO** - Consolidadas páginas "Recursos" y "Consejos" en una nueva página de blog elegante /blog. Diseño profesional con sistema avanzado de filtros por categoría (ansiedad, autoestima, familia, laboral, bienestar) y tipo de contenido (consejos, ejercicios, guías). Incluye 6 artículos completos con contenido profesional basado en evidencia, modal inmersivo para lectura, buscador inteligente y navegación mejorada. Menú lateral actualizado con entrada única "Blog" reemplazando las dos pestañas anteriores.
-- July 20, 2025. **REESTRUCTURACIÓN NAVEGACIÓN DE PRECIOS COMPLETADA** - Eliminado "Suscripción" del menú lateral y creada página dedicada /precios para consolidar toda la información de planes. Removidas secciones PricingSection de página principal, ahora todo el contenido de precios está centralizado en una página independiente con navegación directa desde menú. Mejora significativa en UX separando contenido promocional de opciones de compra.
-- July 20, 2025. **SISTEMA DE CONTACTO EMPRESARIAL COMPLETADO** - Implementado sistema completo de contacto para planes empresariales con diálogo modal interactivo. Todos los botones "Consultar" de la tabla de precios ahora abren diálogo personalizado que muestra el plan específico seleccionado (10 usuarios, Pack Pyme - 25 usuarios, 50 usuarios, Pack Empresa - 100 usuarios, 250 usuarios, Institución - 500 usuarios, Premium - 1000+ usuarios). Incluye opciones directas de contacto por email (con template pre-rellenado) y teléfono (+34 660 45 21 36), información corporativa EMPORDAJOBS SL, y cierre automático tras acción. Sistema B2B de contacto empresarial 100% funcional y listo para producción.
-- July 20, 2025. **PLANES EMPRESARIALES IMPLEMENTADOS** - Agregada sección completa "Planes NFLOW Empresas & Instituciones" en pricing-section con tabla de precios profesional (IVA incluido): 10 usuarios (96,68€), Pack Pyme 25 usuarios (180,29€), 50 usuarios (361,79€), Pack Empresa 100 usuarios (482,79€), 250 usuarios (1.087,79€), Institución 500 usuarios (1.692,79€), 1000+ usuarios (precio especial). Incluye beneficios clave (100% privado, sin permanencia, soporte especializado), botones de consulta funcionales, y contacto directo (email + teléfono). Diseño profesional con códigos de color por tier y badges identificativos. Sistema B2B completamente integrado.
-- July 20, 2025. **ERROR JSX CRÍTICO RESUELTO + TESTUSER CORREGIDO** - Error "Objects are not valid as a React child (found: object with keys {label, onClick})" solucionado completamente. Problema localizado en login.tsx líneas 74-77 donde componente toast recibía objeto action mal estructurado. Eliminado objeto problemático y reemplazado por redirección automática limpia. Usuario testuser tenía suscripción expirada (2025-07-19), renovada por 30 días más con límite aumentado a 30 preguntas. Creada ficha de control ERROR_JSX_TROUBLESHOOTING.md con diagnóstico completo para futuros casos. Sistema completamente estabilizado con usuarios testuser y usuarionuevo funcionando correctamente.
-- July 19, 2025. **SCROLL CHAT IMPLEMENTADO** - Agregado scroll vertical a respuestas largas del chat con altura máxima de 384px, scrollbar personalizada delgada compatible con navegadores WebKit y Firefox, mantiene estética del diseño.
-- July 19, 2025. **PROMPT NEUROPSI-AI PROFESIONALIZADO COMPLETAMENTE** - Implementada estructura profesional de 10 secciones obligatorias con formato markdown: # Presentación Empática, # Refuerzo Positivo, # Preguntas Sintomatológicas, # Orientación Diagnóstica DSM-5-TR/CIE-11, # Explicación Grupo Diagnóstico, # Técnicas Prácticas, # Algoritmo Urgencia, # Mitos y Verdades, # Recursos Locales, # Advertencia Profesional. Mantiene sección bibliográfica obligatoria con 3 libros específicos al final. Incluye ejemplo completo de estructura para garantizar consistencia en respuestas. Sistema combina rigor clínico con calidez empática.
-- July 19, 2025. **SECCIONES PRINCIPALES OPTIMIZADAS** - Reorganizado layout de MentalHealthHeroSection con imagen a la izquierda y texto a la derecha. Eliminado párrafo descriptivo y característica "Para Toda la Familia/Apoyo integral desde los 12 años" para diseño más limpio. Imagen aumentada 15% para mejor balance visual. YouthMentalHealthSection optimizada: eliminado párrafo sobre inversión social y reducido título "Juventud y Salud Mental: El Momento Decisivo" a la mitad del tamaño original. Ambas secciones ahora más concisas y visualmente equilibradas.
-- July 19, 2025. **GRUPO JOBDA AGREGADO EN PÁGINA NOSOTROS** - Implementada nueva sección "Grupo JOBDA - Plataforma de Multiservicios" en /nosotros explicando que NFLOW forma parte del ecosistema JOBDA.BIZ operado por EMPORDAJOBS SL. Incluye información corporativa completa, servicios del grupo (consultoría, IA, psicología, formación, neurotecnología), datos legales (CIF B02701100, Portbou), y badge identificativo del ecosistema. Diseño profesional con gradientes azules y estructura en cards.
-- July 18, 2025. **VALIDACIÓN DE EDAD EN REGISTRO IMPLEMENTADA** - Agregado campo fecha de nacimiento obligatorio en formulario de registro con validación frontend y backend. Usuarios menores de 18 años no pueden registrarse y reciben mensaje específico sobre supervisión parental. Rango válido: 18-95 años. Campo birthDate añadido al esquema de base de datos, validación de edad en servidor, y migración aplicada exitosamente.
-- July 18, 2025. **POLÍTICA DE EDAD ACTUALIZADA** - Cambiada edad mínima de 12-95 años a 18-95 años en toda la plataforma. Menores de edad ahora requieren supervisión parental y consentimiento explícito. Actualizada sección de aviso de edad, traducciones en español e inglés, y texto de servicios para reflejar nueva política de acceso responsable.
-- July 17, 2025. **EXPERIENCIA LABORAL EXPANDIDA EN PÁGINA NOSOTROS** - Agregadas 4 nuevas posiciones profesionales del Dr. Ramón Molons con detalles específicos: Psicólogo Forense Juzgados Girona/La Bisbal/Sant Feliu/Figueres (1995-2003), Psicólogo Institutos Públicos Cataluña (2003-2023, 23 centros educativos, 6 años trabajados en intervalo de 20 años como sustituto interino), Psicólogo Colegio Cor De Maria (1995-1998), Psicólogo Centro Alzheimer Figueres (2000-2001). Cada posición con descripción especializada, fechas exactas y códigos de color distintivos para mejor organización cronológica.
-- July 17, 2025. **SECCIÓN "SIN FRONTERAS" INSERTADA** - Implementada nueva sección BorderlessSupportSection entre las dos tarjetas principales con texto impactante "La Salud Mental SIN Fronteras" y "Con NFLOW, Donde estés, cuando lo necesites, como lo necesites". Diseño con gradientes oscuros (indigo/purple/pink), texto con efectos de color diferenciados y elementos decorativos animados. Posicionada entre MentalHealthHeroSection y YouthMentalHealthSection.
-- July 17, 2025. **SECCIÓN JUVENTUD Y SALUD MENTAL AGREGADA** - Implementada nueva sección YouthMentalHealthSection con imagen de adolescentes y texto inspirador "Juventud y Salud Mental: El Momento Decisivo". Incluye gradientes verdes (emerald/teal), contenido reflexivo sobre la importancia de la salud mental joven, grid de características (Cimiento Vital, Prevención, Apoyo Especializado, Futuro Pleno) y badge "NFLOW Adolescentes 12+ años". Botón "Apoyo para Jóvenes" redirige a /ejemplos-chat. Posicionada como tercera sección después de MentalHealthHeroSection.
-- July 18, 2025. **BOTÓN "EJEMPLOS DE NFLOW" IMPLEMENTADO** - Cambiado botón "Comenzar Ahora" por "Ejemplos de NFlow" en tarjeta principal (mental-health-hero-section), ahora redirecciona a /ejemplos-chat. Diseño mejorado con borde decorativo brillante, efecto pulso animado, icono MessageSquare, mayor anchura (max-w-xs), padding aumentado (px-10 py-5), texto centrado y tamaño de fuente más grande. Botón más visible y atractivo con mejor contraste.
-- July 18, 2025. **BOTÓN TRADUCTOR INTERACTIVO IMPLEMENTADO** - Eliminados todos los selectores de Google Translate del header y sidebar, reemplazados por botón interactivo "Speaking 150+ languages • 支持150多种语言" en language-banner-section. Al hacer click abre modal profesional con Google Translate integrado: diseño con gradiente azul, backdrop blur, título "🌍 Seleccionar Idioma", subtítulo explicativo, botón cerrar (×), cierre con ESC y click fuera. Traduce toda la página instantáneamente manteniendo navegación limpia y moderna.
-- July 18, 2025. **FORMACIÓN ACADÉMICA ACTUALIZADA EN PÁGINA NOSOTROS** - Corregidos tres elementos en la sección de formación: Ingeniería de Telecomunicaciones ahora muestra "en curso", Biomatemática y Bioinformática cambió a "Máster Bioestadística (en curso)", y Psicología de la Salud actualizado a "Postgrado Psicología de la Salud". Cambios reflejan estado actual de formación continua del Dr. Ramón Molons.
-- July 18, 2025. **SECCIÓN LGBTI+ APOYO ESPECIALIZADO AGREGADA** - Implementada nueva sección LGBTISupportSection cerca del final de la página principal con imagen de comunidad LGBTI+ con bandera del orgullo. Reconoce vulnerabilidades únicas (tasas 3-4x mayores de suicidio/trastornos mentales), ofrece espacio seguro con confidencialidad total, lenguaje inclusivo y apoyo especializado. Diseño con gradientes purple/pink, características destacadas (espacio seguro, respeto identidad, comprensión realidades LGBTI+) y mensaje de compromiso del equipo NFLOW para aportar granito de arena con amor y respeto.
-- July 18, 2025. **PROMPT DERECHO LABORAL MEJORADO** - Expandido sistema NEUROPSI-AI con especialización completa en derecho laboral y bajas médicas. Incluye detección automática de consultas laborales, estructura de respuesta clara (situación, derechos, pasos, recursos), ejemplo práctico de despido durante baja médica, recursos clave (sindicatos, abogados, inspección), disclaimer obligatorio y frase activadora. Sistema ahora cubre consultas sobre estrés laboral, acoso, reincorporación, adaptación de puestos y trámites según normativa española.
-- July 18, 2025. **TARJETA EXPLICATIVA NFLOW AGREGADA EN RECURSOS** - Implementada nueva sección prominente "NFLOW: Pensado para Personas y Empresas" en página /recursos con diseño profesional. Incluye misión clara, diferenciación particulares vs empresas, grid de características principales (24/7, profesional, sin permanencias, 150+ idiomas) y CTA directo a nflow.biz. Posicionada entre hero section y filtros para máximo impacto educativo.
-- July 18, 2025. **URL CORREGIDA EN PÁGINA APP-MÓVIL** - Actualizada URL incorrecta de "https://nflow.app" a "https://nflow.biz/" en las instrucciones de instalación PWA para Android Chrome e iPhone Safari. Ahora usuarios reciben la URL correcta para instalar NFLOW.
-- July 18, 2025. **LAYOUT HERO SECTION REORGANIZADO** - Reestructurado completamente el layout: títulos centrados arriba, imagen grande centrada debajo de los títulos, características y descripción en grid de 2 columnas al final. Layout más fluido y visualmente atractivo.
-- July 18, 2025. **RECUADRO "APOYO ACTIVO" OPTIMIZADO** - Movido el indicador "Apoyo Activo" a esquina superior derecha, reducido tamaño y eliminado texto secundario para no tapar la imagen de familia.
-- July 18, 2025. **TÍTULO PRINCIPAL ACTUALIZADO CON ICONOS** - Cambiado título principal a "Ayuda psicológica en tu bolsillo!" con icono Brain y subtítulo "una robot muy lista!" con icono Zap. Agregados signos de exclamación para mayor impacto visual y emocional.
-- July 17, 2025. **TARJETA SALUD MENTAL CON TÍTULO AMIGABLE** - Implementada nueva sección MentalHealthHeroSection con imagen elegante de familia usando NFLOW y título "Para Todos, Una Robot Muy Lista!" para tono más amigable y tecnológico. Incluye gradientes modernos, características clave (Para Toda la Familia, 100% Confidencial, Profesional, Disponible 24/7), indicador de apoyo activo y elementos decorativos. Posicionada después del banner multiidioma como segunda sección para óptima jerarquía visual.
-- July 17, 2025. **CUATRO SOLUCIONES COMPLETADAS** - Agregado "NFLOW Adolescentes - Apoyo personalizado a partir 12 años" como cuarta solución en services-section, completando las Cuatro Soluciones Especializadas (Familias, Adolescentes, Laboral, Adultos).
-- July 17, 2025. **BANNER MULTIIDIOMA REPOSICIONADO** - Banner "Speaking 150+ languages • 支持150多种语言" movido debajo del header para mejor visualización en móvil, con espaciado superior adecuado (pt-20) y posicionado como primera sección del main.
-- July 17, 2025. **BANNER MULTIIDIOMA AGREGADO** - Implementado banner prominente "Speaking 150+ languages • 支持150多种语言" en la página principal con diseño azul gradiente y icono Globe para destacar el soporte global multiidioma.
-- July 17, 2025. **PÁGINA DEDICADA APLICACIÓN MÓVIL CREADA** - Implementada página completa `/app-movil` con guías detalladas de instalación PWA para Android/Chrome e iPhone/Safari. Incluye sección explicativa de PWA, beneficios, FAQ completa, ejemplos visuales y llamadas a la acción. Enlace del menú actualizado para dirigir a esta página dedicada.
-- July 17, 2025. **ENLACE "APLICACIÓN MÓVIL" AGREGADO AL MENÚ** - Añadido enlace "Aplicación Móvil" en menú hamburguesa con ícono Smartphone que lleva directamente a la sección PWA para fácil acceso a las instrucciones de instalación.
-- July 17, 2025. **SECCIÓN PWA INSTALACIÓN IMPLEMENTADA** - Creada nueva sección PWAInstallationSection con guías visuales paso a paso para instalar NFLOW como aplicación móvil sin tiendas. Incluye instrucciones específicas para Android/Chrome e iPhone/Safari con iconografía clara y ventajas destacadas. Posicionada en el medio de la página principal para máximo impacto.
-- July 17, 2025. **HEROSECTION MOVIDA A TERCERA POSICIÓN** - Reposicionada la tarjeta inicial (HeroSection) dos posiciones hacia abajo: ahora aparece después de GlobalSupportSection y AgeNoticeSection para optimizar el flujo de navegación.
-- July 17, 2025. **SECCIÓN PAQUETES TEMPORALMENTE DESHABILITADA** - PackagesSection comentada debido a problemas de posicionamiento en webview que causaba aparición incorrecta al principio de página.
-- July 17, 2025. **SECCIÓN PAQUETES REPOSICIONADA AL FINAL** - Movida la sección PackagesSection (tarjetas de productos NFLOW) desde posición media a la posición final de la página, después de InstitutoSection, para enfocar la navegación en contenido principal antes que productos.
-- July 17, 2025. **NUEVA SECCIÓN "SALUD MENTAL SIN FRONTERAS"** - Creada sección GlobalSupportSection con diseño moderno destacando la naturaleza global e inclusiva de NFLOW. Incluye dos tarjetas principales con las imágenes personalizadas: "Apoyo Sin Límites" (completamente anónimo, sin estigma) y "Primera Línea de Apoyo" (confianza de millones). Agregada grid de características (150+ idiomas, 100% anónimo, inclusivo, 24/7). Posicionada al inicio de la página, justo después del HeroSection, para máximo impacto visual.
-- July 17, 2025. **AVISO DE PAGO REPOSICIONADO** - Movido el aviso "NFLOW es una Aplicación de Pago" desde posición inicial (después del hero) a posición final (después de la sección de precios) para mejorar el flujo de usuario y permitir que vean primero el contenido antes del mensaje de restricción.
-- July 17, 2025. **PLAN ANUAL REESTRUCTURADO A €49** - Reducido precio del Plan Anual "Total" de €69 a €49, aumentando el ahorro a 48% respecto al Premium mensual. Precio equivalente actualizado a €4,08/mes. Cambio aplicado en sección de precios y documentación para mejorar la accesibilidad económica de la suscripción anual.
-- July 16, 2025. **PÁGINA "NOSOTROS" PROFESIONAL IMPLEMENTADA** - Creada página dedicada `/nosotros` con información completa del Dr. Ramón Molons de San Román (Colegiado Barcelona #7851). Incluye formación académica (UAB, UOC, UB, UdG), experiencia profesional 30+ años, especialización en neuroingeniería e IA clínica, información corporativa EMPORDAJOBS SL, y diseño profesional con cards y gradientes. Integrada en menú hamburguesa como enlace directo, eliminando conflictos del modal anterior.
-- July 13, 2025. **GOOGLE SEARCH CONSOLE INTEGRADO** - Agregada verificación completa de Google Search Console con meta tag ovYmUyEk3tIkbO3iXmY5jSnUWJbqQTejvxjUfPt_U0U y archivo HTML de respaldo. Sistema de monitoreo SEO listo para análisis de rendimiento, indexación y optimización en motores de búsqueda.
-- July 12, 2025. **MENSAJES ESPAÑOLIZADOS SISTEMA PAGO** - Actualizados todos los mensajes de error del backend a español: "NFLOW es aplicación de pago - Suscripción requerida". Creada sección prominente "NFLOW es una Aplicación de Pago" en página principal con diseño llamativo. Cambiado botón principal hero de "Empezar Chat" a "Comprar Suscripción" para claridad total sobre naturaleza de pago.
-- July 12, 2025. **ACCESO AL CHAT RESTRINGIDO SOLO A SUSCRIPTORES** - Eliminado acceso gratuito al chat completamente. Usuarios sin suscripción activa ahora tienen 0 preguntas mensuales y no pueden acceder al chat. Implementada verificación de suscripción en todos los endpoints del chat (/api/conversations, /api/messages). Frontend redirige automáticamente usuarios sin suscripción a la sección de precios con mensaje claro. Los recursos gratuitos continúan disponibles en la barra de navegación.
-- July 12, 2025. **PLAN ANUAL "TOTAL" CARACTERÍSTICAS CORREGIDAS** - Eliminadas referencias incorrectas a soporte individual, sesiones con expertos y cancelación del Plan Anual €49. Actualizadas características para reflejar correctamente: pago único sin renovación automática, 365 días de acceso garantizado, sin sorpresas ni cobros adicionales, sin compromisos automáticos después del año.
-- July 11, 2025. **POLÍTICA DE CANCELACIÓN MEJORADA** - Agregada información clara sobre cancelación fácil de suscripciones en todas las tarjetas de precios y nueva sección dedicada "Sin Compromisos a Largo Plazo" que destaca: cancelación inmediata, sin preguntas, acceso hasta el final del período. Transparencia total en políticas de cancelación para generar confianza.
-- July 9, 2025. **NUEVAS CATEGORÍAS ANOREXIA-BULIMIA Y AUTISMO AGREGADAS** - Implementadas dos nuevas secciones de recursos con modales informativos especializados: Anorexia-Bulimia (icono Utensils) con información sobre TCA, señales de alerta, recursos profesionales y apoyo familiar; Autismo (icono Puzzle) con información TEA, señales tempranas, recursos especializados y apoyo familiar. Ambas conectadas a GuíaSalud y números de emergencia funcionales.
-- July 8, 2025. **ENLACES ROTOS CORREGIDOS** - Agregado destino URL https://portal.guiasalud.es/gpc/?_sft_especialidad=psicologia-clinica,psiquiatria a todos los botones de recursos en modales de ansiedad y depresión, números de teléfono funcionales para emergencias (112) y Teléfono de la Esperanza (717003717)
-- July 8, 2025. **RECURSOS AUTOESTIMA PROFESIONALES AÑADIDOS** - Implementados tres ejercicios especializados de autoestima: "Registro de Logros Reales" (Bandura, autorreforzamiento), "Reto de Autodiálogo Constructivo" (CBT, reestructuración cognitiva), y "Cartas al Yo del Futuro" (visualización positiva). Cada ejercicio incluye fundamento científico robusto con referencias de Psychological Bulletin, Journal of Positive Psychology, protocolos NICE, objetivos neuropsicológicos específicos, materiales requeridos, duración, población diana, indicadores de mejora y contraindicaciones clínicas.
-- July 8, 2025. **RECURSOS FAMILIA EXPANDIDOS** - Agregadas tres nuevas herramientas de comunicación familiar: "Ventana de Escucha Activa" (Carl Rogers), "Agenda de Temas Neutrales" (rutinas familiares), y "Tarjetas de Comunicación Positiva" (refuerzo positivo). Cada recurso incluye modal detallado con fundamento científico, objetivos neuropsicológicos, instrucciones paso a paso, materiales requeridos y contraindicaciones. Basados en estándares APA, NICE, OMS y evidencia reciente de Journal of Family Psychology.
-- July 8, 2025. **MENÚ HAMBURGUESA EXPANDIDO** - Añadidas pestañas "Precios" (scroll automático a sección precios) y "Contacto" (modal con información INS NEURONMEG, CIF B02701100, teléfono 660452136, Dr. Ramón Molons de San Román Col. 7851)
-- July 8, 2025. **EJERCICIOS MINDFULNESS PROFESIONALES IMPLEMENTADOS** - Sección bienestar actualizada con prompt técnico completo para generación de ejercicios de mindfulness basados en MBSR, MBCT y estándares APA/NICE/OMS, incluyendo formato estructurado con fundamento neurobiológico
-- July 8, 2025. **RECURSOS DEPRESIÓN AÑADIDOS** - Nueva categoría "Depresión" con modal especializado incluyendo síntomas principales, herramientas de autoevaluación profesionales (PHQ-9, HAM-D, BDI-II), recursos de emergencia y atención primaria basados en protocolos clínicos oficiales
-- July 8, 2025. **FILTROS RECURSOS SIMPLIFICADOS** - Eliminados completamente los filtros de tipo ("Ejercicio", "Artículo", "Guía"), navegación solo por categorías temáticas para mejor experiencia de usuario
-- July 8, 2025. **RECURSOS ANSIEDAD DESARROLLADOS** - Implementada sección completa de recursos para ansiedad basada en guías oficiales del Sistema Nacional de Salud, incluyendo técnicas de respiración, gestión de crisis emocionales, herramientas GAD-7, y recursos profesionales como Teléfono de la Esperanza
-- July 8, 2025. **PLANES SUSCRIPCIÓN MEJORADOS** - Rediseño completo de la sección de precios con tres planes específicos: Básico (€2.99), Pro (€5.99), Premium (€7.99) con características detalladas, número de preguntas por mes claramente definido (10, 20, 30), y filosofía NFLOW integrada
-- July 8, 2025. **SECCIÓN PAQUETES SIMPLIFICADA** - Eliminadas todas las tarjetas de paquetes, reemplazadas por mensaje "Próximamente disponibles" con botón redirección a registro
-- July 8, 2025. **VERSIÓN BETA ACTUALIZADA** - Cambiado símbolo β por "versión beta 1-04" en footer para mayor claridad
-- July 2, 2025. **USUARIO MARCOS PAJARON BLOQUEADO** - Usuario mpajaron (ID: 34) bloqueado completamente del sistema, suscripción cancelada y acceso revocado por solicitud administrativa
-- July 2, 2025. **PARTNER MARCOS PAJARON DESHABILITADO** - Partner Dr. Marcos Pajaron (ID: 2) deshabilitado con status "disabled" y documentos no verificados, acceso al sistema de partners completamente revocado
-- June 30, 2025. **SECCIÓN LEGAL COMPLETA AÑADIDA** - Implementadas 4 páginas legales completas: Términos y Condiciones, Política de Privacidad, Política de Cookies y Aviso Legal con toda la información corporativa de EMPORDAJOBS SL (CIF: B02701100)
-- June 30, 2025. **FOOTER ACTUALIZADO CON INFORMACIÓN LEGAL** - Añadida sección "Legal" con enlaces a todas las páginas legales, actualizada información de la empresa y datos de contacto oficiales
-- June 30, 2025. **AVISO INVERSIÓN PARTNERS INTEGRADO** - Página de login de partners ahora muestra prominentemente los requisitos de inversión (SAFE €4,000 o notarial €5,000) con diseño profesional en dos columnas
-- June 29, 2025. **PARTNER MARCOS PAJARON ANULADO** - Partner Dr. Marcos Pajaron deshabilitado completamente del sistema por solicitud administrativa
-- June 29, 2025. **FOOTER SIMPLIFICADO A LINKEDIN ÚNICAMENTE** - Eliminados iconos Twitter e Instagram, conservado solo LinkedIn con enlace https://www.linkedin.com/in/empordajobs/
-- June 29, 2025. **VARIABLES TRADUCCIÓN COMPLETAMENTE ELIMINADAS** - Corregidos todos los errores t() en chat-header.tsx y chat-interface.tsx, sistema 100% funcional con texto estático español
-- June 29, 2025. **PROMPT CÁNCER MEJORADO** - Sistema especializado de apoyo emocional oncológico integrado con detección automática, protocolos diferenciados para adultos/niños, ejemplos específicos y personaje mágico "Lumo" para menores
-- June 29, 2025. **GUIÑO MULTIIDIOMA AGREGADO** - Badge prominente "Speaking 150+ languages • 支持150多种语言" en hero section para conectar con comunidades internacional y china
-- June 29, 2025. **SISTEMA GOOGLE TRANSLATE COMPLETADO** - Implementación completa en página principal y chat con modal personalizado funcional en todos los dispositivos, texto estático en español para mejor rendimiento
-- June 29, 2025. **MIGRACIÓN A GOOGLE TRANSLATE** - Reemplazado sistema de traducciones interno por diálogos informativos que guían al usuario a usar Google Translate integrado del navegador
-- June 29, 2025. **TRADUCCIONES CHAT COMPLETADAS** - Agregadas todas las traducciones faltantes para filtros y casillas en 9 idiomas, sistema 100% funcional
-- June 29, 2025. **CHAT LAYOUT CORREGIDO** - Solucionado desbordamiento del sidebar que invadía área principal, estructura contenida restaurada
-- June 29, 2025. **HEADER MÓVIL OPTIMIZADO** - Reestructurado para pantallas pequeñas: idiomas, login y register movidos al menú hamburguesa, diseño responsive perfeccionado
-- June 29, 2025. **SISTEMA TRADUCCIONES REESTRUCTURADO** - Migrado completo a React Context para gestión centralizada, eliminados errores "setLanguage is not a function", texto botón principal simplificado a "Empezar Chat"
-- June 26, 2025. **PREGUNTAS AGREGADAS A USUARIO** - Incrementado límite mensual de mpajaron de 10 a 20 preguntas mediante actualización directa en base de datos
-- June 26, 2025. **TRADUCTOR DE CHAT IMPLEMENTADO** - Selector de idiomas prominente integrado en header del chat, banner informativo en cada conversación, traducciones completas para todas las secciones del chat, sistema adaptativo por conversación individual
-- June 26, 2025. **SISTEMA MULTIIDIOMA COMPLETADO** - Implementado soporte completo para 9 idiomas (ES, EN, FR, DE, IT, PT, CA, EU, GL) con detección automática, cambio en tiempo real, respuestas IA adaptadas por idioma
-- June 20, 2025. **REDEPLOY EXITOSO CONFIRMADO** - Sistema dual PayPal + Stripe liviano funcionando, redeploy rápido sin problemas de promote
-- June 20, 2025. **STRIPE RESTAURADO LIVIANO** - Reimplementado Stripe sin dependencias npm, solo CDN externo para redeploy rápido, webhook simplificado funcional
-- June 20, 2025. **MÉTODOS MANUALES ELIMINADOS** - Removidas todas las referencias a WhatsApp y activación manual, sistema 100% automatizado
-- June 20, 2025. **STRIPE FLUJO COMPLETO IMPLEMENTADO** - Webhook activación automática, página éxito personalizada, redirección al chat, ambos métodos pagos funcionando simultáneamente
-- June 20, 2025. **PAYPAL FUNCIONALIDAD RESTAURADA** - Resuelto problema carga SDK dinámicamente, botones renderizando exitosamente, mantiene posición principal
-- June 20, 2025. **TARJETAS PAGO EQUILIBRADAS** - Ajustada altura mínima y alineación entre opciones PayPal y Stripe para presentación uniforme
-- June 20, 2025. **STRIPE INTEGRACIÓN COMPLETADA** - Agregado botón Stripe buy-button-id "buy_btn_1Rc7kCCmvVkETA1m5aYwB4IH" con pk_live, suscripción activa si_Rt5ExuGN4XYV9l, portal gestión incluido
-- June 20, 2025. **SISTEMA CONVERSACIONES VERIFICADO EN PRODUCCIÓN** - 7 conversaciones guardadas exitosamente para testuser, filtros funcionando, base de datos Neon optimizada, deployment activo en rough-heart-79938129.replit.app
-- June 21, 2025. **STRIPE/PAYPAL ACTIVACIÓN MANUAL IMPLEMENTADA** - Creadas rutas /stripe-manual y /paypal-manual para activar usuarios que completaron pago pero no fueron redirigidos automáticamente
-- June 21, 2025. **PERFIL USUARIO PERSISTENCIA CORREGIDA** - Formulario edad/sexo ahora aparece solo una vez por usuario, guardado en base de datos con campos ageRange, gender, profileCompleted
-- June 20, 2025. **INS NEURONMEG REEMPLAZADO** - Cambiado por "NFLOW Adolescentes" en sección de servicios con enfoque en gestión emocional y estrés escolar
-- June 20, 2025. **TARJETA EDAD OPTIMIZADA** - Rediseñada completamente en layout horizontal: icono+texto izquierda, edad derecha, reducida altura 40%
-- June 20, 2025. **BOTONES VISTA ELIMINADOS** - Removidos botones "Vista Tarjetas" y "Vista Lista" no funcionales de la sección de precios para mejor UX
-- June 20, 2025. **IMÁGENES HERO OPTIMIZADAS** - Reducido tamaño al 80% para eliminar borrosidad por interpolación del navegador, mejorando significativamente la nitidez visual
-- June 20, 2025. **SECCIÓN PROMOCIONAL DE EJEMPLOS AGREGADA** - Nueva sección en página principal que promociona los ejemplos del chat con diseño atractivo y CTA directo
-- June 19, 2025. **CHAT UX PREMIUM IMPLEMENTADO** - Indicadores profesionales de escritura, botones de copia, contador de caracteres, atajos de teclado (Ctrl+Enter), tiempo de respuesta, barra de estado
-- June 19, 2025. **OPENAI INTEGRACIÓN VERIFICADA** - Sistema de mensajes funcionando correctamente con respuestas en ~10s, guardado automático de conversaciones
-- June 19, 2025. **AVISO DE EDAD MEJORADO VISUALMENTE** - Diseño moderno con gradientes vibrantes, efectos hover y mejor contraste visual
-- June 19, 2025. **SECCIÓN URGENCIAS AGREGADA AL CHAT** - Modal completo con números de emergencia de España y UE, integrado en menú contextual del usuario
-- June 19, 2025. **AVISO EDAD MÍNIMA IMPLEMENTADO** - Sección prominente en página principal clarificando uso para edades 12-95 años
-- June 19, 2025. **MENÚ CHAT OPTIMIZADO Y FINALIZADO** - ChatHeader dedicado, ChatUserMenu contextual sin elementos externos, modal informativo de planes integrado
-- June 19, 2025. **INTERFAZ USUARIO CHAT COMPLETAMENTE PERSONALIZADA** - Avatar, indicador suscripción, gestión completa sin salir del chat
-- June 19, 2025. **SISTEMA COMPLETAMENTE FUNCIONAL** - Eliminado bucle de redirección causado por integración PayPal conflictiva
-- June 19, 2025. **AUTENTICACIÓN TOTALMENTE OPERATIVA** - Login, sesiones y acceso al chat funcionando sin problemas
-- June 19, 2025. **SISTEMA COMPLETAMENTE OPERATIVO** - Session authentication working, user-specific chat access confirmed, 100+ daily users capacity achieved
-- June 19, 2025. **SUBSCRIPTION VERIFICATION FIXED** - Corrected checkSubscription logic for proper user access
-- June 19, 2025. **PRODUCTION DEPLOYMENT CONFIRMED** - System fully automated and ready for 100+ daily users
-- June 19, 2025. **PRODUCTION-READY: Full PayPal automation system** - Eliminated WhatsApp dependency completely
-- June 19, 2025. Fixed PayPal button rendering issues with comprehensive diagnostic system
-- June 19, 2025. Implemented real PayPal subscription integration with plan ID P-8X502396U4202261ENBKC32A
-- June 19, 2025. Created automatic account activation system - payment → instant chat access
-- June 19, 2025. Added subscription management within chat: time remaining, renewal, cancellation
-- June 19, 2025. Set Plan Básico pricing to €2.99/mes with direct PayPal subscription buttons
-- June 19, 2025. Built endpoint /api/paypal/capture-subscription for automatic user activation
-- June 19, 2025. **CAPACIDAD ILIMITADA DE USUARIOS** - Sistema automatizado sin restricciones + gestión administrativa desde consola Replit
-- June 19, 2025. Added visual status indicators for PayPal loading and error handling
-- June 19, 2025. Completed authentication system with MemoryStore sessions - registration and login fully functional
-- June 19, 2025. Fixed bcrypt imports and session persistence with secure cookie handling
-- June 19, 2025. Verified complete user flow: register → auto-authenticate → pending_payment status → activation ready
-- June 19, 2025. PayPal integration tested and working with order creation for subscription activation
-- June 19, 2025. Fixed registration flow with automatic user authentication after account creation
-- June 19, 2025. Corrected session management to prevent login redirect loops for pending payment users
-- June 19, 2025. Updated subscription status endpoint to use authenticated sessions instead of user ID parameters
-- June 19, 2025. Registration now auto-authenticates users and redirects to activation page seamlessly
-- June 19, 2025. Created dedicated activation page (/activar-cuenta) separating payment options from main pricing section
-- June 19, 2025. Added dual activation options in registration page: PayPal automatic (1st) and WhatsApp manual (2nd)
-- June 19, 2025. Added WhatsApp contact option (+34 660 45 21 36) as PayPal alternative for manual account activation
-- June 19, 2025. Implemented payment redirect page for improved PayPal checkout flow handling
-- June 19, 2025. Fixed PayPal integration type errors and improved order creation logging
-- June 19, 2025. Implemented real PayPal integration using live credentials for subscription payments
-- June 19, 2025. Fixed registration flow to create users with pending_payment status requiring subscription activation
-- June 19, 2025. Implemented payment-required authentication: users must complete payment before login access
-- June 19, 2025. Added PayPal order creation with real API calls to sandbox environment
-- June 19, 2025. Created payment success page with automatic session cleanup and chat redirection
-- June 19, 2025. Removed payment simulation in favor of actual PayPal checkout flow
-- June 16, 2025. Fixed mobile chat interface menu overlap by adjusting positioning and container heights
-- June 16, 2025. Fixed "Chat de Apoyo" footer link to redirect to pricing section instead of allowing direct chat access
-- June 16, 2025. Moved subscription cards above "Cuatro Soluciones" section for better user flow
-- June 16, 2025. Enhanced INS NEURONMEG showcase with custom image and clickable service buttons linking to neuronmeg.jobda.es
-- June 16, 2025. Set INS NEURONMEG as default active card in showcase section
-- June 16, 2025. Updated "Cuatro Soluciones" to include: NFLOW Familias, INS NEURONMEG, NFLOW Laboral, NFLOW Adultos
-- June 16, 2025. Integrated INS NEURONMEG with direct links to neuronmeg.jobda.es for consultation booking
-- June 16, 2025. Completely redesigned "Cuatro Soluciones" cards with modern visual design
-- June 16, 2025. Implemented responsive grid layout (1-2-4 columns) with enhanced hover effects
-- June 16, 2025. Added interactive app selection with dynamic showcase section
-- June 16, 2025. Enhanced visual effects: glowing borders, floating accents, and shimmer animations
-- June 15, 2025. Added complete partner management system with admin notifications
-- June 15, 2025. Implemented elegant PWA installation prompt for mobile users
-- June 15, 2025. Removed action buttons from services section while maintaining subscription access
-- June 15, 2025. Simplified chat profile form for minors: only age and gender fields with appropriate options
-- June 15, 2025. Enhanced subscription button in navigation to auto-scroll to pricing section
-- June 15, 2025. Removed rewards program from navigation menu
-- June 15, 2025. Added detailed stress management content modal for workplace stress article
-- June 15, 2025. Improved resources page filters: removed unnecessary buttons and enhanced contrast
-- June 15, 2025. Fixed white button visibility issue in resources page filters
-- June 15, 2025. Removed psychologist session references from subscription cards
-- June 15, 2025. Removed support button from PWA installation section
-- June 15, 2025. Added GRUPO JOBDA card with button to jobda.biz in footer
-- June 15, 2025. Optimized profile form to show only once per user (first time access)
-- June 15, 2025. Enhanced user profile form with educational context about age and orientation importance
-- June 15, 2025. Integrated user profile system for personalized AI responses
-- June 13, 2025. Initial setup
