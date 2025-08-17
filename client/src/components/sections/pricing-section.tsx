@@ -1,26 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Calendar, Users, User, Building, Shield, TrendingUp, Phone, Mail, X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
-import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useLanguageContext } from "@/components/LanguageProvider";
 
-// Declare PayPal global type
-declare global {
-  interface Window {
-    paypal: any;
-  }
-}
-
 export default function PricingSection() {
   const [, setLocation] = useLocation();
-  const { toast } = useToast();
   const { t } = useLanguageContext();
-  const [isNewUser, setIsNewUser] = useState(false);
-  const [newUserId, setNewUserId] = useState<string | null>(null);
   const [isContactDialogOpen, setIsContactDialogOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string>("");
 
@@ -133,128 +121,18 @@ export default function PricingSection() {
     }
   ];
 
-  // Check if user is coming from registration
-  useEffect(() => {
-    const storedUserId = localStorage.getItem("newUserId");
-    const storedUsername = localStorage.getItem("newUsername");
-    
-    if (storedUserId && storedUsername) {
-      setIsNewUser(true);
-      setNewUserId(storedUserId);
-      toast({
-        title: "¡Bienvenido a NFLOW!",
-        description: `${storedUsername}, selecciona tu plan para continuar`,
-        duration: 5000,
-      });
-    }
-  }, [toast]);
+
 
   const handleEnterpriseContact = (planName: string) => {
     setSelectedPlan(planName);
     setIsContactDialogOpen(true);
   };
 
-  // Check for pending user (requires payment) or existing user
-  const pendingUserId = localStorage.getItem("pendingUserId");
-  const existingUserId = localStorage.getItem("userId");
-  
-  // Priority: pendingUserId (needs payment) > newUserId > existingUserId
-  const currentUserId = pendingUserId || newUserId || existingUserId;
-  const isPendingPayment = !!pendingUserId;
-  
-  // Check current subscription status
-  const { data: subscriptionStatus } = useQuery<{hasActiveSubscription: boolean}>({
-    queryKey: ["/api/subscription-status"],
-    queryFn: async () => {
-      if (!currentUserId) return { hasActiveSubscription: false };
-      const response = await fetch(`/api/subscription-status?userId=${currentUserId}`);
-      if (!response.ok) return { hasActiveSubscription: false };
-      return response.json();
-    },
+  // Check current user session for informational purposes only
+  const { data: currentUserId, isLoading: userLoading } = useQuery({
+    queryKey: ["/api/auth/me"],
     retry: false,
-    enabled: !!currentUserId
   });
-
-  const handleSubscribe = async (planId: string) => {
-    // Security check: ensure user is authenticated
-    if (!currentUserId) {
-      console.error("handleSubscribe called without authenticated user");
-      toast({
-        title: "Error",
-        description: "Debes estar registrado para suscribirte",
-        variant: "destructive",
-      });
-      setLocation("/registro");
-      return;
-    }
-
-    try {
-      toast({
-        title: "Creando orden de pago...",
-        description: "Redirigiendo a PayPal",
-        duration: 2000,
-      });
-
-      // Create PayPal order
-      const response = await fetch("/api/paypal/create-order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: currentUserId,
-          subscriptionPlan: planId,
-          amount: getAmount(planId),
-          currency: "EUR"
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Error creating payment order");
-      }
-
-      const orderData = await response.json();
-      
-      // Store payment info for return handling
-      localStorage.setItem("paymentPlan", planId);
-      localStorage.setItem("paymentAmount", getAmount(planId));
-      
-      // Redirect through our payment redirect page
-      const redirectUrl = `/payment-redirect?orderId=${orderData.id}&plan=${planId}`;
-      console.log("Redirecting to payment page:", redirectUrl);
-      window.location.href = redirectUrl;
-
-    } catch (error) {
-      console.error("Payment error:", error);
-      toast({
-        title: "Error en el pago",
-        description: "Hubo un problema iniciando el pago. Intenta de nuevo.",
-        variant: "destructive",
-        duration: 5000,
-      });
-    }
-  };
-
-  const getAmount = (planId: string) => {
-    const priceMap = {
-      basic: "2.99",
-      pro: "5.99",
-      premium: "7.99",
-      annual: "69.00"
-    };
-    return priceMap[planId as keyof typeof priceMap];
-  };
-
-  const getPayPalPlanId = (planId: string) => {
-    // These would be your actual PayPal plan IDs from PayPal dashboard
-    const planMap = {
-      basic: process.env.VITE_PAYPAL_BASIC_PLAN_ID || 'P-basic',
-      pro: process.env.VITE_PAYPAL_PRO_PLAN_ID || 'P-pro', 
-      premium: process.env.VITE_PAYPAL_PREMIUM_PLAN_ID || 'P-premium',
-      annual: process.env.VITE_PAYPAL_ANNUAL_PLAN_ID || 'P-annual'
-    };
-    return planMap[planId as keyof typeof planMap];
-  };
 
   return (
     <>
@@ -324,21 +202,12 @@ export default function PricingSection() {
                 </div>
 
                 {currentUserId ? (
-                  subscriptionStatus?.hasActiveSubscription ? (
-                    <Button 
-                      disabled
-                      className="w-full py-3 rounded-xl font-semibold bg-green-600 text-white"
-                    >
-                      {t('pricing.activeSubscription')}
-                    </Button>
-                  ) : (
-                    <Button 
-                      onClick={() => handleSubscribe(tier.id)}
-                      className={`w-full py-3 rounded-xl font-semibold transition-all duration-300 ${tier.buttonClass} text-white`}
-                    >
-                      {tier.buttonText}
-                    </Button>
-                  )
+                  <Button 
+                    onClick={() => setLocation("/chat")}
+                    className={`w-full py-3 rounded-xl font-semibold transition-all duration-300 ${tier.buttonClass} text-white`}
+                  >
+                    Ir a Mi Cuenta
+                  </Button>
                 ) : (
                   <div className="text-center py-3">
                     <p className="text-gray-400 text-sm mb-3">
