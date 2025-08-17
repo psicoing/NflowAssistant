@@ -330,15 +330,18 @@ export default function PricingSection() {
                     </Button>
                   )
                 ) : (
-                  <Button 
-                    onClick={() => {
-                      localStorage.setItem("selectedPlan", tier.id);
-                      setLocation("/registro");
-                    }}
-                    className={`w-full py-3 rounded-xl font-semibold transition-all duration-300 ${tier.buttonClass} text-white`}
-                  >
-                    Registrarse y Seleccionar
-                  </Button>
+                  <div className="text-center py-3">
+                    <p className="text-gray-400 text-sm mb-3">
+                      Regístrate para acceder a este plan
+                    </p>
+                    <Button 
+                      onClick={() => setLocation("/registro")}
+                      variant="outline"
+                      className="w-full border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+                    >
+                      Crear Cuenta Gratis
+                    </Button>
+                  </div>
                 )}
                 <div id="paypal-button-container"></div>
               </div>
