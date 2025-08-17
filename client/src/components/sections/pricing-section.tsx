@@ -177,11 +177,9 @@ export default function PricingSection() {
 
   const handleSubscribe = async (planId: string) => {
     if (!currentUserId) {
-      toast({
-        title: "Error",
-        description: "Debes estar registrado para suscribirte",
-        variant: "destructive",
-      });
+      // Store the selected plan to redirect after registration
+      localStorage.setItem("selectedPlan", planId);
+      setLocation("/registro");
       return;
     }
 
