@@ -176,7 +176,17 @@ export default function PricingSection() {
   });
 
   const handleSubscribe = async (planId: string) => {
-    // This function is only called for authenticated users now
+    // Security check: ensure user is authenticated
+    if (!currentUserId) {
+      console.error("handleSubscribe called without authenticated user");
+      toast({
+        title: "Error",
+        description: "Debes estar registrado para suscribirte",
+        variant: "destructive",
+      });
+      setLocation("/registro");
+      return;
+    }
 
     try {
       toast({
@@ -343,7 +353,6 @@ export default function PricingSection() {
                     </Button>
                   </div>
                 )}
-                <div id="paypal-button-container"></div>
               </div>
             );
           })}
