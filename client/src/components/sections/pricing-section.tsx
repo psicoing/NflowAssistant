@@ -128,11 +128,8 @@ export default function PricingSection() {
     setIsContactDialogOpen(true);
   };
 
-  // Check current user session for informational purposes only
-  const { data: currentUserId, isLoading: userLoading } = useQuery({
-    queryKey: ["/api/auth/me"],
-    retry: false,
-  });
+  // For a purely informational pricing page, we don't need to check auth status
+  const currentUserId = null;
 
   return (
     <>
