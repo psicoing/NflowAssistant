@@ -176,12 +176,7 @@ export default function PricingSection() {
   });
 
   const handleSubscribe = async (planId: string) => {
-    if (!currentUserId) {
-      // Store the selected plan to redirect after registration
-      localStorage.setItem("selectedPlan", planId);
-      setLocation("/registro");
-      return;
-    }
+    // This function is only called for authenticated users now
 
     try {
       toast({
@@ -318,19 +313,31 @@ export default function PricingSection() {
                   ))}
                 </div>
 
-                {subscriptionStatus?.hasActiveSubscription ? (
-                  <Button 
-                    disabled
-                    className="w-full py-3 rounded-xl font-semibold bg-green-600 text-white"
-                  >
-                    {t('pricing.activeSubscription')}
-                  </Button>
+                {currentUserId ? (
+                  subscriptionStatus?.hasActiveSubscription ? (
+                    <Button 
+                      disabled
+                      className="w-full py-3 rounded-xl font-semibold bg-green-600 text-white"
+                    >
+                      {t('pricing.activeSubscription')}
+                    </Button>
+                  ) : (
+                    <Button 
+                      onClick={() => handleSubscribe(tier.id)}
+                      className={`w-full py-3 rounded-xl font-semibold transition-all duration-300 ${tier.buttonClass} text-white`}
+                    >
+                      {tier.buttonText}
+                    </Button>
+                  )
                 ) : (
                   <Button 
-                    onClick={() => handleSubscribe(tier.id)}
+                    onClick={() => {
+                      localStorage.setItem("selectedPlan", tier.id);
+                      setLocation("/registro");
+                    }}
                     className={`w-full py-3 rounded-xl font-semibold transition-all duration-300 ${tier.buttonClass} text-white`}
                   >
-                    {tier.buttonText}
+                    Registrarse y Seleccionar
                   </Button>
                 )}
                 <div id="paypal-button-container"></div>
