@@ -402,9 +402,24 @@ export default function EjemplosChat() {
         {/* Examples Section */}
         <section className="py-16 px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-white text-center mb-12">
+            <h2 className="text-3xl font-bold text-white text-center mb-8">
               Ejemplos reales por edades
             </h2>
+
+            {/* Cartel informativo sobre las mejoras semanales */}
+            <div className="bg-gradient-to-r from-nflow-orange/20 to-orange-600/20 border border-nflow-orange/30 rounded-lg p-4 mb-12">
+              <div className="flex items-start space-x-3">
+                <Bot className="w-5 h-5 text-nflow-orange flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="text-nflow-orange font-semibold text-sm mb-1">
+                    Ejemplos en constante evolución
+                  </h3>
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    Estos ejemplos mejoran cada semana dado que la versión del robot se va mejorando cada semana y es más potente y extenso en sus respuestas con diferentes mejoras.
+                  </p>
+                </div>
+              </div>
+            </div>
 
             <div className="space-y-4">
               {chatExamples.map((example, index) => (
