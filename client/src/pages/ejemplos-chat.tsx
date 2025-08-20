@@ -415,7 +415,7 @@ export default function EjemplosChat() {
                     Ejemplos en constante evolución
                   </h3>
                   <p className="text-gray-300 text-sm leading-relaxed">
-                    Estos ejemplos mejoran cada semana dado que la versión del robot se va mejorando cada semana y es más potente y extenso en sus respuestas con diferentes mejoras.
+                    Estos ejemplos mejoran cada semana dado que la versión del robot se va mejorando cada semana y es más potente y extenso en sus respuestas con diferentes mejoras. Nosotros te presentamos una versión beta 3.0.1 que es muy rigurosa.
                   </p>
                 </div>
               </div>
