@@ -39,6 +39,7 @@ Preferred communication style: Simple, everyday language.
 - **Technical Implementations**: PWA instalación guiada para acceso móvil, integración de Google Translate para soporte multi-idioma.
 - **System Design Choices**: Soporte para arquitectura serverless con Neon, énfasis en automatización completa del flujo de usuarios y pagos, modularidad de componentes frontend y backend.
 - **Pricing Page Architecture**: Página de precios completamente informativa sin lógica de pagos, usuarios no registrados ven botón "Crear Cuenta Gratis", usuarios registrados ven "Ir a Mi Cuenta".
+- **User Flow Verification (21/8/2025)**: Flujo completo verificado exitosamente - registro, login, activación de suscripción PayPal, acceso al chat con respuestas NEUROPSI-AI completas y control de límites operativo.
 
 ## External Dependencies
 
