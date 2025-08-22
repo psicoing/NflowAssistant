@@ -117,8 +117,8 @@ export default function Login() {
       <div className="w-full max-w-md">
         <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
           <CardHeader className="text-center">
-            <div className="w-16 h-16 bg-nflow-orange rounded-full flex items-center justify-center mx-auto mb-4">
-              <LogIn className="w-8 h-8 text-black" />
+            <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <LogIn className="w-8 h-8 text-white" />
             </div>
             <CardTitle className="text-2xl text-white">Iniciar Sesión</CardTitle>
             <CardDescription className="text-gray-400">
@@ -148,7 +148,7 @@ export default function Login() {
                   value={formData.username}
                   onChange={handleChange}
                   required
-                  className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-nflow-orange"
+                  className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-orange-500"
                 />
               </div>
 
@@ -164,7 +164,7 @@ export default function Login() {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-nflow-orange"
+                  className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-orange-500"
                 />
               </div>
             </CardContent>
@@ -173,7 +173,7 @@ export default function Login() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-nflow-orange hover:bg-nflow-orange/90 text-black font-semibold"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold"
               >
                 {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
               </Button>
@@ -183,7 +183,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => setLocation("/registro")}
-                  className="text-nflow-orange hover:underline"
+                  className="text-orange-500 hover:underline"
                 >
                   Regístrate aquí
                 </button>

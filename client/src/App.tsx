@@ -79,7 +79,7 @@ function AuthenticatedRouter() {
       <Route path="/" component={Home} />
       <Route path="/ejemplos-chat" component={EjemplosChat} />
       <Route path="/login" component={Login} />
-      <Route path="/registro" component={Login} />
+      <Route path="/registro" component={Registro} />
       <Route path="/activar-cuenta" component={ActivarCuenta} />
       <Route path="/chat" component={Chat} />
       <Route path="/chat/:id" component={Chat} />
