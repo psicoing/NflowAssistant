@@ -17,19 +17,18 @@ export default function PromotionalBanner({ onClose }: PromotionalBannerProps) {
       <div className="max-w-7xl mx-auto flex items-center justify-between relative z-10">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <Sparkles className="w-5 h-5 animate-bounce" />
-            <span className="font-bold text-lg">¡OFERTA LIMITADA!</span>
+            <Sparkles className="w-5 h-5" />
+            <span className="font-bold text-lg">NFLOW</span>
           </div>
           
           <div className="hidden md:flex items-center space-x-2">
-            <Clock className="w-4 h-4" />
             <span className="text-sm">
-              Primer mes por solo €2.99 • Soporte profesional 24/7 • Sin compromiso
+              Tu asistente de salud mental profesional • Disponible 24/7
             </span>
           </div>
           
           <div className="md:hidden text-sm">
-            Primer mes €2.99 • Sin compromiso
+            Asistente psicológico profesional
           </div>
         </div>
 
