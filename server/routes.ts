@@ -92,10 +92,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         username,
         password: hashedPassword,
         email,
-        birthDate,
         subscriptionStatus: 'pending_payment',
-        hasCompletedPayment: false,
-        monthlyQuestionLimit: 0  // No free questions - subscription required
+        hasCompletedPayment: false
       });
 
       // Set session for newly registered user
