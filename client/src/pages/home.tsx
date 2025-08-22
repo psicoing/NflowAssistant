@@ -38,13 +38,13 @@ export default function Home() {
       <Header showBanner={showBanner} />
       <main className={showBanner ? "pt-28" : "pt-16"}>
         <LanguageBannerSection />
+        <IntroCardSection />
         <MentalHealthHeroSection />
         <BorderlessSupportSection />
         <YouthMentalHealthSection />
         <GlobalSupportSection />
         <AgeNoticeSection />
         <HeroSection />
-        <IntroCardSection />
         <ServicesSection />
         <ChatExamplesSection />
         <PWAInstallationSection />
