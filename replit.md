@@ -41,6 +41,7 @@ Preferred communication style: Simple, everyday language.
 - **Pricing Page Architecture**: Página de precios completamente informativa sin lógica de pagos, usuarios no registrados ven botón "Crear Cuenta Gratis", usuarios registrados ven "Ir a Mi Cuenta".
 - **User Flow Verification (21/8/2025)**: Flujo completo verificado exitosamente - registro, login, activación de suscripción PayPal, acceso al chat con respuestas NEUROPSI-AI completas y control de límites operativo.
 - **Single Page Experience (22/8/2025)**: Página principal transformada en experiencia fluida con todas las secciones del menú integradas: Blog, Precios, Partners, App Móvil, Nosotros, Contacto, Testimonios reales y sección del Fundador. Navegación suave entre secciones con múltiples botones "Comenzar Ahora" para maximizar conversiones. Imagen profesional del fundador Ramón Molons de San Román integrada con credenciales completas y especialización ISO 45003.
+- **Navigation Consolidation (22/8/2025)**: Navegación unificada completamente - eliminado botón "Acceso" redundante del header, todos los botones "Comenzar Ahora" redirigen a /login, menú móvil actualizado con "Comenzar Ahora", eliminado bucle de registro /registro, colores estandarizados a Tailwind, navegación limpia sin redundancias para mejor UX y conversión.
 
 ## External Dependencies
 
