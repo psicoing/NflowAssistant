@@ -34,10 +34,10 @@ export default function PromotionalBanner({ onClose }: PromotionalBannerProps) {
 
         <div className="flex items-center space-x-3">
           <Button
-            onClick={() => setLocation("/registro")}
-            className="bg-white text-nflow-orange hover:bg-gray-100 font-bold px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
+            onClick={() => setLocation("/register")}
+            className="bg-white text-orange-600 hover:bg-gray-100 font-bold px-6 py-2 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
           >
-            ¡Comenzar Ahora!
+            Comenzar Ahora
           </Button>
           
           <button
