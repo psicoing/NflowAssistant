@@ -25,6 +25,7 @@ import AppMovilSection from "@/components/sections/app-movil-section";
 import NosotrosSection from "@/components/sections/nosotros-section";
 import ContactoSection from "@/components/sections/contacto-section";
 import TestimonialsSection from "@/components/sections/testimonials-section";
+import FounderSection from "@/components/sections/founder-section";
 import { useState } from "react";
 
 export default function Home() {
@@ -48,6 +49,7 @@ export default function Home() {
         <FeaturesSection />
         <PersonasSection />
 
+        <FounderSection />
         <PaidAppNotice />
         <TestimonialsSection />
         <LGBTISupportSection />
