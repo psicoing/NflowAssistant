@@ -211,7 +211,7 @@ export default function PricingSection() {
                       Regístrate para acceder a este plan
                     </p>
                     <Button 
-                      onClick={() => setLocation("/registro")}
+                      onClick={() => setLocation("/login")}
                       variant="outline"
                       className="w-full border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
                     >

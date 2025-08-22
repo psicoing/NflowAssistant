@@ -121,7 +121,7 @@ export default function PersonasSection() {
         {/* Call to Action Button */}
         <div className="text-center mt-16">
           <Button 
-            onClick={() => setLocation("/registro")}
+            onClick={() => setLocation("/login")}
             className="bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 transform hover:scale-110 shadow-2xl animate-pulse hover:animate-none"
           >
             <Star className="w-6 h-6 mr-3" />

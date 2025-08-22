@@ -131,11 +131,11 @@ export default function SmoothScrollMenu() {
               <button
                 onClick={() => {
                   setIsOpen(false);
-                  window.location.href = "/registro";
+                  window.location.href = "/login";
                 }}
-                className="w-full bg-gradient-to-r from-nflow-orange to-orange-600 text-white px-4 py-3 rounded-xl font-medium hover:from-orange-600 hover:to-red-500 transition-all duration-300"
+                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-3 rounded-xl font-medium hover:from-orange-600 hover:to-red-500 transition-all duration-300"
               >
-                Registrarse
+                Comenzar Ahora
               </button>
               <button
                 onClick={() => {

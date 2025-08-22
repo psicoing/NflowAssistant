@@ -73,15 +73,7 @@ export default function Header({ showBanner = false }: HeaderProps) {
             
 
 
-            {/* Desktop Auth Buttons - Hidden on tablets and mobile */}
-            <div className="hidden lg:flex items-center space-x-2">
-              <Link href="/login">
-                <Button variant="outline" size="sm" className="border-orange-300 text-orange-600 hover:bg-orange-50">
-                  <LogIn className="w-4 h-4 mr-2" />
-                  Acceso
-                </Button>
-              </Link>
-            </div>
+
 
             {/* Hamburger Menu - Always visible */}
             <SmoothScrollMenu />

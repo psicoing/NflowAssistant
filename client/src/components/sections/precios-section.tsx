@@ -128,7 +128,7 @@ export default function PreciosSection() {
                   </ul>
 
                   <Button 
-                    onClick={() => setLocation("/registro")}
+                    onClick={() => setLocation("/login")}
                     className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-300 ${
                       plan.recommended 
                         ? 'bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white'

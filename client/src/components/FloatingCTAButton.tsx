@@ -60,7 +60,7 @@ export default function FloatingCTAButton() {
 
       {/* Main floating button */}
       <Button
-        onClick={() => setLocation("/registro")}
+        onClick={() => setLocation("/login")}
         className={`bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white font-bold rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 ${
           isExpanded ? 'px-6 py-6' : 'px-8 py-8'
         } animate-pulse hover:animate-none`}

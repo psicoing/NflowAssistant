@@ -498,7 +498,7 @@ export default function EjemplosChat() {
                   </p>
                   <Button 
                     className="bg-nflow-orange hover:bg-nflow-orange-light text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
-                    onClick={() => window.location.href = '/registro'}
+                    onClick={() => window.location.href = '/login'}
                   >
                     Comenzar ahora
                   </Button>
