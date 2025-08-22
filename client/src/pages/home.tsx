@@ -26,6 +26,7 @@ import NosotrosSection from "@/components/sections/nosotros-section";
 import ContactoSection from "@/components/sections/contacto-section";
 import TestimonialsSection from "@/components/sections/testimonials-section";
 import FounderSection from "@/components/sections/founder-section";
+import IntroCardSection from "@/components/sections/intro-card-section";
 import { useState } from "react";
 
 export default function Home() {
@@ -43,6 +44,7 @@ export default function Home() {
         <GlobalSupportSection />
         <AgeNoticeSection />
         <HeroSection />
+        <IntroCardSection />
         <ServicesSection />
         <ChatExamplesSection />
         <PWAInstallationSection />
