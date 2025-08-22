@@ -1,4 +1,6 @@
-// Removed icon imports as we're now using emoji characters
+import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
+import { Star } from "lucide-react";
 
 const personas = [
   {
@@ -44,6 +46,8 @@ const personas = [
 ];
 
 export default function PersonasSection() {
+  const [, setLocation] = useLocation();
+  
   return (
     <section className="py-20 px-4 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       <div className="max-w-7xl mx-auto text-center">
@@ -112,6 +116,17 @@ export default function PersonasSection() {
               </div>
             );
           })}
+        </div>
+        
+        {/* Call to Action Button */}
+        <div className="text-center mt-16">
+          <Button 
+            onClick={() => setLocation("/registro")}
+            className="bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 transform hover:scale-110 shadow-2xl animate-pulse hover:animate-none"
+          >
+            <Star className="w-6 h-6 mr-3" />
+            ¡Comenzar Ahora!
+          </Button>
         </div>
       </div>
     </section>

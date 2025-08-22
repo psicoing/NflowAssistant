@@ -17,10 +17,12 @@ import MentalHealthHeroSection from "@/components/sections/mental-health-hero-se
 import BorderlessSupportSection from "@/components/sections/borderless-support-section";
 import YouthMentalHealthSection from "@/components/sections/youth-mental-health-section";
 import LGBTISupportSection from "@/components/sections/lgbti-support-section";
+import PromotionalBanner from "@/components/PromotionalBanner";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-nflow-dark">
+      <PromotionalBanner />
       <Header />
       <main>
         <LanguageBannerSection />

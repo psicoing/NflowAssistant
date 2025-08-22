@@ -38,6 +38,7 @@ import NosotrosPage from "@/pages/nosotros";
 import AppMovil from "@/pages/app-movil";
 import PreciosPage from "@/pages/precios";
 import Blog from "@/pages/blog";
+import FloatingCTAButton from "@/components/FloatingCTAButton";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -109,16 +110,31 @@ function AuthenticatedRouter() {
   );
 }
 
+function AppContent() {
+  const [location] = useLocation();
+  const { isAuthenticated } = useAuth();
+  
+  // Only show floating CTA on public pages and for non-authenticated users
+  const showFloatingCTA = !isAuthenticated && 
+    (location === "/" || location === "/ejemplos-chat" || location === "/precios" || 
+     location === "/app-movil" || location === "/nosotros" || location === "/blog");
+
+  return (
+    <div className="min-h-screen bg-nflow-dark text-white">
+      <Toaster />
+      <AuthenticatedRouter />
+      <PWAInstallPrompt />
+      {showFloatingCTA && <FloatingCTAButton />}
+    </div>
+  );
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
         <TooltipProvider>
-          <div className="min-h-screen bg-nflow-dark text-white">
-            <Toaster />
-            <AuthenticatedRouter />
-            <PWAInstallPrompt />
-          </div>
+          <AppContent />
         </TooltipProvider>
       </LanguageProvider>
     </QueryClientProvider>

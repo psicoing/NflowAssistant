@@ -1,6 +1,9 @@
 import { MessageCircle, Book, CheckCircle, Bot, User, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
 
 export default function FeaturesSection() {
+  const [, setLocation] = useLocation();
   return (
     <section className="py-20 px-4 bg-nflow-light text-gray-800">
       <div className="max-w-7xl mx-auto">
@@ -101,6 +104,17 @@ export default function FeaturesSection() {
                 <CheckCircle className="w-4 h-4 text-nflow-orange" />
                 <span className="text-sm text-gray-600">Actualizaciones regulares con contenido</span>
               </div>
+            </div>
+            
+            {/* Call to Action Button */}
+            <div className="text-center mt-8">
+              <Button 
+                onClick={() => setLocation("/registro")}
+                className="bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl animate-bounce hover:animate-none"
+              >
+                <ArrowRight className="w-5 h-5 mr-2" />
+                ¡Comenzar Ahora!
+              </Button>
             </div>
           </div>
         </div>

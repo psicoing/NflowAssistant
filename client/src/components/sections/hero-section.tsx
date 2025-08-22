@@ -52,10 +52,10 @@ export default function HeroSection() {
         <div className="flex justify-center items-center mb-12">
           <Button 
             onClick={handleStartRegistration}
-            className="bg-nflow-orange hover:bg-nflow-orange-light text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
+            className="bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 transform hover:scale-110 shadow-2xl animate-pulse hover:animate-none border-2 border-orange-400 hover:border-red-400"
           >
-            <MessageCircle className="w-5 h-5 mr-2" />
-            Comprar Suscripción
+            <MessageCircle className="w-6 h-6 mr-3" />
+            ¡Comenzar Ahora!
           </Button>
         </div>
 
