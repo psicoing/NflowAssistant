@@ -2,7 +2,7 @@ import { Globe, Heart, Users, Shield } from "lucide-react";
 
 export default function GlobalSupportSection() {
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-nflow-navy via-nflow-blue-dark to-nflow-navy">
+    <section className="py-8 px-4 bg-gradient-to-br from-nflow-navy via-nflow-blue-dark to-nflow-navy">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">

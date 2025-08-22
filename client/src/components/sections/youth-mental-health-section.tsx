@@ -3,7 +3,7 @@ import youthImage from "@assets/ChatGPT Image 17 jul 2025, 18_00_01_175276809905
 
 export default function YouthMentalHealthSection() {
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-emerald-50 to-teal-100 dark:from-gray-800 dark:to-gray-900">
+    <section className="py-8 px-4 bg-gradient-to-br from-emerald-50 to-teal-100 dark:from-gray-800 dark:to-gray-900">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Image first on left */}

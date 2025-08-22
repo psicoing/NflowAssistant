@@ -1,6 +1,6 @@
 export default function BorderlessSupportSection() {
   return (
-    <section className="py-16 px-4 bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900">
+    <section className="py-8 px-4 bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white">
           La Salud Mental{" "}

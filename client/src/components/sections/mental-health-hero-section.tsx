@@ -4,7 +4,7 @@ import mentalHealthImage from "@assets/ChatGPT Image 17 jul 2025, 17_53_59_17527
 
 export default function MentalHealthHeroSection() {
   return (
-    <section className="py-16 px-4 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <section className="py-8 px-4 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
       <div className="max-w-7xl mx-auto">
         <div className="space-y-12">
           {/* Titles Section */}
