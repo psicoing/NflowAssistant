@@ -7,7 +7,7 @@ export default function IntroCardSection() {
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
           {/* Header with gradient */}
-          <div className="bg-gradient-to-r from-nflow-orange to-orange-600 p-8 text-center">
+          <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-8 text-center">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <Brain className="w-8 h-8 text-white" />
               <Sparkles className="w-6 h-6 text-white animate-pulse" />
@@ -22,7 +22,7 @@ export default function IntroCardSection() {
           <div className="p-8 md:p-12">
             <div className="text-center mb-8">
               <p className="text-xl text-gray-700 leading-relaxed mb-6">
-                Con <strong className="text-nflow-orange">NFlow</strong>, accede a un asistente inteligente 
+                Con <strong className="text-orange-600">NFlow</strong>, accede a un asistente inteligente 
                 entrenado en psicología y bienestar, diseñado para acompañarte cuando más lo necesitas.
               </p>
             </div>
@@ -71,9 +71,9 @@ export default function IntroCardSection() {
             </div>
 
             {/* Professional Statement */}
-            <div className="bg-gradient-to-r from-nflow-orange/10 to-orange-100/50 rounded-2xl p-6 mb-8 border-l-4 border-nflow-orange">
+            <div className="bg-gradient-to-r from-orange-50 to-orange-100/50 rounded-2xl p-6 mb-8 border-l-4 border-orange-500">
               <div className="flex items-start space-x-3">
-                <Users className="w-6 h-6 text-nflow-orange mt-1" />
+                <Users className="w-6 h-6 text-orange-600 mt-1" />
                 <div>
                   <p className="text-gray-800 font-medium leading-relaxed">
                     <strong>NFlow no es un chatbot cualquiera:</strong> está desarrollado por profesionales, 
@@ -87,7 +87,7 @@ export default function IntroCardSection() {
             <div className="text-center space-y-4">
               <Button 
                 size="lg" 
-                className="bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-12 py-4 text-lg font-bold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-12 py-4 text-lg font-bold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
                 onClick={() => {
                   window.location.href = '/register';
                 }}
