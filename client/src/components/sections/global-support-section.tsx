@@ -29,14 +29,6 @@ export default function GlobalSupportSection() {
               </div>
             </div>
             
-            <div className="mb-6">
-              <img 
-                src="/assets/global-support.png" 
-                alt="Apoyo global sin fronteras" 
-                className="w-full rounded-2xl shadow-lg"
-              />
-            </div>
-            
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <div className="w-2 h-2 bg-teal-400 rounded-full"></div>
@@ -63,14 +55,6 @@ export default function GlobalSupportSection() {
                 <h3 className="text-2xl font-bold text-white">Primera Línea de Apoyo</h3>
                 <p className="text-gray-400">La confianza de millones en todo el mundo</p>
               </div>
-            </div>
-            
-            <div className="mb-6">
-              <img 
-                src="/assets/emotional-support.png" 
-                alt="Primera línea de apoyo emocional" 
-                className="w-full rounded-2xl shadow-lg"
-              />
             </div>
             
             <div className="space-y-4">

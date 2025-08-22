@@ -1,6 +1,5 @@
 import { Heart, Users, Shield, Clock, Brain, Zap, MessageSquare, Bot } from "lucide-react";
 import { Link } from "wouter";
-import mentalHealthImage from "@assets/ChatGPT Image 17 jul 2025, 17_53_59_1752767672221.png";
 
 export default function MentalHealthHeroSection() {
   return (
@@ -19,36 +18,9 @@ export default function MentalHealthHeroSection() {
             </h2>
           </div>
 
-          {/* Main Content Grid - Image left, Text right */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Image Section - Left Side */}
-            <div className="relative transform scale-115">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                <img 
-                  src={mentalHealthImage} 
-                  alt="Familia usando NFLOW para apoyo en salud mental"
-                  className="w-full h-auto object-cover"
-                />
-                {/* Overlay with subtle gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
-                
-                {/* Floating badge - smaller and positioned at top right */}
-                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <div>
-                      <p className="text-xs font-semibold text-gray-900">Apoyo Activo</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Decorative elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-nflow-orange/10 rounded-full blur-xl"></div>
-              <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-nflow-navy/10 rounded-full blur-xl"></div>
-            </div>
-
-            {/* Content Section - Right Side */}
+          {/* Main Content - Centered */}
+          <div className="max-w-4xl mx-auto">
+            {/* Content Section - Centered */}
             <div className="space-y-8">
               {/* All Features Grid */}
               <div className="grid grid-cols-1 gap-4">
