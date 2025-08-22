@@ -130,7 +130,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Find user
       const user = await storage.getUserByUsername(username);
+      console.log("Login attempt for username:", username);
+      console.log("User found:", user ? "Yes" : "No");
+      
       if (!user) {
+        console.log("User not found in database");
         return res.status(401).json({ 
           success: false, 
           message: "Credenciales incorrectas" 
@@ -138,8 +142,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Verify password
+      console.log("Comparing password with hash...");
+      console.log("Password provided:", password);
+      console.log("Hash in database:", user.password);
+      
       const isValidPassword = await bcrypt.compare(password, user.password);
+      console.log("Password validation result:", isValidPassword);
+      
       if (!isValidPassword) {
+        console.log("Password comparison failed");
         return res.status(401).json({ 
           success: false, 
           message: "Credenciales incorrectas" 
