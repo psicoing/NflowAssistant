@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign } from "lucide-react";
+import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign, Star } from "lucide-react";
 import { useLocation } from "wouter";
 
 const menuItems = [
@@ -16,6 +16,12 @@ const menuItems = [
     name: "Ejemplos del chat",
     sectionId: "ejemplos-chat",
     icon: MessageCircle
+  },
+  {
+    id: "testimonios",
+    name: "Testimonios",
+    sectionId: "testimonials",
+    icon: Star
   },
   {
     id: "blog",

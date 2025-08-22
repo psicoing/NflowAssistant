@@ -24,6 +24,7 @@ import PreciosSection from "@/components/sections/precios-section";
 import AppMovilSection from "@/components/sections/app-movil-section";
 import NosotrosSection from "@/components/sections/nosotros-section";
 import ContactoSection from "@/components/sections/contacto-section";
+import TestimonialsSection from "@/components/sections/testimonials-section";
 import { useState } from "react";
 
 export default function Home() {
@@ -48,6 +49,7 @@ export default function Home() {
         <PersonasSection />
 
         <PaidAppNotice />
+        <TestimonialsSection />
         <LGBTISupportSection />
         
         {/* Menu Sections - All services in one page */}
