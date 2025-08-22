@@ -111,7 +111,7 @@ export default function NFlowComparisonSection() {
                 Experimenta la diferencia profesional
               </h3>
               <p className="text-white/90 mb-4 text-lg">
-                NEUROPSI-AI: Especialización que marca la diferencia en tu bienestar mental
+                NEUROPSI-AI es el robot interno de NFLOW: Especialización que marca la diferencia en tu bienestar mental
               </p>
               <a 
                 href="/login" 
