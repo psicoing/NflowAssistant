@@ -34,11 +34,11 @@ export default function FloatingCTAButton() {
     <div className="fixed bottom-6 right-6 z-50 flex items-end space-x-2">
       {/* Expanded message */}
       {isExpanded && (
-        <div className="bg-gradient-to-r from-nflow-orange to-orange-600 text-white p-4 rounded-2xl shadow-2xl max-w-xs transform animate-bounce">
+        <div className="bg-gray-900 border-2 border-nflow-orange text-white p-4 rounded-2xl shadow-2xl max-w-xs transform animate-bounce">
           <div className="flex items-start justify-between mb-2">
             <div className="flex items-center space-x-2">
-              <Sparkles className="w-5 h-5" />
-              <span className="font-bold text-sm">¡OFERTA ESPECIAL!</span>
+              <Sparkles className="w-5 h-5 text-nflow-orange" />
+              <span className="font-bold text-sm text-white">¡OFERTA ESPECIAL!</span>
             </div>
             <button
               onClick={() => setIsExpanded(false)}
@@ -47,10 +47,10 @@ export default function FloatingCTAButton() {
               <X className="w-4 h-4" />
             </button>
           </div>
-          <p className="text-sm mb-3">
+          <p className="text-sm mb-3 text-gray-100">
             Únete a miles de usuarios que ya mejoraron su bienestar mental con NFLOW
           </p>
-          <div className="text-xs bg-white/20 rounded-lg p-2 mb-3">
+          <div className="text-xs bg-nflow-orange/20 border border-nflow-orange/30 rounded-lg p-2 mb-3 text-white">
             ✨ Primer mes por solo €2.99<br/>
             ✨ Cancela cuando quieras<br/>
             ✨ Soporte 24/7
