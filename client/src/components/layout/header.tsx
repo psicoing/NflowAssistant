@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Brain, Globe, LogIn, UserPlus, ChevronDown, Wifi, WifiOff } from "lucide-react";
-import SidebarMenu from "@/components/ui/sidebar-menu";
+import SmoothScrollMenu from "@/components/ui/smooth-scroll-menu";
 
 interface HeaderProps {
   showBanner?: boolean;
@@ -90,7 +90,7 @@ export default function Header({ showBanner = false }: HeaderProps) {
             </div>
 
             {/* Hamburger Menu - Always visible */}
-            <SidebarMenu />
+            <SmoothScrollMenu />
           </div>
         </div>
       </div>

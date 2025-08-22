@@ -18,6 +18,12 @@ import BorderlessSupportSection from "@/components/sections/borderless-support-s
 import YouthMentalHealthSection from "@/components/sections/youth-mental-health-section";
 import LGBTISupportSection from "@/components/sections/lgbti-support-section";
 import PromotionalBanner from "@/components/PromotionalBanner";
+import BlogSection from "@/components/sections/blog-section";
+import PartnersSection from "@/components/sections/partners-section";
+import PreciosSection from "@/components/sections/precios-section";
+import AppMovilSection from "@/components/sections/app-movil-section";
+import NosotrosSection from "@/components/sections/nosotros-section";
+import ContactoSection from "@/components/sections/contacto-section";
 import { useState } from "react";
 
 export default function Home() {
@@ -43,6 +49,15 @@ export default function Home() {
 
         <PaidAppNotice />
         <LGBTISupportSection />
+        
+        {/* Menu Sections - All services in one page */}
+        <BlogSection />
+        <PreciosSection />
+        <PartnersSection />
+        <AppMovilSection />
+        <NosotrosSection />
+        <ContactoSection />
+        
         <InstitutoSection />
         {/* <PackagesSection /> */}
       </main>
