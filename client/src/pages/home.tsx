@@ -18,13 +18,16 @@ import BorderlessSupportSection from "@/components/sections/borderless-support-s
 import YouthMentalHealthSection from "@/components/sections/youth-mental-health-section";
 import LGBTISupportSection from "@/components/sections/lgbti-support-section";
 import PromotionalBanner from "@/components/PromotionalBanner";
+import { useState } from "react";
 
 export default function Home() {
+  const [showBanner, setShowBanner] = useState(true);
+
   return (
     <div className="min-h-screen bg-nflow-dark">
-      <PromotionalBanner />
-      <Header />
-      <main>
+      {showBanner && <PromotionalBanner onClose={() => setShowBanner(false)} />}
+      <Header showBanner={showBanner} />
+      <main className={showBanner ? "pt-28" : "pt-16"}>
         <LanguageBannerSection />
         <MentalHealthHeroSection />
         <BorderlessSupportSection />

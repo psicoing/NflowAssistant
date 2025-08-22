@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Sparkles, X, Clock } from "lucide-react";
-import { useState } from "react";
 
-export default function PromotionalBanner() {
+interface PromotionalBannerProps {
+  onClose?: () => void;
+}
+
+export default function PromotionalBanner({ onClose }: PromotionalBannerProps) {
   const [, setLocation] = useLocation();
-  const [isVisible, setIsVisible] = useState(true);
-
-  if (!isVisible) return null;
 
   return (
-    <div className="bg-gradient-to-r from-nflow-orange via-orange-500 to-red-500 text-white py-3 px-4 relative overflow-hidden">
+    <div className="fixed top-0 w-full bg-gradient-to-r from-nflow-orange via-orange-500 to-red-500 text-white py-3 px-4 relative overflow-hidden z-[60]">
       {/* Background Animation */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse"></div>
       
@@ -42,7 +42,7 @@ export default function PromotionalBanner() {
           </Button>
           
           <button
-            onClick={() => setIsVisible(false)}
+            onClick={onClose}
             className="text-white/70 hover:text-white p-1"
             aria-label="Cerrar banner"
           >

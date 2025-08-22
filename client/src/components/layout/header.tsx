@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Brain, Globe, LogIn, UserPlus, ChevronDown, Wifi, WifiOff } from "lucide-react";
 import SidebarMenu from "@/components/ui/sidebar-menu";
 
+interface HeaderProps {
+  showBanner?: boolean;
+}
 
-
-export default function Header() {
+export default function Header({ showBanner = false }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -33,7 +35,7 @@ export default function Header() {
 
   return (
     <header 
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      className={`fixed ${showBanner ? 'top-12' : 'top-0'} w-full z-50 transition-all duration-300 ${
         isScrolled ? "bg-nflow-dark/95 backdrop-blur-md" : "bg-nflow-dark/90"
       } border-b border-gray-800`}
     >
