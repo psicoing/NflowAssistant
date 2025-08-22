@@ -83,21 +83,13 @@ export default function IntroCardSection() {
               </div>
             </div>
 
-            {/* Call to Action */}
-            <div className="text-center space-y-4">
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-12 py-4 text-lg font-bold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-                onClick={() => {
-                  window.location.href = '/register';
-                }}
-              >
-                Comenzar Ahora - Solo €2.99/mes
-              </Button>
-              
-              <p className="text-sm text-gray-500">
-                Acceso inmediato • Cancela cuando quieras • Soporte profesional incluido
-              </p>
+            {/* Info Badge */}
+            <div className="text-center">
+              <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-orange-50 to-orange-100 rounded-full border border-orange-200">
+                <span className="text-orange-700 font-medium text-sm">
+                  Tu apoyo emocional profesional disponible 24/7
+                </span>
+              </div>
             </div>
           </div>
         </div>
