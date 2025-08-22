@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Award, Users, Building2 } from "lucide-react";
+import founderImagePath from "@assets/image_1755861606102.png";
 
 export default function FounderSection() {
   return (
@@ -78,9 +79,13 @@ export default function FounderSection() {
                 CEO
               </div>
               
-              {/* Profile Image Placeholder - Using gradient since we can't see the actual image clearly */}
-              <div className="w-full aspect-square bg-gradient-to-br from-blue-300 to-blue-500 rounded-2xl mb-6 flex items-center justify-center text-6xl font-bold text-white shadow-xl">
-                RM
+              {/* Profile Image */}
+              <div className="w-full aspect-square rounded-2xl mb-6 overflow-hidden shadow-xl">
+                <img 
+                  src={founderImagePath} 
+                  alt="Ramón Molons de San Román - CEO y Fundador de NFLOW"
+                  className="w-full h-full object-cover object-center"
+                />
               </div>
               
               {/* Professional Info */}
