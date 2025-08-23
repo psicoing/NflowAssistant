@@ -26,6 +26,7 @@ import ContactoSection from "@/components/sections/contacto-section";
 import TestimonialsSection from "@/components/sections/testimonials-section";
 import FounderSection from "@/components/sections/founder-section";
 import IntroCardSection from "@/components/sections/intro-card-section";
+import FamilyImageSection from "@/components/sections/family-image-section";
 import NFlowComparisonSection from "@/components/sections/nflow-comparison-section";
 
 export default function Home() {
@@ -36,6 +37,7 @@ export default function Home() {
       <main className="pt-16">
         <LanguageBannerSection />
         <IntroCardSection />
+        <FamilyImageSection />
         <NFlowComparisonSection />
         <MentalHealthHeroSection />
         <BorderlessSupportSection />
