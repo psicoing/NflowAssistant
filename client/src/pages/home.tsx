@@ -28,6 +28,7 @@ import FounderSection from "@/components/sections/founder-section";
 import IntroCardSection from "@/components/sections/intro-card-section";
 import FamilyImageSection from "@/components/sections/family-image-section";
 import NFlowComparisonSection from "@/components/sections/nflow-comparison-section";
+import ProfessionalSummarySection from "@/components/sections/professional-summary-section";
 
 export default function Home() {
 
@@ -66,6 +67,8 @@ export default function Home() {
         
         <InstitutoSection />
         {/* <PackagesSection /> */}
+        
+        <ProfessionalSummarySection />
       </main>
       <Footer />
     </div>
