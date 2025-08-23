@@ -86,7 +86,7 @@ const blogPosts = [
     category: "Empresas & Bienestar",
     icon: Building2,
     color: "bg-gradient-to-r from-green-500 to-teal-600",
-    image: "https://images.unsplash.com/photo-1553028826-f4804a6dfd3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    image: "attached_assets/generated_images/Business_chatbot_wellness_newspaper_e38ea534.png",
     readTime: "6 min",
     tags: ["Empresas", "Chatbots", "ROI", "Bienestar Laboral"],
     views: "1,923",

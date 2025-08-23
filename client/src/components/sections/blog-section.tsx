@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { BookOpen, Calendar, User, ArrowRight, Brain, Heart, Bot, Building2, Users, Sparkles, TrendingUp } from "lucide-react";
 // Usando imágenes temporales de Unsplash hasta generar las imágenes estilo periódico
 const aiTeenMentalHealthImage = "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
-const chatbotBenefitsImage = "https://images.unsplash.com/photo-1553028826-f4804a6dfd3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+import chatbotBenefitsImage from "@assets/generated_images/Business_chatbot_wellness_newspaper_e38ea534.png";
 const aiTherapyImage = "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
 
 const blogPosts = [
