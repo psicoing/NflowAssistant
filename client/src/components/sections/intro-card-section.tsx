@@ -87,7 +87,7 @@ export default function IntroCardSection() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-lg mb-1">NEUROPSI-AI</h4>
+                  <h4 className="font-bold text-lg mb-1">NFLOW</h4>
                   <p className="text-sm opacity-90">Tu asistente inteligente empático</p>
                 </div>
               </div>
