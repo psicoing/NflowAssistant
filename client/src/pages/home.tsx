@@ -20,7 +20,7 @@ import LGBTISupportSection from "@/components/sections/lgbti-support-section";
 import BlogSection from "@/components/sections/blog-section";
 import PartnersSection from "@/components/sections/partners-section";
 import PreciosSection from "@/components/sections/precios-section";
-import AppMovilSection from "@/components/sections/app-movil-section";
+import NFlowShowcaseSection from "@/components/sections/nflow-showcase-section";
 import NosotrosSection from "@/components/sections/nosotros-section";
 import ContactoSection from "@/components/sections/contacto-section";
 import TestimonialsSection from "@/components/sections/testimonials-section";
@@ -61,7 +61,7 @@ export default function Home() {
         <BlogSection />
         <PreciosSection />
         <PartnersSection />
-        <AppMovilSection />
+        <NFlowShowcaseSection />
         <NosotrosSection />
         <ContactoSection />
         
