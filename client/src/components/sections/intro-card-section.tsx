@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Brain, Clock, Users, Sparkles, Shield, Heart, Target, Star } from "lucide-react";
+import therapyImage from "@assets/generated_images/Professional_therapy_session_environment_d05dbefd.png";
+import aiTechImage from "@assets/generated_images/AI_mental_health_technology_interface_ebce099a.png";
 
 export default function IntroCardSection() {
   return (
@@ -62,54 +64,31 @@ export default function IntroCardSection() {
               </div>
             </div>
 
-            {/* NEUROPSI-AI Highlight Section */}
-            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-8 mb-8 border border-indigo-100">
-              <div className="text-center mb-6">
-                <div className="flex items-center justify-center space-x-2 mb-4">
-                  <Brain className="w-10 h-10 text-indigo-600" />
-                  <span className="text-2xl font-bold text-indigo-900">NEUROPSI-AI</span>
+            {/* Visual Gallery Section */}
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <img 
+                  src={therapyImage}
+                  alt="Entorno profesional de terapia - NFLOW"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <h4 className="font-bold text-lg mb-1">Apoyo Profesional</h4>
+                  <p className="text-sm opacity-90">Entorno cálido y seguro para tu bienestar</p>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
-                  Tu Asistente Inteligente de Salud Mental
-                </h3>
-                <p className="text-gray-700 leading-relaxed">
-                  Un sistema conversacional avanzado entrenado específicamente en psicología clínica, 
-                  familiar y de la salud. Diseñado para brindar apoyo emocional profesional con la 
-                  calidez humana que necesitas.
-                </p>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="flex items-start space-x-3">
-                  <Shield className="w-6 h-6 text-indigo-600 mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Privacidad Total</h4>
-                    <p className="text-gray-600 text-sm">Conversaciones confidenciales y seguras</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <Heart className="w-6 h-6 text-red-500 mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Apoyo Empático</h4>
-                    <p className="text-gray-600 text-sm">Respuestas cálidas y comprensivas</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <Target className="w-6 h-6 text-green-600 mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Evaluaciones Precisas</h4>
-                    <p className="text-gray-600 text-sm">Análisis basado en DSM-5-TR y CIE-11</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3">
-                  <Users className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Para Todas las Edades</h4>
-                    <p className="text-gray-600 text-sm">Desde adolescentes hasta adultos mayores</p>
-                  </div>
+              <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <img 
+                  src={aiTechImage}
+                  alt="Tecnología AI para salud mental - NEUROPSI-AI"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <h4 className="font-bold text-lg mb-1">Tecnología Avanzada</h4>
+                  <p className="text-sm opacity-90">IA especializada en salud mental</p>
                 </div>
               </div>
             </div>
