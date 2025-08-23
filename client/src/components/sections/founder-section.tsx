@@ -44,7 +44,7 @@ export default function FounderSection() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="w-5 h-5 text-orange-400" />
-                  <span className="text-blue-100">Psicólogo Clínico y Neuropsicólogo en Telecomunicaciones</span>
+                  <span className="text-blue-100">Neuroingeniero en Telecomunicaciones</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Building2 className="w-5 h-5 text-orange-400" />
@@ -96,7 +96,7 @@ export default function FounderSection() {
                     Psicólogo Clínico
                   </Badge>
                   <Badge className="bg-orange-500/20 text-orange-200 border border-orange-400/30 ml-2">
-                    Neuropsicólogo
+                    Neuroingeniero
                   </Badge>
                 </div>
                 <p className="text-blue-100 text-sm">
