@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Brain, Clock, Users, Sparkles, Shield, Heart, Target, Star } from "lucide-react";
-import therapyImage from "@assets/generated_images/Professional_therapy_session_environment_d05dbefd.png";
-import aiTechImage from "@assets/generated_images/AI_mental_health_technology_interface_ebce099a.png";
+import mindfulnessImage from "@assets/generated_images/Mindfulness_meditation_wellness_concept_f8b9d8ab.png";
+import communityImage from "@assets/generated_images/Mental_health_community_support_network_2f00a847.png";
 
 export default function IntroCardSection() {
   return (
@@ -68,27 +68,27 @@ export default function IntroCardSection() {
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img 
-                  src={therapyImage}
-                  alt="Entorno profesional de terapia - NFLOW"
+                  src={mindfulnessImage}
+                  alt="Mindfulness y bienestar mental - NFLOW"
                   className="w-full h-64 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-lg mb-1">Apoyo Profesional</h4>
-                  <p className="text-sm opacity-90">Entorno cálido y seguro para tu bienestar</p>
+                  <h4 className="font-bold text-lg mb-1">Bienestar Interior</h4>
+                  <p className="text-sm opacity-90">Técnicas de mindfulness y paz mental</p>
                 </div>
               </div>
 
               <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img 
-                  src={aiTechImage}
-                  alt="Tecnología AI para salud mental - NEUROPSI-AI"
+                  src={communityImage}
+                  alt="Red de apoyo comunitario - NFLOW"
                   className="w-full h-64 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-lg mb-1">Tecnología Avanzada</h4>
-                  <p className="text-sm opacity-90">IA especializada en salud mental</p>
+                  <h4 className="font-bold text-lg mb-1">Comunidad de Apoyo</h4>
+                  <p className="text-sm opacity-90">Conexión y soporte entre personas</p>
                 </div>
               </div>
             </div>
