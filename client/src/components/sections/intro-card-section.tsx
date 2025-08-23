@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Brain, Clock, Users, Sparkles, Shield, Heart, Target, Star } from "lucide-react";
-import mindfulnessImage from "@assets/generated_images/Mindfulness_meditation_wellness_concept_f8b9d8ab.png";
-import communityImage from "@assets/generated_images/Mental_health_community_support_network_2f00a847.png";
+import techDevicesImage from "@assets/generated_images/Modern_tech_devices_mental_health_acb51148.png";
+import robotAssistantImage from "@assets/generated_images/Friendly_AI_robot_assistant_5cb5bc6c.png";
 
 export default function IntroCardSection() {
   return (
@@ -68,27 +68,27 @@ export default function IntroCardSection() {
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img 
-                  src={mindfulnessImage}
-                  alt="Mindfulness y bienestar mental - NFLOW"
+                  src={techDevicesImage}
+                  alt="Dispositivos tecnológicos para salud mental - NFLOW"
                   className="w-full h-64 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-lg mb-1">Bienestar Interior</h4>
-                  <p className="text-sm opacity-90">Técnicas de mindfulness y paz mental</p>
+                  <h4 className="font-bold text-lg mb-1">Acceso Multiplataforma</h4>
+                  <p className="text-sm opacity-90">Disponible en móvil, tablet y ordenador</p>
                 </div>
               </div>
 
               <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img 
-                  src={communityImage}
-                  alt="Red de apoyo comunitario - NFLOW"
+                  src={robotAssistantImage}
+                  alt="Robot asistente NEUROPSI-AI - NFLOW"
                   className="w-full h-64 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-lg mb-1">Comunidad de Apoyo</h4>
-                  <p className="text-sm opacity-90">Conexión y soporte entre personas</p>
+                  <h4 className="font-bold text-lg mb-1">NEUROPSI-AI</h4>
+                  <p className="text-sm opacity-90">Tu asistente inteligente empático</p>
                 </div>
               </div>
             </div>
