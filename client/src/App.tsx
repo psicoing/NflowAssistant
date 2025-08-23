@@ -37,7 +37,7 @@ import AvisoLegal from "@/pages/legal/aviso-legal";
 import NosotrosPage from "@/pages/nosotros";
 import AppMovil from "@/pages/app-movil";
 import PreciosPage from "@/pages/precios";
-import Blog from "@/pages/blog";
+import BlogNew from "@/pages/blog-new";
 import FloatingCTAButton from "@/components/FloatingCTAButton";
 
 function AuthenticatedRouter() {
@@ -49,6 +49,10 @@ function AuthenticatedRouter() {
 
     // Always allow access to public routes
     const publicRoutes = ["/", "/ejemplos-chat", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners", "/nosotros", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
+    // Allow blog article routes
+    if (location.startsWith("/blog/")) {
+      return;
+    }
     if (publicRoutes.includes(location)) {
       return;
     }
@@ -83,7 +87,8 @@ function AuthenticatedRouter() {
       <Route path="/activar-cuenta" component={ActivarCuenta} />
       <Route path="/chat" component={Chat} />
       <Route path="/chat/:id" component={Chat} />
-      <Route path="/blog" component={Blog} />
+      <Route path="/blog" component={BlogNew} />
+      <Route path="/blog/:id" component={BlogNew} />
       <Route path="/precios" component={PreciosPage} />
       <Route path="/partners" component={Partners} />
       <Route path="/partners/login" component={PartnerLogin} />
