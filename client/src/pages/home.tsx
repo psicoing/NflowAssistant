@@ -26,6 +26,7 @@ import ContactoSection from "@/components/sections/contacto-section";
 import TestimonialsSection from "@/components/sections/testimonials-section";
 import FounderSection from "@/components/sections/founder-section";
 import IntroCardSection from "@/components/sections/intro-card-section";
+import NFlowCarouselSection from "@/components/sections/nflow-carousel-section";
 import FamilyImageSection from "@/components/sections/family-image-section";
 import NFlowComparisonSection from "@/components/sections/nflow-comparison-section";
 import ProfessionalSummarySection from "@/components/sections/professional-summary-section";
@@ -38,6 +39,7 @@ export default function Home() {
       <main className="pt-16">
         <LanguageBannerSection />
         <IntroCardSection />
+        <NFlowCarouselSection />
         <FamilyImageSection />
         <NFlowComparisonSection />
         <MentalHealthHeroSection />
