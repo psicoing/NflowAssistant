@@ -1,6 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Star } from "lucide-react";
+import adolescentesImage from "@assets/generated_images/NFLOW_adolescents_app_interface_154ebcf6.png";
+import padresImage from "@assets/generated_images/NFLOW_parents_app_interface_fe680f15.png";
+import empresasImage from "@assets/generated_images/NFLOW_business_app_interface_fcfe8f47.png";
+import laboralImage from "@assets/generated_images/NFLOW_workplace_wellness_interface_6d72e938.png";
 
 const personas = [
   {
@@ -10,8 +14,7 @@ const personas = [
     bgColor: "bg-gradient-to-br from-orange-500 to-orange-600",
     appName: "NFLOW",
     subtitle: "Salud Mental",
-    character: "👩‍🎓",
-    accessories: ["📱", "☕", "🎧", "📚", "💭"]
+    image: adolescentesImage
   },
   {
     id: "padres",
@@ -20,8 +23,7 @@ const personas = [
     bgColor: "bg-gradient-to-br from-orange-500 to-orange-600", 
     appName: "NFLOW",
     subtitle: "Salud Mental Familiar",
-    character: "👨‍👩‍👧‍👦",
-    accessories: ["❤️", "🏠", "🎯", "📖", "🤝"]
+    image: padresImage
   },
   {
     id: "empresas",
@@ -30,8 +32,7 @@ const personas = [
     bgColor: "bg-gradient-to-br from-yellow-500 to-yellow-600",
     appName: "JOBDA",
     subtitle: "SELECCIÓN DE PERSONAL",
-    character: "👨‍💼",
-    accessories: ["💼", "📊", "🔍", "📋", "💡"]
+    image: empresasImage
   },
   {
     id: "laboral",
@@ -40,8 +41,7 @@ const personas = [
     bgColor: "bg-gradient-to-br from-orange-500 to-orange-600",
     appName: "NFLOW", 
     subtitle: "SALUD MENTAL LABORAL",
-    character: "👷‍♀️",
-    accessories: ["🎧", "⚡", "🛠️", "💪", "🌟"]
+    image: laboralImage
   }
 ];
 
@@ -80,26 +80,15 @@ export default function PersonasSection() {
                       <div className="absolute top-2 right-4 w-4 h-4 bg-gray-400 rounded-full shadow-inner"></div>
                     </div>
 
-                    {/* Clear plastic section with character */}
-                    <div className="bg-gradient-to-br from-white/20 to-white/40 rounded-2xl p-4 backdrop-blur-sm border border-white/30 relative">
-                      {/* Main Character */}
-                      <div className="text-center mb-4">
-                        <div className="text-6xl mb-2 transform group-hover:scale-110 transition-transform duration-300">
-                          {persona.character}
-                        </div>
-                      </div>
-
-                      {/* Accessories Grid */}
-                      <div className="grid grid-cols-3 gap-2">
-                        {persona.accessories.map((accessory, index) => (
-                          <div 
-                            key={index}
-                            className="bg-white/50 rounded-lg p-2 text-center shadow-sm transform group-hover:rotate-6 transition-transform duration-300"
-                            style={{ transitionDelay: `${index * 100}ms` }}
-                          >
-                            <span className="text-lg">{accessory}</span>
-                          </div>
-                        ))}
+                    {/* App Interface Preview */}
+                    <div className="bg-gradient-to-br from-white/20 to-white/40 rounded-2xl p-2 backdrop-blur-sm border border-white/30 relative">
+                      {/* Mobile Interface Image */}
+                      <div className="text-center">
+                        <img 
+                          src={persona.image} 
+                          alt={`${persona.title} App Interface`}
+                          className="w-full h-auto rounded-xl shadow-lg transform group-hover:scale-105 transition-transform duration-300"
+                        />
                       </div>
                     </div>
 
