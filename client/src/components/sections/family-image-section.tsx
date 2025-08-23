@@ -7,11 +7,11 @@ export default function FamilyImageSection() {
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             {/* Image */}
-            <div className="order-2 md:order-1">
+            <div className="order-2 md:order-1 p-4">
               <img 
                 src={familyImage} 
                 alt="Familia usando NFLOW para apoyo emocional" 
-                className="w-full h-auto rounded-2xl"
+                className="w-full h-auto rounded-2xl object-contain max-h-96"
               />
             </div>
             
