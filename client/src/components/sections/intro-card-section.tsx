@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Brain, Clock, Users, Sparkles, Shield, Heart, Target, Star } from "lucide-react";
 import techDevicesImage from "@assets/generated_images/Modern_tech_devices_mental_health_acb51148.png";
-import robotAssistantImage from "@assets/generated_images/Friendly_AI_robot_assistant_5cb5bc6c.png";
+import robotHumanImage from "@assets/generated_images/Human_and_AI_robot_collaboration_1312c395.png";
 
 export default function IntroCardSection() {
   return (
@@ -81,8 +81,8 @@ export default function IntroCardSection() {
 
               <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img 
-                  src={robotAssistantImage}
-                  alt="Robot asistente NEUROPSI-AI - NFLOW"
+                  src={robotHumanImage}
+                  alt="Colaboración humano-IA en NFLOW"
                   className="w-full h-64 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
