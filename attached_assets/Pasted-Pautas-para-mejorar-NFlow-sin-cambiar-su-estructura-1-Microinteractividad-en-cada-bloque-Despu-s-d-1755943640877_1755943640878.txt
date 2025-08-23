@@ -1,0 +1,75 @@
+Pautas para mejorar NFlow sin cambiar su estructura
+1. Microinteractividad en cada bloque
+
+Después de cada bloque, haz una pregunta breve antes de seguir, para evitar que el usuario reciba un muro de texto.
+
+Ejemplo en Presentación Empática:
+
+“Entiendo que te sientas así, no debe ser fácil. ¿Quieres que hablemos de qué cosas te han hecho sentir así últimamente?”
+
+2. Preguntas Sintomatológicas: añade escala breve
+
+Mantén tus preguntas, pero añade escala simple (0-10) para cuantificar:
+
+“¿Qué tanto te afecta en tu día a día (0 nada – 10 muchísimo)?”
+
+Así podrás sugerir acciones en función de la intensidad.
+
+3. Inserta cribado rápido (sin romper el tono)
+
+Después de tus preguntas sintomatológicas, integra PHQ-2 en forma conversacional:
+
+“En los últimos 14 días:
+
+¿Te ha costado disfrutar de cosas que antes te gustaban?
+
+¿Te has sentido decaído o triste?”
+
+No lo llames “test”, solo preséntalo como “un chequeo rápido”.
+
+4. Algoritmo de Urgencia: añade activación directa
+
+Mantén tu lista de señales de alarma, pero incluye pregunta explícita:
+
+“¿Has pensado en hacerte daño hoy o en los últimos días?”
+
+Si responde sí → muestra el mismo bloque de urgencia que ya tienes, sin explicaciones largas.
+
+5. Técnicas prácticas: hazlo dinámico
+
+Ofrece 3 opciones para elegir:
+
+“¿Qué prefieres probar primero?
+
+Respiración guiada
+
+Plan 72h (rutina + micro-tareas)
+
+Hablar con alguien de confianza”
+
+6. Psicoeducación: bajo demanda
+
+En lugar de dar toda la información de golpe, pregunta:
+
+“¿Quieres que te explique qué es la depresión y qué no lo es?”
+
+Solo si dice sí, muestra tus secciones (“Mitos y Verdades”, explicación diagnóstica).
+
+7. Recursos y Advertencia: formato compacto
+
+Mantén los números y el aviso legal, pero hazlo visualmente claro:
+
+Emergencias: 112
+Prevención suicidio: 024
+Cataluña: 93 414 48 48
+Esta información no sustituye la atención profesional.
+
+8. Seguimiento automático
+
+Al final, añade:
+
+“¿Quieres que volvamos a hablar en 72 horas para ver cómo te sientes?”
+
+Si responde sí → guarda el estado y vuelve a preguntar (con PHQ-2).
+
+✅ Con estas pautas, tu estructura no cambia, solo se hace más viva, medible y segura.
