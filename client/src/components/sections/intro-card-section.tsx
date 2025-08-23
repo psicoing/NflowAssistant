@@ -4,7 +4,7 @@ import { CheckCircle, Brain, Clock, Users, Sparkles, Shield, Heart, Target, Star
 export default function IntroCardSection() {
   return (
     <section id="intro-card" className="py-8 px-4 bg-gradient-to-br from-indigo-50 via-white to-blue-50">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
           {/* Header with gradient */}
           <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-8 text-center">
