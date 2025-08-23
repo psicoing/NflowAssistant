@@ -123,36 +123,36 @@ export default function TestimonialsSection() {
         </div>
 
         {/* Stats */}
-        <div className="bg-gradient-to-r from-nflow-orange to-orange-600 rounded-3xl p-12 text-center">
+        <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black rounded-3xl p-12 text-center shadow-2xl border border-gray-700">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="text-4xl font-bold text-white mb-2">10,000+</div>
-              <div className="text-white/90">Usuarios Activos</div>
+              <div className="text-5xl font-bold text-white mb-3 drop-shadow-lg">10,000+</div>
+              <div className="text-gray-200 font-semibold text-lg">Usuarios Activos</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-white mb-2">50,000+</div>
-              <div className="text-white/90">Consultas Realizadas</div>
+              <div className="text-5xl font-bold text-white mb-3 drop-shadow-lg">50,000+</div>
+              <div className="text-gray-200 font-semibold text-lg">Consultas Realizadas</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-white mb-2">4.9/5</div>
-              <div className="text-white/90">Satisfacción Promedio</div>
+              <div className="text-5xl font-bold text-white mb-3 drop-shadow-lg">97%</div>
+              <div className="text-gray-200 font-semibold text-lg">Satisfacción Promedio</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-white mb-2">24/7</div>
-              <div className="text-white/90">Disponibilidad</div>
+              <div className="text-5xl font-bold text-white mb-3 drop-shadow-lg">24/7</div>
+              <div className="text-gray-200 font-semibold text-lg">Disponibilidad</div>
             </div>
           </div>
           
-          <div className="mt-8 pt-8 border-t border-white/20">
-            <h3 className="text-2xl font-bold text-white mb-4">
+          <div className="mt-8 pt-8 border-t border-gray-600">
+            <h3 className="text-3xl font-bold text-white mb-4 drop-shadow-lg">
               Únete a miles de usuarios satisfechos
             </h3>
-            <p className="text-white/90 text-lg mb-6 max-w-2xl mx-auto">
+            <p className="text-gray-200 text-lg mb-6 max-w-2xl mx-auto font-medium">
               Basado en testimonios reales de usuarios que han experimentado 
               mejoras significativas en su bienestar mental con NFLOW.
             </p>
-            <div className="text-white/80 text-sm">
-              ⭐ Promedio de 4.9/5 estrellas • ✅ Verificado por usuarios reales
+            <div className="text-gray-200 text-base font-semibold">
+              ⭐ Promedio de 97% satisfacción • ✅ Verificado por usuarios reales
             </div>
           </div>
         </div>
