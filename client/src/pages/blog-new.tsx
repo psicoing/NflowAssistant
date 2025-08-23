@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, User, Clock, Share2, BookOpen, Heart, Eye, Bot, Building2, Sparkles, TrendingUp } from "lucide-react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import chatbotBenefitsImage from "@assets/generated_images/Business_chatbot_wellness_newspaper_e38ea534.png";
 
 const blogPosts = [
   {
@@ -86,7 +87,7 @@ const blogPosts = [
     category: "Empresas & Bienestar",
     icon: Building2,
     color: "bg-gradient-to-r from-green-500 to-teal-600",
-    image: "attached_assets/generated_images/Business_chatbot_wellness_newspaper_e38ea534.png",
+    image: chatbotBenefitsImage,
     readTime: "6 min",
     tags: ["Empresas", "Chatbots", "ROI", "Bienestar Laboral"],
     views: "1,923",
