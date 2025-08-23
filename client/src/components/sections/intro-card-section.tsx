@@ -128,7 +128,7 @@ export default function IntroCardSection() {
                 onClick={() => window.location.href = '/login'}
                 className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold px-12 py-4 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               >
-                Iniciar Mi Primera Consulta Gratis
+                Empezar Ahora
               </Button>
             </div>
 
