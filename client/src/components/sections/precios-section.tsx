@@ -135,7 +135,7 @@ export default function PreciosSection() {
                         : 'bg-gray-900 hover:bg-gray-800 text-white'
                     }`}
                   >
-                    Comenzar Ahora
+                    Empezar Ahora
                   </Button>
                 </div>
               </div>
