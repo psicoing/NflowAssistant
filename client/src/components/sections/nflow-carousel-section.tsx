@@ -7,6 +7,10 @@ import nflowApp from "@assets/generated_images/NFLOW_mental_health_app_05faf5ea.
 import nflowCommunity from "@assets/generated_images/NFLOW_community_connection_illustration_b01e7ec4.png";
 import nflowWorkplace from "@assets/generated_images/NFLOW_workplace_wellness_illustration_09ae4d69.png";
 import nflowFamily from "@assets/generated_images/NFLOW_family_support_illustration_961f474d.png";
+import nflowNighttime from "@assets/generated_images/NFLOW_24/7_nighttime_support_f61f9e54.png";
+import nflowPrivacy from "@assets/generated_images/NFLOW_privacy_and_security_c17cc747.png";
+import nflowYouth from "@assets/generated_images/NFLOW_youth_and_teens_c6069c47.png";
+import nflowMindfulness from "@assets/generated_images/NFLOW_mindfulness_and_meditation_cb6b64a5.png";
 
 const carouselData = [
   {
@@ -32,6 +36,30 @@ const carouselData = [
     image: nflowFamily,
     title: "Apoyo Familiar",
     description: "Fortalece los vínculos familiares con apoyo especializado para adolescentes y padres"
+  },
+  {
+    id: 5,
+    image: nflowNighttime,
+    title: "Disponible 24/7",
+    description: "Apoyo emocional siempre disponible, incluso en las noches más difíciles"
+  },
+  {
+    id: 6,
+    image: nflowPrivacy,
+    title: "Privacidad Total",
+    description: "Conversaciones completamente privadas y seguras con la máxima confidencialidad"
+  },
+  {
+    id: 7,
+    image: nflowYouth,
+    title: "Enfoque Juvenil",
+    description: "Especializado en adolescentes y jóvenes adultos con contenido adaptado a su edad"
+  },
+  {
+    id: 8,
+    image: nflowMindfulness,
+    title: "Mindfulness y Meditación",
+    description: "Técnicas de relajación, mindfulness y meditación guiada para tu bienestar"
   }
 ];
 
