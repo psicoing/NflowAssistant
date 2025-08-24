@@ -157,7 +157,7 @@ export default function PreciosSection() {
               <div 
                 key={index} 
                 className={`relative bg-gradient-to-br from-white via-blue-50/20 to-indigo-50/10 rounded-3xl shadow-2xl border border-gray-200/30 overflow-hidden transform hover:scale-105 hover:shadow-3xl transition-all duration-300 ${
-                  plan.recommended ? 'ring-4 ring-nflow-orange ring-opacity-60 shadow-nflow-orange/25 bg-gradient-to-br from-orange-50/20 via-white to-red-50/10' : ''
+                  plan.recommended ? 'ring-4 ring-nflow-orange ring-opacity-60 shadow-nflow-orange/25 bg-gradient-to-br from-orange-50/40 via-amber-50/30 to-red-50/20 border-orange-200/40' : ''
                 }`}
               >
                 {plan.recommended && (
@@ -183,7 +183,11 @@ export default function PreciosSection() {
                   </div>
                 </div>
 
-                <div className="p-8 bg-gradient-to-b from-white/90 via-blue-50/30 to-indigo-50/20 backdrop-blur-sm">
+                <div className={`p-8 backdrop-blur-sm ${
+                  plan.recommended 
+                    ? 'bg-gradient-to-b from-white/95 via-orange-50/40 to-amber-50/30'
+                    : 'bg-gradient-to-b from-white/90 via-blue-50/30 to-indigo-50/20'
+                }`}>
                   <p className="text-gray-600 mb-6 text-center">{plan.description}</p>
                   
                   <ul className="space-y-3 mb-8">
@@ -228,8 +232,12 @@ export default function PreciosSection() {
             return (
               <div 
                 key={index} 
-                className={`relative bg-gradient-to-br from-white via-emerald-50/15 to-teal-50/10 rounded-3xl shadow-2xl border border-gray-200/40 overflow-hidden transform hover:scale-105 hover:shadow-3xl transition-all duration-300 backdrop-blur-sm ${
-                  plan.recommended ? 'ring-4 ring-nflow-orange ring-opacity-60 shadow-nflow-orange/25 bg-gradient-to-br from-orange-50/25 via-white to-amber-50/15' : ''
+                className={`relative rounded-3xl shadow-2xl border overflow-hidden transform hover:scale-105 hover:shadow-3xl transition-all duration-300 backdrop-blur-sm ${
+                  plan.recommended 
+                    ? 'bg-gradient-to-br from-orange-50/40 via-white to-amber-50/25 border-orange-200/50 ring-4 ring-nflow-orange ring-opacity-60 shadow-nflow-orange/25'
+                    : plan.isCustom 
+                    ? 'bg-gradient-to-br from-purple-50/40 via-white to-indigo-50/30 border-purple-200/50'
+                    : 'bg-gradient-to-br from-emerald-50/30 via-white to-teal-50/20 border-emerald-200/40'
                 }`}
               >
                 {plan.recommended && (
@@ -264,7 +272,13 @@ export default function PreciosSection() {
                   </div>
                 </div>
 
-                <div className="p-8 bg-gradient-to-b from-white/90 via-emerald-50/25 to-teal-50/15 backdrop-blur-sm">
+                <div className={`p-8 backdrop-blur-sm ${
+                  plan.recommended 
+                    ? 'bg-gradient-to-b from-white/95 via-orange-50/40 to-amber-50/30'
+                    : plan.isCustom
+                    ? 'bg-gradient-to-b from-white/95 via-purple-50/40 to-indigo-50/30'
+                    : 'bg-gradient-to-b from-white/90 via-emerald-50/30 to-teal-50/20'
+                }`}>
                   <p className="text-gray-600 mb-6 text-center">{plan.description}</p>
                   
                   <ul className="space-y-3 mb-8">
