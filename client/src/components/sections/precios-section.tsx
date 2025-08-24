@@ -100,7 +100,7 @@ const businessPlans = [
     ],
     recommended: true,
     icon: Building,
-    gradient: "from-nflow-orange to-orange-600"
+    gradient: "from-orange-500 to-red-600"
   },
   {
     name: "Plan Corporativo",
