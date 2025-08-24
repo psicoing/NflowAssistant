@@ -5,9 +5,9 @@ import robotHumanImage from "@assets/generated_images/Human_and_AI_robot_collabo
 
 export default function IntroCardSection() {
   return (
-    <section id="intro-card" className="py-8 px-4 bg-gradient-to-br from-indigo-50 via-white to-blue-50">
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+    <section id="intro-card" className="py-8 px-4 bg-gradient-to-br from-indigo-50 via-white to-blue-50 nflow-full-width-section">
+      <div className="nflow-card-container mx-auto">
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden w-full">
           {/* Header with gradient */}
           <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-8 text-center">
             <div className="flex items-center justify-center space-x-2 mb-4">
@@ -38,7 +38,7 @@ export default function IntroCardSection() {
             </div>
 
             {/* Main Features Grid */}
-            <div className="grid md:grid-cols-3 gap-6 mb-10">
+            <div className="grid md:grid-cols-3 nflow-wide-grid mb-10">
               <div className="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-100">
                 <div className="flex items-center justify-center mb-4">
                   <CheckCircle className="w-8 h-8 text-green-600" />
@@ -65,7 +65,7 @@ export default function IntroCardSection() {
             </div>
 
             {/* Visual Gallery Section */}
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <div className="grid md:grid-cols-2 gap-6 lg:gap-10 xl:gap-12 mb-8">
               <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img 
                   src={techDevicesImage}
@@ -94,7 +94,7 @@ export default function IntroCardSection() {
             </div>
 
             {/* Stats Section */}
-            <div className="grid md:grid-cols-4 gap-4 mb-8">
+            <div className="grid md:grid-cols-4 gap-4 lg:gap-6 xl:gap-8 mb-8">
               <div className="text-center p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
                 <div className="text-2xl font-bold text-orange-600 mb-1">24/7</div>
                 <div className="text-sm text-gray-600">Disponibilidad</div>

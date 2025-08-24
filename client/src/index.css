@@ -2,10 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Mobile responsive improvements */
+/* Responsive width improvements */
 @media (max-width: 768px) {
   .nflow-package-card {
     transform: translateZ(0);
+  }
+}
+
+/* Desktop full-width optimization */
+@media (min-width: 1024px) {
+  .nflow-full-width-section {
+    max-width: 95vw;
+    width: 95vw;
+  }
+  
+  .nflow-card-container {
+    max-width: 90vw;
+    width: 90vw;
+  }
+  
+  .nflow-wide-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+}
+
+/* Ultra-wide screens optimization */
+@media (min-width: 1536px) {
+  .nflow-full-width-section {
+    max-width: 92vw;
+    width: 92vw;
+  }
+  
+  .nflow-card-container {
+    max-width: 88vw;
+    width: 88vw;
   }
 }
 

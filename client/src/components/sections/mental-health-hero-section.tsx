@@ -3,8 +3,8 @@ import { Link } from "wouter";
 
 export default function MentalHealthHeroSection() {
   return (
-    <section className="py-8 px-4 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-8 px-4 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 nflow-full-width-section">
+      <div className="nflow-card-container mx-auto">
         <div className="space-y-12">
           {/* Titles Section */}
           <div className="text-center space-y-6">
@@ -19,7 +19,7 @@ export default function MentalHealthHeroSection() {
           </div>
 
           {/* Main Content - Centered */}
-          <div className="max-w-4xl mx-auto">
+          <div className="w-full mx-auto">
             {/* Content Section - Centered */}
             <div className="space-y-8">
               {/* All Features Grid */}
