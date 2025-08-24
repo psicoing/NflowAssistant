@@ -63,7 +63,7 @@ const personalPlans = [
 const businessPlans = [
   {
     name: "Plan Profesional",
-    price: "99.99",
+    price: "149.50",
     period: "mes",
     originalPrice: "299.99",
     description: "Para profesionales de la salud mental y consultores independientes",
