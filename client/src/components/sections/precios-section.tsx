@@ -41,9 +41,9 @@ const personalPlans = [
   },
   {
     name: "Plan Premium",
-    price: "2.99",
+    price: "32",
     period: "12 meses",
-    originalPrice: "35.88", 
+    originalPrice: "35.56", 
     description: "Acceso completo anual para usuarios que buscan la experiencia definitiva",
     features: [
       "Acceso completo por 12 meses",
