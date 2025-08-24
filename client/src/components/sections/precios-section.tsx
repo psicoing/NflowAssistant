@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { Check, Star, Crown, Shield, Zap, Users, Building, Briefcase, Globe } from "lucide-react";
+import { Check, Star, Crown, Shield, Zap, Users, Building, Briefcase, Globe, Gem } from "lucide-react";
 
 const personalPlans = [
   {
@@ -40,22 +40,22 @@ const personalPlans = [
     gradient: "from-nflow-orange to-orange-600"
   },
   {
-    name: "Plan Grupal",
-    price: "49.99",
-    period: "mes",
-    originalPrice: "149.99", 
-    description: "Ideal para familias, equipos de trabajo o grupos pequeños",
+    name: "Plan Premium",
+    price: "79.99",
+    period: "pago único",
+    originalPrice: "199.99", 
+    description: "Acceso completo de por vida para usuarios que buscan la experiencia definitiva",
     features: [
-      "Hasta 10 usuarios incluidos",
-      "Todas las características del Plan Individual",
-      "Dashboard de administración grupal",
-      "Informes de bienestar del grupo",
-      "Sesiones grupales virtuales",
-      "Soporte dedicado",
-      "Configuración personalizada"
+      "Acceso de por vida sin suscripciones",
+      "Todas las características Premium incluidas",
+      "Consultas ilimitadas para siempre",
+      "Contenido exclusivo y actualizaciones",
+      "Análisis avanzado personalizado",
+      "Soporte prioritario de por vida",
+      "Certificado de completar programas"
     ],
     recommended: false,
-    icon: Users,
+    icon: Gem,
     gradient: "from-purple-500 to-purple-600"
   }
 ];
