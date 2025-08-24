@@ -83,9 +83,9 @@ const businessPlans = [
   },
   {
     name: "Plan Empresarial",
-    price: "199.99",
+    price: "598",
     period: "mes",
-    originalPrice: "599.99",
+    originalPrice: "999.99",
     description: "Ideal para empresas medianas que priorizan el bienestar de sus empleados",
     features: [
       "Hasta 200 empleados incluidos",
