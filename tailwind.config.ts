@@ -44,6 +44,15 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        // NFLOW Custom Colors
+        "nflow-orange": "hsl(var(--nflow-orange))",
+        "nflow-orange-light": "hsl(var(--nflow-orange-light))",
+        "nflow-navy": "hsl(var(--nflow-navy))",
+        "nflow-dark": "hsl(var(--nflow-dark))",
+        "nflow-blue": "hsl(var(--nflow-blue))",
+        "nflow-blue-dark": "hsl(var(--nflow-blue-dark))",
+        "nflow-gray": "hsl(var(--nflow-gray))",
+        "nflow-light": "hsl(var(--nflow-light))",
         chart: {
           "1": "hsl(var(--chart-1))",
           "2": "hsl(var(--chart-2))",
