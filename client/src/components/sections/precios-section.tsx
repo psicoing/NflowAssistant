@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { Check, Star, Crown, Shield, Zap, Users } from "lucide-react";
+import { Check, Star, Crown, Shield, Zap, Users, Building, Briefcase, Globe } from "lucide-react";
 
-const pricingPlans = [
+const personalPlans = [
   {
     name: "Plan Básico",
     price: "2.99",
@@ -60,6 +60,73 @@ const pricingPlans = [
   }
 ];
 
+const businessPlans = [
+  {
+    name: "Plan Profesional",
+    price: "99.99",
+    period: "mes",
+    originalPrice: "299.99",
+    description: "Para profesionales de la salud mental y consultores independientes",
+    features: [
+      "Hasta 50 clientes/pacientes",
+      "Panel de administración avanzado",
+      "Informes y analytics detallados",
+      "Integración con calendarios",
+      "Sesiones de seguimiento personalizado",
+      "Soporte técnico prioritario",
+      "Certificaciones y acreditaciones",
+      "Herramientas de evaluación profesional"
+    ],
+    recommended: false,
+    icon: Briefcase,
+    gradient: "from-emerald-500 to-teal-600"
+  },
+  {
+    name: "Plan Empresarial",
+    price: "199.99",
+    period: "mes",
+    originalPrice: "599.99",
+    description: "Ideal para empresas medianas que priorizan el bienestar de sus empleados",
+    features: [
+      "Hasta 200 empleados incluidos",
+      "Dashboard ejecutivo con KPIs",
+      "Programas de bienestar personalizados",
+      "Integración con RRHH",
+      "Reportes de clima laboral",
+      "Sesiones grupales ilimitadas",
+      "Soporte dedicado 24/7",
+      "Cumplimiento normativo ISO 45003",
+      "Onboarding y capacitación incluida"
+    ],
+    recommended: true,
+    icon: Building,
+    gradient: "from-nflow-orange to-orange-600"
+  },
+  {
+    name: "Plan Corporativo",
+    price: "Personalizado",
+    period: "mes",
+    originalPrice: "999.99+",
+    description: "Solución completa para grandes corporaciones y organizaciones",
+    features: [
+      "Usuarios ilimitados",
+      "Implementación personalizada",
+      "Integración API completa",
+      "Múltiples ubicaciones/países",
+      "Soporte multi-idioma",
+      "Gerente de cuenta dedicado",
+      "SLA garantizado 99.9%",
+      "Auditorías de seguridad",
+      "Cumplimiento GDPR y normativas locales",
+      "Desarrollo de funciones personalizadas"
+    ],
+    recommended: false,
+    icon: Globe,
+    gradient: "from-purple-600 to-indigo-700",
+    isCustom: true
+  }
+];
+
 export default function PreciosSection() {
   const [, setLocation] = useLocation();
 
@@ -82,8 +149,9 @@ export default function PreciosSection() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
-          {pricingPlans.map((plan, index) => {
+        {/* Personal Plans */}
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
+          {personalPlans.map((plan, index) => {
             const IconComponent = plan.icon;
             return (
               <div 
@@ -143,21 +211,112 @@ export default function PreciosSection() {
           })}
         </div>
 
-        {/* Additional Info */}
+        {/* Business Plans Section */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            Planes NFLOW Empresas & Instituciones
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Soluciones profesionales diseñadas para organizaciones que priorizan 
+            el bienestar mental de sus empleados y clientes.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8 mb-12">
+          {businessPlans.map((plan, index) => {
+            const IconComponent = plan.icon;
+            return (
+              <div 
+                key={index} 
+                className={`relative bg-white rounded-3xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300 ${
+                  plan.recommended ? 'ring-4 ring-nflow-orange ring-opacity-50' : ''
+                }`}
+              >
+                {plan.recommended && (
+                  <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-nflow-orange to-orange-600 text-white text-center py-2 font-bold text-sm">
+                    ⭐ MÁS POPULAR EMPRESAS
+                  </div>
+                )}
+
+                <div className={`bg-gradient-to-r ${plan.gradient} p-8 text-white ${plan.recommended ? 'pt-12' : ''}`}>
+                  <div className="flex items-center justify-center mb-4">
+                    <IconComponent className="w-12 h-12" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-center mb-2">{plan.name}</h3>
+                  <div className="text-center">
+                    {plan.isCustom ? (
+                      <div>
+                        <span className="text-2xl font-bold">Precio {plan.price}</span>
+                        <p className="text-sm opacity-80 mt-2">Cotización personalizada</p>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center space-x-2">
+                        <span className="text-lg line-through opacity-60">€{plan.originalPrice}</span>
+                        <span className="text-4xl font-bold">€{plan.price}</span>
+                        <span className="text-lg">/{plan.period}</span>
+                      </div>
+                    )}
+                    {!plan.isCustom && (
+                      <div className="bg-white/20 rounded-full px-3 py-1 text-xs font-bold mt-2 inline-block">
+                        AHORRA {Math.round((1 - parseFloat(plan.price) / parseFloat(plan.originalPrice)) * 100)}%
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="p-8">
+                  <p className="text-gray-600 mb-6 text-center">{plan.description}</p>
+                  
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start space-x-3">
+                        <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Button 
+                    onClick={() => plan.isCustom ? setLocation("/partners") : setLocation("/login")}
+                    className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-300 ${
+                      plan.recommended 
+                        ? 'bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white'
+                        : plan.isCustom
+                        ? 'bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-indigo-700 hover:to-purple-800 text-white'
+                        : 'bg-gray-900 hover:bg-gray-800 text-white'
+                    }`}
+                  >
+                    {plan.isCustom ? 'Contactar Ventas' : 'Empezar Ahora'}
+                  </Button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Contact Info */}
         <div className="bg-gray-900 rounded-3xl p-8 text-center">
           <h3 className="text-2xl font-bold text-white mb-4">
-            ¿Necesitas un plan empresarial?
+            ¿Tienes dudas sobre nuestros planes empresariales?
           </h3>
           <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-            Ofrecemos soluciones personalizadas para empresas de todos los tamaños con 
-            características adicionales, integraciones y soporte dedicado.
+            Nuestro equipo de ventas especializado te ayudará a elegir la solución perfecta 
+            para tu organización. Consulta gratuita y demo personalizada incluida.
           </p>
-          <Button 
-            onClick={() => setLocation("/partners")}
-            className="bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white px-8 py-4 rounded-2xl font-bold"
-          >
-            Contactar Ventas
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              onClick={() => setLocation("/partners")}
+              className="bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white px-8 py-4 rounded-2xl font-bold"
+            >
+              Contactar Ventas
+            </Button>
+            <Button 
+              onClick={() => setLocation("/partners")}
+              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-4 rounded-2xl font-bold transition-all duration-300"
+            >
+              Solicitar Demo
+            </Button>
+          </div>
         </div>
       </div>
     </section>
