@@ -156,8 +156,8 @@ export default function PreciosSection() {
             return (
               <div 
                 key={index} 
-                className={`relative bg-white rounded-3xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300 ${
-                  plan.recommended ? 'ring-4 ring-nflow-orange ring-opacity-50' : ''
+                className={`relative bg-gradient-to-br from-white via-blue-50/20 to-indigo-50/10 rounded-3xl shadow-2xl border border-gray-200/30 overflow-hidden transform hover:scale-105 hover:shadow-3xl transition-all duration-300 ${
+                  plan.recommended ? 'ring-4 ring-nflow-orange ring-opacity-60 shadow-nflow-orange/25 bg-gradient-to-br from-orange-50/20 via-white to-red-50/10' : ''
                 }`}
               >
                 {plan.recommended && (
@@ -183,7 +183,7 @@ export default function PreciosSection() {
                   </div>
                 </div>
 
-                <div className="p-8">
+                <div className="p-8 bg-gradient-to-b from-white/90 via-blue-50/30 to-indigo-50/20 backdrop-blur-sm">
                   <p className="text-gray-600 mb-6 text-center">{plan.description}</p>
                   
                   <ul className="space-y-3 mb-8">
@@ -197,7 +197,7 @@ export default function PreciosSection() {
 
                   <Button 
                     onClick={() => setLocation("/login")}
-                    className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-300 ${
+                    className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl ${
                       plan.recommended 
                         ? 'bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white'
                         : 'bg-gray-900 hover:bg-gray-800 text-white'
@@ -228,8 +228,8 @@ export default function PreciosSection() {
             return (
               <div 
                 key={index} 
-                className={`relative bg-white rounded-3xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300 ${
-                  plan.recommended ? 'ring-4 ring-nflow-orange ring-opacity-50' : ''
+                className={`relative bg-gradient-to-br from-white via-emerald-50/15 to-teal-50/10 rounded-3xl shadow-2xl border border-gray-200/40 overflow-hidden transform hover:scale-105 hover:shadow-3xl transition-all duration-300 backdrop-blur-sm ${
+                  plan.recommended ? 'ring-4 ring-nflow-orange ring-opacity-60 shadow-nflow-orange/25 bg-gradient-to-br from-orange-50/25 via-white to-amber-50/15' : ''
                 }`}
               >
                 {plan.recommended && (
@@ -264,7 +264,7 @@ export default function PreciosSection() {
                   </div>
                 </div>
 
-                <div className="p-8">
+                <div className="p-8 bg-gradient-to-b from-white/90 via-emerald-50/25 to-teal-50/15 backdrop-blur-sm">
                   <p className="text-gray-600 mb-6 text-center">{plan.description}</p>
                   
                   <ul className="space-y-3 mb-8">
@@ -278,7 +278,7 @@ export default function PreciosSection() {
 
                   <Button 
                     onClick={() => plan.isCustom ? setLocation("/partners") : setLocation("/login")}
-                    className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-300 ${
+                    className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl ${
                       plan.recommended 
                         ? 'bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white'
                         : plan.isCustom
