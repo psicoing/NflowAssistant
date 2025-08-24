@@ -9,18 +9,10 @@
   }
 }
 
-/* Desktop full-width optimization - Perfect centering */
+/* Simple responsive design with symmetric margins */
 @media (min-width: 1024px) {
-  .nflow-full-width-section {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    padding-left: 2.5vw;
-    padding-right: 2.5vw;
-  }
-  
-  .nflow-card-container {
-    max-width: 95vw;
-    width: 95vw;
+  .nflow-responsive-container {
+    max-width: 85vw;
     margin: 0 auto;
   }
   
@@ -30,43 +22,15 @@
   }
 }
 
-/* Ultra-wide screens optimization */
+@media (min-width: 1280px) {
+  .nflow-responsive-container {
+    max-width: 80vw;
+  }
+}
+
 @media (min-width: 1536px) {
-  .nflow-full-width-section {
-    padding-left: 4vw;
-    padding-right: 4vw;
-  }
-  
-  .nflow-card-container {
-    max-width: 92vw;
-    width: 92vw;
-  }
-}
-
-/* Alternative full-width approach */
-.nflow-full-section {
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-}
-
-/* Ensure no black stripes on sides */
-body {
-  overflow-x: hidden;
-}
-
-/* Perfect centering without side gaps */
-@media (min-width: 1024px) {
-  .nflow-perfect-center {
-    width: 100%;
-    max-width: none;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: max(2.5vw, calc((100vw - 1200px) / 2));
-    padding-right: max(2.5vw, calc((100vw - 1200px) / 2));
+  .nflow-responsive-container {
+    max-width: 75vw;
   }
 }
 
