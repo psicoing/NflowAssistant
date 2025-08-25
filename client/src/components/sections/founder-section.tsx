@@ -114,7 +114,7 @@ export default function FounderSection() {
         {/* Innovation Stats */}
         <div className="mt-16 grid md:grid-cols-3 gap-8">
           <div className="text-center text-white">
-            <div className="text-4xl font-bold text-orange-400 mb-2">15+</div>
+            <div className="text-4xl font-bold text-orange-400 mb-2">32</div>
             <div className="text-blue-100">Años de Experiencia</div>
           </div>
           <div className="text-center text-white">
@@ -122,7 +122,7 @@ export default function FounderSection() {
             <div className="text-blue-100">Certificación Especializada</div>
           </div>
           <div className="text-center text-white">
-            <div className="text-4xl font-bold text-orange-400 mb-2">10,000+</div>
+            <div className="text-4xl font-bold text-orange-400 mb-2">788</div>
             <div className="text-blue-100">Usuarios Beneficiados</div>
           </div>
         </div>

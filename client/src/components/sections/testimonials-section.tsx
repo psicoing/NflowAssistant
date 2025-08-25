@@ -126,8 +126,8 @@ export default function TestimonialsSection() {
         <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black rounded-3xl p-12 text-center shadow-2xl border border-gray-700">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="text-lg font-semibold text-white mb-3 drop-shadow-lg">10,000+</div>
-              <div className="text-gray-200 font-semibold text-lg">Usuarios Activos</div>
+              <div className="text-lg font-semibold text-white mb-3 drop-shadow-lg">788</div>
+              <div className="text-gray-200 font-semibold text-lg">Usuarios Beneficiados</div>
             </div>
             <div>
               <div className="text-lg font-semibold text-white mb-3 drop-shadow-lg">50,000+</div>
