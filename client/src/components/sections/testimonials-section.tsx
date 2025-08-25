@@ -130,7 +130,7 @@ export default function TestimonialsSection() {
               <div className="text-gray-200 font-semibold text-lg">Usuarios Beneficiados</div>
             </div>
             <div>
-              <div className="text-lg font-semibold text-white mb-3 drop-shadow-lg">50,000+</div>
+              <div className="text-lg font-semibold text-white mb-3 drop-shadow-lg">1,345</div>
               <div className="text-gray-200 font-semibold text-lg">Consultas Realizadas</div>
             </div>
             <div>
