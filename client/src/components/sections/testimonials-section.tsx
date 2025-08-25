@@ -126,19 +126,19 @@ export default function TestimonialsSection() {
         <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black rounded-3xl p-12 text-center shadow-2xl border border-gray-700">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="text-5xl font-bold text-white mb-3 drop-shadow-lg">10,000+</div>
+              <div className="text-3xl font-bold text-white mb-3 drop-shadow-lg">10,000+</div>
               <div className="text-gray-200 font-semibold text-lg">Usuarios Activos</div>
             </div>
             <div>
-              <div className="text-5xl font-bold text-white mb-3 drop-shadow-lg">50,000+</div>
+              <div className="text-3xl font-bold text-white mb-3 drop-shadow-lg">50,000+</div>
               <div className="text-gray-200 font-semibold text-lg">Consultas Realizadas</div>
             </div>
             <div>
-              <div className="text-5xl font-bold text-white mb-3 drop-shadow-lg">97%</div>
+              <div className="text-3xl font-bold text-white mb-3 drop-shadow-lg">97%</div>
               <div className="text-gray-200 font-semibold text-lg">Satisfacción Promedio</div>
             </div>
             <div>
-              <div className="text-5xl font-bold text-white mb-3 drop-shadow-lg">24/7</div>
+              <div className="text-3xl font-bold text-white mb-3 drop-shadow-lg">24/7</div>
               <div className="text-gray-200 font-semibold text-lg">Disponibilidad</div>
             </div>
           </div>
