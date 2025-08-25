@@ -145,7 +145,7 @@ export default function TestimonialsSection() {
           
           <div className="mt-8 pt-8 border-t border-gray-600">
             <h3 className="text-3xl font-bold text-white mb-4 drop-shadow-lg">
-              Únete a miles de usuarios satisfechos
+              Únete a personas satisfechas
             </h3>
             <p className="text-gray-200 text-lg mb-6 max-w-2xl mx-auto font-medium">
               Basado en testimonios reales de usuarios que han experimentado 
