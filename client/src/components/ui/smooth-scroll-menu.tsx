@@ -79,19 +79,22 @@ export default function SmoothScrollMenu() {
       return;
     }
 
-    // If not on home page, navigate to home first then scroll
-    if (location !== "/") {
-      window.location.href = `/#${sectionId}`;
-      return;
-    }
+    // Add small delay to ensure menu closes first
+    setTimeout(() => {
+      // If not on home page, navigate to home first then scroll
+      if (location !== "/") {
+        window.location.href = `/#${sectionId}`;
+        return;
+      }
 
-    // Smooth scroll to section
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 100; // Account for fixed header
-      const elementPosition = element.offsetTop - offset;
-      window.scrollTo({ top: elementPosition, behavior: "smooth" });
-    }
+      // Smooth scroll to section
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const offset = 100; // Account for fixed header
+        const elementPosition = element.offsetTop - offset;
+        window.scrollTo({ top: elementPosition, behavior: "smooth" });
+      }
+    }, 300); // Small delay to allow menu animation to complete
   };
 
   return (
