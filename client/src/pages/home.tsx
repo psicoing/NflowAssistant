@@ -35,8 +35,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-nflow-dark">
-      <Header showBanner={false} />
-      <main className="pt-16">
+      <Header showBanner={true} />
+      <main className="pt-28">
         <LanguageBannerSection />
         <IntroCardSection />
         <NFlowCarouselSection />

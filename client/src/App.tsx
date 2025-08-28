@@ -39,6 +39,7 @@ import AppMovil from "@/pages/app-movil";
 import PreciosPage from "@/pages/precios";
 import BlogNew from "@/pages/blog-new";
 import FloatingCTAButton from "@/components/FloatingCTAButton";
+import DomainInfoBanner from "@/components/ui/domain-info-banner";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -126,6 +127,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-nflow-dark text-white">
+      <DomainInfoBanner />
       <Toaster />
       <AuthenticatedRouter />
       <PWAInstallPrompt />
