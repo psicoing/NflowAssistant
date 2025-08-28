@@ -10,7 +10,7 @@ export default function DomainInfoBanner() {
         <div className="flex items-center justify-center gap-3 text-sm font-medium">
           <Globe className="w-4 h-4 text-orange-100" />
           <span>
-            <strong>✅ NFLOW Oficial</strong> - Has accedido desde{" "}
+            <strong>✅ NFLOW Oficial</strong> - Aplicación técnica conectada desde{" "}
             <span className="font-bold text-orange-100">nflow.es, nflow.biz, nflow.gal o nflow.store</span>
           </span>
           <Shield className="w-4 h-4 text-orange-100" />
@@ -18,7 +18,7 @@ export default function DomainInfoBanner() {
         
         <div className="mt-1 flex items-center justify-center gap-2 text-xs text-orange-100">
           <Lock className="w-3 h-3" />
-          <span>Plataforma oficial verificada • Conexión 100% segura • Tus datos están protegidos</span>
+          <span>Esta URL es la app • Los dominios NFLOW son comerciales • Conexión 100% segura</span>
         </div>
       </div>
     </div>
