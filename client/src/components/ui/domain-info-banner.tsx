@@ -10,15 +10,15 @@ export default function DomainInfoBanner() {
         <div className="flex items-center justify-center gap-3 text-sm font-medium">
           <Globe className="w-4 h-4 text-orange-100" />
           <span>
-            <strong>✅ NFLOW Oficial</strong> - Has accedido desde{" "}
-            <span className="font-bold text-orange-100">nflow.es, nflow.biz, nflow.gal o nflow.store</span>
+            <strong>✅ NFLOW Oficial</strong> - Nos puedes conocer por{" "}
+            <span className="font-bold text-orange-100">nflow.es • nflow.biz • nflow.gal • nflow.store • nflow.style</span>
           </span>
           <Shield className="w-4 h-4 text-orange-100" />
         </div>
         
         <div className="mt-1 flex items-center justify-center gap-2 text-xs text-orange-100">
           <Lock className="w-3 h-3" />
-          <span>Dominio oficial de la app: <strong>nflow-assistant-rmportbou.replit.app</strong> • Conexión 100% segura</span>
+          <span>Dominio oficial de la app: <strong>nflow.style</strong> • Conexión 100% segura</span>
         </div>
       </div>
     </div>
