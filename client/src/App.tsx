@@ -127,7 +127,6 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-nflow-dark text-white">
-      <DomainInfoBanner />
       <Toaster />
       <AuthenticatedRouter />
       <PWAInstallPrompt />
