@@ -56,7 +56,7 @@ const menuItems = [
   {
     id: "nosotros",
     name: "Nosotros",
-    sectionId: "nosotros",
+    sectionId: "founder",
     icon: Info
   },
   {
