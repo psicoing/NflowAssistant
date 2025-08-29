@@ -2,9 +2,9 @@ import { Shield, CheckCircle, Globe, Lock } from "lucide-react";
 
 export default function DomainInfoBanner() {
   return (
-    <div className="bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 text-white py-4 px-4 text-center relative overflow-hidden">
+    <div className="bg-gradient-to-r from-sky-300 via-sky-400 to-blue-400 text-white py-4 px-4 text-center relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-blue-700/20"></div>
+      <div className="absolute inset-0 bg-sky-600/15"></div>
       
       <div className="relative max-w-6xl mx-auto">
         <div className="flex items-center justify-center gap-3 text-sm font-medium">
