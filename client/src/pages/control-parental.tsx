@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { useEffect } from "react";
 import { 
   Shield, 
   Users, 
@@ -21,6 +22,10 @@ import {
 import youthControlImage from "@assets/image_1756563884379.png";
 
 export default function ControlParentalPage() {
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-emerald-50 to-teal-50 dark:from-gray-900 dark:to-blue-900">
       {/* Header Navigation */}
