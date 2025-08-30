@@ -1,4 +1,5 @@
 import { Brain, Heart, Users, TrendingUp } from "lucide-react";
+import { Link } from "wouter";
 import youthImage from "@assets/ChatGPT Image 17 jul 2025, 18_00_01_1752768099056.png";
 
 export default function YouthMentalHealthSection() {
@@ -105,12 +106,11 @@ export default function YouthMentalHealthSection() {
 
             {/* CTA */}
             <div className="pt-6">
-              <button 
-                onClick={() => window.location.href = '/control-parental'}
-                className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300 hover:from-emerald-700 hover:to-teal-700"
-              >
-                Niños y Adolescentes
-              </button>
+              <Link href="/control-parental">
+                <button className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300 hover:from-emerald-700 hover:to-teal-700">
+                  Niños y Adolescentes
+                </button>
+              </Link>
             </div>
           </div>
         </div>
