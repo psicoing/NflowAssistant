@@ -239,7 +239,7 @@ export default function NosotrosPage() {
                   <div className="flex items-center gap-4">
                     <MapPin className="h-5 w-5 text-gray-500" />
                     <div>
-                      <h4 className="font-semibold">EMPORDAJOBS SL</h4>
+                      <h4 className="font-semibold">JOBDA, filial de EMPORDAJOBS SL</h4>
                       <p className="text-gray-600 dark:text-gray-400">CIF: B02701100</p>
                       <p className="text-gray-600 dark:text-gray-400">Portbou, Girona, España</p>
                     </div>
@@ -281,7 +281,7 @@ export default function NosotrosPage() {
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                     NFLOW forma parte del <strong>Grupo JOBDA</strong>, una plataforma integral de multiservicios 
                     que opera bajo la marca <strong>JOBDA.BIZ</strong>. Este ecosistema empresarial está 
-                    legalmente constituido bajo <strong>EMPORDAJOBS SL</strong> (CIF: B02701100).
+                    legalmente constituido bajo <strong>JOBDA, filial de EMPORDAJOBS SL</strong> (CIF: B02701100).
                   </p>
                   
                   <div className="grid md:grid-cols-2 gap-6 mt-6">

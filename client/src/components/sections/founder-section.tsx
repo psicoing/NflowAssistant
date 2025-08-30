@@ -40,7 +40,7 @@ export default function FounderSection() {
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <Award className="w-5 h-5 text-orange-400" />
-                  <span className="text-blue-100">CEO y Fundador de Empordajobs SL</span>
+                  <span className="text-blue-100">CEO y Fundador de JOBDA, filial de Empordajobs SL</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="w-5 h-5 text-orange-400" />

@@ -608,7 +608,7 @@ export default function PricingSection() {
             
             <div className="text-center pt-2 border-t">
               <p className="text-xs text-gray-500">
-                EMPORDAJOBS SL • CIF: B02701100<br />
+                JOBDA, filial de EMPORDAJOBS SL • CIF: B02701100<br />
                 Especialistas en salud mental empresarial
               </p>
             </div>

@@ -200,7 +200,7 @@ export default function AboutUsModal({ trigger, onOpenChange }: AboutUsModalProp
                   <div className="flex items-center gap-3">
                     <MapPin className="h-4 w-4 text-gray-500" />
                     <div>
-                      <p className="font-medium">EMPORDAJOBS SL</p>
+                      <p className="font-medium">JOBDA, filial de EMPORDAJOBS SL</p>
                       <p className="text-sm text-gray-600 dark:text-gray-400">CIF: B02701100</p>
                       <p className="text-sm text-gray-600 dark:text-gray-400">Portbou, Girona, España</p>
                     </div>

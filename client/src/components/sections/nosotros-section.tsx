@@ -140,7 +140,7 @@ export default function NosotrosSection() {
           <div>
             <h3 className="text-2xl font-bold text-gray-900 mb-6">Información Corporativa</h3>
             <div className="space-y-4 text-gray-600">
-              <p><strong>Razón Social:</strong> EMPORDAJOBS SL</p>
+              <p><strong>Razón Social:</strong> JOBDA, filial de EMPORDAJOBS SL</p>
               <p><strong>CIF:</strong> B02701100</p>
               <p><strong>Domicilio:</strong> Portbou, Girona, España</p>
               <p><strong>Email:</strong> empordajobs@gmail.com</p>

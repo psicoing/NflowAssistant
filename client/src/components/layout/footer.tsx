@@ -115,7 +115,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center mb-4">
             <p className="text-gray-400 text-sm">
-              © 2025 EMPORDAJOBS SL. Todos los derechos reservados.
+              © 2025 JOBDA, filial de EMPORDAJOBS SL. Todos los derechos reservados.
             </p>
             <p className="text-gray-400 text-sm mt-2 md:mt-0">
               Desarrollado con ❤️ para mejorar la salud mental
@@ -123,7 +123,7 @@ export default function Footer() {
           </div>
           <div className="text-center md:text-left">
             <p className="text-gray-500 text-xs">
-              EMPORDAJOBS SL • CIF: B02701100 • Portbou, Girona, España
+              JOBDA, filial de EMPORDAJOBS SL • CIF: B02701100 • Portbou, Girona, España
             </p>
             <p className="text-gray-500 text-xs mt-1">
               Email: empordajobs@gmail.com • Teléfono: +34 660 45 21 36
