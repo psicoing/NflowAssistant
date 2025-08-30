@@ -73,7 +73,7 @@ export default function NosotrosPage() {
                   <div className="flex flex-wrap gap-3">
                     <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 py-1 px-3">
                       <Shield className="h-3 w-3 mr-1" />
-                      Colegiado Barcelona #7851
+                      Colegiado Colegio de Psicólogos de Barcelona
                     </Badge>
                     <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 py-1 px-3">
                       <Award className="h-3 w-3 mr-1" />

@@ -124,7 +124,7 @@ export default function NosotrosSection() {
                 Llic. Ramón Molons de San Román
               </h4>
               <p className="text-white/90 text-lg">
-                Colegiado Barcelona #7851
+                Colegiado Colegio de Psicólogos de Barcelona
               </p>
             </div>
             <p className="text-gray-300 text-lg leading-relaxed">
