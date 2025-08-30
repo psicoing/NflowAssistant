@@ -48,11 +48,15 @@ export default function FounderSection() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <Building2 className="w-5 h-5 text-orange-400" />
-                  <span className="text-blue-100">Colegiado Colegio de Psicólogos de Barcelona</span>
+                  <span className="text-blue-100">Colegiado Colegio de Psicólogos de Barcelona #7851</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Users className="w-5 h-5 text-orange-400" />
                   <span className="text-blue-100">Psicólogo Clínico y Escolar</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="w-5 h-5 text-orange-400" />
+                  <span className="text-blue-100">Licencia Sanitaria Estatal E-17928702</span>
                 </div>
               </div>
             </div>

@@ -123,9 +123,10 @@ export default function NosotrosSection() {
               <h4 className="text-2xl font-bold text-white mb-2">
                 Llic. Ramón Molons de San Román
               </h4>
-              <p className="text-white/90 text-lg">
-                Colegiado Colegio de Psicólogos de Barcelona
-              </p>
+              <div className="text-white/90 text-lg space-y-1">
+                <p>Colegiado Colegio de Psicólogos de Barcelona #7851</p>
+                <p>Licencia Sanitaria Estatal E-17928702</p>
+              </div>
             </div>
             <p className="text-gray-300 text-lg leading-relaxed">
               Nuestro equipo está dirigido por psicólogos colegiados con años de experiencia 
