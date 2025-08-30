@@ -76,15 +76,15 @@ export default function FounderSection() {
           </div>
 
           {/* Image */}
-          <div className="relative">
-            <div className="relative bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
+          <div className="relative flex justify-center">
+            <div className="relative bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20 w-80 max-w-sm">
               {/* CEO Badge */}
-              <div className="absolute -top-4 -right-4 bg-orange-500 text-white rounded-full w-16 h-16 flex items-center justify-center font-bold text-lg shadow-xl z-10">
+              <div className="absolute -top-4 -right-4 bg-orange-500 text-white rounded-full w-14 h-14 flex items-center justify-center font-bold text-sm shadow-xl z-10">
                 CEO
               </div>
               
               {/* Profile Image */}
-              <div className="w-full aspect-square rounded-2xl mb-6 overflow-hidden shadow-xl">
+              <div className="w-56 h-56 mx-auto rounded-2xl mb-6 overflow-hidden shadow-xl">
                 <img 
                   src={founderImagePath} 
                   alt="Ramón Molons de San Román - CEO y Fundador de NFLOW"
