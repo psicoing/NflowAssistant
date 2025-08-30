@@ -501,7 +501,7 @@ export default function ControlParentalPage() {
               <Link href="/registro">
                 <Button 
                   size="lg" 
-                  className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-full sm:w-auto"
+                  className="bg-orange-500 text-white hover:bg-orange-600 px-8 py-4 text-lg font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-full sm:w-auto border-2 border-white"
                 >
                   Empezar Ahora - Control Parental
                 </Button>
@@ -510,7 +510,7 @@ export default function ControlParentalPage() {
                 <Button 
                   variant="outline"
                   size="lg" 
-                  className="border-white text-white hover:bg-white/10 px-8 py-4 text-lg font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-full sm:w-auto"
+                  className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-full sm:w-auto"
                 >
                   Consulta Profesional
                 </Button>
