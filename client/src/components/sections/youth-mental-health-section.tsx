@@ -106,10 +106,10 @@ export default function YouthMentalHealthSection() {
             {/* CTA */}
             <div className="pt-6">
               <button 
-                onClick={() => window.location.href = '/ejemplos-chat'}
+                onClick={() => window.location.href = '/control-parental'}
                 className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300 hover:from-emerald-700 hover:to-teal-700"
               >
-                Apoyo para Jóvenes
+                Niños y Adolescentes
               </button>
             </div>
           </div>

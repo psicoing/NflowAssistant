@@ -36,6 +36,7 @@ import PoliticaCookies from "@/pages/legal/cookies";
 import AvisoLegal from "@/pages/legal/aviso-legal";
 import NosotrosPage from "@/pages/nosotros";
 import AppMovil from "@/pages/app-movil";
+import ControlParental from "@/pages/control-parental";
 import PreciosPage from "@/pages/precios";
 import BlogNew from "@/pages/blog-new";
 import FloatingCTAButton from "@/components/FloatingCTAButton";
@@ -49,7 +50,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners", "/nosotros", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners", "/nosotros", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
     // Allow blog article routes
     if (location.startsWith("/blog/")) {
       return;
@@ -111,6 +112,7 @@ function AuthenticatedRouter() {
       <Route path="/legal/aviso-legal" component={AvisoLegal} />
       <Route path="/nosotros" component={NosotrosPage} />
       <Route path="/app-movil" component={AppMovil} />
+      <Route path="/control-parental" component={ControlParental} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -123,7 +125,7 @@ function AppContent() {
   // Only show floating CTA on public pages and for non-authenticated users
   const showFloatingCTA = !isAuthenticated && 
     (location === "/" || location === "/ejemplos-chat" || location === "/precios" || 
-     location === "/app-movil" || location === "/nosotros" || location === "/blog");
+     location === "/app-movil" || location === "/nosotros" || location === "/control-parental" || location === "/blog");
 
   return (
     <div className="min-h-screen bg-nflow-dark text-white">
