@@ -1,7 +1,7 @@
 # NFLOW - Asistente de Salud Mental con IA
 
 ## Overview
-NFLOW es una plataforma web de salud mental que integra un asistente conversacional basado en IA con recursos educativos y un sistema de suscripciones completamente automatizado. Su objetivo es proporcionar apoyo de salud mental accesible, profesional y anónimo. La plataforma está diseñada para una capacidad ilimitada de usuarios, con activación automática de suscripciones a través de PayPal y Stripe, sin requerir intervención manual.
+NFLOW es una aplicación para la salud mental de personas individuales, familias y trabajadores. Ofrece soluciones innovadoras que integren salud mental y desarrollo laboral, alineadas con los principios de la normativa ISO 45003, centrada en el bienestar psicológico en el entorno de trabajo. NFLOW funciona como un recurso digital de apoyo emocional continuo, diseñado para una capacidad ilimitada de usuarios, con activación automática de suscripciones a través de PayPal y Stripe, sin requerir intervención manual.
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.

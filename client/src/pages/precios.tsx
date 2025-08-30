@@ -16,11 +16,11 @@ export default function PreciosPage() {
                 Planes de Suscripción
               </h1>
               <h2 className="text-2xl md:text-3xl font-semibold text-gray-300 mb-8">
-                Salud mental digital sin postureo
+                Para individuos, familias y trabajadores
               </h2>
               <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-                Solo tú, tu mejora personal y la IA. Todo 100% automático, seguro y privado. 
-                Aquí lo que ves es lo que hay.
+                Soluciones innovadoras que integren salud mental y desarrollo laboral, alineadas con 
+                los principios de la normativa ISO 45003. Recurso digital de apoyo emocional continuo.
               </p>
             </div>
           </section>

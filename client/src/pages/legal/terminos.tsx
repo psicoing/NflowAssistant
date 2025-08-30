@@ -71,7 +71,10 @@ export default function TerminosCondiciones() {
 
             <h2>2. Descripción del Servicio</h2>
             <p>
-              NFLOW es una plataforma digital de salud mental que proporciona:
+              NFLOW es una aplicación para la salud mental de personas individuales, familias y trabajadores. 
+              Ofrece soluciones innovadoras que integren salud mental y desarrollo laboral, alineadas con los 
+              principios de la normativa ISO 45003, centrada en el bienestar psicológico en el entorno de trabajo. 
+              NFLOW funciona como un recurso digital de apoyo emocional continuo que proporciona:
             </p>
             <ul>
               <li>Asistente conversacional de apoyo psicológico basado en IA</li>

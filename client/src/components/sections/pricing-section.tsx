@@ -322,7 +322,7 @@ export default function PricingSection() {
           <div className="inline-block bg-gradient-to-r from-nflow-orange/10 to-orange-600/10 rounded-2xl p-6 border border-nflow-orange/20">
             <h4 className="text-lg font-bold text-white mb-2">Filosofía NFLOW</h4>
             <p className="text-gray-300 text-sm max-w-2xl">
-              NFLOW es salud mental digital sin postureo: sin grupos, sin coach, sin promesas mágicas.<br/>
+              NFLOW es una aplicación para la salud mental de personas individuales, familias y trabajadores.<br/>
               <span className="text-nflow-orange font-medium">Solo tú, tu mejora personal y la IA.</span>
             </p>
           </div>
@@ -339,7 +339,7 @@ export default function PricingSection() {
             </div>
             <h3 className="text-xl font-semibold text-gray-300 mb-6">¿Por qué NFLOW para tu organización?</h3>
             <p className="text-lg text-gray-400 max-w-4xl mx-auto mb-6">
-              Mejora la salud mental de tus equipos con IA, sin postureo ni complicaciones.
+              Mejora la salud mental de tus equipos con soluciones innovadoras alineadas con la normativa ISO 45003.
             </p>
             
             {/* Key Benefits */}

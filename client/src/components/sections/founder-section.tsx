@@ -21,16 +21,16 @@ export default function FounderSection() {
 
             <div className="space-y-6 text-lg leading-relaxed text-blue-50">
               <p>
-                Con <strong>NFLOW y APPIA</strong>, mi objetivo es ofrecer soluciones innovadoras que integren 
+                Con <strong>NFLOW</strong>, mi objetivo es ofrecer soluciones innovadoras que integren 
                 salud mental y desarrollo laboral, alineadas con los principios de la normativa ISO 45003, 
                 centrada en el bienestar psicológico en el entorno de trabajo.
               </p>
               
               <p>
-                <strong>NFLOW</strong> funciona como un recurso digital de apoyo emocional continuo, mientras que 
-                <strong> APPIA</strong> permite a cada organización desarrollar su propia inteligencia artificial 
-                personalizada, generando entornos altamente digitalizados y adaptativos, capaces de responder a 
-                los nuevos desafíos del ámbito corporativo.
+                <strong>NFLOW</strong> es una aplicación para la salud mental de personas individuales, 
+                familias y trabajadores. Funciona como un recurso digital de apoyo emocional continuo, 
+                generando entornos altamente digitalizados y adaptativos, capaces de responder a los 
+                nuevos desafíos del bienestar psicológico en todos los ámbitos de la vida.
               </p>
             </div>
 
