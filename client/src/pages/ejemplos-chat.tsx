@@ -6,6 +6,31 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { ChevronDown, ChevronUp, Bot, User, MessageCircle, Brain, Heart, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// Función para convertir Markdown a HTML formateado
+function formatMarkdownToHtml(content: string): string {
+  return content
+    // Encabezados
+    .replace(/^# (.+)$/gm, '<h1 class="text-lg font-bold text-white mt-4 mb-2 first:mt-0">$1</h1>')
+    .replace(/^## (.+)$/gm, '<h2 class="text-base font-semibold text-white mt-3 mb-2">$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3 class="text-sm font-medium text-white mt-2 mb-1">$1</h3>')
+    // Texto en negrita
+    .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-white">$1</strong>')
+    // Texto en cursiva
+    .replace(/\*(.+?)\*/g, '<em class="italic text-gray-200">$1</em>')
+    // Citas (blockquotes)
+    .replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-nflow-orange pl-4 text-gray-200 italic my-2">$1</blockquote>')
+    // Listas con viñetas
+    .replace(/^- (.+)$/gm, '<li class="text-gray-100 ml-4">• $1</li>')
+    // Listas numeradas
+    .replace(/^(\d+)\. (.+)$/gm, '<li class="text-gray-100 ml-4">$1. $2</li>')
+    // Párrafos (líneas que no son encabezados ni listas)
+    .replace(/^(?!<[h|l|b])(.+)$/gm, '<p class="text-gray-100 mb-2">$1</p>')
+    // Saltos de línea dobles se convierten en espacios entre párrafos
+    .replace(/\n\s*\n/g, '\n')
+    // Saltos de línea simples se convierten en <br>
+    .replace(/\n/g, '<br/>');
+}
+
 interface ChatExample {
   ageRange: string;
   question: string;
@@ -1034,9 +1059,12 @@ export default function EjemplosChat() {
                             <Bot className="w-4 h-4 text-white" />
                           </div>
                           <div className="bg-gray-700/50 border border-gray-600/30 p-4 rounded-lg rounded-tl-md flex-1">
-                            <div className="text-gray-200 text-sm leading-relaxed whitespace-pre-line">
-                              {example.response}
-                            </div>
+                            <div 
+                              className="text-gray-200 text-sm leading-relaxed"
+                              dangerouslySetInnerHTML={{
+                                __html: formatMarkdownToHtml(example.response)
+                              }}
+                            />
                           </div>
                         </div>
                       </div>
