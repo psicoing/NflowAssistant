@@ -921,11 +921,25 @@ export default function EjemplosChat() {
   const [openItems, setOpenItems] = useState<string[]>([]);
 
   const toggleItem = (ageRange: string) => {
+    const isCurrentlyOpen = openItems.includes(ageRange);
+    
     setOpenItems(prev => 
       prev.includes(ageRange) 
         ? prev.filter(item => item !== ageRange)
         : [...prev, ageRange]
     );
+    
+    // Si se está abriendo el item, hacer scroll al principio del contenido después de la expansión
+    if (!isCurrentlyOpen) {
+      setTimeout(() => {
+        const element = document.querySelector(`[data-age-range="${ageRange}"]`);
+        if (element) {
+          const offset = 120; // Account for fixed header
+          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset - offset;
+          window.scrollTo({ top: elementPosition, behavior: "smooth" });
+        }
+      }, 300); // Wait for expansion animation
+    }
   };
 
   return (
@@ -1009,7 +1023,11 @@ export default function EjemplosChat() {
 
             <div className="space-y-4">
               {chatExamples.map((example, index) => (
-                <Card key={index} className="bg-gray-800/60 border-gray-700/50 overflow-hidden">
+                <Card 
+                  key={index} 
+                  className="bg-gray-800/60 border-gray-700/50 overflow-hidden"
+                  data-age-range={example.ageRange}
+                >
                   <Collapsible 
                     open={openItems.includes(example.ageRange)}
                     onOpenChange={() => toggleItem(example.ageRange)}

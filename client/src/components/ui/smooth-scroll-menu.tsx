@@ -15,7 +15,8 @@ const menuItems = [
     id: "ejemplos-chat",
     name: "Ejemplos del chat",
     sectionId: "ejemplos-chat",
-    icon: MessageCircle
+    icon: MessageCircle,
+    isPage: true
   },
   {
     id: "fundador",
@@ -71,11 +72,17 @@ export default function SmoothScrollMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [location] = useLocation();
 
-  const scrollToSection = (sectionId: string) => {
+  const scrollToSection = (sectionId: string, isPage?: boolean) => {
     setIsOpen(false);
     
     if (sectionId === "top") {
       window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    // If it's a separate page, navigate directly
+    if (isPage || sectionId === "ejemplos-chat") {
+      window.location.href = `/${sectionId}`;
       return;
     }
 
@@ -118,7 +125,7 @@ export default function SmoothScrollMenu() {
               return (
                 <button
                   key={item.id}
-                  onClick={() => scrollToSection(item.sectionId)}
+                  onClick={() => scrollToSection(item.sectionId, (item as any).isPage)}
                   className="w-full flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200"
                 >
                   <IconComponent className="w-5 h-5" />
