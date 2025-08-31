@@ -145,31 +145,19 @@ export default function ChatInterface({
                 Estoy aquí para brindarte apoyo emocional profesional y confidencial. 
                 Comparte conmigo lo que te preocupa.
               </p>
-              <div className="grid grid-cols-1 gap-2 md:grid-cols-3 md:gap-3 max-w-sm md:max-w-2xl mx-auto px-4">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onSendMessage('Me siento muy ansioso últimamente y no sé cómo manejarlo')}
-                  className="border-nflow-orange/30 bg-nflow-orange/10 text-white hover:bg-nflow-orange/20 hover:border-nflow-orange/50 transition-all duration-300 text-xs md:text-sm py-2 px-3"
-                >
-                  Ansiedad
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onSendMessage('Tengo problemas para dormir y me afecta mi día a día')}
-                  className="border-nflow-blue/30 bg-nflow-blue/10 text-white hover:bg-nflow-blue/20 hover:border-nflow-blue/50 transition-all duration-300 text-xs md:text-sm py-2 px-3"
-                >
-                  Sueño
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onSendMessage('Estoy muy estresado con el trabajo y la vida diaria')}
-                  className="border-purple-500/30 bg-purple-500/10 text-white hover:bg-purple-500/20 hover:border-purple-500/50 transition-all duration-300 text-xs md:text-sm py-2 px-3"
-                >
-                  Estrés
-                </Button>
+              
+              {/* Arrow pointing to prompt area */}
+              <div className="flex flex-col items-center mt-8 mb-4 px-4">
+                <div className="flex items-center space-x-3 bg-gradient-to-r from-nflow-orange/20 to-nflow-blue/20 border border-nflow-orange/30 rounded-xl px-4 py-3 mb-3">
+                  <div className="w-2 h-2 bg-nflow-orange rounded-full animate-pulse"></div>
+                  <p className="text-sm md:text-base text-white font-medium">
+                    👇 Escribe tu mensaje en el campo de abajo
+                  </p>
+                  <div className="w-2 h-2 bg-nflow-orange rounded-full animate-pulse"></div>
+                </div>
+                <div className="text-nflow-orange text-2xl animate-bounce">
+                  ↓
+                </div>
               </div>
             </div>
           ) : (
