@@ -248,12 +248,20 @@ export default function TestimonialsSection() {
                 Aunque no se sabe hasta dónde llegará, su fuerte es la experiencia de su director, 
                 <span className="font-bold text-white"> dedicado 32 años a la psicología clínica y escolar</span>.
               </p>
-              <div className="flex items-center justify-center space-x-4 text-sm text-gray-300">
+              <div className="flex items-center justify-center space-x-4 text-sm text-gray-300 mb-4">
                 <span>🧠 Neuropsicología</span>
                 <span>•</span>
                 <span>📡 Telecomunicaciones</span>
                 <span>•</span>
                 <span>👨‍⚕️ 32 años experiencia</span>
+              </div>
+              <div className="bg-gradient-to-r from-nflow-orange/20 to-nflow-blue/20 rounded-lg p-4 border border-nflow-orange/40">
+                <p className="text-white font-bold text-center text-lg mb-2">
+                  🌟 ÚNICA EN EL MUNDO EN SU VERSIÓN 🌟
+                </p>
+                <p className="text-gray-200 text-center text-sm">
+                  <span className="font-semibold">Inauguración:</span> Agosto 2025 • Primera plataforma de IA especializada en salud mental con estas características únicas
+                </p>
               </div>
             </div>
             
