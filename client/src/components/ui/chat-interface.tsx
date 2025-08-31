@@ -4,8 +4,32 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Bot, User, Loader2, Copy, RotateCcw, Zap, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import ReactMarkdown from "react-markdown";
 import type { Message } from "@shared/schema";
+
+// Función para convertir Markdown a HTML formateado
+function formatMarkdownToHtml(content: string): string {
+  return content
+    // Encabezados
+    .replace(/^# (.+)$/gm, '<h1 class="text-lg font-bold text-white mt-4 mb-2 first:mt-0">$1</h1>')
+    .replace(/^## (.+)$/gm, '<h2 class="text-base font-semibold text-white mt-3 mb-2">$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3 class="text-sm font-medium text-white mt-2 mb-1">$1</h3>')
+    // Texto en negrita
+    .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-white">$1</strong>')
+    // Texto en cursiva
+    .replace(/\*(.+?)\*/g, '<em class="italic text-gray-200">$1</em>')
+    // Citas (blockquotes)
+    .replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-nflow-orange pl-4 text-gray-200 italic my-2">$1</blockquote>')
+    // Listas con viñetas
+    .replace(/^- (.+)$/gm, '<li class="text-gray-100 ml-4">• $1</li>')
+    // Listas numeradas
+    .replace(/^(\d+)\. (.+)$/gm, '<li class="text-gray-100 ml-4">$1. $2</li>')
+    // Párrafos (líneas que no son encabezados ni listas)
+    .replace(/^(?!<[h|l|b])(.+)$/gm, '<p class="text-gray-100 mb-2">$1</p>')
+    // Saltos de línea dobles se convierten en espacios entre párrafos
+    .replace(/\n\s*\n/g, '\n')
+    // Saltos de línea simples se convierten en <br>
+    .replace(/\n/g, '<br/>');
+}
 
 interface ChatInterfaceProps {
   messages: Message[];
@@ -190,29 +214,18 @@ export default function ChatInterface({
                   }`}
                   onDoubleClick={() => copyMessage(message.content)}
                 >
-                  <div className="max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-700">
+                  <div className="max-h-96 overflow-y-auto scrollbar-thin">
                     {message.isUser ? (
                       <p className="text-sm md:text-sm leading-relaxed whitespace-pre-wrap">
                         {message.content}
                       </p>
                     ) : (
-                      <div className="text-sm md:text-sm leading-relaxed prose prose-invert prose-sm max-w-none">
-                        <ReactMarkdown 
-                          components={{
-                            h1: ({children}) => <h1 className="text-lg font-bold text-white mt-4 mb-2 first:mt-0">{children}</h1>,
-                            h2: ({children}) => <h2 className="text-base font-semibold text-white mt-3 mb-2">{children}</h2>,
-                            h3: ({children}) => <h3 className="text-sm font-medium text-white mt-2 mb-1">{children}</h3>,
-                            p: ({children}) => <p className="text-gray-100 mb-2 last:mb-0">{children}</p>,
-                            strong: ({children}) => <strong className="font-semibold text-white">{children}</strong>,
-                            ul: ({children}) => <ul className="list-disc list-inside text-gray-100 space-y-1 ml-2">{children}</ul>,
-                            ol: ({children}) => <ol className="list-decimal list-inside text-gray-100 space-y-1 ml-2">{children}</ol>,
-                            li: ({children}) => <li className="text-gray-100">{children}</li>,
-                            blockquote: ({children}) => <blockquote className="border-l-4 border-nflow-orange pl-4 text-gray-200 italic my-2">{children}</blockquote>,
-                          }}
-                        >
-                          {message.content}
-                        </ReactMarkdown>
-                      </div>
+                      <div 
+                        className="text-sm md:text-sm leading-relaxed"
+                        dangerouslySetInnerHTML={{
+                          __html: formatMarkdownToHtml(message.content)
+                        }}
+                      />
                     )}
                   </div>
                   
