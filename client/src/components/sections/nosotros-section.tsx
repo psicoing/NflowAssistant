@@ -25,28 +25,6 @@ const teamValues = [
   }
 ];
 
-const stats = [
-  {
-    number: "10,000+",
-    label: "Usuarios Activos",
-    icon: Users
-  },
-  {
-    number: "50,000+",
-    label: "Consultas Realizadas",
-    icon: Target
-  },
-  {
-    number: "24/7",
-    label: "Disponibilidad",
-    icon: Globe
-  },
-  {
-    number: "4.9/5",
-    label: "Satisfacción Usuario",
-    icon: Award
-  }
-];
 
 export default function NosotrosSection() {
   const [, setLocation] = useLocation();
@@ -75,19 +53,6 @@ export default function NosotrosSection() {
           </p>
         </div>
 
-        {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-8 mb-16">
-          {stats.map((stat, index) => {
-            const IconComponent = stat.icon;
-            return (
-              <div key={index} className="text-center bg-white rounded-2xl p-8 shadow-lg">
-                <IconComponent className="w-12 h-12 text-nflow-orange mx-auto mb-4" />
-                <div className="text-3xl font-bold text-gray-900 mb-2">{stat.number}</div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
-              </div>
-            );
-          })}
-        </div>
 
         {/* Values */}
         <div className="mb-16">
