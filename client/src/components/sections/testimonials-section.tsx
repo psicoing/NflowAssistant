@@ -1,4 +1,6 @@
 import { Star, Quote, Calendar, MapPin, MessageCircle, HelpCircle, Users, Target, Clock, ThumbsUp } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 
 const testimonials = [
   {
@@ -63,6 +65,105 @@ const testimonials = [
   }
 ];
 
+// Component to display dynamic statistics
+function DynamicStatsDisplay() {
+  const { data: stats, isLoading, error } = useQuery({
+    queryKey: ['/api/public-stats'],
+    refetchInterval: 30000, // Refresh every 30 seconds
+  });
+
+  const [displayStats, setDisplayStats] = useState({
+    totalUsers: '?',
+    totalConversations: '?',
+    activeSubscriptions: '?',
+    averageSatisfaction: '?'
+  });
+
+  useEffect(() => {
+    if (stats && !isLoading) {
+      // Animate the numbers appearing
+      setTimeout(() => {
+        setDisplayStats({
+          totalUsers: stats.totalUsers.toLocaleString(),
+          totalConversations: stats.totalConversations.toLocaleString(),
+          activeSubscriptions: stats.activeSubscriptions.toLocaleString(),
+          averageSatisfaction: stats.averageSatisfaction.toFixed(1)
+        });
+      }, 500);
+    }
+  }, [stats, isLoading]);
+
+  return (
+    <div className="grid md:grid-cols-4 gap-8">
+      <div className="flex flex-col items-center">
+        <div className="flex items-center space-x-2 mb-3">
+          <Users className="w-6 h-6 text-nflow-orange" />
+        </div>
+        <div className="flex items-center space-x-1 mb-2">
+          <div className="text-3xl font-bold text-nflow-orange drop-shadow-lg">
+            {isLoading ? (
+              <HelpCircle className="w-8 h-8 animate-pulse" />
+            ) : (
+              displayStats.totalUsers
+            )}
+          </div>
+          <div className="relative group">
+            <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+              Usuarios registrados en la plataforma
+            </div>
+          </div>
+        </div>
+        <div className="text-gray-200 font-semibold text-lg">Usuarios Registrados</div>
+      </div>
+      
+      <div className="flex flex-col items-center">
+        <div className="flex items-center space-x-2 mb-3">
+          <Target className="w-6 h-6 text-nflow-orange" />
+        </div>
+        <div className="flex items-center space-x-1 mb-2">
+          <div className="text-3xl font-bold text-nflow-orange drop-shadow-lg">
+            {isLoading ? (
+              <HelpCircle className="w-8 h-8 animate-pulse" />
+            ) : (
+              displayStats.totalConversations
+            )}
+          </div>
+          <div className="relative group">
+            <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+              Conversaciones totales con NEUROPSI-AI
+            </div>
+          </div>
+        </div>
+        <div className="text-gray-200 font-semibold text-lg">Consultas Realizadas</div>
+      </div>
+      
+      <div className="flex flex-col items-center">
+        <div className="flex items-center space-x-2 mb-3">
+          <Clock className="w-6 h-6 text-nflow-orange" />
+        </div>
+        <div className="text-3xl font-bold text-nflow-orange mb-2 drop-shadow-lg">24/7</div>
+        <div className="text-gray-200 font-semibold text-lg">Disponibilidad</div>
+      </div>
+      
+      <div className="flex flex-col items-center">
+        <div className="flex items-center space-x-2 mb-3">
+          <ThumbsUp className="w-6 h-6 text-nflow-orange" />
+        </div>
+        <div className="text-3xl font-bold text-nflow-orange mb-2 drop-shadow-lg">
+          {isLoading ? (
+            <HelpCircle className="w-8 h-8 animate-pulse" />
+          ) : (
+            `${displayStats.averageSatisfaction}/5`
+          )}
+        </div>
+        <div className="text-gray-200 font-semibold text-lg">Satisfacción Usuario</div>
+      </div>
+    </div>
+  );
+}
+
 export default function TestimonialsSection() {
   return (
     <section id="testimonials" className="py-20 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -124,52 +225,7 @@ export default function TestimonialsSection() {
 
         {/* Stats */}
         <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black rounded-3xl p-12 text-center shadow-2xl border border-gray-700">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="flex flex-col items-center">
-              <div className="flex items-center space-x-2 mb-3">
-                <Users className="w-6 h-6 text-nflow-orange" />
-              </div>
-              <div className="flex items-center space-x-1 mb-2">
-                <div className="text-3xl font-bold text-nflow-orange drop-shadow-lg">10,000+</div>
-                <div className="relative group">
-                  <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
-                    Usuarios que han utilizado nuestros servicios
-                  </div>
-                </div>
-              </div>
-              <div className="text-gray-200 font-semibold text-lg">Usuarios Activos</div>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="flex items-center space-x-2 mb-3">
-                <Target className="w-6 h-6 text-nflow-orange" />
-              </div>
-              <div className="flex items-center space-x-1 mb-2">
-                <div className="text-3xl font-bold text-nflow-orange drop-shadow-lg">50,000+</div>
-                <div className="relative group">
-                  <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
-                    Consultas psicológicas realizadas en la plataforma
-                  </div>
-                </div>
-              </div>
-              <div className="text-gray-200 font-semibold text-lg">Consultas Realizadas</div>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="flex items-center space-x-2 mb-3">
-                <Clock className="w-6 h-6 text-nflow-orange" />
-              </div>
-              <div className="text-3xl font-bold text-nflow-orange mb-2 drop-shadow-lg">24/7</div>
-              <div className="text-gray-200 font-semibold text-lg">Disponibilidad</div>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="flex items-center space-x-2 mb-3">
-                <ThumbsUp className="w-6 h-6 text-nflow-orange" />
-              </div>
-              <div className="text-3xl font-bold text-nflow-orange mb-2 drop-shadow-lg">4.9/5</div>
-              <div className="text-gray-200 font-semibold text-lg">Satisfacción Usuario</div>
-            </div>
-          </div>
+          <DynamicStatsDisplay />
           
           <div className="mt-8 pt-8 border-t border-gray-600">
             <h3 className="text-3xl font-bold text-white mb-4 drop-shadow-lg">

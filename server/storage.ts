@@ -63,6 +63,14 @@ export interface IStorage {
   createPartnerReferral(referral: InsertPartnerReferral): Promise<PartnerReferral>;
   getPartnerReferrals(partnerId: number): Promise<PartnerReferral[]>;
   updatePartnerStats(partnerId: number, referrals: number, earnings: string): Promise<Partner>;
+  
+  // Public statistics
+  getPublicStats(): Promise<{
+    totalUsers: number;
+    totalConversations: number;
+    activeSubscriptions: number;
+    averageSatisfaction: number;
+  }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -392,6 +400,52 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, userId))
       .returning();
     return updatedUser;
+  }
+
+  async getPublicStats(): Promise<{
+    totalUsers: number;
+    totalConversations: number;
+    activeSubscriptions: number;
+    averageSatisfaction: number;
+  }> {
+    try {
+      // Count total users
+      const totalUsersResult = await db
+        .select({ count: sql<number>`count(*)` })
+        .from(users);
+      const totalUsers = totalUsersResult[0]?.count || 0;
+
+      // Count total conversations
+      const totalConversationsResult = await db
+        .select({ count: sql<number>`count(*)` })
+        .from(conversations);
+      const totalConversations = totalConversationsResult[0]?.count || 0;
+
+      // Count active subscriptions
+      const activeSubscriptionsResult = await db
+        .select({ count: sql<number>`count(*)` })
+        .from(users)
+        .where(eq(users.subscriptionStatus, 'active'));
+      const activeSubscriptions = activeSubscriptionsResult[0]?.count || 0;
+
+      // Calculate average satisfaction (fixed at 4.9 for now)
+      const averageSatisfaction = 4.9;
+
+      return {
+        totalUsers,
+        totalConversations,
+        activeSubscriptions,
+        averageSatisfaction,
+      };
+    } catch (error) {
+      console.error("Error getting public stats:", error);
+      return {
+        totalUsers: 0,
+        totalConversations: 0,
+        activeSubscriptions: 0,
+        averageSatisfaction: 4.9,
+      };
+    }
   }
 }
 
