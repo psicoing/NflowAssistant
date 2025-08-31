@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Bot, User, Loader2, Copy, RotateCcw, Zap, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import ReactMarkdown from "react-markdown";
 import type { Message } from "@shared/schema";
 
 interface ChatInterfaceProps {
@@ -183,9 +184,29 @@ export default function ChatInterface({
                   onDoubleClick={() => copyMessage(message.content)}
                 >
                   <div className="max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-700">
-                    <p className="text-sm md:text-sm leading-relaxed whitespace-pre-wrap">
-                      {message.content}
-                    </p>
+                    {message.isUser ? (
+                      <p className="text-sm md:text-sm leading-relaxed whitespace-pre-wrap">
+                        {message.content}
+                      </p>
+                    ) : (
+                      <div className="text-sm md:text-sm leading-relaxed prose prose-invert prose-sm max-w-none">
+                        <ReactMarkdown 
+                          components={{
+                            h1: ({children}) => <h1 className="text-lg font-bold text-white mt-4 mb-2 first:mt-0">{children}</h1>,
+                            h2: ({children}) => <h2 className="text-base font-semibold text-white mt-3 mb-2">{children}</h2>,
+                            h3: ({children}) => <h3 className="text-sm font-medium text-white mt-2 mb-1">{children}</h3>,
+                            p: ({children}) => <p className="text-gray-100 mb-2 last:mb-0">{children}</p>,
+                            strong: ({children}) => <strong className="font-semibold text-white">{children}</strong>,
+                            ul: ({children}) => <ul className="list-disc list-inside text-gray-100 space-y-1 ml-2">{children}</ul>,
+                            ol: ({children}) => <ol className="list-decimal list-inside text-gray-100 space-y-1 ml-2">{children}</ol>,
+                            li: ({children}) => <li className="text-gray-100">{children}</li>,
+                            blockquote: ({children}) => <blockquote className="border-l-4 border-nflow-orange pl-4 text-gray-200 italic my-2">{children}</blockquote>,
+                          }}
+                        >
+                          {message.content}
+                        </ReactMarkdown>
+                      </div>
+                    )}
                   </div>
                   
                   <div className="flex justify-between items-center mt-2 md:mt-3">

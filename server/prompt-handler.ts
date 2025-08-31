@@ -62,6 +62,9 @@ ${userProfile.ageRange === '65+' ? '- Adulto mayor: usa lenguaje respetuoso, con
     // Detectar si el mensaje se relaciona con derecho laboral y bajas médicas
     const isLaborRelated = /\b(baja médica|bajas médicas|despido|despedir|trabajo|laboral|jefe|empresa|derechos trabajador|acoso laboral|estrés laboral|reincorporación|adaptación puesto|protocolos laborales|trámites laborales|sindicato|convenio|nómina|finiquito|incapacidad|mutua|seguridad social)\b/i.test(userMessage);
     
+    // Detectar si el mensaje se relaciona con suicidio, muerte o hacerse daño
+    const isSuicideRelated = /\b(suicidio|suicidar|matarme|morir|muerte|hacerme daño|autolesión|no quiero vivir|quiero desaparecer|no vale la pena|todo está perdido|no puedo más|quiero acabar|terminar con todo|no tiene sentido vivir|quiero irme|ya no aguanto)\b/i.test(userMessage);
+    
     // Construir sección especializada en cáncer si es relevante
     let cancerSection = '';
     if (isCancerRelated) {
@@ -146,6 +149,36 @@ La información ofrecida es orientativa y no sustituye el asesoramiento profesio
 `;
     }
     
+    // Construir sección de urgencia si es relevante
+    let urgencySection = '';
+    if (isSuicideRelated) {
+      urgencySection = `
+🚨 **PROTOCOLO DE URGENCIA ACTIVADO**
+
+**💛 NO ESTÁS SOLA. NO ESTÁS SOLO.**
+
+Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente. Hay salida. Hay personas preparadas para ayudarte, sin juzgarte, sin presionarte, solo para escucharte y acompañarte.
+
+📞 **Llama ahora** (24h, gratis y confidencial):
+- 📍 Telèfon de l'Esperança (Catalunya): 93 414 48 48  
+- ☎️ Línea 024 (toda España, conducta suicida): 024  
+- 🚨 Emergencias generales: 112
+
+🫂 También puedes acudir a tu centro de salud mental, hospital o hablar con alguien de confianza.  
+**Tu historia no termina aquí. Hay capítulos mejores por escribir. Y mereces vivirlos.**
+
+*Por favor, quédate un rato más con nosotros. Hablemos.*
+`;
+    }
+    
+    // Construir recursos locales basados en si es suicidio o no
+    const resourcesSection = isSuicideRelated ? 
+      `🚨 **Emergencias:** 112
+📞 **Prevención suicidio:** 024
+📱 **Catalunya:** 93 414 48 48` :
+      `🏥 **Orientador/a** del colegio o instituto
+🏥 **Centro de salud mental** más cercano`;
+    
     // Prompt sistema NEUROPSI-AI inclusivo y multiestrato con apoyo especializado en cáncer
     const systemPrompt = `${languageInstructions}
     
@@ -158,6 +191,8 @@ Dar respuestas comprensibles, útiles y fundamentadas a personas de todas las ed
 ${cancerSection}
 
 ${laborSection}
+
+${urgencySection}
 
 🧑‍⚕️🎓 **TU PERSONALIDAD CÁLIDA Y PROFESIONAL:**
 👨‍👩‍👧 **Acompañante empático:** Hablas como un psicólogo cercano que genuinamente se preocupa. Usas un lenguaje natural, cálido y comprensivo.
@@ -215,6 +250,8 @@ ${laborSection}
 - Participa en actividades que disfrutes
 
 **7. ALGORITMO DE URGENCIA Y SEÑALES DE ALARMA:**
+**Solo incluir esta sección si detectas palabras relacionadas con suicidio, muerte o hacerse daño. Para consultas normales, omitir.**
+
 **PREGUNTA DIRECTA DE ACTIVACIÓN:** ¿Has pensado en hacerte daño hoy o en los últimos días?
 
 **Si respuesta = SÍ → ACTIVAR BLOQUE DE URGENCIA INMEDIATO**
@@ -241,10 +278,10 @@ ${laborSection}
 
 **9. RECURSOS LOCALES (FORMATO COMPACTO):**
 
-🚨 **Emergencias:** 112
+${isSuicideRelated ? `🚨 **Emergencias:** 112
 📞 **Prevención suicidio:** 024
-📱 **Catalunya:** 93 414 48 48
-🏥 **Orientador/a** del colegio o instituto
+📱 **Catalunya:** 93 414 48 48` : '🏥 **Orientador/a** del colegio o instituto
+🏥 **Centro de salud mental** más cercano'}
 
 *Esta información no sustituye la atención profesional.*
 
@@ -270,8 +307,7 @@ Responde por defecto en modo adaptable. Variables disponibles:
 - modo_humor: formal / neutro / humor inteligente
 - tipo_usuario: adulto / adolescente / profesional / madre/padre / docente
 
-🚨 **SI DETECTAS UNA SITUACIÓN DE RIESGO SUICIDA:**
-Ante cualquier mensaje que sugiera desesperanza, ideas de suicidio, autolesiones o sufrimiento grave (por ejemplo: "no quiero seguir", "todo me da igual", "nadie me ayuda", "quiero desaparecer", "me quiero morir", "no vale la pena vivir", "nadie me entiende", "quiero hacerme daño", "no puedo más", "todo está perdido", etc.), responde de inmediato con este bloque prioritario:
+${isSuicideRelated ? `🚨 **SITUACIÓN DE RIESGO SUICIDA DETECTADA - ACTIVAR PROTOCOLO DE URGENCIA:**
 
 **💛 NO ESTÁS SOLA. NO ESTÁS SOLO.**
 
@@ -287,10 +323,7 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
 
 *Por favor, quédate un rato más con nosotros. Hablemos.*
 
-**Este mensaje interrumpe cualquier respuesta anterior y debe mostrarse como prioridad absoluta si el lenguaje del usuario sugiere peligro inminente o sufrimiento profundo.**
-
-**Para dudas más suaves** como "no sé si tiene sentido seguir", "a veces pienso que no valgo nada", incluye:
-💬 *"Sé que a veces la mente puede convencernos de que estamos solos o sin salida. Pero eso no es verdad. Tu dolor tiene nombre, y tiene caminos. Hay ayuda. Hay gente. Hay esperanza."*
+**IMPORTANTE:** Este protocolo de urgencia debe incluirse SOLO cuando el usuario mencione palabras relacionadas con suicidio, muerte, hacerse daño o desesperanza extrema.` : ''}
 
 **EJEMPLOS CONTEXTUALES:**
 ${relevantExamples}
