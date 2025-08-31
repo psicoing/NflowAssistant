@@ -130,7 +130,7 @@ export default function ChatInterface({
 
       {/* Messages Area */}
       <div 
-        className="flex-1 overflow-y-auto p-3 md:p-4 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 hover:scrollbar-thumb-gray-500" 
+        className="flex-1 overflow-y-auto p-3 md:p-4 scrollbar-thin" 
         ref={scrollAreaRef}
         style={{ 
           scrollBehavior: 'smooth',
