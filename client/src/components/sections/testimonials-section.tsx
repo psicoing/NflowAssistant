@@ -128,6 +128,9 @@ export default function TestimonialsSection() {
             <div className="flex flex-col items-center">
               <div className="flex items-center space-x-2 mb-3">
                 <Users className="w-6 h-6 text-nflow-orange" />
+              </div>
+              <div className="flex items-center space-x-1 mb-2">
+                <div className="text-3xl font-bold text-nflow-orange drop-shadow-lg">10,000+</div>
                 <div className="relative group">
                   <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
                   <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
@@ -135,12 +138,14 @@ export default function TestimonialsSection() {
                   </div>
                 </div>
               </div>
-              <div className="text-3xl font-bold text-nflow-orange mb-2 drop-shadow-lg">10,000+</div>
               <div className="text-gray-200 font-semibold text-lg">Usuarios Activos</div>
             </div>
             <div className="flex flex-col items-center">
               <div className="flex items-center space-x-2 mb-3">
                 <Target className="w-6 h-6 text-nflow-orange" />
+              </div>
+              <div className="flex items-center space-x-1 mb-2">
+                <div className="text-3xl font-bold text-nflow-orange drop-shadow-lg">50,000+</div>
                 <div className="relative group">
                   <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
                   <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
@@ -148,7 +153,6 @@ export default function TestimonialsSection() {
                   </div>
                 </div>
               </div>
-              <div className="text-3xl font-bold text-nflow-orange mb-2 drop-shadow-lg">50,000+</div>
               <div className="text-gray-200 font-semibold text-lg">Consultas Realizadas</div>
             </div>
             <div className="flex flex-col items-center">
