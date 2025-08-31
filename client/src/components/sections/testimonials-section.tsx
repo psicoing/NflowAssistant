@@ -1,4 +1,4 @@
-import { Star, Quote, Calendar, MapPin, MessageCircle } from "lucide-react";
+import { Star, Quote, Calendar, MapPin, MessageCircle, HelpCircle, Users, Target, Clock, ThumbsUp } from "lucide-react";
 
 const testimonials = [
   {
@@ -125,21 +125,45 @@ export default function TestimonialsSection() {
         {/* Stats */}
         <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-black rounded-3xl p-12 text-center shadow-2xl border border-gray-700">
           <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="text-lg font-semibold text-white mb-3 drop-shadow-lg">788</div>
-              <div className="text-gray-200 font-semibold text-lg">Usuarios Beneficiados</div>
+            <div className="flex flex-col items-center">
+              <div className="flex items-center space-x-2 mb-3">
+                <Users className="w-6 h-6 text-nflow-orange" />
+                <div className="relative group">
+                  <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                    Usuarios que han utilizado nuestros servicios
+                  </div>
+                </div>
+              </div>
+              <div className="text-3xl font-bold text-nflow-orange mb-2 drop-shadow-lg">10,000+</div>
+              <div className="text-gray-200 font-semibold text-lg">Usuarios Activos</div>
             </div>
-            <div>
-              <div className="text-lg font-semibold text-white mb-3 drop-shadow-lg">1,345</div>
+            <div className="flex flex-col items-center">
+              <div className="flex items-center space-x-2 mb-3">
+                <Target className="w-6 h-6 text-nflow-orange" />
+                <div className="relative group">
+                  <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                    Consultas psicológicas realizadas en la plataforma
+                  </div>
+                </div>
+              </div>
+              <div className="text-3xl font-bold text-nflow-orange mb-2 drop-shadow-lg">50,000+</div>
               <div className="text-gray-200 font-semibold text-lg">Consultas Realizadas</div>
             </div>
-            <div>
-              <div className="text-lg font-semibold text-white mb-3 drop-shadow-lg">97%</div>
-              <div className="text-gray-200 font-semibold text-lg">Satisfacción Promedio</div>
-            </div>
-            <div>
-              <div className="text-lg font-semibold text-white mb-3 drop-shadow-lg">24/7</div>
+            <div className="flex flex-col items-center">
+              <div className="flex items-center space-x-2 mb-3">
+                <Clock className="w-6 h-6 text-nflow-orange" />
+              </div>
+              <div className="text-3xl font-bold text-nflow-orange mb-2 drop-shadow-lg">24/7</div>
               <div className="text-gray-200 font-semibold text-lg">Disponibilidad</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="flex items-center space-x-2 mb-3">
+                <ThumbsUp className="w-6 h-6 text-nflow-orange" />
+              </div>
+              <div className="text-3xl font-bold text-nflow-orange mb-2 drop-shadow-lg">4.9/5</div>
+              <div className="text-gray-200 font-semibold text-lg">Satisfacción Usuario</div>
             </div>
           </div>
           
@@ -151,8 +175,30 @@ export default function TestimonialsSection() {
               Basado en testimonios reales de usuarios que han experimentado 
               mejoras significativas en su bienestar mental con NFLOW.
             </p>
+            
+            {/* Información sobre credenciales únicas del director */}
+            <div className="bg-gradient-to-r from-nflow-orange/10 to-nflow-blue/10 border border-nflow-orange/30 rounded-xl p-6 mb-6 max-w-4xl mx-auto">
+              <div className="flex items-center justify-center space-x-3 mb-4">
+                <div className="w-3 h-3 bg-nflow-orange rounded-full animate-pulse"></div>
+                <h4 className="text-xl font-bold text-white">Credenciales Únicas</h4>
+                <div className="w-3 h-3 bg-nflow-orange rounded-full animate-pulse"></div>
+              </div>
+              <p className="text-gray-200 text-center leading-relaxed mb-4">
+                Esta app PWA está realizada por <span className="font-bold text-nflow-orange">uno de los tres únicos psicólogos neuroingenierios de España en telecomunicaciones</span>. 
+                Aunque no se sabe hasta dónde llegará, su fuerte es la experiencia de su director, 
+                <span className="font-bold text-white"> dedicado 32 años a la psicología clínica y escolar</span>.
+              </p>
+              <div className="flex items-center justify-center space-x-4 text-sm text-gray-300">
+                <span>🧠 Neuropsicología</span>
+                <span>•</span>
+                <span>📡 Telecomunicaciones</span>
+                <span>•</span>
+                <span>👨‍⚕️ 32 años experiencia</span>
+              </div>
+            </div>
+            
             <div className="text-gray-200 text-base font-semibold">
-              ⭐ Promedio de 97% satisfacción • ✅ Verificado por usuarios reales
+              ⭐ Promedio de 4.9/5 satisfacción • ✅ Verificado por usuarios reales
             </div>
           </div>
         </div>
