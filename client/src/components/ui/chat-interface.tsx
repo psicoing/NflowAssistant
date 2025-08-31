@@ -129,7 +129,14 @@ export default function ChatInterface({
       </div>
 
       {/* Messages Area */}
-      <ScrollArea className="flex-1 p-3 md:p-4" ref={scrollAreaRef}>
+      <div 
+        className="flex-1 overflow-y-auto p-3 md:p-4 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 hover:scrollbar-thumb-gray-500" 
+        ref={scrollAreaRef}
+        style={{ 
+          scrollBehavior: 'smooth',
+          maxHeight: 'calc(100vh - 200px)'
+        }}
+      >
         <div className="space-y-3 md:space-y-4">
           {messages.length === 0 ? (
             <div className="text-center py-8 md:py-12">
@@ -283,7 +290,7 @@ export default function ChatInterface({
           
           <div ref={messagesEndRef} />
         </div>
-      </ScrollArea>
+      </div>
 
       {/* Input Area - Enhanced */}
       <div className="p-3 md:p-6 border-t border-gray-700/50 bg-gradient-to-r from-gray-800 to-gray-700 backdrop-blur-sm">
