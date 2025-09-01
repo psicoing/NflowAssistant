@@ -249,7 +249,9 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
 📚 **Recursos Bibliográficos Oficiales:**
 - PSICODOC - Base de datos especializada con +140,000 registros científicos
 - Papeles del Psicólogo - Revista oficial del Consejo General de Psicología
-- Biblioteca COPM Madrid - Catálogo online con acceso a literatura especializada`;
+- Biblioteca COPM Madrid - Catálogo online con acceso a literatura especializada
+- Biblioteca COPC Catalunya - 11,868 volúmenes + 25,196 libros electrónicos
+- Tests Psicológicos Oficiales - 1,472 ejemplares validados y programas de intervención`;
     }
     
     if (isBibliograficoRelated) {
@@ -257,6 +259,9 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
 - PSICODOC - Base de datos con +140,000 registros de literatura psicológica en español
 - Papeles del Psicólogo - Revista científico-profesional del COP España
 - Biblioteca Digital COPM - Acceso 24/7 a libros y publicaciones especializadas
+- Biblioteca COPC Catalunya - 11,868 volúmenes físicos + 25,196 libros electrónicos
+- Tests Psicológicos Validados - 1,472 ejemplares oficiales y programas de intervención
+- Plataformas Digitales - OdiloTK, Ebook Central, Proquest One Psychology
 - Bases Internacionales - PsycINFO, MEDLINE, Scopus para investigación
 - Acceso gratuito - Redalyc, SciELO España, Dialnet para artículos iberoamericanos`;
     }
