@@ -28,14 +28,6 @@ export default function IntroCardSection() {
                 Con <strong className="text-orange-600">NFlow</strong>, accede a un asistente inteligente 
                 entrenado en psicología y bienestar, diseñado para acompañarte cuando más lo necesitas.
               </p>
-              <div className="flex justify-center">
-                <Button 
-                  onClick={() => window.location.href = '/login'}
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                >
-                  Comenzar Ahora
-                </Button>
-              </div>
             </div>
 
             {/* Domain Info Banner */}
