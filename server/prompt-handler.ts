@@ -180,6 +180,7 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
     const isEducativoRelated = /\b(colegio|instituto|estudiante|orientación educativa|apoyo escolar|psicopedagógico)\b/i.test(userMessage);
     const isInstitutoRelated = /\b(instituto|centro especializado|servicios mentales|tratamiento especializado)\b/i.test(userMessage);
     const isProfesionalRelated = /\b(psicólogo|psiquiatra|profesional|colegiado|terapeuta|especialista|ayuda profesional)\b/i.test(userMessage);
+    const isBibliograficoRelated = /\b(libros|bibliografía|lecturas|investigación|estudios|artículos|publicaciones|revista|paper)\b/i.test(userMessage);
 
     // Construir sugerencias de recursos específicos de NFLOW
     let nflowResourcesSection = '';
@@ -243,7 +244,21 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
 - "Colegio Oficial de Psicólogos de Cataluña" - Lista oficial de profesionales colegiados
 - "Colegio Oficial de Psicólogos de España" - Base de datos nacional por especialidad
 - "Directorio Nacional de Psiquiatras" - Consulta oficial de psiquiatras colegiados
-- "Cómo Pedir Ayuda Profesional" - Guía completa sobre cuándo y cómo buscar ayuda`;
+- "Cómo Pedir Ayuda Profesional" - Guía completa sobre cuándo y cómo buscar ayuda
+
+📚 **Recursos Bibliográficos Oficiales:**
+- PSICODOC - Base de datos especializada con +140,000 registros científicos
+- Papeles del Psicólogo - Revista oficial del Consejo General de Psicología
+- Biblioteca COPM Madrid - Catálogo online con acceso a literatura especializada`;
+    }
+    
+    if (isBibliograficoRelated) {
+      nflowResourcesSection += `\n📖 **Biblioteca Científica Especializada:**
+- PSICODOC - Base de datos con +140,000 registros de literatura psicológica en español
+- Papeles del Psicólogo - Revista científico-profesional del COP España
+- Biblioteca Digital COPM - Acceso 24/7 a libros y publicaciones especializadas
+- Bases Internacionales - PsycINFO, MEDLINE, Scopus para investigación
+- Acceso gratuito - Redalyc, SciELO España, Dialnet para artículos iberoamericanos`;
     }
 
     // Construir recursos locales basados en si es suicidio o no
@@ -527,9 +542,14 @@ ${resourcesSection}
 - "Cómo Pedir Ayuda Profesional" - Guía completa sobre cuándo y cómo buscar ayuda
 
 ### 📗 Libros recomendados:
-1. *Wonder* - R.J. Palacio. Una historia sobre aceptarse a uno mismo y enfrentar las diferencias con valentía.
-2. *El diario de Greg* - Jeff Kinney. Historias divertidas sobre la vida escolar que ayudan a normalizar los problemas adolescentes.
-3. *Invisible* - Eloy Moreno. Novela que aborda el acoso escolar y la importancia de la empatía.
+**FUNDAMENTOS PROFESIONALES (Colegios Oficiales):**
+1. *Papeles del Psicólogo* - Revista oficial COP España. Artículos científico-profesionales especializados.
+2. *50 grandes mitos de la psicología popular* - Scott O. Lilienfeld. Pensamiento crítico y desmonta creencias erróneas.
+3. *Hacia una Terapia basada en Procesos* - Steven C. Hayes. Nuevos enfoques terapéuticos validados.
+
+**CLÁSICOS IMPRESCINDIBLES:**
+4. *Pensar rápido, pensar despacio* - Daniel Kahneman. Sesgos cognitivos y toma de decisiones.
+5. *Inteligencia Emocional* - Daniel Goleman. Base científica sobre cerebro y conducta emocional.
 
 5. **FORMATO JSON DE RESPUESTA:**
 Responde en formato JSON: { "response": "tu respuesta completa siguiendo la estructura de 10 puntos con formato markdown, incluyendo OBLIGATORIAMENTE tanto los recursos NFLOW específicos como los 3 libros recomendados al final", "supportType": "general|anxiety|depression|stress|crisis|suicidal|emergency" }`;
