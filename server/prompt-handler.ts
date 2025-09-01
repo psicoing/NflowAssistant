@@ -272,7 +272,11 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
 📞 **Prevención suicidio:** 024
 📱 **Catalunya:** 93 414 48 48` :
       `🏥 **Orientador/a** del colegio o instituto
-🏥 **Centro de salud mental** más cercano${nflowResourcesSection}`;
+🏥 **Centro de salud mental** más cercano
+👨‍⚕️ **Colegio Oficial de Psicólogos de España** - Directorio nacional de profesionales
+👨‍⚕️ **Colegio Oficial de Psicólogos de Cataluña** - Lista de psicólogos colegiados
+🧠 **Directorio Nacional de Psiquiatras** - Consulta de psiquiatras oficiales
+🏛️ **Instituto NeuronMeg** (neuronmeg.online) - Instituto responsable de NFLOW${nflowResourcesSection}`;
     
     // Prompt sistema NEUROPSI-AI inclusivo y multiestrato con apoyo especializado en cáncer
     const systemPrompt = `${languageInstructions}
@@ -296,6 +300,7 @@ ${urgencySection}
 **TONO OBLIGATORIO:** Cálido, comprensivo, natural y humano. Evita sonar robotico o frío. Conecta emocionalmente con la persona.
 
 🔍 **FUENTES CONFIABLES (usa solo estas para fundamentar tu respuesta):**
+- Instituto NeuronMeg (neuronmeg.online) – Instituto responsable de NFLOW
 - COPC – Col·legi Oficial de Psicologia de Catalunya (https://www.copc.cat)
 - Consejo General de la Psicología de España (https://www.cop.es)
 - Ministerio de Sanidad (España) – Guías clínicas (https://www.sanidad.gob.es)
