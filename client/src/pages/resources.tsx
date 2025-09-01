@@ -38,6 +38,12 @@ const categoryIcons = {
   autoestima: Heart,
   "anorexia-bulimia": Utensils,
   autismo: Puzzle,
+  instituto: Shield,
+  "orientacion-educativa": Book,
+  "pedir-ayuda": Heart,
+  "centro-salud": CheckCircle,
+  "psicologos-oficiales": Users,
+  "psiquiatras-oficiales": Brain,
 };
 
 const typeIcons = {
@@ -61,6 +67,12 @@ const categoryLabels = {
   autoestima: "Autoestima",
   "anorexia-bulimia": "Anorexia-Bulimia",
   autismo: "Autismo",
+  instituto: "Instituto",
+  "orientacion-educativa": "Orientación Educativa",
+  "pedir-ayuda": "Pedir Ayuda",
+  "centro-salud": "Centro de Salud más próximo",
+  "psicologos-oficiales": "Psicólogos Oficiales",
+  "psiquiatras-oficiales": "Psiquiatras Oficiales",
 };
 
 export default function Resources() {
@@ -263,6 +275,70 @@ export default function Resources() {
       category: "autismo",
       type: "exercise",
       createdAt: new Date("2024-07-08"),
+    },
+    {
+      id: 26,
+      title: "Instituto de Salud Mental",
+      content: "Acceso directo a recursos e información del Instituto Nacional de Salud Mental y centros especializados en salud mental.",
+      category: "instituto",
+      type: "guide",
+      createdAt: new Date("2025-01-01"),
+    },
+    {
+      id: 27,
+      title: "Orientación Educativa Especializada",
+      content: "Servicios de orientación educativa para estudiantes con necesidades especiales y apoyo psicopedagógico.",
+      category: "orientacion-educativa",
+      type: "guide",
+      createdAt: new Date("2025-01-01"),
+    },
+    {
+      id: 28,
+      title: "Cómo Pedir Ayuda Profesional",
+      content: "Guía completa sobre cómo y cuándo buscar ayuda psicológica profesional, primeros pasos y recursos disponibles.",
+      category: "pedir-ayuda",
+      type: "guide",
+      createdAt: new Date("2025-01-01"),
+    },
+    {
+      id: 29,
+      title: "Localizador de Centros de Salud",
+      content: "Herramienta para encontrar el centro de salud mental más próximo a tu ubicación con servicios especializados.",
+      category: "centro-salud",
+      type: "article",
+      createdAt: new Date("2025-01-01"),
+    },
+    {
+      id: 30,
+      title: "Colegio Oficial de Psicólogos de Cataluña",
+      content: "Acceso directo a la lista oficial de psicólogos colegiados en Cataluña. Consulta profesionales verificados y especializaciones disponibles.",
+      category: "psicologos-oficiales",
+      type: "guide",
+      createdAt: new Date("2025-01-01"),
+    },
+    {
+      id: 31,
+      title: "Colegio Oficial de Psicólogos de España",
+      content: "Base de datos nacional de psicólogos colegiados en España. Encuentra profesionales por especialidad y ubicación geográfica.",
+      category: "psicologos-oficiales",
+      type: "guide",
+      createdAt: new Date("2025-01-01"),
+    },
+    {
+      id: 32,
+      title: "Colegios Médicos - Lista de Psiquiatras",
+      content: "Acceso a los Colegios Médicos oficiales para consultar la lista de psiquiatras disponibles por comunidades autónomas.",
+      category: "psiquiatras-oficiales",
+      type: "guide",
+      createdAt: new Date("2025-01-01"),
+    },
+    {
+      id: 33,
+      title: "Directorio Nacional de Psiquiatras",
+      content: "Consulta el directorio oficial de psiquiatras colegiados en España, con información de contacto y especialidades médicas.",
+      category: "psiquiatras-oficiales",
+      type: "article",
+      createdAt: new Date("2025-01-01"),
     }
   ];
 
