@@ -271,12 +271,23 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
       `🚨 **Emergencias:** 112
 📞 **Prevención suicidio:** 024
 📱 **Catalunya:** 93 414 48 48` :
-      `🏥 **Orientador/a** del colegio o instituto
-🏥 **Centro de salud mental** más cercano
-👨‍⚕️ **Colegio Oficial de Psicólogos de España** - Directorio nacional de profesionales
-👨‍⚕️ **Colegio Oficial de Psicólogos de Cataluña** - Lista de psicólogos colegiados
+      `🏥 **Centro de salud mental** más cercano
+
+👨‍⚕️ **Consejo General de Colegios Oficiales de Psicólogos (CGCOP)**
+   📞 Teléfono: 914 44 90 20 | ✉️ secop@cop.es
+   🌍 Directorio nacional - redirige a cualquier colegio por provincia
+
+👨‍⚕️ **Colegio Oficial de Psicólogos de Cataluña (COPC)**
+   📍 C/ Rocafort, 129, 08015 Barcelona
+   📞 Teléfono: 932 478 650 | 📠 Fax: 932 478 654
+   ✉️ copc@copc.cat | 🕐 L-J: 9h-19h
+
 🧠 **Directorio Nacional de Psiquiatras** - Consulta de psiquiatras oficiales
-🏛️ **Instituto NeuronMeg** (neuronmeg.online) - Instituto responsable de NFLOW${nflowResourcesSection}`;
+
+🏛️ **Instituto NeuronMeg** - Instituto responsable de NFLOW
+   📍 Figueres y Portbou - Girona
+   📞 +34 660 452 136 | ✉️ rmportbou@gmail.com
+   🌐 neuronmeg.online${nflowResourcesSection}`;
     
     // Prompt sistema NEUROPSI-AI inclusivo y multiestrato con apoyo especializado en cáncer
     const systemPrompt = `${languageInstructions}
