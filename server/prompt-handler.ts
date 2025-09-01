@@ -171,13 +171,88 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
 `;
     }
     
+    // Detectar categorías para sugerir recursos específicos de NFLOW
+    const isAnsiedadRelated = /\b(ansiedad|ansiedad|crisis|pánico|nervios|preocupación|estrés|tensión|agobiado)\b/i.test(userMessage);
+    const isDepresionRelated = /\b(depresión|depresivo|triste|tristeza|desánimo|sin ganas|melancolía|apatía)\b/i.test(userMessage);
+    const isFamiliaRelated = /\b(familia|padres|hijos|adolescentes|comunicación familiar|conflictos familiares|relaciones familiares)\b/i.test(userMessage);
+    const isAutoestimaRelated = /\b(autoestima|confianza|seguridad|valor propio|autoimagen|autovaloración)\b/i.test(userMessage);
+    const isBienestarRelated = /\b(bienestar|mindfulness|relajación|meditación|equilibrio|armonía)\b/i.test(userMessage);
+    const isEducativoRelated = /\b(colegio|instituto|estudiante|orientación educativa|apoyo escolar|psicopedagógico)\b/i.test(userMessage);
+    const isInstitutoRelated = /\b(instituto|centro especializado|servicios mentales|tratamiento especializado)\b/i.test(userMessage);
+    const isProfesionalRelated = /\b(psicólogo|psiquiatra|profesional|colegiado|terapeuta|especialista|ayuda profesional)\b/i.test(userMessage);
+
+    // Construir sugerencias de recursos específicos de NFLOW
+    let nflowResourcesSection = '';
+    
+    if (isAnsiedadRelated) {
+      nflowResourcesSection += `\n📚 **Recursos NFLOW para Ansiedad:**
+- "Técnicas de Respiración para la Ansiedad" - Ejercicios oficiales del Sistema Nacional de Salud
+- "Gestión de Crisis Emocionales" - Estrategias para ataques de pánico según protocolos clínicos
+- "Autoevaluación GAD-7 y Herramientas" - Recursos validados por el Ministerio de Sanidad`;
+    }
+    
+    if (isDepresionRelated) {
+      nflowResourcesSection += `\n📚 **Recursos NFLOW para Depresión:**
+- "Guía Oficial sobre Depresión" - Información del Sistema Nacional de Salud
+- "Herramientas de Detección Temprana" - Protocolos de atención primaria
+- "Plan de Activación Conductual" - Técnicas psicoeducativas validadas`;
+    }
+    
+    if (isFamiliaRelated) {
+      nflowResourcesSection += `\n👨‍👩‍👧 **Recursos NFLOW para Familia:**
+- "Comunicación Familiar Efectiva" - Estrategias para padres e hijos adolescentes
+- "Ventana de Escucha Activa" - Técnica basada en Carl Rogers
+- "Tarjetas de Comunicación Positiva" - Sistema de refuerzo emocional familiar`;
+    }
+    
+    if (isAutoestimaRelated) {
+      nflowResourcesSection += `\n💪 **Recursos NFLOW para Autoestima:**
+- "Fortaleciendo la Autoestima" - Actividades y reflexiones de autovaloración
+- "Registro de Logros Reales" - Técnica para incrementar percepción de competencia
+- "Cartas al Yo del Futuro" - Visualización positiva para fortalecer autoimagen`;
+    }
+    
+    if (isBienestarRelated) {
+      nflowResourcesSection += `\n🧘 **Recursos NFLOW para Bienestar:**
+- "Ejercicios de Mindfulness" - Prácticas de atención plena para bienestar emocional
+- "Formato Técnico para Atención Plena" - Guía profesional con fundamento neurobiológico
+- "Técnicas de Regulación Emocional" - Herramientas de autocontrol emocional`;
+    }
+    
+    if (isLaborRelated) {
+      nflowResourcesSection += `\n💼 **Recursos NFLOW para Ámbito Laboral:**
+- "Manejo del Estrés Laboral" - Herramientas para gestión profesional del estrés
+- "Protocolo ISO 45003" - Guía de bienestar psicológico en el trabajo
+- "Prevención del Burnout" - Estrategias de autocuidado profesional`;
+    }
+    
+    if (isEducativoRelated) {
+      nflowResourcesSection += `\n🎓 **Recursos NFLOW de Orientación Educativa:**
+- "Orientación Educativa Especializada" - Apoyo psicopedagógico para necesidades especiales
+- "Recursos para Estudiantes" - Herramientas de apoyo académico y emocional`;
+    }
+    
+    if (isInstitutoRelated) {
+      nflowResourcesSection += `\n🏥 **Recursos NFLOW Institucionales:**
+- "Instituto de Salud Mental" - Acceso a centros especializados nacionales
+- "Localizador de Centros de Salud" - Herramienta para encontrar servicios próximos`;
+    }
+    
+    if (isProfesionalRelated) {
+      nflowResourcesSection += `\n👨‍⚕️ **Directorio de Profesionales NFLOW:**
+- "Colegio Oficial de Psicólogos de Cataluña" - Lista oficial de profesionales colegiados
+- "Colegio Oficial de Psicólogos de España" - Base de datos nacional por especialidad
+- "Directorio Nacional de Psiquiatras" - Consulta oficial de psiquiatras colegiados
+- "Cómo Pedir Ayuda Profesional" - Guía completa sobre cuándo y cómo buscar ayuda`;
+    }
+
     // Construir recursos locales basados en si es suicidio o no
     const resourcesSection = isSuicideRelated ? 
       `🚨 **Emergencias:** 112
 📞 **Prevención suicidio:** 024
 📱 **Catalunya:** 93 414 48 48` :
       `🏥 **Orientador/a** del colegio o instituto
-🏥 **Centro de salud mental** más cercano`;
+🏥 **Centro de salud mental** más cercano${nflowResourcesSection}`;
     
     // Prompt sistema NEUROPSI-AI inclusivo y multiestrato con apoyo especializado en cáncer
     const systemPrompt = `${languageInstructions}
@@ -282,6 +357,11 @@ ${resourcesSection}
 
 *Esta información no sustituye la atención profesional.*
 
+**INSTRUCCIÓN ESPECIAL PARA RECURSOS NFLOW:**
+- Cuando detectes que el usuario puede beneficiarse de recursos específicos de NFLOW, menciona SIEMPRE estos recursos en la sección correspondiente
+- Usa frases como: "Te recomiendo revisar nuestro recurso..." o "Puedes encontrar ayuda específica en..."
+- Integra las sugerencias de manera natural en tu respuesta, no como una lista separada
+
 **10. SEGUIMIENTO AUTOMÁTICO:**
 ¿Quieres que volvamos a hablar en 72 horas para ver cómo te sientes?
 
@@ -359,6 +439,9 @@ ${profileContext}
    - # Advertencia Profesional
 
 2. **SECCIONES FINALES OBLIGATORIAS (después de los 10 puntos):**
+   ### 📚 Recursos NFLOW recomendados:
+   [INCLUIR AUTOMÁTICAMENTE los recursos específicos detectados según las palabras clave del mensaje del usuario]
+   
    ### 📗 Libros recomendados:
    1. *[Título específico]* - [Autor reconocido]. [Razón específica de recomendación]
    2. *[Título específico]* - [Autor reconocido]. [Razón específica de recomendación]
@@ -438,13 +521,18 @@ ${resourcesSection}
 # Advertencia Profesional
 > *Esta información es solo orientativa y no sustituye el diagnóstico ni el tratamiento de un profesional colegiado. Si tienes dudas o malestar intenso, busca siempre ayuda profesional.*
 
+### 📚 Recursos NFLOW recomendados:
+- "Técnicas de Respiración para la Ansiedad" - Ejercicios oficiales del Sistema Nacional de Salud
+- "Comunicación Familiar Efectiva" - Estrategias para padres e hijos adolescentes
+- "Cómo Pedir Ayuda Profesional" - Guía completa sobre cuándo y cómo buscar ayuda
+
 ### 📗 Libros recomendados:
 1. *Wonder* - R.J. Palacio. Una historia sobre aceptarse a uno mismo y enfrentar las diferencias con valentía.
 2. *El diario de Greg* - Jeff Kinney. Historias divertidas sobre la vida escolar que ayudan a normalizar los problemas adolescentes.
 3. *Invisible* - Eloy Moreno. Novela que aborda el acoso escolar y la importancia de la empatía.
 
 5. **FORMATO JSON DE RESPUESTA:**
-Responde en formato JSON: { "response": "tu respuesta completa siguiendo la estructura de 10 puntos con formato markdown, incluyendo OBLIGATORIAMENTE los 3 libros recomendados al final", "supportType": "general|anxiety|depression|stress|crisis|suicidal|emergency" }`;
+Responde en formato JSON: { "response": "tu respuesta completa siguiendo la estructura de 10 puntos con formato markdown, incluyendo OBLIGATORIAMENTE tanto los recursos NFLOW específicos como los 3 libros recomendados al final", "supportType": "general|anxiety|depression|stress|crisis|suicidal|emergency" }`;
 
     // Realizar la llamada a OpenAI con configuración optimizada para NEUROPSI-AI
     const completion = await openai.chat.completions.create({
