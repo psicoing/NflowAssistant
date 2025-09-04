@@ -68,13 +68,9 @@ const businessPlans = [
     description: "Para profesionales de la salud mental y consultores independientes",
     features: [
       "Hasta 50 clientes/pacientes",
+      "10 mensajes por usuario al mes",
       "Panel de administración avanzado",
-      "Informes y analytics detallados",
-      "Integración con calendarios",
-      "Sesiones de seguimiento personalizado",
-      "Soporte técnico prioritario",
-      "Certificaciones y acreditaciones",
-      "Herramientas de evaluación profesional"
+      "Informes y analytics detallados"
     ],
     recommended: false,
     icon: Briefcase,
@@ -88,11 +84,7 @@ const businessPlans = [
     description: "Ideal para empresas medianas que priorizan el bienestar de sus empleados",
     features: [
       "Hasta 200 empleados incluidos",
-      "Dashboard ejecutivo con KPIs",
-      "Programas de bienestar personalizados",
-      "Integración con RRHH",
-      "Reportes de clima laboral",
-      "Sesiones grupales ilimitadas",
+      "10 mensajes por usuario al mes",
       "Soporte dedicado 24/7",
       "Cumplimiento normativo ISO 45003",
       "Onboarding y capacitación incluida"
@@ -109,13 +101,9 @@ const businessPlans = [
     description: "Solución completa para grandes corporaciones y organizaciones",
     features: [
       "Usuarios ilimitados",
+      "Hasta 25 mensajes por usuario al mes",
       "Implementación personalizada",
       "Integración API completa",
-      "Múltiples ubicaciones/países",
-      "Soporte multi-idioma",
-      "Gerente de cuenta dedicado",
-      "SLA garantizado 99.9%",
-      "Auditorías de seguridad",
       "Cumplimiento GDPR y normativas locales",
       "Desarrollo de funciones personalizadas"
     ],
