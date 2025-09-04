@@ -62,6 +62,7 @@ export default function Login() {
           setLocation("/chat");
         } else {
           console.log("Usuario sin suscripción activa");
+          console.log("userType:", data.userType);
           console.log("hasCompletedPayment:", data.hasCompletedPayment);
           console.log("subscriptionStatus:", data.subscriptionStatus);
           console.log("hasActiveSubscription:", data.hasActiveSubscription);
@@ -78,19 +79,38 @@ export default function Login() {
               setLocation("/activar");
             }, 2000);
           } else {
-            toast({
-              title: "Suscripción requerida",
-              description: "Para acceder al chat necesitas una suscripción activa",
-              variant: "destructive",
-            });
+            // Personalizar mensaje según tipo de usuario
+            if (data.userType === 'business') {
+              toast({
+                title: "Suscripción empresarial requerida",
+                description: "Para acceder al chat tu empresa necesita una suscripción activa",
+                variant: "destructive",
+              });
+            } else {
+              toast({
+                title: "Suscripción requerida",
+                description: "Para acceder al chat necesitas una suscripción activa",
+                variant: "destructive",
+              });
+            }
           }
           
           setLocation("/");
-          // Scroll to pricing section after redirect
+          // Scroll to pricing section after redirect, personalizado por userType
           setTimeout(() => {
             const pricingSection = document.getElementById("precios");
             if (pricingSection) {
               pricingSection.scrollIntoView({ behavior: "smooth" });
+              
+              // Si es usuario empresarial, hacer scroll a la sección empresarial después de un momento
+              if (data.userType === 'business') {
+                setTimeout(() => {
+                  const businessSection = pricingSection.querySelector('.grid.md\\:grid-cols-3:last-child');
+                  if (businessSection) {
+                    businessSection.scrollIntoView({ behavior: "smooth" });
+                  }
+                }, 500);
+              }
             }
           }, 100);
         }

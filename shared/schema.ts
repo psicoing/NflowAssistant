@@ -9,6 +9,7 @@ export const users = pgTable("users", {
   email: text("email"),
   birthDate: text("birth_date"), // YYYY-MM-DD format
   role: text("role").default("user"), // user, admin, partner
+  userType: text("user_type").default("individual"), // individual, business
   subscriptionStatus: text("subscription_status").default("inactive"), // active, inactive, cancelled
   subscriptionPlan: text("subscription_plan"), // basic, group, individual
   subscriptionId: text("subscription_id"),
@@ -103,6 +104,8 @@ export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
   email: true,
+  birthDate: true,
+  userType: true,
   subscriptionStatus: true,
   hasCompletedPayment: true,
 });

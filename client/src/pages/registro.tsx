@@ -7,7 +7,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { UserPlus, User } from "lucide-react";
+import { UserPlus, User, Building } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function Registro() {
   const [, setLocation] = useLocation();
@@ -17,7 +18,8 @@ export default function Registro() {
     password: "",
     confirmPassword: "",
     email: "",
-    birthDate: ""
+    birthDate: "",
+    userType: "individual"
   });
   const [error, setError] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
@@ -56,24 +58,26 @@ export default function Registro() {
       return;
     }
 
-    // Validación de fecha de nacimiento
-    if (!formData.birthDate) {
-      setError("Por favor, ingresa tu fecha de nacimiento");
-      setIsLoading(false);
-      return;
-    }
+    // Validación de fecha de nacimiento (solo para usuarios individuales)
+    if (formData.userType === "individual") {
+      if (!formData.birthDate) {
+        setError("Por favor, ingresa tu fecha de nacimiento");
+        setIsLoading(false);
+        return;
+      }
 
-    const age = calculateAge(formData.birthDate);
-    if (age < 18) {
-      setError("Para registrarte debes tener al menos 18 años. Si eres menor de edad, consulta con tus padres o tutores para el uso supervisado de la plataforma.");
-      setIsLoading(false);
-      return;
-    }
+      const age = calculateAge(formData.birthDate);
+      if (age < 18) {
+        setError("Para registrarte debes tener al menos 18 años. Si eres menor de edad, consulta con tus padres o tutores para el uso supervisado de la plataforma.");
+        setIsLoading(false);
+        return;
+      }
 
-    if (age > 95) {
-      setError("La plataforma está diseñada para personas de 18 a 95 años");
-      setIsLoading(false);
-      return;
+      if (age > 95) {
+        setError("La plataforma está diseñada para personas de 18 a 95 años");
+        setIsLoading(false);
+        return;
+      }
     }
 
     try {
@@ -86,7 +90,8 @@ export default function Registro() {
           username: formData.username,
           password: formData.password,
           email: formData.email,
-          birthDate: formData.birthDate
+          birthDate: formData.userType === "individual" ? formData.birthDate : null,
+          userType: formData.userType
         }),
       });
 
@@ -206,23 +211,50 @@ export default function Registro() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="birthDate" className="text-gray-200">
-                  Fecha de Nacimiento *
+                <Label htmlFor="userType" className="text-gray-200">
+                  Tipo de Cuenta *
                 </Label>
-                <Input
-                  id="birthDate"
-                  name="birthDate"
-                  type="date"
-                  value={formData.birthDate}
-                  onChange={handleChange}
-                  required
-                  max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
+                <Select value={formData.userType} onValueChange={(value) => setFormData(prev => ({...prev, userType: value}))}>
+                  <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:border-nflow-blue">
+                    <SelectValue placeholder="Selecciona el tipo de cuenta" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-800 border-gray-600">
+                    <SelectItem value="individual" className="text-white hover:bg-gray-700">
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4" />
+                        Usuario Individual
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="business" className="text-white hover:bg-gray-700">
+                      <div className="flex items-center gap-2">
+                        <Building className="w-4 h-4" />
+                        Empresa/Organización
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {formData.userType === "individual" && (
+                <div className="space-y-2">
+                  <Label htmlFor="birthDate" className="text-gray-200">
+                    Fecha de Nacimiento *
+                  </Label>
+                  <Input
+                    id="birthDate"
+                    name="birthDate"
+                    type="date"
+                    value={formData.birthDate}
+                    onChange={handleChange}
+                    required
+                    max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
                   className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-nflow-blue"
                 />
                 <p className="text-xs text-gray-400">
                   Debes tener al menos 18 años para registrarte
                 </p>
-              </div>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-gray-200">

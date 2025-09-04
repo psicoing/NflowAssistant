@@ -37,42 +37,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User registration
   app.post("/api/auth/register", async (req, res) => {
     try {
-      const { username, password, email, birthDate } = req.body;
+      const { username, password, email, birthDate, userType } = req.body;
       
-      if (!username || !password || !birthDate) {
+      if (!username || !password) {
         return res.status(400).json({ 
           success: false, 
-          message: "Username, password y fecha de nacimiento son requeridos" 
+          message: "Username y password son requeridos" 
+        });
+      }
+      
+      // Validar que para usuarios individuales se requiera fecha de nacimiento
+      if (userType === "individual" && !birthDate) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Fecha de nacimiento es requerida para usuarios individuales" 
         });
       }
 
-      // Validar edad mínima
-      const calculateAge = (birthDate: string) => {
-        const today = new Date();
-        const birth = new Date(birthDate);
-        let age = today.getFullYear() - birth.getFullYear();
-        const monthDiff = today.getMonth() - birth.getMonth();
-        
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-          age--;
+      // Validar edad mínima solo para usuarios individuales
+      if (userType === "individual" && birthDate) {
+        const calculateAge = (birthDate: string) => {
+          const today = new Date();
+          const birth = new Date(birthDate);
+          let age = today.getFullYear() - birth.getFullYear();
+          const monthDiff = today.getMonth() - birth.getMonth();
+          
+          if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+            age--;
+          }
+          
+          return age;
+        };
+
+        const age = calculateAge(birthDate);
+        if (age < 18) {
+          return res.status(400).json({ 
+            success: false, 
+            message: "Debes tener al menos 18 años para registrarte. Si eres menor de edad, consulta con tus padres o tutores." 
+          });
         }
-        
-        return age;
-      };
 
-      const age = calculateAge(birthDate);
-      if (age < 18) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Debes tener al menos 18 años para registrarte. Si eres menor de edad, consulta con tus padres o tutores." 
-        });
-      }
-
-      if (age > 95) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "La plataforma está diseñada para personas de 18 a 95 años" 
-        });
+        if (age > 95) {
+          return res.status(400).json({ 
+            success: false, 
+            message: "La plataforma está diseñada para personas de 18 a 95 años" 
+          });
+        }
       }
 
       // Check if user already exists
@@ -92,6 +102,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         username,
         password: hashedPassword,
         email,
+        birthDate: userType === "individual" ? birthDate : null,
+        userType: userType || "individual",
         subscriptionStatus: 'pending_payment',
         hasCompletedPayment: false
       });
@@ -167,6 +179,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         success: true,
         userId: user.id,
+        userType: user.userType || "individual",
         hasCompletedPayment: user.hasCompletedPayment,
         subscriptionStatus: user.subscriptionStatus,
         hasActiveSubscription,
@@ -206,6 +219,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         id: user.id,
         username: user.username,
         email: user.email,
+        userType: user.userType || "individual",
         subscriptionStatus: user.subscriptionStatus,
         subscriptionPlan: user.subscriptionPlan,
         hasCompletedPayment: user.hasCompletedPayment,
