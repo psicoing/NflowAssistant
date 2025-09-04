@@ -10,7 +10,7 @@ const personalPlans = [
     originalPrice: "9.99",
     description: "Perfecto para usuarios individuales que buscan apoyo básico",
     features: [
-      "50 consultas mensuales al asistente IA",
+      "10 mensajes al asistente IA",
       "Acceso a recursos educativos básicos", 
       "Soporte por email",
       "Ejercicios de relajación y mindfulness",
@@ -27,7 +27,7 @@ const personalPlans = [
     originalPrice: "19.99",
     description: "La opción más popular para un apoyo completo y personalizado",
     features: [
-      "Consultas ilimitadas al asistente IA",
+      "Máximo 20 mensajes al asistente IA",
       "Acceso completo a todos los recursos",
       "Soporte prioritario 24/7",
       "Planes de bienestar personalizados",
@@ -47,12 +47,11 @@ const personalPlans = [
     description: "Acceso completo anual para usuarios que buscan la experiencia definitiva",
     features: [
       "Acceso completo por 12 meses",
-      "Todas las características Premium incluidas",
-      "Consultas ilimitadas durante el año",
+      "120 mensajes durante el año",
+      "Todas las características del plan de €5.99",
       "Contenido exclusivo y actualizaciones",
       "Análisis avanzado personalizado",
-      "Soporte prioritario anual",
-      "Certificado de completar programas"
+      "Soporte prioritario anual"
     ],
     recommended: false,
     icon: Gem,
