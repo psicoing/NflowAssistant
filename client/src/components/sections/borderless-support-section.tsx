@@ -22,7 +22,8 @@ export default function BorderlessSupportSection() {
           <p className="text-base md:text-lg text-gray-300 leading-relaxed max-w-2xl mx-auto">
             <span className="text-yellow-400 font-medium">Donde estés</span>, 
             <span className="text-orange-400 font-medium"> cuando lo necesites</span>, 
-            <span className="text-pink-400 font-medium"> como lo necesites</span>.
+            <span className="text-pink-400 font-medium"> sin horarios</span>... 
+            <span className="text-green-400 font-medium">¡Te ayudo!</span>
           </p>
         </div>
 
