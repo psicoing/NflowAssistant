@@ -2,7 +2,7 @@ export default function BorderlessSupportSection() {
   return (
     <section className="relative py-6 px-4 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 overflow-hidden">
       <div className="max-w-4xl mx-auto text-center relative z-10">
-        <h2 className="text-3xl md:text-5xl font-bold mb-4 text-white leading-tight">
+        <h2 className="text-2xl md:text-4xl font-bold mb-4 text-white leading-tight">
           La Salud Mental{" "}
           <span className="relative">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
