@@ -39,7 +39,7 @@ export default function HeroSection() {
         {/* Main Heading */}
         <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
           <span className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light bg-clip-text text-transparent">
-            Tu psicólogo en el bolsillo
+            Un psicólogo en tu bolsillo
           </span>
         </h1>
 
