@@ -311,14 +311,16 @@ export default function ActivarCuenta() {
                 </ul>
                 
                 {/* Stripe Button */}
-                <div className="min-h-[50px] relative border border-gray-600/50 rounded-lg bg-gray-900/30 p-2 flex items-center justify-center">
-                  <stripe-buy-button
-                    buy-button-id="buy_btn_1Rc7kCCmvVkETA1m5aYwB4IH"
-                    publishable-key="pk_live_51JIZjtCmvVkETA1mxdBylAQvElIPw0haPvP3mutq99SezEZVrFryWzz5zbX5gU2RFP15uFsR2XTKx5yYgkcJhADM00sR04papy"
-                    success-url={`${window.location.origin}/activacion-exitosa?email=${encodeURIComponent(localStorage.getItem('user_email') || '')}`}
-                    cancel-url={`${window.location.origin}/activar-cuenta`}
-                    customer-email=""
-                  />
+                <div className="min-h-[50px] relative border border-gray-600/50 rounded-lg bg-gray-900/30 overflow-hidden">
+                  <div className="p-2 flex items-center justify-center">
+                    <stripe-buy-button
+                      buy-button-id="buy_btn_1Rc7kCCmvVkETA1m5aYwB4IH"
+                      publishable-key="pk_live_51JIZjtCmvVkETA1mxdBylAQvElIPw0haPvP3mutq99SezEZVrFryWzz5zbX5gU2RFP15uFsR2XTKx5yYgkcJhADM00sR04papy"
+                      success-url={`${window.location.origin}/activacion-exitosa?email=${encodeURIComponent(localStorage.getItem('user_email') || '')}`}
+                      cancel-url={`${window.location.origin}/activar-cuenta`}
+                      customer-email=""
+                    />
+                  </div>
                 </div>
                 
                 <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-3">
