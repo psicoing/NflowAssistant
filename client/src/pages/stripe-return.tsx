@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { CheckCircle, AlertTriangle, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import SoporteActivacionBanner from "@/components/SoporteActivacionBanner";
 
 export default function StripeReturn() {
   const [, setLocation] = useLocation();
@@ -119,8 +120,12 @@ export default function StripeReturn() {
   }, [setLocation, toast]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-gradient-to-br from-gray-800/90 to-gray-900/90 border-gray-700/50 backdrop-blur-sm">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
+      <div className="max-w-md mx-auto pt-8">
+        <SoporteActivacionBanner />
+        
+        <div className="flex items-center justify-center">
+          <Card className="w-full bg-gradient-to-br from-gray-800/90 to-gray-900/90 border-gray-700/50 backdrop-blur-sm">
         <CardHeader className="text-center">
           {status === 'processing' && (
             <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
@@ -199,6 +204,8 @@ export default function StripeReturn() {
           )}
         </CardContent>
       </Card>
+        </div>
+      </div>
     </div>
   );
 }

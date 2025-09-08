@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { CheckCircle, ArrowRight, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import SoporteActivacionBanner from "@/components/SoporteActivacionBanner";
 
 export default function ActivacionExitosa() {
   const [, setLocation] = useLocation();
@@ -88,9 +89,13 @@ export default function ActivacionExitosa() {
   }, [setLocation, toast]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-gradient-to-br from-gray-800/90 to-gray-900/90 border-gray-700/50 backdrop-blur-sm">
-        <CardHeader className="text-center">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
+      <div className="max-w-md mx-auto pt-8">
+        <SoporteActivacionBanner />
+        
+        <div className="flex items-center justify-center">
+          <Card className="w-full bg-gradient-to-br from-gray-800/90 to-gray-900/90 border-gray-700/50 backdrop-blur-sm">
+            <CardHeader className="text-center">
           {status === 'processing' && (
             <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
               <Loader2 className="w-8 h-8 text-white animate-spin" />
@@ -168,6 +173,8 @@ export default function ActivacionExitosa() {
           )}
         </CardContent>
       </Card>
+        </div>
+      </div>
     </div>
   );
 }
