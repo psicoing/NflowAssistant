@@ -211,168 +211,147 @@ export default function ActivarCuenta() {
 
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             {/* Opción 1: PayPal */}
-            <Card className="bg-gray-800/50 border-nflow-orange backdrop-blur-sm">
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-nflow-orange rounded-full flex items-center justify-center mx-auto mb-4">
+            <Card className="bg-gray-800/50 border-orange-500 backdrop-blur-sm h-fit">
+              <CardHeader className="text-center pb-4">
+                <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CreditCard className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle className="text-xl text-white">1º Opción: PayPal</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Recomendado - Activación automática
+                <CardTitle className="text-xl text-white mb-2">Plan Básico</CardTitle>
+                <div className="text-2xl font-bold text-orange-400 mb-2">€2.99/mes</div>
+                <CardDescription className="text-gray-300 text-sm">
+                  Activación automática
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="bg-gray-700/50 border border-nflow-orange rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-lg font-semibold text-white">Plan Básico</h4>
-                    <span className="text-lg font-bold text-nflow-orange">€2.99/mes</span>
-                  </div>
-                  <ul className="text-sm text-gray-300 mb-4 space-y-1">
-                    <li>• Chat ilimitado con IA</li>
-                    <li>• Soporte 24/7</li>
-                    <li>• Activación automática</li>
-                  </ul>
+                <ul className="text-sm text-gray-300 mb-4 space-y-2 text-center">
+                  <li>• Chat ilimitado con IA</li>
+                  <li>• Soporte 24/7</li>
+                  <li>• Activación automática</li>
+                </ul>
+                
+                {/* PayPal Button Container */}
+                <div ref={paypalContainerRef} className="min-h-[50px] relative border border-gray-600/50 rounded-lg bg-gray-900/30">
+                  {!paypalStatus.buttonRendered && !paypalStatus.error && (
+                    <div className="absolute inset-0 bg-gray-800/80 flex flex-col items-center justify-center rounded-lg p-4">
+                      <div className="animate-spin w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full mb-2"></div>
+                      <span className="text-gray-300 text-sm text-center">
+                        Cargando PayPal...
+                      </span>
+                    </div>
+                  )}
                   
-                  {/* PayPal Button Container */}
-                  <div ref={paypalContainerRef} className="min-h-[50px] relative border border-gray-600/50 rounded-lg">
-                    {!paypalStatus.buttonRendered && !paypalStatus.error && (
-                      <div className="absolute inset-0 bg-gray-800/80 flex flex-col items-center justify-center rounded-lg p-4">
-                        <div className="animate-spin w-6 h-6 border-2 border-nflow-blue border-t-transparent rounded-full mb-2"></div>
-                        <span className="text-gray-300 text-sm text-center">
-                          Cargando PayPal...
-                        </span>
-                      </div>
-                    )}
-                    
-                    {paypalStatus.error && (
-                      <div className="absolute inset-0 bg-red-900/20 border border-red-500/50 flex flex-col items-center justify-center rounded-lg p-4">
-                        <p className="text-red-400 text-sm text-center mb-2">
-                          {paypalStatus.errorMessage}
-                        </p>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => window.location.reload()}
-                          className="text-xs border-red-500/50 text-red-400 hover:bg-red-900/30"
-                        >
-                          Reintentar
-                        </Button>
-                      </div>
-                    )}
-                  </div>
+                  {paypalStatus.error && (
+                    <div className="absolute inset-0 bg-red-900/20 border border-red-500/50 flex flex-col items-center justify-center rounded-lg p-4">
+                      <p className="text-red-400 text-sm text-center mb-2">
+                        {paypalStatus.errorMessage}
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => window.location.reload()}
+                        className="text-xs border-red-500/50 text-red-400 hover:bg-red-900/30"
+                      >
+                        Reintentar
+                      </Button>
+                    </div>
+                  )}
                 </div>
 
                 {isLoading && (
                   <div className="text-center text-gray-300">
-                    <div className="animate-spin w-6 h-6 border-2 border-nflow-orange border-t-transparent rounded-full mx-auto mb-2"></div>
+                    <div className="animate-spin w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full mx-auto mb-2"></div>
                     Preparando pago...
                   </div>
                 )}
               </CardContent>
             </Card>
 
-            {/* Opción 2: Stripe (Liviano - Solo CDN) */}
-            <Card className="bg-gray-800/50 border-purple-500 backdrop-blur-sm">
-              <CardHeader className="text-center">
+            {/* Opción 2: Stripe */}
+            <Card className="bg-gray-800/50 border-purple-500 backdrop-blur-sm h-fit">
+              <CardHeader className="text-center pb-4">
                 <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CreditCard className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle className="text-xl text-white">2º Opción: Stripe</CardTitle>
-                <CardDescription className="text-gray-300">
-                  Alternativa rápida si PayPal no funciona
+                <CardTitle className="text-xl text-white mb-2">Plan Básico</CardTitle>
+                <div className="text-2xl font-bold text-purple-400 mb-2">€2.99/mes</div>
+                <CardDescription className="text-gray-300 text-sm">
+                  Alternativa si PayPal no funciona
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="bg-gray-700/50 border border-purple-500 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-lg font-semibold text-white">Plan Básico</h4>
-                    <span className="text-lg font-bold text-purple-400">€2.99/mes</span>
-                  </div>
-                  <ul className="text-sm text-gray-300 mb-4 space-y-1">
-                    <li>• Chat ilimitado con IA</li>
-                    <li>• Soporte 24/7</li>
-                    <li>• Activación instantánea</li>
-                  </ul>
-                  
-                  {/* Stripe Button (solo CDN) con redirección automática */}
-                  <div className="min-h-[50px] relative border border-gray-600/50 rounded-lg p-2 bg-white/5 flex items-center justify-center">
-                    <stripe-buy-button
-                      buy-button-id="buy_btn_1Rc7kCCmvVkETA1m5aYwB4IH"
-                      publishable-key="pk_live_51JIZjtCmvVkETA1mxdBylAQvElIPw0haPvP3mutq99SezEZVrFryWzz5zbX5gU2RFP15uFsR2XTKx5yYgkcJhADM00sR04papy"
-                      success-url={`${window.location.origin}/activacion-exitosa?email=${encodeURIComponent(localStorage.getItem('user_email') || '')}`}
-                      cancel-url={`${window.location.origin}/activar-cuenta`}
-                      customer-email=""
-                    />
-                  </div>
-                  
-                  <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-3 mt-3">
-                    <p className="text-green-300 text-xs text-center">
-                      ⚡ Activación 100% automática tras el pago - sin intervención manual
-                    </p>
-                  </div>
-                  
-                  <p className="text-xs text-gray-400 mt-2 text-center">
-                    Procesado por Stripe (sin dependencias npm)
+                <ul className="text-sm text-gray-300 mb-4 space-y-2 text-center">
+                  <li>• Chat ilimitado con IA</li>
+                  <li>• Soporte 24/7</li>
+                  <li>• Activación instantánea</li>
+                </ul>
+                
+                {/* Stripe Button */}
+                <div className="min-h-[50px] relative border border-gray-600/50 rounded-lg bg-gray-900/30 p-2 flex items-center justify-center">
+                  <stripe-buy-button
+                    buy-button-id="buy_btn_1Rc7kCCmvVkETA1m5aYwB4IH"
+                    publishable-key="pk_live_51JIZjtCmvVkETA1mxdBylAQvElIPw0haPvP3mutq99SezEZVrFryWzz5zbX5gU2RFP15uFsR2XTKx5yYgkcJhADM00sR04papy"
+                    success-url={`${window.location.origin}/activacion-exitosa?email=${encodeURIComponent(localStorage.getItem('user_email') || '')}`}
+                    cancel-url={`${window.location.origin}/activar-cuenta`}
+                    customer-email=""
+                  />
+                </div>
+                
+                <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-3">
+                  <p className="text-green-300 text-xs text-center">
+                    ⚡ Activación 100% automática
                   </p>
                 </div>
               </CardContent>
             </Card>
 
             {/* Opción 3: Bizum */}
-            <Card className="bg-gray-800/50 border-green-500 backdrop-blur-sm">
-              <CardHeader className="text-center">
+            <Card className="bg-gray-800/50 border-green-500 backdrop-blur-sm h-fit">
+              <CardHeader className="text-center pb-4">
                 <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Smartphone className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle className="text-xl text-white">3º Opción: Bizum</CardTitle>
-                <CardDescription className="text-gray-300">
+                <CardTitle className="text-xl text-white mb-2">Plan Básico</CardTitle>
+                <div className="text-2xl font-bold text-green-400 mb-2">€2.99/mes</div>
+                <CardDescription className="text-gray-300 text-sm">
                   Método español - Activación en 24h
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="bg-gray-700/50 border border-green-500 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-lg font-semibold text-white">Plan Básico</h4>
-                    <span className="text-lg font-bold text-green-400">€2.99/mes</span>
-                  </div>
-                  <ul className="text-sm text-gray-300 mb-4 space-y-1">
-                    <li>• Chat ilimitado con IA</li>
-                    <li>• Soporte 24/7</li>
-                    <li>• Activación en 24 horas</li>
-                  </ul>
-                  
-                  <div className="space-y-3">
-                    <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-4">
-                      <p className="text-green-300 text-sm font-medium mb-3 text-center">
-                        📱 Instrucciones Bizum:
-                      </p>
-                      <div className="text-sm text-green-200 space-y-2 text-center">
-                        <p className="font-semibold">1. Envía €2.99 por Bizum al:</p>
-                        <p className="text-lg font-bold text-white bg-green-700/50 py-2 px-4 rounded">
-                          +34 660 45 21 36
-                        </p>
-                        <p className="font-semibold">2. En el concepto pon:</p>
-                        <div className="text-sm text-green-200 space-y-1 mb-2">
-                          <p>• 1. Nombre de tu usuario</p>
-                          <p>• 2. Escoge una contraseña</p>
-                          <p>• 3. Tu email</p>
-                        </div>
-                        <p className="text-sm text-yellow-200 bg-green-700/30 py-2 px-3 rounded italic">
-                          "usuario, contraseña, email"
-                        </p>
-                        <p className="text-xs text-green-300 mt-1">
-                          ⚡ Ejemplo: "juan123, mipass2025, juan@gmail.com"
-                        </p>
-                        <p className="font-semibold">3. Ramón te activará en 24h sin falta</p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-orange-600/20 border border-orange-600/50 rounded-lg p-3 mt-3">
-                    <p className="text-orange-300 text-xs text-center">
-                      💬 ¿Dudas? Llama a Ramón: +34 660 45 21 36
+                <ul className="text-sm text-gray-300 mb-4 space-y-2 text-center">
+                  <li>• Chat ilimitado con IA</li>
+                  <li>• Soporte 24/7</li>
+                  <li>• Activación en 24 horas</li>
+                </ul>
+                
+                <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-4">
+                  <p className="text-green-300 text-sm font-medium mb-3 text-center">
+                    📱 Instrucciones Bizum:
+                  </p>
+                  <div className="text-sm text-green-200 space-y-2 text-center">
+                    <p className="font-semibold">1. Envía €2.99 por Bizum al:</p>
+                    <p className="text-lg font-bold text-white bg-green-700/50 py-2 px-4 rounded">
+                      +34 660 45 21 36
                     </p>
+                    <p className="font-semibold">2. En el concepto pon:</p>
+                    <div className="text-sm text-green-200 space-y-1 mb-2">
+                      <p>• 1. Nombre de tu usuario</p>
+                      <p>• 2. Escoge una contraseña</p>
+                      <p>• 3. Tu email</p>
+                    </div>
+                    <p className="text-sm text-yellow-200 bg-green-700/30 py-2 px-3 rounded italic">
+                      "usuario, contraseña, email"
+                    </p>
+                    <p className="text-xs text-green-300 mt-1">
+                      ⚡ Ejemplo: "juan123, mipass2025, juan@gmail.com"
+                    </p>
+                    <p className="font-semibold">3. Ramón te activará en 24h sin falta</p>
                   </div>
+                </div>
+                
+                <div className="bg-orange-600/20 border border-orange-600/50 rounded-lg p-3">
+                  <p className="text-orange-300 text-xs text-center">
+                    💬 ¿Dudas? Llama a Ramón: +34 660 45 21 36
+                  </p>
                 </div>
               </CardContent>
             </Card>
