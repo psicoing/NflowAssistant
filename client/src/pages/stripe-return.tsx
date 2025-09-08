@@ -19,11 +19,14 @@ export default function StripeReturn() {
         const sessionId = urlParams.get('session_id');
         const success = urlParams.get('success');
         
-        console.log('Stripe return parameters:', { sessionId, success });
+        console.log('🚀 STRIPE RETURN PROCESSING START');
+        console.log('URL:', window.location.href);
+        console.log('Parameters:', { sessionId, success });
+        console.log('All URL params:', Object.fromEntries(urlParams.entries()));
 
         if (success === 'true' || sessionId) {
-          // Process subscription activation
-          const response = await fetch('/api/stripe/capture-subscription', {
+          // First try session-based activation
+          let response = await fetch('/api/stripe/capture-subscription', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -34,6 +37,21 @@ export default function StripeReturn() {
             }),
             credentials: 'include',
           });
+
+          // If session fails (401), try email-based activation
+          if (response.status === 401) {
+            console.log('⚠️ Session expired (401), trying session-based activation...');
+            response = await fetch('/api/stripe/activate-by-session', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                sessionId: sessionId
+              }),
+            });
+            console.log('Session-based activation response status:', response.status);
+          }
 
           if (response.ok) {
             const result = await response.json();
