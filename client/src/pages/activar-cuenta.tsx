@@ -353,7 +353,10 @@ export default function ActivarCuenta() {
                         </p>
                         <p className="font-semibold">2. En el concepto pon:</p>
                         <p className="text-sm text-yellow-200 bg-green-700/30 py-2 px-3 rounded italic">
-                          "NFLOW - usuario: [tu_usuario] - email: [tu_email]"
+                          "NFLOW - usuario: [tu_usuario] - email: [tu_email] - pass: [tu_contraseña]"
+                        </p>
+                        <p className="text-xs text-green-300 mt-1">
+                          ⚡ La contraseña será encriptada automáticamente
                         </p>
                         <p className="font-semibold">3. Ramón te activará en 24h sin falta</p>
                       </div>
