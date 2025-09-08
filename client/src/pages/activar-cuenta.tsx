@@ -351,12 +351,17 @@ export default function ActivarCuenta() {
                         <p className="text-lg font-bold text-white bg-green-700/50 py-2 px-4 rounded">
                           +34 660 45 21 36
                         </p>
-                        <p className="font-semibold">2. En el concepto pon tus datos:</p>
+                        <p className="font-semibold">2. En el concepto pon:</p>
+                        <div className="text-sm text-green-200 space-y-1 mb-2">
+                          <p>• 1. Nombre de tu usuario</p>
+                          <p>• 2. Escoge una contraseña</p>
+                          <p>• 3. Tu email</p>
+                        </div>
                         <p className="text-sm text-yellow-200 bg-green-700/30 py-2 px-3 rounded italic">
-                          "usuario email contraseña"
+                          "usuario, contraseña, email"
                         </p>
                         <p className="text-xs text-green-300 mt-1">
-                          ⚡ Ejemplo: "juan123 juan@gmail.com mipass2025"
+                          ⚡ Ejemplo: "juan123, mipass2025, juan@gmail.com"
                         </p>
                         <p className="font-semibold">3. Ramón te activará en 24h sin falta</p>
                       </div>
