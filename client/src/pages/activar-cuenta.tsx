@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, CreditCard, MessageCircle, Zap, CheckCircle } from "lucide-react";
 import { Link, useLocation } from "wouter";
+import { useToast } from "@/hooks/use-toast";
 
 declare global {
   interface Window {
@@ -26,6 +27,7 @@ interface PayPalStatus {
 
 export default function ActivarCuenta() {
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
   const [paypalStatus, setPaypalStatus] = useState<PayPalStatus>({
     buttonRendered: false,
     error: false,
@@ -266,7 +268,7 @@ export default function ActivarCuenta() {
                       publishable-key="pk_live_51JIZjtCmvVkETA1mxdBylAQvElIPw0haPvP3mutq99SezEZVrFryWzz5zbX5gU2RFP15uFsR2XTKx5yYgkcJhADM00sR04papy"
                       success-url={`${window.location.origin}/stripe-return?session_id={CHECKOUT_SESSION_ID}`}
                       cancel-url={`${window.location.origin}/activar-cuenta`}
-                      customer-email={pendingUserId && existingUser ? existingUser.email : ''}
+                      customer-email=""
                     />
                   </div>
                   
