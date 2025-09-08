@@ -21,7 +21,7 @@ export default function SoporteActivacionBanner() {
                 
                 <div className="text-sm text-gray-100">
                   <span className="font-bold text-white">¿Problemas con la activación?</span> 
-                  <span className="ml-1">Te atendemos personalmente para activar tu perfil:</span>
+                  <span className="ml-1">Ramón Molons te atiende personalmente para activar tu perfil:</span>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-2 sm:space-y-0 text-sm">
