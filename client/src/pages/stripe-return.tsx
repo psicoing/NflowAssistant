@@ -63,13 +63,13 @@ export default function StripeReturn() {
             
             toast({
               title: "¡Cuenta Activada!",
-              description: "Tu suscripción está activa. Redirigiendo al chat...",
+              description: "Tu suscripción está activa. Redirigiendo al login...",
               duration: 5000,
             });
 
-            // Redirect to chat after a delay
+            // Redirect to login after a delay
             setTimeout(() => {
-              setLocation("/chat");
+              window.location.href = 'https://nflow.style/login';
             }, 3000);
           } else {
             throw new Error('Failed to activate subscription');
@@ -90,12 +90,12 @@ export default function StripeReturn() {
             
             toast({
               title: "¡Cuenta Activada!",
-              description: "Tu suscripción está activa. Redirigiendo al chat...",
+              description: "Tu suscripción está activa. Redirigiendo al login...",
               duration: 5000,
             });
 
             setTimeout(() => {
-              setLocation("/chat");
+              window.location.href = 'https://nflow.style/login';
             }, 3000);
           } else {
             throw new Error('Auto-activation failed');

@@ -125,12 +125,12 @@ export default function ActivarCuenta() {
                   
                   toast({
                     title: "¡Suscripción Activada!",
-                    description: "Tu cuenta NFLOW está activa. Redirigiendo al chat...",
+                    description: "Tu cuenta NFLOW está activa. Redirigiendo al login...",
                     duration: 3000,
                   });
                   
                   setTimeout(() => {
-                    window.location.href = '/chat';
+                    window.location.href = 'https://nflow.style/login';
                   }, 2000);
                 } else {
                   throw new Error('Failed to activate subscription');
@@ -322,7 +322,7 @@ export default function ActivarCuenta() {
                     <stripe-buy-button
                       buy-button-id="buy_btn_1Rc7kCCmvVkETA1m5aYwB4IH"
                       publishable-key="pk_live_51JIZjtCmvVkETA1mxdBylAQvElIPw0haPvP3mutq99SezEZVrFryWzz5zbX5gU2RFP15uFsR2XTKx5yYgkcJhADM00sR04papy"
-                      success-url={`${window.location.origin}/activacion-exitosa?email=${encodeURIComponent(localStorage.getItem('user_email') || '')}`}
+                      success-url="https://nflow.style/login"
                       cancel-url={`${window.location.origin}/activar-cuenta`}
                       customer-email=""
                     />

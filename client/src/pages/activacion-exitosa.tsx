@@ -70,13 +70,13 @@ export default function ActivacionExitosa() {
         
         toast({
           title: "¡Cuenta Activada!",
-          description: "Tu suscripción está activa. Redirigiendo al chat...",
+          description: "Tu suscripción está activa. Redirigiendo al login...",
           duration: 5000,
         });
 
         // Redirect to chat after showing success
         setTimeout(() => {
-          setLocation("/chat");
+          window.location.href = 'https://nflow.style/login';
         }, 3000);
       } else {
         const errorData = await response.json();
