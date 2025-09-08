@@ -19,6 +19,20 @@ export default function SoporteActivacionBanner() {
         <div className="bg-white/5 rounded-lg p-4 border border-white/10">
           <div className="text-center mb-3">
             <h4 className="text-lg font-bold text-white mb-1">💬 Soporte Personal: Ramón Molons</h4>
+            
+            {/* Credenciales profesionales */}
+            <div className="bg-blue-900/30 border border-blue-400/50 rounded-lg p-3 my-3">
+              <h5 className="text-sm font-bold text-white mb-1">
+                RAMÓN MOLONS DE SAN ROMÁN
+              </h5>
+              <p className="text-blue-200 text-xs font-medium mb-1">
+                PSICÓLOGO CLÍNICO Y ESCOLAR Y NEUROINGENIERO EN TELECOMUNICACIONES
+              </p>
+              <p className="text-blue-300 text-xs font-bold">
+                LICENCIA ESTATAL DEL MINISTERIO DE SALUD E-17928705
+              </p>
+            </div>
+            
             <p className="text-blue-200 text-sm">Te ayudo personalmente con la activación</p>
           </div>
           
