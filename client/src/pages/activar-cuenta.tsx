@@ -70,47 +70,77 @@ export default function ActivarCuenta() {
               });
             },
             onApprove: async function(data: any, actions: any) {
-              console.log('PayPal aprobado:', data);
+              console.log('🎯 PayPal Subscription Approved:', data);
+              console.log('🎯 Available actions:', Object.keys(actions));
               setIsLoading(true);
               
               try {
-                const details = await actions.order.capture();
-                console.log('PayPal capture completed:', details);
+                // For subscriptions, no capture needed - approval is enough
+                console.log('✅ PayPal subscription approved, activating...');
                 
-                // Store payment info for webhook processing
-                localStorage.setItem('paypal_payment_data', JSON.stringify({
-                  orderID: data.orderID,
-                  payerEmail: details.payer.email_address,
-                  status: 'completed',
-                  timestamp: Date.now()
-                }));
-                
-                // Webhook will handle activation automatically
-                // Redirect directly to chat - activation happens via webhook
-                toast({
-                  title: "¡Pago Completado!",
-                  description: "Activando tu cuenta automáticamente...",
-                  duration: 3000,
+                // Directly activate via API call since this is a subscription
+                const response = await fetch('/api/paypal/capture-subscription', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    subscriptionId: data.subscriptionID || data.orderID,
+                    subscriptionPlan: 'basic'
+                  }),
+                  credentials: 'include',
                 });
-                
-                setTimeout(() => {
-                  window.location.href = '/chat';
-                }, 2000);
+
+                if (response.ok) {
+                  const result = await response.json();
+                  console.log('✅ PayPal subscription activated:', result);
+                  
+                  toast({
+                    title: "¡Suscripción Activada!",
+                    description: "Tu cuenta NFLOW está activa. Redirigiendo al chat...",
+                    duration: 3000,
+                  });
+                  
+                  setTimeout(() => {
+                    window.location.href = '/chat';
+                  }, 2000);
+                } else {
+                  throw new Error('Failed to activate subscription');
+                }
                 
               } catch (error) {
-                console.error('PayPal approval error:', error);
+                console.error('❌ PayPal approval error:', error);
+                toast({
+                  title: "Error en la activación",
+                  description: "Contacta soporte para activar tu cuenta manualmente.",
+                  variant: "destructive",
+                });
                 // Fallback to return page
-                window.location.href = `/paypal-return?orderID=${data.orderID}`;
+                window.location.href = `/paypal-return?subscriptionID=${data.subscriptionID || data.orderID}`;
               } finally {
                 setIsLoading(false);
               }
             },
             onError: function(err: any) {
-              console.error('PayPal Error:', err);
+              console.error('❌ PayPal Error Details:', {
+                message: err.message,
+                details: err.details,
+                name: err.name,
+                stack: err.stack,
+                fullError: err
+              });
+              
+              toast({
+                title: "Error PayPal",
+                description: "Hubo un problema con PayPal. Intenta con Stripe como alternativa.",
+                variant: "destructive",
+                duration: 5000,
+              });
+              
               setPaypalStatus(prev => ({
                 ...prev,
                 error: true,
-                errorMessage: 'Error en el proceso de pago'
+                errorMessage: `Error PayPal: ${err.message || 'Error desconocido'}`
               }));
             },
             onCancel: function(data: any) {
