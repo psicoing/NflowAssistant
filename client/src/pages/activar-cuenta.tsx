@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, CreditCard, MessageCircle, Zap, CheckCircle } from "lucide-react";
+import { ArrowLeft, CreditCard, MessageCircle, Zap, CheckCircle, Smartphone } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import SoporteActivacionBanner from "@/components/SoporteActivacionBanner";
@@ -35,6 +35,12 @@ export default function ActivarCuenta() {
     errorMessage: ""
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [bizumData, setBizumData] = useState({
+    username: "",
+    password: "",
+    email: ""
+  });
+  const [bizumSubmitted, setBizumSubmitted] = useState(false);
   const paypalContainerRef = useRef<HTMLDivElement>(null);
 
   // Cargar scripts de forma ligera (sin dependencias npm)
@@ -194,6 +200,45 @@ export default function ActivarCuenta() {
     }
   }, [paypalStatus.buttonRendered, paypalStatus.error]);
 
+  const handleBizumSubmit = async () => {
+    if (!bizumData.username || !bizumData.password || !bizumData.email) {
+      toast({
+        title: "Datos incompletos",
+        description: "Por favor completa todos los campos",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/bizum/submit-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bizumData),
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        setBizumSubmitted(true);
+        toast({
+          title: "¡Datos enviados!",
+          description: "Ramón activará tu cuenta en 24 horas tras confirmar el pago Bizum",
+          duration: 8000,
+        });
+      } else {
+        throw new Error('Error enviando datos');
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Hubo un problema enviando los datos. Llama a Ramón para resolverlo.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
       <div className="container mx-auto px-4 py-8">
@@ -209,7 +254,7 @@ export default function ActivarCuenta() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
             {/* Opción 1: PayPal */}
             <Card className="bg-gray-800/50 border-nflow-orange backdrop-blur-sm">
               <CardHeader className="text-center">
@@ -314,6 +359,91 @@ export default function ActivarCuenta() {
                   <p className="text-xs text-gray-400 mt-2 text-center">
                     Procesado por Stripe (sin dependencias npm)
                   </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Opción 3: Bizum */}
+            <Card className="bg-gray-800/50 border-green-500 backdrop-blur-sm">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Smartphone className="w-8 h-8 text-white" />
+                </div>
+                <CardTitle className="text-xl text-white">3º Opción: Bizum</CardTitle>
+                <CardDescription className="text-gray-300">
+                  Método español - Activación en 24h
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="bg-gray-700/50 border border-green-500 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-lg font-semibold text-white">Plan Básico</h4>
+                    <span className="text-lg font-bold text-green-400">€2.99/mes</span>
+                  </div>
+                  <ul className="text-sm text-gray-300 mb-4 space-y-1">
+                    <li>• Chat ilimitado con IA</li>
+                    <li>• Soporte 24/7</li>
+                    <li>• Activación en 24 horas</li>
+                  </ul>
+                  
+                  <div className="space-y-3">
+                    <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-3">
+                      <p className="text-green-300 text-sm font-medium mb-2">
+                        📱 Instrucciones Bizum:
+                      </p>
+                      <div className="text-xs text-green-200 space-y-1">
+                        <p>1. Envía €2.99 por Bizum al <strong>+34 660 45 21 36</strong></p>
+                        <p>2. Pon tu usuario, contraseña y email aquí</p>
+                        <p>3. Ramón te activará en 24h sin falta</p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <input 
+                        type="text" 
+                        placeholder="Tu nombre de usuario" 
+                        value={bizumData.username}
+                        onChange={(e) => setBizumData(prev => ({...prev, username: e.target.value}))}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white text-sm"
+                        disabled={bizumSubmitted}
+                      />
+                      <input 
+                        type="password" 
+                        placeholder="Tu contraseña" 
+                        value={bizumData.password}
+                        onChange={(e) => setBizumData(prev => ({...prev, password: e.target.value}))}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white text-sm"
+                        disabled={bizumSubmitted}
+                      />
+                      <input 
+                        type="email" 
+                        placeholder="Tu email" 
+                        value={bizumData.email}
+                        onChange={(e) => setBizumData(prev => ({...prev, email: e.target.value}))}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white text-sm"
+                        disabled={bizumSubmitted}
+                      />
+                      
+                      {!bizumSubmitted ? (
+                        <Button 
+                          onClick={handleBizumSubmit}
+                          className="w-full bg-green-600 hover:bg-green-700 text-white"
+                        >
+                          Enviar datos (tras pago Bizum)
+                        </Button>
+                      ) : (
+                        <div className="text-center py-3 bg-green-800/30 border border-green-600 rounded text-green-300 text-sm">
+                          ✅ Datos enviados - Activación en 24h
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div className="bg-orange-600/20 border border-orange-600/50 rounded-lg p-3 mt-3">
+                    <p className="text-orange-300 text-xs text-center">
+                      💬 ¿Dudas? Llama a Ramón: +34 660 45 21 36
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
