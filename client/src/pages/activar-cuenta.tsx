@@ -411,19 +411,6 @@ export default function ActivarCuenta() {
                 🏢 ¿Necesitas un Plan Personal o de Empresa?
               </h3>
               
-              {/* Credenciales profesionales de Ramón */}
-              <div className="bg-indigo-900/30 border border-indigo-400/50 rounded-lg p-4 mb-4">
-                <h4 className="text-lg font-bold text-white mb-2">
-                  RAMÓN MOLONS DE SAN ROMÁN
-                </h4>
-                <p className="text-indigo-200 text-sm font-medium mb-1">
-                  PSICÓLOGO CLÍNICO Y ESCOLAR Y NEUROINGENIERO EN TELECOMUNICACIONES
-                </p>
-                <p className="text-indigo-300 text-xs font-bold">
-                  LICENCIA ESTATAL DEL MINISTERIO DE SALUD E-17928705
-                </p>
-              </div>
-              
               <p className="text-purple-200 mb-4">
                 Ofrecemos soluciones personalizadas para individuos y empresas con necesidades específicas
               </p>
