@@ -64,11 +64,38 @@ export default function ActivarCuenta() {
           console.log('Iniciando renderizado de PayPal...');
           
           await window.paypal.Buttons({
-            createSubscription: function(data: any, actions: any) {
+            createSubscription: async function(data: any, actions: any) {
               console.log('Creando suscripción PayPal...');
-              return actions.subscription.create({
-                'plan_id': 'P-8X502396U4202261ENBKC32A'
-              });
+              
+              // Crear plan dinámicamente desde el servidor
+              try {
+                const planResponse = await fetch('/api/paypal/create-plan', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    amount: '2.99',
+                    currency: 'EUR',
+                    name: 'Plan Básico NFLOW'
+                  }),
+                  credentials: 'include',
+                });
+
+                if (!planResponse.ok) {
+                  throw new Error('Failed to create PayPal plan');
+                }
+
+                const planData = await planResponse.json();
+                console.log('Plan creado:', planData.planId);
+
+                return actions.subscription.create({
+                  'plan_id': planData.planId
+                });
+              } catch (error) {
+                console.error('Error creando plan PayPal:', error);
+                throw error;
+              }
             },
             onApprove: async function(data: any, actions: any) {
               console.log('🎯 PayPal Subscription Approved:', data);

@@ -1121,6 +1121,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // 🟡 PayPal - Crear plan dinámicamente
+  app.post("/api/paypal/create-plan", async (req, res) => {
+    try {
+      const { amount, currency, name } = req.body;
+
+      // Crear plan usando PayPal Integration
+      const PayPalIntegration = require('./paypal-integration').PayPalIntegration;
+      const paypalIntegration = new PayPalIntegration();
+      
+      // Primero crear producto
+      const productId = await paypalIntegration.createProduct(
+        name || 'Plan Básico NFLOW',
+        'Suscripción mensual para acceso completo a NFLOW'
+      );
+
+      // Luego crear plan
+      const planId = await paypalIntegration.createPlan(
+        productId,
+        name || 'Plan Básico NFLOW',
+        amount || '2.99'
+      );
+
+      console.log('✅ PayPal plan creado:', planId);
+
+      res.json({ 
+        success: true, 
+        planId: planId,
+        productId: productId
+      });
+
+    } catch (error) {
+      console.error('Error creando plan PayPal:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Error creando plan PayPal',
+        error: error.message
+      });
+    }
+  });
 
   const httpServer = createServer(app);
   return httpServer;
