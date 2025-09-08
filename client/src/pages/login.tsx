@@ -41,6 +41,10 @@ export default function Login() {
         localStorage.setItem("username", formData.username);
         localStorage.setItem("hasCompletedPayment", data.hasCompletedPayment.toString());
         
+        // 🚀 CRITICAL: Guardar email para activación automática de pagos
+        localStorage.setItem("user_email", data.email || formData.email || "");
+        console.log('💾 Email guardado para activación automática:', data.email || formData.email);
+        
         toast({
           title: "Inicio de sesión exitoso",
           description: `Bienvenido de vuelta, ${formData.username}`,

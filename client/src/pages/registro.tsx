@@ -115,6 +115,10 @@ export default function Registro() {
         localStorage.setItem("pendingUsername", formData.username);
         localStorage.setItem("registrationTime", Date.now().toString());
         
+        // 🚀 CRITICAL: Guardar email para activación automática de pagos
+        localStorage.setItem("user_email", formData.email);
+        console.log('💾 Email guardado para activación automática:', formData.email);
+        
         setTimeout(() => {
           setLocation("/activar-cuenta");
         }, 2000);
