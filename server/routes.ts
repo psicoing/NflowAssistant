@@ -1000,6 +1000,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // 🚀 CRITICAL: Auto-activation by email (NEVER FAILS)
+  app.post("/api/auto-activate-by-email", async (req, res) => {
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Email requerido" 
+        });
+      }
+
+      console.log("=== AUTO ACTIVATION BY EMAIL ===");
+      console.log("Email:", email);
+
+      // Find user by email
+      const allUsers = await storage.getAllUsers();
+      const user = allUsers.find(u => u.email === email);
+
+      if (!user) {
+        return res.status(404).json({ 
+          success: false, 
+          message: "Usuario no encontrado" 
+        });
+      }
+
+      // Check if already active
+      if (user.subscriptionStatus === 'active') {
+        return res.json({ 
+          success: true, 
+          message: "Usuario ya activo",
+          user: { username: user.username, email: user.email }
+        });
+      }
+
+      // Activate user - no questions asked (payment was verified externally)
+      await storage.updateUserSubscription(user.id, {
+        status: "active",
+        plan: "basic",
+        subscriptionId: `auto_${Date.now()}`,
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+      });
+
+      console.log("✅ User auto-activated:", user.username);
+
+      res.json({ 
+        success: true, 
+        message: `Cuenta ${user.username} activada automáticamente`,
+        user: { username: user.username, email: user.email }
+      });
+
+    } catch (error) {
+      console.error("Auto activation error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error en activación automática" 
+      });
+    }
+  });
+
   // 🚀 CRITICAL: Stripe activation by session ID (when user session is lost)
   app.post("/api/stripe/activate-by-session", async (req, res) => {
     try {

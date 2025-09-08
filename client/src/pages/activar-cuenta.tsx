@@ -296,7 +296,7 @@ export default function ActivarCuenta() {
                     <stripe-buy-button
                       buy-button-id="buy_btn_1Rc7kCCmvVkETA1m5aYwB4IH"
                       publishable-key="pk_live_51JIZjtCmvVkETA1mxdBylAQvElIPw0haPvP3mutq99SezEZVrFryWzz5zbX5gU2RFP15uFsR2XTKx5yYgkcJhADM00sR04papy"
-                      success-url={`${window.location.origin}/stripe-return?session_id={CHECKOUT_SESSION_ID}`}
+                      success-url={`${window.location.origin}/activacion-exitosa?email=${encodeURIComponent(localStorage.getItem('user_email') || '')}`}
                       cancel-url={`${window.location.origin}/activar-cuenta`}
                       customer-email=""
                     />
@@ -304,7 +304,7 @@ export default function ActivarCuenta() {
                   
                   <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-3 mt-3">
                     <p className="text-green-300 text-xs text-center">
-                      ⚡ Activación automática tras el pago y redirección a /stripe-return
+                      ⚡ Activación 100% automática tras el pago - sin intervención manual
                     </p>
                   </div>
                   

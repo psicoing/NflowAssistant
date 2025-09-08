@@ -30,6 +30,7 @@ import ActivarStripe from "@/pages/activar-stripe";
 import StripeActivateManual from "@/pages/stripe-activate-manual";
 import PayPalActivateManual from "@/pages/paypal-activate-manual";
 import QuickActivate from "@/pages/quick-activate";
+import ActivacionExitosa from "@/pages/activacion-exitosa";
 import TerminosCondiciones from "@/pages/legal/terminos";
 import PoliticaPrivacidad from "@/pages/legal/privacidad";
 import PoliticaCookies from "@/pages/legal/cookies";
@@ -50,7 +51,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners", "/nosotros", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners", "/nosotros", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
     // Allow blog article routes
     if (location.startsWith("/blog/")) {
       return;
@@ -102,6 +103,7 @@ function AuthenticatedRouter() {
       <Route path="/payment-redirect" component={PaymentRedirect} />
       <Route path="/paypal-return" component={PayPalReturn} />
       <Route path="/stripe-return" component={StripeReturn} />
+      <Route path="/activacion-exitosa" component={ActivacionExitosa} />
       <Route path="/activar-stripe" component={ActivarStripe} />
       <Route path="/stripe-manual" component={StripeActivateManual} />
       <Route path="/paypal-manual" component={PayPalActivateManual} />
