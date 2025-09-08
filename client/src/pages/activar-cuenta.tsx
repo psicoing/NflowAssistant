@@ -427,6 +427,21 @@ export default function ActivarCuenta() {
               <p className="text-purple-200 mb-4">
                 Ofrecemos soluciones personalizadas para individuos y empresas con necesidades específicas
               </p>
+
+              {/* Información sobre tarifas en desarrollo */}
+              <div className="bg-yellow-900/30 border border-yellow-500/50 rounded-lg p-4 mb-4">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <span className="text-yellow-400 text-lg">⚡</span>
+                  <h5 className="text-yellow-200 font-bold text-sm">¿Has visto otras tarifas publicadas?</h5>
+                </div>
+                <p className="text-yellow-200 text-xs text-center mb-2">
+                  Algunas opciones de tarifas están publicadas pero aún no están activas automáticamente
+                </p>
+                <p className="text-yellow-100 text-xs text-center font-medium">
+                  💫 <strong>¡Ponte en contacto con nosotros y te activamos el plan que quieras!</strong>
+                </p>
+              </div>
+
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <div className="bg-purple-600/20 border border-purple-500/50 rounded-lg p-3">
                   <p className="text-purple-300 text-sm font-medium">
