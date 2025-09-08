@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, CreditCard, MessageCircle, Zap, CheckCircle, Smartphone } from "lucide-react";
+import { ArrowLeft, CreditCard, MessageCircle, Zap, CheckCircle, Smartphone, Phone, Mail } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import SoporteActivacionBanner from "@/components/SoporteActivacionBanner";
@@ -403,6 +403,45 @@ export default function ActivarCuenta() {
           </div>
 
           <SoporteActivacionBanner />
+
+          {/* Planes personalizados */}
+          <div className="bg-gradient-to-r from-purple-800/50 to-indigo-800/50 border border-purple-500/30 rounded-xl p-6 mb-6 backdrop-blur-sm shadow-lg">
+            <div className="text-center">
+              <h3 className="text-xl font-bold text-white mb-3">
+                🏢 ¿Necesitas un Plan Personal o de Empresa?
+              </h3>
+              <p className="text-purple-200 mb-4">
+                Ofrecemos soluciones personalizadas para individuos y empresas con necesidades específicas
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div className="bg-purple-600/20 border border-purple-500/50 rounded-lg p-3">
+                  <p className="text-purple-300 text-sm font-medium">
+                    💼 Planes Empresariales • 👤 Planes Personalizados • 🎯 Soluciones a Medida
+                  </p>
+                </div>
+              </div>
+              <div className="mt-4">
+                <p className="text-white font-medium mb-2">Ponte en contacto con nosotros:</p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <a 
+                    href="tel:+34660452136"
+                    className="flex items-center gap-2 bg-green-500/20 text-green-300 px-4 py-2 rounded-lg border border-green-500/30 hover:bg-green-500/30 transition-colors"
+                  >
+                    <Phone className="w-4 h-4" />
+                    <span className="font-bold">+34 660 45 21 36</span>
+                  </a>
+                  
+                  <a 
+                    href="mailto:jobda@jobda.es?subject=Plan Personalizado NFLOW"
+                    className="flex items-center gap-2 bg-orange-500/20 text-orange-300 px-4 py-2 rounded-lg border border-orange-500/30 hover:bg-orange-500/30 transition-colors"
+                  >
+                    <Mail className="w-4 h-4" />
+                    <span className="font-bold">jobda@jobda.es</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
 
