@@ -412,7 +412,7 @@ export default function ActivarCuenta() {
 
           <div className="text-center mt-8">
             <Link href="/">
-              <Button variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-700">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white border border-blue-500 shadow-lg">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 ← Volver al inicio
               </Button>
