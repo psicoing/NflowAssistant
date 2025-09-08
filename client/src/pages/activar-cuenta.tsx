@@ -35,12 +35,6 @@ export default function ActivarCuenta() {
     errorMessage: ""
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [bizumData, setBizumData] = useState({
-    username: "",
-    password: "",
-    email: ""
-  });
-  const [bizumSubmitted, setBizumSubmitted] = useState(false);
   const paypalContainerRef = useRef<HTMLDivElement>(null);
 
   // Cargar scripts de forma ligera (sin dependencias npm)
@@ -200,45 +194,6 @@ export default function ActivarCuenta() {
     }
   }, [paypalStatus.buttonRendered, paypalStatus.error]);
 
-  const handleBizumSubmit = async () => {
-    if (!bizumData.username || !bizumData.password || !bizumData.email) {
-      toast({
-        title: "Datos incompletos",
-        description: "Por favor completa todos los campos",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      const response = await fetch('/api/bizum/submit-payment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bizumData),
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        setBizumSubmitted(true);
-        toast({
-          title: "¡Datos enviados!",
-          description: "Ramón activará tu cuenta en 24 horas tras confirmar el pago Bizum",
-          duration: 8000,
-        });
-      } else {
-        throw new Error('Error enviando datos');
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Hubo un problema enviando los datos. Llama a Ramón para resolverlo.",
-        variant: "destructive",
-      });
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
       <div className="container mx-auto px-4 py-8">
@@ -396,49 +351,12 @@ export default function ActivarCuenta() {
                         <p className="text-lg font-bold text-white bg-green-700/50 py-2 px-4 rounded">
                           +34 660 45 21 36
                         </p>
-                        <p className="font-semibold">2. Completa tus datos aquí</p>
+                        <p className="font-semibold">2. En el concepto pon:</p>
+                        <p className="text-sm text-yellow-200 bg-green-700/30 py-2 px-3 rounded italic">
+                          "NFLOW - usuario: [tu_usuario] - email: [tu_email]"
+                        </p>
                         <p className="font-semibold">3. Ramón te activará en 24h sin falta</p>
                       </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <input 
-                        type="text" 
-                        placeholder="Tu nombre de usuario" 
-                        value={bizumData.username}
-                        onChange={(e) => setBizumData(prev => ({...prev, username: e.target.value}))}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white text-sm"
-                        disabled={bizumSubmitted}
-                      />
-                      <input 
-                        type="password" 
-                        placeholder="Tu contraseña" 
-                        value={bizumData.password}
-                        onChange={(e) => setBizumData(prev => ({...prev, password: e.target.value}))}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white text-sm"
-                        disabled={bizumSubmitted}
-                      />
-                      <input 
-                        type="email" 
-                        placeholder="Tu email" 
-                        value={bizumData.email}
-                        onChange={(e) => setBizumData(prev => ({...prev, email: e.target.value}))}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white text-sm"
-                        disabled={bizumSubmitted}
-                      />
-                      
-                      {!bizumSubmitted ? (
-                        <Button 
-                          onClick={handleBizumSubmit}
-                          className="w-full bg-green-600 hover:bg-green-700 text-white"
-                        >
-                          Enviar datos (tras pago Bizum)
-                        </Button>
-                      ) : (
-                        <div className="text-center py-3 bg-green-800/30 border border-green-600 rounded text-green-300 text-sm">
-                          ✅ Datos enviados - Activación en 24h
-                        </div>
-                      )}
                     </div>
                   </div>
                   

@@ -1121,51 +1121,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // 🟢 Bizum payment endpoint
-  app.post("/api/bizum/submit-payment", async (req, res) => {
-    try {
-      const { username, password, email } = req.body;
-
-      if (!username || !password || !email) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Todos los campos son requeridos" 
-        });
-      }
-
-      console.log("=== BIZUM PAYMENT REQUEST ===");
-      console.log("Username:", username);
-      console.log("Email:", email);
-      console.log("Timestamp:", new Date().toISOString());
-
-      // Store Bizum payment request in a simple way
-      // For now, just log it. In production, you'd store it in database
-      const bizumRequest = {
-        username,
-        email,
-        password, // In production, you'd hash this
-        status: 'pending',
-        submittedAt: new Date().toISOString(),
-        paymentMethod: 'bizum'
-      };
-
-      // TODO: Store in database table for admin review
-      console.log("Bizum request stored:", bizumRequest);
-
-      res.json({ 
-        success: true, 
-        message: "Datos recibidos. Activación en 24 horas tras confirmar pago Bizum.",
-        requestId: `bizum_${Date.now()}`
-      });
-
-    } catch (error) {
-      console.error("Bizum submission error:", error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Error procesando solicitud Bizum" 
-      });
-    }
-  });
 
   const httpServer = createServer(app);
   return httpServer;
