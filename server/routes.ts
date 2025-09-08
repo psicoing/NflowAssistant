@@ -1127,7 +1127,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { amount, currency, name } = req.body;
 
       // Crear plan usando PayPal Integration
-      const PayPalIntegration = require('./paypal-integration').PayPalIntegration;
+      const { PayPalIntegration } = await import('./paypal-integration.js');
       const paypalIntegration = new PayPalIntegration();
       
       // Primero crear producto
@@ -1156,7 +1156,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ 
         success: false, 
         message: 'Error creando plan PayPal',
-        error: error.message
+        error: error instanceof Error ? error.message : 'Error desconocido'
       });
     }
   });
