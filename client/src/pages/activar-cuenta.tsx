@@ -288,6 +288,12 @@ export default function ActivarCuenta() {
                     Preparando pago...
                   </div>
                 )}
+                
+                <div className="bg-blue-600/20 border border-blue-600/50 rounded-lg p-3 mt-3">
+                  <p className="text-blue-300 text-xs text-center">
+                    💡 Consulta el recuadro del final de página para que te sientas seguro(a) y cómodo(a)
+                  </p>
+                </div>
               </CardContent>
             </Card>
 
@@ -326,6 +332,12 @@ export default function ActivarCuenta() {
                 <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-3">
                   <p className="text-green-300 text-xs text-center">
                     ⚡ Activación 100% automática
+                  </p>
+                </div>
+                
+                <div className="bg-blue-600/20 border border-blue-600/50 rounded-lg p-3 mt-3">
+                  <p className="text-blue-300 text-xs text-center">
+                    💡 Consulta el recuadro del final de página para que te sientas seguro(a) y cómodo(a)
                   </p>
                 </div>
               </CardContent>
@@ -378,6 +390,12 @@ export default function ActivarCuenta() {
                 <div className="bg-orange-600/20 border border-orange-600/50 rounded-lg p-3">
                   <p className="text-orange-300 text-xs text-center">
                     💬 ¿Dudas? Llama a Ramón: +34 660 45 21 36
+                  </p>
+                </div>
+                
+                <div className="bg-blue-600/20 border border-blue-600/50 rounded-lg p-3 mt-3">
+                  <p className="text-blue-300 text-xs text-center">
+                    💡 Consulta el recuadro del final de página para que te sientas seguro(a) y cómodo(a)
                   </p>
                 </div>
               </CardContent>
