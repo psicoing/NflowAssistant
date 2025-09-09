@@ -606,17 +606,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
 
 
-  // Stripe checkout session - control total de URLs
+  // Stripe checkout session - permite pagos sin login previo
   app.post("/api/stripe/create-checkout-session", async (req, res) => {
     try {
-      if (!(req as any).isAuthenticated()) {
-        return res.status(401).json({ success: false, message: "Not authenticated" });
-      }
-
       const origin = req.headers.origin;
-      const user = (req as any).user;
+      const isAuthenticated = (req as any).isAuthenticated();
+      const user = isAuthenticated ? (req as any).user : null;
       
-      console.log("Creating Stripe checkout session for user:", user.email);
+      console.log("Creating Stripe checkout session - Auth:", isAuthenticated, "User:", user?.email || "anonymous");
 
       // Importar Stripe solo cuando se necesite
       const Stripe = (await import('stripe')).default;
@@ -634,6 +631,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ],
         success_url: "https://nflow.style/stripe-return?session_id={CHECKOUT_SESSION_ID}",
         cancel_url: "https://nflow.style/cancel",
+        // Añadir metadata para identificar usuario después del pago
+        metadata: {
+          userId: user?.id?.toString() || "guest",
+          userEmail: user?.email || "from_checkout",
+          source: "activation_page"
+        },
+        // Permitir que Stripe recoja el email automáticamente
+        customer_email: user?.email || undefined,
       });
       
       res.json({ url: session.url });
