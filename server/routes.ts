@@ -631,8 +631,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }],
         mode: 'subscription',
         customer_email: user.email,
-        success_url: `${origin}/stripe-return?session_id={CHECKOUT_SESSION_ID}&success=true`,
-        cancel_url: `${origin}/activar-cuenta`,
+        success_url: `${origin}/stripe-return?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/cancel`,
         metadata: {
           user_id: user.id.toString(),
           username: user.username,
@@ -661,7 +661,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const sessionId = req.query.session_id as string;
       
       if (!sessionId) {
-        return res.redirect("/activar-cuenta?error=no_session");
+        return res.send("Error: no se encontró información de pago");
       }
 
       console.log("🔍 Verificando session de Stripe:", sessionId);
@@ -697,12 +697,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         return res.redirect("/login");
       } else {
-        console.log("❌ Pago no completado, estado:", session.payment_status);
-        return res.redirect("/activar-cuenta?error=payment_failed");
+        return res.send("Error: pago no confirmado");
       }
     } catch (error: any) {
       console.error('Error en stripe-return:', error);
-      return res.redirect("/activar-cuenta?error=verification_failed");
+      return res.send("Error: verificación de pago fallida");
     }
   });
 
@@ -784,6 +783,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("❌ Stripe webhook error:", error);
       res.status(400).json({ error: 'Webhook error', details: error.message });
     }
+  });
+
+  // Página de cancelación
+  app.get("/cancel", (req, res) => {
+    res.send(`
+      <html>
+        <head><title>Pago Cancelado</title></head>
+        <body style="font-family: Arial; text-align: center; padding: 50px;">
+          <h2>Pago Cancelado</h2>
+          <p>Has cancelado el proceso de pago.</p>
+          <a href="/activar-cuenta" style="color: #0066cc;">Volver a intentar</a>
+        </body>
+      </html>
+    `);
   });
 
   // PayPal endpoints
