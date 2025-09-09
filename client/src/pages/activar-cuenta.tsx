@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowLeft, CreditCard, MessageCircle, Zap, CheckCircle, Smartphone, Phone, Mail } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import SoporteActivacionBanner from "@/components/SoporteActivacionBanner";
 
 declare global {
@@ -29,6 +30,7 @@ interface PayPalStatus {
 export default function ActivarCuenta() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { user } = useAuth();
   const [paypalStatus, setPaypalStatus] = useState<PayPalStatus>({
     buttonRendered: false,
     error: false,
@@ -324,7 +326,7 @@ export default function ActivarCuenta() {
                       publishable-key="pk_live_51JIZjtCmvVkETA1mxdBylAQvElIPw0haPvP3mutq99SezEZVrFryWzz5zbX5gU2RFP15uFsR2XTKx5yYgkcJhADM00sR04papy"
                       success-url="https://nflow.style/login"
                       cancel-url={`${window.location.origin}/activar-cuenta`}
-                      customer-email=""
+                      customer-email={user?.email || ""}
                     />
                   </div>
                 </div>
