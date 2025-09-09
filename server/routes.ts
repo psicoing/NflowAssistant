@@ -631,8 +631,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             quantity: 1,
           },
         ],
-        success_url: `${origin}/stripe-return?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${origin}/cancel`,
+        success_url: "https://nflow.style/stripe-return?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: "https://nflow.style/cancel",
       });
       
       res.json({ url: session.url });
