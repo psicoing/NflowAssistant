@@ -605,6 +605,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
 
 
+  // Stripe checkout session - control total de URLs
+  app.post("/api/stripe/create-checkout-session", async (req, res) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ success: false, message: "Not authenticated" });
+      }
+
+      const { origin } = req.body;
+      const user = req.user;
+      
+      console.log("Creating Stripe checkout session for user:", user.email);
+
+      // Importar Stripe solo cuando se necesite
+      const Stripe = (await import('stripe')).default;
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+        apiVersion: '2023-10-16',
+      });
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [{
+          price: 'price_1Rc7kBCmvVkETA1mLXy8waDu', // Tu price ID de Stripe
+          quantity: 1,
+        }],
+        mode: 'subscription',
+        customer_email: user.email,
+        success_url: `${origin}/stripe-return?session_id={CHECKOUT_SESSION_ID}&success=true`,
+        cancel_url: `${origin}/activar-cuenta`,
+        metadata: {
+          user_id: user.id.toString(),
+          username: user.username,
+        },
+      });
+
+      console.log("✅ Stripe checkout session created:", session.id);
+      
+      res.json({ 
+        success: true, 
+        sessionId: session.id,
+        url: session.url 
+      });
+    } catch (error) {
+      console.error('Stripe checkout session error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error creating checkout session" 
+      });
+    }
+  });
+
   // Stripe webhook automático - activación inmediata de suscripciones
   app.post("/api/stripe/webhook", async (req, res) => {
     try {
