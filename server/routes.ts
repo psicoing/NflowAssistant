@@ -608,19 +608,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Stripe checkout session - control total de URLs
   app.post("/api/stripe/create-checkout-session", async (req, res) => {
     try {
-      if (!req.isAuthenticated()) {
+      if (!(req as any).isAuthenticated()) {
         return res.status(401).json({ success: false, message: "Not authenticated" });
       }
 
       const { origin } = req.body;
-      const user = req.user;
+      const user = (req as any).user;
       
       console.log("Creating Stripe checkout session for user:", user.email);
 
       // Importar Stripe solo cuando se necesite
       const Stripe = (await import('stripe')).default;
       const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-        apiVersion: '2023-10-16',
+        apiVersion: '2025-08-27.basil',
       });
 
       const session = await stripe.checkout.sessions.create({
@@ -646,7 +646,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         sessionId: session.id,
         url: session.url 
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Stripe checkout session error:', error);
       res.status(500).json({ 
         success: false, 

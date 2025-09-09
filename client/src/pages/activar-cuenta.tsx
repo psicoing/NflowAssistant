@@ -37,7 +37,53 @@ export default function ActivarCuenta() {
     errorMessage: ""
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [stripeLoading, setStripeLoading] = useState(false);
   const paypalContainerRef = useRef<HTMLDivElement>(null);
+
+  // Handle Stripe payment with custom checkout session
+  const handleStripePayment = async () => {
+    if (!user?.email) {
+      toast({
+        title: "Error",
+        description: "Debes estar logueado para realizar el pago",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setStripeLoading(true);
+    
+    try {
+      const response = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          origin: window.location.origin
+        }),
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.url) {
+        console.log('✅ Redirecting to Stripe checkout:', data.url);
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.message || 'Error creating checkout session');
+      }
+    } catch (error) {
+      console.error('Stripe payment error:', error);
+      toast({
+        title: "Error de pago",
+        description: "No se pudo iniciar el proceso de pago. Inténtalo de nuevo.",
+        variant: "destructive",
+      });
+    } finally {
+      setStripeLoading(false);
+    }
+  };
 
   // Cargar scripts de forma ligera (sin dependencias npm)
   useEffect(() => {
@@ -318,18 +364,25 @@ export default function ActivarCuenta() {
                   <li>• Activación instantánea</li>
                 </ul>
                 
-                {/* Stripe Button */}
-                <div className="min-h-[50px] relative border border-gray-600/50 rounded-lg bg-gray-900/30 overflow-hidden">
-                  <div className="p-2 flex items-center justify-center">
-                    <stripe-buy-button
-                      buy-button-id="buy_btn_1Rc7kCCmvVkETA1m5aYwB4IH"
-                      publishable-key="pk_live_51JIZjtCmvVkETA1mxdBylAQvElIPw0haPvP3mutq99SezEZVrFryWzz5zbX5gU2RFP15uFsR2XTKx5yYgkcJhADM00sR04papy"
-                      success-url={`${window.location.origin}/stripe-return`}
-                      cancel-url={`${window.location.origin}/activar-cuenta`}
-                      customer-email={user?.email || ""}
-                    />
-                  </div>
-                </div>
+                {/* Stripe Button Custom */}
+                <Button
+                  onClick={handleStripePayment}
+                  disabled={!user?.email || stripeLoading}
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white py-6 text-lg font-semibold rounded-lg"
+                  size="lg"
+                >
+                  {stripeLoading ? (
+                    <>
+                      <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                      Procesando...
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="w-5 h-5 mr-2" />
+                      Pagar €2.99/mes
+                    </>
+                  )}
+                </Button>
                 
                 <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-3">
                   <p className="text-green-300 text-xs text-center">
