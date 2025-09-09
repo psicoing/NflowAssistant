@@ -59,9 +59,7 @@ export default function ActivarCuenta() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          origin: window.location.origin
-        }),
+        body: JSON.stringify({}),
         credentials: 'include',
       });
 

@@ -612,7 +612,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ success: false, message: "Not authenticated" });
       }
 
-      const { origin } = req.body;
+      const origin = req.headers.origin;
       const user = (req as any).user;
       
       console.log("Creating Stripe checkout session for user:", user.email);
@@ -652,6 +652,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: false, 
         message: "Error creating checkout session" 
       });
+    }
+  });
+
+  // Stripe return handler - verificación directa del pago
+  app.get("/stripe-return", async (req, res) => {
+    try {
+      const sessionId = req.query.session_id as string;
+      
+      if (!sessionId) {
+        return res.redirect("/activar-cuenta?error=no_session");
+      }
+
+      console.log("🔍 Verificando session de Stripe:", sessionId);
+
+      // Importar Stripe
+      const Stripe = (await import('stripe')).default;
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+        apiVersion: '2025-08-27.basil',
+      });
+
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      console.log("💳 Estado del pago:", session.payment_status);
+      
+      if (session.payment_status === "paid") {
+        // Activar usuario por email
+        const customerEmail = session.customer_details?.email || session.customer_email;
+        
+        if (customerEmail) {
+          const users = await storage.getAllUsers();
+          const user = users.find(u => u.email === customerEmail);
+          
+          if (user) {
+            await storage.updateUserSubscription(user.id, {
+              status: 'active',
+              plan: 'basic',
+              subscriptionId: sessionId,
+              expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 días
+            });
+            
+            console.log("✅ Usuario activado vía stripe-return:", user.username);
+          }
+        }
+        
+        return res.redirect("/login");
+      } else {
+        console.log("❌ Pago no completado, estado:", session.payment_status);
+        return res.redirect("/activar-cuenta?error=payment_failed");
+      }
+    } catch (error: any) {
+      console.error('Error en stripe-return:', error);
+      return res.redirect("/activar-cuenta?error=verification_failed");
     }
   });
 
@@ -729,7 +780,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       res.json({ received: true, activated: false });
-    } catch (error) {
+    } catch (error: any) {
       console.error("❌ Stripe webhook error:", error);
       res.status(400).json({ error: 'Webhook error', details: error.message });
     }
