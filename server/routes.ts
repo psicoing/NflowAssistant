@@ -621,11 +621,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         apiVersion: '2025-08-27.basil',
       });
 
+      // Crear precio dinámicamente para evitar problemas de Price ID
+      const price = await stripe.prices.create({
+        unit_amount: 299, // €2.99 in cents
+        currency: 'eur',
+        recurring: {
+          interval: 'month',
+        },
+        product_data: {
+          name: 'NFLOW - Plan Básico',
+          description: 'Acceso completo al chat de IA y soporte 24/7',
+        },
+      });
+
       const session = await stripe.checkout.sessions.create({
         mode: "subscription",
         line_items: [
           {
-            price: "price_1Rc7kBCmvVkETA1mLXy8waDu", // tu precio en Stripe
+            price: price.id,
             quantity: 1,
           },
         ],
