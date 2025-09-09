@@ -610,7 +610,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/stripe/create-checkout-session", async (req, res) => {
     try {
       const origin = req.headers.origin;
-      const user = req.session?.userId ? req.session.user : null;
+      const user = req.session?.userId ? { id: req.session.userId, email: req.session.email } : null;
       const isAuthenticated = !!user;
       
       console.log("Creating Stripe checkout session - Auth:", isAuthenticated, "User:", user?.email || "anonymous");
@@ -630,7 +630,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         },
         product_data: {
           name: 'NFLOW - Plan Básico',
-          description: 'Acceso completo al chat de IA y soporte 24/7',
         },
       });
 
