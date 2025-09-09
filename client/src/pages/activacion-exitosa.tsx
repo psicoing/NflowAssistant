@@ -76,7 +76,7 @@ export default function ActivacionExitosa() {
 
         // Redirect to chat after showing success
         setTimeout(() => {
-          window.location.href = 'https://nflow.style/login';
+          window.location.href = '/login';
         }, 3000);
       } else {
         const errorData = await response.json();

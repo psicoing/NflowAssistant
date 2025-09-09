@@ -176,7 +176,7 @@ export default function ActivarCuenta() {
                   });
                   
                   setTimeout(() => {
-                    window.location.href = 'https://nflow.style/login';
+                    window.location.href = '/login';
                   }, 2000);
                 } else {
                   throw new Error('Failed to activate subscription');

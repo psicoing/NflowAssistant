@@ -69,7 +69,7 @@ export default function StripeReturn() {
 
             // Redirect to login after a delay
             setTimeout(() => {
-              window.location.href = 'https://nflow.style/login';
+              window.location.href = '/login';
             }, 3000);
           } else {
             throw new Error('Failed to activate subscription');
@@ -95,7 +95,7 @@ export default function StripeReturn() {
             });
 
             setTimeout(() => {
-              window.location.href = 'https://nflow.style/login';
+              window.location.href = '/login';
             }, 3000);
           } else {
             throw new Error('Auto-activation failed');
