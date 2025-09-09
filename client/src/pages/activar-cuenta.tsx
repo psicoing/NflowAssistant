@@ -8,9 +8,6 @@ import { useAuth } from "@/hooks/useAuth";
 import SoporteActivacionBanner from "@/components/SoporteActivacionBanner";
 
 declare global {
-  interface Window {
-    paypal: any;
-  }
   namespace JSX {
     interface IntrinsicElements {
       'stripe-buy-button': {
@@ -21,24 +18,11 @@ declare global {
   }
 }
 
-interface PayPalStatus {
-  buttonRendered: boolean;
-  error: boolean;
-  errorMessage: string;
-}
-
 export default function ActivarCuenta() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const { user } = useAuth();
-  const [paypalStatus, setPaypalStatus] = useState<PayPalStatus>({
-    buttonRendered: false,
-    error: false,
-    errorMessage: ""
-  });
-  const [isLoading, setIsLoading] = useState(false);
   const [stripeLoading, setStripeLoading] = useState(false);
-  const paypalContainerRef = useRef<HTMLDivElement>(null);
 
   // Handle Stripe payment with custom checkout session
   const handleStripePayment = async () => {
@@ -83,17 +67,8 @@ export default function ActivarCuenta() {
     }
   };
 
-  // Cargar scripts de forma ligera (sin dependencias npm)
+  // Cargar Stripe script
   useEffect(() => {
-    // PayPal
-    if (!window.paypal && !document.querySelector('script[src*="paypal.com/sdk"]')) {
-      const paypalScript = document.createElement('script');
-      paypalScript.src = 'https://www.paypal.com/sdk/js?client-id=sb&vault=true&intent=subscription';
-      paypalScript.async = true;
-      document.head.appendChild(paypalScript);
-    }
-    
-    // Stripe (solo CDN, sin npm)
     if (!document.querySelector('script[src*="stripe.com"]')) {
       const stripeScript = document.createElement('script');
       stripeScript.src = 'https://js.stripe.com/v3/buy-button.js';
@@ -101,171 +76,6 @@ export default function ActivarCuenta() {
       document.head.appendChild(stripeScript);
     }
   }, []);
-
-  // Configurar PayPal - Simplificado sin dependencias del servidor
-  useEffect(() => {
-    const loadPayPal = async () => {
-      if (window.paypal && paypalContainerRef.current && !paypalStatus.buttonRendered) {
-        try {
-          console.log('Iniciando renderizado de PayPal...');
-          
-          await window.paypal.Buttons({
-            createSubscription: async function(data: any, actions: any) {
-              console.log('Creando suscripción PayPal...');
-              
-              // Crear plan dinámicamente desde el servidor
-              try {
-                const planResponse = await fetch('/api/paypal/create-plan', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    amount: '2.99',
-                    currency: 'EUR',
-                    name: 'Plan Básico NFLOW'
-                  }),
-                  credentials: 'include',
-                });
-
-                if (!planResponse.ok) {
-                  throw new Error('Failed to create PayPal plan');
-                }
-
-                const planData = await planResponse.json();
-                console.log('Plan creado:', planData.planId);
-
-                return actions.subscription.create({
-                  'plan_id': planData.planId
-                });
-              } catch (error) {
-                console.error('Error creando plan PayPal:', error);
-                throw error;
-              }
-            },
-            onApprove: async function(data: any, actions: any) {
-              console.log('🎯 PayPal Subscription Approved:', data);
-              console.log('🎯 Available actions:', Object.keys(actions));
-              setIsLoading(true);
-              
-              try {
-                // For subscriptions, no capture needed - approval is enough
-                console.log('✅ PayPal subscription approved, activating...');
-                
-                // Directly activate via API call since this is a subscription
-                const response = await fetch('/api/paypal/capture-subscription', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    subscriptionId: data.subscriptionID || data.orderID,
-                    subscriptionPlan: 'basic'
-                  }),
-                  credentials: 'include',
-                });
-
-                if (response.ok) {
-                  const result = await response.json();
-                  console.log('✅ PayPal subscription activated:', result);
-                  
-                  toast({
-                    title: "¡Suscripción Activada!",
-                    description: "Tu cuenta NFLOW está activa. Redirigiendo al login...",
-                    duration: 3000,
-                  });
-                  
-                  setTimeout(() => {
-                    window.location.href = '/login';
-                  }, 2000);
-                } else {
-                  throw new Error('Failed to activate subscription');
-                }
-                
-              } catch (error) {
-                console.error('❌ PayPal approval error:', error);
-                toast({
-                  title: "Error en la activación",
-                  description: "Contacta soporte para activar tu cuenta manualmente.",
-                  variant: "destructive",
-                });
-                // Fallback to return page
-                window.location.href = `/paypal-return?subscriptionID=${data.subscriptionID || data.orderID}`;
-              } finally {
-                setIsLoading(false);
-              }
-            },
-            onError: function(err: any) {
-              console.error('❌ PayPal Error Details:', {
-                message: err.message,
-                details: err.details,
-                name: err.name,
-                stack: err.stack,
-                fullError: err
-              });
-              
-              toast({
-                title: "Error PayPal",
-                description: "Hubo un problema con PayPal. Intenta con Stripe como alternativa.",
-                variant: "destructive",
-                duration: 5000,
-              });
-              
-              setPaypalStatus(prev => ({
-                ...prev,
-                error: true,
-                errorMessage: `Error PayPal: ${err.message || 'Error desconocido'}`
-              }));
-            },
-            onCancel: function(data: any) {
-              console.log('PayPal payment cancelled:', data);
-              setPaypalStatus(prev => ({
-                ...prev,
-                error: true,
-                errorMessage: 'Pago cancelado'
-              }));
-            }
-          }).render(paypalContainerRef.current);
-
-          console.log('PayPal buttons renderizado exitosamente');
-          setPaypalStatus(prev => ({ ...prev, buttonRendered: true }));
-        } catch (error) {
-          console.error('Error loading PayPal:', error);
-          setPaypalStatus(prev => ({
-            ...prev,
-            error: true,
-            errorMessage: 'Error al cargar PayPal: ' + (error instanceof Error ? error.message : 'Unknown error')
-          }));
-        }
-      }
-    };
-
-    let attempts = 0;
-    const maxAttempts = 20; // máximo 10 segundos
-
-    const checkPayPal = () => {
-      attempts++;
-      if (window.paypal) {
-        console.log('PayPal SDK disponible, cargando botones...');
-        loadPayPal();
-      } else if (attempts < maxAttempts) {
-        console.log(`Esperando PayPal SDK... (${attempts}/${maxAttempts})`);
-        setTimeout(checkPayPal, 500);
-      } else {
-        console.error('Timeout esperando PayPal SDK');
-        setPaypalStatus(prev => ({
-          ...prev,
-          error: true,
-          errorMessage: 'PayPal no se pudo cargar. Intenta recargar la página.'
-        }));
-      }
-    };
-
-    // Solo intentar una vez
-    if (!paypalStatus.buttonRendered && !paypalStatus.error) {
-      checkPayPal();
-    }
-  }, [paypalStatus.buttonRendered, paypalStatus.error]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
@@ -276,74 +86,12 @@ export default function ActivarCuenta() {
               Activar Tu Cuenta NFLOW
             </h1>
             <p className="text-xl text-gray-300">
-              Elige tu método de pago preferido para comenzar
+              Elige tu método de pago para comenzar
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-            {/* Opción 1: PayPal */}
-            <Card className="bg-gray-800/50 border-orange-500 backdrop-blur-sm h-fit">
-              <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CreditCard className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-xl text-white mb-2">Plan Básico</CardTitle>
-                <div className="text-2xl font-bold text-orange-400 mb-2">€2.99/mes</div>
-                <CardDescription className="text-gray-300 text-sm">
-                  Activación automática
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ul className="text-sm text-gray-300 mb-4 space-y-2 text-center">
-                  <li>• Chat ilimitado con IA</li>
-                  <li>• Soporte 24/7</li>
-                  <li>• Activación automática</li>
-                </ul>
-                
-                {/* PayPal Button Container */}
-                <div ref={paypalContainerRef} className="min-h-[50px] relative border border-gray-600/50 rounded-lg bg-gray-900/30">
-                  {!paypalStatus.buttonRendered && !paypalStatus.error && (
-                    <div className="absolute inset-0 bg-gray-800/80 flex flex-col items-center justify-center rounded-lg p-4">
-                      <div className="animate-spin w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full mb-2"></div>
-                      <span className="text-gray-300 text-sm text-center">
-                        Cargando PayPal...
-                      </span>
-                    </div>
-                  )}
-                  
-                  {paypalStatus.error && (
-                    <div className="absolute inset-0 bg-red-900/20 border border-red-500/50 flex flex-col items-center justify-center rounded-lg p-4">
-                      <p className="text-red-400 text-sm text-center mb-2">
-                        {paypalStatus.errorMessage}
-                      </p>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => window.location.reload()}
-                        className="text-xs border-red-500/50 text-red-400 hover:bg-red-900/30"
-                      >
-                        Reintentar
-                      </Button>
-                    </div>
-                  )}
-                </div>
-
-                {isLoading && (
-                  <div className="text-center text-gray-300">
-                    <div className="animate-spin w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full mx-auto mb-2"></div>
-                    Preparando pago...
-                  </div>
-                )}
-                
-                <div className="bg-blue-600/20 border border-blue-600/50 rounded-lg p-3 mt-3">
-                  <p className="text-blue-300 text-xs text-center">
-                    💡 Consulta el recuadro del final de página para que te sientas seguro(a) y cómodo(a)
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Opción 2: Stripe */}
+          <div className="grid md:grid-cols-2 gap-6 mb-8 max-w-4xl mx-auto">
+            {/* Opción 1: Stripe */}
             <Card className="bg-gray-800/50 border-purple-500 backdrop-blur-sm h-fit">
               <CardHeader className="text-center pb-4">
                 <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
