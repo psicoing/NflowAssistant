@@ -65,11 +65,11 @@ export default function ActivarCuenta() {
 
       const data = await response.json();
 
-      if (data.success && data.url) {
+      if (data.url) {
         console.log('✅ Redirecting to Stripe checkout:', data.url);
         window.location.href = data.url;
       } else {
-        throw new Error(data.message || 'Error creating checkout session');
+        throw new Error('Error creating checkout session');
       }
     } catch (error) {
       console.error('Stripe payment error:', error);

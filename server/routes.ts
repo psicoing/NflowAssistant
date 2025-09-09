@@ -624,28 +624,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items: [{
-          price: 'price_1Rc7kBCmvVkETA1mLXy8waDu', // Tu price ID de Stripe
-          quantity: 1,
-        }],
-        mode: 'subscription',
-        customer_email: user.email,
+        mode: "subscription",
+        line_items: [
+          {
+            price: "price_1Rc7kBCmvVkETA1mLXy8waDu", // tu precio en Stripe
+            quantity: 1,
+          },
+        ],
         success_url: `${origin}/stripe-return?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/cancel`,
-        metadata: {
-          user_id: user.id.toString(),
-          username: user.username,
-        },
       });
-
-      console.log("✅ Stripe checkout session created:", session.id);
       
-      res.json({ 
-        success: true, 
-        sessionId: session.id,
-        url: session.url 
-      });
+      res.json({ url: session.url });
     } catch (error: any) {
       console.error('Stripe checkout session error:', error);
       res.status(500).json({ 
