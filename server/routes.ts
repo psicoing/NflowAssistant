@@ -610,8 +610,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/stripe/create-checkout-session", async (req, res) => {
     try {
       const origin = req.headers.origin;
-      const isAuthenticated = (req as any).isAuthenticated();
-      const user = isAuthenticated ? (req as any).user : null;
+      const user = req.session?.userId ? req.session.user : null;
+      const isAuthenticated = !!user;
       
       console.log("Creating Stripe checkout session - Auth:", isAuthenticated, "User:", user?.email || "anonymous");
 
