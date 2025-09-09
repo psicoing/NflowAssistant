@@ -132,7 +132,7 @@ export default function ActivarCuenta() {
                 <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CreditCard className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle className="text-xl text-white mb-2">Plan Básico</CardTitle>
+                <CardTitle className="text-xl text-white mb-2">Stripe - Plan Básico</CardTitle>
                 <div className="text-2xl font-bold text-purple-400 mb-2">€2.99/mes</div>
                 <CardDescription className="text-gray-300 text-sm">
                   Alternativa si PayPal no funciona
