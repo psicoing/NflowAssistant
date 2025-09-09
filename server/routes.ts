@@ -645,53 +645,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Stripe return handler - verificación directa del pago
   app.get("/stripe-return", async (req, res) => {
-    try {
-      const sessionId = req.query.session_id as string;
+    const Stripe = (await import('stripe')).default;
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+      apiVersion: '2025-08-27.basil',
+    });
+    
+    const session = await stripe.checkout.sessions.retrieve(req.query.session_id as string);
+
+    if (session.payment_status === "paid") {
+      // Activar usuario por email
+      const customerEmail = session.customer_details?.email || session.customer_email;
       
-      if (!sessionId) {
-        return res.send("Error: no se encontró información de pago");
-      }
-
-      console.log("🔍 Verificando session de Stripe:", sessionId);
-
-      // Importar Stripe
-      const Stripe = (await import('stripe')).default;
-      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-        apiVersion: '2025-08-27.basil',
-      });
-
-      const session = await stripe.checkout.sessions.retrieve(sessionId);
-      console.log("💳 Estado del pago:", session.payment_status);
-      
-      if (session.payment_status === "paid") {
-        // Activar usuario por email
-        const customerEmail = session.customer_details?.email || session.customer_email;
+      if (customerEmail) {
+        const users = await storage.getAllUsers();
+        const user = users.find(u => u.email === customerEmail);
         
-        if (customerEmail) {
-          const users = await storage.getAllUsers();
-          const user = users.find(u => u.email === customerEmail);
-          
-          if (user) {
-            await storage.updateUserSubscription(user.id, {
-              status: 'active',
-              plan: 'basic',
-              subscriptionId: sessionId,
-              expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 días
-            });
-            
-            console.log("✅ Usuario activado vía stripe-return:", user.username);
-          }
+        if (user) {
+          await storage.updateUserSubscription(user.id, {
+            status: 'active',
+            plan: 'basic',
+            subscriptionId: req.query.session_id as string,
+            expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+          });
         }
-        
-        return res.redirect("/login");
-      } else {
-        return res.send("Error: pago no confirmado");
       }
-    } catch (error: any) {
-      console.error('Error en stripe-return:', error);
-      return res.send("Error: verificación de pago fallida");
+      
+      return res.redirect("/login");
+    } else {
+      return res.send("Error en pago");
     }
   });
 
