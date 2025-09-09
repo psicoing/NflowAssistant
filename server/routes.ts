@@ -690,20 +690,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       const sig = req.headers["stripe-signature"];
-      if (!sig) {
-        console.error("❌ Missing stripe signature");
-        return res.status(400).send('Missing stripe signature');
-      }
-
       let event;
 
-      // Verificar la firma del webhook para seguridad
-      try {
-        event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET || '');
-        console.log("✅ Webhook signature verified");
-      } catch (err: any) {
-        console.error("❌ Webhook signature verification failed:", err.message);
-        return res.status(400).send(`Webhook Error: ${err.message}`);
+      // Verificar la firma del webhook para seguridad (skip en development para testing)
+      if (process.env.NODE_ENV === 'development' && req.body.test_mode) {
+        console.log("🧪 DEV MODE: Skipping signature verification for testing");
+        event = req.body;
+      } else {
+        if (!sig) {
+          console.error("❌ Missing stripe signature");
+          return res.status(400).send('Missing stripe signature');
+        }
+        
+        try {
+          event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET || '');
+          console.log("✅ Webhook signature verified");
+        } catch (err: any) {
+          console.error("❌ Webhook signature verification failed:", err.message);
+          return res.status(400).send(`Webhook Error: ${err.message}`);
+        }
       }
       
       console.log("Event type:", event.type);
@@ -1267,6 +1272,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
         message: 'Error creando plan PayPal',
         error: error instanceof Error ? error.message : 'Error desconocido'
       });
+    }
+  });
+
+  // 🧪 TEST: Webhook sin verificación de firma para debugging
+  app.post("/api/test/stripe-webhook", async (req, res) => {
+    try {
+      console.log("🧪 TEST WEBHOOK: Evento recibido:", req.body?.type);
+      
+      const event = req.body;
+      
+      if (event.type === 'checkout.session.completed') {
+        const eventData = event.data.object;
+        const customerEmail = eventData.customer_details?.email || 
+                             eventData.customer_email ||
+                             eventData.receipt_email;
+        
+        console.log("🧪 TEST WEBHOOK: Email del cliente:", customerEmail);
+        
+        if (customerEmail) {
+          const users = await storage.getAllUsers();
+          const user = users.find(u => u.email === customerEmail);
+          
+          if (user) {
+            console.log("🧪 TEST WEBHOOK: Usuario encontrado:", user.username, "Status:", user.subscriptionStatus);
+            
+            const updatedUser = await storage.updateUserSubscription(user.id, {
+              status: 'active',
+              plan: 'basic',
+              subscriptionId: `test_webhook_${Date.now()}`,
+              expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+            });
+            
+            console.log("🧪 TEST WEBHOOK: Usuario actualizado:", updatedUser.subscriptionStatus);
+            
+            res.json({ 
+              success: true, 
+              activated: true,
+              user: updatedUser.username,
+              newStatus: updatedUser.subscriptionStatus
+            });
+            return;
+          } else {
+            console.log("🧪 TEST WEBHOOK: Usuario no encontrado para email:", customerEmail);
+            res.json({ 
+              success: false, 
+              error: "Usuario no encontrado",
+              searchedEmail: customerEmail,
+              availableEmails: users.filter(u => u.email).map(u => u.email)
+            });
+            return;
+          }
+        }
+      }
+      
+      res.json({ success: false, error: "Evento no manejado o sin email" });
+      
+    } catch (error: any) {
+      console.error("🧪 TEST WEBHOOK ERROR:", error);
+      res.json({ success: false, error: error.message });
     }
   });
 
