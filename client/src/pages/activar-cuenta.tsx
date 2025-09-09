@@ -324,7 +324,7 @@ export default function ActivarCuenta() {
                     <stripe-buy-button
                       buy-button-id="buy_btn_1Rc7kCCmvVkETA1m5aYwB4IH"
                       publishable-key="pk_live_51JIZjtCmvVkETA1mxdBylAQvElIPw0haPvP3mutq99SezEZVrFryWzz5zbX5gU2RFP15uFsR2XTKx5yYgkcJhADM00sR04papy"
-                      success-url="https://nflow.style/login"
+                      success-url={`${window.location.origin}/stripe-return`}
                       cancel-url={`${window.location.origin}/activar-cuenta`}
                       customer-email={user?.email || ""}
                     />
