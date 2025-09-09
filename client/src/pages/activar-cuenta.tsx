@@ -90,7 +90,53 @@ export default function ActivarCuenta() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 mb-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 mb-8 max-w-6xl mx-auto">
+            {/* Panel informativo: Próximas opciones BBVA */}
+            <Card className="bg-gradient-to-br from-blue-900/50 to-indigo-900/50 border-blue-400 backdrop-blur-sm h-fit">
+              <CardHeader className="text-center pb-4">
+                <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Zap className="w-8 h-8 text-white" />
+                </div>
+                <CardTitle className="text-xl text-white mb-2">Próximamente</CardTitle>
+                <CardDescription className="text-blue-200 text-sm font-medium">
+                  Nueva versión con más opciones
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="bg-blue-800/30 border border-blue-500/50 rounded-lg p-4">
+                  <h4 className="text-blue-200 font-bold text-sm mb-3 text-center">
+                    🏦 Próximas Pasarelas de Pago:
+                  </h4>
+                  <div className="text-sm text-blue-100 space-y-2">
+                    <div className="bg-blue-700/30 rounded-lg p-3 mb-2">
+                      <p className="font-semibold text-blue-200 mb-1">BBVA Business</p>
+                      <p className="text-xs text-blue-300">En implementación - Empresa B02701100</p>
+                    </div>
+                    
+                    <ul className="space-y-1 text-xs text-blue-200">
+                      <li>• Todas las pasarelas BBVA disponibles</li>
+                      <li>• Bizum empresarial integrado</li>
+                      <li>• Transferencias instantáneas</li>
+                      <li>• Pagos recurrentes automatizados</li>
+                      <li>• Múltiples opciones de pago</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div className="bg-green-600/20 border border-green-500/50 rounded-lg p-3">
+                  <p className="text-green-300 text-xs text-center font-medium">
+                    ⚡ En desarrollo para máxima comodidad de pago
+                  </p>
+                </div>
+                
+                <div className="bg-yellow-600/20 border border-yellow-500/50 rounded-lg p-3">
+                  <p className="text-yellow-300 text-xs text-center">
+                    📅 Disponible en la próxima actualización
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Opción 1: Stripe */}
             <Card className="bg-gray-800/50 border-purple-500 backdrop-blur-sm h-fit">
               <CardHeader className="text-center pb-4">
