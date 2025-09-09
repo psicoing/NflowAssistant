@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, CreditCard, MessageCircle, Zap, CheckCircle, Smartphone, Phone, Mail } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/useAuth";
 import SoporteActivacionBanner from "@/components/SoporteActivacionBanner";
 
 declare global {
@@ -21,20 +20,10 @@ declare global {
 export default function ActivarCuenta() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const { user } = useAuth();
   const [stripeLoading, setStripeLoading] = useState(false);
 
   // Handle Stripe payment with custom checkout session
   const handleStripePayment = async () => {
-    if (!user?.email) {
-      toast({
-        title: "Error",
-        description: "Debes estar logueado para realizar el pago",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setStripeLoading(true);
     
     try {
@@ -159,7 +148,7 @@ export default function ActivarCuenta() {
                 {/* Stripe Button Custom */}
                 <Button
                   onClick={handleStripePayment}
-                  disabled={!user?.email || stripeLoading}
+                  disabled={stripeLoading}
                   className="w-full bg-purple-600 hover:bg-purple-700 text-white py-6 text-lg font-semibold rounded-lg"
                   size="lg"
                 >
