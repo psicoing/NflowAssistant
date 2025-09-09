@@ -1270,6 +1270,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // 🧪 TEST: Endpoint para probar activación de usuarios directamente
+  app.post("/api/test/activate-user", async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ error: "Email requerido" });
+      }
+      
+      console.log("🧪 TEST: Intentando activar usuario con email:", email);
+      
+      // Buscar usuario por email
+      const users = await storage.getAllUsers();
+      const user = users.find(u => u.email === email);
+      
+      if (!user) {
+        console.log("❌ TEST: Usuario no encontrado");
+        return res.status(404).json({ 
+          error: "Usuario no encontrado",
+          availableEmails: users.filter(u => u.email).map(u => u.email)
+        });
+      }
+      
+      console.log("✅ TEST: Usuario encontrado:", user.username, "Status actual:", user.subscriptionStatus);
+      
+      // Activar suscripción
+      const updatedUser = await storage.updateUserSubscription(user.id, {
+        status: 'active',
+        plan: 'basic',
+        subscriptionId: `test_${Date.now()}`,
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+      });
+      
+      console.log("✅ TEST: Usuario actualizado:", updatedUser.subscriptionStatus);
+      
+      res.json({ 
+        success: true, 
+        user: {
+          id: updatedUser.id,
+          username: updatedUser.username,
+          email: updatedUser.email,
+          subscriptionStatus: updatedUser.subscriptionStatus,
+          hasCompletedPayment: updatedUser.hasCompletedPayment
+        }
+      });
+      
+    } catch (error: any) {
+      console.error("❌ TEST: Error en activación:", error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
