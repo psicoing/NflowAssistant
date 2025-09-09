@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema } from "@shared/schema";
@@ -678,23 +679,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Stripe webhook automático - activación inmediata de suscripciones
-  app.post("/api/stripe/webhook", async (req, res) => {
+  app.post("/api/stripe/webhook", express.raw({ type: "application/json" }), async (req, res) => {
     try {
       console.log("=== STRIPE WEBHOOK RECEIVED ===");
-      console.log("Event type:", req.body.type);
-      console.log("Full event data:", JSON.stringify(req.body, null, 2));
       
-      const event = req.body;
+      // Initialize Stripe
+      const Stripe = (await import('stripe')).default;
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+        apiVersion: '2025-08-27.basil',
+      });
+      
+      const sig = req.headers["stripe-signature"];
+      if (!sig) {
+        console.error("❌ Missing stripe signature");
+        return res.status(400).send('Missing stripe signature');
+      }
+
+      let event;
+
+      // Verificar la firma del webhook para seguridad
+      try {
+        event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET || '');
+        console.log("✅ Webhook signature verified");
+      } catch (err: any) {
+        console.error("❌ Webhook signature verification failed:", err.message);
+        return res.status(400).send(`Webhook Error: ${err.message}`);
+      }
+      
+      console.log("Event type:", event.type);
+      console.log("Full event data:", JSON.stringify(event, null, 2));
       
       // Múltiples eventos de Stripe que indican pago exitoso
       if (event.type === 'checkout.session.completed' || 
           event.type === 'payment_intent.succeeded' ||
           event.type === 'invoice.payment_succeeded') {
         
-        const customerEmail = event.data.object.customer_details?.email || 
-                             event.data.object.customer_email ||
-                             event.data.object.receipt_email ||
-                             event.email; // Para pruebas manuales
+        const eventData = event.data.object as any;
+        const customerEmail = eventData.customer_details?.email || 
+                             eventData.customer_email ||
+                             eventData.receipt_email;
         
         console.log("Processing Stripe payment for email:", customerEmail);
         
@@ -707,7 +730,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             console.log("User found:", user.username, "ID:", user.id, "Current status:", user.subscriptionStatus);
             
             // Determine plan based on price or subscription data
-            const subscriptionPlan = event.data.object.amount_total >= 6900 ? 'annual' : 'basic';
+            const subscriptionPlan = (eventData.amount_total && eventData.amount_total >= 6900) ? 'annual' : 'basic';
             const expiresAt = subscriptionPlan === 'annual' 
               ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 365 days
               : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
@@ -715,7 +738,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await storage.updateUserSubscription(user.id, {
               status: 'active',
               plan: subscriptionPlan,
-              subscriptionId: event.data.object.id || `stripe_${Date.now()}`,
+              subscriptionId: eventData.id || `stripe_${Date.now()}`,
               expiresAt: expiresAt
             });
             
@@ -741,9 +764,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         } else {
           console.log("❌ No customer email found in Stripe event");
           console.log("Available email fields:", {
-            'customer_details.email': event.data.object.customer_details?.email,
-            'customer_email': event.data.object.customer_email,
-            'receipt_email': event.data.object.receipt_email
+            'customer_details.email': eventData.customer_details?.email,
+            'customer_email': eventData.customer_email,
+            'receipt_email': eventData.receipt_email
           });
         }
       } else {
