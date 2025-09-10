@@ -179,63 +179,6 @@ export default function ActivarCuenta() {
               </CardContent>
             </Card>
 
-            {/* Opción 3: Bizum */}
-            <Card className="bg-gray-800/50 border-green-500 backdrop-blur-sm h-fit">
-              <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Smartphone className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-xl text-white mb-2">Plan Básico</CardTitle>
-                <div className="text-2xl font-bold text-green-400 mb-2">€2.99/mes</div>
-                <CardDescription className="text-gray-300 text-sm">
-                  Método español - Activación en 24h
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ul className="text-sm text-gray-300 mb-4 space-y-2 text-center">
-                  <li>• Chat ilimitado con IA</li>
-                  <li>• Soporte 24/7</li>
-                  <li>• Activación en 24 horas</li>
-                </ul>
-                
-                <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-4">
-                  <p className="text-green-300 text-sm font-medium mb-3 text-center">
-                    📱 Instrucciones Bizum:
-                  </p>
-                  <div className="text-sm text-green-200 space-y-2 text-center">
-                    <p className="font-semibold">1. Envía €2.99 por Bizum al:</p>
-                    <p className="text-lg font-bold text-white bg-green-700/50 py-2 px-4 rounded">
-                      +34 660 45 21 36
-                    </p>
-                    <p className="font-semibold">2. En el concepto pon:</p>
-                    <div className="text-sm text-green-200 space-y-1 mb-2">
-                      <p>• 1. Nombre de tu usuario</p>
-                      <p>• 2. Escoge una contraseña</p>
-                      <p>• 3. Tu email</p>
-                    </div>
-                    <p className="text-sm text-yellow-200 bg-green-700/30 py-2 px-3 rounded italic">
-                      "usuario, contraseña, email"
-                    </p>
-                    <p className="text-xs text-green-300 mt-1">
-                      ⚡ Ejemplo: "juan123, mipass2025, juan@gmail.com"
-                    </p>
-                    <p className="font-semibold">3. Ramón te activará en 24h sin falta</p>
-                  </div>
-                </div>
-                
-                <div className="bg-orange-600/20 border border-orange-600/50 rounded-lg p-3">
-                  <p className="text-orange-300 text-xs text-center">
-                    💬 ¿Dudas? Llama a Ramón: +34 660 45 21 36
-                  </p>
-                </div>
-                
-                <div className="bg-blue-600/20 border border-blue-600/50 rounded-lg p-3 mt-3">
-                  <p className="text-blue-300 text-xs text-center">
-                    💡 Consulta el recuadro del final de página para que te sientas seguro(a) y cómodo(a)
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
           </div>
 
           <SoporteActivacionBanner />
