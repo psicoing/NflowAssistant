@@ -96,6 +96,9 @@ export default function Footer() {
             <div className="flex flex-col md:flex-row items-center justify-between">
               <div className="text-center md:text-left mb-4 md:mb-0">
                 <h3 className="text-xl font-bold text-white mb-2">GRUPO JOBDA</h3>
+                <p className="text-gray-400 text-xs mb-2">
+                  Empresa Empordajobs SL B02701100 - Spain
+                </p>
                 <p className="text-gray-300 text-sm">
                   Soluciones empresariales innovadoras para el crecimiento de tu negocio
                 </p>
