@@ -45,6 +45,14 @@ function formatMarkdownToHtml(content: string, onOptionClick?: (option: string) 
     .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-white bg-nflow-orange/20 px-1 py-0.5 rounded">$1</strong>')
     // Preguntas con escalas 0-10 destacadas e interactivas
     .replace(/\*\*¿Qué tanto te afecta en tu día a día\?\*\* \(0 = nada – 10 = muchísimo\)/g, '<div class="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 rounded-lg p-4 my-4"><div class="flex items-center space-x-2 mb-3"><span class="text-blue-300 font-semibold">📊</span><strong class="font-semibold text-white">¿Qué tanto te afecta en tu día a día?</strong></div><div class="grid grid-cols-11 gap-1 mb-2">' + Array.from({length: 11}, (_, i) => `<button class="interactive-scale-btn w-6 h-6 text-xs font-bold rounded border border-gray-500 hover:bg-nflow-orange hover:text-white transition-all duration-200" data-value="${i}">${i}</button>`).join('') + '</div><div class="text-xs text-gray-400 flex justify-between"><span class="text-green-400">0 = Nada</span><span class="text-red-400">10 = Muchísimo</span></div></div>')
+    // Escalas numericas genericas
+    .replace(/\*\*Valora tu (.+?) del 0 al 10\*\* \(([^)]+)\)/g, '<div class="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 rounded-lg p-4 my-4"><div class="flex items-center space-x-2 mb-3"><span class="text-blue-300 font-semibold">📊</span><strong class="font-semibold text-white">Valora tu $1 del 0 al 10</strong></div><div class="grid grid-cols-11 gap-1 mb-2">' + Array.from({length: 11}, (_, i) => `<button class="interactive-scale-btn w-6 h-6 text-xs font-bold rounded border border-gray-500 hover:bg-nflow-orange hover:text-white transition-all duration-200" data-value="${i}" data-scale-type="$1">${i}</button>`).join('') + '</div><div class="text-xs text-gray-400 flex justify-between"><span>$2</span></div></div>')
+    // Checkboxes interactivos ☐
+    .replace(/☐ (.+?)(?=\n|$)/g, '<div class="flex items-center space-x-3 my-2 p-2 hover:bg-gray-800/30 rounded cursor-pointer transition-all duration-200 checkbox-item" data-checkbox-text="$1"><input type="checkbox" class="interactive-checkbox w-4 h-4 text-nflow-orange bg-gray-800 border-gray-600 rounded focus:ring-nflow-orange focus:ring-2" data-symptom="$1"><span class="text-gray-200 select-none">$1</span></div>')
+    // Botones [Botón X: ...] interactivos
+    .replace(/\[Botón ([A-Z]): ([^\]]+)\]/g, '<button class="interactive-choice-btn bg-gradient-to-r from-nflow-orange/20 to-orange-600/20 border border-nflow-orange/40 rounded-lg px-4 py-2 my-1 mx-1 cursor-pointer hover:bg-nflow-orange/30 hover:border-nflow-orange/60 transition-all duration-200 text-left inline-block" data-choice="$1" data-choice-text="$2"><div class="flex items-center space-x-2"><span class="bg-nflow-orange text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">$1</span><span class="font-semibold text-white text-sm">$2</span></div></button>')
+    // Preguntas Sí/No interactivas
+    .replace(/\*\*¿([^*?]+\?)\*\*/g, '<div class="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-400/30 rounded-lg p-4 my-4"><div class="flex items-center space-x-2 mb-3"><span class="text-indigo-300 font-semibold">❓</span><strong class="font-semibold text-white">¿$1</strong></div><div class="flex space-x-3"><button class="interactive-yesno-btn bg-green-500/20 hover:bg-green-500/40 border border-green-400/30 text-green-300 px-4 py-2 rounded transition-all duration-200" data-answer="sí" data-question="¿$1">✅ Sí</button><button class="interactive-yesno-btn bg-red-500/20 hover:bg-red-500/40 border border-red-400/30 text-red-300 px-4 py-2 rounded transition-all duration-200" data-answer="no" data-question="¿$1">❌ No</button></div></div>')
     // Opciones clickeables interactivas
     .replace(/\*\*Opción (\d+): (.+?)\*\*/g, '<button class="interactive-option-btn w-full bg-gradient-to-r from-nflow-orange/10 to-orange-600/10 border border-nflow-orange/30 rounded-lg p-3 my-2 cursor-pointer hover:bg-nflow-orange/20 hover:border-nflow-orange/50 transition-all duration-200 text-left" data-option="Opción $1: $2"><div class="flex items-center space-x-2"><span class="bg-nflow-orange text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">$1</span><strong class="font-semibold text-white">$2</strong></div><div class="text-xs text-gray-400 mt-1">Haz clic para explorar esta opción</div></button>')
     // Texto en cursiva
@@ -202,8 +210,31 @@ function ProgressiveResponse({ content, messageId, isLatest, onSendMessage }: {
         }
       } else if (target.classList.contains('interactive-scale-btn')) {
         const scaleValue = target.getAttribute('data-value');
+        const scaleType = target.getAttribute('data-scale-type');
         if (scaleValue && onSendMessage) {
-          onSendMessage(`Mi nivel de afectación es ${scaleValue}/10`);
+          const message = scaleType 
+            ? `Mi nivel de ${scaleType} es ${scaleValue}/10`
+            : `Mi nivel de afectación es ${scaleValue}/10`;
+          onSendMessage(message);
+        }
+      } else if (target.classList.contains('interactive-choice-btn')) {
+        const choice = target.getAttribute('data-choice');
+        const choiceText = target.getAttribute('data-choice-text');
+        if (choice && choiceText && onSendMessage) {
+          onSendMessage(`Elijo la opción ${choice}: ${choiceText}`);
+        }
+      } else if (target.classList.contains('interactive-yesno-btn')) {
+        const answer = target.getAttribute('data-answer');
+        const question = target.getAttribute('data-question');
+        if (answer && question && onSendMessage) {
+          onSendMessage(`Respuesta a "${question}": ${answer}`);
+        }
+      } else if (target.classList.contains('interactive-checkbox')) {
+        const symptom = target.getAttribute('data-symptom');
+        const checkbox = target as HTMLInputElement;
+        if (symptom && onSendMessage) {
+          const action = checkbox.checked ? 'He marcado' : 'He desmarcado';
+          onSendMessage(`${action}: ${symptom}`);
         }
       } else if (target.classList.contains('bookmark-btn')) {
         const bookmarkContent = target.getAttribute('data-bookmark');
@@ -233,9 +264,24 @@ function ProgressiveResponse({ content, messageId, isLatest, onSendMessage }: {
       }
     };
 
+    // Manejar clics en checkbox items (tanto en el div como en el checkbox)
+    const handleCheckboxClick = (event: Event) => {
+      const target = event.target as HTMLElement;
+      
+      if (target.classList.contains('checkbox-item')) {
+        const checkbox = target.querySelector('.interactive-checkbox') as HTMLInputElement;
+        if (checkbox) {
+          checkbox.checked = !checkbox.checked;
+          checkbox.dispatchEvent(new Event('click'));
+        }
+      }
+    };
+
     responseRef.current.addEventListener('click', handleInteractionClick);
+    responseRef.current.addEventListener('click', handleCheckboxClick);
     return () => {
       responseRef.current?.removeEventListener('click', handleInteractionClick);
+      responseRef.current?.removeEventListener('click', handleCheckboxClick);
     };
   }, [onSendMessage, messageId]);
 
