@@ -5,7 +5,16 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
-app.use(express.json());
+
+// Apply express.json() conditionally - exclude Stripe webhook route
+app.use((req, res, next) => {
+  if (req.path === "/api/stripe/webhook") {
+    // Skip JSON parsing for Stripe webhook - it needs raw body
+    return next();
+  }
+  express.json()(req, res, next);
+});
+
 app.use(express.urlencoded({ extended: false }));
 
 // Create memory store for sessions
