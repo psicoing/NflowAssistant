@@ -283,7 +283,7 @@ function ProgressiveResponse({ content, messageId, isLatest, onSendMessage }: {
       responseRef.current?.removeEventListener('click', handleInteractionClick);
       responseRef.current?.removeEventListener('click', handleCheckboxClick);
     };
-  }, [onSendMessage, messageId]);
+  }, [onSendMessage, messageId, visibleSections]);
 
   // Estilos adaptativos según el tono emocional
   const getEmotionalStyling = (tone: typeof emotionalTone) => {
@@ -511,15 +511,7 @@ export default function ChatInterface({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("🔥 handleSubmit called!", {
-      inputValueTrimmed: inputValue.trim(),
-      isLoading,
-      isQuestionLimitReached,
-      canSubmit: inputValue.trim() && !isLoading && !isQuestionLimitReached
-    });
-    
     if (inputValue.trim() && !isLoading && !isQuestionLimitReached) {
-      console.log("✅ Sending message:", inputValue.trim());
       const startTime = Date.now();
       setIsTyping(true);
       setProgressPercent(0);
@@ -896,11 +888,6 @@ export default function ChatInterface({
           <Button
             type="submit"
             disabled={isLoading || !inputValue.trim()}
-            onClick={() => console.log("🔥 Button clicked!", { 
-              isLoading, 
-              inputValue: inputValue.trim(), 
-              disabled: isLoading || !inputValue.trim() 
-            })}
             className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white px-4 md:px-6 py-2.5 md:py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:scale-100"
           >
             {isLoading ? (
