@@ -20,12 +20,103 @@ export interface ChatResponse {
 }
 
 /**
+ * Detecta preferencias del usuario basadas en sus selecciones anteriores
+ * Prioriza las selecciones más recientes y evita conflictos
+ */
+function detectUserPreferences(history: Message[]): string {
+  let preferences: string[] = [];
+  
+  // Analizar mensajes del usuario desde el más reciente al más antiguo
+  const userMessages = history
+    .filter(msg => msg.isUser && msg.content)
+    .reverse(); // Más reciente primero
+
+  // Variables para evitar duplicados y conflictos
+  let helpTypeSet = false;
+  let intensitySet = false;
+  let hasConfirmations = false;
+  let hasRejections = false;
+  let hasSymptoms = false;
+
+  for (const msg of userMessages) {
+    const content = msg.content.toLowerCase();
+    
+    // Detectar tipo de ayuda (mutuamente excluyente - solo el más reciente)
+    if (!helpTypeSet) {
+      // Técnica rápida: buscar variantes robustas incluyendo sin acentos
+      if (/t[eé]cnica\s*r[aá]pida|opci[oó]n\s*a|bot[oó]n\s*a|r[aá]pida?\s*\(2-3\s*min\)/i.test(content)) {
+        preferences.push('- PREFERENCIA: Respuestas concisas y técnicas implementables en 2-3 minutos máximo');
+        preferences.push('- FORMATO: Usa bullet points, pasos numerados cortos, evita explicaciones largas');
+        helpTypeSet = true;
+      }
+      // Plan estructurado
+      else if (/plan\s*estructurado|opci[oó]n\s*b|bot[oó]n\s*b|estructurado\s*\(semana\)/i.test(content)) {
+        preferences.push('- PREFERENCIA: Plan detallado paso a paso con cronograma semanal');
+        preferences.push('- FORMATO: Estructura detallada con objetivos diarios, seguimiento y progresión');
+        helpTypeSet = true;
+      }
+      // Apoyo emocional
+      else if (/apoyo\s*emocional|opci[oó]n\s*c|bot[oó]n\s*c|emocional/i.test(content)) {
+        preferences.push('- PREFERENCIA: Enfoque empático con validación emocional y contención');
+        preferences.push('- FORMATO: Lenguaje cálido, reconocimiento de emociones, técnicas de autocompasión');
+        helpTypeSet = true;
+      }
+    }
+
+    // Detectar nivel de intensidad (solo el más reciente)
+    if (!intensitySet) {
+      // Buscar cualquier escala 0-10 con regex robusta
+      const intensityMatch = content.match(/(?:nivel.*?|afectaci[oó]n.*?|mi\s*nivel.*?)(?:es\s*)?(\d{1,2})(?:\/10)?/i) ||
+                             content.match(/\b(\d{1,2})\s*\/\s*10\b/i) ||
+                             content.match(/\b(\d{1,2})\s*de\s*10\b/i);
+      
+      if (intensityMatch) {
+        const nivel = parseInt(intensityMatch[1]);
+        if (nivel >= 8 && nivel <= 10) {
+          preferences.push('- URGENCIA: Alta prioridad - usar técnicas de contención inmediata y apoyo de crisis');
+          intensitySet = true;
+        } else if (nivel >= 1 && nivel <= 3) {
+          preferences.push('- ENFOQUE: Preventivo - técnicas de mantenimiento y fortalecimiento personal');
+          intensitySet = true;
+        } else if (nivel >= 4 && nivel <= 7) {
+          preferences.push('- ENFOQUE: Moderado - técnicas de manejo activo y estrategias de afrontamiento');
+          intensitySet = true;
+        }
+      }
+    }
+
+    // Detectar respuestas afirmativas (solo si no hay conflicto)
+    if (!hasConfirmations && !hasRejections) {
+      if (/respuesta.*?:\s*s[ií]|respondido.*?s[ií]|elijo.*?s[ií]/i.test(content)) {
+        preferences.push('- CONTEXTO: Usuario ha confirmado experiencias específicas - profundizar en estrategias personalizadas');
+        hasConfirmations = true;
+      } else if (/respuesta.*?:\s*no|respondido.*?no|elijo.*?no/i.test(content)) {
+        preferences.push('- CONTEXTO: Usuario ha descartado ciertas experiencias - explorar alternativas y otros enfoques');
+        hasRejections = true;
+      }
+    }
+
+    // Detectar síntomas marcados (solo la primera vez)
+    if (!hasSymptoms && /he\s*marcado|siento.{0,10}marcado|selecci[oó]n|seleccione|seleccionado|seleccionar|marcado|marco/i.test(content)) {
+      preferences.push('- SÍNTOMAS IDENTIFICADOS: Usuario ha marcado síntomas específicos - personalizar respuesta a sus manifestaciones exactas');
+      hasSymptoms = true;
+    }
+  }
+
+  return preferences.length > 0 ? 
+    `\n🎯 **PREFERENCIAS DETECTADAS DEL USUARIO (BASADAS EN SELECCIONES RECIENTES):**\n${preferences.join('\n')}\n` : '';
+}
+
+/**
  * Genera una respuesta mejorada usando OpenAI con ejemplos contextuales
  */
 export async function generateChatResponse(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es'): Promise<string> {
   try {
     // Seleccionar ejemplos relevantes basados en el mensaje del usuario
     const relevantExamples = selectRelevantExamples(userMessage, 2);
+    
+    // Detectar preferencias del usuario basadas en selecciones anteriores
+    const userPreferences = detectUserPreferences(history);
     
     // Construir el historial de conversación para contexto
     const conversationHistory = history.slice(-6).map(msg => ({
@@ -297,6 +388,10 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
     
     // Si es consulta educativa, usar prompt específico para información general
     const systemPrompt = isEducationalQuery ? `${languageInstructions}
+
+${profileContext}
+
+${userPreferences}
     
 TÚ ERES:
 NEUROPSI-AI, un asistente educativo experto en psicología que proporciona información general, educativa y científica sobre temas de salud mental.
@@ -360,6 +455,10 @@ ${resourcesSection}
 **IMPORTANTE**: Esta es información educativa general. Para evaluación personal, consultar con profesional colegiado.
 
 **RESPONDE EN FORMATO JSON**: { "response": "tu explicación educativa completa con elementos interactivos", "supportType": "educational" }` : `${languageInstructions}
+
+${profileContext}
+
+${userPreferences}
     
 TÚ ERES:
 NEUROPSI-AI, un asistente conversacional experto en psicología clínica, educativa, familiar y de la salud mental pública, con especialización en apoyo emocional oncológico y derecho laboral aplicado a la salud mental.
