@@ -638,7 +638,9 @@ export default function ChatInterface({
         ref={scrollAreaRef}
         style={{ 
           scrollBehavior: 'smooth',
-          maxHeight: 'calc(100vh - 200px)'
+          // Mobile: más espacio reservado para todos los elementos (260px)
+          // Desktop: espacio estándar (200px) - se aplica via media query CSS
+          maxHeight: 'calc(100vh - 260px)'
         }}
       >
         <div className="space-y-3 md:space-y-4">
