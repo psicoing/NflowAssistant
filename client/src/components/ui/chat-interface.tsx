@@ -511,7 +511,15 @@ export default function ChatInterface({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("🔥 handleSubmit called!", {
+      inputValueTrimmed: inputValue.trim(),
+      isLoading,
+      isQuestionLimitReached,
+      canSubmit: inputValue.trim() && !isLoading && !isQuestionLimitReached
+    });
+    
     if (inputValue.trim() && !isLoading && !isQuestionLimitReached) {
+      console.log("✅ Sending message:", inputValue.trim());
       const startTime = Date.now();
       setIsTyping(true);
       setProgressPercent(0);
@@ -632,15 +640,14 @@ export default function ChatInterface({
         </div>
       </div>
 
-      {/* Messages Area */}
+      {/* Messages Area - Different layouts for mobile vs desktop */}
+      {/* Mobile: Full screen scroll without fixed height */}
+      {/* Desktop: Fixed height container with internal scroll */}
       <div 
-        className="flex-1 overflow-y-auto p-3 md:p-4 scrollbar-thin" 
+        className="flex-1 overflow-y-auto p-3 md:p-4 scrollbar-thin md:max-h-[calc(100vh-200px)]"
         ref={scrollAreaRef}
         style={{ 
-          scrollBehavior: 'smooth',
-          // Mobile: más espacio reservado para todos los elementos (260px)
-          // Desktop: espacio estándar (200px) - se aplica via media query CSS
-          maxHeight: 'calc(100vh - 260px)'
+          scrollBehavior: 'smooth'
         }}
       >
         <div className="space-y-3 md:space-y-4">
@@ -889,6 +896,11 @@ export default function ChatInterface({
           <Button
             type="submit"
             disabled={isLoading || !inputValue.trim()}
+            onClick={() => console.log("🔥 Button clicked!", { 
+              isLoading, 
+              inputValue: inputValue.trim(), 
+              disabled: isLoading || !inputValue.trim() 
+            })}
             className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white px-4 md:px-6 py-2.5 md:py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:scale-100"
           >
             {isLoading ? (

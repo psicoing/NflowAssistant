@@ -596,9 +596,3 @@ body {
   animation: gentleFloat 3s ease-in-out infinite;
 }
 
-/* Chat scroll area responsive heights - Mobile vs Desktop */
-@media (min-width: 768px) {
-  div[style*="calc(100vh - 260px)"] {
-    max-height: calc(100vh - 200px) !important;
-  }
-}

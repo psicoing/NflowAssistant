@@ -224,11 +224,12 @@ export default function Chat() {
       try {
         const newConversation = await createConversationMutation.mutateAsync(title);
         // Wait for conversation to be created, then send message
-        sendMessageMutation.mutate({ conversationId: newConversation.id, content });
+        await sendMessageMutation.mutateAsync({ conversationId: newConversation.id, content });
       } catch (error) {
+        console.error("Error in conversation creation or message sending:", error);
         toast({
           title: "Error",
-          description: "No se pudo crear la conversación",
+          description: "No se pudo crear la conversación o enviar el mensaje",
           variant: "destructive",
         });
       }
@@ -355,8 +356,10 @@ export default function Chat() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex flex-col md:flex-row flex-1 pt-16 overflow-hidden" style={{ height: 'calc(100vh - 64px)', minHeight: 'calc(100vh - 64px)' }}>
+      {/* Main Content - Different layouts for mobile vs desktop */}
+      {/* Mobile: Natural scroll without fixed height */}
+      {/* Desktop: Fixed height with internal scrolling */}
+      <div className="flex flex-col md:flex-row flex-1 pt-16 md:overflow-hidden md:h-[calc(100vh-64px)] md:min-h-[calc(100vh-64px)]">
         {/* Sidebar - Hidden on mobile */}
         <div className="hidden md:flex w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex-col backdrop-blur-sm flex-shrink-0">
           <div className="p-6 border-b border-gray-700/50 space-y-4">
