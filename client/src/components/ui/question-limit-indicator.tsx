@@ -10,7 +10,11 @@ interface QuestionLimitData {
   resetDate: string;
 }
 
-export default function QuestionLimitIndicator() {
+interface QuestionLimitIndicatorProps {
+  compact?: boolean; // Para versión móvil compacta
+}
+
+export default function QuestionLimitIndicator({ compact = false }: QuestionLimitIndicatorProps) {
   const { data: limitData, isLoading } = useQuery<QuestionLimitData>({
     queryKey: ["/api/question-limit"],
     refetchInterval: 30000, // Refresh every 30 seconds
@@ -43,6 +47,29 @@ export default function QuestionLimitIndicator() {
     });
   };
 
+  // Versión compacta para móvil
+  if (compact) {
+    return (
+      <div className="flex items-center space-x-2 bg-gray-800/60 rounded-lg px-3 py-2 border border-gray-700/50">
+        <MessageCircle className="w-4 h-4 text-nflow-orange flex-shrink-0" />
+        <div className="flex items-center space-x-1 min-w-0">
+          <span className={`text-xs font-semibold ${getStatusColor()} whitespace-nowrap`}>
+            {remaining}
+          </span>
+          <span className="text-xs text-gray-400 hidden xs:inline">/</span>
+          <span className="text-xs text-gray-400 hidden xs:inline">{limit}</span>
+        </div>
+        {!canAsk && (
+          <AlertTriangle className="w-3 h-3 text-red-400 flex-shrink-0" />
+        )}
+        {canAsk && remaining <= 2 && (
+          <AlertTriangle className="w-3 h-3 text-yellow-400 flex-shrink-0" />
+        )}
+      </div>
+    );
+  }
+
+  // Versión completa para desktop/tablet
   return (
     <div className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-4 mb-4">
       <div className="flex items-center justify-between mb-3">

@@ -330,18 +330,23 @@ export default function Chat() {
       
       {/* Mobile Navigation Bar */}
       <div className="md:hidden bg-gray-800/90 border-b border-gray-700/50 p-3 mt-16">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between space-x-3">
           <Button
             onClick={handleNewChat}
             size="sm"
-            className="bg-nflow-orange hover:bg-nflow-orange/90 text-black font-semibold px-4"
+            className="bg-nflow-orange hover:bg-nflow-orange/90 text-black font-semibold px-3 flex-shrink-0"
             disabled={createConversationMutation.isPending}
           >
             <Plus className="w-4 h-4 mr-1" />
             Nuevo
           </Button>
           
-          <span className="text-white text-sm font-medium">
+          {/* Question Counter Mobile */}
+          <div className="flex-shrink-0">
+            <QuestionLimitIndicator compact={true} />
+          </div>
+          
+          <span className="text-white text-sm font-medium min-w-0 truncate text-center flex-1">
             {currentConversationId ? 
               conversations.find(c => c.id === currentConversationId)?.title || "Chat" 
               : "Selecciona conversación"
