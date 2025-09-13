@@ -366,23 +366,31 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
       `🚨 **Emergencias:** 112
 📞 **Prevención suicidio:** 024
 📱 **Catalunya:** 93 414 48 48` :
-      `🏥 **Centro de salud mental** más cercano
+      `
+┌─────────────────────────────────────────────────────────────┐
+│ 🏥 **ATENCIÓN SANITARIA INMEDIATA**                        │
+└─────────────────────────────────────────────────────────────┘
+🏥 Centro de salud mental más cercano
+🧠 Directorio Nacional de Psiquiatras - Consulta oficial
 
-👨‍⚕️ **Consejo General de Colegios Oficiales de Psicólogos (CGCOP)**
-   📞 Teléfono: 914 44 90 20 | ✉️ secop@cop.es
-   🌍 Directorio nacional - redirige a cualquier colegio por provincia
+┌─────────────────────────────────────────────────────────────┐
+│ 👨‍⚕️ **COLEGIOS OFICIALES DE PSICOLOGÍA**                   │
+└─────────────────────────────────────────────────────────────┘
+**Consejo General (CGCOP) - Nacional:**
+📞 914 44 90 20 | ✉️ secop@cop.es
+🌍 Directorio por provincia
 
-👨‍⚕️ **Colegio Oficial de Psicólogos de Cataluña (COPC)**
-   📍 C/ Rocafort, 129, 08015 Barcelona
-   📞 Teléfono: 932 478 650 | 📠 Fax: 932 478 654
-   ✉️ copc@copc.cat | 🕐 L-J: 9h-19h
+**Cataluña (COPC) - Regional:**
+📍 C/ Rocafort, 129, 08015 Barcelona
+📞 932 478 650 | 📠 932 478 654
+✉️ copc@copc.cat | 🕐 L-J: 9h-19h
 
-🧠 **Directorio Nacional de Psiquiatras** - Consulta de psiquiatras oficiales
-
-🏛️ **Instituto NeuronMeg** - Instituto responsable de NFLOW
-   📍 Figueres y Portbou - Girona
-   📞 +34 660 452 136 | ✉️ rmportbou@gmail.com
-   🌐 neuronmeg.online${nflowResourcesSection}`;
+┌─────────────────────────────────────────────────────────────┐
+│ 🏛️ **INSTITUTO NEURONMEG - NFLOW**                         │
+└─────────────────────────────────────────────────────────────┘
+📍 Figueres y Portbou - Girona
+📞 +34 660 452 136 | ✉️ rmportbou@gmail.com
+🌐 neuronmeg.online${nflowResourcesSection}`;
     
     // Prompt sistema NEUROPSI-AI inclusivo y multiestrato con apoyo especializado en cáncer
     
