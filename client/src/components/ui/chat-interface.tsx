@@ -5,6 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Bot, User, Loader2, Copy, RotateCcw, Zap, Clock, Brain, Heart, Pause, Flower2, Sparkles, ArrowRight, Lightbulb, Users, Target } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { Message } from "@shared/schema";
+import DOMPurify from 'dompurify';
 
 // Función para detectar y convertir técnicas/recursos en bookmarks automáticos
 function detectBookmarkableContent(content: string): string[] {
@@ -49,8 +50,8 @@ function formatMarkdownToHtml(content: string, onOptionClick?: (option: string) 
     .replace(/\*\*Valora tu (.+?) del 0 al 10\*\* \(([^)]+)\)/g, '<div class="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 rounded-lg p-4 my-4"><div class="flex items-center space-x-2 mb-3"><span class="text-blue-300 font-semibold">📊</span><strong class="font-semibold text-white">Valora tu $1 del 0 al 10</strong></div><div class="grid grid-cols-11 gap-1 mb-2">' + Array.from({length: 11}, (_, i) => `<button class="interactive-scale-btn w-6 h-6 text-xs font-bold rounded border border-gray-500 hover:bg-nflow-orange hover:text-white transition-all duration-200" data-value="${i}" data-scale-type="$1">${i}</button>`).join('') + '</div><div class="text-xs text-gray-400 flex justify-between"><span>$2</span></div></div>')
     // Checkboxes interactivos ☐
     .replace(/☐ (.+?)(?=\n|$)/g, '<div class="flex items-center space-x-3 my-2 p-2 hover:bg-gray-800/30 rounded cursor-pointer transition-all duration-200 checkbox-item" data-checkbox-text="$1"><input type="checkbox" class="interactive-checkbox w-4 h-4 text-nflow-orange bg-gray-800 border-gray-600 rounded focus:ring-nflow-orange focus:ring-2" data-symptom="$1"><span class="text-gray-200 select-none">$1</span></div>')
-    // Botones [Botón X: ...] interactivos
-    .replace(/\[Botón ([A-Z]): ([^\]]+)\]/g, '<button class="interactive-choice-btn bg-gradient-to-r from-nflow-orange/20 to-orange-600/20 border border-nflow-orange/40 rounded-lg px-4 py-2 my-1 mx-1 cursor-pointer hover:bg-nflow-orange/30 hover:border-nflow-orange/60 transition-all duration-200 text-left inline-block" data-choice="$1" data-choice-text="$2"><div class="flex items-center space-x-2"><span class="bg-nflow-orange text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">$1</span><span class="font-semibold text-white text-sm">$2</span></div></button>')
+    // Botones [Botón/Boton/Button X: ...] interactivos - regex robusto para acentos y multi-idioma
+    .replace(/\[(Bot[óo]n|Button) ([A-Z]): ([^\]]+)\]/gi, '<button class="interactive-choice-btn bg-gradient-to-r from-nflow-orange/20 to-orange-600/20 border border-nflow-orange/40 rounded-lg px-4 py-2 my-1 mx-1 cursor-pointer hover:bg-nflow-orange/30 hover:border-nflow-orange/60 transition-all duration-200 text-left inline-block" data-choice="$2" data-choice-text="$3"><div class="flex items-center space-x-2"><span class="bg-nflow-orange text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">$2</span><span class="font-semibold text-white text-sm">$3</span></div></button>')
     // Preguntas Sí/No interactivas
     .replace(/\*\*¿([^*?]+\?)\*\*/g, '<div class="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-400/30 rounded-lg p-4 my-4"><div class="flex items-center space-x-2 mb-3"><span class="text-indigo-300 font-semibold">❓</span><strong class="font-semibold text-white">¿$1</strong></div><div class="flex space-x-3"><button class="interactive-yesno-btn bg-green-500/20 hover:bg-green-500/40 border border-green-400/30 text-green-300 px-4 py-2 rounded transition-all duration-200" data-answer="sí" data-question="¿$1">✅ Sí</button><button class="interactive-yesno-btn bg-red-500/20 hover:bg-red-500/40 border border-red-400/30 text-red-300 px-4 py-2 rounded transition-all duration-200" data-answer="no" data-question="¿$1">❌ No</button></div></div>')
     // Opciones clickeables interactivas
@@ -70,7 +71,21 @@ function formatMarkdownToHtml(content: string, onOptionClick?: (option: string) 
     // Saltos de línea simples se convierten en <br>
     .replace(/\n/g, '<br/>');
     
-  return html;
+  // Sanitizar el HTML con DOMPurify permitiendo elementos interactivos necesarios
+  const sanitizedHtml = DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [
+      'div', 'span', 'button', 'input', 'h1', 'h2', 'h3', 'p', 'br', 'strong', 
+      'em', 'li', 'blockquote', 'ul', 'ol'
+    ],
+    ALLOWED_ATTR: [
+      'class', 'data-choice', 'data-choice-text', 'data-value', 'data-scale-type',
+      'data-symptom', 'data-checkbox-text', 'data-option', 'data-answer', 
+      'data-question', 'data-bookmark', 'type', 'style'
+    ],
+    KEEP_CONTENT: true
+  });
+  
+  return sanitizedHtml;
 }
 
 // Función para detectar el tono emocional y ajustar colores
