@@ -25,14 +25,14 @@ export default function ProfessionalMeritSection() {
           <CardContent className="p-8">
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               {/* Certificate Image */}
-              <div className="relative flex justify-center">
+              <div className="relative">
                 <div className="absolute -inset-4 bg-gradient-to-r from-nflow-orange/20 to-orange-600/20 rounded-2xl blur-lg"></div>
-                <div className="relative bg-white rounded-xl p-6 shadow-xl max-w-sm w-full">
-                  <div className="overflow-hidden rounded-lg flex justify-center items-center h-64">
+                <div className="relative bg-white rounded-xl p-4 shadow-xl">
+                  <div className="overflow-hidden rounded-lg h-48 w-full flex justify-center items-center">
                     <img 
                       src={certificadoCOPCPath}
                       alt="Certificado Colegio Oficial de Psicología de Cataluña - Ramón Molons de San Román"
-                      className="max-w-none h-48 object-contain transform -rotate-90 shadow-lg"
+                      className="w-full h-auto object-cover transform -rotate-90 scale-75"
                     />
                   </div>
                   {/* Verification Badge */}
