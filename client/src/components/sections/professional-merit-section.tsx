@@ -105,7 +105,7 @@ export default function ProfessionalMeritSection() {
         <Card className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 shadow-xl mt-8">
           <CardContent className="p-8">
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-white mb-4">Prefiero tener una vista con el psicólogo de NFLOW</h3>
+              <h3 className="text-2xl font-bold text-nflow-orange mb-4">Prefiero tener una vista con el psicólogo de NFLOW</h3>
               <p className="text-gray-100 font-medium">Consulta personalizada con Ramón Molons de San Román - Instituto NeuronMeg</p>
             </div>
             
