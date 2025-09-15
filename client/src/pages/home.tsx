@@ -30,6 +30,7 @@ import NFlowCarouselSection from "@/components/sections/nflow-carousel-section";
 import FamilyImageSection from "@/components/sections/family-image-section";
 import NFlowComparisonSection from "@/components/sections/nflow-comparison-section";
 import ProfessionalSummarySection from "@/components/sections/professional-summary-section";
+import ProfessionalMeritSection from "@/components/sections/professional-merit-section";
 
 export default function Home() {
 
@@ -71,6 +72,7 @@ export default function Home() {
         {/* <PackagesSection /> */}
         
         <ProfessionalSummarySection />
+        <ProfessionalMeritSection />
       </main>
       <Footer />
     </div>
