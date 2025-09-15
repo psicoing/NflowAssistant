@@ -106,32 +106,32 @@ export default function ProfessionalMeritSection() {
           <CardContent className="p-8">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold text-white mb-4">¿Prefieres una visita con el psicólogo?</h3>
-              <p className="text-gray-300">Consulta personalizada con Ramón Molons de San Román - Instituto NeuronMeg</p>
+              <p className="text-gray-100 font-medium">Consulta personalizada con Ramón Molons de San Román - Instituto NeuronMeg</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white/10 rounded-xl p-6 text-center hover:bg-white/20 transition-all duration-300 border border-white/10">
-                <div className="w-16 h-16 bg-nflow-orange rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-gray-800/90 rounded-xl p-6 text-center hover:bg-gray-700/90 transition-all duration-300 border-2 border-nflow-orange/50 shadow-xl">
+                <div className="w-16 h-16 bg-nflow-orange shadow-xl rounded-full flex items-center justify-center mx-auto mb-4">
                   <MapPin className="w-8 h-8 text-white" />
                 </div>
-                <h4 className="text-lg font-semibold text-white mb-2">Presencia</h4>
-                <p className="text-sm text-gray-300">Consulta en centro profesional</p>
+                <h4 className="text-xl font-bold text-white mb-2">Presencia</h4>
+                <p className="text-base text-white/90 font-medium">Consulta en centro profesional</p>
               </div>
               
-              <div className="bg-white/10 rounded-xl p-6 text-center hover:bg-white/20 transition-all duration-300 border border-white/10">
-                <div className="w-16 h-16 bg-nflow-orange rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-gray-800/90 rounded-xl p-6 text-center hover:bg-gray-700/90 transition-all duration-300 border-2 border-nflow-orange/50 shadow-xl">
+                <div className="w-16 h-16 bg-nflow-orange shadow-xl rounded-full flex items-center justify-center mx-auto mb-4">
                   <Home className="w-8 h-8 text-white" />
                 </div>
-                <h4 className="text-lg font-semibold text-white mb-2">Domicilio</h4>
-                <p className="text-sm text-gray-300">Visita personalizada en casa</p>
+                <h4 className="text-xl font-bold text-white mb-2">Domicilio</h4>
+                <p className="text-base text-white/90 font-medium">Visita personalizada en casa</p>
               </div>
               
-              <div className="bg-white/10 rounded-xl p-6 text-center hover:bg-white/20 transition-all duration-300 border border-white/10">
-                <div className="w-16 h-16 bg-nflow-orange rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-gray-800/90 rounded-xl p-6 text-center hover:bg-gray-700/90 transition-all duration-300 border-2 border-nflow-orange/50 shadow-xl">
+                <div className="w-16 h-16 bg-nflow-orange shadow-xl rounded-full flex items-center justify-center mx-auto mb-4">
                   <Video className="w-8 h-8 text-white" />
                 </div>
-                <h4 className="text-lg font-semibold text-white mb-2">Videoconferencia</h4>
-                <p className="text-sm text-gray-300">Consulta online segura</p>
+                <h4 className="text-xl font-bold text-white mb-2">Videoconferencia</h4>
+                <p className="text-base text-white/90 font-medium">Consulta online segura</p>
               </div>
             </div>
             
