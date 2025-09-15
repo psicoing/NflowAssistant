@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Award, Shield, Star, CheckCircle } from "lucide-react";
+import { Award, Shield, Star, CheckCircle, MapPin, Home, Video, Calendar, ExternalLink } from "lucide-react";
 import certificadoCOPCPath from "../../assets/certificado-copc.png";
 
 export default function ProfessionalMeritSection() {
@@ -97,6 +97,56 @@ export default function ProfessionalMeritSection() {
                   </p>
                 </div>
               </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Professional Consultation Options */}
+        <Card className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 shadow-xl mt-8">
+          <CardContent className="p-8">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-white mb-4">¿Prefieres una visita con el psicólogo?</h3>
+              <p className="text-gray-300">Consulta personalizada con Ramón Molons de San Román - Instituto NeuronMeg</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-white/10 rounded-xl p-6 text-center hover:bg-white/20 transition-all duration-300 border border-white/10">
+                <div className="w-16 h-16 bg-nflow-orange rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MapPin className="w-8 h-8 text-white" />
+                </div>
+                <h4 className="text-lg font-semibold text-white mb-2">Presencia</h4>
+                <p className="text-sm text-gray-300">Consulta en centro profesional</p>
+              </div>
+              
+              <div className="bg-white/10 rounded-xl p-6 text-center hover:bg-white/20 transition-all duration-300 border border-white/10">
+                <div className="w-16 h-16 bg-nflow-orange rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Home className="w-8 h-8 text-white" />
+                </div>
+                <h4 className="text-lg font-semibold text-white mb-2">Domicilio</h4>
+                <p className="text-sm text-gray-300">Visita personalizada en casa</p>
+              </div>
+              
+              <div className="bg-white/10 rounded-xl p-6 text-center hover:bg-white/20 transition-all duration-300 border border-white/10">
+                <div className="w-16 h-16 bg-nflow-orange rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Video className="w-8 h-8 text-white" />
+                </div>
+                <h4 className="text-lg font-semibold text-white mb-2">Videoconferencia</h4>
+                <p className="text-sm text-gray-300">Consulta online segura</p>
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <a 
+                href="https://neuronmeg.online/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-nflow-orange hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-xl transition-colors shadow-lg hover:shadow-xl"
+                data-testid="link-neuronmeg-consultation"
+              >
+                <Calendar className="w-6 h-6" />
+                Reservar Consulta Profesional
+                <ExternalLink className="w-5 h-5" />
+              </a>
             </div>
           </CardContent>
         </Card>
