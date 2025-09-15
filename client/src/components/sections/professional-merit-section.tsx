@@ -31,7 +31,7 @@ export default function ProfessionalMeritSection() {
                   <img 
                     src={certificadoCOPCPath}
                     alt="Certificado Colegio Oficial de Psicología de Cataluña - Ramón Molons de San Román"
-                    className="w-full h-auto rounded-lg shadow-lg transform rotate-180"
+                    className="w-full h-auto rounded-lg shadow-lg transform -rotate-90"
                   />
                   {/* Verification Badge */}
                   <div className="absolute -top-3 -right-3 bg-green-500 text-white rounded-full p-2 shadow-lg">
