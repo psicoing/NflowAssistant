@@ -28,11 +28,11 @@ export default function ProfessionalMeritSection() {
               <div className="relative">
                 <div className="absolute -inset-4 bg-gradient-to-r from-nflow-orange/20 to-orange-600/20 rounded-2xl blur-lg"></div>
                 <div className="relative bg-white rounded-xl p-4 shadow-xl">
-                  <div className="overflow-hidden rounded-lg h-48 w-full flex justify-center items-center">
+                  <div className="rounded-lg h-64 w-full flex justify-center items-center">
                     <img 
                       src={certificadoCOPCPath}
                       alt="Certificado Colegio Oficial de Psicología de Cataluña - Ramón Molons de San Román"
-                      className="w-full h-auto object-cover transform -rotate-90 scale-75"
+                      className="max-h-56 max-w-full object-contain transform -rotate-90"
                     />
                   </div>
                   {/* Verification Badge */}
