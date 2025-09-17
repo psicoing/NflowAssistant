@@ -10,7 +10,7 @@ const personalPlans = [
     originalPrice: "9.99",
     description: "Perfecto para usuarios individuales que buscan apoyo básico",
     features: [
-      "10 mensajes al asistente IA",
+      "Acceso diario al asistente NEUROPSI-AI",
       "Acceso a recursos educativos básicos", 
       "Soporte por email",
       "Ejercicios de relajación y mindfulness",
@@ -27,7 +27,7 @@ const personalPlans = [
     originalPrice: "19.99",
     description: "La opción más popular para un apoyo completo y personalizado",
     features: [
-      "Máximo 20 mensajes al asistente IA",
+      "Consultas ilimitadas con NEUROPSI-AI",
       "Acceso completo a todos los recursos",
       "Soporte prioritario 24/7",
       "Planes de bienestar personalizados",
@@ -47,7 +47,7 @@ const personalPlans = [
     description: "Acceso completo anual para usuarios que buscan la experiencia definitiva",
     features: [
       "Acceso completo por 12 meses",
-      "120 mensajes durante el año",
+      "Acceso completo anual al asistente IA",
       "Todas las características del plan de €5.99",
       "Contenido exclusivo y actualizaciones",
       "Análisis avanzado personalizado",
@@ -68,7 +68,7 @@ const businessPlans = [
     description: "Para profesionales de la salud mental y consultores independientes",
     features: [
       "Hasta 50 clientes/pacientes",
-      "10 mensajes por usuario al mes",
+      "Acceso profesional al asistente IA por empleado",
       "Panel de administración avanzado",
       "Informes y analytics detallados"
     ],
@@ -84,7 +84,7 @@ const businessPlans = [
     description: "Ideal para empresas medianas que priorizan el bienestar de sus empleados",
     features: [
       "Hasta 200 empleados incluidos",
-      "10 mensajes por usuario al mes",
+      "Acceso profesional al asistente IA por empleado",
       "Soporte dedicado 24/7",
       "Cumplimiento normativo ISO 45003",
       "Onboarding y capacitación incluida"
@@ -101,7 +101,7 @@ const businessPlans = [
     description: "Solución completa para grandes corporaciones y organizaciones",
     features: [
       "Usuarios ilimitados",
-      "Hasta 25 mensajes por usuario al mes",
+      "Acceso premium al asistente IA por empleado",
       "Implementación personalizada",
       "Integración API completa",
       "Cumplimiento GDPR y normativas locales",
