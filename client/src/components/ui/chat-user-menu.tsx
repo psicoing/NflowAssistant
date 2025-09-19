@@ -172,17 +172,18 @@ export default function ChatUserMenu() {
             
             <DropdownMenuSeparator className="bg-gray-700" />
             
-            <DropdownMenuItem 
-              className="text-white hover:bg-gray-700 cursor-pointer"
-              onSelect={(e) => {
+            <div 
+              className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm text-white hover:bg-gray-700 transition-colors"
+              onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 console.log("Perfil clicked");
-                setTimeout(() => setShowProfileDialog(true), 0);
+                setShowProfileDialog(true);
               }}
             >
               <User className="mr-2 h-4 w-4" />
               <span>Perfil</span>
-            </DropdownMenuItem>
+            </div>
             
             <DropdownMenuItem 
               className="text-red-400 hover:bg-gray-700 cursor-pointer"
@@ -204,17 +205,18 @@ export default function ChatUserMenu() {
             
             {user.subscriptionStatus === 'active' && (
               <>
-                <DropdownMenuItem 
-                  className="text-blue-400 hover:bg-gray-700 cursor-pointer"
-                  onSelect={(e) => {
+                <div 
+                  className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm text-blue-400 hover:bg-gray-700 transition-colors"
+                  onClick={(e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     console.log("Mejorar Plan clicked");
-                    setTimeout(() => setLocation("/#precios"), 0);
+                    setLocation("/#precios");
                   }}
                 >
                   <Crown className="mr-2 h-4 w-4" />
                   <span>Mejorar Plan</span>
-                </DropdownMenuItem>
+                </div>
                 
                 <DropdownMenuItem 
                   className="text-green-400 hover:bg-gray-700 cursor-pointer"
