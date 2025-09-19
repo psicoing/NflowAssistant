@@ -26,6 +26,7 @@ export interface IStorage {
     ageRange: string;
     gender: string;
   }): Promise<User>;
+  updateUserPassword(userId: number, hashedPassword: string): Promise<User>;
   
   // Question limit management
   checkQuestionLimit(userId: number): Promise<{ canAsk: boolean; remaining: number; limit: number }>;
@@ -203,6 +204,17 @@ export class DatabaseStorage implements IStorage {
         ageRange: profileData.ageRange,
         gender: profileData.gender,
         profileCompleted: true,
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
+  }
+
+  async updateUserPassword(userId: number, hashedPassword: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({
+        password: hashedPassword,
       })
       .where(eq(users.id, userId))
       .returning();

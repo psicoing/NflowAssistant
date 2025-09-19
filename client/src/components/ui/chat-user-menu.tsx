@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { 
   User, 
   LogOut, 
@@ -49,6 +51,12 @@ export default function ChatUserMenu() {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showPlanInfoDialog, setShowPlanInfoDialog] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
 
   const logoutMutation = useMutation({
     mutationFn: () => apiRequest("POST", "/api/auth/logout"),
@@ -96,6 +104,60 @@ export default function ChatUserMenu() {
 
   const handleCancelSubscription = () => {
     cancelSubscriptionMutation.mutate();
+  };
+
+  const changePasswordMutation = useMutation({
+    mutationFn: (data: { currentPassword: string; newPassword: string }) => 
+      apiRequest("POST", "/api/auth/change-password", data),
+    onSuccess: () => {
+      toast({
+        title: "Contraseña actualizada",
+        description: "Tu contraseña ha sido cambiada exitosamente.",
+      });
+      setShowPasswordDialog(false);
+      setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo cambiar la contraseña",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handlePasswordChange = () => {
+    if (!passwordForm.currentPassword || !passwordForm.newPassword || !passwordForm.confirmPassword) {
+      toast({
+        title: "Error",
+        description: "Todos los campos son obligatorios",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      toast({
+        title: "Error",
+        description: "Las contraseñas nuevas no coinciden",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (passwordForm.newPassword.length < 6) {
+      toast({
+        title: "Error",
+        description: "La nueva contraseña debe tener al menos 6 caracteres",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    changePasswordMutation.mutate({
+      currentPassword: passwordForm.currentPassword,
+      newPassword: passwordForm.newPassword,
+    });
   };
 
   const getSubscriptionStatusText = () => {
@@ -202,36 +264,6 @@ export default function ChatUserMenu() {
               </DropdownMenuItem>
             )}
             
-            {user.subscriptionStatus === 'active' && (
-              <>
-                <DropdownMenuItem 
-                  className="text-blue-400 hover:bg-gray-700 cursor-pointer"
-                  onSelect={() => {
-                    setDropdownOpen(false);
-                    setShowPlanInfoDialog(true);
-                  }}
-                >
-                  <Crown className="mr-2 h-4 w-4" />
-                  <span>Mejorar Plan</span>
-                </DropdownMenuItem>
-                
-                <DropdownMenuItem 
-                  className="text-green-400 hover:bg-gray-700 cursor-pointer"
-                  onClick={() => setShowBillingDialog(true)}
-                >
-                  <Receipt className="mr-2 h-4 w-4" />
-                  <span>Facturación</span>
-                </DropdownMenuItem>
-                
-                <DropdownMenuItem 
-                  className="text-red-400 hover:bg-gray-700 cursor-pointer"
-                  onClick={() => setShowCancelDialog(true)}
-                >
-                  <XCircle className="mr-2 h-4 w-4" />
-                  <span>Cancelar Suscripción</span>
-                </DropdownMenuItem>
-              </>
-            )}
             
             <DropdownMenuSeparator className="bg-gray-700" />
             
@@ -373,12 +405,12 @@ export default function ChatUserMenu() {
             <Button 
               onClick={() => {
                 setShowProfileDialog(false);
-                setLocation("/#precios");
+                setShowPasswordDialog(true);
               }}
               variant="outline"
               className="border-gray-600 text-gray-300 hover:bg-gray-700"
             >
-              Ver Planes
+              Cambiar Contraseña
             </Button>
             <Button 
               onClick={() => setShowProfileDialog(false)}
@@ -556,6 +588,82 @@ export default function ChatUserMenu() {
               className="bg-nflow-orange hover:bg-nflow-orange/90 text-black"
             >
               Cerrar
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Diálogo de Cambio de Contraseña */}
+      <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
+        <DialogContent className="bg-gray-800 border-gray-700 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white flex items-center">
+              <Settings className="mr-2 h-5 w-5 text-nflow-orange" />
+              Cambiar Contraseña
+            </DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Ingresa tu contraseña actual y define una nueva contraseña
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="mt-6 space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="current-password" className="text-gray-300">
+                Contraseña Actual
+              </Label>
+              <Input
+                id="current-password"
+                type="password"
+                value={passwordForm.currentPassword}
+                onChange={(e) => setPasswordForm(prev => ({ ...prev, currentPassword: e.target.value }))}
+                className="bg-gray-700 border-gray-600 text-white"
+                placeholder="Ingresa tu contraseña actual"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="new-password" className="text-gray-300">
+                Nueva Contraseña
+              </Label>
+              <Input
+                id="new-password"
+                type="password"
+                value={passwordForm.newPassword}
+                onChange={(e) => setPasswordForm(prev => ({ ...prev, newPassword: e.target.value }))}
+                className="bg-gray-700 border-gray-600 text-white"
+                placeholder="Mínimo 6 caracteres"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirm-password" className="text-gray-300">
+                Confirmar Nueva Contraseña
+              </Label>
+              <Input
+                id="confirm-password"
+                type="password"
+                value={passwordForm.confirmPassword}
+                onChange={(e) => setPasswordForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                className="bg-gray-700 border-gray-600 text-white"
+                placeholder="Repite la nueva contraseña"
+              />
+            </div>
+          </div>
+          
+          <div className="flex justify-between mt-6">
+            <Button 
+              onClick={() => setShowPasswordDialog(false)}
+              variant="outline"
+              className="border-gray-600 text-gray-300 hover:bg-gray-700"
+            >
+              Cancelar
+            </Button>
+            <Button 
+              onClick={handlePasswordChange}
+              disabled={changePasswordMutation.isPending}
+              className="bg-nflow-orange hover:bg-nflow-orange/90 text-black"
+            >
+              {changePasswordMutation.isPending ? "Cambiando..." : "Cambiar Contraseña"}
             </Button>
           </div>
         </DialogContent>
