@@ -171,19 +171,17 @@ export default function ChatUserMenu() {
             
             <DropdownMenuSeparator className="bg-gray-700" />
             
-            <div 
-              className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm text-white hover:bg-gray-700 transition-colors"
-              onClick={(e) => {
+            <DropdownMenuItem 
+              className="text-white hover:bg-gray-700 cursor-pointer"
+              onSelect={(e) => {
                 e.preventDefault();
-                e.stopPropagation();
-                console.log("✅ Perfil clicked");
-                setDropdownOpen(false);  // Cerrar dropdown
-                setShowProfileDialog(true);  // Abrir diálogo
+                console.log("✅ Perfil clicked - onSelect");
+                setShowProfileDialog(true);
               }}
             >
               <User className="mr-2 h-4 w-4" />
               <span>Perfil</span>
-            </div>
+            </DropdownMenuItem>
             
             <DropdownMenuItem 
               className="text-red-400 hover:bg-gray-700 cursor-pointer"
@@ -205,19 +203,17 @@ export default function ChatUserMenu() {
             
             {user.subscriptionStatus === 'active' && (
               <>
-                <div 
-                  className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm text-blue-400 hover:bg-gray-700 transition-colors"
-                  onClick={(e) => {
+                <DropdownMenuItem 
+                  className="text-blue-400 hover:bg-gray-700 cursor-pointer"
+                  onSelect={(e) => {
                     e.preventDefault();
-                    e.stopPropagation();
-                    console.log("✅ Mejorar Plan clicked");
-                    setDropdownOpen(false);  // Cerrar dropdown
-                    setLocation("/#precios");  // Navegar a precios
+                    console.log("✅ Mejorar Plan clicked - onSelect");
+                    setLocation("/#precios");
                   }}
                 >
                   <Crown className="mr-2 h-4 w-4" />
                   <span>Mejorar Plan</span>
-                </div>
+                </DropdownMenuItem>
                 
                 <DropdownMenuItem 
                   className="text-green-400 hover:bg-gray-700 cursor-pointer"
