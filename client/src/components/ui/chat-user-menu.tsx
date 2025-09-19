@@ -46,6 +46,8 @@ export default function ChatUserMenu() {
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [showEmergencyDialog, setShowEmergencyDialog] = useState(false);
   const [showBillingDialog, setShowBillingDialog] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [showPlanInfoDialog, setShowPlanInfoDialog] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const logoutMutation = useMutation({
@@ -173,9 +175,8 @@ export default function ChatUserMenu() {
             
             <DropdownMenuItem 
               className="text-white hover:bg-gray-700 cursor-pointer"
-              onSelect={(e) => {
-                e.preventDefault();
-                console.log("✅ Perfil clicked - onSelect");
+              onSelect={() => {
+                setDropdownOpen(false);
                 setShowProfileDialog(true);
               }}
             >
@@ -205,10 +206,9 @@ export default function ChatUserMenu() {
               <>
                 <DropdownMenuItem 
                   className="text-blue-400 hover:bg-gray-700 cursor-pointer"
-                  onSelect={(e) => {
-                    e.preventDefault();
-                    console.log("✅ Mejorar Plan clicked - onSelect");
-                    setLocation("/#precios");
+                  onSelect={() => {
+                    setDropdownOpen(false);
+                    setShowPlanInfoDialog(true);
                   }}
                 >
                   <Crown className="mr-2 h-4 w-4" />
