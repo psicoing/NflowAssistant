@@ -202,7 +202,7 @@ export default function ChatUserMenu() {
               <>
                 <DropdownMenuItem 
                   className="text-blue-400 hover:bg-gray-700 cursor-pointer"
-                  onClick={() => setShowPlanInfoDialog(true)}
+                  onClick={() => setLocation("/#precios")}
                 >
                   <Crown className="mr-2 h-4 w-4" />
                   <span>Mejorar Plan</span>
@@ -362,7 +362,17 @@ export default function ChatUserMenu() {
               </div>
             </div>
           </div>
-          <div className="flex justify-end mt-6">
+          <div className="flex justify-between mt-6">
+            <Button 
+              onClick={() => {
+                setShowProfileDialog(false);
+                setLocation("/#precios");
+              }}
+              variant="outline"
+              className="border-gray-600 text-gray-300 hover:bg-gray-700"
+            >
+              Ver Planes
+            </Button>
             <Button 
               onClick={() => setShowProfileDialog(false)}
               className="bg-nflow-orange hover:bg-nflow-orange/90 text-black"
