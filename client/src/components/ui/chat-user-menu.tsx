@@ -43,11 +43,10 @@ export default function ChatUserMenu() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [showCancelDialog, setShowCancelDialog] = useState(false);
-  const [showPlanInfoDialog, setShowPlanInfoDialog] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [showEmergencyDialog, setShowEmergencyDialog] = useState(false);
   const [showBillingDialog, setShowBillingDialog] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const logoutMutation = useMutation({
     mutationFn: () => apiRequest("POST", "/api/auth/logout"),
@@ -141,7 +140,7 @@ export default function ChatUserMenu() {
         </div>
 
         {/* User Menu */}
-        <DropdownMenu>
+        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0 hover:bg-gray-800/50">
               <Avatar className="h-10 w-10 border border-gray-600">
@@ -177,8 +176,9 @@ export default function ChatUserMenu() {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log("Perfil clicked");
-                setShowProfileDialog(true);
+                console.log("✅ Perfil clicked");
+                setDropdownOpen(false);  // Cerrar dropdown
+                setShowProfileDialog(true);  // Abrir diálogo
               }}
             >
               <User className="mr-2 h-4 w-4" />
@@ -210,8 +210,9 @@ export default function ChatUserMenu() {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log("Mejorar Plan clicked");
-                    setLocation("/#precios");
+                    console.log("✅ Mejorar Plan clicked");
+                    setDropdownOpen(false);  // Cerrar dropdown
+                    setLocation("/#precios");  // Navegar a precios
                   }}
                 >
                   <Crown className="mr-2 h-4 w-4" />
