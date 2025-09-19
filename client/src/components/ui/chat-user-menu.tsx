@@ -174,7 +174,11 @@ export default function ChatUserMenu() {
             
             <DropdownMenuItem 
               className="text-white hover:bg-gray-700 cursor-pointer"
-              onClick={() => setShowProfileDialog(true)}
+              onSelect={(e) => {
+                e.preventDefault();
+                console.log("Perfil clicked");
+                setTimeout(() => setShowProfileDialog(true), 0);
+              }}
             >
               <User className="mr-2 h-4 w-4" />
               <span>Perfil</span>
@@ -202,7 +206,11 @@ export default function ChatUserMenu() {
               <>
                 <DropdownMenuItem 
                   className="text-blue-400 hover:bg-gray-700 cursor-pointer"
-                  onClick={() => setLocation("/#precios")}
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    console.log("Mejorar Plan clicked");
+                    setTimeout(() => setLocation("/#precios"), 0);
+                  }}
                 >
                   <Crown className="mr-2 h-4 w-4" />
                   <span>Mejorar Plan</span>
