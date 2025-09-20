@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Brain, Globe, LogIn, UserPlus, ChevronDown, Wifi, WifiOff } from "lucide-react";
 import SmoothScrollMenu from "@/components/ui/smooth-scroll-menu";
+import EsEnLanguageToggle from "@/components/ui/es-en-language-toggle";
 
 interface HeaderProps {
   showBanner?: boolean;
@@ -53,6 +54,9 @@ export default function Header({ showBanner = false }: HeaderProps) {
 
           {/* Desktop and Mobile Navigation */}
           <div className="flex items-center space-x-4">
+            {/* Language Toggle - Always visible for UK market expansion */}
+            <EsEnLanguageToggle />
+            
             {/* Connection Status - Show only in chat */}
             {location.startsWith('/chat') && (
               <div className="hidden sm:flex items-center space-x-2">
@@ -71,10 +75,6 @@ export default function Header({ showBanner = false }: HeaderProps) {
               </div>
             )}
             
-
-
-
-
             {/* Hamburger Menu - Always visible */}
             <SmoothScrollMenu />
           </div>
