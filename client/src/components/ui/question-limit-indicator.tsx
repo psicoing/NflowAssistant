@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Progress } from "@/components/ui/progress";
 import { MessageCircle, AlertTriangle, CheckCircle } from "lucide-react";
+import { useLanguageContext } from "@/components/LanguageProvider";
 
 interface QuestionLimitData {
   limit: number;
@@ -15,6 +16,7 @@ interface QuestionLimitIndicatorProps {
 }
 
 export default function QuestionLimitIndicator({ compact = false }: QuestionLimitIndicatorProps) {
+  const { t } = useLanguageContext();
   const { data: limitData, isLoading } = useQuery<QuestionLimitData>({
     queryKey: ["/api/question-limit"],
     refetchInterval: 30000, // Refresh every 30 seconds
@@ -75,7 +77,7 @@ export default function QuestionLimitIndicator({ compact = false }: QuestionLimi
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center space-x-2">
           <MessageCircle className="w-4 h-4 text-nflow-orange" />
-          <span className="text-white font-medium text-sm">Preguntas este mes</span>
+          <span className="text-white font-medium text-sm">{t('limit.title')}</span>
         </div>
         <div className="flex items-center space-x-2">
           {canAsk ? (
@@ -84,7 +86,7 @@ export default function QuestionLimitIndicator({ compact = false }: QuestionLimi
             <AlertTriangle className="w-4 h-4 text-red-400" />
           )}
           <span className={`text-sm font-semibold ${getStatusColor()}`}>
-            {remaining} de {limit}
+            {remaining} {t('limit.remaining')} {limit}
           </span>
         </div>
       </div>
@@ -97,20 +99,20 @@ export default function QuestionLimitIndicator({ compact = false }: QuestionLimi
           />
         </div>
         <div className="flex justify-between items-center text-xs text-gray-400">
-          <span>Usadas: {used}</span>
-          <span>Se reinicia: {formatResetDate(resetDate)}</span>
+          <span>{t('limit.used')} {used}</span>
+          <span>{t('limit.resets')} {formatResetDate(resetDate)}</span>
         </div>
       </div>
       
       {!canAsk && (
         <div className="mt-3 p-2 bg-red-900/20 border border-red-700/50 rounded text-xs text-red-300">
-          Has alcanzado tu límite mensual. Se reiniciará el {formatResetDate(resetDate)}.
+          {t('limit.reached')} {formatResetDate(resetDate)}.
         </div>
       )}
       
       {canAsk && remaining <= 2 && (
         <div className="mt-3 p-2 bg-yellow-900/20 border border-yellow-700/50 rounded text-xs text-yellow-300">
-          Te quedan pocas preguntas este mes.
+          {t('limit.warning')}
         </div>
       )}
     </div>

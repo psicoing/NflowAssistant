@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
+import { useLanguageContext } from "@/components/LanguageProvider";
 import ChatHeader from "@/components/ui/chat-header";
 import ChatInterface from "@/components/ui/chat-interface";
 import UserProfileForm from "@/components/ui/user-profile-form";
@@ -31,6 +32,7 @@ export default function Chat() {
 
   // Authentication handled by session-based auth
   const { user, isLoading: isAuthLoading } = useAuth();
+  const { t } = useLanguageContext();
 
   // Check subscription status and redirect if needed
   useEffect(() => {
@@ -612,10 +614,10 @@ export default function Chat() {
               <div className="text-center max-w-md mx-4">
                 <MessageCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
                 <h2 className="text-xl font-semibold text-white mb-2">
-                  Bienvenido a NFLOW Chat
+                  {t('chat.welcome.title')}
                 </h2>
                 <p className="text-gray-400 mb-6">
-                  Selecciona una conversación existente o crea una nueva para comenzar a chatear con nuestro asistente de IA.
+                  {t('chat.welcome.description')}
                 </p>
                 <Button
                   onClick={handleNewChat}
@@ -623,7 +625,7 @@ export default function Chat() {
                   disabled={createConversationMutation.isPending}
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Crear nueva conversación
+                  {t('chat.welcome.cta')}
                 </Button>
               </div>
             </div>

@@ -119,6 +119,14 @@ export const translations = {
     'chat.filters.today': 'Hoy',
     'chat.filters.week': 'Semana',
     'chat.filters.month': 'Mes',
+    
+    // Question Limit
+    'limit.title': 'Preguntas este mes',
+    'limit.remaining': 'de',
+    'limit.used': 'Usadas:',
+    'limit.resets': 'Se reinicia:',
+    'limit.reached': 'Has alcanzado tu límite mensual. Se reiniciará el',
+    'limit.warning': 'Te quedan pocas preguntas este mes.',
     'chat.suggestions.anxiety': 'Me siento ansioso',
     'chat.suggestions.sleep': 'Necesito consejos para dormir mejor',
     'chat.suggestions.sleepShort': 'Problemas para dormir',
@@ -249,6 +257,14 @@ export const translations = {
     'chat.filters.today': 'Today',
     'chat.filters.week': 'Week',
     'chat.filters.month': 'Month',
+    
+    // Question Limit
+    'limit.title': 'Questions this month',
+    'limit.remaining': 'of',
+    'limit.used': 'Used:',
+    'limit.resets': 'Resets:',
+    'limit.reached': 'You have reached your monthly limit. It will reset on',
+    'limit.warning': 'You have few questions left this month.',
     'chat.suggestions.anxiety': 'I feel anxious',
     'chat.suggestions.sleep': 'I need advice to sleep better',
     'chat.suggestions.sleepShort': 'Sleep problems',

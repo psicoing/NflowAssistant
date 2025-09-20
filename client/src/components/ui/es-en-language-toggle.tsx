@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/hooks/useLanguage";
+import { useLanguageContext } from "@/components/LanguageProvider";
 
 export default function EsEnLanguageToggle() {
-  const { currentLanguage, changeLanguage } = useLanguage();
+  const { currentLanguage, changeLanguage } = useLanguageContext();
   const [userCountry, setUserCountry] = useState<string | null>(null);
   const [autoDetected, setAutoDetected] = useState(false);
 
