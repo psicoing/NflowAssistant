@@ -113,7 +113,7 @@ export default function SmoothScrollMenu() {
       </SheetTrigger>
       
       <SheetContent side="right" className="bg-nflow-dark border-gray-800 w-80">
-        <div className="py-6">
+        <div className="py-6 h-full overflow-y-auto">
           <div className="flex items-center space-x-2 mb-8">
             <img src="/faro.png" alt="NFLOW" className="w-8 h-8" />
             <span className="text-xl font-bold text-white">NFLOW</span>
