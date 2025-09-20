@@ -1,5 +1,5 @@
 import ChatUserMenu from "./chat-user-menu-minimal";
-import ChatLanguageSelector from "./chat-language-selector";
+import EsEnLanguageToggle from "./es-en-language-toggle";
 import { MessageCircle, Brain } from "lucide-react";
 
 export default function ChatHeader() {
@@ -23,7 +23,7 @@ export default function ChatHeader() {
 
         {/* Selector de idioma prominente y menú del usuario */}
         <div className="flex items-center space-x-4">
-          <ChatLanguageSelector />
+          <EsEnLanguageToggle />
           <ChatUserMenu />
         </div>
       </div>
