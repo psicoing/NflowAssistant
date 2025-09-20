@@ -248,7 +248,10 @@ export default function ChatUserMenu() {
             
             <DropdownMenuItem 
               className="text-red-400 hover:bg-gray-700 cursor-pointer"
-              onClick={() => setShowEmergencyDialog(true)}
+              onSelect={() => {
+                setDropdownOpen(false);
+                setShowEmergencyDialog(true);
+              }}
             >
               <AlertTriangle className="mr-2 h-4 w-4" />
               <span>Urgencias</span>
@@ -257,7 +260,10 @@ export default function ChatUserMenu() {
             {user.subscriptionStatus === 'pending_payment' && (
               <DropdownMenuItem 
                 className="text-yellow-400 hover:bg-gray-700 cursor-pointer"
-                onClick={() => setLocation("/#precios")}
+                onSelect={() => {
+                  setDropdownOpen(false);
+                  setLocation("/#precios");
+                }}
               >
                 <CreditCard className="mr-2 h-4 w-4" />
                 <span>Activar Suscripción</span>
@@ -269,7 +275,10 @@ export default function ChatUserMenu() {
             
             <DropdownMenuItem 
               className="text-red-400 hover:bg-gray-700 cursor-pointer"
-              onClick={handleLogout}
+              onSelect={() => {
+                setDropdownOpen(false);
+                handleLogout();
+              }}
               disabled={logoutMutation.isPending}
             >
               <LogOut className="mr-2 h-4 w-4" />
