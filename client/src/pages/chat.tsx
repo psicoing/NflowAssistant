@@ -9,7 +9,8 @@ import QuestionLimitIndicator from "@/components/ui/question-limit-indicator";
 import ChatLanguageBanner from "@/components/ui/chat-language-banner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MessageCircle, Plus, Search, Calendar, Clock } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { MessageCircle, Plus, Search, Calendar, Clock, List } from "lucide-react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import type { Conversation, Message } from "@shared/schema";
@@ -26,6 +27,7 @@ export default function Chat() {
   const [selectedDateFilter, setSelectedDateFilter] = useState<"all" | "today" | "week" | "month">("all");
   const [userProfile, setUserProfile] = useState<any>(null);
   const [showProfileForm, setShowProfileForm] = useState(false);
+  const [showConversationsSheet, setShowConversationsSheet] = useState(false);
 
   // Authentication handled by session-based auth
   const { user, isLoading: isAuthLoading } = useAuth();
@@ -347,12 +349,134 @@ export default function Chat() {
             <QuestionLimitIndicator compact={true} />
           </div>
           
-          <span className="text-white text-sm font-medium min-w-0 truncate text-center flex-1">
-            {currentConversationId ? 
-              conversations.find(c => c.id === currentConversationId)?.title || "Chat" 
-              : "Selecciona conversación"
-            }
-          </span>
+          {/* Conversations Button - Mobile */}
+          <Sheet open={showConversationsSheet} onOpenChange={setShowConversationsSheet}>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/20 px-2 flex-shrink-0"
+              >
+                <List className="w-4 h-4 mr-1" />
+                <span className="text-xs font-medium min-w-0 truncate">
+                  {currentConversationId ? 
+                    (conversations.find(c => c.id === currentConversationId)?.title?.substring(0, 15) + "...") || "Chat" 
+                    : `${conversations.length || 0}`
+                  }
+                </span>
+              </Button>
+            </SheetTrigger>
+            
+            <SheetContent side="left" className="bg-gray-900 border-gray-700 w-80 p-0">
+              <div className="flex flex-col h-full">
+                <div className="p-6 border-b border-gray-700/50 space-y-4">
+                  <h3 className="text-white font-semibold text-lg">Conversaciones</h3>
+                  
+                  {/* Search */}
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="Buscar conversaciones..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder:text-gray-400 focus:border-nflow-orange focus:ring-1 focus:ring-nflow-orange/20 transition-all"
+                    />
+                  </div>
+
+                  {/* Date Filter */}
+                  <div className="flex gap-2">
+                    {[
+                      { key: "all", label: "Todos", icon: Clock },
+                      { key: "today", label: "Hoy", icon: Calendar },
+                      { key: "week", label: "Semana", icon: Calendar },
+                      { key: "month", label: "Mes", icon: Calendar },
+                    ].map(({ key, label, icon: Icon }) => (
+                      <button
+                        key={key}
+                        onClick={() => setSelectedDateFilter(key as any)}
+                        className={`flex-1 px-2 py-1.5 text-xs rounded-lg border transition-all duration-200 ${
+                          selectedDateFilter === key
+                            ? "bg-nflow-orange/20 border-nflow-orange text-nflow-orange"
+                            : "bg-gray-700/30 border-gray-600/50 text-gray-300 hover:bg-gray-600/50"
+                        }`}
+                      >
+                        <Icon className="w-3 h-3 mx-auto mb-1" />
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Conversations List */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                  {isLoadingConversations ? (
+                    <div className="text-center py-8">
+                      <div className="animate-spin w-8 h-8 border-4 border-nflow-orange border-t-transparent rounded-full mx-auto mb-3" />
+                      <p className="text-gray-400 text-sm">Cargando conversaciones...</p>
+                    </div>
+                  ) : filteredConversations.length === 0 ? (
+                    <div className="text-center py-8">
+                      <MessageCircle className="w-12 h-12 text-gray-500 mx-auto mb-3" />
+                      <p className="text-gray-400 text-sm mb-2">
+                        {searchQuery || selectedDateFilter !== "all" 
+                          ? "No se encontraron conversaciones" 
+                          : "Aún no tienes conversaciones"
+                        }
+                      </p>
+                      {!searchQuery && selectedDateFilter === "all" && (
+                        <Button
+                          onClick={() => {
+                            handleNewChat();
+                            setShowConversationsSheet(false);
+                          }}
+                          size="sm"
+                          variant="outline"
+                          className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                          disabled={createConversationMutation.isPending}
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          {createConversationMutation.isPending ? "Creando..." : "Crear primera conversación"}
+                        </Button>
+                      )}
+                    </div>
+                  ) : (
+                    filteredConversations.map((conversation: Conversation) => (
+                      <Card
+                        key={conversation.id}
+                        className={`cursor-pointer transition-all duration-200 border ${
+                          currentConversationId === conversation.id
+                            ? "bg-nflow-orange/10 border-nflow-orange/50 shadow-lg shadow-nflow-orange/20"
+                            : "bg-gray-800/50 border-gray-700/50 hover:bg-gray-700/50 hover:border-gray-600/50"
+                        }`}
+                        onClick={() => {
+                          handleSelectConversation(conversation.id);
+                          setShowConversationsSheet(false);
+                        }}
+                      >
+                        <CardContent className="p-4">
+                          <h3 className={`font-medium text-sm mb-2 line-clamp-2 ${
+                            currentConversationId === conversation.id ? "text-nflow-orange" : "text-white"
+                          }`}>
+                            {conversation.title}
+                          </h3>
+                          <p className="text-xs text-gray-400">
+                            {new Date(conversation.createdAt).toLocaleDateString("es-ES", {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    ))
+                  )}
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
 
