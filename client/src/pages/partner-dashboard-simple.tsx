@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2 } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 
 interface Partner {
@@ -19,41 +21,84 @@ interface Partner {
   createdAt: string;
 }
 
+interface Referral {
+  id: number;
+  referralCode: string;
+  subscriptionPlan: string;
+  amount: string;
+  commission: string;
+  status: string;
+  createdAt: string;
+}
+
 export default function PartnerDashboardSimple() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [referralCode, setReferralCode] = useState("");
 
-  // Partner data - in production this would come from authentication
-  const partner: Partner = {
-    id: 1,
-    companyName: "Clínica Test",
-    contactName: "Dr. Juan Pérez",
-    email: "test@clinica.com",
-    status: "approved",
-    partnerType: "healthcare",
-    totalReferrals: 0,
-    totalEarnings: "0",
-    createdAt: "2025-06-13"
+  const { data: partner, isLoading: partnerLoading, error } = useQuery<Partner>({
+    queryKey: ["/api/partners/profile"],
+    retry: false,
+  });
+
+  const { data: referrals = [], isLoading: referralsLoading } = useQuery<Referral[]>({
+    queryKey: ["/api/partners/referrals"],
+    retry: false,
+  });
+
+  useEffect(() => {
+    if (!partnerLoading && (!partner || error)) {
+      console.log("Partner auth failed:", error);
+      setLocation("/partners/login");
+    }
+  }, [partner, partnerLoading, error, setLocation]);
+
+  if (partnerLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Cargando dashboard...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!partner) {
+    return null; // useEffect will redirect to login
+  }
+
+  const handleLogout = async () => {
+    try {
+      await apiRequest("POST", "/api/partners/logout", {});
+      toast({
+        title: "Sesión cerrada",
+        description: "Has cerrado sesión correctamente",
+      });
+      setLocation("/partners/login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
 
-
-
-  const handleLogout = () => {
-    toast({
-      title: "Sesión cerrada",
-      description: "Has cerrado sesión correctamente",
-    });
-    setLocation("/partners/login");
-  };
-
-  const generateReferralCode = () => {
-    const code = `CLINICA_${partner.id}_${Date.now().toString().slice(-4)}`;
-    setReferralCode(code);
-    toast({
-      title: "Código generado",
-      description: "Tu código de referencia ha sido creado",
-    });
+  const generateReferralCode = async () => {
+    try {
+      const response = await apiRequest("POST", "/api/partners/generate-code", {});
+      const data = await response.json();
+      setReferralCode(data.referralCode);
+      toast({
+        title: "Código generado",
+        description: "Tu código de referencia ha sido creado",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo generar el código de referencia",
+        variant: "destructive",
+      });
+    }
   };
 
   const copyReferralCode = () => {
