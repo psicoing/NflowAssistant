@@ -780,9 +780,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Validate referral code
+  app.post("/api/partners/validate-code", async (req, res) => {
+    try {
+      const { referralCode } = req.body;
+
+      if (!referralCode || typeof referralCode !== 'string') {
+        return res.json({ valid: false, message: "Código requerido" });
+      }
+
+      // Parse referral code format: COMPANYPREFIX_PARTNERID_TIMESTAMP
+      const parts = referralCode.split('_');
+      if (parts.length < 2) {
+        return res.json({ valid: false, message: "Formato de código inválido" });
+      }
+
+      // Extract partner ID (second to last part)
+      const partnerIdStr = parts[parts.length - 2];
+      const partnerId = parseInt(partnerIdStr);
+
+      if (isNaN(partnerId)) {
+        return res.json({ valid: false, message: "ID de partner inválido" });
+      }
+
+      // Verify partner exists and is active
+      const partner = await storage.getPartner(partnerId);
+      if (!partner) {
+        return res.json({ valid: false, message: "Partner no encontrado" });
+      }
+
+      if (partner.status !== 'approved' && partner.status !== 'active') {
+        return res.json({ valid: false, message: "Partner no activo" });
+      }
+
+      res.json({ 
+        valid: true, 
+        partnerId: partnerId,
+        partnerName: partner.companyName,
+        message: "Código válido" 
+      });
+
+    } catch (error) {
+      console.error("Error validating referral code:", error);
+      res.json({ valid: false, message: "Error validando código" });
+    }
+  });
+
   // Stripe checkout session - simplificado para máxima compatibilidad
   app.post("/api/stripe/create-checkout-session", async (req, res) => {
     try {
+      const { referralCode } = req.body;
       console.log("Creating Stripe checkout session - simplified approach");
 
       // Importar Stripe solo cuando se necesite
@@ -803,6 +850,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         },
       });
 
+      // Prepare metadata with referral information
+      let metadata: any = {
+        source: "activation_page",
+        userId: req.session.userId?.toString() || "unknown"
+      };
+
+      // If referral code provided, validate and add to metadata
+      if (referralCode && typeof referralCode === 'string') {
+        try {
+          const parts = referralCode.split('_');
+          if (parts.length >= 2) {
+            const partnerIdStr = parts[parts.length - 2];
+            const partnerId = parseInt(partnerIdStr);
+            
+            if (!isNaN(partnerId)) {
+              const partner = await storage.getPartner(partnerId);
+              if (partner && (partner.status === 'approved' || partner.status === 'active')) {
+                metadata.referralCode = referralCode;
+                metadata.partnerId = partnerId.toString();
+                metadata.partnerName = partner.companyName;
+                console.log(`✓ Valid referral code: ${referralCode} for partner: ${partner.companyName}`);
+              }
+            }
+          }
+        } catch (error) {
+          console.log(`⚠ Invalid referral code format: ${referralCode}`);
+        }
+      }
+
       const session = await stripe.checkout.sessions.create({
         mode: "subscription",
         line_items: [
@@ -813,9 +889,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ],
         success_url: "https://nflow.style/stripe-return?session_id={CHECKOUT_SESSION_ID}",
         cancel_url: "https://nflow.style/cancel",
-        metadata: {
-          source: "activation_page"
-        },
+        metadata
       });
       
       res.json({ url: session.url });
@@ -915,6 +989,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
           if (user) {
             console.log("=== ACTIVATING STRIPE SUBSCRIPTION ===");
             console.log("User found:", user.username, "ID:", user.id, "Current status:", user.subscriptionStatus);
+            
+            // Check for referral code in metadata to process commission
+            const metadata = eventData.metadata;
+            if (metadata && metadata.referralCode && metadata.partnerId) {
+              console.log("=== PROCESSING REFERRAL COMMISSION ===");
+              console.log("Referral code:", metadata.referralCode);
+              console.log("Partner ID:", metadata.partnerId);
+              
+              try {
+                const partnerId = parseInt(metadata.partnerId);
+                const partner = await storage.getPartner(partnerId);
+                
+                if (partner && (partner.status === 'approved' || partner.status === 'active')) {
+                  const amount = (eventData.amount_total || 299).toString(); // Amount in cents
+                  const commission = Math.round((eventData.amount_total || 299) * 0.1).toString(); // 10% commission
+                  
+                  // Create partner referral record
+                  await storage.createPartnerReferral({
+                    partnerId: partnerId,
+                    userId: user.id,
+                    referralCode: metadata.referralCode,
+                    subscriptionPlan: 'basic',
+                    amount: amount,
+                    commission: commission,
+                    status: 'paid'
+                  });
+                  
+                  // Update partner statistics
+                  const newReferrals = partner.totalReferrals + 1;
+                  const newEarnings = (parseFloat(partner.totalEarnings) + parseFloat(commission)).toString();
+                  await storage.updatePartnerStats(partnerId, newReferrals, newEarnings);
+                  
+                  console.log(`✅ Commission processed: €${(parseFloat(commission) / 100).toFixed(2)} for partner: ${partner.companyName}`);
+                }
+              } catch (error) {
+                console.error("❌ Error processing referral commission:", error);
+              }
+            }
             
             // Determine plan based on price or subscription data
             const subscriptionPlan = (eventData.amount_total && eventData.amount_total >= 6900) ? 'annual' : 'basic';
