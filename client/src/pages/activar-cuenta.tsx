@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, CreditCard, MessageCircle, Zap, CheckCircle, Smartphone, Phone, Mail } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ArrowLeft, CreditCard, MessageCircle, Zap, CheckCircle, Smartphone, Phone, Mail, Gift, Users } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
+import { useReferralCode } from "@/hooks/useReferralCode";
 import SoporteActivacionBanner from "@/components/SoporteActivacionBanner";
 
 declare global {
@@ -21,6 +24,7 @@ export default function ActivarCuenta() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [stripeLoading, setStripeLoading] = useState(false);
+  const { referralCode, isValidating, isValid, updateReferralCode } = useReferralCode();
 
   // Handle Stripe payment with custom checkout session
   const handleStripePayment = async () => {
@@ -32,7 +36,9 @@ export default function ActivarCuenta() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({ 
+          referralCode: referralCode.trim() || null 
+        }),
         credentials: 'include',
       });
 
@@ -91,6 +97,84 @@ export default function ActivarCuenta() {
                 💳 En tu extracto bancario aparecerá el cargo como "Empordajobs SL" - es completamente normal y seguro
               </p>
             </div>
+          </div>
+
+          {/* Código de Referencia */}
+          <div className="max-w-md mx-auto mb-8">
+            {referralCode && (
+              <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 mb-4">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-3">
+                    <Gift className="h-6 w-6 text-green-600" />
+                    <div>
+                      <h3 className="font-semibold text-green-800">¡Código Aplicado!</h3>
+                      <p className="text-sm text-green-600">
+                        Código: <span className="font-mono font-bold">{referralCode}</span>
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            <Card className="bg-white/10 backdrop-blur border-white/20">
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <Users className="h-5 w-5 text-yellow-400" />
+                    <Label htmlFor="referralCode" className="text-white font-medium">
+                      ¿Tienes un código de referencia? (Opcional)
+                    </Label>
+                  </div>
+                  
+                  <div className="relative">
+                    <Input
+                      id="referralCode"
+                      type="text"
+                      placeholder="Ej: NFLOWCEOTESTPA_1234"
+                      value={referralCode}
+                      onChange={(e) => updateReferralCode(e.target.value)}
+                      className="bg-white/90 border-white/30 text-gray-800 placeholder:text-gray-500"
+                      data-testid="input-referral-code"
+                    />
+                    
+                    {isValidating && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <div className="animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                      </div>
+                    )}
+                    
+                    {isValid === true && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600">
+                        <CheckCircle className="h-4 w-4" />
+                      </div>
+                    )}
+                    
+                    {isValid === false && referralCode && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-600">
+                        <span className="text-sm">❌</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {isValid === false && referralCode && (
+                    <p className="text-sm text-red-300">
+                      Código no válido. Puedes continuar sin él.
+                    </p>
+                  )}
+                  
+                  {isValid === true && (
+                    <p className="text-sm text-green-300">
+                      ✓ Código válido. Tu partner recibirá una comisión del 10%.
+                    </p>
+                  )}
+                  
+                  <p className="text-xs text-gray-300">
+                    Los códigos de referencia apoyan a partners que promocionan NFLOW
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           <div className="flex justify-center mb-8">
