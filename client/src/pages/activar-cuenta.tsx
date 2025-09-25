@@ -62,8 +62,11 @@ export default function ActivarCuenta() {
     }
   };
 
-  // Cargar Stripe script
+  // Cargar Stripe script y hacer scroll al top
   useEffect(() => {
+    // Scroll al inicio de la página al cargar
+    window.scrollTo(0, 0);
+    
     if (!document.querySelector('script[src*="stripe.com"]')) {
       const stripeScript = document.createElement('script');
       stripeScript.src = 'https://js.stripe.com/v3/buy-button.js';
