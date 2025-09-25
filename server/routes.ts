@@ -834,7 +834,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Importar Stripe solo cuando se necesite
       const Stripe = (await import('stripe')).default;
-      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+      const stripeKey = process.env.STRIPE_SECRET_KEY || process.env.TESTING_STRIPE_SECRET_KEY || '';
+      
+      if (!stripeKey) {
+        console.error('❌ No Stripe secret key found in environment');
+        return res.status(500).json({ error: 'Stripe configuration missing' });
+      }
+      
+      const stripe = new Stripe(stripeKey, {
         apiVersion: '2025-08-27.basil',
       });
 
