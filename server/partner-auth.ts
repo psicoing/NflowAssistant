@@ -85,6 +85,9 @@ export async function registerPartner(partnerData: InsertPartner): Promise<{ suc
 
 export function generateReferralCode(partnerName: string, partnerId: number): string {
   const cleanName = partnerName.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-  const code = `${cleanName}_${partnerId}_${Date.now().toString().slice(-4)}`;
-  return code.substring(0, 15); // Limitar longitud
+  // Limit company name to ensure full format fits
+  const shortName = cleanName.substring(0, 8);
+  const timestamp = Date.now().toString().slice(-4);
+  const code = `${shortName}_${partnerId}_${timestamp}`;
+  return code;
 }

@@ -1017,8 +1017,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   });
                   
                   // Update partner statistics
-                  const newReferrals = partner.totalReferrals + 1;
-                  const newEarnings = (parseFloat(partner.totalEarnings) + parseFloat(commission)).toString();
+                  const newReferrals = (partner.totalReferrals || 0) + 1;
+                  const currentEarnings = parseFloat(partner.totalEarnings || "0");
+                  const newEarnings = (currentEarnings + parseFloat(commission)).toString();
                   await storage.updatePartnerStats(partnerId, newReferrals, newEarnings);
                   
                   console.log(`✅ Commission processed: €${(parseFloat(commission) / 100).toFixed(2)} for partner: ${partner.companyName}`);
