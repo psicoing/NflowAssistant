@@ -659,7 +659,126 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== PARTNER ROUTES =====
+  
+  // Partner login
+  app.post("/api/partners/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Email y contraseña son requeridos" 
+        });
+      }
+      
+      const result = await authenticatePartner(email, password);
+      
+      if (result.success && result.partner) {
+        // Set partner session
+        req.session.partnerId = result.partner.id;
+        req.session.isPartner = true;
+        req.session.partnerStatus = result.partner.status;
+        
+        res.json({ 
+          success: true, 
+          message: result.message,
+          partner: result.partner
+        });
+      } else {
+        res.status(401).json({ 
+          success: false, 
+          message: result.message 
+        });
+      }
+    } catch (error) {
+      console.error("Partner login error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Error interno del servidor" 
+      });
+    }
+  });
 
+  // Partner logout
+  app.post("/api/partners/logout", async (req, res) => {
+    try {
+      delete req.session.partnerId;
+      delete req.session.isPartner;
+      delete req.session.partnerStatus;
+      
+      res.json({ success: true, message: "Logout exitoso" });
+    } catch (error) {
+      console.error("Partner logout error:", error);
+      res.status(500).json({ success: false, message: "Error interno" });
+    }
+  });
+
+  // Get partner profile
+  app.get("/api/partners/profile", async (req, res) => {
+    try {
+      const partnerId = req.session.partnerId;
+      
+      if (!partnerId) {
+        return res.status(401).json({ message: "Not authenticated as partner" });
+      }
+      
+      const partner = await storage.getPartner(partnerId);
+      
+      if (!partner) {
+        return res.status(404).json({ message: "Partner not found" });
+      }
+      
+      // Return partner data without password
+      const { password, ...partnerData } = partner;
+      res.json(partnerData);
+    } catch (error) {
+      console.error("Error fetching partner profile:", error);
+      res.status(500).json({ message: "Error fetching profile" });
+    }
+  });
+
+  // Get partner referrals
+  app.get("/api/partners/referrals", async (req, res) => {
+    try {
+      const partnerId = req.session.partnerId;
+      
+      if (!partnerId) {
+        return res.status(401).json({ message: "Not authenticated as partner" });
+      }
+      
+      const referrals = await storage.getPartnerReferrals(partnerId);
+      res.json(referrals);
+    } catch (error) {
+      console.error("Error fetching partner referrals:", error);
+      res.status(500).json({ message: "Error fetching referrals" });
+    }
+  });
+
+  // Generate referral code
+  app.post("/api/partners/generate-code", async (req, res) => {
+    try {
+      const partnerId = req.session.partnerId;
+      
+      if (!partnerId) {
+        return res.status(401).json({ message: "Not authenticated as partner" });
+      }
+      
+      const partner = await storage.getPartner(partnerId);
+      
+      if (!partner) {
+        return res.status(404).json({ message: "Partner not found" });
+      }
+      
+      const referralCode = generateReferralCode(partner.companyName, partnerId);
+      
+      res.json({ referralCode });
+    } catch (error) {
+      console.error("Error generating referral code:", error);
+      res.status(500).json({ message: "Error generating code" });
+    }
+  });
 
   // Stripe checkout session - simplificado para máxima compatibilidad
   app.post("/api/stripe/create-checkout-session", async (req, res) => {
