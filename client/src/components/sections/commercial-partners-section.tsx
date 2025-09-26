@@ -6,14 +6,16 @@ export default function CommercialPartnersSection() {
   const partners = [
     {
       name: "Jesús Dominguez García",
+      dni: "71435981M",
       role: "Director de Marketing & Desarrollo Comercial",
       description: "Profesional con gran trayectoria en diferentes empresas del sector de salud mental y bienestar. Activo, dedicado y especialmente atento con los clientes, Jesús aporta su experiencia en estrategias de marketing para hacer llegar NFLOW a quienes más lo necesitan.",
-      specialties: ["Marketing Digital", "Desarrollo Comercial", "Atención al Cliente", "Estrategia de Crecimiento"],
+      specialties: ["Marketing Digital", "Desarrollo Comercial", "Atención al Cliente", "Crecimiento"],
       icon: TrendingUp,
       gradient: "from-blue-500 to-cyan-500"
     },
     {
-      name: "Ramón Molons San Román", 
+      name: "Ramón Molons San Román",
+      dni: "40267052Z", 
       role: "Socio Fundador & Director Técnico",
       description: "Especialista en ISO 45003 y fundador de NFLOW, Ramón combina su experiencia técnica con una visión comercial estratégica. Su dedicación y compromiso con la excelencia han sido fundamentales para posicionar NFLOW como referente en salud mental digital.",
       specialties: ["ISO 45003", "Dirección Técnica", "Innovación Digital", "Estrategia Empresarial"], 
@@ -57,6 +59,7 @@ export default function CommercialPartnersSection() {
                     <div className="relative z-10">
                       <IconComponent className="w-12 h-12 mb-4 opacity-90" />
                       <h3 className="text-2xl font-bold mb-2">{partner.name}</h3>
+                      <p className="text-sm opacity-75 mb-1">DNI: {partner.dni}</p>
                       <p className="text-lg opacity-90">{partner.role}</p>
                     </div>
                   </div>
