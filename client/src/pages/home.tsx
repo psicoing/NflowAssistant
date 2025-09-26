@@ -32,6 +32,7 @@ import NFlowComparisonSection from "@/components/sections/nflow-comparison-secti
 import ProfessionalSummarySection from "@/components/sections/professional-summary-section";
 import ProfessionalMeritSection from "@/components/sections/professional-merit-section";
 import ReferralInfoSection from "@/components/sections/referral-info-section";
+import CommercialPartnersSection from "@/components/sections/commercial-partners-section";
 
 export default function Home() {
 
@@ -69,6 +70,8 @@ export default function Home() {
         <NFlowShowcaseSection />
         <NosotrosSection />
         <ContactoSection />
+        
+        <CommercialPartnersSection />
         
         <InstitutoSection />
         {/* <PackagesSection /> */}
