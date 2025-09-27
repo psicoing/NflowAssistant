@@ -60,13 +60,13 @@ export default function QueEsNflowSection() {
           
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Para jóvenes y familias */}
-            <Card className="bg-gradient-to-br from-purple-600/20 to-pink-600/20 backdrop-blur-sm border-purple-300/30">
+            <Card className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 backdrop-blur-sm border-purple-400/40">
               <CardContent className="p-8">
                 <div className="flex items-center mb-6">
-                  <Heart className="w-8 h-8 text-purple-400 mr-3" />
+                  <Heart className="w-8 h-8 text-pink-400 mr-3" />
                   <h4 className="text-2xl font-bold text-white">Para jóvenes y familias</h4>
                 </div>
-                <p className="text-purple-100 text-lg leading-relaxed">
+                <p className="text-gray-200 text-lg leading-relaxed font-medium">
                   Apoyo emocional inmediato, con control parental opcional. Un espacio seguro para 
                   expresarse y recibir orientación profesional.
                 </p>
@@ -74,27 +74,27 @@ export default function QueEsNflowSection() {
             </Card>
 
             {/* Para empresas */}
-            <Card className="bg-gradient-to-br from-blue-600/20 to-cyan-600/20 backdrop-blur-sm border-blue-300/30">
+            <Card className="bg-gradient-to-br from-blue-900/40 to-cyan-900/40 backdrop-blur-sm border-blue-400/40">
               <CardContent className="p-8">
                 <div className="flex items-center mb-6">
-                  <Building2 className="w-8 h-8 text-blue-400 mr-3" />
+                  <Building2 className="w-8 h-8 text-cyan-400 mr-3" />
                   <h4 className="text-2xl font-bold text-white">Para empresas</h4>
                 </div>
-                <p className="text-blue-100 text-lg leading-relaxed">
-                  Cumple con la <strong>ISO 45003</strong> (bienestar laboral) de forma económica. 
+                <p className="text-gray-200 text-lg leading-relaxed font-medium">
+                  Cumple con la <strong className="text-white">ISO 45003</strong> (bienestar laboral) de forma económica. 
                   Cuida a tus empleados con una inversión mínima.
                 </p>
               </CardContent>
             </Card>
 
             {/* Para profesionales */}
-            <Card className="bg-gradient-to-br from-green-600/20 to-emerald-600/20 backdrop-blur-sm border-green-300/30">
+            <Card className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 backdrop-blur-sm border-green-400/40">
               <CardContent className="p-8">
                 <div className="flex items-center mb-6">
-                  <UserCheck className="w-8 h-8 text-green-400 mr-3" />
+                  <UserCheck className="w-8 h-8 text-emerald-400 mr-3" />
                   <h4 className="text-2xl font-bold text-white">Para profesionales</h4>
                 </div>
-                <p className="text-green-100 text-lg leading-relaxed">
+                <p className="text-gray-200 text-lg leading-relaxed font-medium">
                   Complemento eficaz para prevención y orientación en salud y educación. 
                   Una herramienta de apoyo profesional.
                 </p>
