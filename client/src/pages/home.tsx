@@ -40,13 +40,13 @@ export default function Home() {
     <div className="min-h-screen bg-nflow-dark">
       <Header showBanner={false} />
       <main className="pt-16">
+        <MentalHealthHeroSection />
         <BorderlessSupportSection />
         <LanguageBannerSection />
         <IntroCardSection />
         <NFlowCarouselSection />
         <FamilyImageSection />
         <NFlowComparisonSection />
-        <MentalHealthHeroSection />
         <YouthMentalHealthSection />
         <GlobalSupportSection />
         <AgeNoticeSection />
