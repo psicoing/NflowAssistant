@@ -33,6 +33,7 @@ import ProfessionalSummarySection from "@/components/sections/professional-summa
 import ProfessionalMeritSection from "@/components/sections/professional-merit-section";
 import ReferralInfoSection from "@/components/sections/referral-info-section";
 import CommercialPartnersSection from "@/components/sections/commercial-partners-section";
+import QueEsNflowSection from "@/components/sections/que-es-nflow-section";
 
 export default function Home() {
 
@@ -58,6 +59,7 @@ export default function Home() {
         <PersonasSection />
 
         <FounderSection />
+        <QueEsNflowSection />
         <PaidAppNotice />
         <TestimonialsSection />
         <LGBTISupportSection />

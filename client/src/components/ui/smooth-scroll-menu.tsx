@@ -20,7 +20,7 @@ const menuItems = [
   },
   {
     id: "fundador",
-    name: "Nuestro Fundador",
+    name: "Quienes Somos",
     sectionId: "founder",
     icon: User
   },
