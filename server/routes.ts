@@ -1171,80 +1171,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     `);
   });
 
-  // PayPal endpoints
-  app.get("/api/paypal/config", async (req, res) => {
-    try {
-      res.json({ 
-        clientId: process.env.PAYPAL_CLIENT_ID,
-        success: true
-      });
-    } catch (error) {
-      console.error("PayPal config error:", error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Error getting PayPal config" 
-      });
-    }
-  });
 
-  app.get("/api/paypal/create-subscription-button", async (req, res) => {
-    try {
-      res.json({ 
-        success: true, 
-        subscriptionId: "temp",
-        message: "PayPal button ready" 
-      });
-    } catch (error) {
-      console.error("PayPal button error:", error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Error loading PayPal" 
-      });
-    }
-  });
 
-  app.post("/api/paypal/capture-subscription", async (req, res) => {
-    try {
-      const { subscriptionId, subscriptionPlan = "basic" } = req.body;
-      const userId = req.session.userId;
-
-      if (!userId) {
-        return res.status(401).json({ 
-          success: false, 
-          message: "Usuario no autenticado" 
-        });
-      }
-
-      // Determine expiration date based on plan
-      let expiresAt;
-      if (subscriptionPlan === 'annual') {
-        expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000); // 365 days
-      } else {
-        expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
-      }
-
-      // Update user subscription status
-      await storage.updateUserSubscription(userId, {
-        status: "active",
-        plan: subscriptionPlan,
-        subscriptionId: subscriptionId,
-        expiresAt: expiresAt
-      });
-
-      res.json({ 
-        success: true, 
-        message: "Suscripción activada",
-        plan: subscriptionPlan,
-        expiresAt: expiresAt.toISOString()
-      });
-    } catch (error) {
-      console.error("PayPal capture error:", error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Error procesando pago" 
-      });
-    }
-  });
 
   // Stripe subscription capture (for return page)
   app.post("/api/stripe/capture-subscription", async (req, res) => {
@@ -1372,55 +1300,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Manual PayPal activation by username (for support/admin use)
-  app.post("/api/paypal/manual-activate", async (req, res) => {
-    try {
-      const { username } = req.body;
-
-      if (!username) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Username requerido" 
-        });
-      }
-
-      // Find user by username
-      const user = await storage.getUserByUsername(username);
-      if (!user) {
-        return res.status(404).json({ 
-          success: false, 
-          message: "Usuario no encontrado" 
-        });
-      }
-
-      // Check if user already has active subscription
-      if (user.subscriptionStatus === 'active') {
-        return res.json({ 
-          success: true, 
-          message: "Usuario ya tiene suscripción activa" 
-        });
-      }
-
-      // Activate subscription
-      await storage.updateUserSubscription(user.id, {
-        status: "active",
-        plan: "basic",
-        subscriptionId: "paypal_manual_" + Date.now(),
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
-      });
-
-      res.json({ 
-        success: true, 
-        message: `Usuario ${username} activado exitosamente con PayPal` 
-      });
-    } catch (error) {
-      console.error("PayPal manual activation error:", error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Error en activación manual PayPal" 
-      });
-    }
-  });
 
   // Get user question limit status
   app.get("/api/question-limit", async (req, res) => {
@@ -1607,45 +1486,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // 🟡 PayPal - Crear plan dinámicamente
-  app.post("/api/paypal/create-plan", async (req, res) => {
-    try {
-      const { amount, currency, name } = req.body;
-
-      // Crear plan usando PayPal Integration
-      const { PayPalIntegration } = await import('./paypal-integration.js');
-      const paypalIntegration = new PayPalIntegration();
-      
-      // Primero crear producto
-      const productId = await paypalIntegration.createProduct(
-        name || 'Plan Básico NFLOW',
-        'Suscripción mensual para acceso completo a NFLOW'
-      );
-
-      // Luego crear plan
-      const planId = await paypalIntegration.createPlan(
-        productId,
-        name || 'Plan Básico NFLOW',
-        amount || '2.99'
-      );
-
-      console.log('✅ PayPal plan creado:', planId);
-
-      res.json({ 
-        success: true, 
-        planId: planId,
-        productId: productId
-      });
-
-    } catch (error) {
-      console.error('Error creando plan PayPal:', error);
-      res.status(500).json({ 
-        success: false, 
-        message: 'Error creando plan PayPal',
-        error: error instanceof Error ? error.message : 'Error desconocido'
-      });
-    }
-  });
 
   // 🧪 TEST: Webhook sin verificación de firma para debugging
   app.post("/api/test/stripe-webhook", async (req, res) => {
