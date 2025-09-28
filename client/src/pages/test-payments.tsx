@@ -74,64 +74,6 @@ export default function TestPayments() {
     }
   };
 
-  const simulatePayPalPayment = async () => {
-    if (!testUserEmail.trim()) {
-      toast({
-        title: "Error",
-        description: "Ingresa un email para la prueba",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsProcessing(true);
-    
-    try {
-      // Simular webhook de PayPal
-      const response = await fetch('/api/paypal/webhook', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          event_type: 'PAYMENT.CAPTURE.COMPLETED',
-          resource: {
-            id: `paypal_test_${Date.now()}`,
-            state: 'approved',
-            payer: {
-              email_address: testUserEmail
-            }
-          }
-        }),
-      });
-
-      if (response.ok) {
-        toast({
-          title: "🧪 Prueba PayPal Exitosa",
-          description: "Webhook simulado procesado. Verificando activación...",
-          duration: 3000,
-        });
-
-        // Invalidate cache and redirect
-        await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
-        
-        setTimeout(() => {
-          setLocation("/chat");
-        }, 2000);
-      } else {
-        throw new Error('Webhook simulation failed');
-      }
-    } catch (error) {
-      console.error('PayPal test error:', error);
-      toast({
-        title: "Error en prueba",
-        description: "No se pudo simular el pago de PayPal",
-        variant: "destructive",
-      });
-    } finally {
-      setIsProcessing(false);
-    }
-  };
 
   const activateTestUser = async () => {
     if (!testUserEmail.trim()) {
@@ -200,7 +142,7 @@ export default function TestPayments() {
           </CardTitle>
           
           <CardDescription className="text-gray-300">
-            Simula webhooks de Stripe y PayPal para activar suscripciones
+            Simula webhooks de Stripe para activar suscripciones
           </CardDescription>
         </CardHeader>
         
@@ -255,24 +197,6 @@ export default function TestPayments() {
               </CardContent>
             </Card>
 
-            {/* Simulación PayPal */}
-            <Card className="bg-gray-700/30 border-blue-500/50">
-              <CardHeader className="text-center pb-3">
-                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-2">
-                  <CreditCard className="w-5 h-5 text-white" />
-                </div>
-                <CardTitle className="text-lg text-white">Simular PayPal</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Button 
-                  onClick={simulatePayPalPayment}
-                  disabled={isProcessing || !testUserEmail.trim()}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  {isProcessing ? "Procesando..." : "Simular Webhook PayPal"}
-                </Button>
-              </CardContent>
-            </Card>
           </div>
 
           {/* Activación Directa */}

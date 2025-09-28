@@ -190,7 +190,7 @@ export default function ActivarCuenta() {
                 <CardTitle className="text-xl text-white mb-2">Stripe - Plan Básico</CardTitle>
                 <div className="text-2xl font-bold text-purple-400 mb-2">€2.99/mes</div>
                 <CardDescription className="text-gray-300 text-sm">
-                  Alternativa si PayPal no funciona
+                  Pago seguro con Stripe
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
