@@ -1,10 +1,10 @@
 import { 
-  users, conversations, messages, resources, paypalTransactions, partners, partnerReferrals,
+  users, conversations, messages, resources, stripeTransactions, partners, partnerReferrals,
   type User, type InsertUser, 
   type Conversation, type InsertConversation,
   type Message, type InsertMessage,
   type Resource, type InsertResource,
-  type PaypalTransaction, type InsertPaypalTransaction,
+  type StripeTransaction, type InsertStripeTransaction,
   type Partner, type InsertPartner,
   type PartnerReferral, type InsertPartnerReferral
 } from "@shared/schema";
@@ -45,11 +45,11 @@ export interface IStorage {
   getResourcesByCategory(category: string): Promise<Resource[]>;
   createResource(resource: InsertResource): Promise<Resource>;
   
-  createPaypalTransaction(transaction: InsertPaypalTransaction): Promise<PaypalTransaction>;
-  updatePaypalTransaction(paypalOrderId: string, status: string): Promise<PaypalTransaction>;
-  getPaypalTransactionsByUser(userId: number): Promise<PaypalTransaction[]>;
+  createStripeTransaction(transaction: InsertStripeTransaction): Promise<StripeTransaction>;
+  updateStripeTransaction(stripeSessionId: string, status: string): Promise<StripeTransaction>;
+  getStripeTransactionsByUser(userId: number): Promise<StripeTransaction[]>;
   getAllUsers(): Promise<User[]>;
-  getAllPaypalTransactions(): Promise<PaypalTransaction[]>;
+  getAllStripeTransactions(): Promise<StripeTransaction[]>;
   
   // Partner operations
   getPartner(id: number): Promise<Partner | undefined>;
@@ -221,40 +221,40 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async createPaypalTransaction(transaction: InsertPaypalTransaction): Promise<PaypalTransaction> {
-    const [paypalTransaction] = await db
-      .insert(paypalTransactions)
+  async createStripeTransaction(transaction: InsertStripeTransaction): Promise<StripeTransaction> {
+    const [stripeTransaction] = await db
+      .insert(stripeTransactions)
       .values(transaction)
       .returning();
-    return paypalTransaction;
+    return stripeTransaction;
   }
 
-  async updatePaypalTransaction(paypalOrderId: string, status: string): Promise<PaypalTransaction> {
+  async updateStripeTransaction(stripeSessionId: string, status: string): Promise<StripeTransaction> {
     const [transaction] = await db
-      .update(paypalTransactions)
+      .update(stripeTransactions)
       .set({
         status: status,
-        completedAt: status === 'COMPLETED' ? new Date() : null,
+        completedAt: status === 'completed' ? new Date() : null,
       })
-      .where(eq(paypalTransactions.paypalOrderId, paypalOrderId))
+      .where(eq(stripeTransactions.stripeSessionId, stripeSessionId))
       .returning();
     return transaction;
   }
 
-  async getPaypalTransactionsByUser(userId: number): Promise<PaypalTransaction[]> {
+  async getStripeTransactionsByUser(userId: number): Promise<StripeTransaction[]> {
     return await db
       .select()
-      .from(paypalTransactions)
-      .where(eq(paypalTransactions.userId, userId))
-      .orderBy(paypalTransactions.createdAt);
+      .from(stripeTransactions)
+      .where(eq(stripeTransactions.userId, userId))
+      .orderBy(stripeTransactions.createdAt);
   }
 
   async getAllUsers(): Promise<User[]> {
     return await db.select().from(users);
   }
 
-  async getAllPaypalTransactions(): Promise<PaypalTransaction[]> {
-    return await db.select().from(paypalTransactions);
+  async getAllStripeTransactions(): Promise<StripeTransaction[]> {
+    return await db.select().from(stripeTransactions);
   }
 
   // Partner operations
