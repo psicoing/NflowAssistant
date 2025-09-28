@@ -121,7 +121,7 @@ export default function PartnerDashboardSimple() {
 
   const getConversionRate = () => {
     if (!partner.totalReferrals || referrals.length === 0) return 0;
-    return Math.round((referrals.filter(r => r.status === 'paid').length / partner.totalReferrals) * 100);
+    return Math.round((referrals.filter(r => r.status === 'completed').length / partner.totalReferrals) * 100);
   };
 
   const getStatusBadge = (status: string) => {
@@ -323,7 +323,7 @@ export default function PartnerDashboardSimple() {
                 <div className="text-xs text-blue-600">Tasa de Conversión</div>
               </div>
               <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <div className="text-2xl font-bold text-green-600">{referrals.filter(r => r.status === 'paid').length}</div>
+                <div className="text-2xl font-bold text-green-600">{referrals.filter(r => r.status === 'completed').length}</div>
                 <div className="text-xs text-green-600">Pagos Exitosos</div>
               </div>
               <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
@@ -459,7 +459,7 @@ export default function PartnerDashboardSimple() {
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-3">
                         <div className="flex-shrink-0">
-                          {referral.status === 'paid' ? (
+                          {referral.status === 'completed' ? (
                             <CheckCircle className="w-5 h-5 text-green-500" />
                           ) : (
                             <Clock className="w-5 h-5 text-yellow-500" />
@@ -482,8 +482,8 @@ export default function PartnerDashboardSimple() {
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <Badge variant={referral.status === 'paid' ? 'default' : 'secondary'}>
-                        {referral.status === 'paid' ? 'Pagado' : 'Pendiente'}
+                      <Badge variant={referral.status === 'completed' ? 'default' : 'secondary'}>
+                        {referral.status === 'completed' ? 'Pagado' : 'Pendiente'}
                       </Badge>
                     </div>
                   </div>
