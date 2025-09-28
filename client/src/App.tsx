@@ -24,11 +24,9 @@ import PartnerDashboard from "@/pages/partner-dashboard-simple";
 import PWAInstallPrompt from "@/components/ui/pwa-install-prompt";
 import PaymentRedirect from "@/pages/payment-redirect";
 import ActivarCuenta from "@/pages/activar-cuenta";
-import PayPalReturn from "@/pages/paypal-return";
 import StripeReturn from "@/pages/stripe-return";
 import ActivarStripe from "@/pages/activar-stripe";
 import StripeActivateManual from "@/pages/stripe-activate-manual";
-import PayPalActivateManual from "@/pages/paypal-activate-manual";
 import QuickActivate from "@/pages/quick-activate";
 import ActivacionExitosa from "@/pages/activacion-exitosa";
 import TerminosCondiciones from "@/pages/legal/terminos";
@@ -51,7 +49,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/paypal-return", "/admin/login", "/partners/login", "/partners/register", "/partners", "/partners/dashboard", "/nosotros", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/partners/login", "/partners/register", "/partners", "/partners/dashboard", "/nosotros", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
     // Allow blog article routes
     if (location.startsWith("/blog/")) {
       return;
@@ -101,12 +99,10 @@ function AuthenticatedRouter() {
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/payment-redirect" component={PaymentRedirect} />
-      <Route path="/paypal-return" component={PayPalReturn} />
       <Route path="/stripe-return" component={StripeReturn} />
       <Route path="/activacion-exitosa" component={ActivacionExitosa} />
       <Route path="/activar-stripe" component={ActivarStripe} />
       <Route path="/stripe-manual" component={StripeActivateManual} />
-      <Route path="/paypal-manual" component={PayPalActivateManual} />
       <Route path="/activar" component={QuickActivate} />
       <Route path="/legal/terminos" component={TerminosCondiciones} />
       <Route path="/legal/privacidad" component={PoliticaPrivacidad} />
