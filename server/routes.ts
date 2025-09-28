@@ -2,11 +2,13 @@ import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema } from "@shared/schema";
+import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
 import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 import "./types"; // Import session types
 
 // Helper function to check if user has active subscription
@@ -1054,27 +1056,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 const partner = await storage.getPartner(partnerId);
                 
                 if (partner && (partner.status === 'approved' || partner.status === 'active')) {
-                  const amount = (eventData.amount_total || 299).toString(); // Amount in cents
-                  const commission = Math.round((eventData.amount_total || 299) * 0.1).toString(); // 10% commission
+                  const amount = ((eventData.amount_total || 2999) / 100).toFixed(2); // Convert from cents to euros
+                  const commission = ((eventData.amount_total || 2999) * 0.1 / 100).toFixed(2); // 10% commission in euros
                   
-                  // Create partner referral record
-                  await storage.createPartnerReferral({
-                    partnerId: partnerId,
-                    userId: user.id,
-                    referralCode: metadata.referralCode,
-                    subscriptionPlan: 'basic',
-                    amount: amount,
-                    commission: commission,
-                    status: 'paid'
-                  });
+                  console.log(`💰 Processing payment: €${amount}, Commission: €${commission}`);
+                  
+                  // Check if a referral already exists for this user and partner
+                  const existingReferrals = await storage.getPartnerReferrals(partnerId);
+                  const existingReferral = existingReferrals.find(r => r.userId === user.id);
+                  
+                  if (existingReferral) {
+                    console.log(`📝 Updating existing referral record for user ${user.id}`);
+                    // Update existing referral with payment information
+                    await db.update(partnerReferrals)
+                      .set({
+                        subscriptionPlan: 'basic',
+                        amount: amount,
+                        commission: commission,
+                        status: 'completed',
+                        paidAt: new Date()
+                      })
+                      .where(eq(partnerReferrals.id, existingReferral.id));
+                  } else {
+                    console.log(`➕ Creating new referral record for user ${user.id}`);
+                    // Create new partner referral record
+                    await storage.createPartnerReferral({
+                      partnerId: partnerId,
+                      userId: user.id,
+                      referralCode: metadata.referralCode,
+                      subscriptionPlan: 'basic',
+                      amount: amount,
+                      commission: commission,
+                      status: 'completed'
+                    });
+                  }
                   
                   // Update partner statistics
-                  const newReferrals = (partner.totalReferrals || 0) + 1;
-                  const currentEarnings = parseFloat(partner.totalEarnings || "0");
-                  const newEarnings = (currentEarnings + parseFloat(commission)).toString();
-                  await storage.updatePartnerStats(partnerId, newReferrals, newEarnings);
+                  const allReferrals = await storage.getPartnerReferrals(partnerId);
+                  const completedReferrals = allReferrals.filter(r => r.status === 'completed');
+                  const totalEarnings = completedReferrals.reduce((sum, r) => sum + parseFloat(r.commission || '0'), 0);
                   
-                  console.log(`✅ Commission processed: €${(parseFloat(commission) / 100).toFixed(2)} for partner: ${partner.companyName}`);
+                  await storage.updatePartnerStats(partnerId, completedReferrals.length, totalEarnings.toFixed(2));
+                  
+                  console.log(`✅ Commission processed: €${commission} for partner: ${partner.companyName}`);
+                  console.log(`📊 Partner stats updated: ${completedReferrals.length} referrals, €${totalEarnings.toFixed(2)} total earnings`);
                 }
               } catch (error) {
                 console.error("❌ Error processing referral commission:", error);
