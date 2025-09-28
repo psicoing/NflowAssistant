@@ -1056,8 +1056,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 const partner = await storage.getPartner(partnerId);
                 
                 if (partner && (partner.status === 'approved' || partner.status === 'active')) {
-                  const amount = ((eventData.amount_total || 2999) / 100).toFixed(2); // Convert from cents to euros
-                  const commission = ((eventData.amount_total || 2999) * 0.1 / 100).toFixed(2); // 10% commission in euros
+                  const amount = ((eventData.amount_total || 299) / 100).toFixed(2); // Convert from cents to euros
+                  const commission = ((eventData.amount_total || 299) * 0.1 / 100).toFixed(2); // 10% commission in euros
                   
                   console.log(`💰 Processing payment: €${amount}, Commission: €${commission}`);
                   
