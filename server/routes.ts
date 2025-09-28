@@ -38,7 +38,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User registration
   app.post("/api/auth/register", async (req, res) => {
     try {
-      const { username, password, email, birthDate, userType } = req.body;
+      const { username, password, email, birthDate, userType, referralCode } = req.body;
       
       if (!username || !password) {
         return res.status(400).json({ 
@@ -111,6 +111,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Set session for newly registered user
       req.session.userId = newUser.id;
+
+      // Process referral code if provided
+      if (referralCode && typeof referralCode === 'string') {
+        try {
+          console.log("=== PROCESSING REFERRAL CODE DURING REGISTRATION ===");
+          console.log("Referral code:", referralCode);
+          console.log("New user ID:", newUser.id);
+          
+          // Parse referral code format: COMPANYPREFIX_PARTNERID_TIMESTAMP
+          const parts = referralCode.split('_');
+          if (parts.length >= 2) {
+            const partnerIdStr = parts[parts.length - 2];
+            const partnerId = parseInt(partnerIdStr);
+            
+            if (!isNaN(partnerId)) {
+              // Verify partner exists and is active
+              const partner = await storage.getPartner(partnerId);
+              if (partner && (partner.status === 'approved' || partner.status === 'active')) {
+                console.log(`✓ Valid partner found: ${partner.companyName} (ID: ${partnerId})`);
+                
+                // Create partner referral record
+                await storage.createPartnerReferral({
+                  partnerId: partnerId,
+                  userId: newUser.id,
+                  referralCode: referralCode.trim(),
+                  subscriptionPlan: 'pending', // Will be updated when payment is made
+                  amount: '0.00', // Will be updated when payment is made
+                  commission: '0.00', // Will be updated when payment is made
+                  status: 'pending'
+                });
+                
+                console.log(`✓ Partner referral record created for partner ${partnerId} and user ${newUser.id}`);
+              } else {
+                console.log(`⚠ Invalid or inactive partner with ID: ${partnerId}`);
+              }
+            } else {
+              console.log(`⚠ Invalid partner ID in referral code: ${partnerIdStr}`);
+            }
+          } else {
+            console.log(`⚠ Invalid referral code format: ${referralCode}`);
+          }
+        } catch (error) {
+          console.error("Error processing referral code during registration:", error);
+        }
+      }
 
       res.json({
         success: true,
