@@ -52,14 +52,14 @@ export const resources = pgTable("resources", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const paypalTransactions = pgTable("paypal_transactions", {
+export const stripeTransactions = pgTable("stripe_transactions", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").notNull(),
-  paypalOrderId: text("paypal_order_id").notNull(),
+  stripeSessionId: text("stripe_session_id").notNull(),
   subscriptionPlan: text("subscription_plan").notNull(),
   amount: text("amount").notNull(),
   currency: text("currency").notNull(),
-  status: text("status").notNull(), // CREATED, APPROVED, COMPLETED, CANCELLED
+  status: text("status").notNull(), // pending, completed, failed, cancelled
   createdAt: timestamp("created_at").defaultNow().notNull(),
   completedAt: timestamp("completed_at"),
 });
@@ -125,7 +125,7 @@ export const insertResourceSchema = createInsertSchema(resources).omit({
   createdAt: true,
 });
 
-export const insertPaypalTransactionSchema = createInsertSchema(paypalTransactions).omit({
+export const insertStripeTransactionSchema = createInsertSchema(stripeTransactions).omit({
   id: true,
   createdAt: true,
   completedAt: true,
@@ -156,8 +156,8 @@ export type InsertMessage = z.infer<typeof insertMessageSchema>;
 export type Message = typeof messages.$inferSelect;
 export type InsertResource = z.infer<typeof insertResourceSchema>;
 export type Resource = typeof resources.$inferSelect;
-export type InsertPaypalTransaction = z.infer<typeof insertPaypalTransactionSchema>;
-export type PaypalTransaction = typeof paypalTransactions.$inferSelect;
+export type InsertStripeTransaction = z.infer<typeof insertStripeTransactionSchema>;
+export type StripeTransaction = typeof stripeTransactions.$inferSelect;
 export type InsertPartner = z.infer<typeof insertPartnerSchema>;
 export type Partner = typeof partners.$inferSelect;
 export type InsertPartnerReferral = z.infer<typeof insertPartnerReferralSchema>;
