@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { UserPlus, User, Building } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useReferralCode } from "@/hooks/useReferralCode";
 
 export default function Registro() {
   const [, setLocation] = useLocation();
@@ -25,6 +26,7 @@ export default function Registro() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [createdCredentials, setCreatedCredentials] = useState({ username: "", password: "" });
   const { toast } = useToast();
+  const { referralCode, isValidating, isValid, updateReferralCode } = useReferralCode();
 
   // Función para calcular la edad
   const calculateAge = (birthDate: string) => {
@@ -91,7 +93,8 @@ export default function Registro() {
           password: formData.password,
           email: formData.email,
           birthDate: formData.userType === "individual" ? formData.birthDate : null,
-          userType: formData.userType
+          userType: formData.userType,
+          referralCode: referralCode.trim() || null
         }),
       });
 
