@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Play, Maximize2, X, Brain, MessageCircle, Sparkles } from "lucide-react";
-import videoDemoPath from "@assets/Grabación de pantalla 2025-09-27 173802_1759151810234.mp4";
+import videoDemoPath from "@assets/Grabación de pantalla 2025-09-26 180946_1759154539586.mp4";
 
 export default function NeuropsiDemoSection() {
   const [isVideoExpanded, setIsVideoExpanded] = useState(false);
