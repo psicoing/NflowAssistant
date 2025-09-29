@@ -36,7 +36,7 @@ export default function MentalHealthHeroSection() {
                 </div>
               </div>
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 drop-shadow-md leading-tight">
-                👉 No estás solo. NFLOW está aquí para escucharte y acompañarte.
+                👉 NFLOW está aquí para escucharte y acompañarte.
               </h1>
               <p className="text-lg md:text-xl text-white/90 max-w-4xl mx-auto font-medium leading-relaxed">
                 💡 Cuando sientes estrés, dudas o soledad, NFLOW te da apoyo inmediato, confidencial y accesible desde tu móvil, siempre que lo necesites.
