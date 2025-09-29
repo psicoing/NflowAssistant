@@ -26,6 +26,7 @@ import ContactoSection from "@/components/sections/contacto-section";
 import TestimonialsSection from "@/components/sections/testimonials-section";
 import FounderSection from "@/components/sections/founder-section";
 import IntroCardSection from "@/components/sections/intro-card-section";
+import NeuropsiDemoSection from "@/components/sections/neuropsi-demo-section";
 import NFlowCarouselSection from "@/components/sections/nflow-carousel-section";
 import FamilyImageSection from "@/components/sections/family-image-section";
 import NFlowComparisonSection from "@/components/sections/nflow-comparison-section";
@@ -45,6 +46,7 @@ export default function Home() {
         <BorderlessSupportSection />
         <LanguageBannerSection />
         <IntroCardSection />
+        <NeuropsiDemoSection />
         <NFlowCarouselSection />
         <FamilyImageSection />
         <NFlowComparisonSection />
