@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Brain, Clock, Users, Sparkles, Shield, Heart, Target, Star } from "lucide-react";
+import { CheckCircle, Brain, Clock, Users, Sparkles, Shield, Heart, Target, Star, Code, Zap, MessageSquare } from "lucide-react";
 import techDevicesImage from "@assets/generated_images/Modern_tech_devices_mental_health_acb51148.png";
 import robotHumanImage from "@assets/generated_images/Human_and_AI_robot_collaboration_1312c395.png";
 import DomainInfoBanner from "@/components/ui/domain-info-banner";
@@ -59,6 +59,58 @@ export default function IntroCardSection() {
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">Disponible 24/7</h3>
                 <p className="text-gray-600 text-sm">Para ti o tu empresa</p>
+              </div>
+            </div>
+
+            {/* Advanced Technology Feature */}
+            <div className="mb-10">
+              <div className="relative bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 rounded-3xl p-8 text-white overflow-hidden">
+                {/* Background decorative elements */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
+                <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center justify-center mb-6">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
+                        <Code className="w-8 h-8 text-white" />
+                      </div>
+                      <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
+                        <Brain className="w-8 h-8 text-white" />
+                      </div>
+                      <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
+                        <Zap className="w-8 h-8 text-white" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center">
+                    <h3 className="text-2xl md:text-3xl font-bold mb-4">
+                      🚀 Tecnología LLM Avanzada
+                    </h3>
+                    <p className="text-lg md:text-xl text-purple-100 mb-6 max-w-3xl mx-auto leading-relaxed">
+                      <strong>NFLOW no es un chatbot con respuestas prefabricadas.</strong> Es un modelo de lenguaje LLM avanzado programado con Python e integrado con la tecnología más moderna de ChatGPT, diseñado específicamente para ofrecer una experiencia real y conversacional única.
+                    </p>
+                    
+                    <div className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                      <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                        <MessageSquare className="w-6 h-6 text-purple-200 mx-auto mb-2" />
+                        <div className="text-sm font-semibold text-purple-100">Conversación Natural</div>
+                        <div className="text-xs text-purple-200 mt-1">Interacción fluida y humana</div>
+                      </div>
+                      <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                        <Brain className="w-6 h-6 text-purple-200 mx-auto mb-2" />
+                        <div className="text-sm font-semibold text-purple-100">IA Contextual</div>
+                        <div className="text-xs text-purple-200 mt-1">Comprende y adapta respuestas</div>
+                      </div>
+                      <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                        <Code className="w-6 h-6 text-purple-200 mx-auto mb-2" />
+                        <div className="text-sm font-semibold text-purple-100">Programación Avanzada</div>
+                        <div className="text-xs text-purple-200 mt-1">Python + GPT integrados</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
