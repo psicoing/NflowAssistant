@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Play, Maximize2, X, Brain, MessageCircle, Sparkles } from "lucide-react";
 import videoDemoPath from "@assets/Grabación de pantalla 2025-09-27 173802_1759151810234.mp4";
 
 export default function NeuropsiDemoSection() {
   const [isVideoExpanded, setIsVideoExpanded] = useState(false);
+  const [canAutoplay, setCanAutoplay] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const expandedVideoRef = useRef<HTMLVideoElement>(null);
 
   return (
     <section className="py-12 px-4 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
@@ -33,11 +36,20 @@ export default function NeuropsiDemoSection() {
                   {/* Mini TV Effect */}
                   <div className="relative">
                     <video
+                      ref={videoRef}
                       className="w-full h-64 object-cover rounded-2xl"
                       muted
                       loop
-                      autoPlay
                       playsInline
+                      onLoadedData={() => {
+                        if (videoRef.current) {
+                          videoRef.current.play().then(() => {
+                            setCanAutoplay(true);
+                          }).catch(() => {
+                            setCanAutoplay(false);
+                          });
+                        }
+                      }}
                     >
                       <source src={videoDemoPath} type="video/mp4" />
                       Tu navegador no soporta videos HTML5.
@@ -46,17 +58,37 @@ export default function NeuropsiDemoSection() {
                     {/* TV Border Effect */}
                     <div className="absolute inset-0 rounded-2xl border-4 border-gray-800 pointer-events-none"></div>
                     
-                    {/* Expand Button Overlay */}
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-2xl">
-                      <Button
-                        onClick={() => setIsVideoExpanded(true)}
-                        className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border border-white/30 rounded-full px-6 py-3"
-                        data-testid="button-expand-video"
-                      >
-                        <Maximize2 className="w-5 h-5 mr-2" />
-                        Ver en Grande
-                      </Button>
-                    </div>
+                    {/* Play button overlay for when autoplay fails - Highest Priority */}
+                    {!canAutoplay && (
+                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center rounded-2xl z-20">
+                        <Button
+                          onClick={() => {
+                            if (videoRef.current) {
+                              videoRef.current.play();
+                              setCanAutoplay(true);
+                            }
+                          }}
+                          className="bg-white/95 hover:bg-white text-black rounded-full w-16 h-16 p-0 shadow-lg"
+                          data-testid="button-play-video"
+                        >
+                          <Play className="w-8 h-8" />
+                        </Button>
+                      </div>
+                    )}
+                    
+                    {/* Expand Button Overlay - Only show when video can play */}
+                    {canAutoplay && (
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-2xl z-10">
+                        <Button
+                          onClick={() => setIsVideoExpanded(true)}
+                          className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border border-white/30 rounded-full px-6 py-3"
+                          data-testid="button-expand-video"
+                        >
+                          <Maximize2 className="w-5 h-5 mr-2" />
+                          Ver en Grande
+                        </Button>
+                      </div>
+                    )}
                   </div>
                   
                   {/* Mini TV Stand */}
@@ -141,20 +173,34 @@ export default function NeuropsiDemoSection() {
 
         {/* Expanded Video Modal */}
         {isVideoExpanded && (
-          <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+          <div 
+            className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setIsVideoExpanded(false);
+              }
+            }}
+          >
             <div className="relative w-full max-w-6xl">
               <Button
                 onClick={() => setIsVideoExpanded(false)}
-                className="absolute -top-12 right-0 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full w-10 h-10 p-0"
+                className="absolute -top-12 right-0 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full w-10 h-10 p-0 z-10"
                 data-testid="button-close-video"
               >
                 <X className="w-5 h-5" />
               </Button>
               <video
+                ref={expandedVideoRef}
                 className="w-full h-auto max-h-[80vh] rounded-2xl"
                 controls
-                autoPlay
                 playsInline
+                onLoadedData={() => {
+                  if (expandedVideoRef.current) {
+                    expandedVideoRef.current.play().catch(() => {
+                      // Si falla el autoplay, el usuario puede usar los controles
+                    });
+                  }
+                }}
               >
                 <source src={videoDemoPath} type="video/mp4" />
                 Tu navegador no soporta videos HTML5.
