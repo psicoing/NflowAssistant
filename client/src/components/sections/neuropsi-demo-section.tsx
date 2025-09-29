@@ -39,6 +39,11 @@ export default function NeuropsiDemoSection() {
                         <MessageCircle className="w-5 h-5 text-blue-500" />
                         <span className="text-sm text-gray-700">Conversación activa...</span>
                       </div>
+                      
+                      {/* Mensaje temporal en rojo destacado */}
+                      <div className="bg-red-600 text-white px-6 py-2 rounded-full shadow-lg animate-pulse">
+                        <span className="text-sm font-bold">🎬 Video disponible en breve</span>
+                      </div>
                     </div>
                     
                     {/* TV Border Effect */}
