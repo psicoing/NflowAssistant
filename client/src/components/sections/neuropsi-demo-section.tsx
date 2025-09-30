@@ -13,7 +13,7 @@ export default function NeuropsiDemoSection() {
               <Sparkles className="w-6 h-6 text-white animate-pulse" />
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-3">
-              🤖 Así es NEUROPSI-AI por Dentro
+              Haz un tour por NFLOW
             </h2>
             <div className="w-24 h-1 bg-white/30 mx-auto rounded-full"></div>
           </div>
@@ -69,11 +69,10 @@ export default function NeuropsiDemoSection() {
               <div className="space-y-6">
                 <div className="space-y-4">
                   <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
-                    🎯 Esto es lo que verán tus usuarios
+                    Visita la demo
                   </h3>
                   <p className="text-lg text-gray-700 leading-relaxed">
-                    Cuando los usuarios se registren en NFLOW, tendrán acceso completo a 
-                    <strong className="text-blue-600"> NEUROPSI-AI</strong>, nuestro avanzado robot de psicología digital.
+                    Disfruta del paseo virtual, y conoce a nuestra robot <strong className="text-blue-600">NeuroPsi-AI</strong>, que te está esperando.
                   </p>
                 </div>
 
