@@ -11,6 +11,7 @@ import Home from "@/pages/home";
 import Chat from "@/pages/chat";
 import EjemplosChat from "@/pages/ejemplos-chat";
 import Resources from "@/pages/resources";
+import RecursosGratis from "@/pages/recursos";
 import Consejos from "@/pages/consejos";
 import Partners from "@/pages/partners";
 import Recompensas from "@/pages/recompensas";
@@ -49,7 +50,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/partners/login", "/partners/register", "/partners", "/partners/dashboard", "/nosotros", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/partners/login", "/partners/register", "/partners", "/partners/dashboard", "/nosotros", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
     // Allow blog article routes
     if (location.startsWith("/blog/")) {
       return;
@@ -83,6 +84,7 @@ function AuthenticatedRouter() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/ejemplos-chat" component={EjemplosChat} />
+      <Route path="/recursos" component={RecursosGratis} />
       <Route path="/login" component={Login} />
       <Route path="/registro" component={Registro} />
       <Route path="/activar-cuenta" component={ActivarCuenta} />
