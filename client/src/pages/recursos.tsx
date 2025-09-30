@@ -285,6 +285,12 @@ export default function RecursosGratis() {
                           variant="outline"
                           size="sm"
                           className="bg-white/80 hover:bg-white border-gray-200"
+                          onClick={() => {
+                            if (navigator.share) {
+                              navigator.share({ title: afirmacion.text, text: afirmacion.subtext });
+                            }
+                          }}
+                          data-testid={`button-share-affirmation-${index}`}
                         >
                           <Share2 className="w-4 h-4 mr-2" />
                           Compartir
@@ -293,6 +299,16 @@ export default function RecursosGratis() {
                           variant="outline"
                           size="sm"
                           className="bg-white/80 hover:bg-white border-gray-200"
+                          onClick={() => {
+                            const blob = new Blob([`${afirmacion.text}\n\n${afirmacion.subtext}`], { type: 'text/plain' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = 'afirmacion.txt';
+                            a.click();
+                            URL.revokeObjectURL(url);
+                          }}
+                          data-testid={`button-download-affirmation-${index}`}
                         >
                           <Download className="w-4 h-4 mr-2" />
                           Guardar
@@ -318,6 +334,7 @@ export default function RecursosGratis() {
                 size="lg"
                 className="bg-white text-indigo-600 hover:bg-gray-100 font-semibold px-8"
                 onClick={() => window.location.href = "/login"}
+                data-testid="button-cta-premium"
               >
                 Comenzar Ahora
                 <ChevronRight className="w-5 h-5 ml-2" />
