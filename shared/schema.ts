@@ -78,6 +78,7 @@ export const partners = pgTable("partners", {
   licenseNumber: text("license_number"), // Para clínicas/profesionales de salud
   documentsVerified: boolean("documents_verified").default(false),
   commissionRate: text("commission_rate").default("10"), // Porcentaje de comisión
+  referralCode: text("referral_code").unique(), // Código de referencia permanente
   totalReferrals: integer("total_referrals").default(0),
   totalEarnings: text("total_earnings").default("0"),
   lastLoginAt: timestamp("last_login_at"),

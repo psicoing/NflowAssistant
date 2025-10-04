@@ -16,6 +16,7 @@ interface Partner {
   email: string;
   status: string;
   partnerType: string;
+  referralCode?: string;
   totalReferrals: number;
   totalEarnings: string;
   createdAt: string;
@@ -52,6 +53,13 @@ export default function PartnerDashboardSimple() {
       setLocation("/partners/login");
     }
   }, [partner, partnerLoading, error, setLocation]);
+
+  // Load partner's permanent referral code automatically
+  useEffect(() => {
+    if (partner?.referralCode) {
+      setReferralCode(partner.referralCode);
+    }
+  }, [partner]);
 
   if (partnerLoading) {
     return (
@@ -90,7 +98,7 @@ export default function PartnerDashboardSimple() {
       setReferralCode(data.referralCode);
       toast({
         title: "Código generado",
-        description: "Tu código de referencia ha sido creado",
+        description: "Tu código de referencia permanente ha sido creado",
       });
     } catch (error) {
       toast({

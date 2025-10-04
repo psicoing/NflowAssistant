@@ -2,7 +2,7 @@ import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals } from "@shared/schema";
+import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
 import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
 import bcrypt from "bcrypt";
@@ -803,7 +803,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Generate referral code
+  // Generate or get permanent referral code
   app.post("/api/partners/generate-code", async (req, res) => {
     try {
       const partnerId = req.session.partnerId;
@@ -818,7 +818,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Partner not found" });
       }
       
+      // Check if partner already has a permanent referral code
+      if (partner.referralCode) {
+        console.log(`Partner ${partnerId} already has code: ${partner.referralCode}`);
+        return res.json({ referralCode: partner.referralCode });
+      }
+      
+      // Generate permanent referral code (only once)
       const referralCode = generateReferralCode(partner.companyName, partnerId);
+      
+      // Save it to partner profile
+      await db.update(partners)
+        .set({ referralCode })
+        .where(eq(partners.id, partnerId));
+      
+      console.log(`Generated permanent code for partner ${partnerId}: ${referralCode}`);
       
       res.json({ referralCode });
     } catch (error) {
