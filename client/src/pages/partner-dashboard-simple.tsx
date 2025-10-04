@@ -109,8 +109,13 @@ export default function PartnerDashboardSimple() {
     });
   };
 
+  const getBaseUrl = () => {
+    // Use production URL if available, otherwise fallback to current origin
+    return import.meta.env.VITE_APP_URL || window.location.origin.replace('.replit.dev', '.replit.app');
+  };
+
   const copyPromotionalLink = (linkType: string) => {
-    const baseUrl = window.location.origin;
+    const baseUrl = getBaseUrl();
     const url = `${baseUrl}/registro?ref=${referralCode}`;
     navigator.clipboard.writeText(url);
     toast({
@@ -266,7 +271,7 @@ export default function PartnerDashboardSimple() {
                     </label>
                     <div className="flex items-center space-x-2">
                       <div className="flex-1 p-3 bg-blue-50 dark:bg-blue-900/20 rounded text-xs font-mono break-all text-blue-700 dark:text-blue-300">
-                        {window.location.origin}/registro?ref={referralCode}
+                        {getBaseUrl()}/registro?ref={referralCode}
                       </div>
                       <Button 
                         variant="outline" 
@@ -381,7 +386,7 @@ export default function PartnerDashboardSimple() {
                   <label className="text-sm font-medium">Enlace General</label>
                   <div className="flex items-center space-x-2">
                     <div className="flex-1 p-2 bg-gray-100 dark:bg-gray-800 rounded text-xs font-mono break-all">
-                      {window.location.origin}/registro?ref={referralCode}
+                      {getBaseUrl()}/registro?ref={referralCode}
                     </div>
                     <Button variant="outline" size="sm" onClick={() => copyPromotionalLink('general')}>
                       <Copy className="w-4 h-4" />
@@ -399,7 +404,7 @@ export default function PartnerDashboardSimple() {
                       variant="outline" 
                       size="sm" 
                       onClick={() => {
-                        const message = `¡Hola! Te recomiendo NFLOW para salud mental con IA. Usa mi código: ${referralCode} - ${window.location.origin}/registro?ref=${referralCode}`;
+                        const message = `¡Hola! Te recomiendo NFLOW para salud mental con IA. Usa mi código: ${referralCode} - ${getBaseUrl()}/registro?ref=${referralCode}`;
                         navigator.clipboard.writeText(message);
                         toast({ title: "Mensaje de WhatsApp copiado" });
                       }}
@@ -420,7 +425,7 @@ export default function PartnerDashboardSimple() {
                       size="sm" 
                       onClick={() => {
                         const subject = "Herramienta de Salud Mental con IA - NFLOW";
-                        const body = `Hola,\n\nQuería recomendarte NFLOW, una innovadora herramienta de salud mental que utiliza IA para brindar apoyo 24/7.\n\nPuedes probarla usando mi código de referencia: ${referralCode}\n\nEnlace: ${window.location.origin}/registro?ref=${referralCode}\n\n¡Espero que te sea útil!\n\nSaludos`;
+                        const body = `Hola,\n\nQuería recomendarte NFLOW, una innovadora herramienta de salud mental que utiliza IA para brindar apoyo 24/7.\n\nPuedes probarla usando mi código de referencia: ${referralCode}\n\nEnlace: ${getBaseUrl()}/registro?ref=${referralCode}\n\n¡Espero que te sea útil!\n\nSaludos`;
                         navigator.clipboard.writeText(`${subject}\n\n${body}`);
                         toast({ title: "Plantilla de email copiada" });
                       }}
@@ -440,7 +445,7 @@ export default function PartnerDashboardSimple() {
                       variant="outline" 
                       size="sm" 
                       onClick={() => {
-                        const message = `🧠 Descubre NFLOW: Revolucionaria herramienta de salud mental con IA disponible 24/7 💙\n\n✅ Apoyo profesional inmediato\n✅ Completamente confidencial\n✅ Basado en ISO 45003\n\nUsa mi código: ${referralCode}\n\n${window.location.origin}/registro?ref=${referralCode}\n\n#SaludMental #IA #NFLOW #Bienestar`;
+                        const message = `🧠 Descubre NFLOW: Revolucionaria herramienta de salud mental con IA disponible 24/7 💙\n\n✅ Apoyo profesional inmediato\n✅ Completamente confidencial\n✅ Basado en ISO 45003\n\nUsa mi código: ${referralCode}\n\n${getBaseUrl()}/registro?ref=${referralCode}\n\n#SaludMental #IA #NFLOW #Bienestar`;
                         navigator.clipboard.writeText(message);
                         toast({ title: "Post para redes sociales copiado" });
                       }}
