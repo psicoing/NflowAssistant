@@ -111,7 +111,7 @@ export default function PartnerDashboardSimple() {
 
   const copyPromotionalLink = (linkType: string) => {
     const baseUrl = window.location.origin;
-    const url = `${baseUrl}/activar-cuenta?ref=${referralCode}`;
+    const url = `${baseUrl}/registro?ref=${referralCode}`;
     navigator.clipboard.writeText(url);
     toast({
       title: "Enlace copiado",
@@ -245,18 +245,43 @@ export default function PartnerDashboardSimple() {
                   Generar Código de Referencia
                 </Button>
               ) : (
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-2">
-                    <div className="flex-1 p-3 bg-gray-100 dark:bg-gray-800 rounded font-mono text-sm">
-                      {referralCode}
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block">
+                      Código de Referencia
+                    </label>
+                    <div className="flex items-center space-x-2">
+                      <div className="flex-1 p-3 bg-gray-100 dark:bg-gray-800 rounded font-mono text-sm">
+                        {referralCode}
+                      </div>
+                      <Button variant="outline" size="sm" onClick={copyReferralCode} data-testid="button-copy-code">
+                        <Copy className="w-4 h-4" />
+                      </Button>
                     </div>
-                    <Button variant="outline" size="sm" onClick={copyReferralCode}>
-                      <Copy className="w-4 h-4" />
-                    </Button>
                   </div>
+                  
+                  <div>
+                    <label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block">
+                      Link Referenciado
+                    </label>
+                    <div className="flex items-center space-x-2">
+                      <div className="flex-1 p-3 bg-blue-50 dark:bg-blue-900/20 rounded text-xs font-mono break-all text-blue-700 dark:text-blue-300">
+                        {window.location.origin}/registro?ref={referralCode}
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => copyPromotionalLink('directo')}
+                        data-testid="button-copy-link"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Comparte este código con tus contactos. Cuando se suscriban usando este código,
-                    recibirás una comisión del 10%.
+                    💡 <strong>Usa el link directo</strong> para que el código se aplique automáticamente al registrarse.
+                    El usuario solo tendrá que completar sus datos.
                   </p>
                   <Button variant="outline" onClick={generateReferralCode} className="w-full">
                     Generar Nuevo Código
@@ -356,7 +381,7 @@ export default function PartnerDashboardSimple() {
                   <label className="text-sm font-medium">Enlace General</label>
                   <div className="flex items-center space-x-2">
                     <div className="flex-1 p-2 bg-gray-100 dark:bg-gray-800 rounded text-xs font-mono break-all">
-                      {window.location.origin}/activar-cuenta?ref={referralCode}
+                      {window.location.origin}/registro?ref={referralCode}
                     </div>
                     <Button variant="outline" size="sm" onClick={() => copyPromotionalLink('general')}>
                       <Copy className="w-4 h-4" />
@@ -374,7 +399,7 @@ export default function PartnerDashboardSimple() {
                       variant="outline" 
                       size="sm" 
                       onClick={() => {
-                        const message = `¡Hola! Te recomiendo NFLOW para salud mental con IA. Usa mi código: ${referralCode} - ${window.location.origin}/activar-cuenta?ref=${referralCode}`;
+                        const message = `¡Hola! Te recomiendo NFLOW para salud mental con IA. Usa mi código: ${referralCode} - ${window.location.origin}/registro?ref=${referralCode}`;
                         navigator.clipboard.writeText(message);
                         toast({ title: "Mensaje de WhatsApp copiado" });
                       }}
@@ -395,7 +420,7 @@ export default function PartnerDashboardSimple() {
                       size="sm" 
                       onClick={() => {
                         const subject = "Herramienta de Salud Mental con IA - NFLOW";
-                        const body = `Hola,\n\nQuería recomendarte NFLOW, una innovadora herramienta de salud mental que utiliza IA para brindar apoyo 24/7.\n\nPuedes probarla usando mi código de referencia: ${referralCode}\n\nEnlace: ${window.location.origin}/activar-cuenta?ref=${referralCode}\n\n¡Espero que te sea útil!\n\nSaludos`;
+                        const body = `Hola,\n\nQuería recomendarte NFLOW, una innovadora herramienta de salud mental que utiliza IA para brindar apoyo 24/7.\n\nPuedes probarla usando mi código de referencia: ${referralCode}\n\nEnlace: ${window.location.origin}/registro?ref=${referralCode}\n\n¡Espero que te sea útil!\n\nSaludos`;
                         navigator.clipboard.writeText(`${subject}\n\n${body}`);
                         toast({ title: "Plantilla de email copiada" });
                       }}
@@ -415,7 +440,7 @@ export default function PartnerDashboardSimple() {
                       variant="outline" 
                       size="sm" 
                       onClick={() => {
-                        const message = `🧠 Descubre NFLOW: Revolucionaria herramienta de salud mental con IA disponible 24/7 💙\n\n✅ Apoyo profesional inmediato\n✅ Completamente confidencial\n✅ Basado en ISO 45003\n\nUsa mi código: ${referralCode}\n\n${window.location.origin}/activar-cuenta?ref=${referralCode}\n\n#SaludMental #IA #NFLOW #Bienestar`;
+                        const message = `🧠 Descubre NFLOW: Revolucionaria herramienta de salud mental con IA disponible 24/7 💙\n\n✅ Apoyo profesional inmediato\n✅ Completamente confidencial\n✅ Basado en ISO 45003\n\nUsa mi código: ${referralCode}\n\n${window.location.origin}/registro?ref=${referralCode}\n\n#SaludMental #IA #NFLOW #Bienestar`;
                         navigator.clipboard.writeText(message);
                         toast({ title: "Post para redes sociales copiado" });
                       }}

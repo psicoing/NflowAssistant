@@ -4,6 +4,7 @@ export function useReferralCode() {
   const [referralCode, setReferralCode] = useState("");
   const [isValidating, setIsValidating] = useState(false);
   const [isValid, setIsValid] = useState<boolean | null>(null);
+  const [isFromUrl, setIsFromUrl] = useState(false);
 
   // Capturar código de referencia desde URL al cargar la página
   useEffect(() => {
@@ -12,14 +13,18 @@ export function useReferralCode() {
     
     if (refCode) {
       localStorage.setItem('referralCode', refCode);
+      localStorage.setItem('referralCodeFromUrl', 'true');
       setReferralCode(refCode);
+      setIsFromUrl(true);
       // Limpiar la URL para que no se vea el parámetro
       window.history.replaceState({}, document.title, window.location.pathname);
     } else {
       // Intentar recuperar código guardado en localStorage
       const savedCode = localStorage.getItem('referralCode');
+      const fromUrl = localStorage.getItem('referralCodeFromUrl') === 'true';
       if (savedCode) {
         setReferralCode(savedCode);
+        setIsFromUrl(fromUrl);
       }
     }
   }, []);
@@ -71,13 +76,16 @@ export function useReferralCode() {
   const clearReferralCode = () => {
     setReferralCode("");
     localStorage.removeItem('referralCode');
+    localStorage.removeItem('referralCodeFromUrl');
     setIsValid(null);
+    setIsFromUrl(false);
   };
 
   return {
     referralCode,
     isValidating,
     isValid,
+    isFromUrl,
     updateReferralCode,
     clearReferralCode,
   };

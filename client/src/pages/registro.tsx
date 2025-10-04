@@ -26,7 +26,7 @@ export default function Registro() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [createdCredentials, setCreatedCredentials] = useState({ username: "", password: "" });
   const { toast } = useToast();
-  const { referralCode, isValidating, isValid, updateReferralCode } = useReferralCode();
+  const { referralCode, isValidating, isValid, isFromUrl, updateReferralCode } = useReferralCode();
 
   // Función para calcular la edad
   const calculateAge = (birthDate: string) => {
@@ -293,6 +293,46 @@ export default function Registro() {
                   required
                   className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-nflow-blue"
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="referralCode" className="text-gray-200">
+                  Código de Referencia (opcional)
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="referralCode"
+                    name="referralCode"
+                    type="text"
+                    placeholder="Código de partner"
+                    value={referralCode}
+                    onChange={(e) => updateReferralCode(e.target.value)}
+                    readOnly={isFromUrl}
+                    className={`bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-nflow-blue ${isFromUrl ? 'opacity-75 cursor-not-allowed' : ''}`}
+                    data-testid="input-referral-code"
+                  />
+                  {isValidating && (
+                    <div className="absolute right-3 top-3">
+                      <div className="animate-spin h-4 w-4 border-2 border-nflow-blue border-t-transparent rounded-full"></div>
+                    </div>
+                  )}
+                  {!isValidating && isValid === true && (
+                    <div className="absolute right-3 top-3 text-green-500">✓</div>
+                  )}
+                  {!isValidating && isValid === false && (
+                    <div className="absolute right-3 top-3 text-red-500">✗</div>
+                  )}
+                </div>
+                {isFromUrl && (
+                  <p className="text-xs text-green-400">
+                    ✓ Código de referencia aplicado automáticamente
+                  </p>
+                )}
+                {isValid === false && referralCode && (
+                  <p className="text-xs text-red-400">
+                    El código ingresado no es válido
+                  </p>
+                )}
               </div>
             </CardContent>
 
