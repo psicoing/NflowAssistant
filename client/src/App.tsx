@@ -14,6 +14,7 @@ import Resources from "@/pages/resources";
 import RecursosGratis from "@/pages/recursos";
 import Consejos from "@/pages/consejos";
 import Partners from "@/pages/partners";
+import PartnersComerciales from "@/pages/partners-comerciales";
 import Recompensas from "@/pages/recompensas";
 import Login from "@/pages/login";
 import Registro from "@/pages/registro";
@@ -50,7 +51,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/partners/login", "/partners/register", "/partners", "/partners/dashboard", "/nosotros", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
     // Allow blog article routes
     if (location.startsWith("/blog/")) {
       return;
@@ -94,6 +95,7 @@ function AuthenticatedRouter() {
       <Route path="/blog/:id" component={BlogNew} />
       <Route path="/precios" component={PreciosPage} />
       <Route path="/partners" component={Partners} />
+      <Route path="/partners-comerciales" component={PartnersComerciales} />
       <Route path="/partners/login" component={PartnerLogin} />
       <Route path="/partners/register" component={PartnerRegister} />
       <Route path="/partners/dashboard" component={PartnerDashboard} />
