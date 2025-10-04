@@ -249,7 +249,7 @@ export default function PartnerDashboardSimple() {
                 Código de Referencia
               </CardTitle>
               <CardDescription>
-                Genera códigos únicos para trackear tus referencias
+                Tu código permanente para trackear tus referencias
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -259,6 +259,12 @@ export default function PartnerDashboardSimple() {
                 </Button>
               ) : (
                 <div className="space-y-4">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
+                      ✨ Este es tu código PERMANENTE. Úsalo siempre para tus referidos.
+                    </p>
+                  </div>
+
                   <div>
                     <label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block">
                       Código de Referencia
@@ -292,13 +298,26 @@ export default function PartnerDashboardSimple() {
                     </div>
                   </div>
 
+                  <div>
+                    <label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block">
+                      Código QR
+                    </label>
+                    <div className="flex justify-center p-4 bg-white dark:bg-gray-800 rounded-lg border">
+                      <img 
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(getBaseUrl() + '/registro?ref=' + referralCode)}`}
+                        alt="QR Code para registro"
+                        className="w-48 h-48"
+                      />
+                    </div>
+                    <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">
+                      Tus usuarios pueden escanear este QR para registrarse directamente con tu código
+                    </p>
+                  </div>
+
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    💡 <strong>Usa el link directo</strong> para que el código se aplique automáticamente al registrarse.
+                    💡 <strong>Usa el link directo o el QR</strong> para que el código se aplique automáticamente al registrarse.
                     El usuario solo tendrá que completar sus datos.
                   </p>
-                  <Button variant="outline" onClick={generateReferralCode} className="w-full">
-                    Generar Nuevo Código
-                  </Button>
                 </div>
               )}
             </CardContent>
