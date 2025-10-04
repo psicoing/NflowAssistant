@@ -144,9 +144,60 @@ export default function Registro() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Decorative Side Elements - Only visible on larger screens */}
+      <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-64 bg-gradient-to-r from-nflow-blue/20 to-transparent">
+        <div className="h-full flex flex-col items-center justify-center p-8 space-y-8">
+          <div className="text-center">
+            <div className="w-24 h-24 bg-nflow-blue/30 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-nflow-blue/50">
+              <UserPlus className="w-12 h-12 text-nflow-blue" />
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-2">NFLOW</h3>
+            <p className="text-sm text-gray-400">Salud Mental Digital</p>
+            <div className="mt-4 px-4 py-2 bg-nflow-blue/20 rounded-lg border border-nflow-blue/30">
+              <p className="text-xs text-nflow-blue font-semibold">nflow.style</p>
+            </div>
+          </div>
+          <div className="space-y-3 text-center">
+            <div className="flex items-center gap-2 text-gray-300">
+              <div className="w-2 h-2 bg-nflow-blue rounded-full"></div>
+              <span className="text-sm">Chat IA NEUROPSI</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-300">
+              <div className="w-2 h-2 bg-nflow-blue rounded-full"></div>
+              <span className="text-sm">ISO 45003</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-300">
+              <div className="w-2 h-2 bg-nflow-blue rounded-full"></div>
+              <span className="text-sm">Recursos Gratis</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-64 bg-gradient-to-l from-nflow-blue/20 to-transparent">
+        <div className="h-full flex flex-col items-center justify-center p-8">
+          <div className="text-center space-y-6">
+            <div className="relative">
+              <div className="absolute inset-0 bg-nflow-blue/30 blur-xl rounded-full"></div>
+              <div className="relative w-32 h-32 bg-gradient-to-br from-nflow-blue to-blue-600 rounded-2xl flex items-center justify-center mx-auto transform rotate-12">
+                <div className="transform -rotate-12">
+                  <UserPlus className="w-16 h-16 text-white" />
+                </div>
+              </div>
+            </div>
+            <div>
+              <p className="text-gray-400 text-sm mb-2">Únete a la comunidad</p>
+              <p className="text-3xl font-bold text-white">NFLOW</p>
+              <p className="text-nflow-blue font-semibold mt-1">nflow.style</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Registration Card */}
+      <div className="w-full max-w-md relative z-10">
+        <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm shadow-2xl">
           <CardHeader className="text-center">
             <div className="w-16 h-16 bg-nflow-blue rounded-full flex items-center justify-center mx-auto mb-4">
               <UserPlus className="w-8 h-8 text-white" />
