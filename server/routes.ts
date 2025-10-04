@@ -1121,6 +1121,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
             
             console.log("✅ Stripe subscription activated successfully for:", user.username);
             
+            // ALSO check for pending referrals (for users who registered with referral links)
+            // This handles cases where referral code came from URL during registration
+            if (!metadata || !metadata.referralCode) {
+              console.log("=== CHECKING FOR PENDING REFERRALS ===");
+              try {
+                // Search for any pending referral for this user
+                const allPartners = await storage.getAllPartners();
+                for (const partner of allPartners) {
+                  const referrals = await storage.getPartnerReferrals(partner.id);
+                  const pendingReferral = referrals.find(
+                    r => r.userId === user.id && r.status === 'pending'
+                  );
+                  
+                  if (pendingReferral) {
+                    console.log(`✓ Found pending referral for user ${user.id}, partner ${partner.id}`);
+                    const amount = ((eventData.amount_total || 299) / 100).toFixed(2);
+                    const commission = ((eventData.amount_total || 299) * 0.1 / 100).toFixed(2);
+                    
+                    // Update pending referral to completed
+                    await db.update(partnerReferrals)
+                      .set({
+                        subscriptionPlan: subscriptionPlan,
+                        amount: amount,
+                        commission: commission,
+                        status: 'completed',
+                        paidAt: new Date()
+                      })
+                      .where(eq(partnerReferrals.id, pendingReferral.id));
+                    
+                    // Update partner stats
+                    const allReferrals = await storage.getPartnerReferrals(partner.id);
+                    const completedReferrals = allReferrals.filter(r => r.status === 'completed');
+                    const totalEarnings = completedReferrals.reduce((sum, r) => sum + parseFloat(r.commission || '0'), 0);
+                    
+                    await storage.updatePartnerStats(partner.id, completedReferrals.length, totalEarnings.toFixed(2));
+                    
+                    console.log(`✅ Pending referral updated: €${commission} commission for partner ${partner.companyName}`);
+                    console.log(`📊 Partner stats updated: ${completedReferrals.length} referrals, €${totalEarnings.toFixed(2)} total`);
+                    break; // Only one referral per user
+                  }
+                }
+              } catch (error) {
+                console.error("❌ Error checking pending referrals:", error);
+              }
+            }
+            
             // Return success with user info
             res.json({ 
               received: true, 
