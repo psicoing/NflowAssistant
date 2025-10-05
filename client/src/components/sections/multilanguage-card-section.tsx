@@ -231,7 +231,7 @@ export default function MultilanguageCardSection() {
                     className={`
                       bg-gradient-to-r from-nflow-orange via-orange-500 to-orange-600 
                       hover:from-orange-600 hover:via-orange-500 hover:to-red-500 
-                      text-white font-semibold px-4 py-4 md:px-6 md:py-6 rounded-xl shadow-xl
+                      text-white font-semibold px-6 py-4 md:px-8 md:py-5 rounded-xl shadow-xl
                       transition-all duration-300 hover:scale-105 hover:shadow-2xl
                       border border-orange-400/30 w-full md:w-auto
                       ${isTranslateActive ? 'opacity-75' : ''}
@@ -239,7 +239,7 @@ export default function MultilanguageCardSection() {
                     data-testid="button-language-selector"
                   >
                     <Globe className="w-5 h-5 mr-2 flex-shrink-0" />
-                    <span className="text-sm md:text-base lg:text-lg leading-tight">Speaking 150+ languages • 支持150多种语言</span>
+                    <span className="text-base md:text-lg">Cambiar de idioma</span>
                   </Button>
                 </div>
               </div>
