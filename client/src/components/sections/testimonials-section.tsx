@@ -237,23 +237,23 @@ export default function TestimonialsSection() {
             </p>
             
             {/* Información sobre credenciales únicas del director */}
-            <div className="bg-gradient-to-r from-nflow-orange/10 to-nflow-blue/10 border border-nflow-orange/30 rounded-xl p-6 mb-6 max-w-4xl mx-auto">
+            <div className="bg-gradient-to-r from-nflow-orange/10 to-nflow-blue/10 border border-nflow-orange/30 rounded-xl p-4 sm:p-6 mb-6 max-w-4xl mx-auto">
               <div className="flex items-center justify-center space-x-3 mb-4">
                 <div className="w-3 h-3 bg-nflow-orange rounded-full animate-pulse"></div>
-                <h4 className="text-xl font-bold text-white">Credenciales Únicas</h4>
+                <h4 className="text-lg sm:text-xl font-bold text-white">Credenciales Únicas</h4>
                 <div className="w-3 h-3 bg-nflow-orange rounded-full animate-pulse"></div>
               </div>
-              <p className="text-gray-200 text-center leading-relaxed mb-4">
-                Esta app PWA está realizada por <span className="font-bold text-nflow-orange">uno de los tres únicos psicólogos neuroingenierios de España en telecomunicaciones</span>. 
+              <p className="text-sm sm:text-base text-gray-200 text-center leading-relaxed mb-4 px-2 break-words">
+                Esta app PWA está realizada por <span className="font-bold text-nflow-orange">uno de los tres únicos psicólogos neuroingenieros de España en telecomunicaciones</span>. 
                 Aunque no se sabe hasta dónde llegará, su fuerte es la experiencia de su director, 
                 <span className="font-bold text-white"> dedicado 32 años a la psicología clínica y escolar</span>.
               </p>
-              <div className="flex items-center justify-center space-x-4 text-sm text-gray-300 mb-4">
-                <span>🧠 Neuropsicología</span>
-                <span>•</span>
-                <span>📡 Telecomunicaciones</span>
-                <span>•</span>
-                <span>👨‍⚕️ 32 años experiencia</span>
+              <div className="flex flex-col sm:flex-row items-center justify-center sm:space-x-4 space-y-2 sm:space-y-0 text-xs sm:text-sm text-gray-300 mb-4">
+                <span className="text-center">🧠 Neuropsicología</span>
+                <span className="hidden sm:inline">•</span>
+                <span className="text-center">📡 Telecomunicaciones</span>
+                <span className="hidden sm:inline">•</span>
+                <span className="text-center">👨‍⚕️ 32 años experiencia</span>
               </div>
               <div className="bg-gradient-to-r from-nflow-orange/20 to-nflow-blue/20 rounded-lg p-4 border border-nflow-orange/40">
                 <p className="text-white font-bold text-center text-lg mb-2">
