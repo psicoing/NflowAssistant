@@ -12,7 +12,7 @@ import PackagesSection from "@/components/sections/packages-section";
 
 import InstitutoSection from "@/components/sections/instituto-section";
 import PWAInstallationSection from "@/components/sections/pwa-installation-section";
-import LanguageBannerSection from "@/components/sections/language-banner-section";
+import MultilanguageCardSection from "@/components/sections/multilanguage-card-section";
 import MentalHealthHeroSection from "@/components/sections/mental-health-hero-section";
 import BorderlessSupportSection from "@/components/sections/borderless-support-section";
 import YouthMentalHealthSection from "@/components/sections/youth-mental-health-section";
@@ -45,7 +45,7 @@ export default function Home() {
       <main className="pt-16">
         <MentalHealthHeroSection />
         <BorderlessSupportSection />
-        <LanguageBannerSection />
+        <MultilanguageCardSection />
         <IntroCardSection />
         <FreeResourcesCardSection />
         <NeuropsiDemoSection />
