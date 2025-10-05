@@ -3,7 +3,7 @@ import Footer from "@/components/layout/footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Users, DollarSign, TrendingUp, Globe, Star, Shield, Gift, LogIn, UserPlus, ExternalLink, Info } from "lucide-react";
+import { Users, DollarSign, TrendingUp, Globe, Star, Shield, Gift, LogIn, UserPlus, ExternalLink, Info, ArrowLeft } from "lucide-react";
 import { useLocation } from "wouter";
 
 const beneficios = [
@@ -70,6 +70,18 @@ export default function Partners() {
       <Header />
       
       <main className="pt-16">
+        {/* Botón de Volver */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <Button
+            variant="ghost"
+            onClick={() => setLocation("/")}
+            className="text-white hover:bg-white/10 flex items-center gap-2"
+            data-testid="button-back"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Volver
+          </Button>
+        </div>
         {/* Banner Informativo Partners */}
         <section className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 py-4 border-b border-blue-500/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
