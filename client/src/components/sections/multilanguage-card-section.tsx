@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Globe, Languages, MessageSquare, Sparkles } from "lucide-react";
+import { Globe, Languages, MessageSquare } from "lucide-react";
 
 export default function MultilanguageCardSection() {
   const [isTranslateActive, setIsTranslateActive] = useState(false);
@@ -180,70 +179,73 @@ export default function MultilanguageCardSection() {
   };
 
   return (
-    <section className="py-8 px-4 bg-gradient-to-br from-nflow-dark via-blue-950/30 to-nflow-dark">
-      <div className="max-w-5xl mx-auto">
-        <Card className="bg-gradient-to-br from-blue-900/40 via-blue-800/30 to-blue-900/40 border-blue-600/30 backdrop-blur-sm overflow-hidden">
-          <div className="relative">
-            {/* Decorative background elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-nflow-blue/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-nflow-orange/10 rounded-full blur-3xl"></div>
-            
-            <div className="relative p-8 md:p-12">
-              <div className="flex flex-col md:flex-row items-center gap-8">
-                {/* Icon Section */}
-                <div className="flex-shrink-0">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-nflow-blue/20 rounded-full blur-xl animate-pulse"></div>
-                    <div className="relative w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-nflow-blue to-blue-600 rounded-full flex items-center justify-center shadow-xl">
-                      <Globe className="w-10 h-10 md:w-12 md:h-12 text-white" />
-                    </div>
+    <section className="py-6 px-4 bg-nflow-dark">
+      <div className="max-w-6xl mx-auto">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-950/90 via-blue-900/80 to-blue-950/90 border border-blue-800/40 shadow-2xl backdrop-blur-sm">
+          {/* Decorative gradient orbs */}
+          <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-nflow-orange/10 rounded-full blur-3xl"></div>
+          
+          <div className="relative px-6 py-8 md:px-12 md:py-10">
+            <div className="grid md:grid-cols-[auto_1fr] gap-6 md:gap-8 items-center">
+              {/* Icon */}
+              <div className="flex justify-center md:justify-start">
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-xl group-hover:bg-blue-400/40 transition-all duration-300"></div>
+                  <div className="relative w-24 h-24 md:w-28 md:h-28 bg-gradient-to-br from-blue-600 via-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
+                    <Globe className="w-12 h-12 md:w-14 md:h-14 text-white" strokeWidth={1.5} />
                   </div>
                 </div>
+              </div>
 
-                {/* Content Section */}
-                <div className="flex-1 text-center md:text-left">
-                  <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
-                    <Sparkles className="w-5 h-5 text-nflow-orange" />
-                    <h3 className="text-2xl md:text-3xl font-bold text-white">
-                      Soporte Multiidioma
-                    </h3>
-                  </div>
-                  <p className="text-blue-100 text-base md:text-lg mb-4 max-w-2xl">
+              {/* Content */}
+              <div className="text-center md:text-left space-y-4">
+                <div>
+                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 flex items-center justify-center md:justify-start gap-2">
+                    <span className="text-nflow-orange">✨</span>
+                    Soporte Multiidioma
+                  </h3>
+                  <p className="text-blue-200/90 text-base md:text-lg leading-relaxed max-w-3xl">
                     Nuestro chatbot terapéutico habla <span className="font-bold text-white">más de 150 idiomas</span>. 
                     Recibe apoyo emocional en tu idioma nativo, sin barreras de comunicación.
                   </p>
-                  
-                  {/* Language badge and stats */}
-                  <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 mb-6">
-                    <div className="flex items-center gap-2 bg-blue-800/40 px-4 py-2 rounded-full border border-blue-600/30">
-                      <Languages className="w-5 h-5 text-blue-300" />
-                      <span className="text-sm font-medium text-blue-100">150+ idiomas disponibles</span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-blue-800/40 px-4 py-2 rounded-full border border-blue-600/30">
-                      <MessageSquare className="w-5 h-5 text-blue-300" />
-                      <span className="text-sm font-medium text-blue-100">Chat en tiempo real</span>
-                    </div>
+                </div>
+                
+                {/* Badges */}
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                  <div className="flex items-center gap-2 bg-blue-800/40 backdrop-blur-sm px-4 py-2 rounded-full border border-blue-600/40 shadow-md">
+                    <Languages className="w-4 h-4 text-blue-300" />
+                    <span className="text-sm font-medium text-blue-100">150+ idiomas disponibles</span>
                   </div>
+                  <div className="flex items-center gap-2 bg-blue-800/40 backdrop-blur-sm px-4 py-2 rounded-full border border-blue-600/40 shadow-md">
+                    <MessageSquare className="w-4 h-4 text-blue-300" />
+                    <span className="text-sm font-medium text-blue-100">Chat en tiempo real</span>
+                  </div>
+                </div>
 
-                  {/* CTA Button */}
+                {/* CTA Button */}
+                <div className="pt-2">
                   <Button
                     onClick={handleTranslateClick}
+                    size="lg"
                     className={`
-                      bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 
-                      text-white font-semibold px-6 py-6 rounded-xl shadow-lg
-                      transition-all duration-300 hover:scale-105 hover:shadow-xl
+                      bg-gradient-to-r from-nflow-orange via-orange-500 to-orange-600 
+                      hover:from-orange-600 hover:via-orange-500 hover:to-red-500 
+                      text-white font-semibold px-6 py-6 rounded-xl shadow-xl
+                      transition-all duration-300 hover:scale-105 hover:shadow-2xl
+                      border border-orange-400/30
                       ${isTranslateActive ? 'opacity-75' : ''}
                     `}
                     data-testid="button-language-selector"
                   >
                     <Globe className="w-5 h-5 mr-2" />
-                    Speaking 150+ languages • 支持150多种语言
+                    <span className="text-base md:text-lg">Speaking 150+ languages • 支持150多种语言</span>
                   </Button>
                 </div>
               </div>
             </div>
           </div>
-        </Card>
+        </div>
       </div>
     </section>
   );
