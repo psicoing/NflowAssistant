@@ -179,14 +179,14 @@ export default function MultilanguageCardSection() {
   };
 
   return (
-    <section className="py-6 px-4 bg-nflow-dark">
+    <section className="py-6 px-4 bg-nflow-dark overflow-x-hidden">
       <div className="max-w-6xl mx-auto">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-950/90 via-blue-900/80 to-blue-950/90 border border-blue-800/40 shadow-2xl backdrop-blur-sm">
           {/* Decorative gradient orbs */}
           <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl"></div>
           <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-nflow-orange/10 rounded-full blur-3xl"></div>
           
-          <div className="relative px-6 py-8 md:px-12 md:py-10">
+          <div className="relative px-4 py-8 md:px-12 md:py-10">
             <div className="grid md:grid-cols-[auto_1fr] gap-6 md:gap-8 items-center">
               {/* Icon */}
               <div className="flex justify-center md:justify-start">
@@ -201,9 +201,9 @@ export default function MultilanguageCardSection() {
               {/* Content */}
               <div className="text-center md:text-left space-y-4">
                 <div>
-                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 flex items-center justify-center md:justify-start gap-2">
+                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 flex items-center justify-center md:justify-start gap-2 flex-wrap">
                     <span className="text-nflow-orange">✨</span>
-                    Soporte Multiidioma
+                    <span>Soporte Multiidioma</span>
                   </h3>
                   <p className="text-blue-200/90 text-base md:text-lg leading-relaxed max-w-3xl">
                     Nuestro chatbot terapéutico habla <span className="font-bold text-white">más de 150 idiomas</span>. 
@@ -212,34 +212,34 @@ export default function MultilanguageCardSection() {
                 </div>
                 
                 {/* Badges */}
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                  <div className="flex items-center gap-2 bg-blue-800/40 backdrop-blur-sm px-4 py-2 rounded-full border border-blue-600/40 shadow-md">
-                    <Languages className="w-4 h-4 text-blue-300" />
-                    <span className="text-sm font-medium text-blue-100">150+ idiomas disponibles</span>
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 md:gap-3">
+                  <div className="flex items-center gap-2 bg-blue-800/40 backdrop-blur-sm px-3 py-2 md:px-4 rounded-full border border-blue-600/40 shadow-md">
+                    <Languages className="w-4 h-4 text-blue-300 flex-shrink-0" />
+                    <span className="text-xs md:text-sm font-medium text-blue-100 whitespace-nowrap">150+ idiomas</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-blue-800/40 backdrop-blur-sm px-4 py-2 rounded-full border border-blue-600/40 shadow-md">
-                    <MessageSquare className="w-4 h-4 text-blue-300" />
-                    <span className="text-sm font-medium text-blue-100">Chat en tiempo real</span>
+                  <div className="flex items-center gap-2 bg-blue-800/40 backdrop-blur-sm px-3 py-2 md:px-4 rounded-full border border-blue-600/40 shadow-md">
+                    <MessageSquare className="w-4 h-4 text-blue-300 flex-shrink-0" />
+                    <span className="text-xs md:text-sm font-medium text-blue-100 whitespace-nowrap">Chat en vivo</span>
                   </div>
                 </div>
 
                 {/* CTA Button */}
-                <div className="pt-2">
+                <div className="pt-2 w-full">
                   <Button
                     onClick={handleTranslateClick}
                     size="lg"
                     className={`
                       bg-gradient-to-r from-nflow-orange via-orange-500 to-orange-600 
                       hover:from-orange-600 hover:via-orange-500 hover:to-red-500 
-                      text-white font-semibold px-6 py-6 rounded-xl shadow-xl
+                      text-white font-semibold px-4 py-5 md:px-6 md:py-6 rounded-xl shadow-xl
                       transition-all duration-300 hover:scale-105 hover:shadow-2xl
-                      border border-orange-400/30
+                      border border-orange-400/30 w-full md:w-auto
                       ${isTranslateActive ? 'opacity-75' : ''}
                     `}
                     data-testid="button-language-selector"
                   >
-                    <Globe className="w-5 h-5 mr-2" />
-                    <span className="text-base md:text-lg">Speaking 150+ languages • 支持150多种语言</span>
+                    <Globe className="w-5 h-5 mr-2 flex-shrink-0" />
+                    <span className="text-sm md:text-base lg:text-lg truncate">Speaking 150+ languages • 支持150多种语言</span>
                   </Button>
                 </div>
               </div>
