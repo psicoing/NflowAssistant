@@ -36,6 +36,7 @@ import ReferralInfoSection from "@/components/sections/referral-info-section";
 import CommercialPartnersSection from "@/components/sections/commercial-partners-section";
 import QueEsNflowSection from "@/components/sections/que-es-nflow-section";
 import FreeResourcesCardSection from "@/components/sections/free-resources-card-section";
+import FamilySupportHeroSection from "@/components/sections/family-support-hero-section";
 
 export default function Home() {
 
@@ -43,6 +44,7 @@ export default function Home() {
     <div className="min-h-screen bg-nflow-dark">
       <Header showBanner={false} />
       <main className="pt-16">
+        <FamilySupportHeroSection />
         <MentalHealthHeroSection />
         <BorderlessSupportSection />
         <MultilanguageCardSection />
