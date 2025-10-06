@@ -11,7 +11,7 @@ export default function FamilySupportHeroSection() {
           <div className="space-y-6 md:space-y-8 order-2 lg:order-1">
             <div>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-4">
-                Apoyo emocional para toda la familia
+                Apoyo emocional para las personas
               </h1>
               <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 Cada persona merece apoyo emocional profesional. NFLOW conecta familias, adolescentes, trabajadores y adultos con herramientas de bienestar mental respaldadas por la ciencia y la experiencia clínica.
