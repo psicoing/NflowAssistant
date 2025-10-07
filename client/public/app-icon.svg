@@ -1,0 +1,49 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" rx="110" fill="#1a1a2e"/>
+  
+  <!-- Brain/Mind symbol with chat bubble -->
+  <g transform="translate(256, 256)">
+    <!-- Chat bubble base (orange) -->
+    <path d="M -80 -40 Q -80 -80, -40 -80 L 40 -80 Q 80 -80, 80 -40 L 80 20 Q 80 60, 40 60 L -20 60 L -40 80 L -40 60 L -40 60 Q -80 60, -80 20 Z" 
+          fill="#ff6b35" 
+          opacity="0.9"/>
+    
+    <!-- Brain icon inside -->
+    <g transform="translate(0, -10)">
+      <!-- Left hemisphere -->
+      <path d="M -35 -20 Q -50 -20, -50 -5 Q -50 0, -48 5 Q -45 15, -35 20 Q -30 15, -28 10 L -28 -10 Q -30 -15, -35 -20 Z" 
+            fill="white" 
+            opacity="0.95"/>
+      
+      <!-- Right hemisphere -->
+      <path d="M 35 -20 Q 50 -20, 50 -5 Q 50 0, 48 5 Q 45 15, 35 20 Q 30 15, 28 10 L 28 -10 Q 30 -15, 35 -20 Z" 
+            fill="white" 
+            opacity="0.95"/>
+      
+      <!-- Center connection -->
+      <ellipse cx="0" cy="0" rx="5" ry="18" fill="white" opacity="0.95"/>
+      
+      <!-- Brain details (folds) -->
+      <path d="M -38 -10 Q -35 -5, -38 0" stroke="rgba(26, 26, 46, 0.3)" stroke-width="2" fill="none"/>
+      <path d="M -42 5 Q -38 8, -42 11" stroke="rgba(26, 26, 46, 0.3)" stroke-width="2" fill="none"/>
+      <path d="M 38 -10 Q 35 -5, 38 0" stroke="rgba(26, 26, 46, 0.3)" stroke-width="2" fill="none"/>
+      <path d="M 42 5 Q 38 8, 42 11" stroke="rgba(26, 26, 46, 0.3)" stroke-width="2" fill="none"/>
+    </g>
+    
+    <!-- Sparkle/wellness indicators -->
+    <circle cx="-100" cy="-80" r="8" fill="#ff6b35" opacity="0.6"/>
+    <circle cx="100" cy="-70" r="6" fill="#ff6b35" opacity="0.5"/>
+    <circle cx="-90" cy="70" r="7" fill="#ff6b35" opacity="0.4"/>
+    
+    <!-- Brand text NFLOW -->
+    <text x="0" y="110" 
+          font-family="Arial, sans-serif" 
+          font-size="48" 
+          font-weight="bold" 
+          fill="white" 
+          text-anchor="middle">
+      NFLOW
+    </text>
+  </g>
+</svg>
