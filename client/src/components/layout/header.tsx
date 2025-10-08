@@ -45,7 +45,7 @@ export default function Header({ showBanner = false }: HeaderProps) {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 flex items-center justify-center">
-              <img src="/faro.png" alt="NFLOW" className="w-8 h-8" />
+              <img src="/favicon.png" alt="NFLOW" className="w-8 h-8 rounded-lg" />
             </div>
             <span className="text-xl font-bold text-white">NFLOW</span>
           </Link>

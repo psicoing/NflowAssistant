@@ -71,8 +71,8 @@ export default function AppMovilSection() {
                   {/* App Header */}
                   <div className="bg-nflow-orange rounded-2xl p-4 mb-4">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                        <img src="/faro.png" alt="NFLOW" className="w-6 h-6" />
+                      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center p-1">
+                        <img src="/favicon.png" alt="NFLOW" className="w-full h-full rounded-md" />
                       </div>
                       <div>
                         <h3 className="text-white font-bold">NFLOW</h3>
