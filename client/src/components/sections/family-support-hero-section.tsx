@@ -61,8 +61,8 @@ export default function FamilySupportHeroSection() {
                   <span className="font-bold text-gray-900 dark:text-white">+15,000</span> conversaciones de apoyo
                 </p>
               </div>
-              <div className="flex items-center gap-1">
-                <span className="text-yellow-500">⭐⭐⭐⭐⭐</span>
+              <div className="flex items-center gap-1" aria-label="Calificación de 4.8 de 5 estrellas">
+                <span className="text-yellow-500" aria-hidden="true">⭐⭐⭐⭐⭐</span>
                 <span className="text-sm font-semibold text-gray-900 dark:text-white ml-1">4.8/5</span>
               </div>
             </div>
