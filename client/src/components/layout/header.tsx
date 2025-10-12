@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Brain, Globe, LogIn, UserPlus, ChevronDown, Wifi, WifiOff } from "lucide-react";
 import SmoothScrollMenu from "@/components/ui/smooth-scroll-menu";
 import EsEnLanguageToggle from "@/components/ui/es-en-language-toggle";
+import giftBoxImage from "@assets/generated_images/Orange_gift_box_icon_198e60f2.png";
 
 interface HeaderProps {
   showBanner?: boolean;
@@ -53,7 +54,24 @@ export default function Header({ showBanner = false }: HeaderProps) {
 
 
           {/* Desktop and Mobile Navigation */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            {/* Gift Box - Link to Jobda */}
+            <a 
+              href="https://jobda.org/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="group relative flex items-center justify-center hover:scale-110 transition-transform duration-300"
+              data-testid="link-gift-jobda"
+            >
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden bg-gradient-to-br from-orange-400 to-orange-600 p-1.5 shadow-lg group-hover:shadow-orange-500/50 transition-shadow">
+                <img 
+                  src={giftBoxImage} 
+                  alt="Regalo" 
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            </a>
+            
             {/* Language Toggle - Always visible for UK market expansion */}
             <EsEnLanguageToggle />
             
