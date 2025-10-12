@@ -35,7 +35,7 @@ export default function FamilySupportHeroSection() {
               
               <Button
                 onClick={() => {
-                  const element = document.getElementById('ejemplos-chat');
+                  const element = document.getElementById('tour-nflow');
                   if (element) {
                     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }

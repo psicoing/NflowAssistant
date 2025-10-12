@@ -3,7 +3,7 @@ import demoVideoPath from "@assets/Grabación-de-pantalla-2025-09-26-180946_1759
 
 export default function NeuropsiDemoSection() {
   return (
-    <section className="py-12 px-4 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+    <section id="tour-nflow" className="py-12 px-4 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
       <div className="nflow-responsive-container">
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
           {/* Header */}
