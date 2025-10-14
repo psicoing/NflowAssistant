@@ -151,7 +151,7 @@ export default function NosotrosSection() {
               onClick={() => setLocation("/login")}
               className="bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white px-8 py-4 rounded-2xl font-bold text-lg"
             >
-              Probar NFLOW Gratis
+              Comenzar Ahora
             </Button>
             <Button 
               onClick={() => {
