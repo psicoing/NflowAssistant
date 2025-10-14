@@ -236,17 +236,13 @@ export default function TestimonialsSection() {
               mejoras significativas en su bienestar mental con NFLOW.
             </p>
             
-            <div className="bg-gradient-to-r from-nflow-orange/20 to-nflow-blue/20 rounded-lg p-4 border border-nflow-orange/40 max-w-2xl mx-auto mb-6">
+            <div className="bg-gradient-to-r from-nflow-orange/20 to-nflow-blue/20 rounded-lg p-4 border border-nflow-orange/40 max-w-2xl mx-auto">
               <p className="text-white font-bold text-center text-base mb-2">
                 📅 Inauguración: 1 de septiembre 2025
               </p>
               <p className="text-gray-200 text-center text-sm">
                 Indicadores reales y transparentes del uso de la plataforma
               </p>
-            </div>
-            
-            <div className="text-gray-200 text-base font-semibold">
-              ⭐ Promedio de 4.9/5 satisfacción • ✅ Verificado por usuarios reales
             </div>
           </div>
         </div>
