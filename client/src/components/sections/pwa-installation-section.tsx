@@ -184,20 +184,6 @@ export default function PWAInstallationSection() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Call to Action */}
-        <div className="text-center mt-12">
-          <Button 
-            size="lg" 
-            className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white px-8 py-3 text-lg font-semibold"
-          >
-            <Smartphone className="w-5 h-5 mr-2" />
-            Instalar NFLOW Ahora
-          </Button>
-          <p className="text-gray-400 text-sm mt-4">
-            Compatible con todos los navegadores modernos • Sin costo adicional
-          </p>
-        </div>
       </div>
     </section>
   );
