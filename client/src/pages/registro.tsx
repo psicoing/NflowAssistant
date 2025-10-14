@@ -10,6 +10,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { UserPlus, User, Building } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useReferralCode } from "@/hooks/useReferralCode";
+import { SEOHead } from "@/components/SEOHead";
 
 export default function Registro() {
   const [, setLocation] = useLocation();
@@ -144,7 +145,15 @@ export default function Registro() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4 relative overflow-hidden">
+    <>
+      <SEOHead
+        title="Registro - NFLOW Psicólogo IA | Crear Cuenta Gratis"
+        description="Crea tu cuenta en NFLOW y accede a apoyo emocional profesional con IA. Psicólogo virtual 24/7 en español. Registro rápido y seguro."
+        keywords="registro NFLOW, crear cuenta psicólogo IA, registro salud mental, nueva cuenta terapia online"
+        ogTitle="Únete a NFLOW - Tu Psicólogo IA 24/7"
+        canonicalUrl="https://nflow.style/registro"
+      />
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4 relative overflow-hidden">
       {/* Decorative Side Elements - Only visible on larger screens */}
       <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-64 bg-gradient-to-r from-nflow-blue/20 to-transparent">
         <div className="h-full flex flex-col items-center justify-center p-8 space-y-8">
@@ -429,5 +438,6 @@ export default function Registro() {
         </Card>
       </div>
     </div>
+    </>
   );
 }

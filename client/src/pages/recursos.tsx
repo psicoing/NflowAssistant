@@ -28,6 +28,7 @@ import {
   CheckCircle2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { SEOHead } from "@/components/SEOHead";
 
 interface Emotion {
   id: string;
@@ -605,8 +606,16 @@ export default function RecursosGratis() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
-      <Header />
+    <>
+      <SEOHead
+        title="Recursos Gratis - NFLOW | Herramientas de Bienestar"
+        description="Accede gratis a herramientas de bienestar emocional: registro emocional, afirmaciones diarias, tests de ansiedad y depresión. Sin necesidad de registro."
+        keywords="recursos salud mental gratis, test ansiedad gratis, test depresión, afirmaciones positivas, registro emocional"
+        ogTitle="Recursos Gratis de Salud Mental - NFLOW"
+        canonicalUrl="https://nflow.style/recursos"
+      />
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+        <Header />
       
       <main className="pt-24 pb-12 px-4">
         <div className="max-w-6xl mx-auto">
@@ -779,5 +788,6 @@ export default function RecursosGratis() {
 
       <Footer />
     </div>
+    </>
   );
 }

@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { LogIn, User } from "lucide-react";
+import { SEOHead } from "@/components/SEOHead";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -137,8 +138,16 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <>
+      <SEOHead
+        title="Acceso - NFLOW Psicólogo IA"
+        description="Inicia sesión en NFLOW y accede a tu psicólogo IA disponible 24/7. Apoyo emocional profesional en español para tu salud mental."
+        keywords="login NFLOW, acceso psicólogo IA, iniciar sesión salud mental, chat psicológico online"
+        ogTitle="Inicia sesión en NFLOW - Tu Psicólogo IA"
+        canonicalUrl="https://nflow.style/login"
+      />
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
         <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
           <CardHeader className="text-center">
             <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -225,5 +234,6 @@ export default function Login() {
         </Card>
       </div>
     </div>
+    </>
   );
 }

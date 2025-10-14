@@ -18,7 +18,7 @@ export default function FamilySupportHeroSection() {
                 Tu Psicólogo IA Disponible 24/7
               </h1>
               <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                Apoyo mental profesional en español, cuando lo necesites. NFLOW conecta familias, adolescentes y adultos con herramientas de bienestar respaldadas por 30+ años de experiencia clínica.
+                Apoyo emocional y salud mental con IA en español, cuando lo necesites. Chat psicológico profesional que conecta familias, adolescentes y adultos con herramientas de bienestar respaldadas por 30+ años de experiencia clínica ISO 45003.
               </p>
             </div>
 

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Users, DollarSign, TrendingUp, Globe, Star, Shield, Gift, LogIn, UserPlus, ExternalLink, Info, ArrowLeft } from "lucide-react";
 import { useLocation } from "wouter";
+import { SEOHead } from "@/components/SEOHead";
 
 const beneficios = [
   {
@@ -66,8 +67,16 @@ export default function Partners() {
     setLocation("/partners/register");
   };
   return (
-    <div className="min-h-screen bg-nflow-dark">
-      <Header />
+    <>
+      <SEOHead
+        title="Partners - NFLOW | Programa de Afiliados"
+        description="Únete al programa de partners de NFLOW. Gana comisiones promoviendo salud mental digital. Hasta 30% de comisión por cada referido suscrito."
+        keywords="programa afiliados salud mental, partners NFLOW, comisiones psicólogo IA, referidos salud mental"
+        ogTitle="Conviértete en Partner de NFLOW"
+        canonicalUrl="https://nflow.style/partners"
+      />
+      <div className="min-h-screen bg-nflow-dark">
+        <Header />
       
       <main className="pt-16">
         {/* Botón de Volver */}
@@ -324,5 +333,6 @@ export default function Partners() {
 
       <Footer />
     </div>
+    </>
   );
 }

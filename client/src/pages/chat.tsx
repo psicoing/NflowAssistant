@@ -15,6 +15,7 @@ import { MessageCircle, Plus, Search, Calendar, Clock, List } from "lucide-react
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import type { Conversation, Message } from "@shared/schema";
+import { SEOHead } from "@/components/SEOHead";
 
 export default function Chat() {
   const { id } = useParams<{ id?: string }>();
@@ -330,8 +331,16 @@ export default function Chat() {
 
   // Main chat interface
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-      <ChatHeader />
+    <>
+      <SEOHead
+        title="Chat - NEUROPSI-AI | NFLOW Psicólogo IA"
+        description="Chatea con NEUROPSI-AI, tu psicólogo virtual disponible 24/7. Apoyo emocional profesional con inteligencia artificial en español."
+        keywords="chat psicólogo IA, NEUROPSI-AI, conversación salud mental, terapia online chat, psicólogo virtual"
+        ogTitle="Chat con NEUROPSI-AI - Tu Psicólogo IA Personal"
+        canonicalUrl="https://nflow.style/chat"
+      />
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+        <ChatHeader />
       
       {/* Mobile Navigation Bar */}
       <div className="md:hidden bg-gray-800/90 border-b border-gray-700/50 p-3 mt-16">
@@ -633,5 +642,6 @@ export default function Chat() {
         </div>
       </div>
     </div>
+    </>
   );
 }

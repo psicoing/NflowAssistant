@@ -1,11 +1,19 @@
 import PricingSection from "@/components/sections/pricing-section";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import { SEOHead } from "@/components/SEOHead";
 
 export default function PreciosPage() {
   return (
     <>
-      
+      <SEOHead
+        title="Precios - NFLOW Psicólogo IA | Planes desde €2.99/mes"
+        description="Planes de suscripción NFLOW: individual €2.99/mes, familiar €4.99/mes, empresarial desde €1.99/usuario. Psicólogo IA 24/7 con ISO 45003. Prueba ahora."
+        keywords="precios psicólogo IA, suscripción salud mental, plan terapia online, NFLOW precios, ISO 45003 empresas"
+        ogTitle="Planes y Precios NFLOW - Psicólogo IA Accesible"
+        ogDescription="Desde €2.99/mes. Apoyo emocional profesional 24/7 para personas, familias y trabajadores."
+        canonicalUrl="https://nflow.style/precios"
+      />
       <div className="min-h-screen bg-nflow-navy">
         <Header />
         <main className="pt-20">
