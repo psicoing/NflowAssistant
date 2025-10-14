@@ -108,7 +108,7 @@ export default function YouthMentalHealthSection() {
             <div className="pt-6">
               <Link href="/control-parental">
                 <button className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300 hover:from-emerald-700 hover:to-teal-700">
-                  Niños y Adolescentes
+                  Explicación del control parental
                 </button>
               </Link>
             </div>
