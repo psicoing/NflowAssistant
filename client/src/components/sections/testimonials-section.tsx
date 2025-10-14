@@ -256,11 +256,11 @@ export default function TestimonialsSection() {
                 <span className="text-center">👨‍⚕️ 32 años experiencia</span>
               </div>
               <div className="bg-gradient-to-r from-nflow-orange/20 to-nflow-blue/20 rounded-lg p-4 border border-nflow-orange/40">
-                <p className="text-white font-bold text-center text-lg mb-2">
-                  🌟 ÚNICA EN EL MUNDO EN SU VERSIÓN 🌟
+                <p className="text-white font-bold text-center text-base mb-2">
+                  📅 Inauguración: 1 de septiembre 2025
                 </p>
                 <p className="text-gray-200 text-center text-sm">
-                  <span className="font-semibold">Inauguración:</span> Agosto 2025 • Primera plataforma de IA especializada en salud mental con estas características únicas
+                  Indicadores reales y transparentes del uso de la plataforma
                 </p>
               </div>
             </div>
