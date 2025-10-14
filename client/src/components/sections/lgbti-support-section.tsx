@@ -1,7 +1,10 @@
 import { Heart, Shield, Users } from "lucide-react";
+import { useLocation } from "wouter";
 import lgbtiImagePath from "@assets/ChatGPT Image 18 jul 2025, 09_00_02_1752822021391.png";
 
 export default function LGBTISupportSection() {
+  const [, setLocation] = useLocation();
+  
   return (
     <section className="py-20 px-4 bg-gradient-to-b from-nflow-dark via-purple-950/30 to-nflow-dark relative overflow-hidden">
       {/* Efectos de fondo */}
@@ -118,13 +121,14 @@ export default function LGBTISupportSection() {
 
             {/* CTA */}
             <div className="text-center">
-              <a 
-                href="#pricing" 
+              <button
+                onClick={() => setLocation("/registro")}
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold px-8 py-4 rounded-xl border border-purple-400/50 shadow-lg transition-all duration-300 hover:shadow-purple-500/25 hover:scale-105"
+                data-testid="button-lgbti-apoyo"
               >
                 <Heart className="w-5 h-5" />
                 Encuentra tu Apoyo Aquí
-              </a>
+              </button>
             </div>
           </div>
         </div>
