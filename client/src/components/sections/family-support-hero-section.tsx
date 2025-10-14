@@ -58,7 +58,7 @@ export default function FamilySupportHeroSection() {
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 border-2 border-white dark:border-slate-900"></div>
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  <span className="font-bold text-gray-900 dark:text-white">+15,000</span> conversaciones de apoyo
+                  <span className="font-bold text-gray-900 dark:text-white">+140,000</span> fuentes de psicología
                 </p>
               </div>
               <div className="flex items-center gap-1" aria-label="Calificación de 4.8 de 5 estrellas">
