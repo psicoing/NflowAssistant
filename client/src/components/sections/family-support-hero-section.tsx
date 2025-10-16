@@ -14,8 +14,9 @@ export default function FamilySupportHeroSection() {
           {/* Content Side */}
           <div className="space-y-6 md:space-y-8 order-2 lg:order-1">
             <div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-4">
-                Tu Psicólogo IA Disponible 24/7
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 text-center md:text-left text-blue-900 md:text-gray-900 dark:text-white">
+                <span className="md:hidden">Psicólogo IA</span>
+                <span className="hidden md:inline">Tu Psicólogo IA Disponible 24/7</span>
               </h1>
               <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 Apoyo emocional y salud mental con IA en español, cuando lo necesites. Chat psicológico profesional que conecta familias, adolescentes y adultos con herramientas de bienestar respaldadas por 30+ años de experiencia clínica ISO 45003.
