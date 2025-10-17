@@ -52,4 +52,9 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
   - Step numbers changed to emerald-500 background
   - Completion badges use teal-500
   - Benefits section uses emerald→teal→cyan gradients
+- Updated NUXA Brand Evolution Section:
+  - Added prominent NUXA app icon display (112x128px responsive)
+  - Logo features animated glow effect with emerald→teal gradient
+  - Professional styling with rounded corners, shadow, and subtle border
+  - Positioned between "Evolución Natural" badge and main heading
 - Logo file: `attached_assets/generated_images/NUXA_logo_with_circle_person_ba9dba6f.png`

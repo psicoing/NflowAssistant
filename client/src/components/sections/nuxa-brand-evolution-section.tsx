@@ -1,5 +1,6 @@
 import { Sparkles, Leaf, Heart, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import nuxaLogo from "@assets/generated_images/NUXA_logo_with_circle_person_ba9dba6f.png";
 
 export default function NuxaBrandEvolutionSection() {
   return (
@@ -18,6 +19,18 @@ export default function NuxaBrandEvolutionSection() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-100 to-teal-100 dark:from-emerald-900/30 dark:to-teal-900/30 rounded-full border border-emerald-200 dark:border-emerald-800">
             <Leaf className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             <span className="text-sm font-semibold text-emerald-800 dark:text-emerald-300">Evolución Natural</span>
+          </div>
+        </div>
+
+        {/* NUXA Logo - App Icon Preview */}
+        <div className="flex justify-center mb-8">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-3xl blur-2xl opacity-30 animate-pulse"></div>
+            <img 
+              src={nuxaLogo} 
+              alt="NUXA App Icon" 
+              className="relative w-28 h-28 md:w-32 md:h-32 rounded-3xl shadow-2xl border-4 border-white/20 dark:border-white/10"
+            />
           </div>
         </div>
 
