@@ -195,3 +195,21 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - Professional product photography with NUXA branding
 
 **Status:** ✅ Complete and tested. All 3 images display correctly (1 vertical phone + 2 gallery images).
+
+### Hero Title Update - NUXA with nflow reference (17/10/2025)
+**Summary:** Simplified main hero title to show "NUXA" with nflow attribution.
+
+**Changes:**
+- Main H1 changed from "NUXA - Tu Psicólogo IA" to simply "NUXA"
+- Added subtitle: "(nflow powered system)" in italic, smaller text
+- Title increased in size: text-4xl → text-5xl → text-6xl (responsive)
+- Subtitle styling: gray-500, italic, text-sm → text-base
+- Attribution shows nflow as the matrix/system powering NUXA
+
+**Technical Details:**
+- Component: `client/src/components/sections/family-support-hero-section.tsx`
+- H1 element simplified to single word "NUXA"
+- Subtitle wrapped in separate <p> tag with italic class
+- Maintains responsive alignment: centered (mobile) → left-aligned (desktop)
+
+**Status:** ✅ Complete and tested. New title displays correctly across all devices.

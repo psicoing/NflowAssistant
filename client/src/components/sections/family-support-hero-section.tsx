@@ -14,10 +14,14 @@ export default function FamilySupportHeroSection() {
           {/* Content Side */}
           <div className="space-y-6 md:space-y-8 order-2 lg:order-1">
             <div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 text-center md:text-left text-blue-900 md:text-gray-900 dark:text-white">
-                <span className="md:hidden">NUXA - Tu Psicólogo IA</span>
-                <span className="hidden md:inline">NUXA - Tu Psicólogo IA</span>
-              </h1>
+              <div className="text-center md:text-left mb-4">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-blue-900 md:text-gray-900 dark:text-white">
+                  NUXA
+                </h1>
+                <p className="text-sm md:text-base text-gray-500 dark:text-gray-400 mt-2 italic">
+                  (nflow powered system)
+                </p>
+              </div>
               <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 Apoyo emocional y salud mental con IA en español, cuando lo necesites. Chat psicológico profesional que conecta familias, adolescentes y adultos con herramientas de bienestar respaldadas por 30+ años de experiencia clínica ISO 45003.
               </p>
