@@ -14,7 +14,7 @@ export default function FamilySupportHeroSection() {
           {/* Content Side */}
           <div className="space-y-6 md:space-y-8 order-2 lg:order-1">
             <div>
-              <div className="text-center md:text-left mb-4">
+              <div className="text-center mb-4">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-blue-900 md:text-gray-900 dark:text-white">
                   NUXA
                 </h1>

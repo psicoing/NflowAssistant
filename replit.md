@@ -210,6 +210,6 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - Component: `client/src/components/sections/family-support-hero-section.tsx`
 - H1 element simplified to single word "NUXA"
 - Subtitle wrapped in separate <p> tag with italic class
-- Maintains responsive alignment: centered (mobile) → left-aligned (desktop)
+- Always centered on all screen sizes (mobile and desktop)
 
-**Status:** ✅ Complete and tested. New title displays correctly across all devices.
+**Status:** ✅ Complete and tested. New title displays centered correctly across all devices.
