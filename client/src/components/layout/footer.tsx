@@ -67,24 +67,46 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Legal</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/legal/terminos" className="text-gray-400 hover:text-white transition-colors">
-                  Términos y condiciones
-                </Link>
-              </li>
-              <li>
-                <Link href="/legal/privacidad" className="text-gray-400 hover:text-white transition-colors">
-                  Política de privacidad
-                </Link>
-              </li>
-              <li>
-                <Link href="/legal/cookies" className="text-gray-400 hover:text-white transition-colors">
-                  Política de cookies
-                </Link>
-              </li>
-              <li>
-                <Link href="/legal/aviso-legal" className="text-gray-400 hover:text-white transition-colors">
+                <a 
+                  href="https://jobda.org/legal" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Aviso legal
-                </Link>
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://jobda.org/privacy" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  Política de privacidad
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://jobda.org/cookies" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  Política de cookies
+                </a>
+              </li>
+              <li>
+                <button 
+                  onClick={() => {
+                    // Abrir preferencias de cookies
+                    const event = new CustomEvent('openCookiePreferences');
+                    window.dispatchEvent(event);
+                  }}
+                  className="text-gray-400 hover:text-white transition-colors text-left"
+                >
+                  Preferencias de cookies
+                </button>
               </li>
             </ul>
           </div>

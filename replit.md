@@ -73,3 +73,30 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - PWA Icons: `attached_assets/generated_images/NUXA_PWA_icon_192x192_0fcf9f49.png`, `NUXA_PWA_icon_512x512_763e7500.png`
 
 **Status:** ✅ Production-ready. 100% NUXA branding across PWA, SEO, and all assets.
+
+### Cookie Consent & Legal Links Update (17/10/2025)
+**Summary:** Implemented GDPR-compliant cookie consent system and updated all legal links to jobda.org.
+
+**Legal Links Migration:**
+- All footer legal links now point to jobda.org:
+  - Aviso legal: https://jobda.org/legal
+  - Política de privacidad: https://jobda.org/privacy
+  - Política de cookies: https://jobda.org/cookies
+  - Preferencias de cookies: Opens consent dialog
+
+**Cookie Consent System:**
+- GDPR-compliant consent dialog with 4 cookie categories
+- Categories: Necesarias (required), Preferencias, Analíticas, Marketing
+- Non-essential cookies default to FALSE (opt-in only)
+- Persistent preferences saved to localStorage
+- Actions: "Rechazar todo", "Aceptar todo", "Guardar preferencias"
+- Reopening dialog shows saved preferences correctly
+- CustomEvent system for opening preferences from footer
+
+**Implementation:**
+- Component: `client/src/components/ui/cookie-consent.tsx`
+- Global integration in App.tsx
+- Footer button dispatches 'openCookiePreferences' event
+- Auto-shows on first visit, persists user choices
+
+**Status:** ✅ Production-ready and GDPR-compliant.

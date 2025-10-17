@@ -24,6 +24,7 @@ import PartnerLogin from "@/pages/partner-login";
 import PartnerRegister from "@/pages/partner-register";
 import PartnerDashboard from "@/pages/partner-dashboard-simple";
 import PWAInstallPrompt from "@/components/ui/pwa-install-prompt";
+import { CookieConsent } from "@/components/ui/cookie-consent";
 import PaymentRedirect from "@/pages/payment-redirect";
 import ActivarCuenta from "@/pages/activar-cuenta";
 import StripeReturn from "@/pages/stripe-return";
@@ -134,6 +135,7 @@ function AppContent() {
       <Toaster />
       <AuthenticatedRouter />
       <PWAInstallPrompt />
+      <CookieConsent />
       {showFloatingCTA && <FloatingCTAButton />}
     </div>
   );
