@@ -163,27 +163,28 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 **Next Steps:** Ready for production deployment.
 
 ### NUXA Vertical Phone Showcase (17/10/2025)
-**Summary:** Redesigned intro card with vertical phone mockup and feature highlights.
+**Summary:** Replaced family images with vertical phone mockup across multiple sections.
 
-**Changes:**
+**Main Hero Section (family-support-hero-section.tsx):**
+- Replaced family photo with vertical NUXA phone mockup
+- Image positioned on right side (desktop) or top (mobile)
+- Max-width: 400px with professional drop-shadow
+- Clean, modern presentation focusing on NUXA app interface
+
+**Intro Card Section (intro-card-section.tsx):**
 - Removed old 2-image gallery layout (techDevicesImage and family photo)
 - Added professional vertical phone mockup (9:16 aspect ratio)
-- Created new asymmetric layout: phone (left 1/3) + content (right 2/3)
-- Phone image occupies full height alongside content paragraphs
-- Added 3 feature highlight cards with icons
-
-**New Layout Structure:**
-- **Left:** Vertical phone mockup showing NUXA app interface
-- **Right:** Title "NUXA siempre contigo" + description + 3 feature cards:
+- Created asymmetric layout: phone (left 1/3) + content (right 2/3)
+- Phone image occupies full height alongside content
+- Added 3 feature highlight cards with icons:
   - Acceso Multiplataforma (emerald)
   - 100% Confidencial (teal)
   - Apoyo Personalizado (cyan)
 
 **Technical Details:**
-- File: `attached_assets/generated_images/Vertical_NUXA_phone_mockup_ee80d374.png`
-- Component: `client/src/components/sections/intro-card-section.tsx`
-- Image max-width: 280px with drop-shadow-2xl
-- Responsive: flex-col (mobile) → flex-row (desktop)
-- Removed imports: techDevicesImage, nuxaPhoneImage
+- Image file: `attached_assets/generated_images/Vertical_NUXA_phone_mockup_ee80d374.png`
+- Aspect ratio: 9:16 (vertical phone orientation)
+- Professional product photography with NUXA branding
+- Emerald/teal/cyan color palette on screen
 
-**Status:** ✅ Complete and tested. New vertical layout displays correctly across devices.
+**Status:** ✅ Complete and tested. Vertical phone displays correctly in both hero and intro sections.

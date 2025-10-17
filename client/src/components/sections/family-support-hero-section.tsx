@@ -1,7 +1,7 @@
 import { Users, Shield, Award, Clock, MessageCircle, PlayCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import familyImage from "@assets/image_1759748297357.png";
+import nuxaVerticalPhone from "@assets/generated_images/Vertical_NUXA_phone_mockup_ee80d374.png";
 
 export default function FamilySupportHeroSection() {
   const [, setLocation] = useLocation();
@@ -117,15 +117,14 @@ export default function FamilySupportHeroSection() {
           </div>
 
           {/* Image Side */}
-          <div className="order-1 lg:order-2">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+          <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+            <div className="relative max-w-[400px]">
               <img 
-                src={familyImage} 
-                alt="Familia usando NFLOW - Apoyo emocional profesional"
-                className="w-full h-auto object-cover"
-                data-testid="img-family-hero"
+                src={nuxaVerticalPhone} 
+                alt="NUXA - Tu Psicólogo IA siempre contigo"
+                className="w-full h-auto object-contain drop-shadow-2xl"
+                data-testid="img-nuxa-phone-hero"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
             </div>
           </div>
 
