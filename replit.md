@@ -173,9 +173,16 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - Image located in Visual Gallery section of intro card
 
 **Technical Details:**
-- File: `attached_assets/generated_images/Phone_displaying_NUXA_app_a8557479.png`
+- File: `attached_assets/generated_images/Improved_NUXA_family_photo_06a4115e.png`
 - Component: `client/src/components/sections/intro-card-section.tsx`
 - Import alias: `nuxaPhoneImage` from `@assets/generated_images/`
 - Layout: Grid with 2 images (Acceso Multiplataforma + NUXA phone)
 
-**Status:** ✅ Complete and tested. Image displays correctly in production.
+**Image Features:**
+- Professional family photo with father holding smartphone
+- NUXA app interface clearly visible on phone screen
+- Emerald/teal/cyan brand colors
+- Warm, inviting atmosphere with natural lighting
+- Professional photography quality
+
+**Status:** ✅ Complete and tested. Improved image displays correctly in production.

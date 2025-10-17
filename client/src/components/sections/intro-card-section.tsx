@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Brain, Clock, Users, Sparkles, Shield, Heart, Target, Star, Code, Zap, MessageSquare } from "lucide-react";
 import techDevicesImage from "@assets/generated_images/Modern_tech_devices_mental_health_acb51148.png";
-import nuxaPhoneImage from "@assets/generated_images/Phone_displaying_NUXA_app_a8557479.png";
+import nuxaPhoneImage from "@assets/generated_images/Improved_NUXA_family_photo_06a4115e.png";
 import DomainInfoBanner from "@/components/ui/domain-info-banner";
 
 export default function IntroCardSection() {
