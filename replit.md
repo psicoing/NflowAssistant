@@ -213,3 +213,19 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - Always centered on all screen sizes (mobile and desktop)
 
 **Status:** ✅ Complete and tested. New title displays centered correctly across all devices.
+
+### Intro Card Borderless Integration (17/10/2025)
+**Summary:** Removed white background and borders from intro card section for seamless app integration.
+
+**Changes:**
+- Removed main container white background, border, shadow, and rounded corners
+- Removed white backgrounds and borders from stats cards (+50 Especialidades, 100% Confidencial, +150 Idiomas)
+- All elements now blend seamlessly with section gradient background (emerald-50 → white → cyan-50)
+
+**Technical Details:**
+- Component: `client/src/components/sections/intro-card-section.tsx`
+- Main container (line 15): Removed `bg-white`, `rounded-3xl`, `shadow-2xl`, `border border-gray-100`
+- Stats cards (lines 210-221): Removed `bg-white`, `rounded-xl`, `border border-gray-100`, `shadow-sm`
+- Content integrates directly with gradient background without boxed appearance
+
+**Status:** ✅ Complete and tested. Borderless design verified on desktop and mobile.

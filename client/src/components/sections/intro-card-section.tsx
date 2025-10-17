@@ -9,7 +9,7 @@ export default function IntroCardSection() {
   return (
     <section id="intro-card" className="py-8 px-4 bg-gradient-to-br from-emerald-50 via-white to-cyan-50">
       <div className="nflow-responsive-container">
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden w-full">
+        <div className="overflow-hidden w-full">
           {/* Header with gradient */}
           <div className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 p-8 text-center">
             <div className="flex items-center justify-center space-x-2 mb-4">
@@ -204,15 +204,15 @@ export default function IntroCardSection() {
 
             {/* Stats Section */}
             <div className="grid md:grid-cols-3 gap-4 lg:gap-6 xl:gap-8 mb-8">
-              <div className="text-center p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+              <div className="text-center p-4">
                 <div className="text-2xl font-bold text-teal-600 mb-1">+50</div>
                 <div className="text-sm text-gray-600">Especialidades</div>
               </div>
-              <div className="text-center p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+              <div className="text-center p-4">
                 <div className="text-2xl font-bold text-emerald-600 mb-1">100%</div>
                 <div className="text-sm text-gray-600">Confidencial</div>
               </div>
-              <div className="text-center p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+              <div className="text-center p-4">
                 <div className="text-2xl font-bold text-cyan-600 mb-1">+150</div>
                 <div className="text-sm text-gray-600">Idiomas</div>
               </div>
