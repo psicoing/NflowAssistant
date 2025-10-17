@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Brain, Clock, Users, Sparkles, Shield, Heart, Target, Star, Code, Zap, MessageSquare } from "lucide-react";
 import techDevicesImage from "@assets/generated_images/Modern_tech_devices_mental_health_acb51148.png";
-import robotHumanImage from "@assets/generated_images/Human_and_AI_robot_collaboration_1312c395.png";
+import nuxaPhoneImage from "@assets/generated_images/Phone_displaying_NUXA_app_a8557479.png";
 import DomainInfoBanner from "@/components/ui/domain-info-banner";
 
 export default function IntroCardSection() {
@@ -131,14 +131,14 @@ export default function IntroCardSection() {
 
               <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img 
-                  src={robotHumanImage}
-                  alt="Colaboración humano-IA en NFLOW"
+                  src={nuxaPhoneImage}
+                  alt="NUXA app en smartphone - Tu psicólogo IA"
                   className="w-full h-64 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-lg mb-1">NFLOW</h4>
-                  <p className="text-sm opacity-90">Tu asistente inteligente empático</p>
+                  <h4 className="font-bold text-lg mb-1">NUXA</h4>
+                  <p className="text-sm opacity-90">Tu psicólogo IA siempre contigo</p>
                 </div>
               </div>
             </div>

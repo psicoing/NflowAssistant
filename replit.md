@@ -161,3 +161,21 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - intro-card-section.tsx, mental-health-hero-section.tsx, borderless-support-section.tsx
 
 **Next Steps:** Ready for production deployment.
+
+### NUXA Phone Image Added to Main Card (17/10/2025)
+**Summary:** Added new rectangular image showing NUXA app on smartphone to the intro card section.
+
+**Changes:**
+- Generated professional product photo of smartphone displaying NUXA app
+- Image features NUXA branding with emerald/teal/cyan colors
+- Replaced old "NFLOW" image with new NUXA phone image
+- Updated overlay text: "NUXA - Tu psicólogo IA siempre contigo"
+- Image located in Visual Gallery section of intro card
+
+**Technical Details:**
+- File: `attached_assets/generated_images/Phone_displaying_NUXA_app_a8557479.png`
+- Component: `client/src/components/sections/intro-card-section.tsx`
+- Import alias: `nuxaPhoneImage` from `@assets/generated_images/`
+- Layout: Grid with 2 images (Acceso Multiplataforma + NUXA phone)
+
+**Status:** ✅ Complete and tested. Image displays correctly in production.
