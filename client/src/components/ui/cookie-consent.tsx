@@ -108,7 +108,7 @@ export function CookieConsent() {
             Su privacidad es importante
           </h2>
           <button
-            onClick={() => setIsVisible(false)}
+            onClick={handleRejectAll}
             className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
             data-testid="button-close-cookie-consent"
           >

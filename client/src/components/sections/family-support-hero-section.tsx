@@ -15,8 +15,8 @@ export default function FamilySupportHeroSection() {
           <div className="space-y-6 md:space-y-8 order-2 lg:order-1">
             <div>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 text-center md:text-left text-blue-900 md:text-gray-900 dark:text-white">
-                <span className="md:hidden">Psicólogo IA</span>
-                <span className="hidden md:inline">Tu Psicólogo IA Disponible 24/7</span>
+                <span className="md:hidden">NUXA - Tu Psicólogo IA</span>
+                <span className="hidden md:inline">NUXA - Tu Psicólogo IA</span>
               </h1>
               <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 Apoyo emocional y salud mental con IA en español, cuando lo necesites. Chat psicológico profesional que conecta familias, adolescentes y adultos con herramientas de bienestar respaldadas por 30+ años de experiencia clínica ISO 45003.
@@ -27,7 +27,7 @@ export default function FamilySupportHeroSection() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 onClick={() => setLocation("/login")}
-                className="bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+                className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
                 data-testid="button-comenzar-chat"
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
@@ -54,9 +54,9 @@ export default function FamilySupportHeroSection() {
             <div className="flex items-center gap-6 pt-2">
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-2">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white dark:border-slate-900"></div>
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 border-2 border-white dark:border-slate-900"></div>
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 border-2 border-white dark:border-slate-900"></div>
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 border-2 border-white dark:border-slate-900"></div>
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 border-2 border-white dark:border-slate-900"></div>
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 border-2 border-white dark:border-slate-900"></div>
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   <span className="font-bold text-gray-900 dark:text-white">+140,000</span> fuentes de psicología
@@ -72,8 +72,8 @@ export default function FamilySupportHeroSection() {
             <div className="grid sm:grid-cols-2 gap-4">
               {/* Para Toda la Familia */}
               <div className="flex items-start gap-3 bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-gray-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
-                <div className="flex-shrink-0 w-10 h-10 bg-nflow-orange/10 rounded-lg flex items-center justify-center">
-                  <Users className="w-5 h-5 text-nflow-orange" />
+                <div className="flex-shrink-0 w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                  <Users className="w-5 h-5 text-emerald-500" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Para Toda la Familia</h3>
@@ -83,8 +83,8 @@ export default function FamilySupportHeroSection() {
 
               {/* 100% Confidencial */}
               <div className="flex items-start gap-3 bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-gray-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
-                <div className="flex-shrink-0 w-10 h-10 bg-nflow-orange/10 rounded-lg flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-nflow-orange" />
+                <div className="flex-shrink-0 w-10 h-10 bg-cyan-500/10 rounded-lg flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-cyan-500" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-1">100% Confidencial</h3>
@@ -94,8 +94,8 @@ export default function FamilySupportHeroSection() {
 
               {/* Profesional */}
               <div className="flex items-start gap-3 bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-gray-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
-                <div className="flex-shrink-0 w-10 h-10 bg-nflow-orange/10 rounded-lg flex items-center justify-center">
-                  <Award className="w-5 h-5 text-nflow-orange" />
+                <div className="flex-shrink-0 w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                  <Award className="w-5 h-5 text-emerald-500" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Profesional</h3>
@@ -103,13 +103,13 @@ export default function FamilySupportHeroSection() {
                 </div>
               </div>
 
-              {/* Disponible 24/7 */}
+              {/* Con nuxa, equilibrio presente */}
               <div className="flex items-start gap-3 bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-gray-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
-                <div className="flex-shrink-0 w-10 h-10 bg-nflow-orange/10 rounded-lg flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-nflow-orange" />
+                <div className="flex-shrink-0 w-10 h-10 bg-teal-500/10 rounded-lg flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-teal-500" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Disponible 24/7</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Con nuxa, equilibrio presente</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Apoyo cuando lo necesites</p>
                 </div>
               </div>

@@ -10,11 +10,11 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-nflow-orange rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center">
                 <Brain className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">NFLOW</span>
-              <span className="text-xs bg-nflow-orange/20 text-nflow-orange px-2 py-1 rounded-full">
+              <span className="text-xl font-bold text-white">NUXA</span>
+              <span className="text-xs bg-teal-500/20 text-teal-400 px-2 py-1 rounded-full">
                 versión beta 1-04
               </span>
             </div>
@@ -27,7 +27,7 @@ export default function Footer() {
                 href="https://www.linkedin.com/in/empordajobs/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-nflow-orange transition-colors"
+                className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-teal-500 transition-colors"
                 aria-label="LinkedIn"
               >
                 <Linkedin className="w-4 h-4 text-gray-400 hover:text-white" />
@@ -127,7 +127,7 @@ export default function Footer() {
               </div>
               <Button 
                 onClick={() => window.open('https://jobda.biz', '_blank')}
-                className="bg-nflow-orange hover:bg-nflow-orange/90 text-black font-semibold px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
                 Visitar JOBDA

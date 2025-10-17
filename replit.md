@@ -100,3 +100,64 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - Auto-shows on first visit, persists user choices
 
 **Status:** ✅ Production-ready and GDPR-compliant.
+
+### Removal of "24/7" and NUXA Branding Update (17/10/2025)
+**Summary:** Removed "Disponible 24/7" references from main homepage sections and replaced with elegant "nuxa" phrases aligned with NUXA branding.
+
+**Main Components Updated:**
+1. **family-support-hero-section.tsx**: 
+   - H1: "NUXA - Tu Psicólogo IA" (was "Tu Psicólogo IA Disponible 24/7")
+   - Feature card: "Con nuxa, equilibrio presente" (was "Disponible 24/7")
+   - Colors: Updated to emerald/teal/cyan palette
+2. **intro-card-section.tsx**: 
+   - Removed "Disponible 24/7" card from grid
+   - Removed "24/7 Disponibilidad" stat
+   - Added "Con nuxa, tu equilibrio siempre presente" card
+   - Colors: Updated header and all gradients to NUXA palette
+3. **mental-health-hero-section.tsx**: 
+   - Replaced "Apoyo disponible 24/7" with "Con nuxa, siempre presente"
+   - Colors: Updated all gradients to NUXA palette
+4. **borderless-support-section.tsx**: 
+   - Badge: "Con nuxa, tu equilibrio siempre" (was "Apoyo Profesional 24/7")
+   - Colors: Updated all gradients and decorative elements to NUXA palette
+
+**Elegant "nuxa" Phrases Added:**
+- "Con nuxa, tu equilibrio siempre presente"
+- "Con nuxa, equilibrio presente"
+- "Con nuxa, siempre presente"
+- "Con nuxa, tu equilibrio siempre"
+
+**NUXA Color Palette Applied:**
+- Primary gradient: emerald-500 → teal-500 → cyan-500
+- All CTA buttons use NUXA gradient
+- All feature icons use emerald/teal/cyan variants
+- Removed all orange (nflow-orange) references from updated sections
+
+**Note:** Some sections still contain "24/7" references but are not in primary hero/intro areas. These can be updated in future iterations if needed.
+
+**Status:** ✅ Complete. All main sections updated with NUXA branding and colors.
+
+### Final Status - All Updates Complete (17/10/2025)
+**Production Ready** ✅
+
+**Cookie Consent System:**
+- GDPR-compliant with proper close button behavior (saves "reject all")
+- Non-essential cookies default to FALSE
+- Persistent preferences with localStorage
+- Reopenable from footer
+
+**Legal Links:**
+- All footer links correctly point to jobda.org
+
+**NUXA Branding Complete:**
+- All "NFLOW" references changed to "NUXA"
+- All "24/7" references removed from main sections
+- Elegant "nuxa" phrases added throughout
+- Complete color migration: emerald-500, teal-500, cyan-500
+- Footer updated with NUXA branding and teal colors
+
+**Files Updated:**
+- cookie-consent.tsx, footer.tsx, family-support-hero-section.tsx
+- intro-card-section.tsx, mental-health-hero-section.tsx, borderless-support-section.tsx
+
+**Next Steps:** Ready for production deployment.

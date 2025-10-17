@@ -6,11 +6,11 @@ import DomainInfoBanner from "@/components/ui/domain-info-banner";
 
 export default function IntroCardSection() {
   return (
-    <section id="intro-card" className="py-8 px-4 bg-gradient-to-br from-indigo-50 via-white to-blue-50">
+    <section id="intro-card" className="py-8 px-4 bg-gradient-to-br from-emerald-50 via-white to-cyan-50">
       <div className="nflow-responsive-container">
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden w-full">
           {/* Header with gradient */}
-          <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-8 text-center">
+          <div className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 p-8 text-center">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <Brain className="w-8 h-8 text-white" />
               <Sparkles className="w-6 h-6 text-white animate-pulse" />
@@ -25,7 +25,7 @@ export default function IntroCardSection() {
           <div className="p-8 md:p-12">
             <div className="text-center mb-8">
               <p className="text-xl text-gray-700 leading-relaxed mb-6">
-                Con <strong className="text-orange-600">NFlow</strong>, accede a un asistente inteligente 
+                Con <strong className="text-teal-600">NUXA</strong>, accede a un asistente inteligente 
                 entrenado en psicología y bienestar, diseñado para acompañarte cuando más lo necesitas.
               </p>
             </div>
@@ -45,20 +45,20 @@ export default function IntroCardSection() {
                 <p className="text-gray-600 text-sm">Adaptada a cada etapa de la vida</p>
               </div>
 
-              <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100">
+              <div className="text-center p-6 bg-gradient-to-br from-cyan-50 to-sky-50 rounded-2xl border border-cyan-100">
                 <div className="flex items-center justify-center mb-4">
-                  <Brain className="w-8 h-8 text-blue-600" />
+                  <Brain className="w-8 h-8 text-cyan-600" />
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">Basado en Ciencia</h3>
                 <p className="text-gray-600 text-sm">Lenguaje cercano y evidencia científica</p>
               </div>
 
-              <div className="text-center p-6 bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl border border-orange-100">
+              <div className="text-center p-6 bg-gradient-to-br from-teal-50 to-emerald-50 rounded-2xl border border-teal-100">
                 <div className="flex items-center justify-center mb-4">
-                  <Clock className="w-8 h-8 text-orange-600" />
+                  <Sparkles className="w-8 h-8 text-teal-600" />
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2">Disponible 24/7</h3>
-                <p className="text-gray-600 text-sm">Para ti o tu empresa</p>
+                <h3 className="font-bold text-gray-900 mb-2">Con nuxa, tu equilibrio siempre presente</h3>
+                <p className="text-gray-600 text-sm">Elegancia en cada conversación</p>
               </div>
             </div>
 
@@ -89,7 +89,7 @@ export default function IntroCardSection() {
                       🚀 Tecnología LLM Avanzada
                     </h3>
                     <p className="text-lg md:text-xl text-purple-100 mb-6 max-w-3xl mx-auto leading-relaxed">
-                      <strong>NFLOW no es un chatbot con respuestas prefabricadas.</strong> Es un modelo de lenguaje LLM avanzado programado con Python e integrado con la tecnología más moderna de ChatGPT, diseñado específicamente para ofrecer una experiencia real y conversacional única.
+                      <strong>NUXA no es un chatbot con respuestas prefabricadas.</strong> Es un modelo de lenguaje LLM avanzado programado con Python e integrado con la tecnología más moderna de ChatGPT, diseñado específicamente para ofrecer una experiencia real y conversacional única.
                     </p>
                     
                     <div className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto">
@@ -144,21 +144,17 @@ export default function IntroCardSection() {
             </div>
 
             {/* Stats Section */}
-            <div className="grid md:grid-cols-4 gap-4 lg:gap-6 xl:gap-8 mb-8">
+            <div className="grid md:grid-cols-3 gap-4 lg:gap-6 xl:gap-8 mb-8">
               <div className="text-center p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-                <div className="text-2xl font-bold text-orange-600 mb-1">24/7</div>
-                <div className="text-sm text-gray-600">Disponibilidad</div>
-              </div>
-              <div className="text-center p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-                <div className="text-2xl font-bold text-blue-600 mb-1">+50</div>
+                <div className="text-2xl font-bold text-teal-600 mb-1">+50</div>
                 <div className="text-sm text-gray-600">Especialidades</div>
               </div>
               <div className="text-center p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-                <div className="text-2xl font-bold text-green-600 mb-1">100%</div>
+                <div className="text-2xl font-bold text-emerald-600 mb-1">100%</div>
                 <div className="text-sm text-gray-600">Confidencial</div>
               </div>
               <div className="text-center p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
-                <div className="text-2xl font-bold text-purple-600 mb-1">+10</div>
+                <div className="text-2xl font-bold text-cyan-600 mb-1">+150</div>
                 <div className="text-sm text-gray-600">Idiomas</div>
               </div>
             </div>
@@ -176,7 +172,7 @@ export default function IntroCardSection() {
               </div>
               <Button 
                 onClick={() => window.location.href = '/login'}
-                className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold px-12 py-4 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white font-semibold px-12 py-4 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               >
                 Empezar Ahora
               </Button>
