@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Brain, Clock, Users, Sparkles, Shield, Heart, Target, Star, Code, Zap, MessageSquare } from "lucide-react";
 import nuxaVerticalPhone from "@assets/generated_images/Vertical_NUXA_phone_mockup_ee80d374.png";
+import techDevicesImage from "@assets/generated_images/Modern_tech_devices_mental_health_acb51148.png";
+import robotHumanImage from "@assets/generated_images/Human_and_AI_robot_collaboration_1312c395.png";
 import DomainInfoBanner from "@/components/ui/domain-info-banner";
 
 export default function IntroCardSection() {
@@ -167,6 +169,35 @@ export default function IntroCardSection() {
                       <p className="text-sm text-gray-600">Respuestas adaptadas a tu situación única</p>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Visual Gallery Section */}
+            <div className="grid md:grid-cols-2 gap-6 lg:gap-10 xl:gap-12 mb-10">
+              <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <img 
+                  src={techDevicesImage}
+                  alt="Acceso multiplataforma - NUXA en móvil, tablet y ordenador"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <h4 className="font-bold text-lg mb-1">Acceso Multiplataforma</h4>
+                  <p className="text-sm opacity-90">Disponible en móvil, tablet y ordenador</p>
+                </div>
+              </div>
+
+              <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <img 
+                  src={robotHumanImage}
+                  alt="Colaboración humano-IA en NUXA"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <h4 className="font-bold text-lg mb-1">IA + Humanidad</h4>
+                  <p className="text-sm opacity-90">Tecnología empática al servicio del bienestar</p>
                 </div>
               </div>
             </div>

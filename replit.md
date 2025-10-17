@@ -163,7 +163,7 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 **Next Steps:** Ready for production deployment.
 
 ### NUXA Vertical Phone Showcase (17/10/2025)
-**Summary:** Replaced family images with vertical phone mockup across multiple sections.
+**Summary:** Replaced family images with vertical phone mockup and restored gallery images.
 
 **Main Hero Section (family-support-hero-section.tsx):**
 - Replaced family photo with vertical NUXA phone mockup
@@ -172,19 +172,26 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - Clean, modern presentation focusing on NUXA app interface
 
 **Intro Card Section (intro-card-section.tsx):**
-- Removed old 2-image gallery layout (techDevicesImage and family photo)
 - Added professional vertical phone mockup (9:16 aspect ratio)
 - Created asymmetric layout: phone (left 1/3) + content (right 2/3)
-- Phone image occupies full height alongside content
-- Added 3 feature highlight cards with icons:
+- Phone image occupies full height alongside 3 feature cards:
   - Acceso Multiplataforma (emerald)
   - 100% Confidencial (teal)
   - Apoyo Personalizado (cyan)
+- **Restored Visual Gallery** with 2 horizontal images:
+  - techDevicesImage: "Acceso Multiplataforma" 
+  - robotHumanImage: "IA + Humanidad"
+
+**Visual Elements in Intro Card:**
+1. Vertical phone mockup with feature cards
+2. Visual gallery with 2 horizontal images (side by side on desktop)
+3. Stats section
+4. Call to action button
 
 **Technical Details:**
-- Image file: `attached_assets/generated_images/Vertical_NUXA_phone_mockup_ee80d374.png`
-- Aspect ratio: 9:16 (vertical phone orientation)
+- Phone image: `attached_assets/generated_images/Vertical_NUXA_phone_mockup_ee80d374.png`
+- Gallery images: techDevicesImage, robotHumanImage (restored from original design)
+- Aspect ratio: 9:16 (vertical phone), 16:9 (gallery images)
 - Professional product photography with NUXA branding
-- Emerald/teal/cyan color palette on screen
 
-**Status:** ✅ Complete and tested. Vertical phone displays correctly in both hero and intro sections.
+**Status:** ✅ Complete and tested. All 3 images display correctly (1 vertical phone + 2 gallery images).
