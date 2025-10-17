@@ -40,3 +40,16 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - **TypeScript**: Ensures type safety throughout the project.
 - **ESBuild**: Used for fast bundling in production environments.
 - **Drizzle Kit**: Manages database migrations and schema.
+
+## Recent Updates
+
+### NUXA Logo & PWA Branding Update (17/10/2025)
+- Generated new NUXA logo for iPhone/Android app installation featuring circular turquoise/teal gradient with person silhouette, prominent "NUXA" text, and subtle "nflow" text below
+- Updated PWA Installation Section with NUXA branding:
+  - Added NUXA logo display (48x48 mobile, 56x56 desktop)
+  - Changed all text references from "NFLOW" to "NUXA"
+  - Updated color scheme from orange/blue to emerald/teal/cyan gradients
+  - Step numbers changed to emerald-500 background
+  - Completion badges use teal-500
+  - Benefits section uses emerald→teal→cyan gradients
+- Logo file: `attached_assets/generated_images/NUXA_logo_with_circle_person_ba9dba6f.png`
