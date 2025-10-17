@@ -46,13 +46,13 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-nflow-dark">
       <SEOHead
-        title="NFLOW - Psicólogo IA 24/7 | Salud Mental"
-        description="Tu psicólogo IA con 30+ años experiencia clínica. Apoyo emocional en español 24/7 para personas, familias y trabajadores. ISO 45003. Confidencial."
-        keywords="psicólogo IA, salud mental, apoyo emocional, chat psicológico, ansiedad, depresión, ISO 45003, bienestar laboral, terapia online, psicólogo virtual, inteligencia artificial"
-        ogTitle="NFLOW - Tu Psicólogo IA Disponible 24/7"
+        title="NUXA - Tu Psicólogo IA 24/7 | Salud Mental"
+        description="Tu psicólogo IA disponible 24/7. Apoyo emocional en español para personas, familias y trabajadores. ISO 45003. Confidencial y personalizado."
+        keywords="psicólogo IA, NUXA, salud mental, apoyo emocional, chat psicológico, ansiedad, depresión, ISO 45003, bienestar laboral, terapia online, psicólogo virtual, inteligencia artificial"
+        ogTitle="NUXA - Tu Psicólogo IA Disponible 24/7"
         ogDescription="Apoyo emocional profesional con IA. Atención en español las 24 horas. Salud mental para personas, familias y trabajadores."
-        ogUrl="https://nflow.style"
-        canonicalUrl="https://nflow.style"
+        ogUrl="https://nuxa.life"
+        canonicalUrl="https://nuxa.life"
       />
       <StructuredData type="Organization" data={NFlowOrganizationData} />
       <StructuredData type="WebApplication" data={NFlowWebAppData} />

@@ -38,26 +38,26 @@ export function StructuredData({ type, data }: StructuredDataProps) {
   return null;
 }
 
-// Predefined structured data for NFLOW
-export const NFlowOrganizationData = {
-  name: 'NFLOW',
-  url: 'https://nflow.style',
-  logo: 'https://nflow.style/icon-512.png',
-  description: 'Psicólogo IA disponible 24/7. Apoyo emocional profesional con inteligencia artificial certificada ISO 45003.',
+// Predefined structured data for NUXA
+export const NuxaOrganizationData = {
+  name: 'NUXA',
+  url: 'https://nuxa.life',
+  logo: 'https://nuxa.life/icon-512.png',
+  description: 'Tu psicólogo IA disponible 24/7. Apoyo emocional profesional con inteligencia artificial certificada ISO 45003.',
   sameAs: [
-    'https://www.linkedin.com/company/nflow',
-    'https://twitter.com/nflowstyle',
+    'https://www.linkedin.com/company/nuxa',
+    'https://twitter.com/nuxalife',
   ],
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer support',
-    email: 'soporte@nflow.style',
+    email: 'soporte@nuxa.life',
     availableLanguage: ['es', 'en'],
   },
 };
 
-export const NFlowWebAppData = {
-  name: 'NFLOW - Psicólogo IA',
+export const NuxaWebAppData = {
+  name: 'NUXA - Tu Psicólogo IA 24/7',
   applicationCategory: 'HealthApplication',
   operatingSystem: 'Web, iOS, Android',
   offers: {
@@ -71,5 +71,9 @@ export const NFlowWebAppData = {
     ratingValue: '4.8',
     reviewCount: '15000',
   },
-  description: 'Psicólogo virtual con IA disponible 24/7. Apoyo emocional profesional en español para personas, familias y trabajadores.',
+  description: 'Tu psicólogo IA disponible 24/7. Apoyo emocional profesional en español para personas, familias y trabajadores.',
 };
+
+// Legacy exports for backwards compatibility (deprecated)
+export const NFlowOrganizationData = NuxaOrganizationData;
+export const NFlowWebAppData = NuxaWebAppData;
