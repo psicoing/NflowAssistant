@@ -162,27 +162,28 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 
 **Next Steps:** Ready for production deployment.
 
-### NUXA Phone Image Added to Main Card (17/10/2025)
-**Summary:** Added new rectangular image showing NUXA app on smartphone to the intro card section.
+### NUXA Vertical Phone Showcase (17/10/2025)
+**Summary:** Redesigned intro card with vertical phone mockup and feature highlights.
 
 **Changes:**
-- Generated professional product photo of smartphone displaying NUXA app
-- Image features NUXA branding with emerald/teal/cyan colors
-- Replaced old "NFLOW" image with new NUXA phone image
-- Updated overlay text: "NUXA - Tu psicólogo IA siempre contigo"
-- Image located in Visual Gallery section of intro card
+- Removed old 2-image gallery layout (techDevicesImage and family photo)
+- Added professional vertical phone mockup (9:16 aspect ratio)
+- Created new asymmetric layout: phone (left 1/3) + content (right 2/3)
+- Phone image occupies full height alongside content paragraphs
+- Added 3 feature highlight cards with icons
+
+**New Layout Structure:**
+- **Left:** Vertical phone mockup showing NUXA app interface
+- **Right:** Title "NUXA siempre contigo" + description + 3 feature cards:
+  - Acceso Multiplataforma (emerald)
+  - 100% Confidencial (teal)
+  - Apoyo Personalizado (cyan)
 
 **Technical Details:**
-- File: `attached_assets/generated_images/Improved_NUXA_family_photo_06a4115e.png`
+- File: `attached_assets/generated_images/Vertical_NUXA_phone_mockup_ee80d374.png`
 - Component: `client/src/components/sections/intro-card-section.tsx`
-- Import alias: `nuxaPhoneImage` from `@assets/generated_images/`
-- Layout: Grid with 2 images (Acceso Multiplataforma + NUXA phone)
+- Image max-width: 280px with drop-shadow-2xl
+- Responsive: flex-col (mobile) → flex-row (desktop)
+- Removed imports: techDevicesImage, nuxaPhoneImage
 
-**Image Features:**
-- Professional family photo with father holding smartphone
-- NUXA app interface clearly visible on phone screen
-- Emerald/teal/cyan brand colors
-- Warm, inviting atmosphere with natural lighting
-- Professional photography quality
-
-**Status:** ✅ Complete and tested. Improved image displays correctly in production.
+**Status:** ✅ Complete and tested. New vertical layout displays correctly across devices.

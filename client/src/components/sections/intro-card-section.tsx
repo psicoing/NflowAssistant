@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Brain, Clock, Users, Sparkles, Shield, Heart, Target, Star, Code, Zap, MessageSquare } from "lucide-react";
-import techDevicesImage from "@assets/generated_images/Modern_tech_devices_mental_health_acb51148.png";
-import nuxaPhoneImage from "@assets/generated_images/Improved_NUXA_family_photo_06a4115e.png";
+import nuxaVerticalPhone from "@assets/generated_images/Vertical_NUXA_phone_mockup_ee80d374.png";
 import DomainInfoBanner from "@/components/ui/domain-info-banner";
 
 export default function IntroCardSection() {
@@ -114,31 +113,60 @@ export default function IntroCardSection() {
               </div>
             </div>
 
-            {/* Visual Gallery Section */}
-            <div className="grid md:grid-cols-2 gap-6 lg:gap-10 xl:gap-12 mb-8">
-              <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <img 
-                  src={techDevicesImage}
-                  alt="Dispositivos tecnológicos para salud mental - NFLOW"
-                  className="w-full h-64 object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-lg mb-1">Acceso Multiplataforma</h4>
-                  <p className="text-sm opacity-90">Disponible en móvil, tablet y ordenador</p>
+            {/* NUXA Phone Showcase */}
+            <div className="flex flex-col md:flex-row items-center gap-8 lg:gap-12 mb-10">
+              {/* Vertical Phone Image */}
+              <div className="w-full md:w-1/3 flex justify-center">
+                <div className="relative">
+                  <img 
+                    src={nuxaVerticalPhone}
+                    alt="NUXA - Tu psicólogo IA siempre contigo"
+                    className="w-full max-w-[280px] h-auto object-contain drop-shadow-2xl"
+                  />
                 </div>
               </div>
 
-              <div className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <img 
-                  src={nuxaPhoneImage}
-                  alt="NUXA app en smartphone - Tu psicólogo IA"
-                  className="w-full h-64 object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-lg mb-1">NUXA</h4>
-                  <p className="text-sm opacity-90">Tu psicólogo IA siempre contigo</p>
+              {/* Content */}
+              <div className="w-full md:w-2/3 space-y-6">
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                    NUXA siempre contigo
+                  </h3>
+                  <p className="text-lg text-gray-600 leading-relaxed mb-4">
+                    Accede a apoyo emocional profesional desde cualquier dispositivo, en cualquier momento.
+                  </p>
+                </div>
+
+                <div className="grid gap-4">
+                  <div className="flex items-start space-x-4 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                    <div className="flex-shrink-0">
+                      <CheckCircle className="w-6 h-6 text-emerald-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1">Acceso Multiplataforma</h4>
+                      <p className="text-sm text-gray-600">Disponible en móvil, tablet y ordenador</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4 p-4 bg-teal-50 rounded-xl border border-teal-100">
+                    <div className="flex-shrink-0">
+                      <Shield className="w-6 h-6 text-teal-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1">100% Confidencial</h4>
+                      <p className="text-sm text-gray-600">Tus conversaciones están protegidas y encriptadas</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4 p-4 bg-cyan-50 rounded-xl border border-cyan-100">
+                    <div className="flex-shrink-0">
+                      <Heart className="w-6 h-6 text-cyan-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1">Apoyo Personalizado</h4>
+                      <p className="text-sm text-gray-600">Respuestas adaptadas a tu situación única</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
