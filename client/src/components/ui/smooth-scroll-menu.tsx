@@ -33,7 +33,7 @@ const menuItems = [
   },
   {
     id: "testimonios",
-    name: "Testimonios",
+    name: "Opiniones",
     sectionId: "testimonials",
     icon: Star
   },
