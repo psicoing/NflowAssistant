@@ -30,6 +30,24 @@ export default function ActivarCuenta() {
   // Definición de planes
   const plans = [
     {
+      id: 'basic' as const,
+      name: 'Plan Básico',
+      price: '2.99',
+      originalPrice: null,
+      period: 'mes',
+      discount: null,
+      icon: MessageCircle,
+      gradient: 'from-blue-500 to-blue-600',
+      description: 'Acceso básico a NEUROPSI-AI para comenzar tu viaje de bienestar',
+      features: [
+        'Chat ilimitado con IA',
+        'Soporte 24/7',
+        'Activación instantánea',
+        'Acceso a recursos básicos'
+      ],
+      popular: false
+    },
+    {
       id: 'individual' as const,
       name: 'Plan Individual',
       price: '5.99',
@@ -224,7 +242,7 @@ export default function ActivarCuenta() {
           </div>
 
           {/* Planes disponibles */}
-          <div className="grid md:grid-cols-2 gap-6 mb-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 mb-8 max-w-7xl mx-auto">
             {plans.map((plan) => {
               const IconComponent = plan.icon;
               return (
@@ -249,13 +267,17 @@ export default function ActivarCuenta() {
                     </div>
                     <CardTitle className="text-2xl text-white mb-2">{plan.name}</CardTitle>
                     <div className="flex items-center justify-center gap-2 mb-2">
-                      <span className="text-lg line-through opacity-60 text-white">€{plan.originalPrice}</span>
+                      {plan.originalPrice && (
+                        <span className="text-lg line-through opacity-60 text-white">€{plan.originalPrice}</span>
+                      )}
                       <span className="text-4xl font-bold text-white">€{plan.price}</span>
                       <span className="text-lg text-white">/{plan.period}</span>
                     </div>
-                    <div className="bg-white/20 rounded-full px-3 py-1 text-xs font-bold inline-block text-white">
-                      AHORRA {plan.discount}%
-                    </div>
+                    {plan.discount && (
+                      <div className="bg-white/20 rounded-full px-3 py-1 text-xs font-bold inline-block text-white">
+                        AHORRA {plan.discount}%
+                      </div>
+                    )}
                   </CardHeader>
                   
                   <CardContent className="space-y-4 pt-6 bg-gray-800/50">

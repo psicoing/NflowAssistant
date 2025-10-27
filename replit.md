@@ -41,3 +41,52 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - **TypeScript**: Ensures type safety throughout the project.
 - **ESBuild**: Used for fast bundling in production environments.
 - **Drizzle Kit**: Manages database migrations and schema.
+
+## Recent Changes
+
+### Activación de Planes Múltiples (27/10/2025)
+**Summary:** Implementado sistema completo de selección entre 3 planes de suscripción (Básico, Individual, Premium).
+
+**Planes Disponibles:**
+1. **Plan Básico** (€2.99/mes):
+   - Precio: €2.99/mes (sin descuento)
+   - Chat ilimitado con IA
+   - Soporte 24/7
+   - Activación instantánea
+   - Acceso a recursos básicos
+   - Icono: MessageCircle, Color: Azul
+
+2. **Plan Individual** (€5.99/mes - MÁS POPULAR):
+   - Precio: €5.99/mes (antes €19.99 - Ahorra 70%)
+   - Consultas ilimitadas con NEUROPSI-AI
+   - Acceso completo a todos los recursos
+   - Soporte prioritario 24/7
+   - Planes de bienestar personalizados
+   - Icono: Star, Color: Naranja
+
+3. **Plan Premium** (€32/12 meses):
+   - Precio: €32/12 meses (antes €35.56 - Ahorra 10%)
+   - Acceso completo por 12 meses
+   - Todas las características del plan Individual
+   - Contenido exclusivo y actualizaciones
+   - Análisis avanzado personalizado
+   - Icono: Gem, Color: Morado
+
+**Backend Changes (server/routes.ts):**
+- Endpoint `/api/stripe/create-checkout-session` acepta parámetro `plan` ('basic', 'individual', 'premium')
+- Configuración de precios: basic (299 cents), individual (599 cents), premium (3200 cents)
+- Plan Premium usa interval_count: 12 (anual)
+- Metadatos de sesión incluyen plan seleccionado para activación
+- Webhook actualizado para procesar plan desde metadata y actualizar suscripción
+- Expiración: 30 días (basic/individual), 365 días (premium)
+- Sistema de referidos integrado con los 3 planes
+
+**Frontend Changes (client/src/pages/activar-cuenta.tsx):**
+- Grid de 3 columnas (md:grid-cols-3) mostrando los 3 planes
+- Plan Individual marcado como "MÁS POPULAR" con badge
+- Cada plan muestra: precio original tachado (si aplica), precio actual, descuento, características
+- Botones individuales de pago por plan
+- Diseño responsive: 3 columnas en desktop, apilado en móvil
+- Gradientes distintivos: azul (Basic), naranja (Individual), morado (Premium)
+
+**Status:** ✅ Complete and tested. All 3 plans verified on desktop and mobile.
