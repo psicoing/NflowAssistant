@@ -890,8 +890,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Stripe checkout session - simplificado para máxima compatibilidad
   app.post("/api/stripe/create-checkout-session", async (req, res) => {
     try {
-      const { referralCode } = req.body;
-      console.log("Creating Stripe checkout session - simplified approach");
+      const { referralCode, plan = 'basic' } = req.body;
+      console.log(`Creating Stripe checkout session - plan: ${plan}`);
 
       // Importar Stripe solo cuando se necesite
       const Stripe = (await import('stripe')).default;
@@ -906,22 +906,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
         apiVersion: '2025-08-27.basil',
       });
 
-      // Crear precio dinámicamente para evitar problemas de Price ID
+      // Configuración de planes
+      const planConfig: Record<string, { amount: number; name: string; interval: 'month' | 'year'; intervalCount?: number }> = {
+        basic: {
+          amount: 299, // €2.99 in cents
+          name: 'NFLOW Plan Básico',
+          interval: 'month'
+        },
+        individual: {
+          amount: 599, // €5.99 in cents
+          name: 'NFLOW Plan Individual',
+          interval: 'month'
+        },
+        premium: {
+          amount: 3200, // €32 in cents
+          name: 'NFLOW Plan Premium',
+          interval: 'month',
+          intervalCount: 12 // Facturado cada 12 meses
+        }
+      };
+
+      const selectedPlan = planConfig[plan] || planConfig.basic;
+
+      // Crear precio dinámicamente según el plan seleccionado
       const price = await stripe.prices.create({
-        unit_amount: 299, // €2.99 in cents
+        unit_amount: selectedPlan.amount,
         currency: 'eur',
         recurring: {
-          interval: 'month',
+          interval: selectedPlan.interval,
+          interval_count: selectedPlan.intervalCount || 1
         },
         product_data: {
-          name: 'NFLOW Plan Basico',
+          name: selectedPlan.name,
         },
       });
 
-      // Prepare metadata with referral information
+      // Prepare metadata with referral information and plan
       let metadata: any = {
         source: "activation_page",
-        userId: req.session.userId?.toString() || "unknown"
+        userId: req.session.userId?.toString() || "unknown",
+        plan: plan // Guardar el plan seleccionado
       };
 
       // If referral code provided, validate and add to metadata
@@ -987,11 +1011,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const user = users.find(u => u.email === customerEmail);
         
         if (user) {
+          // Obtener el plan desde los metadatos de la sesión
+          const plan = session.metadata?.plan || 'basic';
+          
+          // Calcular fecha de expiración según el plan
+          let expiresAt: Date;
+          if (plan === 'premium') {
+            expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000); // 12 meses
+          } else {
+            expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 1 mes
+          }
+          
           await storage.updateUserSubscription(user.id, {
             status: 'active',
-            plan: 'basic',
+            plan: plan,
             subscriptionId: req.query.session_id as string,
-            expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+            expiresAt: expiresAt
           });
         }
       }
@@ -1060,10 +1095,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
             
             // Check for referral code in metadata to process commission
             const metadata = eventData.metadata;
+            const selectedPlan = metadata?.plan || 'basic';
+            
             if (metadata && metadata.referralCode && metadata.partnerId) {
               console.log("=== PROCESSING REFERRAL COMMISSION ===");
               console.log("Referral code:", metadata.referralCode);
               console.log("Partner ID:", metadata.partnerId);
+              console.log("Selected plan:", selectedPlan);
               
               try {
                 const partnerId = parseInt(metadata.partnerId);
@@ -1084,7 +1122,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                     // Update existing referral with payment information
                     await db.update(partnerReferrals)
                       .set({
-                        subscriptionPlan: 'basic',
+                        subscriptionPlan: selectedPlan,
                         amount: amount,
                         commission: commission,
                         status: 'completed',
@@ -1098,7 +1136,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                       partnerId: partnerId,
                       userId: user.id,
                       referralCode: metadata.referralCode,
-                      subscriptionPlan: 'basic',
+                      subscriptionPlan: selectedPlan,
                       amount: amount,
                       commission: commission,
                       status: 'completed'
@@ -1120,15 +1158,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
               }
             }
             
-            // Determine plan based on price or subscription data
-            const subscriptionPlan = (eventData.amount_total && eventData.amount_total >= 6900) ? 'annual' : 'basic';
-            const expiresAt = subscriptionPlan === 'annual' 
-              ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 365 days
-              : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+            // Determine expiration date based on plan
+            const expiresAt = selectedPlan === 'premium' 
+              ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 365 days para premium
+              : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days para basic e individual
 
             await storage.updateUserSubscription(user.id, {
               status: 'active',
-              plan: subscriptionPlan,
+              plan: selectedPlan,
               subscriptionId: eventData.id || `stripe_${Date.now()}`,
               expiresAt: expiresAt
             });
@@ -1156,7 +1193,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                     // Update pending referral to completed
                     await db.update(partnerReferrals)
                       .set({
-                        subscriptionPlan: subscriptionPlan,
+                        subscriptionPlan: selectedPlan,
                         amount: amount,
                         commission: commission,
                         status: 'completed',
