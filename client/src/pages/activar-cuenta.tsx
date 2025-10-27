@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, CreditCard, MessageCircle, Zap, CheckCircle, Smartphone, Phone, Mail, Gift, Users } from "lucide-react";
+import { ArrowLeft, CreditCard, MessageCircle, Zap, CheckCircle, Smartphone, Phone, Mail, Gift, Users, Star, Gem } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { useReferralCode } from "@/hooks/useReferralCode";
@@ -24,10 +24,52 @@ export default function ActivarCuenta() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [stripeLoading, setStripeLoading] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<'basic' | 'individual' | 'premium'>('individual'); // Individual por defecto (más popular)
   const { referralCode, isValidating, isValid, updateReferralCode } = useReferralCode();
 
+  // Definición de planes
+  const plans = [
+    {
+      id: 'individual' as const,
+      name: 'Plan Individual',
+      price: '5.99',
+      originalPrice: '19.99',
+      period: 'mes',
+      discount: 70,
+      icon: Star,
+      gradient: 'from-orange-500 to-orange-600',
+      description: 'La opción más popular para un apoyo completo y personalizado',
+      features: [
+        'Consultas ilimitadas con NEUROPSI-AI',
+        'Acceso completo a todos los recursos',
+        'Soporte prioritario 24/7',
+        'Planes de bienestar personalizados'
+      ],
+      popular: true
+    },
+    {
+      id: 'premium' as const,
+      name: 'Plan Premium',
+      price: '32',
+      originalPrice: '35.56',
+      period: '12 meses',
+      discount: 10,
+      icon: Gem,
+      gradient: 'from-purple-500 to-purple-600',
+      description: 'Acceso completo anual para usuarios que buscan la experiencia definitiva',
+      features: [
+        'Acceso completo por 12 meses',
+        'Acceso completo anual al asistente IA',
+        'Todas las características del plan de €7.99',
+        'Contenido exclusivo y actualizaciones',
+        'Análisis avanzado personalizado'
+      ],
+      popular: false
+    }
+  ];
+
   // Handle Stripe payment with custom checkout session
-  const handleStripePayment = async () => {
+  const handleStripePayment = async (plan: 'basic' | 'individual' | 'premium') => {
     setStripeLoading(true);
     
     try {
@@ -37,7 +79,8 @@ export default function ActivarCuenta() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-          referralCode: referralCode.trim() || null 
+          referralCode: referralCode.trim() || null,
+          plan: plan
         }),
         credentials: 'include',
       });
@@ -180,60 +223,81 @@ export default function ActivarCuenta() {
             </Card>
           </div>
 
-          <div className="flex justify-center mb-8">
-            {/* Opción única: Stripe */}
-            <Card className="bg-gray-800/50 border-purple-500 backdrop-blur-sm h-fit">
-              <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CreditCard className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-xl text-white mb-2">Stripe - Plan Básico</CardTitle>
-                <div className="text-2xl font-bold text-purple-400 mb-2">€2.99/mes</div>
-                <CardDescription className="text-gray-300 text-sm">
-                  Pago seguro con Stripe
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ul className="text-sm text-gray-300 mb-4 space-y-2 text-center">
-                  <li>• Chat ilimitado con IA</li>
-                  <li>• Soporte 24/7</li>
-                  <li>• Activación instantánea</li>
-                </ul>
-                
-                {/* Stripe Button Custom */}
-                <Button
-                  onClick={handleStripePayment}
-                  disabled={stripeLoading}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white py-6 text-lg font-semibold rounded-lg"
-                  size="lg"
+          {/* Planes disponibles */}
+          <div className="grid md:grid-cols-2 gap-6 mb-8 max-w-5xl mx-auto">
+            {plans.map((plan) => {
+              const IconComponent = plan.icon;
+              return (
+                <Card 
+                  key={plan.id}
+                  className={`relative backdrop-blur-sm border-2 transition-all duration-300 ${
+                    plan.popular 
+                      ? 'bg-gradient-to-br from-orange-500/10 to-red-500/10 border-orange-500 shadow-lg shadow-orange-500/20' 
+                      : 'bg-gradient-to-br from-purple-500/10 to-indigo-500/10 border-purple-500 shadow-lg shadow-purple-500/20'
+                  }`}
                 >
-                  {stripeLoading ? (
-                    <>
-                      <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                      Procesando...
-                    </>
-                  ) : (
-                    <>
-                      <CreditCard className="w-5 h-5 mr-2" />
-                      Pagar €2.99/mes
-                    </>
+                  {plan.popular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                      <Star className="w-3 h-3 fill-white" />
+                      MÁS POPULAR
+                    </div>
                   )}
-                </Button>
-                
-                <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-3">
-                  <p className="text-green-300 text-xs text-center">
-                    ⚡ Activación 100% automática
-                  </p>
-                </div>
-                
-                <div className="bg-blue-600/20 border border-blue-600/50 rounded-lg p-3 mt-3">
-                  <p className="text-blue-300 text-xs text-center">
-                    💡 Consulta el recuadro del final de página para que te sientas seguro(a) y cómodo(a)
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
+                  
+                  <CardHeader className={`text-center pb-4 bg-gradient-to-r ${plan.gradient} rounded-t-lg`}>
+                    <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <IconComponent className="w-8 h-8 text-white" />
+                    </div>
+                    <CardTitle className="text-2xl text-white mb-2">{plan.name}</CardTitle>
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <span className="text-lg line-through opacity-60 text-white">€{plan.originalPrice}</span>
+                      <span className="text-4xl font-bold text-white">€{plan.price}</span>
+                      <span className="text-lg text-white">/{plan.period}</span>
+                    </div>
+                    <div className="bg-white/20 rounded-full px-3 py-1 text-xs font-bold inline-block text-white">
+                      AHORRA {plan.discount}%
+                    </div>
+                  </CardHeader>
+                  
+                  <CardContent className="space-y-4 pt-6 bg-gray-800/50">
+                    <p className="text-gray-300 text-sm text-center mb-4">{plan.description}</p>
+                    
+                    <ul className="text-sm text-gray-300 mb-4 space-y-2">
+                      {plan.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    
+                    <Button
+                      onClick={() => handleStripePayment(plan.id)}
+                      disabled={stripeLoading}
+                      className={`w-full py-6 text-lg font-semibold rounded-lg bg-gradient-to-r ${plan.gradient} hover:opacity-90 transition-all`}
+                      size="lg"
+                    >
+                      {stripeLoading ? (
+                        <>
+                          <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                          Procesando...
+                        </>
+                      ) : (
+                        <>
+                          <CreditCard className="w-5 h-5 mr-2" />
+                          Pagar €{plan.price}/{plan.period}
+                        </>
+                      )}
+                    </Button>
+                    
+                    <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-3">
+                      <p className="text-green-300 text-xs text-center">
+                        ⚡ Activación 100% automática
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
 
           <SoporteActivacionBanner />
