@@ -37,6 +37,7 @@ import PoliticaPrivacidad from "@/pages/legal/privacidad";
 import PoliticaCookies from "@/pages/legal/cookies";
 import AvisoLegal from "@/pages/legal/aviso-legal";
 import NosotrosPage from "@/pages/nosotros";
+import QuienesSomosPage from "@/pages/quienes-somos";
 import AppMovil from "@/pages/app-movil";
 import ControlParental from "@/pages/control-parental";
 import PreciosPage from "@/pages/precios";
@@ -52,7 +53,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
     // Allow blog article routes
     if (location.startsWith("/blog/")) {
       return;
@@ -114,6 +115,7 @@ function AuthenticatedRouter() {
       <Route path="/legal/cookies" component={PoliticaCookies} />
       <Route path="/legal/aviso-legal" component={AvisoLegal} />
       <Route path="/nosotros" component={NosotrosPage} />
+      <Route path="/quienes-somos" component={QuienesSomosPage} />
       <Route path="/app-movil" component={AppMovil} />
       <Route path="/control-parental" component={ControlParental} />
       <Route component={NotFound} />

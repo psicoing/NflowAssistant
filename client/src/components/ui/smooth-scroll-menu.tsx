@@ -26,10 +26,11 @@ const menuItems = [
     isPage: true
   },
   {
-    id: "fundador",
+    id: "quienes-somos",
     name: "Quienes Somos",
-    sectionId: "founder",
-    icon: User
+    sectionId: "quienes-somos",
+    icon: User,
+    isPage: true
   },
   {
     id: "testimonios",
@@ -62,12 +63,6 @@ const menuItems = [
     name: "Aplicación Móvil",
     sectionId: "app-movil",
     icon: Smartphone
-  },
-  {
-    id: "nosotros",
-    name: "Nosotros",
-    sectionId: "founder",
-    icon: Info
   },
   {
     id: "contacto",

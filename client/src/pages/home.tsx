@@ -10,7 +10,6 @@ import PersonasSection from "@/components/sections/personas-section";
 import GlobalSupportSection from "@/components/sections/global-support-section";
 import PackagesSection from "@/components/sections/packages-section";
 
-import InstitutoSection from "@/components/sections/instituto-section";
 import PWAInstallationSection from "@/components/sections/pwa-installation-section";
 import MultilanguageCardSection from "@/components/sections/multilanguage-card-section";
 import MentalHealthHeroSection from "@/components/sections/mental-health-hero-section";
@@ -19,17 +18,14 @@ import YouthMentalHealthSection from "@/components/sections/youth-mental-health-
 import LGBTISupportSection from "@/components/sections/lgbti-support-section";
 import BlogSection from "@/components/sections/blog-section";
 import NFlowShowcaseSection from "@/components/sections/nflow-showcase-section";
-import NosotrosSection from "@/components/sections/nosotros-section";
 import ContactoSection from "@/components/sections/contacto-section";
 import TestimonialsSection from "@/components/sections/testimonials-section";
-import FounderSection from "@/components/sections/founder-section";
 import IntroCardSection from "@/components/sections/intro-card-section";
 import NeuropsiDemoSection from "@/components/sections/neuropsi-demo-section";
 import NFlowCarouselSection from "@/components/sections/nflow-carousel-section";
 import FamilyImageSection from "@/components/sections/family-image-section";
 import NFlowComparisonSection from "@/components/sections/nflow-comparison-section";
 import ProfessionalSummarySection from "@/components/sections/professional-summary-section";
-import ProfessionalMeritSection from "@/components/sections/professional-merit-section";
 import QueEsNflowSection from "@/components/sections/que-es-nflow-section";
 import FreeResourcesCardSection from "@/components/sections/free-resources-card-section";
 import FamilySupportHeroSection from "@/components/sections/family-support-hero-section";
@@ -77,7 +73,6 @@ export default function Home() {
         <FeaturesSection />
         <PersonasSection />
 
-        <FounderSection />
         <QueEsNflowSection />
         <PaidAppNotice />
         <TestimonialsSection />
@@ -86,14 +81,11 @@ export default function Home() {
         {/* Menu Sections - All services in one page */}
         <BlogSection />
         <NFlowShowcaseSection />
-        <NosotrosSection />
         <ContactoSection />
         
-        <InstitutoSection />
         {/* <PackagesSection /> */}
         
         <ProfessionalSummarySection />
-        <ProfessionalMeritSection />
       </main>
       <Footer />
     </div>

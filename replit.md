@@ -197,3 +197,33 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - URL canónica: https://nuxa.life/precios
 
 **Status:** ✅ Complete and tested. Navigation, pricing display, and back button functionality verified.
+
+### Migración de "Quienes Somos" a Subpágina Dedicada (28/10/2025)
+**Summary:** Todas las secciones relacionadas con "Quienes Somos" se movieron de la página principal a una subpágina dedicada `/quienes-somos`.
+
+**Cambios Realizados:**
+- **Página Principal (/)**: Ya no muestra ninguna sección de "Quienes Somos"
+- **Nueva Subpágina (/quienes-somos)**: Contiene todas las secciones relacionadas:
+  1. InstitutoSection - "Instituto NeuronMeg" con 3 tarjetas (Compromiso, Innovación, Experiencia)
+  2. FounderSection - "Liderando la Innovación en Salud Mental Digital" con CEO Ramón Molons de San Román
+  3. ProfessionalMeritSection - "Respaldo Profesional y Credibilidad" con certificado + "Prefiero tener una vista con el psicólogo" con opciones de consulta
+  4. NosotrosSection - "Sobre NFLOW" con valores, misión, información corporativa
+
+**Navegación:**
+- Menú hamburguesa actualizado: opción "Quienes Somos" redirige a `/quienes-somos` (isPage: true)
+- Botón "Volver al Inicio" en la página para regresar a home
+- Hero section destacado con título "Quiénes Somos"
+- Entrada duplicada "Nosotros" eliminada del menú
+
+**Archivos Modificados:**
+- client/src/pages/quienes-somos.tsx - Nueva página creada con todas las secciones
+- client/src/pages/home.tsx - Eliminadas InstitutoSection, FounderSection, ProfessionalMeritSection, NosotrosSection
+- client/src/components/ui/smooth-scroll-menu.tsx - "Quienes Somos" configurado como página (isPage: true)
+- client/src/App.tsx - Agregada ruta /quienes-somos
+
+**SEO:**
+- Título: "Quiénes Somos - NUXA | Instituto NeuronMeg"
+- Meta description optimizada para profesionalismo y experiencia
+- URL canónica: https://nuxa.life/quienes-somos
+
+**Status:** ✅ Complete and tested. Navigation, content segregation, and all four sections verified on dedicated page.
