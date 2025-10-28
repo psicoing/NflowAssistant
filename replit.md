@@ -109,3 +109,29 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - Destaca tanto el uso personal como empresarial
 
 **Status:** ✅ Complete and tested. Text verified on desktop and mobile.
+
+### Nueva Sección "¿Para quién es NUXA?" (28/10/2025)
+**Summary:** Creada nueva sección antes de "Presentamos NUXA" que clarifica los dos públicos objetivo principales.
+
+**Funcionalidad:**
+- Dos columnas mostrando claramente:
+  1. **Para Personas**: Adolescentes, jóvenes y adultos que buscan orientación emocional
+  2. **Para Empresas**: Organizaciones que cuidan la salud mental de sus empleados (ISO 45003)
+
+**Diseño:**
+- Iconos circulares animados con gradientes (User para personas, Building2 para empresas)
+- Globos de diálogo simulando conversaciones reales con NUXA
+- Características destacadas con bullet points
+- Color emerald/teal para personas, blue/cyan para empresas
+- Responsive: dos columnas en desktop, apilado en móvil
+
+**Ejemplos de conversación:**
+- Persona: "Me siento ansioso últimamente, no sé cómo manejar el estrés..."
+- Empresa: "Tengo dificultades para equilibrar el trabajo y mi vida personal..."
+- NUXA responde con empatía y orientación profesional
+
+**Archivo:**
+- client/src/components/sections/nuxa-purpose-section.tsx
+- Incluida en home.tsx (línea 66, antes de NuxaBrandEvolutionSection)
+
+**Status:** ✅ Complete and tested. Section verified on desktop and mobile with proper responsive behavior.

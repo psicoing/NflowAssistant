@@ -37,6 +37,7 @@ import CommercialPartnersSection from "@/components/sections/commercial-partners
 import QueEsNflowSection from "@/components/sections/que-es-nflow-section";
 import FreeResourcesCardSection from "@/components/sections/free-resources-card-section";
 import FamilySupportHeroSection from "@/components/sections/family-support-hero-section";
+import NuxaPurposeSection from "@/components/sections/nuxa-purpose-section";
 import NuxaBrandEvolutionSection from "@/components/sections/nuxa-brand-evolution-section";
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/components/StructuredData";
@@ -59,6 +60,7 @@ export default function Home() {
       <Header showBanner={false} />
       <main className="pt-16">
         <FamilySupportHeroSection />
+        <NuxaPurposeSection />
         <NuxaBrandEvolutionSection />
         <MentalHealthHeroSection />
         <BorderlessSupportSection />
