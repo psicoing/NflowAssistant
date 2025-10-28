@@ -18,7 +18,6 @@ import BorderlessSupportSection from "@/components/sections/borderless-support-s
 import YouthMentalHealthSection from "@/components/sections/youth-mental-health-section";
 import LGBTISupportSection from "@/components/sections/lgbti-support-section";
 import BlogSection from "@/components/sections/blog-section";
-import PreciosSection from "@/components/sections/precios-section";
 import NFlowShowcaseSection from "@/components/sections/nflow-showcase-section";
 import NosotrosSection from "@/components/sections/nosotros-section";
 import ContactoSection from "@/components/sections/contacto-section";
@@ -86,7 +85,6 @@ export default function Home() {
         
         {/* Menu Sections - All services in one page */}
         <BlogSection />
-        <PreciosSection />
         <NFlowShowcaseSection />
         <NosotrosSection />
         <ContactoSection />

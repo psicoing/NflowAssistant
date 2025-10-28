@@ -47,7 +47,8 @@ const menuItems = [
     id: "precios",
     name: "Precios",
     sectionId: "precios",
-    icon: DollarSign
+    icon: DollarSign,
+    isPage: true
   },
   {
     id: "partners",

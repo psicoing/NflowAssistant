@@ -162,3 +162,38 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - URL canónica: https://nuxa.life/partners
 
 **Status:** ✅ Complete and tested. Navigation, content segregation, and menu redirection verified.
+
+### Migración de Precios a Subpágina Dedicada (28/10/2025)
+**Summary:** Toda la información de Precios se movió de la página principal a una subpágina dedicada `/precios`.
+
+**Cambios Realizados:**
+- **Página Principal (/)**: Ya no muestra la sección de precios
+- **Nueva Subpágina (/precios)**: Contiene toda la información de precios:
+  1. PreciosSection - Completa con planes personales y empresariales
+  
+**Planes Personales:**
+- Plan Básico: €2.99/mes (antes €9.99)
+- Plan Individual: €5.99/mes (antes €19.99) - MÁS POPULAR
+- Plan Premium: €32/12 meses (antes €35.56)
+
+**Planes Empresariales:**
+- Plan Profesional: €149.50/mes (antes €299.99)
+- Plan Empresarial: €598/mes (antes €999.99) - RECOMENDADO
+- Plan Corporativo: Precio personalizado
+
+**Navegación:**
+- Menú hamburguesa actualizado: opción "Precios" redirige a `/precios` (isPage: true)
+- Botón "Volver al Inicio" en la página de precios para regresar a home
+- Hero section destacado con título "Planes y Precios"
+
+**Archivos Modificados:**
+- client/src/pages/precios.tsx - Actualizada con hero section, botón de volver y PreciosSection
+- client/src/pages/home.tsx - Eliminada la sección PreciosSection
+- client/src/components/ui/smooth-scroll-menu.tsx - Precios configurado como página (isPage: true)
+
+**SEO:**
+- Título: "Precios - NUXA | Planes desde €2.99/mes"
+- Meta description optimizada para conversión
+- URL canónica: https://nuxa.life/precios
+
+**Status:** ✅ Complete and tested. Navigation, pricing display, and back button functionality verified.

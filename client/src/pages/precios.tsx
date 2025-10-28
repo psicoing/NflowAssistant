@@ -1,43 +1,55 @@
-import PricingSection from "@/components/sections/pricing-section";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import PreciosSection from "@/components/sections/precios-section";
 import { SEOHead } from "@/components/SEOHead";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { useLocation } from "wouter";
 
 export default function PreciosPage() {
-  return (
-    <>
-      <SEOHead
-        title="Precios - NFLOW Psicólogo IA | Planes desde €2.99/mes"
-        description="Planes de suscripción NFLOW: individual €2.99/mes, familiar €4.99/mes, empresarial desde €1.99/usuario. Psicólogo IA 24/7 con ISO 45003. Prueba ahora."
-        keywords="precios psicólogo IA, suscripción salud mental, plan terapia online, NFLOW precios, ISO 45003 empresas"
-        ogTitle="Planes y Precios NFLOW - Psicólogo IA Accesible"
-        ogDescription="Desde €2.99/mes. Apoyo emocional profesional 24/7 para personas, familias y trabajadores."
-        canonicalUrl="https://nflow.style/precios"
-      />
-      <div className="min-h-screen bg-nflow-navy">
-        <Header />
-        <main className="pt-20">
-          {/* Hero Section */}
-          <section className="py-20 px-4 bg-nflow-navy text-center">
-            <div className="max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-                Planes de Suscripción
-              </h1>
-              <h2 className="text-2xl md:text-3xl font-semibold text-gray-300 mb-8">
-                Para individuos, familias y trabajadores
-              </h2>
-              <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-                Soluciones innovadoras que integren salud mental y desarrollo laboral, alineadas con 
-                los principios de la normativa ISO 45003. Recurso digital de apoyo emocional continuo.
-              </p>
-            </div>
-          </section>
+  const [, setLocation] = useLocation();
 
-          {/* Pricing Section */}
-          <PricingSection />
-        </main>
-        <Footer />
-      </div>
-    </>
+  return (
+    <div className="min-h-screen bg-nflow-dark">
+      <SEOHead
+        title="Precios - NUXA | Planes desde €2.99/mes"
+        description="Planes de suscripción NUXA: Básico €2.99/mes, Individual €5.99/mes, Premium €32/año. Apoyo emocional 24/7 con IA en 150+ idiomas. Planes empresariales disponibles."
+        keywords="precios psicólogo IA, suscripción salud mental, plan terapia online, NUXA precios, ISO 45003 empresas"
+        ogTitle="Planes y Precios NUXA - Apoyo Mental Accesible"
+        ogDescription="Desde €2.99/mes. Apoyo emocional profesional 24/7 para personas y empresas en 150+ idiomas."
+        canonicalUrl="https://nuxa.life/precios"
+      />
+      <Header showBanner={false} />
+      <main className="pt-16">
+        {/* Botón de Volver */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <Button
+            variant="ghost"
+            onClick={() => setLocation("/")}
+            className="text-white hover:bg-white/10 flex items-center gap-2"
+            data-testid="button-back-home"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Volver al Inicio
+          </Button>
+        </div>
+
+        {/* Hero Section */}
+        <section className="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 py-12 md:py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+              Planes y <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Precios</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
+              Apoyo emocional profesional 24/7 para personas y empresas
+            </p>
+          </div>
+        </section>
+
+        {/* Sección de Precios */}
+        <PreciosSection />
+      </main>
+      <Footer />
+    </div>
   );
 }
