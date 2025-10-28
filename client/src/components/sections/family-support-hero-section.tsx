@@ -23,7 +23,8 @@ export default function FamilySupportHeroSection() {
                 </p>
               </div>
               <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                Apoyo emocional y salud mental con IA en español, cuando lo necesites. Chat psicológico profesional que conecta familias, adolescentes y adultos con herramientas de bienestar respaldadas por 30+ años de experiencia clínica ISO 45003.
+                NUXA, para personas y empresas.<br />
+                Apoyo emocional y salud mental con IA en español y más de 150 idiomas.
               </p>
             </div>
 

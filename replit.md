@@ -90,3 +90,22 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - Gradientes distintivos: azul (Basic), naranja (Individual), morado (Premium)
 
 **Status:** ✅ Complete and tested. All 3 plans verified on desktop and mobile.
+
+### Actualización de Texto Hero (28/10/2025)
+**Summary:** Actualizado el texto principal del hero section para enfatizar el alcance multilingüe.
+
+**Cambio Realizado:**
+- **Texto anterior:** "Apoyo emocional y salud mental con IA en español, cuando lo necesites. Chat psicológico profesional que conecta familias, adolescentes y adultos con herramientas de bienestar respaldadas por 30+ años de experiencia clínica ISO 45003."
+- **Texto nuevo:** 
+  - "NUXA, para personas y empresas."
+  - "Apoyo emocional y salud mental con IA en español y más de 150 idiomas."
+
+**Archivo modificado:**
+- client/src/components/sections/family-support-hero-section.tsx (línea 28-31)
+
+**Impacto:**
+- Mensaje más conciso y directo
+- Énfasis en el soporte multilingüe (150+ idiomas)
+- Destaca tanto el uso personal como empresarial
+
+**Status:** ✅ Complete and tested. Text verified on desktop and mobile.
