@@ -53,7 +53,8 @@ const menuItems = [
     id: "partners",
     name: "Partners",
     sectionId: "partners",
-    icon: Users
+    icon: Users,
+    isPage: true
   },
   {
     id: "app-movil",

@@ -18,7 +18,6 @@ import BorderlessSupportSection from "@/components/sections/borderless-support-s
 import YouthMentalHealthSection from "@/components/sections/youth-mental-health-section";
 import LGBTISupportSection from "@/components/sections/lgbti-support-section";
 import BlogSection from "@/components/sections/blog-section";
-import PartnersSection from "@/components/sections/partners-section";
 import PreciosSection from "@/components/sections/precios-section";
 import NFlowShowcaseSection from "@/components/sections/nflow-showcase-section";
 import NosotrosSection from "@/components/sections/nosotros-section";
@@ -32,8 +31,6 @@ import FamilyImageSection from "@/components/sections/family-image-section";
 import NFlowComparisonSection from "@/components/sections/nflow-comparison-section";
 import ProfessionalSummarySection from "@/components/sections/professional-summary-section";
 import ProfessionalMeritSection from "@/components/sections/professional-merit-section";
-import ReferralInfoSection from "@/components/sections/referral-info-section";
-import CommercialPartnersSection from "@/components/sections/commercial-partners-section";
 import QueEsNflowSection from "@/components/sections/que-es-nflow-section";
 import FreeResourcesCardSection from "@/components/sections/free-resources-card-section";
 import FamilySupportHeroSection from "@/components/sections/family-support-hero-section";
@@ -90,13 +87,9 @@ export default function Home() {
         {/* Menu Sections - All services in one page */}
         <BlogSection />
         <PreciosSection />
-        <PartnersSection />
-        <ReferralInfoSection />
         <NFlowShowcaseSection />
         <NosotrosSection />
         <ContactoSection />
-        
-        <CommercialPartnersSection />
         
         <InstitutoSection />
         {/* <PackagesSection /> */}

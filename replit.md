@@ -135,3 +135,30 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - Incluida en home.tsx (línea 66, antes de NuxaBrandEvolutionSection)
 
 **Status:** ✅ Complete and tested. Section verified on desktop and mobile with proper responsive behavior.
+
+### Migración de Partners a Subpágina Dedicada (28/10/2025)
+**Summary:** Toda la información sobre Partners se movió de la página principal a una subpágina dedicada `/partners`.
+
+**Cambios Realizados:**
+- **Página Principal (/)**: Ya no muestra ninguna sección de partners
+- **Nueva Subpágina (/partners)**: Contiene todas las secciones de partners:
+  1. PartnersSection - Programa con comisiones hasta 40%
+  2. ReferralInfoSection - Información sobre códigos de referido
+  3. CommercialPartnersSection - Equipo comercial de partners
+
+**Navegación:**
+- Menú hamburguesa actualizado: opción "Partners" redirige a `/partners` (isPage: true)
+- Botón "Volver al Inicio" en la página de partners para regresar a home
+- Hero section destacado con título "Programa de Partners"
+
+**Archivos Modificados:**
+- client/src/pages/partners.tsx - Reemplazada con nuevo contenido enfocado
+- client/src/pages/home.tsx - Eliminadas todas las secciones e importaciones de partners
+- client/src/components/ui/smooth-scroll-menu.tsx - Partners configurado como página (isPage: true)
+
+**SEO:**
+- Título: "Programa de Partners - NUXA | Gana con Salud Mental"
+- Meta description optimizada para conversión
+- URL canónica: https://nuxa.life/partners
+
+**Status:** ✅ Complete and tested. Navigation, content segregation, and menu redirection verified.
