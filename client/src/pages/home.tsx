@@ -11,6 +11,7 @@ import GlobalSupportSection from "@/components/sections/global-support-section";
 import PackagesSection from "@/components/sections/packages-section";
 
 import PWAInstallationSection from "@/components/sections/pwa-installation-section";
+import AppMovilSection from "@/components/sections/app-movil-section";
 import MultilanguageCardSection from "@/components/sections/multilanguage-card-section";
 import MentalHealthHeroSection from "@/components/sections/mental-health-hero-section";
 import BorderlessSupportSection from "@/components/sections/borderless-support-section";
@@ -70,6 +71,7 @@ export default function Home() {
         <ServicesSection />
         <ChatExamplesSection />
         <PWAInstallationSection />
+        <AppMovilSection />
         <FeaturesSection />
         <PersonasSection />
 

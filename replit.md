@@ -227,3 +227,27 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - URL canónica: https://nuxa.life/quienes-somos
 
 **Status:** ✅ Complete and tested. Navigation, content segregation, and all four sections verified on dedicated page.
+
+### Corrección de Scroll "Aplicación Móvil" (29/10/2025)
+**Summary:** Habilitado el scroll automático al hacer clic en "Aplicación Móvil" en el menú hamburguesa.
+
+**Problema:**
+- La opción "Aplicación Móvil" estaba en el menú pero la sección AppMovilSection no estaba renderizada en home.tsx
+- El clic en el menú no funcionaba porque no había una sección con id="app-movil" para hacer scroll
+
+**Solución:**
+- Importado AppMovilSection en home.tsx
+- Renderizado AppMovilSection después de PWAInstallationSection (secciones relacionadas)
+- La sección ya tenía el id="app-movil" correcto
+
+**Archivos Modificados:**
+- client/src/pages/home.tsx - Agregado import y renderizado de AppMovilSection
+
+**Contenido de AppMovilSection:**
+- Título: "Aplicación Móvil"
+- Phone mockup con preview de chat
+- 4 funcionalidades exclusivas: Notificaciones Inteligentes, Modo Offline, Respuesta Instantánea, Sincronización Multi-dispositivo
+- Beneficios de la app móvil
+- Botones de descarga (App Store y Google Play - próximamente)
+
+**Status:** ✅ Complete and tested. Scroll functionality verified end-to-end.
