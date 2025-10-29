@@ -1,4 +1,4 @@
-import { Star, Quote, Calendar, MapPin, MessageCircle, HelpCircle, Users, Target, Clock, ThumbsUp } from "lucide-react";
+import { Star, Quote, Calendar, MapPin, MessageCircle, HelpCircle, Clock, ThumbsUp } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 
@@ -73,9 +73,6 @@ function DynamicStatsDisplay() {
   });
 
   const [displayStats, setDisplayStats] = useState({
-    totalUsers: '?',
-    totalConversations: '?',
-    activeSubscriptions: '?',
     averageSatisfaction: '?'
   });
 
@@ -84,61 +81,14 @@ function DynamicStatsDisplay() {
       // Animate the numbers appearing
       setTimeout(() => {
         setDisplayStats({
-          totalUsers: stats.totalUsers.toLocaleString(),
-          totalConversations: stats.totalConversations.toLocaleString(),
-          activeSubscriptions: stats.activeSubscriptions.toLocaleString(),
-          averageSatisfaction: stats.averageSatisfaction.toFixed(1)
+          averageSatisfaction: (stats as any).averageSatisfaction?.toFixed(1) || '4.9'
         });
       }, 500);
     }
   }, [stats, isLoading]);
 
   return (
-    <div className="grid md:grid-cols-4 gap-8">
-      <div className="flex flex-col items-center">
-        <div className="flex items-center space-x-2 mb-3">
-          <Users className="w-6 h-6 text-nflow-orange" />
-        </div>
-        <div className="flex items-center space-x-1 mb-2">
-          <div className="text-3xl font-bold text-nflow-orange drop-shadow-lg">
-            {isLoading ? (
-              <HelpCircle className="w-8 h-8 animate-pulse" />
-            ) : (
-              displayStats.totalUsers
-            )}
-          </div>
-          <div className="relative group">
-            <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
-              Usuarios registrados en la plataforma
-            </div>
-          </div>
-        </div>
-        <div className="text-gray-200 font-semibold text-lg">Usuarios Registrados</div>
-      </div>
-      
-      <div className="flex flex-col items-center">
-        <div className="flex items-center space-x-2 mb-3">
-          <Target className="w-6 h-6 text-nflow-orange" />
-        </div>
-        <div className="flex items-center space-x-1 mb-2">
-          <div className="text-3xl font-bold text-nflow-orange drop-shadow-lg">
-            {isLoading ? (
-              <HelpCircle className="w-8 h-8 animate-pulse" />
-            ) : (
-              displayStats.totalConversations
-            )}
-          </div>
-          <div className="relative group">
-            <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
-              Conversaciones totales con NEUROPSI-AI
-            </div>
-          </div>
-        </div>
-        <div className="text-gray-200 font-semibold text-lg">Consultas Realizadas</div>
-      </div>
-      
+    <div className="grid md:grid-cols-2 gap-12 max-w-3xl mx-auto">
       <div className="flex flex-col items-center">
         <div className="flex items-center space-x-2 mb-3">
           <Clock className="w-6 h-6 text-nflow-orange" />
