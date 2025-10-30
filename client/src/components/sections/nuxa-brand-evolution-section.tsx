@@ -4,7 +4,7 @@ import nuxaLogo from "@assets/generated_images/NUXA_logo_with_circle_person_ba9d
 
 export default function NuxaBrandEvolutionSection() {
   return (
-    <section className="relative bg-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-16 md:py-20">
+    <section className="relative bg-white dark:bg-slate-900 py-16 md:py-20">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{ 
