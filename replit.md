@@ -44,13 +44,19 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 
 ## Recent Changes
 
-### Hero Section Updates (30/10/2025)
+### Hero Section Complete Redesign (30/10/2025)
 - **Description update:** Updated main hero description to clarify NUXA's role
   - Changed from: "NUXA, para personas y empresas. Apoyo emocional y salud mental con IA en español y más de 150 idiomas."
   - Changed to: "NUXA es un orientador en psicología que no hace tratamientos ni psicoterapia, ayuda a las personas y empresas a mejorar la salud mental. Habla 150 idiomas."
 - **Removed star rating:** Removed "⭐⭐⭐⭐⭐ 4.8/5" rating display from social proof section
-- Kept "+140,000 fuentes de psicología" badge
-- Files modified: family-support-hero-section.tsx
+- **Removed phone image:** Eliminated phone mockup from hero section (already shown in mobile app section below)
+- **Layout redesign:** Changed from 2-column grid to centered single-column layout
+- **Enhanced typography:** NUXA heading now uses gradient text (emerald→teal→cyan), larger sizes (5xl-7xl)
+- **Improved CTAs:** Larger, more prominent buttons with better spacing and centering
+- **Redesigned social proof:** Badge now has pill design with backdrop blur and centered positioning
+- **Redesigned feature cards:** 4-column vertical layout with gradient icon backgrounds, better hover effects, unique colors per card
+- **Removed duplicate content:** Eliminated "NUXA Phone Showcase" section from intro-card-section (duplicate of mobile app section)
+- Files modified: family-support-hero-section.tsx, intro-card-section.tsx
 - Status: ✅ Complete and tested
 
 ### "Qué es" Section Branding: NFLOW → NUXA (30/10/2025)
