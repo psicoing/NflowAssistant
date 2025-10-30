@@ -44,6 +44,12 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 
 ## Recent Changes
 
+### Blog Section Branding: NFLOW → NUXA (30/10/2025)
+- Updated blog section title from "Blog NFLOW" to "Blog NUXA"
+- Updated blog post content reference: "Plataformas como NFLOW..." → "Plataformas como NUXA..."
+- Files modified: blog-section.tsx
+- Status: ✅ Complete and tested
+
 ### Comparison Section Branding: NFLOW → NUXA (29/10/2025)
 - Updated comparison section heading from "¿Por qué NFLOW supera a GPT-5?" to "¿Por qué NUXA supera a GPT-5?"
 - Updated table column header: "NFLOW" → "NUXA"

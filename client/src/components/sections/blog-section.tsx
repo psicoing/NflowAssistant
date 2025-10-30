@@ -28,7 +28,7 @@ const blogPosts = [
       <p>Estudios recientes muestran que el 78% de adolescentes que utilizan asistentes de IA especializados reportan mejoras significativas en su bienestar emocional en las primeras 4 semanas.</p>
       
       <h3>El Futuro es Ahora</h3>
-      <p>Plataformas como NFLOW están liderando esta transformación, combinando IA avanzada con principios psicológicos sólidos para crear experiencias que realmente importan en la vida de los jóvenes.</p>
+      <p>Plataformas como NUXA están liderando esta transformación, combinando IA avanzada con principios psicológicos sólidos para crear experiencias que realmente importan en la vida de los jóvenes.</p>
     `,
     date: "23 Agosto 2025",
     author: "Dr. Ana Martínez",
@@ -135,7 +135,7 @@ export default function BlogSection() {
               <Sparkles className="w-6 h-6 text-yellow-400 absolute -top-2 -right-2 animate-pulse" />
             </div>
             <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-              Blog NFLOW
+              Blog NUXA
             </h2>
           </div>
           <p className="text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
