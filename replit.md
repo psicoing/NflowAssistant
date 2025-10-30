@@ -41,3 +41,29 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - **TypeScript**: Ensures type safety throughout the project.
 - **ESBuild**: Used for fast bundling in production environments.
 - **Drizzle Kit**: Manages database migrations and schema.
+
+## Recent Changes
+
+### Navigation Branding Update: NFLOW → NUXA (29/10/2025)
+- Updated navbar and hamburger menu to display "NUXA" instead of "NFLOW"
+- Reason: Avoid user confusion as brand has evolved to NUXA
+- Files modified: header.tsx, smooth-scroll-menu.tsx
+- Status: ✅ Complete and tested
+
+### Statistics Removal (29/10/2025)
+- Removed internal metrics from testimonials section (Users: 37, Conversations: 134)
+- Kept only public-facing stats: Availability 24/7 and Satisfaction 4.9/5
+- Files modified: testimonials-section.tsx
+- Status: ✅ Complete and tested
+
+### Mobile App Section Scroll Fix (29/10/2025)
+- Added AppMovilSection to home.tsx to enable scroll functionality
+- Menu item "Aplicación Móvil" now scrolls to section correctly
+- Status: ✅ Complete and tested
+
+### Content Migration to Subpages (28-29/10/2025)
+- Partners content → /partners (program info, referrals, commercial partners)
+- Pricing content → /precios (personal & business plans)
+- About Us content → /quienes-somos (Instituto NeuronMeg, CEO, credentials, company info)
+- All accessible via hamburger menu with proper navigation
+- Status: ✅ Complete and tested
