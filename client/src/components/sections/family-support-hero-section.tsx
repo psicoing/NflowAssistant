@@ -23,8 +23,7 @@ export default function FamilySupportHeroSection() {
                 </p>
               </div>
               <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                NUXA, para personas y empresas.<br />
-                Apoyo emocional y salud mental con IA en español y más de 150 idiomas.
+                NUXA es un orientador en psicología que no hace tratamientos ni psicoterapia, ayuda a las personas y empresas a mejorar la salud mental. Habla 150 idiomas.
               </p>
             </div>
 

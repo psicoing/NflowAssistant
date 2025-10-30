@@ -44,6 +44,13 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 
 ## Recent Changes
 
+### Hero Description Update (30/10/2025)
+- Updated main hero description to clarify NUXA's role
+- Changed from: "NUXA, para personas y empresas. Apoyo emocional y salud mental con IA en español y más de 150 idiomas."
+- Changed to: "NUXA es un orientador en psicología que no hace tratamientos ni psicoterapia, ayuda a las personas y empresas a mejorar la salud mental. Habla 150 idiomas."
+- Files modified: family-support-hero-section.tsx
+- Status: ✅ Complete and tested
+
 ### "Qué es" Section Branding: NFLOW → NUXA (30/10/2025)
 - Updated badge from "Conoce NFLOW" to "Conoce NUXA"
 - Updated heading from "¿Qué es NFLOW?" to "¿Qué es NUXA?"
