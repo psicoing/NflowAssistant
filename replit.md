@@ -44,10 +44,12 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 
 ## Recent Changes
 
-### Hero Description Update (30/10/2025)
-- Updated main hero description to clarify NUXA's role
-- Changed from: "NUXA, para personas y empresas. Apoyo emocional y salud mental con IA en español y más de 150 idiomas."
-- Changed to: "NUXA es un orientador en psicología que no hace tratamientos ni psicoterapia, ayuda a las personas y empresas a mejorar la salud mental. Habla 150 idiomas."
+### Hero Section Updates (30/10/2025)
+- **Description update:** Updated main hero description to clarify NUXA's role
+  - Changed from: "NUXA, para personas y empresas. Apoyo emocional y salud mental con IA en español y más de 150 idiomas."
+  - Changed to: "NUXA es un orientador en psicología que no hace tratamientos ni psicoterapia, ayuda a las personas y empresas a mejorar la salud mental. Habla 150 idiomas."
+- **Removed star rating:** Removed "⭐⭐⭐⭐⭐ 4.8/5" rating display from social proof section
+- Kept "+140,000 fuentes de psicología" badge
 - Files modified: family-support-hero-section.tsx
 - Status: ✅ Complete and tested
 
