@@ -44,6 +44,22 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 
 ## Recent Changes
 
+### Interactive Phone Showcase Section (30/10/2025)
+- **New Section Created:** NuxaPhonesShowcaseSection - Interactive carousel showing 6 phone mockups with NUXA mental health conversations
+- **Generated Assets:** 6 AI-generated phone mockup images showing different mental health topics:
+  1. Anxiety support (Ansiedad)
+  2. Work stress management (Estrés Laboral)
+  3. Family relationships (Relaciones Familiares)
+  4. Self-esteem building (Autoestima)
+  5. Emotional wellness (Bienestar Emocional)
+  6. Sleep & relaxation (Sueño y Relajación)
+- **Features:** Auto-rotating carousel (4s intervals), manual navigation with prev/next arrows, 6 dot indicators, gradient icon badges per topic, hover effects
+- **Design:** 2-column layout (phone + content), glow effects on active phone, gradient backgrounds, topic grid overview, clean modern aesthetic with NUXA branding
+- **Position:** Placed immediately after "Presentamos NUXA" (NuxaBrandEvolutionSection) on homepage
+- Files created: nuxa-phones-showcase-section.tsx
+- Files modified: home.tsx
+- Status: ✅ Complete and tested - carousel rotates automatically and responds to user interaction
+
 ### Hero Section Complete Redesign (30/10/2025)
 - **Description update:** Updated main hero description to clarify NUXA's role
   - Changed from: "NUXA, para personas y empresas. Apoyo emocional y salud mental con IA en español y más de 150 idiomas."

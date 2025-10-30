@@ -32,6 +32,7 @@ import FreeResourcesCardSection from "@/components/sections/free-resources-card-
 import FamilySupportHeroSection from "@/components/sections/family-support-hero-section";
 import NuxaPurposeSection from "@/components/sections/nuxa-purpose-section";
 import NuxaBrandEvolutionSection from "@/components/sections/nuxa-brand-evolution-section";
+import NuxaPhonesShowcaseSection from "@/components/sections/nuxa-phones-showcase-section";
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/components/StructuredData";
 
@@ -55,6 +56,7 @@ export default function Home() {
         <FamilySupportHeroSection />
         <NuxaPurposeSection />
         <NuxaBrandEvolutionSection />
+        <NuxaPhonesShowcaseSection />
         <MentalHealthHeroSection />
         <BorderlessSupportSection />
         <MultilanguageCardSection />
