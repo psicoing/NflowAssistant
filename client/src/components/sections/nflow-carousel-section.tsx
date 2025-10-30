@@ -23,7 +23,7 @@ const carouselData = [
     id: 2,
     image: nflowCommunity,
     title: "Comunidad de Apoyo",
-    description: "Conecta con una comunidad diversa que encuentra bienestar a través de NFLOW"
+    description: "Conecta con una comunidad diversa que encuentra bienestar a través de NUXA"
   },
   {
     id: 3,
@@ -98,10 +98,10 @@ export default function NFlowCarouselSection() {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Descubre <span className="text-orange-600">NFLOW</span> en Acción
+            Descubre <span className="text-orange-600">NUXA</span> en Acción
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Explora cómo NFLOW transforma vidas en diferentes contextos: 
+            Explora cómo NUXA transforma vidas en diferentes contextos: 
             tecnología, comunidad, trabajo y familia
           </p>
         </div>

@@ -44,6 +44,13 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 
 ## Recent Changes
 
+### Carousel Section Branding: NFLOW → NUXA (29/10/2025)
+- Updated carousel section heading from "Descubre NFLOW en Acción" to "Descubre NUXA en Acción"
+- Updated subtitle from "Explora cómo NFLOW transforma vidas" to "Explora cómo NUXA transforma vidas"
+- Updated carousel description: "...a través de NFLOW" to "...a través de NUXA"
+- Files modified: nflow-carousel-section.tsx
+- Status: ✅ Complete and tested
+
 ### Tour Section Branding: NFLOW → NUXA (29/10/2025)
 - Updated demo section heading from "Haz un tour por NFLOW" to "Haz un tour por NUXA"
 - Files modified: neuropsi-demo-section.tsx
