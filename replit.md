@@ -44,6 +44,11 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 
 ## Recent Changes
 
+### Tour Section Branding: NFLOW → NUXA (29/10/2025)
+- Updated demo section heading from "Haz un tour por NFLOW" to "Haz un tour por NUXA"
+- Files modified: neuropsi-demo-section.tsx
+- Status: ✅ Complete and tested
+
 ### Domain Banner Removal (29/10/2025)
 - Removed blue domain info banner showing NFLOW official domains (nflow.es, nflow.biz, nflow.gal, nflow.store, nflow.style)
 - Banner displayed security/verification message: "Dominio oficial de la app: nflow.style • Conexión 100% segura"

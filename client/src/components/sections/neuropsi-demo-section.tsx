@@ -14,7 +14,7 @@ export default function NeuropsiDemoSection() {
               <Sparkles className="w-6 h-6 text-white animate-pulse" />
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-3">
-              Haz un tour por NFLOW
+              Haz un tour por NUXA
             </h2>
             <div className="w-24 h-1 bg-white/30 mx-auto rounded-full"></div>
           </div>
