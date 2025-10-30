@@ -10,11 +10,14 @@ export default function QueEsNflowSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <Badge className="bg-green-500 text-white mb-4 text-sm px-4 py-2">
-            Conoce NFLOW
+            Conoce NUXA
           </Badge>
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-            ¿Qué es NFLOW?
+            ¿Qué es NUXA?
           </h2>
+          <p className="text-sm text-green-400 mb-4 italic">
+            Anteriormente conocido como NFLOW, ahora somos NUXA
+          </p>
           <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
             Un asistente digital de salud mental que ofrece apoyo psicológico adaptado a adolescentes, 
             familias y empresas.
@@ -111,7 +114,7 @@ export default function QueEsNflowSection() {
             <div className="flex items-start space-x-4">
               <CheckCircle className="w-6 h-6 text-green-400 mt-1 flex-shrink-0" />
               <p className="text-xl text-gray-200 leading-relaxed">
-                <strong className="text-white">"NFLOW no sustituye al psicólogo, lo complementa"</strong>: 
+                <strong className="text-white">"NUXA no sustituye al psicólogo, lo complementa"</strong>: 
                 es una ayuda inmediata y continua.
               </p>
             </div>
@@ -135,7 +138,7 @@ export default function QueEsNflowSection() {
             <div className="flex items-start space-x-4">
               <CheckCircle className="w-6 h-6 text-green-400 mt-1 flex-shrink-0" />
               <p className="text-xl text-gray-200 leading-relaxed">
-                <strong className="text-white">"NFLOW acerca la salud mental a todo el mundo"</strong>, 
+                <strong className="text-white">"NUXA acerca la salud mental a todo el mundo"</strong>, 
                 sin listas de espera ni burocracia.
               </p>
             </div>

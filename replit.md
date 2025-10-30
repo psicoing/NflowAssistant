@@ -44,6 +44,15 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 
 ## Recent Changes
 
+### "Qué es" Section Branding: NFLOW → NUXA (30/10/2025)
+- Updated badge from "Conoce NFLOW" to "Conoce NUXA"
+- Updated heading from "¿Qué es NFLOW?" to "¿Qué es NUXA?"
+- Added branding transition note: "Anteriormente conocido como NFLOW, ahora somos NUXA"
+- Updated key arguments: "NFLOW no sustituye al psicólogo" → "NUXA no sustituye al psicólogo"
+- Updated key arguments: "NFLOW acerca la salud mental" → "NUXA acerca la salud mental"
+- Files modified: que-es-nflow-section.tsx
+- Status: ✅ Complete and tested
+
 ### Blog Section Branding: NFLOW → NUXA (30/10/2025)
 - Updated blog section title from "Blog NFLOW" to "Blog NUXA"
 - Updated blog post content reference: "Plataformas como NFLOW..." → "Plataformas como NUXA..."
