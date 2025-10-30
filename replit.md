@@ -44,6 +44,15 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 
 ## Recent Changes
 
+### Domain Banner Removal (29/10/2025)
+- Removed blue domain info banner showing NFLOW official domains (nflow.es, nflow.biz, nflow.gal, nflow.store, nflow.style)
+- Banner displayed security/verification message: "Dominio oficial de la app: nflow.style • Conexión 100% segura"
+- Updated Web contact link from nflow.biz to nuxa.life  
+- Removed DomainInfoBanner component from intro-card-section.tsx
+- Cleaned up unused imports from App.tsx
+- Files modified: intro-card-section.tsx, contacto-section.tsx, App.tsx
+- Status: ✅ Complete and tested - banner no longer visible, contact shows nuxa.life
+
 ### Navigation Branding Update: NFLOW → NUXA (29/10/2025)
 - Updated navbar and hamburger menu to display "NUXA" instead of "NFLOW"
 - Reason: Avoid user confusion as brand has evolved to NUXA

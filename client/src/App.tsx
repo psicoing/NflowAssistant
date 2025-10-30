@@ -43,7 +43,6 @@ import ControlParental from "@/pages/control-parental";
 import PreciosPage from "@/pages/precios";
 import BlogNew from "@/pages/blog-new";
 import FloatingCTAButton from "@/components/FloatingCTAButton";
-import DomainInfoBanner from "@/components/ui/domain-info-banner";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();

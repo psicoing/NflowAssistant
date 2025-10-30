@@ -26,9 +26,9 @@ const contactMethods = [
   {
     icon: Globe,
     title: "Web",
-    value: "https://nflow.biz",
+    value: "https://nuxa.life",
     description: "Plataforma oficial",
-    action: () => window.open("https://nflow.biz", "_blank")
+    action: () => window.open("https://nuxa.life", "_blank")
   }
 ];
 

@@ -3,7 +3,6 @@ import { CheckCircle, Brain, Clock, Users, Sparkles, Shield, Heart, Target, Star
 import nuxaVerticalPhone from "@assets/generated_images/Vertical_NUXA_phone_mockup_ee80d374.png";
 import techDevicesImage from "@assets/generated_images/Modern_tech_devices_mental_health_acb51148.png";
 import robotHumanImage from "@assets/generated_images/Human_and_AI_robot_collaboration_1312c395.png";
-import DomainInfoBanner from "@/components/ui/domain-info-banner";
 
 export default function IntroCardSection() {
   return (
@@ -29,11 +28,6 @@ export default function IntroCardSection() {
                 Con <strong className="text-teal-600">NUXA</strong>, accede a un asistente inteligente 
                 entrenado en psicología y bienestar, diseñado para acompañarte cuando más lo necesitas.
               </p>
-            </div>
-
-            {/* Domain Info Banner */}
-            <div className="mb-8">
-              <DomainInfoBanner />
             </div>
 
             {/* Main Features Grid */}
