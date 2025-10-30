@@ -6,7 +6,7 @@ export default function FamilySupportHeroSection() {
   const [, setLocation] = useLocation();
 
   return (
-    <section className="relative bg-gradient-to-br from-slate-50 via-blue-50/30 to-emerald-50/20 dark:from-slate-900 dark:to-nflow-dark py-16 md:py-24 overflow-hidden">
+    <section className="relative bg-white dark:bg-slate-900 py-16 md:py-24 overflow-hidden">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           
