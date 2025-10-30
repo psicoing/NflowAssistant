@@ -86,7 +86,7 @@ export default function NuxaPhonesShowcaseSection() {
   const IconComponent = activePhone.icon;
 
   return (
-    <section className="relative bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-20 md:py-28 overflow-hidden">
+    <section className="relative bg-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-20 md:py-28 overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{ 
