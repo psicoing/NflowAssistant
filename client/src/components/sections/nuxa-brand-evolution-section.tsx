@@ -56,7 +56,7 @@ export default function NuxaBrandEvolutionSection() {
 
           {/* Features Grid */}
           <div className="grid md:grid-cols-3 gap-6 mt-10 max-w-4xl mx-auto">
-            <div className="flex flex-col items-center gap-3 p-6 bg-white/60 dark:bg-slate-800/60 rounded-2xl border border-emerald-100 dark:border-emerald-900/30 backdrop-blur-sm">
+            <div className="flex flex-col items-center gap-3 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 shadow-sm">
               <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full flex items-center justify-center">
                 <Users className="w-6 h-6 text-white" />
               </div>
@@ -65,7 +65,7 @@ export default function NuxaBrandEvolutionSection() {
               </p>
             </div>
 
-            <div className="flex flex-col items-center gap-3 p-6 bg-white/60 dark:bg-slate-800/60 rounded-2xl border border-emerald-100 dark:border-emerald-900/30 backdrop-blur-sm">
+            <div className="flex flex-col items-center gap-3 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 shadow-sm">
               <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center">
                 <Heart className="w-6 h-6 text-white" />
               </div>
@@ -74,7 +74,7 @@ export default function NuxaBrandEvolutionSection() {
               </p>
             </div>
 
-            <div className="flex flex-col items-center gap-3 p-6 bg-white/60 dark:bg-slate-800/60 rounded-2xl border border-emerald-100 dark:border-emerald-900/30 backdrop-blur-sm">
+            <div className="flex flex-col items-center gap-3 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 shadow-sm">
               <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
@@ -85,7 +85,7 @@ export default function NuxaBrandEvolutionSection() {
           </div>
 
           {/* Mission Statement */}
-          <div className="mt-10 p-8 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 dark:from-emerald-500/20 dark:to-teal-500/20 rounded-3xl border border-emerald-200 dark:border-emerald-800">
+          <div className="mt-10 p-8 bg-gray-50 dark:bg-slate-800 rounded-3xl border-2 border-gray-200 dark:border-gray-700">
             <p className="text-lg md:text-xl text-gray-800 dark:text-gray-200 mb-4">
               Con NUXA queremos dar un paso más: <strong>construir una comunidad donde hablar de salud mental sea tan natural como hablar de salud física.</strong>
             </p>
