@@ -48,7 +48,7 @@ export default function NFlowComparisonSection() {
             <Check className="w-8 h-8 text-green-600 dark:text-green-400" />
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            ¿Por qué NFLOW supera a GPT-5?
+            ¿Por qué NUXA supera a GPT-5?
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Nuestro robot NEUROPSI-AI está específicamente entrenado para salud mental profesional, 
@@ -65,7 +65,7 @@ export default function NFlowComparisonSection() {
                   <h3 className="text-lg">Dimensión</h3>
                 </div>
                 <div className="col-span-1 text-center">
-                  <h3 className="text-lg">NFLOW</h3>
+                  <h3 className="text-lg">NUXA</h3>
                 </div>
                 <div className="col-span-1 text-center">
                   <h3 className="text-lg">GPT-5</h3>
@@ -98,7 +98,7 @@ export default function NFlowComparisonSection() {
                   <div className="col-span-1 text-center">
                     <div className="inline-flex items-center justify-center bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-3 py-2 rounded-full text-sm font-semibold">
                       <Check className="w-4 h-4 mr-1" />
-                      NFLOW mejora
+                      NUXA mejora
                     </div>
                   </div>
                 </div>
@@ -111,7 +111,7 @@ export default function NFlowComparisonSection() {
                 Experimenta la diferencia profesional
               </h3>
               <p className="text-white/90 mb-4 text-lg">
-                NEUROPSI-AI es el robot interno de NFLOW: Especialización que marca la diferencia en tu bienestar mental
+                NEUROPSI-AI es el robot interno de NUXA: Especialización que marca la diferencia en tu bienestar mental
               </p>
               <a 
                 href="/login" 
@@ -136,7 +136,7 @@ export default function NFlowComparisonSection() {
                   <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border-l-4 border-green-500">
                     <div className="flex items-center mb-2">
                       <div className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                        NFLOW
+                        NUXA
                       </div>
                     </div>
                     <p className="text-sm text-gray-700 dark:text-gray-300">{item.nflow}</p>
@@ -154,7 +154,7 @@ export default function NFlowComparisonSection() {
                   <div className="text-center">
                     <div className="inline-flex items-center justify-center bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-4 py-2 rounded-full text-sm font-semibold">
                       <Check className="w-4 h-4 mr-2" />
-                      NFLOW mejora
+                      NUXA mejora
                     </div>
                   </div>
                 </div>
