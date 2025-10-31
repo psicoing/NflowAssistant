@@ -30,6 +30,7 @@ import ProfessionalSummarySection from "@/components/sections/professional-summa
 import QueEsNflowSection from "@/components/sections/que-es-nflow-section";
 import FreeResourcesCardSection from "@/components/sections/free-resources-card-section";
 import FamilySupportHeroSection from "@/components/sections/family-support-hero-section";
+import NflowToNuxaTransitionSection from "@/components/sections/nflow-to-nuxa-transition-section";
 import NuxaPurposeSection from "@/components/sections/nuxa-purpose-section";
 import NuxaBrandEvolutionSection from "@/components/sections/nuxa-brand-evolution-section";
 import NuxaPhonesShowcaseSection from "@/components/sections/nuxa-phones-showcase-section";
@@ -54,6 +55,7 @@ export default function Home() {
       <Header showBanner={false} />
       <main className="pt-16">
         <FamilySupportHeroSection />
+        <NflowToNuxaTransitionSection />
         <NuxaPurposeSection />
         <NuxaBrandEvolutionSection />
         <NuxaPhonesShowcaseSection />
