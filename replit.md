@@ -54,8 +54,19 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
   - Salud: 2 books (Auxiliar de enfermería, Manual de medicina forense)
   - Educación: 1 book (Ordenanza Ayuntamientos)
 - **Multiple Formats:** Some books available in different formats (tapa dura, Kindle, bolsillo, tapa blanda)
-- Files modified: shared/schema.ts
-- Status: ✅ Complete - 23 books inserted with valid affiliate links
+- **Frontend Section:** Created BooksSection component displayed at the end of homepage
+  - Heading: "Leer también da salud mental"
+  - Links to external library: https://nexora.republican/
+  - Displays all 23 books in responsive grid (4 columns on desktop)
+  - Each book card shows: category badge, title, author, Amazon affiliate link
+  - Prominent CTA button linking to Nexora library
+- **Backend Implementation:**
+  - Added getAllBooks() and getBooksByCategory() methods to IStorage interface
+  - Created GET /api/books route with optional category filtering
+  - Fully integrated with TanStack Query on frontend
+- Files modified: shared/schema.ts, server/storage.ts, server/routes.ts
+- Files created: client/src/components/sections/books-section.tsx
+- Status: ✅ Complete - 23 books with affiliate links displayed on homepage
 
 ### Interactive Phone Showcase Section + White Backgrounds (30/10/2025)
 - **New Section Created:** NuxaPhonesShowcaseSection - Interactive carousel showing 6 phone mockups with NUXA mental health conversations

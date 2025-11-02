@@ -1,12 +1,13 @@
 import { 
-  users, conversations, messages, resources, stripeTransactions, partners, partnerReferrals,
+  users, conversations, messages, resources, stripeTransactions, partners, partnerReferrals, books,
   type User, type InsertUser, 
   type Conversation, type InsertConversation,
   type Message, type InsertMessage,
   type Resource, type InsertResource,
   type StripeTransaction, type InsertStripeTransaction,
   type Partner, type InsertPartner,
-  type PartnerReferral, type InsertPartnerReferral
+  type PartnerReferral, type InsertPartnerReferral,
+  type Book
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql } from "drizzle-orm";
@@ -72,6 +73,10 @@ export interface IStorage {
     activeSubscriptions: number;
     averageSatisfaction: number;
   }>;
+  
+  // Books
+  getAllBooks(): Promise<Book[]>;
+  getBooksByCategory(category: string): Promise<Book[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -458,6 +463,14 @@ export class DatabaseStorage implements IStorage {
         averageSatisfaction: 4.9,
       };
     }
+  }
+
+  async getAllBooks(): Promise<Book[]> {
+    return await db.select().from(books);
+  }
+
+  async getBooksByCategory(category: string): Promise<Book[]> {
+    return await db.select().from(books).where(eq(books.category, category));
   }
 }
 

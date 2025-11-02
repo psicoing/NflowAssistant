@@ -664,6 +664,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get all books
+  app.get("/api/books", async (req, res) => {
+    try {
+      const { category } = req.query;
+      
+      let books;
+      if (category && typeof category === 'string') {
+        books = await storage.getBooksByCategory(category);
+      } else {
+        books = await storage.getAllBooks();
+      }
+      
+      res.json(books);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+      res.status(500).json({ message: "Error fetching books" });
+    }
+  });
+
   // Admin login
   app.post("/api/admin/login", async (req, res) => {
     try {

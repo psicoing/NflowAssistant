@@ -34,6 +34,7 @@ import NflowToNuxaTransitionSection from "@/components/sections/nflow-to-nuxa-tr
 import NuxaPurposeSection from "@/components/sections/nuxa-purpose-section";
 import NuxaBrandEvolutionSection from "@/components/sections/nuxa-brand-evolution-section";
 import NuxaPhonesShowcaseSection from "@/components/sections/nuxa-phones-showcase-section";
+import BooksSection from "@/components/sections/books-section";
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/components/StructuredData";
 
@@ -92,6 +93,7 @@ export default function Home() {
         {/* <PackagesSection /> */}
         
         <ProfessionalSummarySection />
+        <BooksSection />
       </main>
       <Footer />
     </div>
