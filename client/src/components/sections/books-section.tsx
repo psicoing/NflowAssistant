@@ -5,7 +5,12 @@ import { Button } from "@/components/ui/button";
 
 export default function BooksSection() {
   const { data: books, isLoading } = useQuery<BookType[]>({
-    queryKey: ["/api/books"],
+    queryKey: ["/api/books", "psicologia"],
+    queryFn: async () => {
+      const response = await fetch("/api/books?category=psicologia");
+      if (!response.ok) throw new Error("Error fetching books");
+      return response.json();
+    },
   });
 
   if (isLoading) {
@@ -61,7 +66,7 @@ export default function BooksSection() {
             <div className="flex items-center gap-2 bg-white dark:bg-slate-800 px-5 py-3 rounded-full border-2 border-emerald-300 dark:border-emerald-600 shadow-md">
               <Heart className="w-5 h-5 text-red-500" />
               <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-                {books?.length || 0} libros seleccionados
+                {books?.length || 0} {books?.length === 1 ? 'libro' : 'libros'} de psicología
               </span>
             </div>
           </div>
