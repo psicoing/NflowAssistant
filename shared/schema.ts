@@ -101,6 +101,15 @@ export const partnerReferrals = pgTable("partner_referrals", {
   paidAt: timestamp("paid_at"),
 });
 
+export const books = pgTable("books", {
+  id: serial("id").primaryKey(),
+  author: text("author").notNull(),
+  title: text("title").notNull(),
+  affiliateLink: text("affiliate_link").notNull(),
+  category: text("category"), // psicologia, desarrollo-personal, ficcion, salud, etc.
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -149,6 +158,11 @@ export const insertPartnerReferralSchema = createInsertSchema(partnerReferrals).
   paidAt: true,
 });
 
+export const insertBookSchema = createInsertSchema(books).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertConversation = z.infer<typeof insertConversationSchema>;
@@ -163,3 +177,5 @@ export type InsertPartner = z.infer<typeof insertPartnerSchema>;
 export type Partner = typeof partners.$inferSelect;
 export type InsertPartnerReferral = z.infer<typeof insertPartnerReferralSchema>;
 export type PartnerReferral = typeof partnerReferrals.$inferSelect;
+export type InsertBook = z.infer<typeof insertBookSchema>;
+export type Book = typeof books.$inferSelect;

@@ -44,6 +44,19 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 
 ## Recent Changes
 
+### Books Library with Affiliate Links (02/11/2025)
+- **Database Table Created:** Added `books` table with fields: id, author, title, affiliate_link, category, created_at
+- **Affiliate Links:** All links use Amazon affiliate tag `nexora090-21` for commission tracking
+- **Total Books:** 23 books across multiple categories:
+  - Ficción: 14 books (La sombra del viento, El último secreto, El círculo de los días, La ciudad y los perros, Como agua para chocolate, La casa de los espíritus, Tatá, Café a solas, La enfermera de Auschwitz, Cuando ya no queden estrellas que contar, La asistenta)
+  - Psicología: 4 books (La paciente silenciosa, Inteligencia Emocional, TDAH, Cómo hacer que te pasen cosas buenas)
+  - Desarrollo Personal: 2 books (Café a solas, El monje que vendió su Ferrari)
+  - Salud: 2 books (Auxiliar de enfermería, Manual de medicina forense)
+  - Educación: 1 book (Ordenanza Ayuntamientos)
+- **Multiple Formats:** Some books available in different formats (tapa dura, Kindle, bolsillo, tapa blanda)
+- Files modified: shared/schema.ts
+- Status: ✅ Complete - 23 books inserted with valid affiliate links
+
 ### Interactive Phone Showcase Section + White Backgrounds (30/10/2025)
 - **New Section Created:** NuxaPhonesShowcaseSection - Interactive carousel showing 6 phone mockups with NUXA mental health conversations
 - **Generated Assets:** 6 AI-generated phone mockup images showing different mental health topics:
