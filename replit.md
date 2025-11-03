@@ -56,16 +56,17 @@ The architecture supports serverless deployment with Neon, emphasizing full auto
 - **Multiple Formats:** Some books available in different formats (tapa dura, Kindle, bolsillo, tapa blanda)
 - **Frontend Section:** Created BooksSection component displayed at the end of homepage
   - Heading: "Leer también da salud mental"
-  - Links to external library: https://nexora.republican/
+  - **ALL links point to Nexora library:** https://nexora.republican/
   - **Displays only psychology books** (category="psicologia"): 4 books total
     - La paciente silenciosa - Alex Michaelides
     - Inteligencia Emocional - Varios autores
     - TDAH: Domina tu Mente - Fabián Goleman
     - Cómo hacer que te pasen cosas buenas - Marian Rojas Estapé
   - Responsive grid layout (4 columns on desktop)
-  - Each book card shows: category badge, title, author, Amazon affiliate link
+  - Each book card shows: category badge, title, author, "Librería Nexora" link
   - Badge shows "4 libros de psicología"
-  - Prominent CTA button linking to Nexora library
+  - Prominent CTA button "Visita nuestra librería Nexora"
+  - Footer: "Encuentra estos libros en Librería Nexora"
 - **Backend Implementation:**
   - Added getAllBooks() and getBooksByCategory() methods to IStorage interface
   - Created GET /api/books route with optional category filtering

@@ -77,7 +77,7 @@ export default function BooksSection() {
           {books?.map((book) => (
             <a
               key={book.id}
-              href={book.affiliateLink}
+              href="https://nexora.republican/"
               target="_blank"
               rel="noopener noreferrer"
               className="group block bg-white dark:bg-slate-800 rounded-2xl border-2 border-gray-200 dark:border-slate-700 p-5 hover:border-emerald-400 dark:hover:border-emerald-600 hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
@@ -114,7 +114,7 @@ export default function BooksSection() {
                 <div className="mt-auto pt-3 border-t border-gray-200 dark:border-slate-700">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-emerald-600 dark:text-emerald-400 font-semibold group-hover:underline">
-                      Ver en Amazon
+                      Librería Nexora
                     </span>
                     <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors" />
                   </div>
@@ -127,7 +127,7 @@ export default function BooksSection() {
         {/* Footer Note */}
         <div className="text-center mt-12">
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Enlaces de afiliados de Amazon • Apoya a NUXA mientras mejoras tu bienestar
+            Encuentra estos libros en Librería Nexora • Apoya a NUXA mientras mejoras tu bienestar
           </p>
         </div>
       </div>
