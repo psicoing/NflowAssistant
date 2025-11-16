@@ -25,6 +25,144 @@ function detectBookmarkableContent(content: string): string[] {
   return bookmarks;
 }
 
+// Función para dividir contenido en segmentos lógicos (burbujas separadas)
+function splitContentIntoSegments(content: string): string[] {
+  const segments: string[] = [];
+  
+  // Dividir por líneas para procesar
+  const lines = content.split('\n');
+  let currentSegment = '';
+  let inList = false;
+  let inTechnique = false;
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    const nextLine = i < lines.length - 1 ? lines[i + 1].trim() : '';
+    
+    // Detectar títulos principales # - nueva burbuja
+    if (line.startsWith('# ')) {
+      if (currentSegment.trim()) {
+        segments.push(currentSegment.trim());
+        currentSegment = '';
+      }
+      inTechnique = false; // Reset state
+      segments.push(line);
+      continue;
+    }
+    
+    // Detectar subtítulos ## - nueva burbuja
+    if (line.startsWith('## ')) {
+      if (currentSegment.trim()) {
+        segments.push(currentSegment.trim());
+        currentSegment = '';
+      }
+      inTechnique = false; // Reset state
+      segments.push(line);
+      continue;
+    }
+    
+    // Detectar preguntas con escalas 0-10 - nueva burbuja (ANTES de inTechnique)
+    if (line.match(/\*\*¿.+?\?\*\* \(0 = .+ – 10 = .+\)/)) {
+      if (currentSegment.trim()) {
+        segments.push(currentSegment.trim());
+        currentSegment = '';
+      }
+      inTechnique = false; // Reset state
+      segments.push(line);
+      continue;
+    }
+    
+    // Detectar otras escalas - nueva burbuja (ANTES de inTechnique)
+    if (line.match(/\*\*Valora tu .+ del 0 al 10\*\*/)) {
+      if (currentSegment.trim()) {
+        segments.push(currentSegment.trim());
+        currentSegment = '';
+      }
+      inTechnique = false; // Reset state
+      segments.push(line);
+      continue;
+    }
+    
+    // Detectar preguntas Sí/No - nueva burbuja (ANTES de inTechnique)
+    if (line.match(/\*\*¿[^?]+\?\*\*$/) && !line.match(/0 = |10 =/)) {
+      if (currentSegment.trim()) {
+        segments.push(currentSegment.trim());
+        currentSegment = '';
+      }
+      inTechnique = false; // Reset state
+      segments.push(line);
+      continue;
+    }
+    
+    // Detectar Técnicas/Ejercicios/Recursos - nueva burbuja
+    if (line.match(/\*\*(Técnica|Ejercicio|Recurso)[^:]*:/i)) {
+      if (currentSegment.trim()) {
+        segments.push(currentSegment.trim());
+        currentSegment = '';
+      }
+      inTechnique = true;
+      currentSegment = line + '\n';
+      continue;
+    }
+    
+    // Si estamos en una técnica/ejercicio, continuar hasta línea vacía
+    if (inTechnique) {
+      if (line === '' && nextLine !== '') {
+        segments.push(currentSegment.trim());
+        currentSegment = '';
+        inTechnique = false;
+        continue;
+      } else {
+        currentSegment += line + '\n';
+        continue;
+      }
+    }
+    
+    // Detectar inicio de lista
+    if (line.match(/^(\d+\.|-) /)) {
+      if (!inList && currentSegment.trim() && !currentSegment.match(/^(\d+\.|-) /)) {
+        segments.push(currentSegment.trim());
+        currentSegment = '';
+      }
+      inList = true;
+      currentSegment += line + '\n';
+      continue;
+    }
+    
+    // Si salimos de una lista
+    if (inList && !line.match(/^(\d+\.|-) /) && line !== '') {
+      if (currentSegment.trim()) {
+        segments.push(currentSegment.trim());
+        currentSegment = '';
+      }
+      inList = false;
+      currentSegment = line + '\n';
+      continue;
+    }
+    
+    // Párrafos normales - acumular hasta doble salto de línea
+    if (line === '') {
+      if (currentSegment.trim() && !inList && !inTechnique) {
+        segments.push(currentSegment.trim());
+        currentSegment = '';
+      } else if (inList || inTechnique) {
+        currentSegment += '\n';
+      }
+      continue;
+    }
+    
+    currentSegment += line + '\n';
+  }
+  
+  // Añadir segmento final si existe
+  if (currentSegment.trim()) {
+    segments.push(currentSegment.trim());
+  }
+  
+  // No filtrar segmentos cortos - mantener todos los mensajes legítimos (incluso "Ok.", emojis, etc.)
+  return segments.filter(s => s.trim().length > 0);
+}
+
 // Función para convertir Markdown a HTML formateado con destacados visuales
 function formatMarkdownToHtml(content: string, onOptionClick?: (option: string) => void, onBookmark?: (content: string) => void): string {
   // Detectar contenido marcable automáticamente
@@ -350,112 +488,133 @@ export default function ChatBubbleInterface({
           <>
             {messages.map((message, index) => {
               const isConsecutive = index > 0 && messages[index - 1].isUser === message.isUser;
-              const formattedContent = !message.isUser ? formatMarkdownToHtml(message.content) : message.content;
+              
+              // Dividir mensajes de la IA en segmentos, usuarios quedan sin dividir
+              const segments = !message.isUser ? splitContentIntoSegments(message.content) : [message.content];
               
               return (
-                <div
-                  key={message.id}
-                  className={`flex items-end space-x-2 ${
-                    message.isUser ? "justify-end" : "justify-start"
-                  } animate-in slide-in-from-bottom-2 duration-300`}
-                  style={{ marginTop: isConsecutive ? '2px' : '8px' }}
-                >
-                  {/* Bot avatar - solo si no es consecutivo */}
-                  {!message.isUser && !isConsecutive && (
-                    <div className="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ring-2 ring-gray-200 dark:ring-gray-700 mb-1">
-                      <Bot className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    </div>
-                  )}
-                  
-                  {/* Spacer cuando es mensaje consecutivo */}
-                  {!message.isUser && isConsecutive && (
-                    <div className="w-8 flex-shrink-0"></div>
-                  )}
-                  
-                  {/* Message Bubble */}
-                  <div
-                    className={`group relative max-w-[85%] sm:max-w-[75%] md:max-w-[65%] ${
-                      message.isUser
-                        ? "bg-gradient-to-br from-emerald-500 to-teal-500 dark:from-emerald-600 dark:to-teal-600 text-white rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl"
-                        : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-tr-2xl rounded-tl-2xl rounded-br-2xl shadow-md border border-gray-200 dark:border-gray-700"
-                    } px-3 py-2 transition-all duration-200 hover:shadow-lg`}
-                  >
-                    {/* Triangle/tail for WhatsApp bubble effect */}
-                    <div
-                      className={`absolute bottom-0 ${
-                        message.isUser
-                          ? "right-0 transform translate-x-1 border-l-8 border-t-8 border-l-transparent border-t-teal-500 dark:border-t-teal-600"
-                          : "left-0 transform -translate-x-1 border-r-8 border-t-8 border-r-transparent border-t-white dark:border-t-gray-800"
-                      }`}
-                      style={{ width: 0, height: 0 }}
-                    ></div>
+                <div key={message.id}>
+                  {segments.map((segment, segmentIndex) => {
+                    const formattedContent = !message.isUser ? formatMarkdownToHtml(segment) : segment;
+                    const isFirstSegment = segmentIndex === 0;
+                    const isLastSegment = segmentIndex === segments.length - 1;
                     
-                    {/* Message Content */}
-                    <div className="relative z-10">
-                      {message.isUser ? (
-                        <div className="text-sm leading-relaxed whitespace-pre-wrap break-words">
-                          {message.content}
+                    return (
+                      <div
+                        key={`${message.id}-segment-${segmentIndex}`}
+                        className={`flex items-end space-x-2 ${
+                          message.isUser ? "justify-end" : "justify-start"
+                        } animate-in slide-in-from-bottom-2 duration-300 mb-2`}
+                        style={{ 
+                          marginTop: isFirstSegment && !isConsecutive ? '8px' : '4px',
+                          animationDelay: `${segmentIndex * 150}ms`
+                        }}
+                      >
+                        {/* Bot avatar - solo en el primer segmento y si no es consecutivo */}
+                        {!message.isUser && isFirstSegment && !isConsecutive && (
+                          <div className="w-8 h-8 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ring-2 ring-gray-200 dark:ring-gray-700 mb-1">
+                            <Bot className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                          </div>
+                        )}
+                        
+                        {/* Spacer cuando no es el primer segmento o es consecutivo */}
+                        {!message.isUser && (!isFirstSegment || isConsecutive) && (
+                          <div className="w-8 flex-shrink-0"></div>
+                        )}
+                        
+                        {/* Message Bubble */}
+                        <div
+                          className={`group relative max-w-[85%] sm:max-w-[75%] md:max-w-[65%] ${
+                            message.isUser
+                              ? "bg-gradient-to-br from-emerald-500 to-teal-500 dark:from-emerald-600 dark:to-teal-600 text-white rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl"
+                              : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-tr-2xl rounded-tl-2xl rounded-br-2xl shadow-md border border-gray-200 dark:border-gray-700"
+                          } px-3 py-2 transition-all duration-200 hover:shadow-lg`}
+                        >
+                          {/* Triangle/tail for WhatsApp bubble effect - solo en el primer segmento */}
+                          {isFirstSegment && (
+                            <div
+                              className={`absolute bottom-0 ${
+                                message.isUser
+                                  ? "right-0 transform translate-x-1 border-l-8 border-t-8 border-l-transparent border-t-teal-500 dark:border-t-teal-600"
+                                  : "left-0 transform -translate-x-1 border-r-8 border-t-8 border-r-transparent border-t-white dark:border-t-gray-800"
+                              }`}
+                              style={{ width: 0, height: 0 }}
+                            ></div>
+                          )}
+                          
+                          {/* Message Content */}
+                          <div className="relative z-10">
+                            {message.isUser ? (
+                              <div className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+                                {segment}
+                              </div>
+                            ) : (
+                              <div 
+                                className="text-sm leading-relaxed message-content"
+                                dangerouslySetInnerHTML={{ __html: formattedContent }}
+                              />
+                            )}
+                            
+                            {/* Timestamp and status - solo en el último segmento */}
+                            {isLastSegment && (
+                              <div className={`flex items-center justify-end space-x-1 mt-1 ${
+                                message.isUser ? 'text-emerald-100 dark:text-emerald-200' : 'text-gray-500 dark:text-gray-500'
+                              }`}>
+                                <span className="text-xs opacity-80">
+                                  {new Date(message.timestamp).toLocaleTimeString('es-ES', {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  })}
+                                </span>
+                                {message.isUser && (
+                                  <CheckCheck className="w-3 h-3 text-emerald-200 dark:text-emerald-300" />
+                                )}
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Hover Actions - solo en el último segmento */}
+                          {isLastSegment && (
+                            <div className="absolute -top-8 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex space-x-1 bg-gray-800 dark:bg-gray-700 rounded-lg shadow-lg p-1">
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-6 w-6 p-0 hover:bg-white/10 text-white"
+                                onClick={() => copyMessage(message.content)}
+                                title="Copiar mensaje"
+                              >
+                                <Copy className="w-3 h-3" />
+                              </Button>
+                              
+                              {!message.isUser && onRegenerateResponse && (
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="h-6 w-6 p-0 hover:bg-white/10 text-white"
+                                  onClick={() => onRegenerateResponse(message.id)}
+                                  title="Regenerar respuesta"
+                                >
+                                  <RotateCcw className="w-3 h-3" />
+                                </Button>
+                              )}
+                            </div>
+                          )}
                         </div>
-                      ) : (
-                        <div 
-                          className="text-sm leading-relaxed message-content"
-                          dangerouslySetInnerHTML={{ __html: formattedContent }}
-                        />
-                      )}
-                      
-                      {/* Timestamp and status */}
-                      <div className={`flex items-center justify-end space-x-1 mt-1 ${
-                        message.isUser ? 'text-emerald-100 dark:text-emerald-200' : 'text-gray-500 dark:text-gray-500'
-                      }`}>
-                        <span className="text-xs opacity-80">
-                          {new Date(message.timestamp).toLocaleTimeString('es-ES', {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </span>
-                        {message.isUser && (
-                          <CheckCheck className="w-3 h-3 text-emerald-200 dark:text-emerald-300" />
+                        
+                        {/* User avatar - solo si no es consecutivo */}
+                        {message.isUser && !isConsecutive && (
+                          <div className="w-8 h-8 bg-gradient-to-br from-gray-600 to-gray-700 dark:from-gray-500 dark:to-gray-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ring-2 ring-gray-300 dark:ring-gray-600 mb-1">
+                            <User className="w-4 h-4 text-white" />
+                          </div>
+                        )}
+                        
+                        {/* Spacer cuando es mensaje consecutivo */}
+                        {message.isUser && isConsecutive && (
+                          <div className="w-8 flex-shrink-0"></div>
                         )}
                       </div>
-                    </div>
-                    
-                    {/* Hover Actions */}
-                    <div className="absolute -top-8 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex space-x-1 bg-gray-800 dark:bg-gray-700 rounded-lg shadow-lg p-1">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-6 w-6 p-0 hover:bg-white/10 text-white"
-                        onClick={() => copyMessage(message.content)}
-                        title="Copiar mensaje"
-                      >
-                        <Copy className="w-3 h-3" />
-                      </Button>
-                      
-                      {!message.isUser && onRegenerateResponse && (
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-6 w-6 p-0 hover:bg-white/10 text-white"
-                          onClick={() => onRegenerateResponse(message.id)}
-                          title="Regenerar respuesta"
-                        >
-                          <RotateCcw className="w-3 h-3" />
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {/* User avatar - solo si no es consecutivo */}
-                  {message.isUser && !isConsecutive && (
-                    <div className="w-8 h-8 bg-gradient-to-br from-gray-600 to-gray-700 dark:from-gray-500 dark:to-gray-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ring-2 ring-gray-300 dark:ring-gray-600 mb-1">
-                      <User className="w-4 h-4 text-white" />
-                    </div>
-                  )}
-                  
-                  {/* Spacer cuando es mensaje consecutivo */}
-                  {message.isUser && isConsecutive && (
-                    <div className="w-8 flex-shrink-0"></div>
-                  )}
+                    );
+                  })}
                 </div>
               );
             })}
