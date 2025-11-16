@@ -6,8 +6,86 @@ import { useToast } from "@/hooks/use-toast";
 import type { Message } from "@shared/schema";
 import DOMPurify from 'dompurify';
 
-// Nota: Este componente utiliza ProgressiveResponse desde chat-interface.tsx
-// Para renderizar el contenido con markdown y elementos interactivos
+// Función para detectar y convertir técnicas/recursos en bookmarks automáticos
+function detectBookmarkableContent(content: string): string[] {
+  const bookmarks: string[] = [];
+  const techniques = content.match(/\*\*Técnica[^:]*: ([^*]+)\*\*/gi);
+  const exercises = content.match(/\*\*Ejercicio[^:]*: ([^*]+)\*\*/gi);
+  const resources = content.match(/\*\*Recurso[^:]*: ([^*]+)\*\*/gi);
+  
+  [techniques, exercises, resources].forEach(matches => {
+    if (matches) {
+      matches.forEach(match => {
+        const cleanText = match.replace(/\*\*/g, '').trim();
+        bookmarks.push(cleanText);
+      });
+    }
+  });
+  
+  return bookmarks;
+}
+
+// Función para convertir Markdown a HTML formateado con destacados visuales
+function formatMarkdownToHtml(content: string, onOptionClick?: (option: string) => void, onBookmark?: (content: string) => void): string {
+  // Detectar contenido marcable automáticamente
+  const bookmarkableItems = detectBookmarkableContent(content);
+  
+  let html = content
+    // Encabezados con separadores elegantes
+    .replace(/^# (.+)$/gm, '<div class="flex items-center my-4"><div class="flex-1 h-px bg-gradient-to-r from-transparent via-emerald-600 to-transparent"></div><h1 class="text-lg font-bold text-gray-900 dark:text-white mx-4 px-3 py-1 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-lg border border-emerald-500/30">$1</h1><div class="flex-1 h-px bg-gradient-to-r from-emerald-600 to-transparent"></div></div>')
+    .replace(/^## (.+)$/gm, '<h2 class="text-base font-semibold text-gray-900 dark:text-white mt-4 mb-2 pb-1 border-b border-gray-300 dark:border-gray-600/30">$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3 class="text-sm font-medium text-emerald-600 dark:text-emerald-400 mt-3 mb-1">$1</h3>')
+    // Técnicas destacadas con botón de bookmark automático
+    .replace(/\*\*Técnica[^:]*: ([^*]+)\*\*/gi, '<div class="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-400/30 rounded-lg p-4 my-3 relative"><div class="flex items-center justify-between mb-2"><div class="flex items-center space-x-2"><span class="text-green-600 dark:text-green-400 font-semibold">🧠</span><strong class="font-semibold text-gray-900 dark:text-white">Técnica: $1</strong></div><button class="bookmark-btn text-xs bg-green-500/20 hover:bg-green-500/40 text-green-700 dark:text-green-300 px-2 py-1 rounded border border-green-400/30 transition-all duration-200" data-bookmark="Técnica: $1">💾 Guardar</button></div><div class="text-sm text-gray-700 dark:text-gray-300">Técnica profesional recomendada por NEUROPSI-AI</div></div>')
+    // Ejercicios destacados con bookmark
+    .replace(/\*\*Ejercicio[^:]*: ([^*]+)\*\*/gi, '<div class="bg-gradient-to-r from-purple-500/20 to-violet-500/20 border border-purple-400/30 rounded-lg p-4 my-3 relative"><div class="flex items-center justify-between mb-2"><div class="flex items-center space-x-2"><span class="text-purple-600 dark:text-purple-300 font-semibold">🏃</span><strong class="font-semibold text-gray-900 dark:text-white">Ejercicio: $1</strong></div><button class="bookmark-btn text-xs bg-purple-500/20 hover:bg-purple-500/40 text-purple-700 dark:text-purple-300 px-2 py-1 rounded border border-purple-400/30 transition-all duration-200" data-bookmark="Ejercicio: $1">💾 Guardar</button></div><div class="text-sm text-gray-700 dark:text-gray-300">Ejercicio personalizado para tu situación</div></div>')
+    // Recursos destacados con bookmark
+    .replace(/\*\*Recurso[^:]*: ([^*]+)\*\*/gi, '<div class="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-400/30 rounded-lg p-4 my-3 relative"><div class="flex items-center justify-between mb-2"><div class="flex items-center space-x-2"><span class="text-blue-600 dark:text-blue-300 font-semibold">📚</span><strong class="font-semibold text-gray-900 dark:text-white">Recurso: $1</strong></div><button class="bookmark-btn text-xs bg-blue-500/20 hover:bg-blue-500/40 text-blue-700 dark:text-blue-300 px-2 py-1 rounded border border-blue-400/30 transition-all duration-200" data-bookmark="Recurso: $1">💾 Guardar</button></div><div class="text-sm text-gray-700 dark:text-gray-300">Recurso recomendado para tu desarrollo</div></div>')
+    // Texto en negrita con destacado
+    .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-gray-900 dark:text-white bg-emerald-500/10 px-1 py-0.5 rounded">$1</strong>')
+    // Preguntas con escalas 0-10 destacadas e interactivas
+    .replace(/\*\*¿Qué tanto te afecta en tu día a día\?\*\* \(0 = nada – 10 = muchísimo\)/g, '<div class="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 rounded-lg p-4 my-4"><div class="flex items-center space-x-2 mb-3"><span class="text-blue-600 dark:text-blue-300 font-semibold">📊</span><strong class="font-semibold text-gray-900 dark:text-white">¿Qué tanto te afecta en tu día a día?</strong></div><div class="grid grid-cols-11 gap-1 mb-2">' + Array.from({length: 11}, (_, i) => `<button class="interactive-scale-btn w-6 h-6 text-xs font-bold rounded border border-gray-400 dark:border-gray-500 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" data-value="${i}">${i}</button>`).join('') + '</div><div class="text-xs text-gray-600 dark:text-gray-400 flex justify-between"><span class="text-green-600 dark:text-green-400">0 = Nada</span><span class="text-red-600 dark:text-red-400">10 = Muchísimo</span></div></div>')
+    // Escalas numericas genericas
+    .replace(/\*\*Valora tu (.+?) del 0 al 10\*\* \(([^)]+)\)/g, '<div class="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 rounded-lg p-4 my-4"><div class="flex items-center space-x-2 mb-3"><span class="text-blue-600 dark:text-blue-300 font-semibold">📊</span><strong class="font-semibold text-gray-900 dark:text-white">Valora tu $1 del 0 al 10</strong></div><div class="grid grid-cols-11 gap-1 mb-2">' + Array.from({length: 11}, (_, i) => `<button class="interactive-scale-btn w-6 h-6 text-xs font-bold rounded border border-gray-400 dark:border-gray-500 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" data-value="${i}" data-scale-type="$1">${i}</button>`).join('') + '</div><div class="text-xs text-gray-600 dark:text-gray-400 flex justify-between"><span>$2</span></div></div>')
+    // Checkboxes interactivos ☐
+    .replace(/☐ (.+?)(?=\n|$)/g, '<div class="flex items-center space-x-3 my-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700/30 rounded cursor-pointer transition-all duration-200 checkbox-item" data-checkbox-text="$1"><input type="checkbox" class="interactive-checkbox w-4 h-4 text-emerald-600 bg-white dark:bg-gray-700 border-gray-400 dark:border-gray-600 rounded focus:ring-emerald-600 focus:ring-2" data-symptom="$1"><span class="text-gray-800 dark:text-gray-200 select-none">$1</span></div>')
+    // Botones [Botón/Boton/Button X: ...] interactivos - regex robusto para acentos y multi-idioma
+    .replace(/\[(Bot[óo]n|Button) ([A-Z]): ([^\]]+)\]/gi, '<button class="interactive-choice-btn bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-500/40 rounded-lg px-4 py-2 my-1 mx-1 cursor-pointer hover:bg-emerald-500/30 hover:border-emerald-500/60 transition-all duration-200 text-left inline-block" data-choice="$2" data-choice-text="$3"><div class="flex items-center space-x-2"><span class="bg-emerald-600 dark:bg-emerald-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">$2</span><span class="font-semibold text-gray-900 dark:text-white text-sm">$3</span></div></button>')
+    // Preguntas Sí/No interactivas
+    .replace(/\*\*¿([^*?]+\?)\*\*/g, '<div class="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-400/30 rounded-lg p-4 my-4"><div class="flex items-center space-x-2 mb-3"><span class="text-indigo-600 dark:text-indigo-300 font-semibold">❓</span><strong class="font-semibold text-gray-900 dark:text-white">¿$1</strong></div><div class="flex space-x-3"><button class="interactive-yesno-btn bg-green-500/20 hover:bg-green-500/40 border border-green-400/30 text-green-700 dark:text-green-300 px-4 py-2 rounded transition-all duration-200" data-answer="sí" data-question="¿$1">✅ Sí</button><button class="interactive-yesno-btn bg-red-500/20 hover:bg-red-500/40 border border-red-400/30 text-red-700 dark:text-red-300 px-4 py-2 rounded transition-all duration-200" data-answer="no" data-question="¿$1">❌ No</button></div></div>')
+    // Opciones clickeables interactivas
+    .replace(/\*\*Opción (\d+): (.+?)\*\*/g, '<button class="interactive-option-btn w-full bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30 rounded-lg p-3 my-2 cursor-pointer hover:bg-emerald-500/20 hover:border-emerald-500/50 transition-all duration-200 text-left" data-option="Opción $1: $2"><div class="flex items-center space-x-2"><span class="bg-emerald-600 dark:bg-emerald-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">$1</span><strong class="font-semibold text-gray-900 dark:text-white">$2</strong></div><div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Haz clic para explorar esta opción</div></button>')
+    // Texto en cursiva
+    .replace(/\*(.+?)\*/g, '<em class="italic text-gray-800 dark:text-gray-200">$1</em>')
+    // Citas profesionales destacadas con iconos
+    .replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-emerald-600 dark:border-emerald-500 bg-emerald-500/10 pl-4 pr-4 py-3 text-gray-800 dark:text-gray-200 italic my-3 rounded-r-lg shadow-sm"><span class="text-emerald-600 dark:text-emerald-400 mr-2">⚠️</span>$1</blockquote>')
+    // Listas con viñetas mejoradas
+    .replace(/^- (.+)$/gm, '<li class="text-gray-800 dark:text-gray-100 ml-4 mb-1 flex items-start"><span class="text-emerald-600 dark:text-emerald-400 mr-2 mt-1 font-bold">•</span><span>$1</span></li>')
+    // Listas numeradas mejoradas
+    .replace(/^(\d+)\. (.+)$/gm, '<li class="text-gray-800 dark:text-gray-100 ml-4 mb-1 flex items-start"><span class="text-emerald-600 dark:text-emerald-400 mr-2 font-semibold bg-emerald-500/20 px-1 rounded">$1.</span><span>$2</span></li>')
+    // Párrafos normales
+    .replace(/^(?!<[h|l|b|d])(.+)$/gm, '<p class="text-gray-800 dark:text-gray-100 mb-2 leading-relaxed">$1</p>')
+    // Saltos de línea dobles se convierten en espacios entre párrafos
+    .replace(/\n\s*\n/g, '\n')
+    // Saltos de línea simples se convierten en <br>
+    .replace(/\n/g, '<br/>');
+    
+  // Sanitizar el HTML con DOMPurify permitiendo elementos interactivos necesarios
+  const sanitizedHtml = DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [
+      'div', 'span', 'button', 'input', 'h1', 'h2', 'h3', 'p', 'br', 'strong', 
+      'em', 'li', 'blockquote', 'ul', 'ol'
+    ],
+    ALLOWED_ATTR: [
+      'class', 'data-choice', 'data-choice-text', 'data-value', 'data-scale-type',
+      'data-symptom', 'data-checkbox-text', 'data-option', 'data-answer', 
+      'data-question', 'data-bookmark', 'type', 'style'
+    ],
+    KEEP_CONTENT: true
+  });
+  
+  return sanitizedHtml;
+}
 
 interface ChatBubbleInterfaceProps {
   messages: Message[];
@@ -29,6 +107,7 @@ export default function ChatBubbleInterface({
   const [inputValue, setInputValue] = useState("");
   const [characterCount, setCharacterCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -67,11 +146,138 @@ export default function ChatBubbleInterface({
     }
   }, [messages]);
 
+  // Handle interactive elements clicks (bookmarks, scales, checkboxes, buttons, etc.)
+  useEffect(() => {
+    if (!messagesContainerRef.current) return;
+
+    const handleInteractionClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      
+      // Handle interactive choice buttons
+      if (target.classList.contains('interactive-choice-btn') || target.closest('.interactive-choice-btn')) {
+        const button = target.classList.contains('interactive-choice-btn') ? target : target.closest('.interactive-choice-btn') as HTMLElement;
+        const choiceText = button?.getAttribute('data-choice-text');
+        if (choiceText && onSendMessage) {
+          onSendMessage(choiceText);
+          toast({
+            title: "Opción seleccionada",
+            description: `Has elegido: ${choiceText}`,
+          });
+        }
+      }
+      
+      // Handle interactive option buttons
+      else if (target.classList.contains('interactive-option-btn') || target.closest('.interactive-option-btn')) {
+        const button = target.classList.contains('interactive-option-btn') ? target : target.closest('.interactive-option-btn') as HTMLElement;
+        const option = button?.getAttribute('data-option');
+        if (option && onSendMessage) {
+          onSendMessage(`He elegido: ${option}`);
+          toast({
+            title: "Opción seleccionada",
+            description: option,
+          });
+        }
+      }
+      
+      // Handle interactive scale buttons
+      else if (target.classList.contains('interactive-scale-btn')) {
+        const value = target.getAttribute('data-value');
+        const scaleType = target.getAttribute('data-scale-type');
+        if (value && onSendMessage) {
+          const message = scaleType 
+            ? `Mi ${scaleType} es: ${value}/10`
+            : `${value}/10`;
+          onSendMessage(message);
+          
+          // Visual feedback
+          target.style.background = 'rgb(5, 150, 105)';
+          target.style.color = 'white';
+          toast({
+            title: "Valoración registrada",
+            description: `Has seleccionado: ${value}/10`,
+          });
+        }
+      }
+      
+      // Handle yes/no buttons
+      else if (target.classList.contains('interactive-yesno-btn') || target.closest('.interactive-yesno-btn')) {
+        const button = target.classList.contains('interactive-yesno-btn') ? target : target.closest('.interactive-yesno-btn') as HTMLElement;
+        const answer = button?.getAttribute('data-answer');
+        const question = button?.getAttribute('data-question');
+        if (answer && onSendMessage) {
+          onSendMessage(`${question}: ${answer}`);
+          toast({
+            title: "Respuesta enviada",
+            description: `Has respondido: ${answer}`,
+          });
+        }
+      }
+      
+      // Handle bookmark buttons
+      else if (target.classList.contains('bookmark-btn')) {
+        const bookmarkContent = target.getAttribute('data-bookmark');
+        if (bookmarkContent) {
+          // Guardar en localStorage para persistencia
+          const existingBookmarks = JSON.parse(localStorage.getItem('nflow-bookmarks') || '[]');
+          const newBookmark = {
+            id: Date.now(),
+            content: bookmarkContent,
+            timestamp: new Date().toISOString(),
+          };
+          
+          if (!existingBookmarks.find((b: any) => b.content === bookmarkContent)) {
+            existingBookmarks.push(newBookmark);
+            localStorage.setItem('nflow-bookmarks', JSON.stringify(existingBookmarks));
+            
+            // Feedback visual
+            target.innerHTML = '✅ Guardado';
+            target.style.background = 'rgba(34, 197, 94, 0.3)';
+            setTimeout(() => {
+              target.innerHTML = '💾 Guardar';
+              target.style.background = '';
+            }, 2000);
+            
+            toast({
+              title: "✅ Recurso guardado",
+              description: "Guardado en tu lista de recursos personales",
+            });
+          } else {
+            toast({
+              title: "Ya guardado",
+              description: "Este recurso ya está en tu lista",
+              variant: "default",
+            });
+          }
+        }
+      }
+    };
+
+    // Handle checkbox clicks
+    const handleCheckboxClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains('checkbox-item')) {
+        const checkbox = target.querySelector('.interactive-checkbox') as HTMLInputElement;
+        if (checkbox) {
+          checkbox.checked = !checkbox.checked;
+          checkbox.dispatchEvent(new Event('click'));
+        }
+      }
+    };
+
+    messagesContainerRef.current.addEventListener('click', handleInteractionClick);
+    messagesContainerRef.current.addEventListener('click', handleCheckboxClick);
+    
+    return () => {
+      messagesContainerRef.current?.removeEventListener('click', handleInteractionClick);
+      messagesContainerRef.current?.removeEventListener('click', handleCheckboxClick);
+    };
+  }, [onSendMessage, toast]);
+
   if (isLoadingMessages) {
     return (
       <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-nflow-orange mx-auto mb-4" />
+          <Loader2 className="w-8 h-8 animate-spin text-emerald-600 dark:text-emerald-400 mx-auto mb-4" />
           <p className="text-gray-600 dark:text-gray-400">Cargando conversación...</p>
         </div>
       </div>
@@ -102,6 +308,7 @@ export default function ChatBubbleInterface({
 
       {/* Messages Area - WhatsApp style */}
       <div 
+        ref={messagesContainerRef}
         className="flex-1 overflow-y-auto px-2 py-4 space-y-2"
         style={{
           backgroundImage: 'linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px)',
@@ -143,6 +350,7 @@ export default function ChatBubbleInterface({
           <>
             {messages.map((message, index) => {
               const isConsecutive = index > 0 && messages[index - 1].isUser === message.isUser;
+              const formattedContent = !message.isUser ? formatMarkdownToHtml(message.content) : message.content;
               
               return (
                 <div
@@ -184,9 +392,16 @@ export default function ChatBubbleInterface({
                     
                     {/* Message Content */}
                     <div className="relative z-10">
-                      <div className="text-sm leading-relaxed whitespace-pre-wrap break-words">
-                        {message.content}
-                      </div>
+                      {message.isUser ? (
+                        <div className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+                          {message.content}
+                        </div>
+                      ) : (
+                        <div 
+                          className="text-sm leading-relaxed message-content"
+                          dangerouslySetInnerHTML={{ __html: formattedContent }}
+                        />
+                      )}
                       
                       {/* Timestamp and status */}
                       <div className={`flex items-center justify-end space-x-1 mt-1 ${
