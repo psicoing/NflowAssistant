@@ -5,13 +5,15 @@ import { useAuth } from "@/hooks/useAuth";
 import { useLanguageContext } from "@/components/LanguageProvider";
 import ChatHeader from "@/components/ui/chat-header";
 import ChatInterface from "@/components/ui/chat-interface";
+import ChatBubbleInterface from "@/components/ui/chat-bubble-interface";
 import UserProfileForm from "@/components/ui/user-profile-form";
 import QuestionLimitIndicator from "@/components/ui/question-limit-indicator";
 import ChatLanguageBanner from "@/components/ui/chat-language-banner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { MessageCircle, Plus, Search, Calendar, Clock, List } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { MessageCircle, Plus, Search, Calendar, Clock, List, MessageSquare } from "lucide-react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import type { Conversation, Message } from "@shared/schema";
@@ -30,6 +32,10 @@ export default function Chat() {
   const [userProfile, setUserProfile] = useState<any>(null);
   const [showProfileForm, setShowProfileForm] = useState(false);
   const [showConversationsSheet, setShowConversationsSheet] = useState(false);
+  const [chatMode, setChatMode] = useState<"classic" | "bubbles">(() => {
+    const saved = localStorage.getItem('nflow-chat-mode');
+    return (saved === "bubbles" || saved === "classic") ? saved : "classic";
+  });
 
   // Authentication handled by session-based auth
   const { user, isLoading: isAuthLoading } = useAuth();
@@ -257,6 +263,18 @@ export default function Chat() {
     setLocation(`/chat/${conversationId}`);
   };
 
+  // Handle chat mode change
+  const handleChatModeToggle = () => {
+    const newMode = chatMode === "classic" ? "bubbles" : "classic";
+    setChatMode(newMode);
+    localStorage.setItem('nflow-chat-mode', newMode);
+    toast({
+      title: newMode === "bubbles" ? "Modo Burbujas Activado" : "Modo Clásico Activado",
+      description: newMode === "bubbles" ? "Chat con estilo WhatsApp" : "Chat con formato completo",
+      duration: 2000,
+    });
+  };
+
   // Helper function to filter conversations by date
   const isConversationInDateRange = (conversation: Conversation) => {
     if (selectedDateFilter === "all") return true;
@@ -344,7 +362,7 @@ export default function Chat() {
       
       {/* Mobile Navigation Bar */}
       <div className="md:hidden bg-gray-800/90 border-b border-gray-700/50 p-3 mt-16">
-        <div className="flex items-center justify-between space-x-3">
+        <div className="flex items-center justify-between space-x-2">
           <Button
             onClick={handleNewChat}
             size="sm"
@@ -353,6 +371,17 @@ export default function Chat() {
           >
             <Plus className="w-4 h-4 mr-1" />
             Nuevo
+          </Button>
+          
+          {/* Chat Mode Toggle Mobile */}
+          <Button
+            onClick={handleChatModeToggle}
+            variant="ghost"
+            size="sm"
+            className="px-2 flex-shrink-0 text-white hover:bg-white/10"
+            title={chatMode === "classic" ? "Cambiar a modo burbujas" : "Cambiar a modo clásico"}
+          >
+            <MessageSquare className="w-4 h-4" />
           </Button>
           
           {/* Question Counter Mobile */}
@@ -501,6 +530,21 @@ export default function Chat() {
             {/* Question Limit Indicator */}
             <QuestionLimitIndicator />
             
+            {/* Chat Mode Toggle Desktop */}
+            <div className="flex items-center justify-between bg-gray-700/30 rounded-lg p-3 border border-gray-600/30">
+              <div className="flex items-center space-x-2">
+                <MessageSquare className="w-4 h-4 text-gray-300" />
+                <span className="text-sm text-gray-300">
+                  {chatMode === "classic" ? "Modo Clásico" : "Modo Burbujas"}
+                </span>
+              </div>
+              <Switch
+                checked={chatMode === "bubbles"}
+                onCheckedChange={handleChatModeToggle}
+                className="data-[state=checked]:bg-emerald-600"
+              />
+            </div>
+            
             {/* New Chat Button */}
             <Button
               onClick={handleNewChat}
@@ -612,12 +656,21 @@ export default function Chat() {
         {/* Chat Interface */}
         <div className="flex-1 flex flex-col overflow-hidden min-w-0">
           {currentConversationId ? (
-            <ChatInterface
-              messages={messages}
-              onSendMessage={handleSendMessage}
-              isLoading={sendMessageMutation.isPending}
-              isLoadingMessages={isLoadingMessages}
-            />
+            chatMode === "bubbles" ? (
+              <ChatBubbleInterface
+                messages={messages}
+                onSendMessage={handleSendMessage}
+                isLoading={sendMessageMutation.isPending}
+                isLoadingMessages={isLoadingMessages}
+              />
+            ) : (
+              <ChatInterface
+                messages={messages}
+                onSendMessage={handleSendMessage}
+                isLoading={sendMessageMutation.isPending}
+                isLoadingMessages={isLoadingMessages}
+              />
+            )
           ) : (
             <div className="flex-1 flex items-center justify-center overflow-hidden">
               <div className="text-center max-w-md mx-4">
