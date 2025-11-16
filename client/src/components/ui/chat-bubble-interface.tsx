@@ -247,6 +247,15 @@ export default function ChatBubbleInterface({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  
+  // Estado para controlar cuántas burbujas mostrar de cada mensaje
+  const [visibleBubbles, setVisibleBubbles] = useState<Record<number, number>>({});
+  const [showTypingFor, setShowTypingFor] = useState<number | null>(null);
+  const [pausedMessages, setPausedMessages] = useState<Record<number, boolean>>({});
+  
+  // Ref para trackear qué mensajes ya fueron vistos (para distinguir históricos de nuevos)
+  const seenMessageIds = useRef<Set<number>>(new Set());
+  const hasHydratedHistory = useRef(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -277,12 +286,106 @@ export default function ChatBubbleInterface({
     });
   };
 
+  // Inicializar burbujas visibles para mensajes de usuario (mostrar inmediatamente)
+  // y para mensajes de IA (solo progresivo para mensajes NUEVOS)
+  useEffect(() => {
+    // En la primera carga de mensajes (cuando llega el historial de la BD),
+    // marcar todos como "vistos" para que se muestren completos
+    if (!hasHydratedHistory.current && messages.length > 0) {
+      messages.forEach(message => {
+        seenMessageIds.current.add(message.id);
+      });
+      hasHydratedHistory.current = true;
+    }
+    
+    // Identificar mensajes nuevos comparando con el Set actual
+    const newMessageIds = new Set<number>();
+    
+    messages.forEach(message => {
+      if (!seenMessageIds.current.has(message.id)) {
+        newMessageIds.add(message.id);
+      }
+    });
+    
+    // Aplicar lógica de visibilidad
+    messages.forEach((message) => {
+      const isNewMessage = newMessageIds.has(message.id);
+      
+      if (message.isUser) {
+        // Mensajes de usuario se muestran inmediatamente
+        if (!visibleBubbles[message.id]) {
+          setVisibleBubbles(prev => ({ ...prev, [message.id]: 999 }));
+        }
+        seenMessageIds.current.add(message.id);
+      } else {
+        if (visibleBubbles[message.id] === undefined) {
+          const segments = splitContentIntoSegments(message.content);
+          
+          if (isNewMessage) {
+            // Mensaje nuevo de IA: empezar progresivo desde 0
+            setVisibleBubbles(prev => ({ ...prev, [message.id]: 0 }));
+            // Marcar como visto después de inicializar para que no se vuelva a inicializar
+            seenMessageIds.current.add(message.id);
+          } else {
+            // Mensaje histórico: mostrar todo inmediatamente
+            setVisibleBubbles(prev => ({ ...prev, [message.id]: segments.length }));
+          }
+        }
+      }
+    });
+  }, [messages]);
+
+  // Efecto para mostrar burbujas progresivamente con delays
+  useEffect(() => {
+    const timers: NodeJS.Timeout[] = [];
+    
+    messages.forEach(message => {
+      if (message.isUser) return; // Skip user messages
+      
+      const segments = splitContentIntoSegments(message.content);
+      const currentVisible = visibleBubbles[message.id] || 0;
+      const isPaused = pausedMessages[message.id];
+      
+      // Si ya se mostraron todas las burbujas, no hacer nada
+      if (currentVisible >= segments.length) return;
+      
+      // Para respuestas largas (>6 burbujas), pausar a la mitad
+      const shouldPause = segments.length > 6 && currentVisible === Math.floor(segments.length / 2);
+      
+      if (shouldPause && !isPaused) {
+        setPausedMessages(prev => ({ ...prev, [message.id]: true }));
+        return;
+      }
+      
+      // Si está pausado, no continuar mostrando burbujas
+      if (isPaused) return;
+      
+      // Mostrar indicador de "escribiendo..."
+      const typingTimer = setTimeout(() => {
+        setShowTypingFor(message.id);
+      }, 300);
+      timers.push(typingTimer);
+      
+      // Mostrar siguiente burbuja
+      const bubbleTimer = setTimeout(() => {
+        setShowTypingFor(null);
+        setVisibleBubbles(prev => ({
+          ...prev,
+          [message.id]: currentVisible + 1
+        }));
+      }, 800); // 800ms = 300ms typing indicator + 500ms delay
+      timers.push(bubbleTimer);
+    });
+    
+    return () => timers.forEach(timer => clearTimeout(timer));
+  }, [messages, visibleBubbles, pausedMessages]);
+
   // Scroll to bottom when new messages arrive
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages]);
+  }, [messages, visibleBubbles]);
 
   // Handle interactive elements clicks (bookmarks, scales, checkboxes, buttons, etc.)
   useEffect(() => {
@@ -491,10 +594,13 @@ export default function ChatBubbleInterface({
               
               // Dividir mensajes de la IA en segmentos, usuarios quedan sin dividir
               const segments = !message.isUser ? splitContentIntoSegments(message.content) : [message.content];
+              const numVisibleBubbles = visibleBubbles[message.id] || 0;
+              const visibleSegments = segments.slice(0, numVisibleBubbles);
+              const isPaused = pausedMessages[message.id];
               
               return (
                 <div key={message.id}>
-                  {segments.map((segment, segmentIndex) => {
+                  {visibleSegments.map((segment, segmentIndex) => {
                     const formattedContent = !message.isUser ? formatMarkdownToHtml(segment) : segment;
                     const isFirstSegment = segmentIndex === 0;
                     const isLastSegment = segmentIndex === segments.length - 1;
@@ -615,6 +721,38 @@ export default function ChatBubbleInterface({
                       </div>
                     );
                   })}
+                  
+                  {/* Indicador de "escribiendo..." entre burbujas */}
+                  {!message.isUser && showTypingFor === message.id && (
+                    <div className="flex items-end space-x-2 mb-2 animate-in slide-in-from-bottom-2 duration-200">
+                      <div className="w-8 flex-shrink-0"></div>
+                      <div className="bg-white dark:bg-gray-800 rounded-tr-2xl rounded-tl-2xl rounded-br-2xl shadow-md border border-gray-200 dark:border-gray-700 px-4 py-2 max-w-xs">
+                        <div className="flex space-x-1">
+                          <div className="w-2 h-2 bg-emerald-500 dark:bg-emerald-400 rounded-full animate-bounce"></div>
+                          <div className="w-2 h-2 bg-emerald-500 dark:bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                          <div className="w-2 h-2 bg-emerald-500 dark:bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Botón "Continuar leyendo" para respuestas largas */}
+                  {!message.isUser && isPaused && numVisibleBubbles < segments.length && (
+                    <div className="flex items-center justify-center my-3">
+                      <Button
+                        onClick={() => {
+                          setPausedMessages(prev => ({ ...prev, [message.id]: false }));
+                        }}
+                        className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 rounded-full px-6 py-2 text-sm font-medium"
+                        data-testid="button-continue-reading"
+                      >
+                        <span className="mr-2">Continuar leyendo</span>
+                        <svg className="w-4 h-4 inline animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </Button>
+                    </div>
+                  )}
                 </div>
               );
             })}
