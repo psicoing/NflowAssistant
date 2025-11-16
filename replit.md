@@ -15,7 +15,12 @@ The application utilizes a professional, responsive design built with Shadcn/ui 
 The frontend is developed using React 18, TypeScript, Vite, and Wouter for routing, with TanStack Query managing server state. The backend is a Node.js and Express.js application written in TypeScript, employing `express-session` for authentication and `bcrypt` for secure password hashing. Data persistence is handled by PostgreSQL, configured for Neon serverless, and managed with Drizzle ORM.
 
 ### Feature Specifications
-- **AI Chat System**: Integrates OpenAI GPT-4o for contextual, persistent, and multi-language conversations, offering both a classic and a WhatsApp-style bubble interface with full markdown and interactive elements support. The WhatsApp bubble mode intelligently splits AI responses into multiple bubbles by logical sections (titles, techniques, exercises, paragraphs, interactive elements) with progressive animations for a more engaging conversational experience.
+- **AI Chat System**: Integrates OpenAI GPT-4o for contextual, persistent, and multi-language conversations, offering both a classic and a WhatsApp-style bubble interface with full markdown and interactive elements support. The WhatsApp bubble mode features:
+  - **Intelligent Segmentation**: AI responses split into logical bubbles (titles, techniques, exercises, paragraphs, interactive elements)
+  - **Progressive Reveal**: New messages appear one-by-one with typing indicators (300ms) and delays (500ms) between bubbles
+  - **Smart Pause System**: Responses with >6 bubbles pause mid-conversation with "Continuar leyendo ▼" button
+  - **Historical Optimization**: Past messages load instantly (no replay), only new AI responses use progressive reveal
+  - **Implementation**: Uses hasHydratedHistory ref to distinguish initial message load from new streaming responses
 - **User & Subscription Management**: Supports user roles, registration, login, and automated subscription activation via PayPal and Stripe webhooks, including various plans (basic, individual, premium, group) and chat access control.
 - **Content & Partner Management**: Provides categorized articles, guides, exercises, and a comprehensive partner program with application, approval, referral tracking, and a dedicated dashboard.
 - **Free Resources**: Offers unauthenticated access to emotional logging, daily streak tracking, affirmations, and professional assessments, primarily managed client-side.
@@ -30,7 +35,7 @@ The architecture is designed for serverless deployment with Neon, emphasizing fu
 ## External Dependencies
 
 ### AI and APIs
-- **OpenAI API**: Powers the GPT-4o model for the AI chat system.
+- **OpenAI API**: Powers the GPT-4o model for the AI chat system with configuration: max_tokens=4000 (increased to handle comprehensive structured responses), temperature=0.4, response_format=json_object. Includes robust error handling for JSON parsing and fallback responses.
 - **PayPal SDK**: Integrated for payment processing and subscription management.
 - **Stripe**: Utilized for payment processing and subscription management.
 

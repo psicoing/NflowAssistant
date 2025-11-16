@@ -790,7 +790,7 @@ Responde en formato JSON: { "response": "tu respuesta completa siguiendo la estr
         { role: "user", content: userMessage }
       ],
       response_format: { type: "json_object" },
-      max_tokens: 1500,
+      max_tokens: 4000,
       temperature: 0.4,
       top_p: 0.9
     });
@@ -800,7 +800,19 @@ Responde en formato JSON: { "response": "tu respuesta completa siguiendo la estr
       throw new Error("No se recibió respuesta de OpenAI");
     }
 
-    const parsedResponse = JSON.parse(responseContent);
+    // Logging para debug
+    console.log("Raw OpenAI response (first 200 chars):", responseContent.substring(0, 200));
+    
+    // Parsear JSON con manejo robusto de errores
+    let parsedResponse;
+    try {
+      parsedResponse = JSON.parse(responseContent);
+    } catch (parseError) {
+      console.error("Error parsing OpenAI JSON response:", parseError);
+      console.error("Full response content:", responseContent);
+      throw new Error("La respuesta de OpenAI no es un JSON válido o fue truncada");
+    }
+    
     return parsedResponse.response || "Lo siento, no pude procesar tu mensaje correctamente.";
 
   } catch (error) {
