@@ -26,6 +26,8 @@ export const users = pgTable("users", {
   monthlyQuestionLimit: integer("monthly_question_limit").default(10),
   questionsUsedThisMonth: integer("questions_used_this_month").default(0),
   lastQuestionResetDate: timestamp("last_question_reset_date").defaultNow(),
+  // Créditos prepagados (pago por uso)
+  prepaidQuestions: integer("prepaid_questions").default(0),
 });
 
 export const conversations = pgTable("conversations", {
