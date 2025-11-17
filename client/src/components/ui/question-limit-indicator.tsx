@@ -7,6 +7,8 @@ interface QuestionLimitData {
   limit: number;
   remaining: number;
   used: number;
+  prepaidQuestions: number;
+  totalRemaining: number;
   canAsk: boolean;
   resetDate: string;
 }
@@ -26,12 +28,12 @@ export default function QuestionLimitIndicator({ compact = false }: QuestionLimi
     return null;
   }
 
-  const { limit, remaining, used, canAsk, resetDate } = limitData;
+  const { limit, remaining, used, canAsk, resetDate, prepaidQuestions, totalRemaining } = limitData;
   const percentage = (used / limit) * 100;
   
   const getStatusColor = () => {
-    if (remaining === 0) return "text-red-400";
-    if (remaining <= 2) return "text-yellow-400";
+    if (totalRemaining === 0) return "text-red-400";
+    if (totalRemaining <= 2) return "text-yellow-400";
     return "text-green-400";
   };
 
@@ -56,15 +58,18 @@ export default function QuestionLimitIndicator({ compact = false }: QuestionLimi
         <MessageCircle className="w-4 h-4 text-nflow-orange flex-shrink-0" />
         <div className="flex items-center space-x-1 min-w-0">
           <span className={`text-xs font-semibold ${getStatusColor()} whitespace-nowrap`}>
-            {remaining}
+            {totalRemaining}
           </span>
-          <span className="text-xs text-gray-400 hidden xs:inline">/</span>
-          <span className="text-xs text-gray-400 hidden xs:inline">{limit}</span>
+          {prepaidQuestions > 0 && (
+            <span className="text-xs text-purple-400 hidden xs:inline">
+              (+{prepaidQuestions})
+            </span>
+          )}
         </div>
         {!canAsk && (
           <AlertTriangle className="w-3 h-3 text-red-400 flex-shrink-0" />
         )}
-        {canAsk && remaining <= 2 && (
+        {canAsk && totalRemaining <= 2 && (
           <AlertTriangle className="w-3 h-3 text-yellow-400 flex-shrink-0" />
         )}
       </div>
@@ -86,7 +91,7 @@ export default function QuestionLimitIndicator({ compact = false }: QuestionLimi
             <AlertTriangle className="w-4 h-4 text-red-400" />
           )}
           <span className={`text-sm font-semibold ${getStatusColor()}`}>
-            {remaining} {t('limit.remaining')} {limit}
+            {totalRemaining} {t('limit.total')}
           </span>
         </div>
       </div>
@@ -99,9 +104,15 @@ export default function QuestionLimitIndicator({ compact = false }: QuestionLimi
           />
         </div>
         <div className="flex justify-between items-center text-xs text-gray-400">
-          <span>{t('limit.used')} {used}</span>
+          <span>{t('limit.used')} {used} / {limit}</span>
           <span>{t('limit.resets')} {formatResetDate(resetDate)}</span>
         </div>
+        {prepaidQuestions > 0 && (
+          <div className="flex items-center space-x-1 text-xs">
+            <span className="text-purple-400 font-semibold">+{prepaidQuestions}</span>
+            <span className="text-gray-400">{t('limit.prepaid')}</span>
+          </div>
+        )}
       </div>
       
       {!canAsk && (
@@ -110,7 +121,7 @@ export default function QuestionLimitIndicator({ compact = false }: QuestionLimi
         </div>
       )}
       
-      {canAsk && remaining <= 2 && (
+      {canAsk && totalRemaining <= 2 && (
         <div className="mt-3 p-2 bg-yellow-900/20 border border-yellow-700/50 rounded text-xs text-yellow-300">
           {t('limit.warning')}
         </div>
