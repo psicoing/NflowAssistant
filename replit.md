@@ -31,6 +31,13 @@ The frontend is developed using React 18, TypeScript, Vite, and Wouter for routi
   - **Historical Optimization**: Past messages load instantly (no replay), only new AI responses use progressive reveal
   - **Implementation**: Uses hasHydratedHistory ref to distinguish initial message load from new streaming responses
 - **User & Subscription Management**: Supports user roles, registration, login, and automated subscription activation via PayPal and Stripe webhooks, including various plans (basic, individual, premium, group) and chat access control.
+- **Comprehensive Pricing Page** (`/precios`): Complete pricing presentation featuring:
+  - **Hybrid Model Explanation**: Visual cards explaining the two payment options (Subscriptions vs Pay-Per-Use)
+  - **Full Comparison Table**: 8-row table comparing all options (2 credit packs, 3 personal plans, 3 business plans) with columns for price, questions included, renewal, and ideal use case
+  - **Credit Packs Section**: Dedicated showcase of Pack Básico (€5/15q) and Pack Premium (€10/35q) with "Comprar Ahora" buttons that open PurchaseCreditsModal
+  - **Personal Plans Section**: Three subscription tiers (Básico €2.99/mes, Individual €5.99/mes, Premium €32/año)
+  - **Business Plans Section**: Enterprise solutions (Profesional €149.50/mes, Empresarial €598/mes, Corporativo custom)
+  - **Updated SEO**: Meta tags include "pago por uso" and "créditos prepagados" keywords
 - **Content & Partner Management**: Provides categorized articles, guides, exercises, and a comprehensive partner program with application, approval, referral tracking, and a dedicated dashboard.
 - **Free Resources**: Offers unauthenticated access to emotional logging, daily streak tracking, affirmations, and professional assessments, primarily managed client-side.
 - **SEO**: Implements dynamic meta tags, Schema.org JSON-LD, sitemap, and optimized content.
