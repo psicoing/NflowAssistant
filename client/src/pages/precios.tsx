@@ -12,11 +12,11 @@ export default function PreciosPage() {
   return (
     <div className="min-h-screen bg-nflow-dark">
       <SEOHead
-        title="Precios - NUXA | Planes desde €2.99/mes"
-        description="Planes de suscripción NUXA: Básico €2.99/mes, Individual €5.99/mes, Premium €32/año. Apoyo emocional 24/7 con IA en 150+ idiomas. Planes empresariales disponibles."
-        keywords="precios psicólogo IA, suscripción salud mental, plan terapia online, NUXA precios, ISO 45003 empresas"
-        ogTitle="Planes y Precios NUXA - Apoyo Mental Accesible"
-        ogDescription="Desde €2.99/mes. Apoyo emocional profesional 24/7 para personas y empresas en 150+ idiomas."
+        title="Precios - NUXA | Planes desde €2.99/mes + Pago Por Uso"
+        description="NUXA: Suscripciones desde €2.99/mes o packs de créditos prepagados €5/15 preguntas. Sin caducidad. Apoyo emocional 24/7 con IA en 150+ idiomas. Elige la opción perfecta para ti."
+        keywords="precios psicólogo IA, suscripción salud mental, pago por uso terapia, créditos prepagados IA, plan terapia online, NUXA precios, ISO 45003 empresas"
+        ogTitle="Planes y Precios NUXA - Flexible y Accesible"
+        ogDescription="Suscripciones mensuales o pago por uso. Créditos que nunca caducan. Apoyo emocional profesional 24/7 en 150+ idiomas."
         canonicalUrl="https://nuxa.life/precios"
       />
       <Header showBanner={false} />
