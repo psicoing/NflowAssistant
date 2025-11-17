@@ -1109,11 +1109,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const user = users.find(u => u.email === customerEmail);
           
           if (user) {
+            // Check for referral code in metadata to process commission
+            const metadata = eventData.metadata;
+            
+            // MANEJO DE CRÉDITOS PREPAGADOS (PAGO POR USO)
+            if (metadata?.type === 'prepaid_credits') {
+              console.log("=== PROCESSING PREPAID CREDITS PURCHASE ===");
+              console.log("User:", user.username, "ID:", user.id);
+              console.log("Pack type:", metadata.packType);
+              console.log("Questions:", metadata.questions);
+              
+              try {
+                const questionsToAdd = parseInt(metadata.questions);
+                await storage.addPrepaidQuestions(user.id, questionsToAdd);
+                
+                console.log(`✅ Added ${questionsToAdd} prepaid questions to user ${user.username}`);
+                
+                res.json({ 
+                  received: true, 
+                  creditsAdded: true,
+                  questions: questionsToAdd,
+                  user: { username: user.username, email: user.email }
+                });
+                return;
+              } catch (error) {
+                console.error("❌ Error adding prepaid questions:", error);
+                res.json({ received: true, creditsAdded: false });
+                return;
+              }
+            }
+            
+            // MANEJO DE SUSCRIPCIONES (FLUJO ORIGINAL)
             console.log("=== ACTIVATING STRIPE SUBSCRIPTION ===");
             console.log("User found:", user.username, "ID:", user.id, "Current status:", user.subscriptionStatus);
             
-            // Check for referral code in metadata to process commission
-            const metadata = eventData.metadata;
             const selectedPlan = metadata?.plan || 'basic';
             
             if (metadata && metadata.referralCode && metadata.partnerId) {
