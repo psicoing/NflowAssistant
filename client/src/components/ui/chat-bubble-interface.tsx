@@ -350,15 +350,16 @@ export default function ChatBubbleInterface({
       if (currentVisible >= segments.length) return;
       
       // Para respuestas largas (>6 burbujas), pausar a la mitad
-      const shouldPause = segments.length > 6 && currentVisible === Math.floor(segments.length / 2);
+      const pausePoint = Math.floor(segments.length / 2);
+      const shouldPause = segments.length > 6 && currentVisible === pausePoint && isPaused === undefined;
       
-      if (shouldPause && !isPaused) {
+      if (shouldPause) {
         setPausedMessages(prev => ({ ...prev, [message.id]: true }));
         return;
       }
       
       // Si está pausado, no continuar mostrando burbujas
-      if (isPaused) return;
+      if (isPaused === true) return;
       
       // Mostrar indicador de "escribiendo..."
       const typingTimer = setTimeout(() => {
@@ -739,7 +740,13 @@ export default function ChatBubbleInterface({
                     <div className="flex items-center justify-center my-3">
                       <Button
                         onClick={() => {
-                          setPausedMessages(prev => ({ ...prev, [message.id]: false }));
+                          console.log(`Continuar leyendo clicked for message ${message.id}`);
+                          console.log(`Current pausedMessages state:`, pausedMessages);
+                          setPausedMessages(prev => {
+                            const newState = { ...prev, [message.id]: false };
+                            console.log(`New pausedMessages state:`, newState);
+                            return newState;
+                          });
                         }}
                         className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 rounded-full px-6 py-2 text-sm font-medium"
                         data-testid="button-continue-reading"
