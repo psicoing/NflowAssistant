@@ -34,6 +34,7 @@ export interface IStorage {
   incrementQuestionCount(userId: number): Promise<User>;
   resetMonthlyQuestions(userId: number): Promise<User>;
   addQuestionsToUser(userId: number, additionalQuestions: number): Promise<User>;
+  addPrepaidQuestions(userId: number, quantity: number): Promise<User>;
   
   createConversation(conversation: InsertConversation): Promise<Conversation>;
   getConversations(userId?: number): Promise<Conversation[]>;
@@ -432,6 +433,24 @@ export class DatabaseStorage implements IStorage {
       .update(users)
       .set({
         monthlyQuestionLimit: newLimit,
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return updatedUser;
+  }
+
+  async addPrepaidQuestions(userId: number, quantity: number): Promise<User> {
+    const user = await this.getUser(userId);
+    if (!user) {
+      throw new Error("Usuario no encontrado");
+    }
+
+    const currentPrepaid = user.prepaidQuestions || 0;
+    
+    const [updatedUser] = await db
+      .update(users)
+      .set({
+        prepaidQuestions: currentPrepaid + quantity,
       })
       .where(eq(users.id, userId))
       .returning();
