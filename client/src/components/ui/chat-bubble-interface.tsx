@@ -552,9 +552,7 @@ export default function ChatBubbleInterface({
         ref={messagesContainerRef}
         className="flex-1 overflow-y-auto px-2 py-4 space-y-2"
         style={{
-          backgroundImage: 'linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px)',
-          backgroundSize: '20px 20px',
-          backgroundColor: '#efeae2'
+          backgroundColor: '#0a1929'
         }}
       >
         {messages.length === 0 ? (
