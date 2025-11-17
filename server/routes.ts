@@ -1468,6 +1468,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Purchase prepaid credits
+  app.post("/api/purchase-credits", async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      if (!userId) {
+        return res.status(401).json({ message: "Usuario no autenticado" });
+      }
+
+      const { pack } = req.body; // 'pack15' or 'pack35'
+      
+      if (!pack || !['pack15', 'pack35'].includes(pack)) {
+        return res.status(400).json({ message: "Pack inválido" });
+      }
+
+      const stripeKey = process.env.STRIPE_SECRET_KEY;
+      if (!stripeKey) {
+        console.error('❌ No Stripe secret key found');
+        return res.status(500).json({ error: 'Stripe no configurado' });
+      }
+
+      const Stripe = (await import('stripe')).default;
+      const stripe = new Stripe(stripeKey, {
+        apiVersion: '2025-08-27.basil',
+      });
+
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+
+      // Configuración de packs
+      const packConfig: Record<string, { questions: number; price: number; name: string }> = {
+        pack15: { questions: 15, price: 500, name: '15 preguntas' },
+        pack35: { questions: 35, price: 1000, name: '35 preguntas' }
+      };
+
+      const selectedPack = packConfig[pack];
+
+      // Crear sesión de Stripe para pago único
+      const session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        line_items: [
+          {
+            price_data: {
+              currency: 'eur',
+              product_data: {
+                name: `Pack de ${selectedPack.name}`,
+                description: `Créditos prepagados para NUXA - ${selectedPack.questions} preguntas adicionales`
+              },
+              unit_amount: selectedPack.price,
+            },
+            quantity: 1,
+          },
+        ],
+        success_url: "https://nflow.style/chat?credits_purchased=true",
+        cancel_url: "https://nflow.style/chat",
+        metadata: {
+          userId: userId.toString(),
+          packType: pack,
+          questions: selectedPack.questions.toString(),
+          type: 'prepaid_credits'
+        }
+      });
+      
+      res.json({ url: session.url });
+    } catch (error: any) {
+      console.error('Error al crear sesión de compra:', error);
+      res.status(500).json({ 
+        error: 'Error al procesar la compra',
+        details: error.message 
+      });
+    }
+  });
+
   // Public statistics endpoint
   app.get("/api/public-stats", async (req, res) => {
     try {
