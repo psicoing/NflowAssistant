@@ -364,11 +364,13 @@ export class DatabaseStorage implements IStorage {
 
     const used = user.questionsUsedThisMonth || 0;
     const limit = user.monthlyQuestionLimit || 10;
-    const remaining = Math.max(0, limit - used);
+    const prepaid = user.prepaidQuestions || 0;
+    const subscriptionRemaining = Math.max(0, limit - used);
+    const totalRemaining = prepaid + subscriptionRemaining;
 
     return {
-      canAsk: remaining > 0,
-      remaining: remaining - 1, // After this question
+      canAsk: totalRemaining > 0,
+      remaining: totalRemaining - 1, // After this question
       limit
     };
   }
@@ -379,13 +381,30 @@ export class DatabaseStorage implements IStorage {
       throw new Error("Usuario no encontrado");
     }
 
-    const [updatedUser] = await db
-      .update(users)
-      .set({
-        questionsUsedThisMonth: (user.questionsUsedThisMonth || 0) + 1,
-      })
-      .where(eq(users.id, userId))
-      .returning();
+    // Primero consumir créditos prepagados, luego cuota de suscripción
+    const prepaid = user.prepaidQuestions || 0;
+    
+    let updatedUser;
+    if (prepaid > 0) {
+      // Consumir crédito prepagado
+      [updatedUser] = await db
+        .update(users)
+        .set({
+          prepaidQuestions: prepaid - 1,
+        })
+        .where(eq(users.id, userId))
+        .returning();
+    } else {
+      // Consumir cuota de suscripción
+      [updatedUser] = await db
+        .update(users)
+        .set({
+          questionsUsedThisMonth: (user.questionsUsedThisMonth || 0) + 1,
+        })
+        .where(eq(users.id, userId))
+        .returning();
+    }
+    
     return updatedUser;
   }
 

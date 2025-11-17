@@ -1449,13 +1449,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const used = user.questionsUsedThisMonth || 0;
       const limit = user.monthlyQuestionLimit || 10;
-      const remaining = Math.max(0, limit - used);
+      const prepaid = user.prepaidQuestions || 0;
+      const subscriptionRemaining = Math.max(0, limit - used);
+      const totalRemaining = prepaid + subscriptionRemaining;
       
       res.json({
         limit,
-        remaining,
+        remaining: subscriptionRemaining,
         used,
-        canAsk: remaining > 0,
+        prepaidQuestions: prepaid,
+        totalRemaining,
+        canAsk: totalRemaining > 0,
         resetDate: new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString()
       });
     } catch (error) {
