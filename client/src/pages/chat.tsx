@@ -9,6 +9,7 @@ import ChatBubbleInterface from "@/components/ui/chat-bubble-interface";
 import UserProfileForm from "@/components/ui/user-profile-form";
 import QuestionLimitIndicator from "@/components/ui/question-limit-indicator";
 import ChatLanguageBanner from "@/components/ui/chat-language-banner";
+import PurchaseCreditsModal from "@/components/modals/purchase-credits-modal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -529,6 +530,18 @@ export default function Chat() {
           <div className="p-6 border-b border-gray-700/50 space-y-4">
             {/* Question Limit Indicator */}
             <QuestionLimitIndicator />
+            
+            {/* Purchase Credits Button */}
+            <PurchaseCreditsModal>
+              <Button
+                variant="outline"
+                className="w-full bg-purple-600/20 hover:bg-purple-600/30 border-purple-500/50 text-purple-300 hover:text-purple-200 font-semibold py-2.5 rounded-lg transition-all duration-300"
+                data-testid="button-purchase-credits"
+              >
+                <span className="mr-2">💎</span>
+                Comprar Créditos
+              </Button>
+            </PurchaseCreditsModal>
             
             {/* Chat Mode Toggle Desktop */}
             <div className="flex items-center justify-between bg-gray-700/30 rounded-lg p-3 border border-gray-600/30">

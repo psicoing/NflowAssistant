@@ -3,6 +3,8 @@
 ## Overview
 NFLOW (now NUXA) is an AI-powered mental health application offering continuous emotional support for individuals, families, and workers. It integrates mental health and professional development solutions, adhering to ISO 45003 standards for psychological well-being at work. The platform supports an unlimited number of users with automated subscription activation and aims to foster a brand identity that emphasizes science, emotion, and human connection in mental wellness. Its business vision is to provide an AI-driven psychological guide, not as a substitute for therapy, but to improve mental health for people and businesses across multiple languages.
 
+The platform implements a **hybrid monetization model**: monthly subscriptions (€2.99-€32/year) combined with pay-per-use prepaid credit packs (€5/15 questions, €10/35 questions). Prepaid credits never expire and are consumed before monthly quota, providing flexibility for occasional users.
+
 ## User Preferences
 Preferred communication style: Simple, everyday language.
 
@@ -15,6 +17,13 @@ The application utilizes a professional, responsive design built with Shadcn/ui 
 The frontend is developed using React 18, TypeScript, Vite, and Wouter for routing, with TanStack Query managing server state. The backend is a Node.js and Express.js application written in TypeScript, employing `express-session` for authentication and `bcrypt` for secure password hashing. Data persistence is handled by PostgreSQL, configured for Neon serverless, and managed with Drizzle ORM.
 
 ### Feature Specifications
+- **Prepaid Credits System (Pay-Per-Use)**: Allows users to purchase question packs without subscription commitment. Credits are stored in `users.prepaidQuestions` column and consumed before monthly quota. Includes:
+  - **Pack Options**: €5 for 15 questions, €10 for 35 questions (better value)
+  - **Purchase Flow**: Stripe Checkout integration with server-side validation of pack types and amounts
+  - **Security**: Webhook validates payment amounts match pack types before adding credits
+  - **UI Integration**: Credits displayed in QuestionLimitIndicator with purple badge
+  - **Consumption Priority**: Prepaid credits → Monthly subscription quota
+  - **No Expiration**: Credits persist indefinitely until used
 - **AI Chat System**: Integrates OpenAI GPT-4o for contextual, persistent, and multi-language conversations, offering both a classic and a WhatsApp-style bubble interface with full markdown and interactive elements support. The WhatsApp bubble mode features:
   - **Intelligent Segmentation**: AI responses split into logical bubbles (titles, techniques, exercises, paragraphs, interactive elements)
   - **Progressive Reveal**: New messages appear one-by-one with typing indicators (300ms) and delays (500ms) between bubbles

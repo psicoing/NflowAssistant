@@ -1118,9 +1118,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
               console.log("User:", user.username, "ID:", user.id);
               console.log("Pack type:", metadata.packType);
               console.log("Questions:", metadata.questions);
+              console.log("Amount paid:", eventData.amount_total);
               
               try {
-                const questionsToAdd = parseInt(metadata.questions);
+                // VALIDACIÓN CRÍTICA: Verificar que el monto pagado coincida con el pack
+                const packType = metadata.packType;
+                const expectedAmounts: Record<string, number> = {
+                  'pack15': 500,  // 5€ en centavos
+                  'pack35': 1000  // 10€ en centavos
+                };
+                
+                const expectedAmount = expectedAmounts[packType];
+                const actualAmount = eventData.amount_total;
+                
+                if (!expectedAmount || actualAmount !== expectedAmount) {
+                  console.error(`❌ SECURITY: Amount mismatch! Expected ${expectedAmount}, got ${actualAmount} for pack ${packType}`);
+                  res.status(400).json({ 
+                    received: true, 
+                    creditsAdded: false,
+                    error: 'Amount mismatch' 
+                  });
+                  return;
+                }
+                
+                // Verificar que las preguntas correspondan al pack
+                const expectedQuestions: Record<string, number> = {
+                  'pack15': 15,
+                  'pack35': 35
+                };
+                
+                const questionsToAdd = expectedQuestions[packType];
+                if (!questionsToAdd || questionsToAdd !== parseInt(metadata.questions)) {
+                  console.error(`❌ SECURITY: Questions mismatch! Expected ${questionsToAdd}, got ${metadata.questions} for pack ${packType}`);
+                  res.status(400).json({ 
+                    received: true, 
+                    creditsAdded: false,
+                    error: 'Questions mismatch' 
+                  });
+                  return;
+                }
+                
+                // Todo verificado - añadir créditos
                 await storage.addPrepaidQuestions(user.id, questionsToAdd);
                 
                 console.log(`✅ Added ${questionsToAdd} prepaid questions to user ${user.username}`);
@@ -1505,10 +1543,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Usuario no autenticado" });
       }
 
-      const { pack } = req.body; // 'pack15' or 'pack35'
+      const { pack } = req.body;
       
-      if (!pack || !['pack15', 'pack35'].includes(pack)) {
-        return res.status(400).json({ message: "Pack inválido" });
+      // Validación del lado del servidor - solo packs permitidos
+      const ALLOWED_PACKS = ['pack15', 'pack35'];
+      if (!pack || !ALLOWED_PACKS.includes(pack)) {
+        return res.status(400).json({ 
+          message: "Pack inválido. Solo se permiten pack15 y pack35." 
+        });
       }
 
       const stripeKey = process.env.STRIPE_SECRET_KEY;
