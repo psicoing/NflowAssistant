@@ -1,9 +1,13 @@
-import { Users, Shield, Award, Clock, MessageCircle, PlayCircle } from "lucide-react";
+import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useState } from "react";
+import departmentPdf from "@assets/NFlow_Style_Departament_de_Salut_1763479981936.pdf";
 
 export default function FamilySupportHeroSection() {
   const [, setLocation] = useLocation();
+  const [isPdfOpen, setIsPdfOpen] = useState(false);
 
   return (
     <section className="relative bg-white dark:bg-slate-900 py-16 md:py-24 overflow-hidden">
@@ -111,10 +115,61 @@ export default function FamilySupportHeroSection() {
                 </div>
               </div>
             </div>
+
+            {/* Banner Departamento de Salud */}
+            <div className="mt-8 max-w-3xl mx-auto">
+              <button
+                onClick={() => setIsPdfOpen(true)}
+                className="w-full bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border-2 border-emerald-400 dark:border-emerald-600 rounded-2xl p-6 hover:shadow-xl hover:border-emerald-500 dark:hover:border-emerald-500 transition-all duration-300 transform hover:scale-105 group"
+                data-testid="button-departamento-salud"
+              >
+                <div className="flex items-center justify-center gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <FileText className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="text-left flex-1">
+                    <h4 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
+                      Recomendado por Departamento de Salud
+                    </h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Haz clic para ver la nota informativa oficial
+                    </p>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <svg className="w-6 h-6 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </button>
+            </div>
           </div>
 
         </div>
       </div>
+
+      {/* Modal para PDF */}
+      <Dialog open={isPdfOpen} onOpenChange={setIsPdfOpen}>
+        <DialogContent className="max-w-5xl h-[90vh] p-0 overflow-hidden">
+          <DialogHeader className="p-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-white" />
+                </div>
+                Nota Informativa - Departament de Salut
+              </DialogTitle>
+            </div>
+          </DialogHeader>
+          <div className="flex-1 overflow-hidden h-full">
+            <iframe
+              src={departmentPdf}
+              className="w-full h-full border-0"
+              title="Documento Departamento de Salud"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
