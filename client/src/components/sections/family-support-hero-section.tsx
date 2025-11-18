@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react";
-import departmentPdf from "@assets/NFlow_Style_Departament_de_Salut_1763479981936.pdf";
 
 export default function FamilySupportHeroSection() {
   const [, setLocation] = useLocation();
@@ -163,7 +162,7 @@ export default function FamilySupportHeroSection() {
           </DialogHeader>
           <div className="flex-1 overflow-hidden h-full">
             <iframe
-              src={departmentPdf}
+              src="/departamento-salud.pdf"
               className="w-full h-full border-0"
               title="Documento Departamento de Salud"
             />
