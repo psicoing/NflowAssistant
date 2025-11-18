@@ -170,11 +170,27 @@ export default function FamilySupportHeroSection() {
             </div>
           </DialogHeader>
           <div className="overflow-y-auto max-h-[calc(90vh-100px)] bg-white dark:bg-gray-900">
-            <img
-              src="/nota-departamento-salud.png"
-              alt="Nota Informativa del Departament de Salut sobre NUXA.life"
-              className="w-full h-auto"
-            />
+            <div className="relative">
+              {/* Recuadro informativo */}
+              <div className="sticky top-0 z-10 bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-4 shadow-lg">
+                <div className="flex items-center justify-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-lg">NFlow.Style</span>
+                    <span className="text-xl">→</span>
+                    <span className="font-bold text-lg">NUXA.life</span>
+                  </div>
+                </div>
+                <p className="text-center text-sm mt-1 opacity-90">
+                  NFlow.Style is now NUXA.life
+                </p>
+              </div>
+              
+              <img
+                src="/nota-departamento-salud.png"
+                alt="Nota Informativa del Departament de Salut sobre NUXA.life"
+                className="w-full h-auto"
+              />
+            </div>
           </div>
         </DialogContent>
       </Dialog>
