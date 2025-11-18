@@ -1,4 +1,4 @@
-import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X } from "lucide-react";
+import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X, Brain, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -133,6 +133,15 @@ export default function FamilySupportHeroSection() {
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       Haz clic para ver la nota informativa oficial
                     </p>
+                  </div>
+                  {/* Iconos decorativos de salud mental */}
+                  <div className="hidden md:flex items-center gap-2 flex-shrink-0">
+                    <div className="w-10 h-10 bg-gradient-to-br from-teal-400/20 to-emerald-400/20 rounded-lg flex items-center justify-center border border-emerald-300/30">
+                      <Brain className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                    <div className="w-10 h-10 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-lg flex items-center justify-center border border-emerald-300/30">
+                      <Heart className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                    </div>
                   </div>
                   <div className="flex-shrink-0">
                     <svg className="w-6 h-6 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
