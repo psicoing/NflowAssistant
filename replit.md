@@ -44,6 +44,7 @@ The frontend is developed using React 18, TypeScript, Vite, and Wouter for routi
 - **Cookie Consent**: Includes a GDPR-compliant cookie consent system.
 - **Interactive Showcase**: Features an interactive carousel of phone mockups demonstrating NUXA's mental health conversations.
 - **Book Library**: Integrates an affiliate book library with Amazon affiliate links, displaying psychology-focused books on the homepage.
+- **Department of Health Endorsement**: Homepage features a prominent clickable banner below the feature cards displaying "Recomendado por Departamento de Salud". Clicking opens a modal with the official informative note PDF from the Departament de Salut, showcasing the platform's credibility and official recognition.
 
 ### System Design Choices
 The architecture is designed for serverless deployment with Neon, emphasizing full automation of user and payment flows. It promotes modularity in both frontend and backend components, ensuring robust authentication and data persistence. The system includes a robust referral system and has fully transitioned its branding from NFLOW to NUXA.
