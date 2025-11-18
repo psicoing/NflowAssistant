@@ -156,9 +156,9 @@ export default function FamilySupportHeroSection() {
         </div>
       </div>
 
-      {/* Modal para PDF */}
+      {/* Modal para Nota Informativa */}
       <Dialog open={isPdfOpen} onOpenChange={setIsPdfOpen}>
-        <DialogContent className="max-w-5xl h-[90vh] p-0 overflow-hidden">
+        <DialogContent className="max-w-4xl max-h-[90vh] p-0 overflow-hidden">
           <DialogHeader className="p-6 pb-4 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
@@ -169,11 +169,11 @@ export default function FamilySupportHeroSection() {
               </DialogTitle>
             </div>
           </DialogHeader>
-          <div className="flex-1 overflow-hidden h-full">
-            <iframe
-              src="/departamento-salud.pdf"
-              className="w-full h-full border-0"
-              title="Documento Departamento de Salud"
+          <div className="overflow-y-auto max-h-[calc(90vh-100px)] bg-white dark:bg-gray-900">
+            <img
+              src="/nota-departamento-salud.png"
+              alt="Nota Informativa del Departament de Salut sobre NUXA.life"
+              className="w-full h-auto"
             />
           </div>
         </DialogContent>
