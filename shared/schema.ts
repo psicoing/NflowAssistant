@@ -66,6 +66,23 @@ export const stripeTransactions = pgTable("stripe_transactions", {
   completedAt: timestamp("completed_at"),
 });
 
+export const shopifyTransactions = pgTable("shopify_transactions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  shopifyOrderId: text("shopify_order_id").notNull().unique(), // Idempotency key
+  shopifyOrderNumber: text("shopify_order_number"),
+  sku: text("sku").notNull(), // Product SKU (NUXA-PACK-BASIC-15, etc.)
+  productType: text("product_type").notNull(), // prepaid_credits, subscription
+  amount: text("amount").notNull(), // Total amount paid
+  currency: text("currency").notNull(),
+  customerEmail: text("customer_email").notNull(),
+  status: text("status").notNull(), // pending, completed, failed, refunded
+  questionsAdded: integer("questions_added"), // For prepaid credits
+  subscriptionPlan: text("subscription_plan"), // For subscriptions
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  processedAt: timestamp("processed_at"),
+});
+
 // Tabla separada para partners
 export const partners = pgTable("partners", {
   id: serial("id").primaryKey(),
@@ -143,6 +160,12 @@ export const insertStripeTransactionSchema = createInsertSchema(stripeTransactio
   completedAt: true,
 });
 
+export const insertShopifyTransactionSchema = createInsertSchema(shopifyTransactions).omit({
+  id: true,
+  createdAt: true,
+  processedAt: true,
+});
+
 export const insertPartnerSchema = createInsertSchema(partners).omit({
   id: true,
   createdAt: true,
@@ -175,6 +198,8 @@ export type InsertResource = z.infer<typeof insertResourceSchema>;
 export type Resource = typeof resources.$inferSelect;
 export type InsertStripeTransaction = z.infer<typeof insertStripeTransactionSchema>;
 export type StripeTransaction = typeof stripeTransactions.$inferSelect;
+export type InsertShopifyTransaction = z.infer<typeof insertShopifyTransactionSchema>;
+export type ShopifyTransaction = typeof shopifyTransactions.$inferSelect;
 export type InsertPartner = z.infer<typeof insertPartnerSchema>;
 export type Partner = typeof partners.$inferSelect;
 export type InsertPartnerReferral = z.infer<typeof insertPartnerReferralSchema>;
