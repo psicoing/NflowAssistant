@@ -1,10 +1,11 @@
 import { 
-  users, conversations, messages, resources, stripeTransactions, partners, partnerReferrals, books,
+  users, conversations, messages, resources, stripeTransactions, shopifyTransactions, partners, partnerReferrals, books,
   type User, type InsertUser, 
   type Conversation, type InsertConversation,
   type Message, type InsertMessage,
   type Resource, type InsertResource,
   type StripeTransaction, type InsertStripeTransaction,
+  type ShopifyTransaction, type InsertShopifyTransaction,
   type Partner, type InsertPartner,
   type PartnerReferral, type InsertPartnerReferral,
   type Book
@@ -52,6 +53,12 @@ export interface IStorage {
   getStripeTransactionsByUser(userId: number): Promise<StripeTransaction[]>;
   getAllUsers(): Promise<User[]>;
   getAllStripeTransactions(): Promise<StripeTransaction[]>;
+  
+  // Shopify transactions
+  createShopifyTransaction(transaction: InsertShopifyTransaction): Promise<ShopifyTransaction>;
+  getShopifyTransactionByOrderId(orderId: string): Promise<ShopifyTransaction | undefined>;
+  getShopifyTransactionsByUser(userId: number): Promise<ShopifyTransaction[]>;
+  getAllShopifyTransactions(): Promise<ShopifyTransaction[]>;
   
   // Partner operations
   getPartner(id: number): Promise<Partner | undefined>;
@@ -261,6 +268,35 @@ export class DatabaseStorage implements IStorage {
 
   async getAllStripeTransactions(): Promise<StripeTransaction[]> {
     return await db.select().from(stripeTransactions);
+  }
+
+  // Shopify transactions
+  async createShopifyTransaction(transaction: InsertShopifyTransaction): Promise<ShopifyTransaction> {
+    const [shopifyTransaction] = await db
+      .insert(shopifyTransactions)
+      .values(transaction)
+      .returning();
+    return shopifyTransaction;
+  }
+
+  async getShopifyTransactionByOrderId(orderId: string): Promise<ShopifyTransaction | undefined> {
+    const [transaction] = await db
+      .select()
+      .from(shopifyTransactions)
+      .where(eq(shopifyTransactions.shopifyOrderId, orderId));
+    return transaction || undefined;
+  }
+
+  async getShopifyTransactionsByUser(userId: number): Promise<ShopifyTransaction[]> {
+    return await db
+      .select()
+      .from(shopifyTransactions)
+      .where(eq(shopifyTransactions.userId, userId))
+      .orderBy(shopifyTransactions.createdAt);
+  }
+
+  async getAllShopifyTransactions(): Promise<ShopifyTransaction[]> {
+    return await db.select().from(shopifyTransactions);
   }
 
   // Partner operations

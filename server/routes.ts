@@ -1340,6 +1340,71 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Shopify webhook - activación automática de productos
+  app.post("/api/shopify/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+    try {
+      console.log("=== SHOPIFY WEBHOOK RECEIVED ===");
+      
+      const { verifyShopifyWebhook, processShopifyOrder } = await import('./shopifyWebhookHandler');
+      
+      // Get HMAC header
+      const hmacHeader = req.headers['x-shopify-hmac-sha256'] as string;
+      
+      if (!hmacHeader) {
+        console.error("❌ Missing Shopify HMAC header");
+        return res.status(401).send('Missing HMAC header');
+      }
+      
+      // Verify webhook signature
+      const webhookSecret = process.env.SHOPIFY_WEBHOOK_SECRET || '';
+      
+      if (!webhookSecret) {
+        console.error("❌ SHOPIFY_WEBHOOK_SECRET not configured");
+        return res.status(500).send('Webhook secret not configured');
+      }
+      
+      const isValid = verifyShopifyWebhook(req.body, hmacHeader, webhookSecret);
+      
+      if (!isValid) {
+        console.error("❌ Invalid Shopify webhook signature");
+        return res.status(401).send('Invalid signature');
+      }
+      
+      console.log("✅ Webhook signature verified");
+      
+      // Parse order data
+      const orderData = JSON.parse(req.body.toString());
+      
+      // Process order
+      const result = await processShopifyOrder(orderData);
+      
+      if (result.success) {
+        console.log("✅ Shopify order processed:", result.message);
+        res.status(200).json({ 
+          received: true,
+          processed: true,
+          message: result.message,
+          transactionId: result.transactionId
+        });
+      } else {
+        console.error("❌ Failed to process order:", result.message);
+        res.status(400).json({
+          received: true,
+          processed: false,
+          error: result.message
+        });
+      }
+      
+    } catch (error: any) {
+      console.error("❌ Shopify webhook error:", error);
+      res.status(500).json({ 
+        received: true,
+        error: 'Internal server error',
+        details: error.message 
+      });
+    }
+  });
+
   // Página de cancelación
   app.get("/cancel", (req, res) => {
     res.send(`

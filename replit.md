@@ -45,6 +45,19 @@ The frontend is developed using React 18, TypeScript, Vite, and Wouter for routi
 - **Interactive Showcase**: Features an interactive carousel of phone mockups demonstrating NUXA's mental health conversations.
 - **Book Library**: Integrates an affiliate book library with Amazon affiliate links, displaying psychology-focused books on the homepage.
 - **Department of Health Endorsement**: Homepage features a prominent clickable banner below the feature cards displaying "Recomendado por Departamento de Salud". Clicking opens a modal with the official informative note PDF from the Departament de Salut, showcasing the platform's credibility and official recognition.
+- **Shopify E-commerce Integration**: Seamless webhook-based integration allowing users to purchase NUXA products through Shopify storefronts. Features:
+  - **Webhook Endpoint**: `/api/shopify/webhook` receives order notifications from Shopify
+  - **HMAC Validation**: Cryptographic signature verification using `X-Shopify-Hmac-Sha256` header for security
+  - **SKU Mapping**: Centralized product mapping (8 SKUs) linking Shopify products to NUXA services:
+    - Credit Packs: NUXA-PACK-BASIC-15 (€5/15q), NUXA-PACK-PREMIUM-35 (€10/35q)
+    - Personal Plans: NUXA-SUB-BASIC-MONTH (€2.99), NUXA-SUB-INDIV-MONTH (€5.99), NUXA-SUB-PREMIUM-YEAR (€32)
+    - Business Plans: NUXA-BUS-PROF-MONTH (€149.50), NUXA-BUS-CORP-MONTH (€598), NUXA-BUS-CUSTOM (custom pricing)
+  - **Idempotency**: `shopifyTransactions` table stores order IDs to prevent duplicate processing
+  - **Security Validation**: Price verification ensures payment amounts match expected product prices
+  - **Automatic Activation**: On successful payment, immediately activates credits or subscriptions
+  - **Required Secret**: `SHOPIFY_WEBHOOK_SECRET` environment variable for signature verification
+  - **Event Handling**: Processes `orders/paid` events from Shopify, skipping non-paid orders
+  - **Transaction Logging**: Complete audit trail of all Shopify purchases in database
 
 ### System Design Choices
 The architecture is designed for serverless deployment with Neon, emphasizing full automation of user and payment flows. It promotes modularity in both frontend and backend components, ensuring robust authentication and data persistence. The system includes a robust referral system and has fully transitioned its branding from NFLOW to NUXA.
