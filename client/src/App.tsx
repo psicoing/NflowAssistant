@@ -43,6 +43,7 @@ import ControlParental from "@/pages/control-parental";
 import PreciosPage from "@/pages/precios";
 import BlogNew from "@/pages/blog-new";
 import FloatingCTAButton from "@/components/FloatingCTAButton";
+import DownloadCSV from "@/pages/download-csv";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -52,7 +53,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv"];
     // Allow blog article routes
     if (location.startsWith("/blog/")) {
       return;
@@ -117,6 +118,7 @@ function AuthenticatedRouter() {
       <Route path="/quienes-somos" component={QuienesSomosPage} />
       <Route path="/app-movil" component={AppMovil} />
       <Route path="/control-parental" component={ControlParental} />
+      <Route path="/download-csv" component={DownloadCSV} />
       <Route component={NotFound} />
     </Switch>
   );
