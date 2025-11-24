@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, TrendingUp, Heart, Star, ArrowLeft } from "lucide-react";
+import { Users, TrendingUp, Heart, Star, ArrowLeft, Sparkles } from "lucide-react";
 import { Link } from "wouter";
 
 export default function PartnersComerciales() {
@@ -103,6 +103,82 @@ export default function PartnersComerciales() {
               </Card>
             );
           })}
+
+          {/* CTA Card - Become a Partner */}
+          <Card 
+            className="group hover:shadow-2xl transition-all duration-300 border-2 border-dashed border-gray-300 dark:border-gray-600 overflow-hidden hover:border-emerald-400 dark:hover:border-emerald-500"
+            data-testid="card-become-partner"
+          >
+            <CardContent className="p-0 h-full">
+              {/* Header with gradient */}
+              <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-8 text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
+                  <Sparkles className="w-full h-full" />
+                </div>
+                <div className="relative z-10">
+                  <Sparkles className="w-12 h-12 mb-4 opacity-90" />
+                  <h2 className="text-2xl font-bold mb-2">
+                    ¡Tú Podrías Estar Aquí!
+                  </h2>
+                  <p className="text-lg opacity-90">Próximo Partner Comercial</p>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-8 flex flex-col justify-between flex-1">
+                <div>
+                  <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                    Únete a nuestro equipo de partners comerciales y forma parte de la revolución en salud mental digital. 
+                    Buscamos profesionales apasionados por el bienestar emocional y con visión para expandir NUXA globalmente.
+                  </p>
+
+                  {/* Benefits */}
+                  <div className="space-y-3 mb-6">
+                    <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      ¿Qué Ofrecemos?
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge 
+                        variant="secondary" 
+                        className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-300"
+                      >
+                        Comisiones Atractivas
+                      </Badge>
+                      <Badge 
+                        variant="secondary" 
+                        className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-300"
+                      >
+                        Crecimiento Profesional
+                      </Badge>
+                      <Badge 
+                        variant="secondary" 
+                        className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-300"
+                      >
+                        Impacto Social
+                      </Badge>
+                      <Badge 
+                        variant="secondary" 
+                        className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-300"
+                      >
+                        Flexibilidad
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+
+                {/* CTA Button */}
+                <Link href="/partners" data-testid="link-apply-partner">
+                  <Button 
+                    className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white py-6 text-lg"
+                    data-testid="button-apply-partner"
+                  >
+                    Aplicar Ahora
+                    <Sparkles className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Bottom CTA */}
