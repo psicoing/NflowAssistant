@@ -7,15 +7,6 @@ import { Link } from "wouter";
 export default function PartnersComerciales() {
   const partners = [
     {
-      name: "Jesús Dominguez García",
-      dni: "71435981M",
-      role: "Director de Marketing & Desarrollo Comercial",
-      description: "Profesional con gran trayectoria en diferentes empresas del sector de salud mental y bienestar. Activo, dedicado y especialmente atento con los clientes, Jesús aporta su experiencia en estrategias de marketing para hacer llegar NFLOW a quienes más lo necesitan.",
-      specialties: ["Marketing Digital", "Desarrollo Comercial", "Atención al Cliente", "Crecimiento"],
-      icon: TrendingUp,
-      gradient: "from-blue-500 to-cyan-500"
-    },
-    {
       name: "Ramón Molons San Román",
       dni: "40436705Z", 
       role: "Socio Fundador & Director Técnico",
