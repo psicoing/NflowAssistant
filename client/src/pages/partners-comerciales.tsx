@@ -3,7 +3,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, TrendingUp, Heart, Star, ArrowLeft, Sparkles } from "lucide-react";
 import { Link } from "wouter";
-import nuxaRobotImage from "@assets/generated_images/nuxa_robot_talking_with_person.png";
 
 export default function PartnersComerciales() {
   const partners = [
@@ -111,23 +110,17 @@ export default function PartnersComerciales() {
             data-testid="card-become-partner"
           >
             <CardContent className="p-0 h-full">
-              {/* Header with Image */}
-              <div className="relative overflow-hidden">
-                <img 
-                  src={nuxaRobotImage} 
-                  alt="Robot NUXA hablando con una persona" 
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-emerald-600/90 to-transparent flex items-end">
-                  <div className="p-6 text-white">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Sparkles className="w-6 h-6" />
-                      <h2 className="text-2xl font-bold">
-                        ¡Tú Podrías Estar Aquí!
-                      </h2>
-                    </div>
-                    <p className="text-lg opacity-90">Próximo Partner Comercial</p>
-                  </div>
+              {/* Header with gradient */}
+              <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-8 text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
+                  <Sparkles className="w-full h-full" />
+                </div>
+                <div className="relative z-10">
+                  <Sparkles className="w-12 h-12 mb-4 opacity-90" />
+                  <h2 className="text-2xl font-bold mb-2">
+                    ¡Tú Podrías Estar Aquí!
+                  </h2>
+                  <p className="text-lg opacity-90">Próximo Partner Comercial</p>
                 </div>
               </div>
 
