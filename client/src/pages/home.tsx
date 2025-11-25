@@ -42,7 +42,17 @@ import {
   NuxaRobotMountainSection,
   NuxaRobotMeadowSection,
   NuxaRobotLibrarySection,
-  NuxaRobotAuroraSection
+  NuxaRobotAuroraSection,
+  NuxaRobotLivingRoomSection,
+  NuxaRobotMeditationSection,
+  NuxaRobotRainySection,
+  NuxaRobotWellnessOfficeSection,
+  NuxaRobotCommunitySection,
+  NuxaRobotJournalingSection,
+  NuxaRobotTelehealthSection,
+  NuxaRobotBambooSection,
+  NuxaRobotCoffeeSection,
+  NuxaRobotRooftopSection
 } from "@/components/sections/nuxa-robot-scenes";
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/components/StructuredData";
@@ -64,57 +74,89 @@ export default function Home() {
       <StructuredData type="WebApplication" data={NFlowWebAppData} />
       <Header showBanner={false} />
       <main className="pt-16">
-        {/* Imagen 1: Bosque */}
+        {/* 1. Bosque - Inicio bienvenida */}
         <NuxaRobotForestSection />
         <FamilySupportHeroSection />
+        
+        {/* 2. Sala de estar - Transición de marca */}
+        <NuxaRobotLivingRoomSection />
         <NflowToNuxaTransitionSection />
+        
+        {/* 3. Meditación - Propósito NUXA */}
+        <NuxaRobotMeditationSection />
         <NuxaPurposeSection />
+        
+        {/* 4. Playa - Evolución de marca */}
+        <NuxaRobotBeachSection />
         <NuxaBrandEvolutionSection />
+        
+        {/* 5. Bambú - Showcase de móviles */}
+        <NuxaRobotBambooSection />
         <NuxaPhonesShowcaseSection />
         
-        {/* Imagen 2: Playa al atardecer */}
-        <NuxaRobotBeachSection />
+        {/* 6. Jardín Zen - Salud mental */}
+        <NuxaRobotZenSection />
         <MentalHealthHeroSection />
+        
+        {/* 7. Lluvia - Apoyo sin fronteras */}
+        <NuxaRobotRainySection />
         <BorderlessSupportSection />
+        
+        {/* 8. Cafetería - Multilenguaje */}
+        <NuxaRobotCoffeeSection />
         <MultilanguageCardSection />
+        
+        {/* 9. Oficina bienestar - Intro */}
+        <NuxaRobotWellnessOfficeSection />
         <IntroCardSection />
+        
+        {/* 10. Montaña - Recursos gratuitos */}
+        <NuxaRobotMountainSection />
         <FreeResourcesCardSection />
         
-        {/* Imagen 3: Jardín Zen */}
-        <NuxaRobotZenSection />
+        {/* 11. Telehealth - Demo Neuropsi */}
+        <NuxaRobotTelehealthSection />
         <NeuropsiDemoSection />
+        
+        {/* 12. Aurora - Carrusel */}
+        <NuxaRobotAuroraSection />
         <NFlowCarouselSection />
+        
+        {/* 13. Prado - Familia */}
+        <NuxaRobotMeadowSection />
         <FamilyImageSection />
         <NFlowComparisonSection />
+        
+        {/* 14. Comunidad - Jóvenes */}
+        <NuxaRobotCommunitySection />
         <YouthMentalHealthSection />
         <GlobalSupportSection />
         
-        {/* Imagen 4: Montaña */}
-        <NuxaRobotMountainSection />
+        {/* 15. Rooftop - Servicios */}
+        <NuxaRobotRooftopSection />
         <AgeNoticeSection />
         <HeroSection />
         <ServicesSection />
+        
+        {/* 16. Journaling - Ejemplos chat */}
+        <NuxaRobotJournalingSection />
         <ChatExamplesSection />
         <PWAInstallationSection />
         <AppMovilSection />
         <FeaturesSection />
         <PersonasSection />
 
-        {/* Imagen 5: Prado de flores - antes de Qué es NUXA */}
-        <NuxaRobotMeadowSection />
+        {/* 17. Biblioteca - Qué es NUXA */}
+        <NuxaRobotLibrarySection />
         <QueEsNflowSection />
         <PaidAppNotice />
         <TestimonialsSection />
         <LGBTISupportSection />
         
-        {/* Imagen 6: Biblioteca acogedora - antes del Blog */}
-        <NuxaRobotLibrarySection />
+        {/* Secciones finales */}
         <BlogSection />
         <NFlowShowcaseSection />
         <ContactoSection />
-        
-        {/* Imagen 7: Aurora boreal - antes del resumen final */}
-        <NuxaRobotAuroraSection />
         <ProfessionalSummarySection />
         <BooksSection />
       </main>
