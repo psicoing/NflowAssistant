@@ -3,6 +3,8 @@ import nuxaRobotBeach from "@assets/generated_images/nuxa_robot_on_sunset_beach.
 import nuxaRobotZen from "@assets/generated_images/nuxa_robot_in_zen_garden.png";
 import nuxaRobotMountain from "@assets/generated_images/nuxa_robot_on_mountain_top.png";
 import nuxaRobotMeadow from "@assets/generated_images/nuxa_robot_in_flower_meadow.png";
+import nuxaRobotLibrary from "@assets/generated_images/nuxa_robot_in_cozy_library.png";
+import nuxaRobotAurora from "@assets/generated_images/nuxa_robot_under_aurora_sky.png";
 
 export function NuxaRobotForestSection() {
   return (
@@ -73,6 +75,36 @@ export function NuxaRobotMeadowSection() {
           alt="Robot NUXA conversando en un prado de flores" 
           className="w-full h-auto object-cover"
           data-testid="img-nuxa-robot-meadow"
+        />
+      </div>
+    </section>
+  );
+}
+
+export function NuxaRobotLibrarySection() {
+  return (
+    <section className="relative w-full overflow-hidden">
+      <div className="relative w-full">
+        <img 
+          src={nuxaRobotLibrary} 
+          alt="Robot NUXA conversando en una biblioteca acogedora" 
+          className="w-full h-auto object-cover"
+          data-testid="img-nuxa-robot-library"
+        />
+      </div>
+    </section>
+  );
+}
+
+export function NuxaRobotAuroraSection() {
+  return (
+    <section className="relative w-full overflow-hidden">
+      <div className="relative w-full">
+        <img 
+          src={nuxaRobotAurora} 
+          alt="Robot NUXA conversando bajo una aurora boreal" 
+          className="w-full h-auto object-cover"
+          data-testid="img-nuxa-robot-aurora"
         />
       </div>
     </section>

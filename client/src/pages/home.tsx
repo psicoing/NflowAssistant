@@ -40,7 +40,9 @@ import {
   NuxaRobotBeachSection,
   NuxaRobotZenSection,
   NuxaRobotMountainSection,
-  NuxaRobotMeadowSection
+  NuxaRobotMeadowSection,
+  NuxaRobotLibrarySection,
+  NuxaRobotAuroraSection
 } from "@/components/sections/nuxa-robot-scenes";
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/components/StructuredData";
@@ -100,6 +102,13 @@ export default function Home() {
 
         {/* Imagen 5: Prado de flores */}
         <NuxaRobotMeadowSection />
+        
+        {/* Imagen 6: Biblioteca acogedora */}
+        <NuxaRobotLibrarySection />
+        
+        {/* Imagen 7: Aurora boreal */}
+        <NuxaRobotAuroraSection />
+        
         <QueEsNflowSection />
         <PaidAppNotice />
         <TestimonialsSection />
