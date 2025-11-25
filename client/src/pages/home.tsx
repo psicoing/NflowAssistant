@@ -100,27 +100,21 @@ export default function Home() {
         <FeaturesSection />
         <PersonasSection />
 
-        {/* Imagen 5: Prado de flores */}
+        {/* Imagen 5: Prado de flores - antes de Qué es NUXA */}
         <NuxaRobotMeadowSection />
-        
-        {/* Imagen 6: Biblioteca acogedora */}
-        <NuxaRobotLibrarySection />
-        
-        {/* Imagen 7: Aurora boreal */}
-        <NuxaRobotAuroraSection />
-        
         <QueEsNflowSection />
         <PaidAppNotice />
         <TestimonialsSection />
         <LGBTISupportSection />
         
-        {/* Menu Sections - All services in one page */}
+        {/* Imagen 6: Biblioteca acogedora - antes del Blog */}
+        <NuxaRobotLibrarySection />
         <BlogSection />
         <NFlowShowcaseSection />
         <ContactoSection />
         
-        {/* <PackagesSection /> */}
-        
+        {/* Imagen 7: Aurora boreal - antes del resumen final */}
+        <NuxaRobotAuroraSection />
         <ProfessionalSummarySection />
         <BooksSection />
       </main>
