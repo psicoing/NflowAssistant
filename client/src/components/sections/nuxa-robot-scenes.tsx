@@ -16,6 +16,7 @@ import nuxaRobotBamboo from "@assets/generated_images/nuxa_robot_with_person_bam
 import nuxaRobotCoffee from "@assets/generated_images/nuxa_robot_cozy_coffee_shop.png";
 import nuxaRobotRooftop from "@assets/generated_images/nuxa_robot_rooftop_garden_sunset.png";
 import nuxaRobotTeenagers from "@assets/generated_images/nuxa_robot_with_teenagers_school.png";
+import nuxaRobotVsGpt from "@assets/generated_images/nuxa_robot_vs_chatgpt_comparison.png";
 
 export function NuxaRobotForestSection() {
   return (
@@ -281,6 +282,21 @@ export function NuxaRobotTeenagersSection() {
           alt="Robot NUXA con adolescentes en un ambiente escolar" 
           className="w-full h-auto object-cover"
           data-testid="img-nuxa-robot-teenagers"
+        />
+      </div>
+    </section>
+  );
+}
+
+export function NuxaRobotVsGptSection() {
+  return (
+    <section className="relative w-full overflow-hidden">
+      <div className="relative w-full">
+        <img 
+          src={nuxaRobotVsGpt} 
+          alt="Comparación entre robot NUXA y ChatGPT" 
+          className="w-full h-auto object-cover"
+          data-testid="img-nuxa-robot-vs-gpt"
         />
       </div>
     </section>

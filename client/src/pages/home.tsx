@@ -53,7 +53,8 @@ import {
   NuxaRobotBambooSection,
   NuxaRobotCoffeeSection,
   NuxaRobotRooftopSection,
-  NuxaRobotTeenagersSection
+  NuxaRobotTeenagersSection,
+  NuxaRobotVsGptSection
 } from "@/components/sections/nuxa-robot-scenes";
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/components/StructuredData";
@@ -99,6 +100,9 @@ export default function Home() {
         <NeuropsiDemoSection />
         <NFlowCarouselSection />
         <FamilyImageSection />
+        
+        {/* Imagen comparación NUXA vs GPT */}
+        <NuxaRobotVsGptSection />
         <NFlowComparisonSection />
         
         {/* IMAGEN 5: Adolescentes */}
