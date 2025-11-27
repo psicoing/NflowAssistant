@@ -75,91 +75,62 @@ export default function Home() {
       <StructuredData type="WebApplication" data={NFlowWebAppData} />
       <Header showBanner={false} />
       <main className="pt-16">
-        {/* 1. Bosque - Inicio bienvenida */}
+        {/* IMAGEN 1: Bosque - Inicio */}
         <NuxaRobotForestSection />
         <FamilySupportHeroSection />
-        
-        {/* 2. Sala de estar - Transición de marca */}
-        <NuxaRobotLivingRoomSection />
         <NflowToNuxaTransitionSection />
-        
-        {/* 3. Meditación - Propósito NUXA */}
-        <NuxaRobotMeditationSection />
         <NuxaPurposeSection />
-        
-        {/* 4. Playa - Evolución de marca */}
-        <NuxaRobotBeachSection />
         <NuxaBrandEvolutionSection />
         
-        {/* 5. Bambú - Showcase de móviles */}
-        <NuxaRobotBambooSection />
+        {/* IMAGEN 2: Sala de estar con persona */}
+        <NuxaRobotLivingRoomSection />
         <NuxaPhonesShowcaseSection />
-        
-        {/* 6. Jardín Zen - Salud mental */}
-        <NuxaRobotZenSection />
         <MentalHealthHeroSection />
-        
-        {/* 7. Lluvia - Apoyo sin fronteras */}
-        <NuxaRobotRainySection />
         <BorderlessSupportSection />
         
-        {/* 8. Cafetería - Multilenguaje */}
-        <NuxaRobotCoffeeSection />
+        {/* IMAGEN 3: Jardín Zen */}
+        <NuxaRobotZenSection />
         <MultilanguageCardSection />
-        
-        {/* 9. Oficina bienestar - Intro */}
-        <NuxaRobotWellnessOfficeSection />
         <IntroCardSection />
-        
-        {/* 10. Montaña - Recursos gratuitos */}
-        <NuxaRobotMountainSection />
         <FreeResourcesCardSection />
         
-        {/* 11. Telehealth - Demo Neuropsi */}
-        <NuxaRobotTelehealthSection />
+        {/* IMAGEN 4: Bambú con persona */}
+        <NuxaRobotBambooSection />
         <NeuropsiDemoSection />
-        
-        {/* 12. Aurora - Carrusel */}
-        <NuxaRobotAuroraSection />
         <NFlowCarouselSection />
-        
-        {/* 13. Prado - Familia */}
-        <NuxaRobotMeadowSection />
         <FamilyImageSection />
         <NFlowComparisonSection />
         
-        {/* 14. Adolescentes - Juventud y salud mental */}
+        {/* IMAGEN 5: Adolescentes */}
         <NuxaRobotTeenagersSection />
         <YouthMentalHealthSection />
         <GlobalSupportSection />
-        
-        {/* 15. Rooftop - Servicios */}
-        <NuxaRobotRooftopSection />
         <AgeNoticeSection />
         <HeroSection />
-        <ServicesSection />
         
-        {/* 16. Journaling - Ejemplos chat */}
-        <NuxaRobotJournalingSection />
+        {/* IMAGEN 6: Montaña */}
+        <NuxaRobotMountainSection />
+        <ServicesSection />
         <ChatExamplesSection />
         <PWAInstallationSection />
         <AppMovilSection />
         <FeaturesSection />
         <PersonasSection />
 
-        {/* 17. Biblioteca - Qué es NUXA */}
+        {/* IMAGEN 7: Biblioteca */}
         <NuxaRobotLibrarySection />
         <QueEsNflowSection />
         <PaidAppNotice />
         <TestimonialsSection />
         
-        {/* Imagen Comunidad LGBTI+ - antes de sección de apoyo */}
+        {/* IMAGEN 8: Comunidad LGBTI+ */}
         <NuxaRobotCommunitySection />
         <LGBTISupportSection />
-        
-        {/* Secciones finales */}
         <BlogSection />
         <NFlowShowcaseSection />
+        
+        {/* IMAGEN 9: Aurora - Final */}
+        <NuxaRobotAuroraSection />
         <ContactoSection />
         <ProfessionalSummarySection />
         <BooksSection />
