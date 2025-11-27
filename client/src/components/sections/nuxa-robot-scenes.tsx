@@ -15,6 +15,7 @@ import nuxaRobotTelehealth from "@assets/generated_images/nuxa_robot_telehealth_
 import nuxaRobotBamboo from "@assets/generated_images/nuxa_robot_bamboo_grove_peaceful.png";
 import nuxaRobotCoffee from "@assets/generated_images/nuxa_robot_cozy_coffee_shop.png";
 import nuxaRobotRooftop from "@assets/generated_images/nuxa_robot_rooftop_garden_sunset.png";
+import nuxaRobotTeenagers from "@assets/generated_images/nuxa_robot_with_teenagers_school.png";
 
 export function NuxaRobotForestSection() {
   return (
@@ -265,6 +266,21 @@ export function NuxaRobotRooftopSection() {
           alt="Robot NUXA en un jardín en la azotea al atardecer" 
           className="w-full h-auto object-cover"
           data-testid="img-nuxa-robot-rooftop"
+        />
+      </div>
+    </section>
+  );
+}
+
+export function NuxaRobotTeenagersSection() {
+  return (
+    <section className="relative w-full overflow-hidden">
+      <div className="relative w-full">
+        <img 
+          src={nuxaRobotTeenagers} 
+          alt="Robot NUXA con adolescentes en un ambiente escolar" 
+          className="w-full h-auto object-cover"
+          data-testid="img-nuxa-robot-teenagers"
         />
       </div>
     </section>

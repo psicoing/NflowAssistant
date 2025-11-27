@@ -52,7 +52,8 @@ import {
   NuxaRobotTelehealthSection,
   NuxaRobotBambooSection,
   NuxaRobotCoffeeSection,
-  NuxaRobotRooftopSection
+  NuxaRobotRooftopSection,
+  NuxaRobotTeenagersSection
 } from "@/components/sections/nuxa-robot-scenes";
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/components/StructuredData";
@@ -127,7 +128,8 @@ export default function Home() {
         <FamilyImageSection />
         <NFlowComparisonSection />
         
-        {/* 14. Jóvenes y Global */}
+        {/* 14. Adolescentes - Juventud y salud mental */}
+        <NuxaRobotTeenagersSection />
         <YouthMentalHealthSection />
         <GlobalSupportSection />
         
