@@ -54,7 +54,8 @@ import {
   NuxaRobotCoffeeSection,
   NuxaRobotRooftopSection,
   NuxaRobotTeenagersSection,
-  NuxaRobotVsGptSection
+  NuxaRobotVsGptSection,
+  NuxaRobotInstallAppSection
 } from "@/components/sections/nuxa-robot-scenes";
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/components/StructuredData";
@@ -116,6 +117,9 @@ export default function Home() {
         <NuxaRobotMountainSection />
         <ServicesSection />
         <ChatExamplesSection />
+        
+        {/* Imagen robot instalando app */}
+        <NuxaRobotInstallAppSection />
         <PWAInstallationSection />
         <AppMovilSection />
         <FeaturesSection />

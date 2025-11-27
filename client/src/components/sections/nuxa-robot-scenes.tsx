@@ -17,6 +17,7 @@ import nuxaRobotCoffee from "@assets/generated_images/nuxa_robot_cozy_coffee_sho
 import nuxaRobotRooftop from "@assets/generated_images/nuxa_robot_rooftop_garden_sunset.png";
 import nuxaRobotTeenagers from "@assets/generated_images/nuxa_robot_with_teenagers_school.png";
 import nuxaRobotVsGpt from "@assets/generated_images/nuxa_robot_vs_chatgpt_comparison.png";
+import nuxaRobotInstallApp from "@assets/generated_images/nuxa_robot_installing_app_on_phone.png";
 
 export function NuxaRobotForestSection() {
   return (
@@ -297,6 +298,21 @@ export function NuxaRobotVsGptSection() {
           alt="Comparación entre robot NUXA y ChatGPT" 
           className="w-full h-auto object-cover"
           data-testid="img-nuxa-robot-vs-gpt"
+        />
+      </div>
+    </section>
+  );
+}
+
+export function NuxaRobotInstallAppSection() {
+  return (
+    <section className="relative w-full overflow-hidden">
+      <div className="relative w-full">
+        <img 
+          src={nuxaRobotInstallApp} 
+          alt="Robot NUXA ayudando a instalar la app en el móvil" 
+          className="w-full h-auto object-cover"
+          data-testid="img-nuxa-robot-install-app"
         />
       </div>
     </section>
