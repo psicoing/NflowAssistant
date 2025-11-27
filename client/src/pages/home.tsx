@@ -127,8 +127,7 @@ export default function Home() {
         <FamilyImageSection />
         <NFlowComparisonSection />
         
-        {/* 14. Comunidad - Jóvenes */}
-        <NuxaRobotCommunitySection />
+        {/* 14. Jóvenes y Global */}
         <YouthMentalHealthSection />
         <GlobalSupportSection />
         
@@ -151,6 +150,9 @@ export default function Home() {
         <QueEsNflowSection />
         <PaidAppNotice />
         <TestimonialsSection />
+        
+        {/* Imagen Comunidad LGBTI+ - antes de sección de apoyo */}
+        <NuxaRobotCommunitySection />
         <LGBTISupportSection />
         
         {/* Secciones finales */}
