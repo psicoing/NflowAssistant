@@ -12,7 +12,7 @@ import nuxaRobotWellnessOffice from "@assets/generated_images/nuxa_robot_wellnes
 import nuxaRobotCommunity from "@assets/generated_images/nuxa_robot_inclusive_community_space.png";
 import nuxaRobotJournaling from "@assets/generated_images/nuxa_robot_journaling_desk_cozy.png";
 import nuxaRobotTelehealth from "@assets/generated_images/nuxa_robot_telehealth_studio_warm.png";
-import nuxaRobotBamboo from "@assets/generated_images/nuxa_robot_bamboo_grove_peaceful.png";
+import nuxaRobotBamboo from "@assets/generated_images/nuxa_robot_with_person_bamboo_grove.png";
 import nuxaRobotCoffee from "@assets/generated_images/nuxa_robot_cozy_coffee_shop.png";
 import nuxaRobotRooftop from "@assets/generated_images/nuxa_robot_rooftop_garden_sunset.png";
 import nuxaRobotTeenagers from "@assets/generated_images/nuxa_robot_with_teenagers_school.png";
