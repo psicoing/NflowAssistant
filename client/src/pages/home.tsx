@@ -115,9 +115,12 @@ export default function Home() {
         <PWAInstallationSection />
         <AppMovilSection />
         <FeaturesSection />
+        
+        {/* IMAGEN 7: Oficina con jóvenes - Para quién es NUXA */}
+        <NuxaRobotWellnessOfficeSection />
         <PersonasSection />
 
-        {/* IMAGEN 7: Biblioteca */}
+        {/* IMAGEN 8: Biblioteca */}
         <NuxaRobotLibrarySection />
         <QueEsNflowSection />
         <PaidAppNotice />
