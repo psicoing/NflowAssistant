@@ -5,7 +5,7 @@ import nuxaRobotMountain from "@assets/generated_images/nuxa_robot_on_mountain_t
 import nuxaRobotMeadow from "@assets/generated_images/nuxa_robot_in_flower_meadow.png";
 import nuxaRobotLibrary from "@assets/generated_images/nuxa_robot_in_cozy_library.png";
 import nuxaRobotAurora from "@assets/generated_images/nuxa_robot_under_aurora_sky.png";
-import nuxaRobotLivingRoom from "@assets/generated_images/nuxa_robot_cozy_living_room.png";
+import nuxaRobotLivingRoom from "@assets/generated_images/nuxa_robot_with_person_living_room.png";
 import nuxaRobotMeditation from "@assets/generated_images/nuxa_robot_meditation_candles_space.png";
 import nuxaRobotRainy from "@assets/generated_images/nuxa_robot_rainy_terrace_peaceful.png";
 import nuxaRobotWellnessOffice from "@assets/generated_images/nuxa_robot_wellness_office_bright.png";
