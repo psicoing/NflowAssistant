@@ -18,6 +18,7 @@ import nuxaRobotRooftop from "@assets/generated_images/nuxa_robot_rooftop_garden
 import nuxaRobotTeenagers from "@assets/generated_images/nuxa_robot_with_teenagers_school.png";
 import nuxaRobotVsGpt from "@assets/generated_images/nuxa_robot_vs_chatgpt_comparison.png";
 import nuxaRobotInstallApp from "@assets/generated_images/nuxa_robot_installing_app_on_phone.png";
+import nuxaRobotPresenting from "@assets/generated_images/nuxa_robot_presenting_itself_proudly.png";
 
 export function NuxaRobotForestSection() {
   return (
@@ -313,6 +314,21 @@ export function NuxaRobotInstallAppSection() {
           alt="Robot NUXA ayudando a instalar la app en el móvil" 
           className="w-full h-auto object-cover"
           data-testid="img-nuxa-robot-install-app"
+        />
+      </div>
+    </section>
+  );
+}
+
+export function NuxaRobotPresentingSection() {
+  return (
+    <section className="relative w-full overflow-hidden">
+      <div className="relative w-full">
+        <img 
+          src={nuxaRobotPresenting} 
+          alt="Robot NUXA presentándose orgullosamente" 
+          className="w-full h-auto object-cover"
+          data-testid="img-nuxa-robot-presenting"
         />
       </div>
     </section>
