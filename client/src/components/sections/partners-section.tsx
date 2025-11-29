@@ -124,13 +124,14 @@ export default function PartnersSection() {
                 Aplicar Ahora
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-              <Button 
-                onClick={() => setLocation("/partners")}
-                variant="outline"
-                className="border-white text-white hover:bg-white hover:text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg"
+              <a 
+                href="https://jobda.org/partners"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all"
               >
                 Más Información
-              </Button>
+              </a>
             </div>
           </div>
         </div>
