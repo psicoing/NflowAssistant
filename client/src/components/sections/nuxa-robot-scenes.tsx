@@ -19,6 +19,9 @@ import nuxaRobotTeenagers from "@assets/generated_images/nuxa_robot_with_teenage
 import nuxaRobotVsGpt from "@assets/generated_images/nuxa_robot_vs_chatgpt_comparison.png";
 import nuxaRobotInstallApp from "@assets/generated_images/nuxa_robot_installing_app_on_phone.png";
 import nuxaRobotPresenting from "@assets/generated_images/nuxa_robot_presenting_itself_proudly.png";
+import nuxaRobotListening from "@assets/generated_images/nuxa_robot_listening_with_empathy.png";
+import nuxaRobotReveal from "@assets/generated_images/nuxa_robot_grand_reveal_celebration.png";
+import nuxaRobotProfessional from "@assets/generated_images/nuxa_robot_professional_certified_expert.png";
 
 export function NuxaRobotForestSection() {
   return (
@@ -329,6 +332,51 @@ export function NuxaRobotPresentingSection() {
           alt="Robot NUXA presentándose orgullosamente" 
           className="w-full h-auto object-cover"
           data-testid="img-nuxa-robot-presenting"
+        />
+      </div>
+    </section>
+  );
+}
+
+export function NuxaRobotListeningSection() {
+  return (
+    <section className="relative w-full overflow-hidden">
+      <div className="relative w-full">
+        <img 
+          src={nuxaRobotListening} 
+          alt="Robot NUXA escuchando con empatía" 
+          className="w-full h-auto object-cover"
+          data-testid="img-nuxa-robot-listening"
+        />
+      </div>
+    </section>
+  );
+}
+
+export function NuxaRobotRevealSection() {
+  return (
+    <section className="relative w-full overflow-hidden">
+      <div className="relative w-full">
+        <img 
+          src={nuxaRobotReveal} 
+          alt="Robot NUXA celebrando su lanzamiento" 
+          className="w-full h-auto object-cover"
+          data-testid="img-nuxa-robot-reveal"
+        />
+      </div>
+    </section>
+  );
+}
+
+export function NuxaRobotProfessionalSection() {
+  return (
+    <section className="relative w-full overflow-hidden">
+      <div className="relative w-full">
+        <img 
+          src={nuxaRobotProfessional} 
+          alt="Robot NUXA profesional certificado" 
+          className="w-full h-auto object-cover"
+          data-testid="img-nuxa-robot-professional"
         />
       </div>
     </section>

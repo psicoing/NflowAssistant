@@ -56,7 +56,10 @@ import {
   NuxaRobotTeenagersSection,
   NuxaRobotVsGptSection,
   NuxaRobotInstallAppSection,
-  NuxaRobotPresentingSection
+  NuxaRobotPresentingSection,
+  NuxaRobotListeningSection,
+  NuxaRobotRevealSection,
+  NuxaRobotProfessionalSection
 } from "@/components/sections/nuxa-robot-scenes";
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/components/StructuredData";
@@ -80,11 +83,14 @@ export default function Home() {
       <main className="pt-16">
         {/* IMAGEN 1: Bosque - Inicio */}
         <NuxaRobotForestSection />
+        
+        {/* Imagen robot escuchando - NUXA está aquí para escucharte */}
+        <NuxaRobotListeningSection />
         <FamilySupportHeroSection />
         <NflowToNuxaTransitionSection />
         
-        {/* Imagen robot presentando NUXA */}
-        <NuxaRobotPresentingSection />
+        {/* Imagen robot celebración - Presentamos NUXA */}
+        <NuxaRobotRevealSection />
         <NuxaPurposeSection />
         <NuxaBrandEvolutionSection />
         
@@ -147,6 +153,9 @@ export default function Home() {
         {/* IMAGEN 9: Aurora - Final */}
         <NuxaRobotAuroraSection />
         <ContactoSection />
+        
+        {/* Imagen robot profesional certificado */}
+        <NuxaRobotProfessionalSection />
         <ProfessionalSummarySection />
         <BooksSection />
       </main>
