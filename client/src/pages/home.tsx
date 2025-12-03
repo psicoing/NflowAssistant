@@ -37,29 +37,47 @@ import NuxaPhonesShowcaseSection from "@/components/sections/nuxa-phones-showcas
 import BooksSection from "@/components/sections/books-section";
 import { 
   NuxaRobotForestSection,
-  NuxaRobotBeachSection,
   NuxaRobotZenSection,
   NuxaRobotMountainSection,
-  NuxaRobotMeadowSection,
   NuxaRobotLibrarySection,
   NuxaRobotAuroraSection,
   NuxaRobotLivingRoomSection,
-  NuxaRobotMeditationSection,
-  NuxaRobotRainySection,
-  NuxaRobotWellnessOfficeSection,
-  NuxaRobotCommunitySection,
-  NuxaRobotJournalingSection,
-  NuxaRobotTelehealthSection,
   NuxaRobotBambooSection,
-  NuxaRobotCoffeeSection,
-  NuxaRobotRooftopSection,
   NuxaRobotTeenagersSection,
   NuxaRobotVsGptSection,
-  NuxaRobotInstallAppSection,
-  NuxaRobotPresentingSection,
   NuxaRobotListeningSection,
   NuxaRobotRevealSection,
-  NuxaRobotProfessionalSection
+  NuxaRobotProfessionalSection,
+  NuxaRobotFamilyTherapySection,
+  NuxaRobotTransformationSection,
+  NuxaRobotWellnessHealingSection,
+  NuxaRobotConnectingSection,
+  NuxaRobotMultilingualSection,
+  NuxaRobotPhoneShowcaseSection,
+  NuxaRobotWelcomingSection,
+  NuxaRobotFreeResourcesSection,
+  NuxaRobotNeuroscienceSection,
+  NuxaRobotCarouselSection,
+  NuxaRobotFamilyPortraitSection,
+  NuxaRobotComparisonSection,
+  NuxaRobotYouthEmpowermentSection,
+  NuxaRobotGlobalAccessSection,
+  NuxaRobotAgeSafeSection,
+  NuxaRobotSuperheroSection,
+  NuxaRobotServicesSection,
+  NuxaRobotChatExamplesSection,
+  NuxaRobotPwaGuideSection,
+  NuxaRobotMobileAppSection,
+  NuxaRobotFeaturesSection,
+  NuxaRobotPersonasSection,
+  NuxaRobotExplainingSection,
+  NuxaRobotPremiumSection,
+  NuxaRobotTestimonialsSection,
+  NuxaRobotLgbtqSection,
+  NuxaRobotBlogReadingSection,
+  NuxaRobotShowcaseSection,
+  NuxaRobotContactSection,
+  NuxaRobotBooksSection
 } from "@/components/sections/nuxa-robot-scenes";
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/components/StructuredData";
@@ -81,73 +99,105 @@ export default function Home() {
       <StructuredData type="WebApplication" data={NFlowWebAppData} />
       <Header showBanner={false} />
       <main className="pt-16">
-        {/* IMAGEN 1: Bosque - Inicio */}
         <NuxaRobotForestSection />
         <FamilySupportHeroSection />
+        
+        <NuxaRobotFamilyTherapySection />
         <NflowToNuxaTransitionSection />
+        
+        <NuxaRobotTransformationSection />
         <NuxaBrandEvolutionSection />
         
-        {/* IMAGEN 2: Robot escuchando - NUXA está aquí para escucharte */}
         <NuxaRobotListeningSection />
         <MentalHealthHeroSection />
+        
+        <NuxaRobotConnectingSection />
         <BorderlessSupportSection />
+        
+        <NuxaRobotMultilingualSection />
         <MultilanguageCardSection />
         
-        {/* IMAGEN 3: Robot celebración - Presentamos NUXA */}
         <NuxaRobotRevealSection />
         <NuxaPurposeSection />
+        
+        <NuxaRobotPhoneShowcaseSection />
         <NuxaPhonesShowcaseSection />
+        
+        <NuxaRobotWelcomingSection />
         <IntroCardSection />
         
-        {/* IMAGEN 4: Sala de estar con persona */}
-        <NuxaRobotLivingRoomSection />
+        <NuxaRobotFreeResourcesSection />
         <FreeResourcesCardSection />
+        
+        <NuxaRobotNeuroscienceSection />
         <NeuropsiDemoSection />
+        
+        <NuxaRobotCarouselSection />
         <NFlowCarouselSection />
         
-        {/* IMAGEN 5: Jardín Zen */}
-        <NuxaRobotZenSection />
+        <NuxaRobotFamilyPortraitSection />
         <FamilyImageSection />
+        
+        <NuxaRobotComparisonSection />
         <NFlowComparisonSection />
+        
+        <NuxaRobotYouthEmpowermentSection />
         <YouthMentalHealthSection />
         
-        {/* IMAGEN 6: Bambú con persona */}
-        <NuxaRobotBambooSection />
+        <NuxaRobotGlobalAccessSection />
         <GlobalSupportSection />
+        
+        <NuxaRobotAgeSafeSection />
         <AgeNoticeSection />
+        
+        <NuxaRobotSuperheroSection />
         <HeroSection />
         
-        {/* IMAGEN 7: Comparación NUXA vs GPT */}
-        <NuxaRobotVsGptSection />
+        <NuxaRobotServicesSection />
         <ServicesSection />
+        
+        <NuxaRobotChatExamplesSection />
         <ChatExamplesSection />
+        
+        <NuxaRobotPwaGuideSection />
         <PWAInstallationSection />
         
-        {/* IMAGEN 8: Adolescentes */}
-        <NuxaRobotTeenagersSection />
+        <NuxaRobotMobileAppSection />
         <AppMovilSection />
+        
+        <NuxaRobotFeaturesSection />
         <FeaturesSection />
+        
+        <NuxaRobotPersonasSection />
         <PersonasSection />
         
-        {/* IMAGEN 9: Montaña */}
-        <NuxaRobotMountainSection />
+        <NuxaRobotExplainingSection />
         <QueEsNflowSection />
+        
+        <NuxaRobotPremiumSection />
         <PaidAppNotice />
+        
+        <NuxaRobotTestimonialsSection />
         <TestimonialsSection />
         
-        {/* IMAGEN 10: Biblioteca */}
-        <NuxaRobotLibrarySection />
+        <NuxaRobotLgbtqSection />
         <LGBTISupportSection />
+        
+        <NuxaRobotBlogReadingSection />
         <BlogSection />
+        
+        <NuxaRobotShowcaseSection />
         <NFlowShowcaseSection />
         
-        {/* IMAGEN 11: Robot profesional certificado */}
         <NuxaRobotProfessionalSection />
         <ProfessionalSummarySection />
+        
+        <NuxaRobotContactSection />
         <ContactoSection />
+        
+        <NuxaRobotBooksSection />
         <BooksSection />
         
-        {/* IMAGEN 12: Aurora - Final */}
         <NuxaRobotAuroraSection />
       </main>
       <Footer />
