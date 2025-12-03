@@ -83,81 +83,72 @@ export default function Home() {
       <main className="pt-16">
         {/* IMAGEN 1: Bosque - Inicio */}
         <NuxaRobotForestSection />
-        
-        {/* Imagen robot escuchando - NUXA está aquí para escucharte */}
-        <NuxaRobotListeningSection />
         <FamilySupportHeroSection />
         <NflowToNuxaTransitionSection />
-        
-        {/* Imagen robot celebración - Presentamos NUXA */}
-        <NuxaRobotRevealSection />
-        <NuxaPurposeSection />
         <NuxaBrandEvolutionSection />
         
-        {/* IMAGEN 2: Sala de estar con persona */}
-        <NuxaRobotLivingRoomSection />
-        <NuxaPhonesShowcaseSection />
+        {/* IMAGEN 2: Robot escuchando - NUXA está aquí para escucharte */}
+        <NuxaRobotListeningSection />
         <MentalHealthHeroSection />
         <BorderlessSupportSection />
-        
-        {/* IMAGEN 3: Jardín Zen */}
-        <NuxaRobotZenSection />
         <MultilanguageCardSection />
-        <IntroCardSection />
-        <FreeResourcesCardSection />
         
-        {/* IMAGEN 4: Bambú con persona */}
-        <NuxaRobotBambooSection />
+        {/* IMAGEN 3: Robot celebración - Presentamos NUXA */}
+        <NuxaRobotRevealSection />
+        <NuxaPurposeSection />
+        <NuxaPhonesShowcaseSection />
+        <IntroCardSection />
+        
+        {/* IMAGEN 4: Sala de estar con persona */}
+        <NuxaRobotLivingRoomSection />
+        <FreeResourcesCardSection />
         <NeuropsiDemoSection />
         <NFlowCarouselSection />
+        
+        {/* IMAGEN 5: Jardín Zen */}
+        <NuxaRobotZenSection />
         <FamilyImageSection />
-        
-        {/* Imagen comparación NUXA vs GPT */}
-        <NuxaRobotVsGptSection />
         <NFlowComparisonSection />
-        
-        {/* IMAGEN 5: Adolescentes */}
-        <NuxaRobotTeenagersSection />
         <YouthMentalHealthSection />
+        
+        {/* IMAGEN 6: Bambú con persona */}
+        <NuxaRobotBambooSection />
         <GlobalSupportSection />
         <AgeNoticeSection />
         <HeroSection />
         
-        {/* IMAGEN 6: Montaña */}
-        <NuxaRobotMountainSection />
+        {/* IMAGEN 7: Comparación NUXA vs GPT */}
+        <NuxaRobotVsGptSection />
         <ServicesSection />
         <ChatExamplesSection />
-        
-        {/* Imagen robot instalando app */}
-        <NuxaRobotInstallAppSection />
         <PWAInstallationSection />
+        
+        {/* IMAGEN 8: Adolescentes */}
+        <NuxaRobotTeenagersSection />
         <AppMovilSection />
         <FeaturesSection />
-        
-        {/* IMAGEN 7: Oficina con jóvenes - Para quién es NUXA */}
-        <NuxaRobotWellnessOfficeSection />
         <PersonasSection />
-
-        {/* IMAGEN 8: Biblioteca */}
-        <NuxaRobotLibrarySection />
+        
+        {/* IMAGEN 9: Montaña */}
+        <NuxaRobotMountainSection />
         <QueEsNflowSection />
         <PaidAppNotice />
         <TestimonialsSection />
         
-        {/* IMAGEN 8: Comunidad LGBTI+ */}
-        <NuxaRobotCommunitySection />
+        {/* IMAGEN 10: Biblioteca */}
+        <NuxaRobotLibrarySection />
         <LGBTISupportSection />
         <BlogSection />
         <NFlowShowcaseSection />
         
-        {/* IMAGEN 9: Aurora - Final */}
-        <NuxaRobotAuroraSection />
-        <ContactoSection />
-        
-        {/* Imagen robot profesional certificado */}
+        {/* IMAGEN 11: Robot profesional certificado */}
         <NuxaRobotProfessionalSection />
         <ProfessionalSummarySection />
+        <ContactoSection />
         <BooksSection />
+        
+        {/* IMAGEN 12: Aurora - Final */}
+        <NuxaRobotAuroraSection />
       </main>
       <Footer />
     </div>
