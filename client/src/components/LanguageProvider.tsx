@@ -15,7 +15,7 @@ interface LanguageProviderProps {
 }
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
-  const [currentLanguage, setCurrentLanguage] = useState<Language>('es');
+  const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem('nflow-language') as Language;

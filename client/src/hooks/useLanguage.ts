@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 export type Language = 'es' | 'en' | 'fr' | 'de' | 'it' | 'pt' | 'ca' | 'eu' | 'gl';
 
 export const languages = [
+  { code: 'en' as Language, name: 'English', flag: '🇬🇧' },
   { code: 'es' as Language, name: 'Español', flag: '🇪🇸' },
-  { code: 'en' as Language, name: 'English', flag: '🇺🇸' },
   { code: 'fr' as Language, name: 'Français', flag: '🇫🇷' },
   { code: 'de' as Language, name: 'Deutsch', flag: '🇩🇪' },
   { code: 'it' as Language, name: 'Italiano', flag: '🇮🇹' },
