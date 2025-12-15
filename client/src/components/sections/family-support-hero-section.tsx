@@ -28,7 +28,7 @@ export default function FamilySupportHeroSection() {
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center flex-wrap">
               <Button
                 onClick={() => setLocation("/login")}
                 className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white px-10 py-7 text-xl font-bold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
@@ -51,6 +51,15 @@ export default function FamilySupportHeroSection() {
               >
                 <PlayCircle className="w-6 h-6 mr-3" />
                 Ver Cómo Funciona
+              </Button>
+
+              <Button
+                onClick={() => setLocation("/ejemplos-chat")}
+                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-10 py-7 text-xl font-bold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
+                data-testid="button-prueba-gratis"
+              >
+                <PlayCircle className="w-6 h-6 mr-3" />
+                Prueba Gratis / Free Trial
               </Button>
             </div>
 
