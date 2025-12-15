@@ -122,19 +122,19 @@ export default function NeuropsiDemoSection() {
           <Link href="/ejemplos-chat">
             <Button className="w-full sm:w-auto px-8 py-6 text-lg bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg" data-testid="button-free-trial">
               <Play className="w-5 h-5 mr-2" />
-              Free Trial
+              Prueba Gratis
             </Button>
           </Link>
           <Link href="/recursos">
             <Button className="w-full sm:w-auto px-8 py-6 text-lg bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg" data-testid="button-free-tips">
               <Lightbulb className="w-5 h-5 mr-2" />
-              Free Tips
+              Consejos Gratis
             </Button>
           </Link>
           <Link href="/blog">
             <Button className="w-full sm:w-auto px-8 py-6 text-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg" data-testid="button-our-blog">
               <BookOpen className="w-5 h-5 mr-2" />
-              Our Blog
+              Nuestro Blog
             </Button>
           </Link>
         </div>
