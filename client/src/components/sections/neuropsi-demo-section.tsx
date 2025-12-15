@@ -1,4 +1,6 @@
-import { Brain, MessageCircle, Sparkles } from "lucide-react";
+import { Brain, MessageCircle, Sparkles, Play, Lightbulb, BookOpen } from "lucide-react";
+import { Link } from "wouter";
+import { Button } from "@/components/ui/button";
 import demoVideoPath from "@assets/Grabación-de-pantalla-2025-09-26-180946_1759247336209.mp4";
 
 export default function NeuropsiDemoSection() {
@@ -109,6 +111,28 @@ export default function NeuropsiDemoSection() {
                     Los usuarios registrados acceden al poder completo de NEUROPSI-AI para resolver sus 
                     desafíos emocionales con tecnología de vanguardia.
                   </p>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                  <Link href="/ejemplos-chat" className="flex-1">
+                    <Button className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white" data-testid="button-free-trial">
+                      <Play className="w-4 h-4 mr-2" />
+                      Free Trial
+                    </Button>
+                  </Link>
+                  <Link href="/recursos" className="flex-1">
+                    <Button className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white" data-testid="button-free-tips">
+                      <Lightbulb className="w-4 h-4 mr-2" />
+                      Free Tips
+                    </Button>
+                  </Link>
+                  <Link href="/blog" className="flex-1">
+                    <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white" data-testid="button-our-blog">
+                      <BookOpen className="w-4 h-4 mr-2" />
+                      Our Blog
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
