@@ -1106,7 +1106,7 @@ export default function EjemplosChat() {
                     </h3>
                     
                     <p className="text-xl text-emerald-100 mb-6 max-w-xl mx-auto leading-relaxed">
-                      Estos son solo ejemplos. <span className="font-bold text-white">Entra y haz tus propias preguntas</span> — NUXA te escucha, te orienta y te ayuda a encontrar respuestas personalizadas.
+                      Estos son solo ejemplos. <span className="font-bold text-white">Entra y expón tus preocupaciones</span> — NUXA te escucha, te orienta y te ayuda a encontrar respuestas personalizadas.
                     </p>
                     
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
@@ -1115,12 +1115,12 @@ export default function EjemplosChat() {
                         onClick={() => window.location.href = '/login'}
                         data-testid="button-probar-ahora"
                       >
-                        🚀 Probar Ahora Gratis
+                        ☕ Entra por menos que un café al mes
                       </Button>
                     </div>
                     
                     <p className="text-emerald-200 text-sm">
-                      Sin tarjeta · Prueba gratuita · Respuestas en segundos
+                      Desde 2,99€/mes · Respuestas en segundos · 24/7
                     </p>
                   </div>
                 </CardContent>
