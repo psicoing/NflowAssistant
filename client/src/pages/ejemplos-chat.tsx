@@ -1094,21 +1094,35 @@ export default function EjemplosChat() {
 
             {/* CTA Section */}
             <div className="mt-16 text-center">
-              <Card className="bg-gradient-to-r from-nflow-orange/10 to-orange-600/10 border-nflow-orange/30 max-w-2xl mx-auto">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold text-white mb-4">
-                    ¿Te gusta lo que ves?
-                  </h3>
-                  <p className="text-gray-300 mb-6">
-                    Accede a respuestas personalizadas ilimitadas suscribiéndote a NFLOW. 
-                    Tu psicólogo digital disponible 24/7.
-                  </p>
-                  <Button 
-                    className="bg-nflow-orange hover:bg-nflow-orange-light text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
-                    onClick={() => window.location.href = '/login'}
-                  >
-                    Comenzar ahora
-                  </Button>
+              <Card className="bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 border-0 max-w-3xl mx-auto shadow-2xl overflow-hidden">
+                <CardContent className="p-10 relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent pointer-events-none"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="text-5xl mb-4">🧠✨</div>
+                    
+                    <h3 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
+                      ¿Y tú, qué necesitas resolver?
+                    </h3>
+                    
+                    <p className="text-xl text-emerald-100 mb-6 max-w-xl mx-auto leading-relaxed">
+                      Estos son solo ejemplos. <span className="font-bold text-white">Entra y haz tus propias preguntas</span> — NUXA te escucha, te orienta y te ayuda a encontrar respuestas personalizadas.
+                    </p>
+                    
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+                      <Button 
+                        className="bg-white hover:bg-gray-100 text-emerald-700 px-10 py-6 rounded-2xl font-bold text-xl transition-all duration-300 hover:scale-105 shadow-xl"
+                        onClick={() => window.location.href = '/login'}
+                        data-testid="button-probar-ahora"
+                      >
+                        🚀 Probar Ahora Gratis
+                      </Button>
+                    </div>
+                    
+                    <p className="text-emerald-200 text-sm">
+                      Sin tarjeta · Prueba gratuita · Respuestas en segundos
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </div>
