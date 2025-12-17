@@ -48,10 +48,10 @@ export default function FloatingCTAButton() {
             </button>
           </div>
           <p className="text-sm mb-3 text-gray-700">
-            Únete a miles de usuarios que ya mejoraron su bienestar mental con NFLOW
+            Únete a miles de usuarios que ya mejoraron su bienestar mental con <span className="font-bold">NUXA</span>
           </p>
           <div className="text-xs bg-orange-50 border border-orange-200 rounded-lg p-2 mb-3 text-orange-700">
-            ✨ Primer mes por solo €2.99<br/>
+            ✨ Sin permanencia<br/>
             ✨ Cancela cuando quieras<br/>
             ✨ Soporte 24/7
           </div>
