@@ -1099,23 +1099,23 @@ export default function EjemplosChat() {
                   <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent pointer-events-none"></div>
                   
                   <div className="relative z-10">
-                    <div className="text-5xl mb-4">🧠✨</div>
+                    <div className="text-5xl mb-4">💬🌟</div>
                     
-                    <h3 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
+                    <h3 className="text-2xl md:text-4xl font-extrabold text-white mb-4">
                       ¿Y tú, qué necesitas resolver?
                     </h3>
                     
-                    <p className="text-xl text-emerald-100 mb-6 max-w-xl mx-auto leading-relaxed">
+                    <p className="text-lg md:text-xl text-emerald-100 mb-6 max-w-xl mx-auto leading-relaxed px-2">
                       Estos son solo ejemplos. <span className="font-bold text-white">Entra y expón tus preocupaciones</span> — NUXA te escucha, te orienta y te ayuda a encontrar respuestas personalizadas.
                     </p>
                     
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+                    <div className="flex justify-center items-center mb-6 px-4">
                       <Button 
-                        className="bg-white hover:bg-gray-100 text-emerald-700 px-10 py-6 rounded-2xl font-bold text-xl transition-all duration-300 hover:scale-105 shadow-xl"
+                        className="bg-white hover:bg-gray-100 text-emerald-700 px-6 md:px-10 py-5 md:py-6 rounded-2xl font-bold text-base md:text-xl transition-all duration-300 hover:scale-105 shadow-xl w-full max-w-sm md:w-auto"
                         onClick={() => window.location.href = '/login'}
                         data-testid="button-probar-ahora"
                       >
-                        ☕ Entra por menos que un café al mes
+                        ☕ Por menos que un café al mes
                       </Button>
                     </div>
                     
