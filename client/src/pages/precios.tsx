@@ -37,6 +37,14 @@ export default function PreciosPage() {
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            {/* Sin Permanencia Banner */}
+            <div className="mb-8 inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-2 border-emerald-400 rounded-full px-6 py-3">
+              <span className="text-2xl">✅</span>
+              <span className="text-lg md:text-xl font-bold text-white">
+                Sin permanencia · Anula cuando quieras en un click
+              </span>
+            </div>
+            
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
               Planes y <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Precios</span>
             </h1>
