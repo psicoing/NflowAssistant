@@ -1119,8 +1119,8 @@ export default function EjemplosChat() {
                       </Button>
                     </div>
                     
-                    <p className="text-emerald-200 text-sm">
-                      Desde 2,99€/mes · Respuestas en segundos · 24/7
+                    <p className="text-emerald-200 text-sm px-2">
+                      Escoge el plan que mejor se ajuste a tus necesidades · <span className="font-bold text-white">Sin permanencia</span>
                     </p>
                   </div>
                 </CardContent>
