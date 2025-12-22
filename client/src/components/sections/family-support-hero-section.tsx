@@ -135,8 +135,19 @@ export default function FamilySupportHeroSection() {
               </div>
             </div>
 
+            {/* Decorative Separator */}
+            <div className="flex items-center justify-center gap-4 my-10">
+              <div className="flex-1 h-1 bg-gradient-to-r from-transparent via-emerald-300 to-emerald-400 rounded-full"></div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-emerald-400 rounded-full"></div>
+                <div className="w-4 h-4 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-teal-400 rounded-full"></div>
+              </div>
+              <div className="flex-1 h-1 bg-gradient-to-l from-transparent via-teal-300 to-teal-400 rounded-full"></div>
+            </div>
+
             {/* Banner Departamento de Salud */}
-            <div className="mt-8 max-w-3xl mx-auto">
+            <div className="max-w-3xl mx-auto">
               <button
                 onClick={() => setIsPdfOpen(true)}
                 className="w-full bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border-2 border-emerald-400 dark:border-emerald-600 rounded-2xl p-6 hover:shadow-xl hover:border-emerald-500 dark:hover:border-emerald-500 transition-all duration-300 transform hover:scale-105 group"
