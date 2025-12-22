@@ -79,11 +79,12 @@ export default function FamilySupportHeroSection() {
             </div>
 
             {/* Robot Image Separator */}
-            <div className="flex justify-center py-6">
+            <div className="w-full py-6 -mx-4 sm:-mx-6 lg:-mx-8">
               <img 
                 src={nuxaRobotConnecting} 
                 alt="Robot NUXA conectando personas" 
-                className="w-full max-w-md h-auto rounded-2xl shadow-lg"
+                className="w-screen h-auto object-cover"
+                style={{ marginLeft: 'calc(-50vw + 50%)', width: '100vw' }}
                 data-testid="img-nuxa-robot-features"
               />
             </div>
