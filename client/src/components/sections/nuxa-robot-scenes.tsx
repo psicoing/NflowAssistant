@@ -60,7 +60,7 @@ export function NuxaRobotForestSection() {
         <img 
           src={nuxaRobotForest} 
           alt="Robot NUXA conversando en un bosque tranquilo" 
-          className="w-full h-auto object-cover"
+          className="w-full h-auto object-cover md:max-h-[45vh]"
           data-testid="img-nuxa-robot-forest"
         />
       </div>
