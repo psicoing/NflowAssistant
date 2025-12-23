@@ -33,32 +33,8 @@ export default function FamilySupportHeroSection() {
               {/* Separator line inside card */}
               <div className="w-full h-px bg-gradient-to-r from-transparent via-emerald-300 to-transparent my-8"></div>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center flex-wrap">
-                <Button
-                  onClick={() => setLocation("/login")}
-                  className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white px-10 py-7 text-xl font-bold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
-                  data-testid="button-comenzar-chat"
-                >
-                  <MessageCircle className="w-6 h-6 mr-3" />
-                  Comenzar Ahora
-                </Button>
-                
-                <Button
-                  onClick={() => {
-                    const element = document.getElementById('tour-nflow');
-                    if (element) {
-                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                  }}
-                  variant="outline"
-                  className="border-2 border-emerald-500 dark:border-emerald-400 text-emerald-700 dark:text-emerald-300 px-10 py-7 text-xl font-bold rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-all duration-300"
-                  data-testid="button-ver-como-funciona"
-                >
-                  <PlayCircle className="w-6 h-6 mr-3" />
-                  Ver Cómo Funciona
-                </Button>
-
+              {/* CTA Button */}
+              <div className="flex justify-center">
                 <Button
                   onClick={() => setLocation("/ejemplos-chat")}
                   className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-10 py-7 text-xl font-bold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
