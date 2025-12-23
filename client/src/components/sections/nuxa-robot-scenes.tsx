@@ -56,11 +56,11 @@ import nuxaRobotBooks from "@assets/generated_images/nuxa_robot_books_recommenda
 export function NuxaRobotForestSection() {
   return (
     <section className="relative w-full overflow-hidden">
-      <div className="relative w-full flex justify-center">
+      <div className="relative w-full">
         <img 
           src={nuxaRobotForest} 
           alt="Robot NUXA conversando en un bosque tranquilo" 
-          className="w-full h-auto object-cover md:max-h-[45vh] md:w-auto md:object-contain"
+          className="w-full h-auto object-cover"
           data-testid="img-nuxa-robot-forest"
         />
       </div>
