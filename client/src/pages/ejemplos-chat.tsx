@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -919,6 +919,10 @@ Si experimenta pensamientos de no querer seguir viviendo o siente desesperanza p
 
 export default function EjemplosChat() {
   const [openItems, setOpenItems] = useState<string[]>([]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const toggleItem = (ageRange: string) => {
     const isCurrentlyOpen = openItems.includes(ageRange);
