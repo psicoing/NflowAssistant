@@ -28,7 +28,7 @@ export default function FamilySupportHeroSection() {
                 <p className="text-2xl md:text-3xl text-emerald-600 dark:text-emerald-400 font-bold mb-6">
                   Hola, ¿me cuentas qué te preocupa?
                 </p>
-                <p className="text-lg md:text-xl lg:text-2xl text-gray-800 dark:text-gray-200 leading-relaxed max-w-4xl mx-auto font-semibold">
+                <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 leading-relaxed max-w-3xl mx-auto">
                   NUXA es un orientador en psicología que no hace tratamientos ni psicoterapia, ayuda a las personas y empresas a mejorar la salud mental. Habla 150 idiomas.
                 </p>
               </div>
