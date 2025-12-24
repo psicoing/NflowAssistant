@@ -1115,7 +1115,7 @@ export default function EjemplosChat() {
                         onClick={() => window.location.href = '/login'}
                         data-testid="button-probar-ahora"
                       >
-                        ☕ Por menos que un café al mes
+                        💬 Empezamos a hablar
                       </Button>
                     </div>
                     
