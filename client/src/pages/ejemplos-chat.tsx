@@ -1018,13 +1018,13 @@ export default function EjemplosChat() {
                   ¿Por qué no ofrecemos pruebas gratis?
                 </h3>
                 <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
-                  NUXA es un <span className="text-emerald-400 font-semibold">asistente de IA real</span>, no un chatbot con respuestas predefinidas. Cada conversación utiliza inteligencia artificial avanzada que <span className="text-emerald-400 font-semibold">genera respuestas personalizadas</span> en tiempo real, lo que requiere recursos significativos.
+                  NUXA es un <span className="text-emerald-400 font-semibold">asistente de IA real</span>, no un chatbot con respuestas predefinidas. La experiencia es tan auténtica que <span className="text-emerald-400 font-semibold">pensarás que hablas con un psicólogo sabio y experimentado</span>. Cada conversación requiere recursos significativos de inteligencia artificial avanzada.
                 </p>
                 <p className="text-gray-400 text-sm mb-4">
                   Por eso te mostramos estos ejemplos reales — para que veas exactamente cómo NUXA te ayudará antes de registrarte.
                 </p>
                 <p className="text-emerald-400 font-semibold text-sm">
-                  💚 Desde solo 2,99€/mes · Sin permanencia · Cancela cuando quieras
+                  💚 Consulta nuestros planes en el menú ☰ · Sin permanencia
                 </p>
               </div>
             </div>
