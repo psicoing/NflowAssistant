@@ -1002,9 +1002,28 @@ export default function EjemplosChat() {
         {/* Examples Section */}
         <section className="py-16 px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
+            <h2 className="text-3xl font-bold text-white text-center mb-6">
               Ejemplos reales por edades
             </h2>
+
+            {/* Explicación sobre por qué no hay prueba gratis */}
+            <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-emerald-500/30 rounded-2xl p-6 mb-8 max-w-3xl mx-auto">
+              <div className="text-center">
+                <div className="text-3xl mb-3">🤖✨</div>
+                <h3 className="text-lg md:text-xl font-bold text-white mb-3">
+                  ¿Por qué no ofrecemos pruebas gratis?
+                </h3>
+                <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+                  NUXA es un <span className="text-emerald-400 font-semibold">asistente de IA real</span>, no un chatbot con respuestas predefinidas. Cada conversación utiliza inteligencia artificial avanzada que <span className="text-emerald-400 font-semibold">genera respuestas personalizadas</span> en tiempo real, lo que requiere recursos significativos.
+                </p>
+                <p className="text-gray-400 text-sm mb-4">
+                  Por eso te mostramos estos ejemplos reales — para que veas exactamente cómo NUXA te ayudará antes de registrarte.
+                </p>
+                <p className="text-emerald-400 font-semibold text-sm">
+                  💚 Desde solo 2,99€/mes · Sin permanencia · Cancela cuando quieras
+                </p>
+              </div>
+            </div>
 
             {/* Cartel informativo sobre las mejoras semanales */}
             <div className="bg-gradient-to-r from-nflow-orange/20 to-orange-600/20 border border-nflow-orange/30 rounded-lg p-4 mb-12">
