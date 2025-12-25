@@ -19,12 +19,9 @@ export default function FamilySupportHeroSection() {
             {/* Main Hero Card */}
             <div className="bg-gradient-to-br from-white to-emerald-50/30 dark:from-slate-800 dark:to-slate-800 rounded-3xl border-2 border-emerald-200 dark:border-slate-700 shadow-xl p-8 md:p-12">
               <div className="mb-8">
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight text-gray-900 dark:text-white mb-4" style={{ WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight text-gray-900 dark:text-white mb-6" style={{ WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
                   NUXA
                 </h1>
-                <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 italic mb-4">
-                  (nflow powered system)
-                </p>
                 <p className="text-2xl md:text-3xl text-emerald-600 dark:text-emerald-400 font-bold mb-4">
                   Hola, ¿me cuentas qué te preocupa?
                 </p>
