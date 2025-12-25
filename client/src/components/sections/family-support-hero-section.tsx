@@ -25,10 +25,32 @@ export default function FamilySupportHeroSection() {
                 <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 italic mb-4">
                   (nflow powered system)
                 </p>
-                <p className="text-2xl md:text-3xl text-emerald-600 dark:text-emerald-400 font-bold mb-6">
+                <p className="text-2xl md:text-3xl text-emerald-600 dark:text-emerald-400 font-bold mb-4">
                   Hola, ¿me cuentas qué te preocupa?
                 </p>
-                <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 leading-relaxed max-w-3xl mx-auto">
+                
+                {/* Handwritten keywords */}
+                <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 mb-6 max-w-2xl mx-auto">
+                  {[
+                    "estrés emocional", "ansiedad diaria", "ansiedad laboral", 
+                    "estrés en el trabajo", "pensamientos repetitivos", "bloqueo emocional",
+                    "problemas familiares", "sentirse desbordado", "cansancio mental",
+                    "dificultad para dormir", "preocupación constante", "soledad emocional"
+                  ].map((keyword, index) => (
+                    <span 
+                      key={index}
+                      className="text-gray-500 dark:text-gray-400 text-xs md:text-sm italic"
+                      style={{ 
+                        fontFamily: "'Segoe Script', 'Bradley Hand', 'Comic Sans MS', cursive",
+                        transform: `rotate(${(index % 3 - 1) * 1}deg)`
+                      }}
+                    >
+                      {keyword}{index < 11 ? " ·" : ""}
+                    </span>
+                  ))}
+                </div>
+
+                <p className="text-xs text-gray-500 dark:text-gray-500 leading-relaxed max-w-2xl mx-auto">
                   NUXA es un orientador en psicología que no hace tratamientos ni psicoterapia, ayuda a las personas y empresas a mejorar la salud mental. Habla 150 idiomas.
                 </p>
               </div>
