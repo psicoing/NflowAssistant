@@ -36,7 +36,7 @@ export default function FamilySupportHeroSection() {
                   ].map((keyword, index) => (
                     <span 
                       key={index}
-                      className="text-gray-500 dark:text-gray-400 text-xs md:text-sm italic"
+                      className="text-gray-500 dark:text-gray-400 text-sm md:text-sm italic"
                       style={{ 
                         fontFamily: "'Segoe Script', 'Bradley Hand', 'Comic Sans MS', cursive",
                         transform: `rotate(${(index % 3 - 1) * 1}deg)`
