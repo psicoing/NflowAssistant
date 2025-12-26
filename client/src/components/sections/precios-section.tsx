@@ -186,149 +186,207 @@ export default function PreciosSection() {
           </div>
         </div>
 
-        {/* Tabla Comparativa Completa */}
+        {/* Tabla Comparativa Visual Mejorada */}
         <div className="mb-16">
-          <h3 className="text-3xl font-bold text-gray-900 text-center mb-8">
-            Comparativa Completa de Opciones
+          <h3 className="text-3xl font-bold text-gray-900 text-center mb-4">
+            Todas las Opciones de un Vistazo
           </h3>
-          <div className="overflow-x-auto">
-            <table className="w-full bg-white rounded-2xl shadow-xl border border-gray-200">
-              <thead>
-                <tr className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
-                  <th className="px-6 py-4 text-left rounded-tl-2xl">Plan / Opción</th>
-                  <th className="px-6 py-4 text-center">Precio</th>
-                  <th className="px-6 py-4 text-center">Preguntas Incluidas</th>
-                  <th className="px-6 py-4 text-center">Renovación</th>
-                  <th className="px-6 py-4 text-center rounded-tr-2xl">Ideal Para</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {/* Packs de Créditos */}
-                <tr className="bg-purple-50/50 hover:bg-purple-100/50 transition-colors">
-                  <td className="px-6 py-4 font-semibold text-gray-900 flex items-center">
-                    <Coins className="w-5 h-5 text-purple-600 mr-2" />
-                    Pack Básico (Créditos)
-                  </td>
-                  <td className="px-6 py-4 text-center font-bold text-purple-600">€5.00</td>
-                  <td className="px-6 py-4 text-center">15 preguntas</td>
-                  <td className="px-6 py-4 text-center">
-                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
-                      Sin caducidad
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">
-                    Prueba o uso ocasional
-                  </td>
-                </tr>
-                <tr className="bg-purple-50/50 hover:bg-purple-100/50 transition-colors">
-                  <td className="px-6 py-4 font-semibold text-gray-900 flex items-center">
-                    <Sparkles className="w-5 h-5 text-purple-600 mr-2" />
-                    Pack Premium (Créditos)
-                  </td>
-                  <td className="px-6 py-4 text-center font-bold text-purple-600">€10.00</td>
-                  <td className="px-6 py-4 text-center">35 preguntas</td>
-                  <td className="px-6 py-4 text-center">
-                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
-                      Sin caducidad
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">
-                    Mejor valor, uso flexible
-                  </td>
-                </tr>
-                
-                {/* Suscripciones Personales */}
-                <tr className="bg-blue-50/50 hover:bg-blue-100/50 transition-colors">
-                  <td className="px-6 py-4 font-semibold text-gray-900 flex items-center">
-                    <Shield className="w-5 h-5 text-blue-600 mr-2" />
-                    Plan Básico
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <div className="font-bold text-blue-600">€2.99/mes</div>
-                    <div className="text-xs text-gray-500 line-through">€9.99</div>
-                  </td>
-                  <td className="px-6 py-4 text-center">10 preguntas/mes</td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">Mensual</td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">
-                    Usuarios que empiezan
-                  </td>
-                </tr>
-                <tr className="bg-orange-50/50 hover:bg-orange-100/50 transition-colors border-2 border-orange-300">
-                  <td className="px-6 py-4 font-semibold text-gray-900 flex items-center">
-                    <Star className="w-5 h-5 text-orange-600 mr-2" />
-                    Plan Individual ⭐
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <div className="font-bold text-orange-600">€5.99/mes</div>
-                    <div className="text-xs text-gray-500 line-through">€19.99</div>
-                  </td>
-                  <td className="px-6 py-4 text-center font-semibold">Ilimitadas</td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">Mensual</td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">
-                    La mayoría de usuarios
-                  </td>
-                </tr>
-                <tr className="bg-purple-50/50 hover:bg-purple-100/50 transition-colors">
-                  <td className="px-6 py-4 font-semibold text-gray-900 flex items-center">
-                    <Gem className="w-5 h-5 text-purple-600 mr-2" />
-                    Plan Premium
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <div className="font-bold text-purple-600">€32/año</div>
-                    <div className="text-xs text-gray-500">~€2.67/mes</div>
-                  </td>
-                  <td className="px-6 py-4 text-center font-semibold">Ilimitadas</td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">Anual</td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">
-                    Máximo ahorro anual
-                  </td>
-                </tr>
+          <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
+            Compara precios, preguntas incluidas y elige la opción perfecta para ti
+          </p>
+          
+          {/* Packs de Créditos */}
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-3 h-3 rounded-full bg-purple-500"></div>
+              <h4 className="text-lg font-bold text-gray-800">Pago Por Uso (Sin Compromiso)</h4>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-white rounded-2xl p-5 border-2 border-purple-200 hover:border-purple-400 hover:shadow-lg transition-all flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
+                    <Coins className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-gray-900">Pack Básico</h5>
+                    <p className="text-sm text-gray-500">15 preguntas</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-purple-600">€5</div>
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">Sin caducidad</span>
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl p-5 border-2 border-purple-300 hover:border-purple-500 hover:shadow-lg transition-all flex items-center justify-between relative">
+                <div className="absolute -top-2 right-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                  MEJOR VALOR
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center">
+                    <Sparkles className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-gray-900">Pack Premium</h5>
+                    <p className="text-sm text-gray-500">35 preguntas</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-purple-600">€10</div>
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">Sin caducidad</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                {/* Planes Empresariales */}
-                <tr className="bg-emerald-50/50 hover:bg-emerald-100/50 transition-colors">
-                  <td className="px-6 py-4 font-semibold text-gray-900 flex items-center">
-                    <Briefcase className="w-5 h-5 text-emerald-600 mr-2" />
-                    Plan Profesional
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <div className="font-bold text-emerald-600">€149.50/mes</div>
-                  </td>
-                  <td className="px-6 py-4 text-center">Hasta 50 usuarios</td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">Mensual</td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">
-                    Profesionales, consultores
-                  </td>
-                </tr>
-                <tr className="bg-orange-50/50 hover:bg-orange-100/50 transition-colors">
-                  <td className="px-6 py-4 font-semibold text-gray-900 flex items-center">
-                    <Building className="w-5 h-5 text-orange-600 mr-2" />
-                    Plan Empresarial
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <div className="font-bold text-orange-600">€598/mes</div>
-                  </td>
-                  <td className="px-6 py-4 text-center">Hasta 200 empleados</td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">Mensual</td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">
-                    Empresas medianas
-                  </td>
-                </tr>
-                <tr className="bg-indigo-50/50 hover:bg-indigo-100/50 transition-colors">
-                  <td className="px-6 py-4 font-semibold text-gray-900 flex items-center">
-                    <Globe className="w-5 h-5 text-indigo-600 mr-2" />
-                    Plan Corporativo
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <div className="font-bold text-indigo-600">Personalizado</div>
-                  </td>
-                  <td className="px-6 py-4 text-center">Ilimitados</td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">A medida</td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-600">
-                    Grandes corporaciones
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          {/* Suscripciones Personales */}
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+              <h4 className="text-lg font-bold text-gray-800">Suscripciones Personales</h4>
+            </div>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="bg-white rounded-2xl p-5 border-2 border-blue-200 hover:border-blue-400 hover:shadow-lg transition-all">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                    <Shield className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-gray-900">Plan Básico</h5>
+                    <p className="text-xs text-gray-500">Usuarios que empiezan</p>
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-3xl font-bold text-blue-600">€2.99</span>
+                  <span className="text-gray-500">/mes</span>
+                  <span className="text-sm text-gray-400 line-through">€9.99</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-blue-500" />
+                  <span className="text-sm text-gray-700">10 preguntas/mes</span>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-5 border-2 border-orange-400 hover:shadow-xl transition-all relative">
+                <div className="absolute -top-2 left-4 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                  <Star className="w-3 h-3" /> MÁS POPULAR
+                </div>
+                <div className="flex items-center gap-3 mb-3 mt-2">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
+                    <Star className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-gray-900">Plan Individual</h5>
+                    <p className="text-xs text-gray-500">La mayoría de usuarios</p>
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-3xl font-bold text-orange-600">€5.99</span>
+                  <span className="text-gray-500">/mes</span>
+                  <span className="text-sm text-gray-400 line-through">€19.99</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-orange-500" />
+                  <span className="text-sm font-semibold text-gray-800">Preguntas ilimitadas</span>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-5 border-2 border-purple-200 hover:border-purple-400 hover:shadow-lg transition-all">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
+                    <Gem className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-gray-900">Plan Premium</h5>
+                    <p className="text-xs text-gray-500">Máximo ahorro anual</p>
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-3xl font-bold text-purple-600">€32</span>
+                  <span className="text-gray-500">/año</span>
+                </div>
+                <div className="flex items-center gap-2 mb-1">
+                  <Zap className="w-4 h-4 text-purple-500" />
+                  <span className="text-sm font-semibold text-gray-800">Preguntas ilimitadas</span>
+                </div>
+                <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">~€2.67/mes</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Planes Empresariales */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
+              <h4 className="text-lg font-bold text-gray-800">Planes Empresariales (ISO 45003)</h4>
+            </div>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="bg-white rounded-2xl p-5 border-2 border-emerald-200 hover:border-emerald-400 hover:shadow-lg transition-all">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                    <Briefcase className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-gray-900">Profesional</h5>
+                    <p className="text-xs text-gray-500">Consultores</p>
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-2xl font-bold text-emerald-600">€149.50</span>
+                  <span className="text-gray-500">/mes</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-emerald-500" />
+                  <span className="text-sm text-gray-700">Hasta 50 usuarios</span>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-5 border-2 border-orange-300 hover:shadow-lg transition-all">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                    <Building className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-gray-900">Empresarial</h5>
+                    <p className="text-xs text-gray-500">Empresas medianas</p>
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-2xl font-bold text-orange-600">€598</span>
+                  <span className="text-gray-500">/mes</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-orange-500" />
+                  <span className="text-sm text-gray-700">Hasta 200 empleados</span>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-5 border-2 border-indigo-300 hover:shadow-lg transition-all">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center">
+                    <Globe className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-gray-900">Corporativo</h5>
+                    <p className="text-xs text-gray-500">Grandes empresas</p>
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-xl font-bold text-indigo-600">Personalizado</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-indigo-500" />
+                  <span className="text-sm text-gray-700">Usuarios ilimitados</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Sin permanencia reminder */}
+          <div className="mt-8 text-center">
+            <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-full px-6 py-3">
+              <Check className="w-5 h-5 text-emerald-600" />
+              <span className="text-emerald-800 font-medium">Sin permanencia · Anula cuando quieras en un click</span>
+            </div>
           </div>
         </div>
 
