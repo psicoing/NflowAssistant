@@ -55,16 +55,6 @@ export default function FamilySupportHeroSection() {
               {/* Separator line inside card */}
               <div className="w-full h-px bg-gradient-to-r from-transparent via-emerald-300 to-transparent my-6"></div>
 
-              {/* Value proposition before CTA */}
-              <div className="text-center mb-6 space-y-2">
-                <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 font-medium">
-                  Aquí puedes recibir una respuesta única y personalizada antes de decidir continuar.
-                </p>
-                <p className="text-xs md:text-sm text-emerald-600 dark:text-emerald-400 italic">
-                  NUXA responde en tu idioma, con empatía y foco en tu experiencia.
-                </p>
-              </div>
-
               {/* CTA Button */}
               <div className="flex justify-center">
                 <Button
@@ -78,7 +68,7 @@ export default function FamilySupportHeroSection() {
               </div>
 
               {/* Social Proof */}
-              <div className="flex justify-center items-center pt-8">
+              <div className="flex justify-center items-center pt-6">
                 <div className="flex items-center gap-3 bg-white dark:bg-slate-700 px-6 py-3 rounded-full border-2 border-emerald-300 dark:border-emerald-600 shadow-lg">
                   <div className="flex -space-x-2">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 border-2 border-white dark:border-slate-900"></div>
@@ -100,6 +90,16 @@ export default function FamilySupportHeroSection() {
                 className="w-full h-auto max-h-[250px] md:max-h-[300px] object-cover"
                 data-testid="img-nuxa-robot-features"
               />
+            </div>
+
+            {/* Value proposition */}
+            <div className="text-center mb-8 space-y-2 max-w-2xl mx-auto">
+              <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 font-medium">
+                Aquí puedes recibir una respuesta única y personalizada antes de decidir continuar.
+              </p>
+              <p className="text-xs md:text-sm text-emerald-600 dark:text-emerald-400 italic">
+                NUXA responde en tu idioma, con empatía y foco en tu experiencia.
+              </p>
             </div>
 
             {/* Features Grid */}
