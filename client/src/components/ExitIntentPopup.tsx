@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
@@ -7,6 +7,16 @@ export default function ExitIntentPopup() {
   const [isVisible, setIsVisible] = useState(false);
   const [hasShown, setHasShown] = useState(false);
   const [, setLocation] = useLocation();
+  const lastScrollY = useRef(0);
+  const scrollVelocity = useRef(0);
+
+  const showPopup = () => {
+    if (!hasShown && !sessionStorage.getItem("exitPopupShown")) {
+      setIsVisible(true);
+      setHasShown(true);
+      sessionStorage.setItem("exitPopupShown", "true");
+    }
+  };
 
   useEffect(() => {
     const alreadyShown = sessionStorage.getItem("exitPopupShown");
@@ -16,22 +26,56 @@ export default function ExitIntentPopup() {
     }
 
     let timeoutId: NodeJS.Timeout;
+    let isActive = false;
     
+    // Desktop: Mouse leave detection
     const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0 && !hasShown) {
-        setIsVisible(true);
-        setHasShown(true);
-        sessionStorage.setItem("exitPopupShown", "true");
+      if (e.clientY <= 0) {
+        showPopup();
       }
     };
 
+    // Mobile: Fast scroll up detection
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const velocity = lastScrollY.current - currentScrollY;
+      
+      // Detect fast scroll up (velocity > 50px) near top of page
+      if (velocity > 50 && currentScrollY < 100 && isActive) {
+        showPopup();
+      }
+      
+      lastScrollY.current = currentScrollY;
+      scrollVelocity.current = velocity;
+    };
+
+    // Mobile: Tab/app switch detection
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden" && isActive) {
+        // Store that we should show popup when they return
+        sessionStorage.setItem("showPopupOnReturn", "true");
+      } else if (document.visibilityState === "visible") {
+        const shouldShow = sessionStorage.getItem("showPopupOnReturn");
+        if (shouldShow && isActive) {
+          sessionStorage.removeItem("showPopupOnReturn");
+          showPopup();
+        }
+      }
+    };
+
+    // Activate after delay
     timeoutId = setTimeout(() => {
+      isActive = true;
       document.addEventListener("mouseleave", handleMouseLeave);
-    }, 5000);
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+    }, 8000);
 
     return () => {
       clearTimeout(timeoutId);
       document.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [hasShown]);
 
