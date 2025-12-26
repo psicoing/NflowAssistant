@@ -53,7 +53,17 @@ export default function FamilySupportHeroSection() {
               </div>
 
               {/* Separator line inside card */}
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-emerald-300 to-transparent my-8"></div>
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-emerald-300 to-transparent my-6"></div>
+
+              {/* Value proposition before CTA */}
+              <div className="text-center mb-6 space-y-2">
+                <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 font-medium">
+                  Aquí puedes recibir una respuesta única y personalizada antes de decidir continuar.
+                </p>
+                <p className="text-xs md:text-sm text-emerald-600 dark:text-emerald-400 italic">
+                  NUXA responde en tu idioma, con empatía y foco en tu experiencia.
+                </p>
+              </div>
 
               {/* CTA Button */}
               <div className="flex justify-center">

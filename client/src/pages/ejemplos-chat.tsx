@@ -1020,8 +1020,11 @@ export default function EjemplosChat() {
                 <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
                   NUXA es un <span className="text-emerald-400 font-semibold">asistente de IA real</span>, no un chatbot con respuestas predefinidas. La experiencia es tan auténtica que <span className="text-emerald-400 font-semibold">pensarás que hablas con un psicólogo sabio y experimentado</span>. Cada conversación requiere recursos significativos de inteligencia artificial avanzada.
                 </p>
-                <p className="text-gray-400 text-sm mb-4">
+                <p className="text-gray-400 text-sm mb-3">
                   Por eso te mostramos estos ejemplos reales — para que veas exactamente cómo NUXA te ayudará antes de registrarte.
+                </p>
+                <p className="text-white/90 text-sm italic mb-4 border-l-2 border-emerald-400 pl-3">
+                  "Esto no solo responde: calma, orienta y te hace sentir escuchado."
                 </p>
                 <p className="text-emerald-400 font-semibold text-sm">
                   💚 Consulta nuestros planes en el menú ☰ · Sin permanencia
