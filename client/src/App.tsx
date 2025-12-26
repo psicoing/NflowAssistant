@@ -43,6 +43,7 @@ import ControlParental from "@/pages/control-parental";
 import PreciosPage from "@/pages/precios";
 import BlogNew from "@/pages/blog-new";
 import FloatingCTAButton from "@/components/FloatingCTAButton";
+import ExitIntentPopup from "@/components/ExitIntentPopup";
 import DownloadCSV from "@/pages/download-csv";
 
 function AuthenticatedRouter() {
@@ -140,6 +141,7 @@ function AppContent() {
       <PWAInstallPrompt />
       <CookieConsent />
       {showFloatingCTA && <FloatingCTAButton />}
+      {showFloatingCTA && <ExitIntentPopup />}
     </div>
   );
 }
