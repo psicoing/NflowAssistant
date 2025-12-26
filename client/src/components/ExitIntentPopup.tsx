@@ -2,13 +2,38 @@ import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
+import { useLanguage } from "@/hooks/useLanguage";
+
+const popupContent = {
+  es: {
+    title: "¿Te vas sin hablar de lo que te preocupa?",
+    description: "NUXA te escucha 24/7, sin juicios, en tu idioma.",
+    highlight: "La experiencia es tan real que pensarás que hablas con un psicólogo sabio.",
+    price: "Desde solo 2,99€/mes",
+    noCommitment: "Sin permanencia · Cancela cuando quieras",
+    cta: "Quiero probar NUXA",
+    dismiss: "No gracias, prefiero seguir solo/a"
+  },
+  en: {
+    title: "Leaving without talking about what worries you?",
+    description: "NUXA listens 24/7, without judgment, in your language.",
+    highlight: "The experience is so real you'll think you're talking to a wise psychologist.",
+    price: "From only €2.99/month",
+    noCommitment: "No commitment · Cancel anytime",
+    cta: "I want to try NUXA",
+    dismiss: "No thanks, I prefer to go it alone"
+  }
+};
 
 export default function ExitIntentPopup() {
   const [isVisible, setIsVisible] = useState(false);
   const [hasShown, setHasShown] = useState(false);
   const [, setLocation] = useLocation();
+  const { currentLanguage } = useLanguage();
   const lastScrollY = useRef(0);
   const scrollVelocity = useRef(0);
+  
+  const content = currentLanguage === 'en' ? popupContent.en : popupContent.es;
 
   const showPopup = () => {
     if (!hasShown && !sessionStorage.getItem("exitPopupShown")) {
@@ -113,20 +138,20 @@ export default function ExitIntentPopup() {
           <div className="text-5xl mb-4">💚</div>
           
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-            ¿Te vas sin hablar de lo que te preocupa?
+            {content.title}
           </h2>
           
           <p className="text-gray-300 text-base mb-6">
-            NUXA te escucha 24/7, sin juicios, en tu idioma. 
-            <span className="text-emerald-400 font-semibold"> La experiencia es tan real que pensarás que hablas con un psicólogo sabio.</span>
+            {content.description}
+            <span className="text-emerald-400 font-semibold"> {content.highlight}</span>
           </p>
 
           <div className="bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-4 mb-6">
             <p className="text-emerald-400 font-bold text-lg">
-              Desde solo 2,99€/mes
+              {content.price}
             </p>
             <p className="text-gray-400 text-sm">
-              Sin permanencia · Cancela cuando quieras
+              {content.noCommitment}
             </p>
           </div>
 
@@ -135,7 +160,7 @@ export default function ExitIntentPopup() {
             className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-6 text-lg font-bold rounded-xl shadow-xl transition-all duration-300 transform hover:scale-105"
             data-testid="button-exit-popup-cta"
           >
-            Quiero probar NUXA
+            {content.cta}
           </Button>
 
           <button 
@@ -143,7 +168,7 @@ export default function ExitIntentPopup() {
             className="mt-4 text-gray-500 text-sm hover:text-gray-400 transition-colors"
             data-testid="button-exit-popup-dismiss"
           >
-            No gracias, prefiero seguir solo/a
+            {content.dismiss}
           </button>
         </div>
       </div>
