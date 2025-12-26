@@ -1010,18 +1010,18 @@ export default function EjemplosChat() {
               Ejemplos reales por edades
             </h2>
 
-            {/* Explicación sobre por qué no hay prueba gratis */}
+            {/* Explicación sobre los ejemplos */}
             <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-emerald-500/30 rounded-2xl p-6 mb-8 max-w-3xl mx-auto">
               <div className="text-center">
                 <div className="text-3xl mb-3">🤖✨</div>
                 <h3 className="text-lg md:text-xl font-bold text-white mb-3">
-                  ¿Por qué no ofrecemos pruebas gratis?
+                  Mira cómo NUXA puede ayudarte
                 </h3>
                 <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
-                  NUXA es un <span className="text-emerald-400 font-semibold">asistente de IA real</span>, no un chatbot con respuestas predefinidas. La experiencia es tan auténtica que <span className="text-emerald-400 font-semibold">pensarás que hablas con un psicólogo sabio y experimentado</span>. Cada conversación requiere recursos significativos de inteligencia artificial avanzada.
+                  Te dejamos ver <span className="text-emerald-400 font-semibold">ejemplos reales</span> de cómo procesa NUXA diferentes situaciones — quizás alguna refleje la tuya. La experiencia es tan auténtica que <span className="text-emerald-400 font-semibold">pensarás que hablas con un psicólogo sabio y experimentado</span>.
                 </p>
                 <p className="text-gray-400 text-sm mb-3">
-                  Por eso te mostramos estos ejemplos reales — para que veas exactamente cómo NUXA te ayudará antes de registrarte.
+                  Para hacer tus propias preguntas, elige un plan. Cada conversación usa IA avanzada que requiere servidores, licencias y tokens — costes que todos pagamos para usar esta tecnología.
                 </p>
                 <p className="text-white/90 text-sm italic mb-4 border-l-2 border-emerald-400 pl-3">
                   "Esto no solo responde: calma, orienta y te hace sentir escuchado."
