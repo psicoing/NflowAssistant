@@ -52,21 +52,6 @@ export default function FamilySupportHeroSection() {
                 </p>
               </div>
 
-              {/* Separator line inside card */}
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-emerald-300 to-transparent my-6"></div>
-
-              {/* CTA Button */}
-              <div className="flex justify-center">
-                <Button
-                  onClick={() => setLocation("/ejemplos-chat")}
-                  className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-10 py-7 text-xl font-bold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
-                  data-testid="button-prueba-gratis"
-                >
-                  <PlayCircle className="w-6 h-6 mr-3" />
-                  Prueba Gratis / Free Trial
-                </Button>
-              </div>
-
               {/* Social Proof */}
               <div className="flex justify-center items-center pt-6">
                 <div className="flex items-center gap-3 bg-white dark:bg-slate-700 px-6 py-3 rounded-full border-2 border-emerald-300 dark:border-emerald-600 shadow-lg">
@@ -100,6 +85,18 @@ export default function FamilySupportHeroSection() {
               <p className="text-xs md:text-sm text-emerald-600 dark:text-emerald-400 italic">
                 NUXA responde en tu idioma, con empatía y foco en tu experiencia.
               </p>
+            </div>
+
+            {/* CTA Button */}
+            <div className="flex justify-center mb-10">
+              <Button
+                onClick={() => setLocation("/ejemplos-chat")}
+                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-10 py-7 text-xl font-bold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
+                data-testid="button-prueba-gratis"
+              >
+                <PlayCircle className="w-6 h-6 mr-3" />
+                Prueba Gratis / Free Trial
+              </Button>
             </div>
 
             {/* Features Grid */}
