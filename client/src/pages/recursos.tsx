@@ -907,7 +907,7 @@ export default function RecursosGratis() {
               <p className="text-gray-600">para el bienestar personal</p>
               
               <div className="flex flex-wrap gap-2 justify-center mt-4">
-                <Badge className="bg-gray-100 text-gray-700">Neuropsicológico</Badge>
+                <Badge className="bg-gray-100 text-gray-700">Neuropsicología</Badge>
                 <Badge className="bg-gray-100 text-gray-700">TCC</Badge>
                 <Badge className="bg-gray-100 text-gray-700">Mindfulness</Badge>
                 <Badge className="bg-gray-100 text-gray-700">ACT</Badge>
@@ -915,7 +915,7 @@ export default function RecursosGratis() {
             </div>
 
             <Tabs defaultValue="actividades" className="w-full">
-              <TabsList className="grid w-full grid-cols-4 mb-6 bg-gray-100">
+              <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-1 mb-6 bg-gray-100 h-auto p-1">
                 <TabsTrigger value="actividades" data-testid="tab-actividades">Actividades</TabsTrigger>
                 <TabsTrigger value="recomendaciones" data-testid="tab-recomendaciones">Recomendaciones</TabsTrigger>
                 <TabsTrigger value="alertas" data-testid="tab-alertas">Alertas</TabsTrigger>
