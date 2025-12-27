@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "wouter";
 import { ChevronLeft, ChevronRight, MessageCircle, Heart, Users, Brain, Moon, Sparkles } from "lucide-react";
 import nuxaLogo from "@assets/generated_images/NUXA_logo_with_circle_person_ba9dba6f.png";
 import anxietyPhone from "@assets/generated_images/NUXA_anxiety_chat_phone_7a0de59f.png";
@@ -222,10 +223,12 @@ export default function NuxaPhonesShowcaseSection() {
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-2xl text-white font-bold text-lg shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer">
-            <MessageCircle className="w-5 h-5" />
-            <span>Comienza tu conversación ahora</span>
-          </div>
+          <Link href="/login">
+            <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-2xl text-white font-bold text-lg shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer">
+              <MessageCircle className="w-5 h-5" />
+              <span>Comienza tu conversación ahora</span>
+            </div>
+          </Link>
         </div>
       </div>
     </section>
