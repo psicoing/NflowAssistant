@@ -25,8 +25,22 @@ import {
   Meh,
   Frown,
   AlertCircle,
-  CheckCircle2
+  CheckCircle2,
+  Clock,
+  CalendarDays,
+  TreePine,
+  Leaf,
+  Eye,
+  Waves,
+  Moon,
+  Apple,
+  Dumbbell,
+  BookOpen,
+  Star,
+  AlertTriangle,
+  X
 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead } from "@/components/SEOHead";
 
@@ -43,6 +57,127 @@ interface EvaluationQuestion {
   options: { value: number; label: string }[];
 }
 
+interface Actividad {
+  id: string;
+  nombre: string;
+  categoria: string;
+  categoriaColor: string;
+  descripcion: string;
+  duracion: string;
+  frecuencia: string;
+  icono: any;
+  pasos: string[];
+  beneficios: string[];
+}
+
+const actividades: Actividad[] = [
+  {
+    id: 'bitacora',
+    nombre: 'Bitácora de la Mente',
+    categoria: 'Activación Emocional',
+    categoriaColor: 'bg-amber-100 text-amber-800',
+    descripcion: 'Detectar ciclos mentales e identificar distorsiones',
+    duracion: '5-10 minutos',
+    frecuencia: 'Diario',
+    icono: Brain,
+    pasos: ['¿Qué sentí hoy?', '¿Qué pensamiento dominó?', '¿Cómo reaccioné?', '¿Qué puedo cambiar?'],
+    beneficios: ['Autoconciencia', 'Detección de patrones', 'Claridad mental']
+  },
+  {
+    id: 'mapa-sensorial',
+    nombre: 'Mapa Sensorial Diario',
+    categoria: 'Activación Emocional',
+    categoriaColor: 'bg-amber-100 text-amber-800',
+    descripcion: 'Registrar olores, sonidos, sabores, texturas del día',
+    duracion: '10 minutos',
+    frecuencia: 'Diario',
+    icono: Heart,
+    pasos: ['Registra 3 olores del día', 'Identifica 3 sonidos significativos', 'Recuerda 2 texturas tocadas', 'Nota sensaciones internas'],
+    beneficios: ['Anclaje al presente', 'Reduce rumiación', 'Conexión sensorial']
+  },
+  {
+    id: 'escaner-corporal',
+    nombre: 'Escáner Corporal Guiado',
+    categoria: 'Regulación Física-Emocional',
+    categoriaColor: 'bg-blue-100 text-blue-800',
+    descripcion: 'Recorrido consciente desde pies a cabeza',
+    duracion: '15 minutos',
+    frecuencia: 'Semanal',
+    icono: Activity,
+    pasos: ['Encuentra posición cómoda', 'Comienza por los pies', 'Sube lentamente al torso', 'Termina en la cabeza'],
+    beneficios: ['Relajación', 'Consciencia corporal', 'Reducción estrés']
+  },
+  {
+    id: 'tecnica-54321',
+    nombre: 'Técnica 5-4-3-2-1 para Crisis',
+    categoria: 'Regulación Física-Emocional',
+    categoriaColor: 'bg-blue-100 text-blue-800',
+    descripcion: 'Herramienta de grounding para momentos de ansiedad',
+    duracion: '5 minutos',
+    frecuencia: 'Según necesidad',
+    icono: Eye,
+    pasos: ['5 cosas que ves', '4 cosas que tocas', '3 sonidos que oyes', '2 olores que percibes', '1 sabor o respiración profunda'],
+    beneficios: ['Control de ansiedad', 'Vuelta al presente', 'Calma inmediata']
+  },
+  {
+    id: 'banos-bosque',
+    nombre: 'Baños de Bosque (Shinrin-Yoku)',
+    categoria: 'Conexión Naturaleza-Mente',
+    categoriaColor: 'bg-green-100 text-green-800',
+    descripcion: 'Caminata consciente en entorno verde',
+    duracion: '30 minutos',
+    frecuencia: 'Semanal',
+    icono: TreePine,
+    pasos: ['Encuentra un espacio verde', 'Camina en silencio', 'Respira aire puro', 'Conecta con la naturaleza'],
+    beneficios: ['Reducción cortisol', 'Conexión natural', 'Paz mental']
+  },
+  {
+    id: 'huerto-mental',
+    nombre: 'Huerto Mental',
+    categoria: 'Conexión Naturaleza-Mente',
+    categoriaColor: 'bg-green-100 text-green-800',
+    descripcion: 'Plantar y cuidar una planta como metáfora de crecimiento',
+    duracion: 'Variable',
+    frecuencia: 'Diario',
+    icono: Leaf,
+    pasos: ['Elige una planta pequeña', 'Cuídala diariamente', 'Observa su crecimiento', 'Registra tus emociones'],
+    beneficios: ['Paciencia', 'Cuidado personal', 'Simbolismo positivo']
+  }
+];
+
+const reglasHigieneMental = [
+  { icono: Moon, titulo: 'Sueño como primer tratamiento', descripcion: 'Dormir antes de la 1:00 AM, rutina sin pantallas', color: 'text-blue-600' },
+  { icono: Apple, titulo: 'Nutrición emocional', descripcion: 'Alimentos ricos en triptófano: avena, plátano, pescado azul', color: 'text-red-500' },
+  { icono: Dumbbell, titulo: 'Ejercicio como fármaco', descripcion: '20 minutos diarios = efecto antidepresivo natural', color: 'text-green-600' }
+];
+
+const lecturasRecomendadas = {
+  jovenes: [
+    { titulo: 'El cerebro adolescente', autor: 'Frances E. Jensen' },
+    { titulo: 'Emocionario', autor: 'Cristina Núñez' }
+  ],
+  adultos: [
+    { titulo: 'Más Platón y menos Prozac', autor: 'Lou Marinoff' },
+    { titulo: 'Vivir con plenitud las crisis', autor: 'Jon Kabat-Zinn' }
+  ]
+};
+
+const terapiasRecomendadas = [
+  { nombre: 'TCC', descripcion: 'Terapia Cognitivo-Conductual' },
+  { nombre: 'ACT', descripcion: 'Aceptación y Compromiso' },
+  { nombre: 'EMDR', descripcion: 'Para trauma' },
+  { nombre: 'Terapia Sistémica', descripcion: 'Para relaciones' }
+];
+
+const alertasClinicas = [
+  'Tristeza diaria > 14 días',
+  'Insomnio persistente',
+  'Ideación suicida o de inutilidad',
+  'Aislamiento social',
+  'Ansiedad intensa en lugares comunes',
+  'Reacciones explosivas fuera de contexto'
+];
+
 export default function RecursosGratis() {
   const { toast } = useToast();
   const [currentView, setCurrentView] = useState<'main' | 'emotional-log' | 'affirmation' | 'evaluation'>('main');
@@ -53,6 +188,7 @@ export default function RecursosGratis() {
   const [evaluationType, setEvaluationType] = useState<'ansiedad' | 'depresion' | 'autoestima'>('ansiedad');
   const [evaluationAnswers, setEvaluationAnswers] = useState<Record<string, number>>({});
   const [evaluationResult, setEvaluationResult] = useState<number | null>(null);
+  const [selectedActividad, setSelectedActividad] = useState<Actividad | null>(null);
 
   const emotions: Emotion[] = [
     { id: 'feliz', name: 'Feliz', emoji: '😊', color: 'bg-green-100 hover:bg-green-200 border-green-300' },
@@ -761,6 +897,272 @@ export default function RecursosGratis() {
               </Card>
             </div>
           </div>
+
+          {/* Sección de Actividades Integrales */}
+          <div className="mb-12">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                Activación integral de recursos psicológicos y neurales
+              </h2>
+              <p className="text-gray-600">para el bienestar personal</p>
+              
+              <div className="flex flex-wrap gap-2 justify-center mt-4">
+                <Badge className="bg-gray-100 text-gray-700">Neuropsicológico</Badge>
+                <Badge className="bg-gray-100 text-gray-700">TCC</Badge>
+                <Badge className="bg-gray-100 text-gray-700">Mindfulness</Badge>
+                <Badge className="bg-gray-100 text-gray-700">ACT</Badge>
+              </div>
+            </div>
+
+            <Tabs defaultValue="actividades" className="w-full">
+              <TabsList className="grid w-full grid-cols-4 mb-6 bg-gray-100">
+                <TabsTrigger value="actividades" data-testid="tab-actividades">Actividades</TabsTrigger>
+                <TabsTrigger value="recomendaciones" data-testid="tab-recomendaciones">Recomendaciones</TabsTrigger>
+                <TabsTrigger value="alertas" data-testid="tab-alertas">Alertas</TabsTrigger>
+                <TabsTrigger value="recursos" data-testid="tab-recursos">Recursos</TabsTrigger>
+              </TabsList>
+
+              {/* Tab Actividades */}
+              <TabsContent value="actividades">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {actividades.map((actividad) => {
+                    const IconComponent = actividad.icono;
+                    return (
+                      <Card
+                        key={actividad.id}
+                        className="p-5 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-white to-gray-50 border border-gray-200"
+                        onClick={() => setSelectedActividad(actividad)}
+                        data-testid={`card-actividad-${actividad.id}`}
+                      >
+                        <div className="flex items-start gap-3 mb-3">
+                          <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                            <IconComponent className="w-5 h-5 text-gray-700" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-bold text-gray-900 text-sm leading-tight">{actividad.nombre}</h4>
+                            <Badge className={`${actividad.categoriaColor} text-xs mt-1`}>
+                              {actividad.categoria}
+                            </Badge>
+                          </div>
+                        </div>
+                        <p className="text-gray-600 text-sm mb-3">{actividad.descripcion}</p>
+                        <div className="flex items-center justify-between text-xs text-gray-500">
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            <span>{actividad.duracion}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <CalendarDays className="w-3 h-3" />
+                            <span>{actividad.frecuencia}</span>
+                          </div>
+                        </div>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </TabsContent>
+
+              {/* Tab Recomendaciones */}
+              <TabsContent value="recomendaciones">
+                {/* Reglas de Higiene Mental */}
+                <Card className="p-6 mb-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Sun className="w-5 h-5 text-yellow-500" />
+                    <h3 className="text-lg font-bold text-gray-900">Reglas Básicas de Higiene Mental</h3>
+                  </div>
+                  <p className="text-sm text-gray-500 mb-4">Basadas en la Guía de Práctica Clínica del SNS y neuroplasticidad</p>
+                  <div className="space-y-4">
+                    {reglasHigieneMental.map((regla, index) => {
+                      const IconComponent = regla.icono;
+                      return (
+                        <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                          <IconComponent className={`w-5 h-5 ${regla.color} flex-shrink-0 mt-0.5`} />
+                          <div>
+                            <h4 className="font-semibold text-gray-900 text-sm">{regla.titulo}</h4>
+                            <p className="text-gray-600 text-sm">{regla.descripcion}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Card>
+
+                {/* Lecturas y Terapias */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Card className="p-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <BookOpen className="w-5 h-5 text-blue-600" />
+                      <h3 className="text-lg font-bold text-gray-900">Lecturas Recomendadas</h3>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h4 className="font-semibold text-gray-700 text-sm mb-2">Para usuarios jóvenes</h4>
+                      {lecturasRecomendadas.jovenes.map((libro, index) => (
+                        <div key={index} className="flex items-center gap-2 mb-2">
+                          <CheckCircle2 className="w-4 h-4 text-green-500" />
+                          <span className="text-sm"><strong>{libro.titulo}</strong> - {libro.autor}</span>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-semibold text-gray-700 text-sm mb-2">Adultos en crisis</h4>
+                      {lecturasRecomendadas.adultos.map((libro, index) => (
+                        <div key={index} className="flex items-center gap-2 mb-2">
+                          <CheckCircle2 className="w-4 h-4 text-green-500" />
+                          <span className="text-sm"><strong>{libro.titulo}</strong> - {libro.autor}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+
+                  <Card className="p-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Star className="w-5 h-5 text-amber-500" />
+                      <h3 className="text-lg font-bold text-gray-900">Terapias Recomendadas</h3>
+                    </div>
+                    <div className="space-y-3">
+                      {terapiasRecomendadas.map((terapia, index) => (
+                        <div key={index} className="flex items-start gap-2 p-3 bg-gray-50 rounded-lg">
+                          <Star className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                          <div>
+                            <h4 className="font-bold text-gray-900 text-sm">{terapia.nombre}</h4>
+                            <p className="text-gray-600 text-xs">{terapia.descripcion}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                </div>
+              </TabsContent>
+
+              {/* Tab Alertas */}
+              <TabsContent value="alertas">
+                <Card className="p-6 bg-red-50 border-red-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <AlertTriangle className="w-6 h-6 text-red-600" />
+                    <h3 className="text-xl font-bold text-red-800">Indicadores de Alerta Clínica</h3>
+                  </div>
+                  <p className="text-red-700 text-sm mb-6">
+                    Si aparece alguno de estos síntomas: derivación inmediata a psicólogo o médico
+                  </p>
+                  <div className="space-y-3">
+                    {alertasClinicas.map((alerta, index) => (
+                      <div 
+                        key={index} 
+                        className="flex items-center gap-3 p-4 bg-red-100 border border-red-200 rounded-lg"
+                      >
+                        <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                        <span className="text-red-800 font-medium">{alerta}</span>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </TabsContent>
+
+              {/* Tab Recursos */}
+              <TabsContent value="recursos">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Card className="p-6">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4">Líneas de Ayuda</h3>
+                    <div className="space-y-3">
+                      <div className="p-3 bg-blue-50 rounded-lg">
+                        <p className="font-bold text-blue-800">Teléfono de la Esperanza</p>
+                        <p className="text-blue-600 text-lg font-mono">717 003 717</p>
+                      </div>
+                      <div className="p-3 bg-green-50 rounded-lg">
+                        <p className="font-bold text-green-800">Emergencias</p>
+                        <p className="text-green-600 text-lg font-mono">112</p>
+                      </div>
+                      <div className="p-3 bg-purple-50 rounded-lg">
+                        <p className="font-bold text-purple-800">Atención al menor</p>
+                        <p className="text-purple-600 text-lg font-mono">116 111</p>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card className="p-6">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4">Apps Complementarias</h3>
+                    <div className="space-y-3">
+                      <div className="p-3 bg-gray-50 rounded-lg">
+                        <p className="font-semibold text-gray-800">Headspace</p>
+                        <p className="text-gray-600 text-sm">Meditación guiada</p>
+                      </div>
+                      <div className="p-3 bg-gray-50 rounded-lg">
+                        <p className="font-semibold text-gray-800">Calm</p>
+                        <p className="text-gray-600 text-sm">Relajación y sueño</p>
+                      </div>
+                      <div className="p-3 bg-gray-50 rounded-lg">
+                        <p className="font-semibold text-gray-800">Insight Timer</p>
+                        <p className="text-gray-600 text-sm">Meditación gratuita</p>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
+
+          {/* Modal Actividad Detalle */}
+          <Dialog open={!!selectedActividad} onOpenChange={() => setSelectedActividad(null)}>
+            <DialogContent className="max-w-md">
+              {selectedActividad && (
+                <>
+                  <DialogHeader>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
+                        <selectedActividad.icono className="w-6 h-6 text-gray-700" />
+                      </div>
+                      <div>
+                        <DialogTitle className="text-xl">{selectedActividad.nombre}</DialogTitle>
+                        <Badge className={`${selectedActividad.categoriaColor} text-xs mt-1`}>
+                          {selectedActividad.categoria}
+                        </Badge>
+                      </div>
+                    </div>
+                  </DialogHeader>
+                  
+                  <p className="text-gray-600">{selectedActividad.descripcion}</p>
+                  
+                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-4 h-4" />
+                      <span>{selectedActividad.duracion}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <CalendarDays className="w-4 h-4" />
+                      <span>{selectedActividad.frecuencia}</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-3">Pasos a seguir:</h4>
+                    <div className="space-y-2">
+                      {selectedActividad.pasos.map((paso, index) => (
+                        <div key={index} className="flex items-start gap-3">
+                          <span className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-sm font-medium text-gray-600 flex-shrink-0">
+                            {index + 1}
+                          </span>
+                          <span className="text-gray-700">{paso}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-gray-900 mb-3">Beneficios:</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedActividad.beneficios.map((beneficio, index) => (
+                        <Badge key={index} variant="outline" className="bg-gray-50">
+                          {beneficio}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+            </DialogContent>
+          </Dialog>
 
           {/* CTA Final */}
           <Card className="p-8 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white border-none">
