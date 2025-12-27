@@ -119,6 +119,9 @@ export const translations = {
     'chat.filters.today': 'Hoy',
     'chat.filters.week': 'Semana',
     'chat.filters.month': 'Mes',
+    'chat.mode.classic': 'Modo Clásico',
+    'chat.mode.bubbles': 'Modo Burbujas',
+    'credits.buy': 'Comprar Créditos',
     
     // Question Limit
     'limit.title': 'Preguntas este mes',
@@ -259,6 +262,9 @@ export const translations = {
     'chat.filters.today': 'Today',
     'chat.filters.week': 'Week',
     'chat.filters.month': 'Month',
+    'chat.mode.classic': 'Classic Mode',
+    'chat.mode.bubbles': 'Bubbles Mode',
+    'credits.buy': 'Buy Credits',
     
     // Question Limit
     'limit.title': 'Questions this month',
