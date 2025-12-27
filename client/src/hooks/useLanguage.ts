@@ -75,7 +75,7 @@ export const translations = {
     'examples.cta.note': 'Gratis • Sin necesidad de registro',
     
     // Pricing Section
-    'pricing.title': 'NFLOW Premium',
+    'pricing.title': 'NUXA Premium',
     'pricing.subtitle': 'Suscripción Premium',
     'pricing.description': 'Desbloquea acceso completo a recursos exclusivos y servicios personalizados',
     'pricing.popular': 'Más Popular',
@@ -105,7 +105,7 @@ export const translations = {
     'pricing.individual.feature3': 'Acceso anticipado a nuevas funcionalidades',
     
     // Chat
-    'chat.welcome.title': 'Bienvenido a NFLOW Chat',
+    'chat.welcome.title': 'Bienvenido a NUXA Chat',
     'chat.welcome.description': 'Selecciona una conversación existente o crea una nueva para comenzar a chatear con nuestro asistente de IA.',
     'chat.welcome.cta': 'Crear Nueva Conversación',
     'chat.select.conversation': 'Seleccionar conversación',
@@ -136,7 +136,7 @@ export const translations = {
     'chat.suggestions.stressShort': 'Manejo del estrés',
     
     // PWA Install
-    'pwa.title': 'Instalar NFLOW',
+    'pwa.title': 'Instalar NUXA',
     'pwa.subtitle': 'Descarga la app para acceso rápido',
     'pwa.install': 'Instalar App',
     'pwa.dismiss': 'Ahora no',
@@ -215,7 +215,7 @@ export const translations = {
     'examples.cta.note': 'Free • No registration required',
     
     // Pricing Section
-    'pricing.title': 'NFLOW Premium',
+    'pricing.title': 'NUXA Premium',
     'pricing.subtitle': 'Premium Subscription',
     'pricing.description': 'Unlock complete access to exclusive resources and personalized services',
     'pricing.popular': 'Most Popular',
@@ -245,7 +245,7 @@ export const translations = {
     'pricing.individual.feature3': 'Early access to new features',
     
     // Chat
-    'chat.welcome.title': 'Welcome to NFLOW Chat',
+    'chat.welcome.title': 'Welcome to NUXA Chat',
     'chat.welcome.description': 'Select an existing conversation or create a new one to start chatting with our AI assistant.',
     'chat.welcome.cta': 'Create New Conversation',
     'chat.select.conversation': 'Select conversation',
@@ -276,7 +276,7 @@ export const translations = {
     'chat.suggestions.stressShort': 'Stress management',
     
     // PWA Install
-    'pwa.title': 'Install NFLOW',
+    'pwa.title': 'Install NUXA',
     'pwa.subtitle': 'Download the app for quick access',
     'pwa.install': 'Install App',
     'pwa.dismiss': 'Not now',
@@ -300,7 +300,7 @@ export const translations = {
   fr: {
     'nav.home': 'Accueil',
     'hero.cta': 'Commencer Chat',
-    'chat.welcome.title': 'Bienvenue dans NFLOW Chat',
+    'chat.welcome.title': 'Bienvenue dans NUXA Chat',
     'chat.conversations.new': 'Nouveau',
     'chat.filters.all': 'Tous',
     'chat.filters.today': 'Aujourd\'hui',
@@ -310,7 +310,7 @@ export const translations = {
   de: {
     'nav.home': 'Startseite',
     'hero.cta': 'Chat Starten',
-    'chat.welcome.title': 'Willkommen bei NFLOW Chat',
+    'chat.welcome.title': 'Willkommen bei NUXA Chat',
     'chat.conversations.new': 'Neu',
     'chat.filters.all': 'Alle',
     'chat.filters.today': 'Heute',
@@ -320,7 +320,7 @@ export const translations = {
   it: {
     'nav.home': 'Casa',
     'hero.cta': 'Inizia Chat',
-    'chat.welcome.title': 'Benvenuto in NFLOW Chat',
+    'chat.welcome.title': 'Benvenuto in NUXA Chat',
     'chat.conversations.new': 'Nuovo',
     'chat.filters.all': 'Tutti',
     'chat.filters.today': 'Oggi',
@@ -330,7 +330,7 @@ export const translations = {
   pt: {
     'nav.home': 'Início',
     'hero.cta': 'Iniciar Chat',
-    'chat.welcome.title': 'Bem-vindo ao NFLOW Chat',
+    'chat.welcome.title': 'Bem-vindo ao NUXA Chat',
     'chat.conversations.new': 'Novo',
     'chat.filters.all': 'Todos',
     'chat.filters.today': 'Hoje',
@@ -340,7 +340,7 @@ export const translations = {
   ca: {
     'nav.home': 'Inici',
     'hero.cta': 'Començar Chat',
-    'chat.welcome.title': 'Benvingut a NFLOW Chat',
+    'chat.welcome.title': 'Benvingut a NUXA Chat',
     'chat.conversations.new': 'Nou',
     'chat.filters.all': 'Tots',
     'chat.filters.today': 'Avui',
@@ -350,7 +350,7 @@ export const translations = {
   eu: {
     'nav.home': 'Hasiera',
     'hero.cta': 'Txata Hasi',
-    'chat.welcome.title': 'Ongi etorri NFLOW Chat-era',
+    'chat.welcome.title': 'Ongi etorri NUXA Chat-era',
     'chat.conversations.new': 'Berria',
     'chat.filters.all': 'Denak',
     'chat.filters.today': 'Gaur',
@@ -360,7 +360,7 @@ export const translations = {
   gl: {
     'nav.home': 'Inicio',
     'hero.cta': 'Comezar Chat',
-    'chat.welcome.title': 'Benvido a NFLOW Chat',
+    'chat.welcome.title': 'Benvido a NUXA Chat',
     'chat.conversations.new': 'Novo',
     'chat.filters.all': 'Todos',
     'chat.filters.today': 'Hoxe',

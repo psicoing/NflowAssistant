@@ -76,7 +76,7 @@ export default function ServicesSection() {
                         <div className="w-10 h-10 bg-black/20 rounded-full mx-auto mb-2 flex items-center justify-center">
                           <MessageCircle className="w-5 h-5 text-black" />
                         </div>
-                        <h3 className="text-black font-bold text-sm">NFLOW Chat</h3>
+                        <h3 className="text-black font-bold text-sm">NUXA Chat</h3>
                         <p className="text-black/70 text-xs">Tu psicólogo digital</p>
                       </div>
                       
