@@ -638,7 +638,7 @@ export default function ChatInterface({
             <Bot className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-white text-sm">NFLOW Assistant</h3>
+            <h3 className="font-semibold text-white text-sm">NUXA Assistant</h3>
             <p className="text-xs text-gray-300 flex items-center">
               <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5 animate-pulse"></span>
               Tu psicólogo digital
@@ -667,7 +667,7 @@ export default function ChatInterface({
                 <div className="absolute -inset-4 bg-gradient-to-r from-nflow-orange/20 to-nflow-blue/20 rounded-3xl blur-xl"></div>
               </div>
               <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
-                ¡Hola! Soy tu psicólogo NFLOW
+                ¡Hola! Soy tu psicólogo NUXA
               </h3>
               <p className="text-gray-300 mb-6 md:mb-8 max-w-sm md:max-w-md mx-auto leading-relaxed text-sm md:text-base px-4">
                 Estoy aquí para brindarte apoyo emocional profesional y confidencial. 
@@ -919,7 +919,7 @@ export default function ChatInterface({
             <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
             <span>Conversación confidencial y segura</span>
             <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-            <span>NFLOW puede cometer errores ocasionales</span>
+            <span>NUXA puede cometer errores ocasionales</span>
             <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
           </div>
         </div>
