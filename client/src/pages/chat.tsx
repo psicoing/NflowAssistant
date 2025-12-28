@@ -14,7 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
-import { MessageCircle, Plus, Search, Calendar, Clock, List, MessageSquare } from "lucide-react";
+import { MessageCircle, Plus, Search, Calendar, Clock, List, MessageSquare, Globe } from "lucide-react";
+import { GoogleTranslateDialog } from "@/components/ui/google-translate-dialog";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import type { Conversation, Message } from "@shared/schema";
@@ -40,7 +41,7 @@ export default function Chat() {
 
   // Authentication handled by session-based auth
   const { user, isLoading: isAuthLoading } = useAuth();
-  const { t } = useLanguageContext();
+  const { t, currentLanguage, changeLanguage, languages } = useLanguageContext();
 
   // Check subscription status and redirect if needed
   useEffect(() => {
@@ -447,6 +448,36 @@ export default function Chat() {
                       </button>
                     ))}
                   </div>
+                  
+                  {/* Language Selector Mobile */}
+                  <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-lg p-3 border border-blue-500/30">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Globe className="w-4 h-4 text-blue-400" />
+                      <span className="text-sm font-medium text-blue-300">{t('chat.language')}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {languages.slice(0, 4).map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={() => changeLanguage(lang.code)}
+                          className={`px-2 py-1 text-xs rounded-md transition-all ${
+                            currentLanguage === lang.code
+                              ? "bg-nflow-orange text-white font-semibold"
+                              : "bg-gray-700/50 text-gray-300 hover:bg-gray-600/50"
+                          }`}
+                        >
+                          {lang.flag} {lang.code.toUpperCase()}
+                        </button>
+                      ))}
+                      <GoogleTranslateDialog 
+                        trigger={
+                          <button className="px-2 py-1 text-xs rounded-md bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 transition-all">
+                            🌐 +{languages.length - 4}
+                          </button>
+                        }
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Conversations List */}
@@ -530,6 +561,39 @@ export default function Chat() {
           <div className="p-6 border-b border-gray-700/50 space-y-4">
             {/* Question Limit Indicator */}
             <QuestionLimitIndicator />
+            
+            {/* Language Selector */}
+            <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-lg p-3 border border-blue-500/30">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center space-x-2">
+                  <Globe className="w-4 h-4 text-blue-400" />
+                  <span className="text-sm font-medium text-blue-300">{t('chat.language')}</span>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {languages.slice(0, 4).map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => changeLanguage(lang.code)}
+                    className={`px-2 py-1 text-xs rounded-md transition-all ${
+                      currentLanguage === lang.code
+                        ? "bg-nflow-orange text-white font-semibold"
+                        : "bg-gray-700/50 text-gray-300 hover:bg-gray-600/50"
+                    }`}
+                    data-testid={`button-lang-${lang.code}`}
+                  >
+                    {lang.flag} {lang.code.toUpperCase()}
+                  </button>
+                ))}
+                <GoogleTranslateDialog 
+                  trigger={
+                    <button className="px-2 py-1 text-xs rounded-md bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 transition-all">
+                      🌐 +{languages.length - 4}
+                    </button>
+                  }
+                />
+              </div>
+            </div>
             
             {/* Purchase Credits Button */}
             <PurchaseCreditsModal>

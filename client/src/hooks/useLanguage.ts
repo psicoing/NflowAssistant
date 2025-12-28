@@ -121,6 +121,8 @@ export const translations = {
     'chat.filters.month': 'Mes',
     'chat.mode.classic': 'Modo Clásico',
     'chat.mode.bubbles': 'Modo Burbujas',
+    'chat.language': 'Idioma',
+    'chat.language.more': 'Más idiomas',
     'credits.buy': 'Comprar Créditos',
     
     // Question Limit
@@ -264,6 +266,8 @@ export const translations = {
     'chat.filters.month': 'Month',
     'chat.mode.classic': 'Classic Mode',
     'chat.mode.bubbles': 'Bubbles Mode',
+    'chat.language': 'Language',
+    'chat.language.more': 'More languages',
     'credits.buy': 'Buy Credits',
     
     // Question Limit
