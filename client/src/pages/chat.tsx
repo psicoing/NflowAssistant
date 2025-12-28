@@ -134,15 +134,18 @@ export default function Chat() {
   // Send message mutation with auto-conversation creation
   const sendMessageMutation = useMutation({
     mutationFn: async ({ conversationId, content }: { conversationId: number; content: string }) => {
+      // Get locale from current language
+      const locale = currentLanguage === 'en' ? 'en-US' : currentLanguage === 'fr' ? 'fr-FR' : currentLanguage === 'de' ? 'de-DE' : 'es-ES';
       const response = await fetch(`/api/conversations/${conversationId}/messages`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          'Accept-Language': 'es-ES'
+          'Accept-Language': locale
         },
         body: JSON.stringify({
           content,
           userProfile,
+          language: currentLanguage, // Also send in body for explicit language selection
         }),
         credentials: 'include',
       });

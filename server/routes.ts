@@ -482,7 +482,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/conversations/:id/messages", async (req, res) => {
     try {
       const conversationId = parseInt(req.params.id);
-      const { content, userProfile } = req.body;
+      const { content, userProfile, language } = req.body;
       const userId = req.session.userId;
 
       console.log(`Processing message for conversation ${conversationId}, user ${userId}`);
@@ -521,11 +521,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get conversation history for AI context
       const history = await storage.getMessages(conversationId);
 
-      // Get user language from request headers or default to Spanish
-      const userLanguage = req.headers['accept-language']?.split(',')[0]?.split('-')[0] || 'es';
+      // Get user language: prefer explicit language from body, then Accept-Language header, default to Spanish
+      const userLanguage = language || req.headers['accept-language']?.split(',')[0]?.split('-')[0] || 'es';
       
       // Process the message with AI
-      console.log("Calling processUserMessage with:", content);
+      console.log("Calling processUserMessage with:", content, "language:", userLanguage);
       const aiResponse = await processUserMessage(content, history, userProfile, userLanguage);
       console.log("AI Response received:", aiResponse);
 
