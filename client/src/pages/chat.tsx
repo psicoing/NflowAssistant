@@ -47,8 +47,8 @@ export default function Chat() {
   useEffect(() => {
     if (!isAuthLoading && user && !user.hasActiveSubscription) {
       toast({
-        title: "Aplicación de pago",
-        description: "NFLOW es de pago. Debes comprar una suscripción para usar el chat",
+        title: t('chat.subscription.required.title'),
+        description: t('chat.subscription.required.description'),
         variant: "destructive",
         duration: 5000,
       });
@@ -164,8 +164,8 @@ export default function Chat() {
       // Handle question limit exceeded (429 status)
       if (error.message?.includes("429")) {
         toast({
-          title: "Límite alcanzado",
-          description: "Has alcanzado tu límite de preguntas mensuales",
+          title: t('chat.limit.title'),
+          description: t('chat.limit.description'),
           variant: "destructive",
         });
         queryClient.invalidateQueries({ queryKey: ["/api/question-limit"] });
@@ -173,8 +173,8 @@ export default function Chat() {
       }
       
       toast({
-        title: "Error",
-        description: "No se pudo enviar el mensaje",
+        title: t('chat.error'),
+        description: t('chat.error.send'),
         variant: "destructive",
       });
     },
@@ -182,7 +182,8 @@ export default function Chat() {
 
   // Handle new chat creation
   const handleNewChat = () => {
-    const title = `Conversación ${new Date().toLocaleDateString("es-ES")} ${new Date().toLocaleTimeString("es-ES", { hour: '2-digit', minute: '2-digit' })}`;
+    const locale = currentLanguage === 'en' ? 'en-US' : currentLanguage === 'fr' ? 'fr-FR' : currentLanguage === 'de' ? 'de-DE' : 'es-ES';
+    const title = `${t('chat.conversation.title')} ${new Date().toLocaleDateString(locale)} ${new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}`;
     createConversationMutation.mutate(title);
   };
 
@@ -216,14 +217,14 @@ export default function Chat() {
       queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
       
       toast({
-        title: "Perfil completado",
-        description: "Tu información ha sido guardada exitosamente.",
+        title: t('chat.profile.saved.title'),
+        description: t('chat.profile.saved.description'),
       });
     } catch (error) {
       console.error("Error saving profile:", error);
       toast({
-        title: "Error",
-        description: "No se pudo guardar el perfil. Intenta de nuevo.",
+        title: t('chat.error'),
+        description: t('chat.error.profile'),
         variant: "destructive",
       });
     }
@@ -233,7 +234,8 @@ export default function Chat() {
   const handleSendMessage = async (content: string) => {
     if (!currentConversationId) {
       // Auto-create conversation if none exists
-      const title = `Conversación ${new Date().toLocaleDateString("es-ES")} ${new Date().toLocaleTimeString("es-ES", { hour: '2-digit', minute: '2-digit' })}`;
+      const locale = currentLanguage === 'en' ? 'en-US' : currentLanguage === 'fr' ? 'fr-FR' : currentLanguage === 'de' ? 'de-DE' : 'es-ES';
+      const title = `${t('chat.conversation.title')} ${new Date().toLocaleDateString(locale)} ${new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}`;
       try {
         const newConversation = await createConversationMutation.mutateAsync(title);
         // Wait for conversation to be created, then send message
@@ -241,8 +243,8 @@ export default function Chat() {
       } catch (error) {
         console.error("Error in conversation creation or message sending:", error);
         toast({
-          title: "Error",
-          description: "No se pudo crear la conversación o enviar el mensaje",
+          title: t('chat.error'),
+          description: t('chat.error.create'),
           variant: "destructive",
         });
       }
@@ -271,8 +273,8 @@ export default function Chat() {
     setChatMode(newMode);
     localStorage.setItem('nflow-chat-mode', newMode);
     toast({
-      title: newMode === "bubbles" ? "Modo Burbujas Activado" : "Modo Clásico Activado",
-      description: newMode === "bubbles" ? "Chat con estilo WhatsApp" : "Chat con formato completo",
+      title: newMode === "bubbles" ? t('chat.mode.bubbles.activated') : t('chat.mode.classic.activated'),
+      description: newMode === "bubbles" ? t('chat.mode.bubbles.description') : t('chat.mode.classic.description'),
       duration: 2000,
     });
   };
@@ -485,7 +487,7 @@ export default function Chat() {
                   {isLoadingConversations ? (
                     <div className="text-center py-8">
                       <div className="animate-spin w-8 h-8 border-4 border-nflow-orange border-t-transparent rounded-full mx-auto mb-3" />
-                      <p className="text-gray-400 text-sm">Cargando conversaciones...</p>
+                      <p className="text-gray-400 text-sm">{t('chat.loading')}</p>
                     </div>
                   ) : filteredConversations.length === 0 ? (
                     <div className="text-center py-8">
@@ -508,12 +510,14 @@ export default function Chat() {
                           disabled={createConversationMutation.isPending}
                         >
                           <Plus className="w-4 h-4 mr-2" />
-                          {createConversationMutation.isPending ? "Creando..." : "Crear primera conversación"}
+                          {createConversationMutation.isPending ? t('chat.conversations.creating') : t('chat.conversations.createFirst')}
                         </Button>
                       )}
                     </div>
                   ) : (
-                    filteredConversations.map((conversation: Conversation) => (
+                    filteredConversations.map((conversation: Conversation) => {
+                      const locale = currentLanguage === 'en' ? 'en-US' : currentLanguage === 'fr' ? 'fr-FR' : currentLanguage === 'de' ? 'de-DE' : 'es-ES';
+                      return (
                       <Card
                         key={conversation.id}
                         className={`cursor-pointer transition-all duration-200 border ${
@@ -533,7 +537,7 @@ export default function Chat() {
                             {conversation.title}
                           </h3>
                           <p className="text-xs text-gray-400">
-                            {new Date(conversation.createdAt).toLocaleDateString("es-ES", {
+                            {new Date(conversation.createdAt).toLocaleDateString(locale, {
                               day: "2-digit",
                               month: "2-digit",
                               year: "numeric",
@@ -543,7 +547,7 @@ export default function Chat() {
                           </p>
                         </CardContent>
                       </Card>
-                    ))
+                    )})
                   )}
                 </div>
               </div>
@@ -673,15 +677,15 @@ export default function Chat() {
             {isLoadingConversations ? (
               <div className="text-center py-8">
                 <div className="animate-spin w-8 h-8 border-4 border-nflow-orange border-t-transparent rounded-full mx-auto mb-3" />
-                <p className="text-gray-400 text-sm">Cargando conversaciones...</p>
+                <p className="text-gray-400 text-sm">{t('chat.loading')}</p>
               </div>
             ) : filteredConversations.length === 0 ? (
               <div className="text-center py-8">
                 <MessageCircle className="w-12 h-12 text-gray-500 mx-auto mb-3" />
                 <p className="text-gray-400 text-sm mb-2">
                   {searchQuery || selectedDateFilter !== "all" 
-                    ? "No se encontraron conversaciones" 
-                    : "Aún no tienes conversaciones"
+                    ? t('chat.conversations.noResults')
+                    : t('chat.conversations.empty')
                   }
                 </p>
                 {!searchQuery && selectedDateFilter === "all" && (
@@ -693,12 +697,14 @@ export default function Chat() {
                     disabled={createConversationMutation.isPending}
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    {createConversationMutation.isPending ? "Creando..." : "Crear primera conversación"}
+                    {createConversationMutation.isPending ? t('chat.conversations.creating') : t('chat.conversations.createFirst')}
                   </Button>
                 )}
               </div>
             ) : (
-              filteredConversations.map((conversation: Conversation) => (
+              filteredConversations.map((conversation: Conversation) => {
+                const locale = currentLanguage === 'en' ? 'en-US' : currentLanguage === 'fr' ? 'fr-FR' : currentLanguage === 'de' ? 'de-DE' : 'es-ES';
+                return (
                 <Card
                   key={conversation.id}
                   className={`cursor-pointer transition-all duration-200 border ${
@@ -715,7 +721,7 @@ export default function Chat() {
                       {conversation.title}
                     </h3>
                     <p className="text-xs text-gray-400">
-                      {new Date(conversation.createdAt).toLocaleDateString("es-ES", {
+                      {new Date(conversation.createdAt).toLocaleDateString(locale, {
                         day: "2-digit",
                         month: "2-digit",
                         year: "numeric",
@@ -725,7 +731,7 @@ export default function Chat() {
                     </p>
                   </CardContent>
                 </Card>
-              ))
+              )})
             )}
           </div>
         </div>
