@@ -139,6 +139,9 @@ export const translations = {
     'chat.mode.bubbles.description': 'Chat con estilo WhatsApp',
     'chat.mode.classic.description': 'Chat con formato completo',
     'chat.conversation.title': 'Conversación',
+    'chat.success': 'Éxito',
+    'chat.newConversationCreated': 'Nueva conversación creada',
+    'chat.error.createConversation': 'No se pudo crear la conversación',
     'credits.buy': 'Comprar Créditos',
     
     // Question Limit
@@ -300,6 +303,9 @@ export const translations = {
     'chat.mode.bubbles.description': 'WhatsApp-style chat',
     'chat.mode.classic.description': 'Full format chat',
     'chat.conversation.title': 'Conversation',
+    'chat.success': 'Success',
+    'chat.newConversationCreated': 'New conversation created',
+    'chat.error.createConversation': 'Could not create conversation',
     'credits.buy': 'Buy Credits',
     
     // Question Limit

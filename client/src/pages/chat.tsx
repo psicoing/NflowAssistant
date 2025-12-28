@@ -117,15 +117,15 @@ export default function Chat() {
       setCurrentConversationId(newConversation.id);
       setLocation(`/chat/${newConversation.id}`);
       toast({
-        title: "Éxito",
-        description: "Nueva conversación creada",
+        title: t('chat.success'),
+        description: t('chat.newConversationCreated'),
       });
     },
     onError: (error) => {
       console.error("Error creating conversation:", error);
       toast({
-        title: "Error",
-        description: "No se pudo crear la conversación",
+        title: t('chat.error'),
+        description: t('chat.error.createConversation'),
         variant: "destructive",
       });
     },
