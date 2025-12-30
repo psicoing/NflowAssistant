@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
-import { MessageCircle, Plus, Search, Calendar, Clock, List, MessageSquare, Globe } from "lucide-react";
+import { MessageCircle, Plus, Search, Calendar, Clock, List, MessageSquare, Globe, BookOpen, Heart, Users, Briefcase, Brain, Sparkles, ArrowLeft, Lightbulb, Shield, Target, Smile, Moon, Dumbbell, TreePine } from "lucide-react";
 import { GoogleTranslateDialog } from "@/components/ui/google-translate-dialog";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
@@ -38,6 +38,7 @@ export default function Chat() {
     const saved = localStorage.getItem('nflow-chat-mode');
     return (saved === "bubbles" || saved === "classic") ? saved : "classic";
   });
+  const [showResourcesPanel, setShowResourcesPanel] = useState(false);
 
   // Authentication handled by session-based auth
   const { user, isLoading: isAuthLoading } = useAuth();
@@ -391,6 +392,16 @@ export default function Chat() {
             <MessageSquare className="w-4 h-4" />
           </Button>
           
+          {/* Resources Button Mobile */}
+          <Button
+            onClick={() => setShowResourcesPanel(true)}
+            size="sm"
+            className="px-2 flex-shrink-0 bg-emerald-600 hover:bg-emerald-500 text-white"
+            data-testid="button-open-resources-mobile"
+          >
+            <BookOpen className="w-4 h-4" />
+          </Button>
+          
           {/* Question Counter Mobile */}
           <div className="flex-shrink-0">
             <QuestionLimitIndicator compact={true} />
@@ -614,6 +625,16 @@ export default function Chat() {
               </Button>
             </PurchaseCreditsModal>
             
+            {/* Resources Button - Destacado */}
+            <Button
+              onClick={() => setShowResourcesPanel(true)}
+              className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold py-3 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 border-0"
+              data-testid="button-open-resources"
+            >
+              <BookOpen className="w-5 h-5 mr-2" />
+              📚 Recursos Profesionales
+            </Button>
+            
             {/* Chat Mode Toggle Desktop */}
             <div className="flex items-center justify-between bg-gray-700/30 rounded-lg p-3 border border-gray-600/30">
               <div className="flex items-center space-x-2">
@@ -780,6 +801,251 @@ export default function Chat() {
           )}
         </div>
       </div>
+
+      {/* Resources Panel - Full screen overlay */}
+      {showResourcesPanel && (
+        <div className="fixed inset-0 z-50 bg-gradient-to-br from-gray-900 via-gray-800 to-black overflow-y-auto">
+          {/* Header */}
+          <div className="sticky top-0 z-10 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700/50 p-4">
+            <div className="max-w-6xl mx-auto flex items-center justify-between">
+              <Button
+                onClick={() => setShowResourcesPanel(false)}
+                variant="ghost"
+                className="text-white hover:bg-white/10"
+                data-testid="button-close-resources"
+              >
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                Volver al chat
+              </Button>
+              <h1 className="text-xl font-bold text-white flex items-center gap-2">
+                <BookOpen className="w-6 h-6 text-emerald-400" />
+                Recursos Profesionales
+              </h1>
+              <div className="w-32" /> {/* Spacer for centering */}
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="max-w-6xl mx-auto p-6 space-y-8">
+            {/* Intro */}
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600/20 rounded-full text-emerald-400 text-sm font-medium mb-4">
+                <Sparkles className="w-4 h-4" />
+                Recursos basados en protocolos clínicos
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                Pide cualquiera de estos recursos en el chat
+              </h2>
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                Solo tienes que escribir en el chat lo que necesitas. NUXA te proporcionará guías paso a paso, 
+                técnicas profesionales y ejercicios personalizados.
+              </p>
+            </div>
+
+            {/* Personal Resources */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 bg-pink-600/20 rounded-xl">
+                  <Heart className="w-6 h-6 text-pink-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Para Ti - Bienestar Personal</h3>
+                  <p className="text-gray-400 text-sm">Recursos para tu salud mental y emocional</p>
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[
+                  { icon: Brain, title: "Gestión de la ansiedad", desc: "Técnicas de respiración, grounding y relajación progresiva", prompt: "Dame técnicas para gestionar la ansiedad" },
+                  { icon: Moon, title: "Mejora del sueño", desc: "Higiene del sueño, relajación antes de dormir", prompt: "Necesito ayuda para dormir mejor" },
+                  { icon: Smile, title: "Autoestima y confianza", desc: "Ejercicios para fortalecer tu autoimagen", prompt: "Quiero mejorar mi autoestima" },
+                  { icon: Target, title: "Gestión del estrés", desc: "Mindfulness, CBT y técnicas de afrontamiento", prompt: "Dame un plan para reducir el estrés" },
+                  { icon: Lightbulb, title: "Pensamientos negativos", desc: "Reestructuración cognitiva y pensamiento positivo", prompt: "Cómo dejar de tener pensamientos negativos" },
+                  { icon: Shield, title: "Resiliencia emocional", desc: "Fortalecer tu capacidad de superar adversidades", prompt: "Quiero ser más resiliente emocionalmente" },
+                ].map((item, index) => (
+                  <Card 
+                    key={index}
+                    className="bg-gray-800/50 border-gray-700/50 hover:border-pink-500/50 hover:bg-gray-800 transition-all cursor-pointer group"
+                    onClick={() => {
+                      setShowResourcesPanel(false);
+                      // Auto-send the prompt if there's a conversation
+                      if (currentConversationId) {
+                        handleSendMessage(item.prompt);
+                      }
+                    }}
+                  >
+                    <CardContent className="p-5">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 bg-pink-600/20 rounded-lg group-hover:bg-pink-600/30 transition-colors">
+                          <item.icon className="w-5 h-5 text-pink-400" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-white mb-1">{item.title}</h4>
+                          <p className="text-gray-400 text-sm mb-2">{item.desc}</p>
+                          <p className="text-pink-400 text-xs italic">"{item.prompt}"</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Family Resources */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 bg-blue-600/20 rounded-xl">
+                  <Users className="w-6 h-6 text-blue-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Para tu Familia</h3>
+                  <p className="text-gray-400 text-sm">Recursos para mejorar las relaciones familiares</p>
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[
+                  { icon: Users, title: "Comunicación familiar", desc: "Técnicas para hablar y escuchar mejor", prompt: "Dame técnicas de comunicación familiar" },
+                  { icon: Heart, title: "Apoyo a adolescentes", desc: "Cómo acompañar los cambios de la adolescencia", prompt: "Cómo ayudar a mi hijo adolescente" },
+                  { icon: Shield, title: "Gestión de conflictos", desc: "Resolver desacuerdos de forma constructiva", prompt: "Cómo resolver conflictos en familia" },
+                  { icon: Brain, title: "Ayudar con ansiedad", desc: "Apoyar a un familiar con ansiedad o depresión", prompt: "Cómo ayudar a alguien con ansiedad" },
+                  { icon: Smile, title: "Crianza positiva", desc: "Pautas para una educación emocional sana", prompt: "Dame pautas de crianza positiva" },
+                  { icon: Moon, title: "Rutinas familiares", desc: "Crear hábitos saludables en familia", prompt: "Cómo crear rutinas saludables en familia" },
+                ].map((item, index) => (
+                  <Card 
+                    key={index}
+                    className="bg-gray-800/50 border-gray-700/50 hover:border-blue-500/50 hover:bg-gray-800 transition-all cursor-pointer group"
+                    onClick={() => {
+                      setShowResourcesPanel(false);
+                      if (currentConversationId) {
+                        handleSendMessage(item.prompt);
+                      }
+                    }}
+                  >
+                    <CardContent className="p-5">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 bg-blue-600/20 rounded-lg group-hover:bg-blue-600/30 transition-colors">
+                          <item.icon className="w-5 h-5 text-blue-400" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-white mb-1">{item.title}</h4>
+                          <p className="text-gray-400 text-sm mb-2">{item.desc}</p>
+                          <p className="text-blue-400 text-xs italic">"{item.prompt}"</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Business Resources */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 bg-amber-600/20 rounded-xl">
+                  <Briefcase className="w-6 h-6 text-amber-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Para tu Empresa</h3>
+                  <p className="text-gray-400 text-sm">Recursos para el bienestar laboral (ISO 45003)</p>
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[
+                  { icon: Target, title: "Prevención del burnout", desc: "Identificar y prevenir el agotamiento laboral", prompt: "Dame un plan de prevención del burnout" },
+                  { icon: Brain, title: "Estrés laboral", desc: "Técnicas para gestionar la presión del trabajo", prompt: "Cómo gestionar el estrés en el trabajo" },
+                  { icon: Users, title: "Liderazgo empático", desc: "Guía para liderar con inteligencia emocional", prompt: "Dame técnicas de liderazgo empático" },
+                  { icon: Shield, title: "Conflictos en equipo", desc: "Mediación y resolución de conflictos laborales", prompt: "Cómo resolver conflictos en mi equipo" },
+                  { icon: Dumbbell, title: "Productividad sana", desc: "Equilibrio entre rendimiento y bienestar", prompt: "Cómo ser productivo sin estresarme" },
+                  { icon: TreePine, title: "Work-life balance", desc: "Estrategias para conciliar vida y trabajo", prompt: "Cómo mejorar mi equilibrio vida-trabajo" },
+                ].map((item, index) => (
+                  <Card 
+                    key={index}
+                    className="bg-gray-800/50 border-gray-700/50 hover:border-amber-500/50 hover:bg-gray-800 transition-all cursor-pointer group"
+                    onClick={() => {
+                      setShowResourcesPanel(false);
+                      if (currentConversationId) {
+                        handleSendMessage(item.prompt);
+                      }
+                    }}
+                  >
+                    <CardContent className="p-5">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 bg-amber-600/20 rounded-lg group-hover:bg-amber-600/30 transition-colors">
+                          <item.icon className="w-5 h-5 text-amber-400" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-white mb-1">{item.title}</h4>
+                          <p className="text-gray-400 text-sm mb-2">{item.desc}</p>
+                          <p className="text-amber-400 text-xs italic">"{item.prompt}"</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Exercises & Techniques */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 bg-emerald-600/20 rounded-xl">
+                  <Sparkles className="w-6 h-6 text-emerald-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Ejercicios y Técnicas Guiadas</h3>
+                  <p className="text-gray-400 text-sm">NUXA te guía paso a paso</p>
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  { title: "Respiración 4-7-8", prompt: "Guíame en la respiración 4-7-8" },
+                  { title: "Técnica 5-4-3-2-1", prompt: "Hazme la técnica de grounding 5-4-3-2-1" },
+                  { title: "Meditación guiada", prompt: "Hazme una meditación guiada de 5 minutos" },
+                  { title: "Relajación muscular", prompt: "Guíame en relajación muscular progresiva" },
+                  { title: "Journaling emocional", prompt: "Ayúdame a escribir un diario emocional" },
+                  { title: "Reestructuración cognitiva", prompt: "Aplícame reestructuración cognitiva" },
+                  { title: "Visualización positiva", prompt: "Hazme un ejercicio de visualización" },
+                  { title: "Gratitud diaria", prompt: "Guíame en un ejercicio de gratitud" },
+                ].map((item, index) => (
+                  <Card 
+                    key={index}
+                    className="bg-emerald-600/10 border-emerald-600/30 hover:border-emerald-500/50 hover:bg-emerald-600/20 transition-all cursor-pointer"
+                    onClick={() => {
+                      setShowResourcesPanel(false);
+                      if (currentConversationId) {
+                        handleSendMessage(item.prompt);
+                      }
+                    }}
+                  >
+                    <CardContent className="p-4 text-center">
+                      <h4 className="font-semibold text-white text-sm">{item.title}</h4>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA */}
+            <Card className="bg-gradient-to-r from-emerald-600/20 to-teal-600/20 border-emerald-500/30">
+              <CardContent className="p-8 text-center">
+                <h3 className="text-2xl font-bold text-white mb-3">
+                  ¿No encuentras lo que buscas?
+                </h3>
+                <p className="text-gray-300 mb-6 max-w-xl mx-auto">
+                  Simplemente escribe en el chat lo que necesitas. NUXA puede ayudarte con cualquier tema 
+                  relacionado con salud mental, bienestar emocional o desarrollo personal.
+                </p>
+                <Button
+                  onClick={() => setShowResourcesPanel(false)}
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-8 py-3"
+                >
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Volver al Chat
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
     </div>
     </>
   );
