@@ -15,7 +15,7 @@ const menuItems = [
   },
   {
     id: "ejemplos-chat",
-    name: "Ejemplos del chat",
+    name: "Chatea con Nuxa",
     href: "/ejemplos-chat",
     icon: MessageCircle
   },
