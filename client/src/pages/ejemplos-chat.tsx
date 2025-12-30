@@ -3,8 +3,9 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronUp, Bot, User, MessageCircle, Brain, Heart, Users } from "lucide-react";
+import { ChevronDown, ChevronUp, Bot, User, MessageCircle, Brain, Heart, Users, Sparkles, Shield, Clock, Zap, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 
 // Función para convertir Markdown a HTML formateado
 function formatMarkdownToHtml(content: string): string {
@@ -951,6 +952,119 @@ export default function EjemplosChat() {
       <Header />
       
       <main className="pt-20 pb-16">
+        {/* Promotional Hero Card - Conversion focused */}
+        <section className="py-8 px-4 bg-gradient-to-br from-nflow-dark via-purple-900/20 to-nflow-dark">
+          <div className="max-w-5xl mx-auto">
+            <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-emerald-600/90 via-teal-600/90 to-cyan-600/90 shadow-2xl shadow-emerald-500/20">
+              {/* Decorative elements */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-yellow-400/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl" />
+              
+              <CardContent className="relative p-8 md:p-12">
+                <div className="grid md:grid-cols-2 gap-8 items-center">
+                  {/* Left content */}
+                  <div className="space-y-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm font-medium">
+                      <Sparkles className="w-4 h-4" />
+                      <span>Psicología + IA Especializada</span>
+                    </div>
+                    
+                    <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+                      NUXA no es ChatGPT con otro nombre
+                    </h2>
+                    
+                    <p className="text-lg text-white/90 leading-relaxed">
+                      Es un <strong>asistente de salud mental real</strong>, entrenado por psicólogos, 
+                      que te escucha, te entiende y te acompaña con técnicas profesionales adaptadas a ti.
+                    </p>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="flex items-center gap-3 text-white">
+                        <div className="p-2 bg-white/20 rounded-lg">
+                          <Shield className="w-5 h-5" />
+                        </div>
+                        <span className="text-sm font-medium">100% Confidencial</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-white">
+                        <div className="p-2 bg-white/20 rounded-lg">
+                          <Clock className="w-5 h-5" />
+                        </div>
+                        <span className="text-sm font-medium">Disponible 24/7</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-white">
+                        <div className="p-2 bg-white/20 rounded-lg">
+                          <Zap className="w-5 h-5" />
+                        </div>
+                        <span className="text-sm font-medium">Respuestas al instante</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-white">
+                        <div className="p-2 bg-white/20 rounded-lg">
+                          <Heart className="w-5 h-5" />
+                        </div>
+                        <span className="text-sm font-medium">Apoyo emocional real</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                      <Link href="/precios">
+                        <Button 
+                          size="lg" 
+                          className="w-full sm:w-auto bg-white text-emerald-700 hover:bg-gray-100 font-bold text-lg px-8 py-6 shadow-xl"
+                          data-testid="button-get-nuxa"
+                        >
+                          Empieza desde 2,99€/mes
+                          <ArrowRight className="w-5 h-5 ml-2" />
+                        </Button>
+                      </Link>
+                    </div>
+                    
+                    <p className="text-white/70 text-sm">
+                      Sin permanencia · Cancela cuando quieras · También pago por uso
+                    </p>
+                  </div>
+                  
+                  {/* Right content - Key differentiators */}
+                  <div className="space-y-4">
+                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                      <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <span className="text-2xl">🧠</span> ¿Por qué NUXA es diferente?
+                      </h3>
+                      <ul className="space-y-3 text-white/90">
+                        <li className="flex items-start gap-3">
+                          <span className="text-emerald-300 font-bold">✓</span>
+                          <span><strong>Protocolos clínicos reales</strong> - No respuestas genéricas</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-emerald-300 font-bold">✓</span>
+                          <span><strong>Técnicas de respiración, CBT, mindfulness</strong> guiadas paso a paso</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-emerald-300 font-bold">✓</span>
+                          <span><strong>Detecta urgencias</strong> y te conecta con profesionales</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-emerald-300 font-bold">✓</span>
+                          <span><strong>Memoria contextual</strong> - Recuerda tu historial</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-emerald-300 font-bold">✓</span>
+                          <span><strong>+150 idiomas</strong> - Te entiende en tu lengua</span>
+                        </li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-yellow-400/20 backdrop-blur-sm rounded-xl p-4 border border-yellow-400/30">
+                      <p className="text-white text-center font-medium">
+                        <span className="text-yellow-300">💡</span> Más de <strong>53.000 personas</strong> ya han probado NUXA
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Hero Section */}
         <section className="py-16 px-4 bg-gradient-to-b from-nflow-dark to-nflow-navy">
           <div className="max-w-4xl mx-auto text-center">
