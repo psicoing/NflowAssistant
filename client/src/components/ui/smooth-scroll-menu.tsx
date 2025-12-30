@@ -13,7 +13,7 @@ const menuItems = [
   },
   {
     id: "ejemplos-chat",
-    name: "Ejemplos del chat",
+    name: "Chatea con Nuxa",
     sectionId: "ejemplos-chat",
     icon: MessageCircle,
     isPage: true
