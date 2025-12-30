@@ -777,111 +777,6 @@ export default function RecursosGratis() {
             </p>
           </div>
 
-          {/* Tarjeta de Recursos Premium */}
-          <Card className="mb-10 relative overflow-hidden border-0 bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 shadow-2xl">
-            {/* Decorative elements */}
-            <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-yellow-400/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-xl" />
-            
-            <div className="relative p-8 md:p-10">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                {/* Left content */}
-                <div className="space-y-5">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm font-medium">
-                    <Crown className="w-4 h-4" />
-                    <span>Recursos Premium en el Chat</span>
-                  </div>
-                  
-                  <h2 className="text-2xl md:text-3xl font-bold text-white leading-tight">
-                    ¿No te apetece chatear? Accede a recursos profesionales
-                  </h2>
-                  
-                  <p className="text-lg text-white/90 leading-relaxed">
-                    Con cualquier plan NUXA, tienes acceso a <strong>guías, ejercicios y protocolos profesionales</strong> dentro del chat. 
-                    Solo tienes que pedirlos.
-                  </p>
-                  
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-white">
-                      <div className="p-2 bg-white/20 rounded-lg flex-shrink-0">
-                        <Heart className="w-5 h-5" />
-                      </div>
-                      <span><strong>Para ti:</strong> Técnicas de relajación, mindfulness, gestión emocional</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-white">
-                      <div className="p-2 bg-white/20 rounded-lg flex-shrink-0">
-                        <Users className="w-5 h-5" />
-                      </div>
-                      <span><strong>Para tu familia:</strong> Comunicación, crianza, apoyo a adolescentes</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-white">
-                      <div className="p-2 bg-white/20 rounded-lg flex-shrink-0">
-                        <Briefcase className="w-5 h-5" />
-                      </div>
-                      <span><strong>Para tu empresa:</strong> Gestión del estrés laboral, burnout, liderazgo</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                    <Link href="/precios">
-                      <Button 
-                        size="lg" 
-                        className="w-full sm:w-auto bg-white text-emerald-700 hover:bg-gray-100 font-bold text-lg px-8 py-6 shadow-xl"
-                        data-testid="button-recursos-premium"
-                      >
-                        Escoge tu plan
-                        <ArrowRight className="w-5 h-5 ml-2" />
-                      </Button>
-                    </Link>
-                  </div>
-                  
-                  <p className="text-white/70 text-sm">
-                    Sin permanencia · Cancela cuando quieras · También pago por uso
-                  </p>
-                </div>
-                
-                {/* Right content - Examples */}
-                <div className="space-y-4">
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                    <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                      <FileText className="w-5 h-5" />
-                      Ejemplos de lo que puedes pedir:
-                    </h3>
-                    <ul className="space-y-3 text-white/90 text-sm">
-                      <li className="flex items-start gap-3">
-                        <span className="text-emerald-300 font-bold">→</span>
-                        <span>"Dame una guía de respiración para la ansiedad"</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-emerald-300 font-bold">→</span>
-                        <span>"Necesito ejercicios para hablar con mi hijo adolescente"</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-emerald-300 font-bold">→</span>
-                        <span>"Dame técnicas para gestionar el estrés en el trabajo"</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-emerald-300 font-bold">→</span>
-                        <span>"Quiero un plan de autocuidado semanal"</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-emerald-300 font-bold">→</span>
-                        <span>"Explícame cómo ayudar a alguien con depresión"</span>
-                      </li>
-                    </ul>
-                  </div>
-                  
-                  <div className="bg-yellow-400/20 backdrop-blur-sm rounded-xl p-4 border border-yellow-400/30">
-                    <p className="text-white text-center font-medium text-sm">
-                      <Shield className="w-4 h-4 inline mr-2" />
-                      Recursos basados en protocolos clínicos reales
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Card>
-
           {/* Racha Diaria */}
           <Card className="mb-8 p-6 bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200">
             <div className="flex items-center justify-between">
@@ -1276,25 +1171,108 @@ export default function RecursosGratis() {
             </DialogContent>
           </Dialog>
 
-          {/* CTA Final */}
-          <Card className="p-8 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white border-none">
-            <div className="text-center">
-              <Brain className="w-16 h-16 mx-auto mb-4" />
-              <h2 className="text-3xl font-bold mb-4">
-                ¿Necesitas apoyo profesional personalizado?
-              </h2>
-              <p className="text-xl text-blue-100 mb-6">
-                Accede a NEUROPSI-AI, nuestra IA especializada en salud mental con conversaciones ilimitadas y seguimiento personalizado
-              </p>
-              <Button
-                size="lg"
-                className="bg-white text-indigo-600 hover:bg-gray-100 font-semibold px-8"
-                onClick={() => window.location.href = "/login"}
-                data-testid="button-cta-premium"
-              >
-                Comenzar Ahora
-                <ChevronRight className="w-5 h-5 ml-2" />
-              </Button>
+          {/* Tarjeta de Recursos Premium */}
+          <Card className="mb-10 relative overflow-hidden border-0 bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 shadow-2xl">
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-yellow-400/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-xl" />
+            
+            <div className="relative p-8 md:p-10">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                {/* Left content */}
+                <div className="space-y-5">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm font-medium">
+                    <Crown className="w-4 h-4" />
+                    <span>Recursos Premium en el Chat</span>
+                  </div>
+                  
+                  <h2 className="text-2xl md:text-3xl font-bold text-white leading-tight">
+                    ¿No te apetece chatear? Accede a recursos profesionales
+                  </h2>
+                  
+                  <p className="text-lg text-white/90 leading-relaxed">
+                    Con cualquier plan NUXA, tienes acceso a <strong>guías, ejercicios y protocolos profesionales</strong> dentro del chat. 
+                    Solo tienes que pedirlos.
+                  </p>
+                  
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-white">
+                      <div className="p-2 bg-white/20 rounded-lg flex-shrink-0">
+                        <Heart className="w-5 h-5" />
+                      </div>
+                      <span><strong>Para ti:</strong> Técnicas de relajación, mindfulness, gestión emocional</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-white">
+                      <div className="p-2 bg-white/20 rounded-lg flex-shrink-0">
+                        <Users className="w-5 h-5" />
+                      </div>
+                      <span><strong>Para tu familia:</strong> Comunicación, crianza, apoyo a adolescentes</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-white">
+                      <div className="p-2 bg-white/20 rounded-lg flex-shrink-0">
+                        <Briefcase className="w-5 h-5" />
+                      </div>
+                      <span><strong>Para tu empresa:</strong> Gestión del estrés laboral, burnout, liderazgo</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                    <Link href="/precios">
+                      <Button 
+                        size="lg" 
+                        className="w-full sm:w-auto bg-white text-emerald-700 hover:bg-gray-100 font-bold text-lg px-8 py-6 shadow-xl"
+                        data-testid="button-recursos-premium"
+                      >
+                        Escoge tu plan
+                        <ArrowRight className="w-5 h-5 ml-2" />
+                      </Button>
+                    </Link>
+                  </div>
+                  
+                  <p className="text-white/70 text-sm">
+                    Sin permanencia · Cancela cuando quieras · También pago por uso
+                  </p>
+                </div>
+                
+                {/* Right content - Examples */}
+                <div className="space-y-4">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                    <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                      <FileText className="w-5 h-5" />
+                      Ejemplos de lo que puedes pedir:
+                    </h3>
+                    <ul className="space-y-3 text-white/90 text-sm">
+                      <li className="flex items-start gap-3">
+                        <span className="text-emerald-300 font-bold">→</span>
+                        <span>"Dame una guía de respiración para la ansiedad"</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <span className="text-emerald-300 font-bold">→</span>
+                        <span>"Necesito ejercicios para hablar con mi hijo adolescente"</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <span className="text-emerald-300 font-bold">→</span>
+                        <span>"Dame técnicas para gestionar el estrés en el trabajo"</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <span className="text-emerald-300 font-bold">→</span>
+                        <span>"Quiero un plan de autocuidado semanal"</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <span className="text-emerald-300 font-bold">→</span>
+                        <span>"Explícame cómo ayudar a alguien con depresión"</span>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-yellow-400/20 backdrop-blur-sm rounded-xl p-4 border border-yellow-400/30">
+                    <p className="text-white text-center font-medium text-sm">
+                      <Shield className="w-4 h-4 inline mr-2" />
+                      Recursos basados en protocolos clínicos reales
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </Card>
         </div>
