@@ -867,10 +867,7 @@ export default function Chat() {
                     className="bg-gray-800/50 border-gray-700/50 hover:border-pink-500/50 hover:bg-gray-800 transition-all cursor-pointer group"
                     onClick={() => {
                       setShowResourcesPanel(false);
-                      // Auto-send the prompt if there's a conversation
-                      if (currentConversationId) {
-                        handleSendMessage(item.prompt);
-                      }
+                      handleSendMessage(item.prompt);
                     }}
                   >
                     <CardContent className="p-5">
@@ -915,9 +912,7 @@ export default function Chat() {
                     className="bg-gray-800/50 border-gray-700/50 hover:border-blue-500/50 hover:bg-gray-800 transition-all cursor-pointer group"
                     onClick={() => {
                       setShowResourcesPanel(false);
-                      if (currentConversationId) {
-                        handleSendMessage(item.prompt);
-                      }
+                      handleSendMessage(item.prompt);
                     }}
                   >
                     <CardContent className="p-5">
@@ -962,9 +957,7 @@ export default function Chat() {
                     className="bg-gray-800/50 border-gray-700/50 hover:border-amber-500/50 hover:bg-gray-800 transition-all cursor-pointer group"
                     onClick={() => {
                       setShowResourcesPanel(false);
-                      if (currentConversationId) {
-                        handleSendMessage(item.prompt);
-                      }
+                      handleSendMessage(item.prompt);
                     }}
                   >
                     <CardContent className="p-5">
@@ -1011,9 +1004,7 @@ export default function Chat() {
                     className="bg-emerald-600/10 border-emerald-600/30 hover:border-emerald-500/50 hover:bg-emerald-600/20 transition-all cursor-pointer"
                     onClick={() => {
                       setShowResourcesPanel(false);
-                      if (currentConversationId) {
-                        handleSendMessage(item.prompt);
-                      }
+                      handleSendMessage(item.prompt);
                     }}
                   >
                     <CardContent className="p-4 text-center">
