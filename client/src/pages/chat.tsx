@@ -632,7 +632,7 @@ export default function Chat() {
               data-testid="button-open-resources"
             >
               <BookOpen className="w-5 h-5 mr-2" />
-              📚 Recursos Profesionales
+              📚 {t('chat.resources')}
             </Button>
             
             {/* Chat Mode Toggle Desktop */}
@@ -815,11 +815,11 @@ export default function Chat() {
                 data-testid="button-close-resources"
               >
                 <ArrowLeft className="w-5 h-5 mr-2" />
-                Volver al chat
+                {t('chat.resources.back')}
               </Button>
               <h1 className="text-xl font-bold text-white flex items-center gap-2">
                 <BookOpen className="w-6 h-6 text-emerald-400" />
-                Recursos Profesionales
+                {t('chat.resources')}
               </h1>
               <div className="w-32" /> {/* Spacer for centering */}
             </div>
@@ -831,14 +831,13 @@ export default function Chat() {
             <div className="text-center mb-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600/20 rounded-full text-emerald-400 text-sm font-medium mb-4">
                 <Sparkles className="w-4 h-4" />
-                Recursos basados en protocolos clínicos
+                {t('chat.resources')}
               </div>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-                Pide cualquiera de estos recursos en el chat
+                {t('chat.resources.title')}
               </h2>
               <p className="text-gray-400 max-w-2xl mx-auto">
-                Solo tienes que escribir en el chat lo que necesitas. NUXA te proporcionará guías paso a paso, 
-                técnicas profesionales y ejercicios personalizados.
+                {t('chat.resources.description')}
               </p>
             </div>
 
@@ -849,8 +848,8 @@ export default function Chat() {
                   <Heart className="w-6 h-6 text-pink-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">Para Ti - Bienestar Personal</h3>
-                  <p className="text-gray-400 text-sm">Recursos para tu salud mental y emocional</p>
+                  <h3 className="text-xl font-bold text-white">{t('chat.resources.personal')}</h3>
+                  <p className="text-gray-400 text-sm">{t('chat.resources.personal.desc')}</p>
                 </div>
               </div>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -894,8 +893,8 @@ export default function Chat() {
                   <Users className="w-6 h-6 text-blue-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">Para tu Familia</h3>
-                  <p className="text-gray-400 text-sm">Recursos para mejorar las relaciones familiares</p>
+                  <h3 className="text-xl font-bold text-white">{t('chat.resources.family')}</h3>
+                  <p className="text-gray-400 text-sm">{t('chat.resources.family.desc')}</p>
                 </div>
               </div>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -939,8 +938,8 @@ export default function Chat() {
                   <Briefcase className="w-6 h-6 text-amber-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">Para tu Empresa</h3>
-                  <p className="text-gray-400 text-sm">Recursos para el bienestar laboral (ISO 45003)</p>
+                  <h3 className="text-xl font-bold text-white">{t('chat.resources.business')}</h3>
+                  <p className="text-gray-400 text-sm">{t('chat.resources.business.desc')}</p>
                 </div>
               </div>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -984,8 +983,8 @@ export default function Chat() {
                   <Sparkles className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">Ejercicios y Técnicas Guiadas</h3>
-                  <p className="text-gray-400 text-sm">NUXA te guía paso a paso</p>
+                  <h3 className="text-xl font-bold text-white">{t('chat.resources.exercises')}</h3>
+                  <p className="text-gray-400 text-sm">{t('chat.resources.exercises.desc')}</p>
                 </div>
               </div>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1019,18 +1018,17 @@ export default function Chat() {
             <Card className="bg-gradient-to-r from-emerald-600/20 to-teal-600/20 border-emerald-500/30">
               <CardContent className="p-8 text-center">
                 <h3 className="text-2xl font-bold text-white mb-3">
-                  ¿No encuentras lo que buscas?
+                  {t('chat.resources.notFound')}
                 </h3>
                 <p className="text-gray-300 mb-6 max-w-xl mx-auto">
-                  Simplemente escribe en el chat lo que necesitas. NUXA puede ayudarte con cualquier tema 
-                  relacionado con salud mental, bienestar emocional o desarrollo personal.
+                  {t('chat.resources.notFound.desc')}
                 </p>
                 <Button
                   onClick={() => setShowResourcesPanel(false)}
                   className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-8 py-3"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
-                  Volver al Chat
+                  {t('chat.resources.back')}
                 </Button>
               </CardContent>
             </Card>
