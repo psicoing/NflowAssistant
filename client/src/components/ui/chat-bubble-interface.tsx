@@ -185,8 +185,14 @@ function formatMarkdownToHtml(content: string, onOptionClick?: (option: string) 
     .replace(/\*\*¿Qué tanto te afecta en tu día a día\?\*\* \(0 = nada – 10 = muchísimo\)/g, '<div class="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 rounded-lg p-4 my-4"><div class="flex items-center space-x-2 mb-3"><span class="text-blue-600 dark:text-blue-300 font-semibold">📊</span><strong class="font-semibold text-gray-900 dark:text-white">¿Qué tanto te afecta en tu día a día?</strong></div><div class="grid grid-cols-11 gap-1 mb-2">' + Array.from({length: 11}, (_, i) => `<button class="interactive-scale-btn w-6 h-6 text-xs font-bold rounded border border-gray-400 dark:border-gray-500 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" data-value="${i}">${i}</button>`).join('') + '</div><div class="text-xs text-gray-600 dark:text-gray-400 flex justify-between"><span class="text-green-600 dark:text-green-400">0 = Nada</span><span class="text-red-600 dark:text-red-400">10 = Muchísimo</span></div></div>')
     // Escalas numericas genericas
     .replace(/\*\*Valora tu (.+?) del 0 al 10\*\* \(([^)]+)\)/g, '<div class="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 rounded-lg p-4 my-4"><div class="flex items-center space-x-2 mb-3"><span class="text-blue-600 dark:text-blue-300 font-semibold">📊</span><strong class="font-semibold text-gray-900 dark:text-white">Valora tu $1 del 0 al 10</strong></div><div class="grid grid-cols-11 gap-1 mb-2">' + Array.from({length: 11}, (_, i) => `<button class="interactive-scale-btn w-6 h-6 text-xs font-bold rounded border border-gray-400 dark:border-gray-500 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" data-value="${i}" data-scale-type="$1">${i}</button>`).join('') + '</div><div class="text-xs text-gray-600 dark:text-gray-400 flex justify-between"><span>$2</span></div></div>')
-    // Checkboxes interactivos ☐
-    .replace(/☐ (.+?)(?=\n|$)/g, '<div class="flex items-center space-x-3 my-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700/30 rounded cursor-pointer transition-all duration-200 checkbox-item" data-checkbox-text="$1"><input type="checkbox" class="interactive-checkbox w-4 h-4 text-emerald-600 bg-white dark:bg-gray-700 border-gray-400 dark:border-gray-600 rounded focus:ring-emerald-600 focus:ring-2" data-symptom="$1"><span class="text-gray-800 dark:text-gray-200 select-none">$1</span></div>')
+    // Checkboxes interactivos ☐ con botón de envío
+    .replace(/((?:☐ .+?(?:\n|$))+)/g, (match) => {
+      const checkboxes = match.split('\n').filter(line => line.trim().startsWith('☐')).map(line => {
+        const text = line.replace('☐ ', '').trim();
+        return `<div class="flex items-center space-x-3 my-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700/30 rounded cursor-pointer transition-all duration-200 checkbox-item" data-checkbox-text="${text}"><input type="checkbox" class="interactive-checkbox w-4 h-4 text-emerald-600 bg-white dark:bg-gray-700 border-gray-400 dark:border-gray-600 rounded focus:ring-emerald-600 focus:ring-2" data-symptom="${text}"><span class="text-gray-800 dark:text-gray-200 select-none">${text}</span></div>`;
+      }).join('');
+      return `<div class="checkbox-group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 my-3">${checkboxes}<button class="submit-checkboxes-btn w-full mt-4 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-emerald-500/25"><span>✓</span><span>Enviar selección</span></button></div>`;
+    })
     // Botones [Botón/Boton/Button X: ...] interactivos - regex robusto para acentos y multi-idioma
     .replace(/\[(Bot[óo]n|Button) ([A-Z]): ([^\]]+)\]/gi, '<button class="interactive-choice-btn bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-500/40 rounded-lg px-4 py-2 my-1 mx-1 cursor-pointer hover:bg-emerald-500/30 hover:border-emerald-500/60 transition-all duration-200 text-left inline-block" data-choice="$2" data-choice-text="$3"><div class="flex items-center space-x-2"><span class="bg-emerald-600 dark:bg-emerald-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">$2</span><span class="font-semibold text-gray-900 dark:text-white text-sm">$3</span></div></button>')
     // Preguntas Sí/No interactivas
@@ -501,17 +507,49 @@ export default function ChatBubbleInterface({
         const checkbox = target.querySelector('.interactive-checkbox') as HTMLInputElement;
         if (checkbox) {
           checkbox.checked = !checkbox.checked;
-          checkbox.dispatchEvent(new Event('click'));
+        }
+      }
+    };
+
+    // Handle submit checkboxes button
+    const handleSubmitCheckboxes = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const button = target.classList.contains('submit-checkboxes-btn') ? target : target.closest('.submit-checkboxes-btn') as HTMLElement;
+      
+      if (button) {
+        const checkboxGroup = button.closest('.checkbox-group');
+        if (checkboxGroup) {
+          const checkedBoxes = checkboxGroup.querySelectorAll('.interactive-checkbox:checked') as NodeListOf<HTMLInputElement>;
+          const selectedOptions = Array.from(checkedBoxes).map(cb => cb.getAttribute('data-symptom')).filter(Boolean);
+          
+          if (selectedOptions.length > 0 && onSendMessage) {
+            const message = `He marcado: ${selectedOptions.join(', ')}`;
+            onSendMessage(message);
+            toast({
+              title: "Selección enviada",
+              description: `Has seleccionado ${selectedOptions.length} opción(es)`,
+            });
+            // Reset checkboxes
+            checkedBoxes.forEach(cb => cb.checked = false);
+          } else {
+            toast({
+              title: "Ninguna opción seleccionada",
+              description: "Por favor, marca al menos una opción antes de enviar",
+              variant: "destructive",
+            });
+          }
         }
       }
     };
 
     messagesContainerRef.current.addEventListener('click', handleInteractionClick);
     messagesContainerRef.current.addEventListener('click', handleCheckboxClick);
+    messagesContainerRef.current.addEventListener('click', handleSubmitCheckboxes);
     
     return () => {
       messagesContainerRef.current?.removeEventListener('click', handleInteractionClick);
       messagesContainerRef.current?.removeEventListener('click', handleCheckboxClick);
+      messagesContainerRef.current?.removeEventListener('click', handleSubmitCheckboxes);
     };
   }, [onSendMessage, toast]);
 
