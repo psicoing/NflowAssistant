@@ -16,7 +16,7 @@ export default function NuxaBrandEvolutionSection() {
             🌿 <span className="text-orange-600 dark:text-orange-400">NUXA</span> — Tu espacio de bienestar
           </h2>
           <p className="text-gray-600 dark:text-gray-400 text-center max-w-xl">
-            Ciencia, emoción y conexión humana en un solo lugar
+            La evolución de NFlow: ciencia, emoción y conexión humana
           </p>
         </div>
 
