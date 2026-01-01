@@ -1,103 +1,52 @@
-import { Sparkles, Users, Heart, Leaf } from "lucide-react";
+import { Users, Heart, Sparkles } from "lucide-react";
 import nuxaLogo from "@assets/generated_images/NUXA_logo_with_circle_person_ba9dba6f.png";
 
 export default function NuxaBrandEvolutionSection() {
   return (
-    <section className="relative bg-white dark:bg-slate-900 py-16 md:py-20">
+    <section className="relative bg-white dark:bg-slate-900 py-12 md:py-16">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Badge */}
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 dark:bg-orange-900/30 rounded-full border-2 border-orange-200 dark:border-orange-800">
-            <Leaf className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-            <span className="text-sm font-bold text-orange-800 dark:text-orange-300">Evolución Natural</span>
-          </div>
-        </div>
-
-        {/* NUXA Logo */}
-        <div className="flex justify-center mb-8">
-          <div className="relative">
-            <div className="absolute inset-0 bg-orange-400 rounded-3xl blur-2xl opacity-20 animate-pulse"></div>
-            <img 
-              src={nuxaLogo} 
-              alt="NUXA App Icon" 
-              className="relative w-28 h-28 md:w-32 md:h-32 rounded-3xl shadow-2xl border-4 border-gray-200 dark:border-gray-700"
-            />
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="text-center space-y-6">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white">
-            🌿 Presentamos <span className="text-orange-600 dark:text-orange-400">NUXA</span>
+        {/* NUXA Logo + Title */}
+        <div className="flex flex-col items-center gap-4 mb-6">
+          <img 
+            src={nuxaLogo} 
+            alt="NUXA" 
+            className="w-20 h-20 md:w-24 md:h-24 rounded-2xl shadow-xl border-2 border-gray-200 dark:border-gray-700"
+          />
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white text-center">
+            🌿 <span className="text-orange-600 dark:text-orange-400">NUXA</span> — Tu espacio de bienestar
           </h2>
-          
-          <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 font-medium max-w-3xl mx-auto">
-            La evolución natural de NFlow
+          <p className="text-gray-600 dark:text-gray-400 text-center max-w-xl">
+            Ciencia, emoción y conexión humana en un solo lugar
           </p>
+        </div>
 
-          <div className="max-w-3xl mx-auto space-y-4 text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-            <p>
-              Después de meses de trabajo e investigación, hoy nace <strong className="text-orange-600 dark:text-orange-400">NUXA</strong>, una versión más cercana, emocional y universal de nuestro proyecto de salud mental digital.
-            </p>
-            
-            <p>
-              <strong className="text-gray-900 dark:text-white">NUXA no es solo un nombre nuevo</strong>: es una manera de entender la vida. Suena a luz, a núcleo, a naturaleza. Representa el equilibrio entre ciencia, emoción y conexión humana.
+        {/* Features Grid - Compacto */}
+        <div className="grid grid-cols-3 gap-3 md:gap-4 max-w-2xl mx-auto">
+          <div className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl">
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center">
+              <Users className="w-5 h-5 text-white" />
+            </div>
+            <p className="text-xs md:text-sm text-gray-700 dark:text-gray-300 text-center font-medium">
+              Familias y empresas
             </p>
           </div>
 
-          {/* Features Grid */}
-          <div className="grid md:grid-cols-3 gap-6 mt-10 max-w-4xl mx-auto">
-            <div className="flex flex-col items-center gap-3 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 shadow-md">
-              <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center">
-                <Users className="w-6 h-6 text-white" />
-              </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300 text-center font-medium">
-                Adolescentes, familias y empresas
-              </p>
+          <div className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl">
+            <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full flex items-center justify-center">
+              <Heart className="w-5 h-5 text-white" />
             </div>
-
-            <div className="flex flex-col items-center gap-3 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 shadow-md">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full flex items-center justify-center">
-                <Heart className="w-6 h-6 text-white" />
-              </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300 text-center font-medium">
-                Bienestar psicológico y emocional
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center gap-3 p-6 bg-white dark:bg-slate-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 shadow-md">
-              <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300 text-center font-medium">
-                Psicología + Neurociencia + IA
-              </p>
-            </div>
-          </div>
-
-          {/* Mission Statement */}
-          <div className="mt-10 p-8 bg-gray-50 dark:bg-slate-800 rounded-3xl border-2 border-gray-200 dark:border-gray-700 shadow-sm">
-            <p className="text-lg md:text-xl text-gray-800 dark:text-gray-200 mb-4">
-              Con NUXA queremos dar un paso más: <strong>construir una comunidad donde hablar de salud mental sea tan natural como hablar de salud física.</strong>
-            </p>
-            <p className="text-base text-gray-600 dark:text-gray-400">
-              Un espacio digital que une psicología, neurociencia y tecnología, con un lenguaje claro, empático y accesible para todos.
+            <p className="text-xs md:text-sm text-gray-700 dark:text-gray-300 text-center font-medium">
+              Bienestar emocional
             </p>
           </div>
 
-          {/* Brand Tagline */}
-          <div className="mt-8">
-            <p className="text-2xl md:text-3xl font-bold text-orange-600 dark:text-orange-400">
-              💫 NUXA LIFE — donde empieza tu equilibrio
+          <div className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl">
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-white" />
+            </div>
+            <p className="text-xs md:text-sm text-gray-700 dark:text-gray-300 text-center font-medium">
+              Psicología + IA
             </p>
-            <a 
-              href="https://nuxa.life" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-block mt-4 text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-semibold transition-colors"
-            >
-              nuxa.life →
-            </a>
           </div>
         </div>
       </div>
