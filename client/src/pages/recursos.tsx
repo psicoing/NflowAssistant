@@ -1171,6 +1171,134 @@ export default function RecursosGratis() {
             </DialogContent>
           </Dialog>
 
+          {/* Tarjeta Empresas y Empleados - Riesgos Psicosociales */}
+          <Card className="mb-10 relative overflow-hidden border-2 border-blue-200 dark:border-blue-800 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 shadow-xl">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-blue-400/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
+            
+            <div className="relative p-6 md:p-8">
+              {/* Header */}
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-3 bg-blue-600 rounded-xl">
+                  <Briefcase className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
+                    Para Empresas y Empleados
+                  </h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Riesgos psicosociales laborales · ISO 45003
+                  </p>
+                </div>
+              </div>
+
+              {/* Grid de 6 riesgos */}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                {/* 1. Estrés laboral */}
+                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">😰</span>
+                    <h3 className="font-bold text-gray-900 dark:text-white text-sm">Estrés laboral crónico</h3>
+                  </div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                    Carga excesiva, plazos imposibles, falta de control.
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    <Badge variant="outline" className="text-xs bg-red-50 text-red-700 border-red-200">Ansiedad</Badge>
+                    <Badge variant="outline" className="text-xs bg-red-50 text-red-700 border-red-200">Insomnio</Badge>
+                  </div>
+                </div>
+
+                {/* 2. Burnout */}
+                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">🔥</span>
+                    <h3 className="font-bold text-gray-900 dark:text-white text-sm">Burnout</h3>
+                  </div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                    No es cansancio. Es quemarse por dentro.
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700 border-orange-200">Cinismo</Badge>
+                    <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700 border-orange-200">Fatiga</Badge>
+                  </div>
+                </div>
+
+                {/* 3. Acoso laboral */}
+                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">⚠️</span>
+                    <h3 className="font-bold text-gray-900 dark:text-white text-sm">Acoso laboral (mobbing)</h3>
+                  </div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                    Violencia psicológica: aislamiento, desacreditación.
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700 border-purple-200">Depresión</Badge>
+                    <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700 border-purple-200">TEPT</Badge>
+                  </div>
+                </div>
+
+                {/* 4. Inseguridad laboral */}
+                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">📋</span>
+                    <h3 className="font-bold text-gray-900 dark:text-white text-sm">Inseguridad y precariedad</h3>
+                  </div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                    Contrato basura = mente en alerta permanente.
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    <Badge variant="outline" className="text-xs bg-yellow-50 text-yellow-700 border-yellow-200">Ansiedad</Badge>
+                    <Badge variant="outline" className="text-xs bg-yellow-50 text-yellow-700 border-yellow-200">Bloqueo</Badge>
+                  </div>
+                </div>
+
+                {/* 5. Falta de reconocimiento */}
+                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">👻</span>
+                    <h3 className="font-bold text-gray-900 dark:text-white text-sm">Falta de reconocimiento</h3>
+                  </div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                    Trabajar sin sentido: trituradora silenciosa.
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    <Badge variant="outline" className="text-xs bg-gray-100 text-gray-700 border-gray-300">Desmotivación</Badge>
+                    <Badge variant="outline" className="text-xs bg-gray-100 text-gray-700 border-gray-300">Depresión</Badge>
+                  </div>
+                </div>
+
+                {/* 6. Riesgos organizativos */}
+                <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">🏢</span>
+                    <h3 className="font-bold text-gray-900 dark:text-white text-sm">Riesgos organizativos</h3>
+                  </div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                    Liderazgos tóxicos, cultura del miedo, caos.
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    <Badge variant="outline" className="text-xs bg-indigo-50 text-indigo-700 border-indigo-200">Toxicidad</Badge>
+                    <Badge variant="outline" className="text-xs bg-indigo-50 text-indigo-700 border-indigo-200">Confusión</Badge>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer con CTA */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <strong className="text-blue-700 dark:text-blue-400">NUXA para empresas:</strong> Guías, tests orientativos y estrategias de prevención
+                </p>
+                <Link href="/precios">
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold">
+                    Ver planes empresas
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </Card>
+
           {/* Tarjeta de Recursos Premium */}
           <Card className="mb-10 relative overflow-hidden border-0 bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 shadow-2xl">
             {/* Decorative elements */}
