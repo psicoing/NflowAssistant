@@ -54,7 +54,7 @@ export default function FamilySupportHeroSection() {
 
               {/* Target Audience */}
               <div className="text-center pt-6">
-                <p className="text-2xl md:text-3xl font-bold text-blue-900 dark:text-blue-300 tracking-wide">
+                <p className="text-2xl md:text-3xl font-bold text-blue-900 dark:text-blue-300 tracking-wide" style={{ fontFamily: "'Poppins', sans-serif" }}>
                   PERSONAS, FAMILIAS Y EMPRESAS
                 </p>
               </div>
