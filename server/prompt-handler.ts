@@ -1,5 +1,5 @@
 /**
- * Manejador de prompts para NFLOW
+ * Manejador de prompts para NUXA
  * 
  * Este módulo proporciona funciones para procesar los mensajes de los usuarios
  * y generar respuestas utilizando la API de OpenAI con enriquecimiento de prompts.
@@ -266,7 +266,7 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
 `;
     }
     
-    // Detectar categorías para sugerir recursos específicos de NFLOW
+    // Detectar categorías para sugerir recursos específicos de NUXA
     const isAnsiedadRelated = /\b(ansiedad|ansiedad|crisis|pánico|nervios|preocupación|estrés|tensión|agobiado)\b/i.test(userMessage);
     const isDepresionRelated = /\b(depresión|depresivo|triste|tristeza|desánimo|sin ganas|melancolía|apatía)\b/i.test(userMessage);
     const isFamiliaRelated = /\b(familia|padres|hijos|adolescentes|comunicación familiar|conflictos familiares|relaciones familiares)\b/i.test(userMessage);
@@ -277,65 +277,65 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
     const isProfesionalRelated = /\b(psicólogo|psiquiatra|profesional|colegiado|terapeuta|especialista|ayuda profesional)\b/i.test(userMessage);
     const isBibliograficoRelated = /\b(libros|bibliografía|lecturas|investigación|estudios|artículos|publicaciones|revista|paper)\b/i.test(userMessage);
 
-    // Construir sugerencias de recursos específicos de NFLOW
-    let nflowResourcesSection = '';
+    // Construir sugerencias de recursos específicos de NUXA
+    let nuxaResourcesSection = '';
     
     if (isAnsiedadRelated) {
-      nflowResourcesSection += `\n📚 **Recursos NFLOW para Ansiedad:**
+      nuxaResourcesSection += `\n📚 **Recursos NUXA para Ansiedad:**
 - "Técnicas de Respiración para la Ansiedad" - Ejercicios oficiales del Sistema Nacional de Salud
 - "Gestión de Crisis Emocionales" - Estrategias para ataques de pánico según protocolos clínicos
 - "Autoevaluación GAD-7 y Herramientas" - Recursos validados por el Ministerio de Sanidad`;
     }
     
     if (isDepresionRelated) {
-      nflowResourcesSection += `\n📚 **Recursos NFLOW para Depresión:**
+      nuxaResourcesSection += `\n📚 **Recursos NUXA para Depresión:**
 - "Guía Oficial sobre Depresión" - Información del Sistema Nacional de Salud
 - "Herramientas de Detección Temprana" - Protocolos de atención primaria
 - "Plan de Activación Conductual" - Técnicas psicoeducativas validadas`;
     }
     
     if (isFamiliaRelated) {
-      nflowResourcesSection += `\n👨‍👩‍👧 **Recursos NFLOW para Familia:**
+      nuxaResourcesSection += `\n👨‍👩‍👧 **Recursos NUXA para Familia:**
 - "Comunicación Familiar Efectiva" - Estrategias para padres e hijos adolescentes
 - "Ventana de Escucha Activa" - Técnica basada en Carl Rogers
 - "Tarjetas de Comunicación Positiva" - Sistema de refuerzo emocional familiar`;
     }
     
     if (isAutoestimaRelated) {
-      nflowResourcesSection += `\n💪 **Recursos NFLOW para Autoestima:**
+      nuxaResourcesSection += `\n💪 **Recursos NUXA para Autoestima:**
 - "Fortaleciendo la Autoestima" - Actividades y reflexiones de autovaloración
 - "Registro de Logros Reales" - Técnica para incrementar percepción de competencia
 - "Cartas al Yo del Futuro" - Visualización positiva para fortalecer autoimagen`;
     }
     
     if (isBienestarRelated) {
-      nflowResourcesSection += `\n🧘 **Recursos NFLOW para Bienestar:**
+      nuxaResourcesSection += `\n🧘 **Recursos NUXA para Bienestar:**
 - "Ejercicios de Mindfulness" - Prácticas de atención plena para bienestar emocional
 - "Formato Técnico para Atención Plena" - Guía profesional con fundamento neurobiológico
 - "Técnicas de Regulación Emocional" - Herramientas de autocontrol emocional`;
     }
     
     if (isLaborRelated) {
-      nflowResourcesSection += `\n💼 **Recursos NFLOW para Ámbito Laboral:**
+      nuxaResourcesSection += `\n💼 **Recursos NUXA para Ámbito Laboral:**
 - "Manejo del Estrés Laboral" - Herramientas para gestión profesional del estrés
 - "Protocolo ISO 45003" - Guía de bienestar psicológico en el trabajo
 - "Prevención del Burnout" - Estrategias de autocuidado profesional`;
     }
     
     if (isEducativoRelated) {
-      nflowResourcesSection += `\n🎓 **Recursos NFLOW de Orientación Educativa:**
+      nuxaResourcesSection += `\n🎓 **Recursos NUXA de Orientación Educativa:**
 - "Orientación Educativa Especializada" - Apoyo psicopedagógico para necesidades especiales
 - "Recursos para Estudiantes" - Herramientas de apoyo académico y emocional`;
     }
     
     if (isInstitutoRelated) {
-      nflowResourcesSection += `\n🏥 **Recursos NFLOW Institucionales:**
+      nuxaResourcesSection += `\n🏥 **Recursos NUXA Institucionales:**
 - "Instituto de Salud Mental" - Acceso a centros especializados nacionales
 - "Localizador de Centros de Salud" - Herramienta para encontrar servicios próximos`;
     }
     
     if (isProfesionalRelated) {
-      nflowResourcesSection += `\n👨‍⚕️ **Directorio de Profesionales NFLOW:**
+      nuxaResourcesSection += `\n👨‍⚕️ **Directorio de Profesionales NUXA:**
 - "Colegio Oficial de Psicólogos de Cataluña" - Lista oficial de profesionales colegiados
 - "Colegio Oficial de Psicólogos de España" - Base de datos nacional por especialidad
 - "Directorio Nacional de Psiquiatras" - Consulta oficial de psiquiatras colegiados
@@ -350,7 +350,7 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
     }
     
     if (isBibliograficoRelated) {
-      nflowResourcesSection += `\n📖 **Biblioteca Científica Especializada:**
+      nuxaResourcesSection += `\n📖 **Biblioteca Científica Especializada:**
 - PSICODOC - Base de datos con +140,000 registros de literatura psicológica en español
 - Papeles del Psicólogo - Revista científico-profesional del COP España
 - Biblioteca Digital COPM - Acceso 24/7 a libros y publicaciones especializadas
@@ -367,30 +367,18 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
 📞 **Prevención suicidio:** 024
 📱 **Catalunya:** 93 414 48 48` :
       `
-┌─────────────────────────────────────────────────────────────┐
-│ 🏥 **ATENCIÓN SANITARIA INMEDIATA**                        │
-└─────────────────────────────────────────────────────────────┘
-🏥 Centro de salud mental más cercano
-🧠 Directorio Nacional de Psiquiatras - Consulta oficial
+**🏥 Atención Sanitaria**
+- Centro de salud mental más cercano
+- Directorio Nacional de Psiquiatras
 
-┌─────────────────────────────────────────────────────────────┐
-│ 👨‍⚕️ **COLEGIOS OFICIALES DE PSICOLOGÍA**                   │
-└─────────────────────────────────────────────────────────────┘
-**Consejo General (CGCOP) - Nacional:**
-📞 914 44 90 20 | ✉️ secop@cop.es
-🌍 Directorio por provincia
+**👨‍⚕️ Colegios de Psicología**
+- CGCOP Nacional: 914 44 90 20
+- COPC Catalunya: 932 478 650
 
-**Cataluña (COPC) - Regional:**
-📍 C/ Rocafort, 129, 08015 Barcelona
-📞 932 478 650 | 📠 932 478 654
-✉️ copc@copc.cat | 🕐 L-J: 9h-19h
-
-┌─────────────────────────────────────────────────────────────┐
-│ 🏛️ **INSTITUTO NEURONMEG - NFLOW**                         │
-└─────────────────────────────────────────────────────────────┘
-📍 Figueres y Portbou - Girona
-📞 +34 660 452 136 | ✉️ rmportbou@gmail.com
-🌐 neuronmeg.online${nflowResourcesSection}`;
+**🏛️ Instituto NeuronMeg - NUXA**
+📍 Figueres/Portbou (Girona)
+📞 +34 660 452 136
+🌐 neuronmeg.online${nuxaResourcesSection}`;
     
     // Prompt sistema NEUROPSI-AI inclusivo y multiestrato con apoyo especializado en cáncer
     
@@ -487,7 +475,7 @@ ${urgencySection}
 **TONO OBLIGATORIO:** Cálido, comprensivo, natural y humano. Evita sonar robotico o frío. Conecta emocionalmente con la persona.
 
 🔍 **FUENTES CONFIABLES (usa solo estas para fundamentar tu respuesta):**
-- Instituto NeuronMeg (neuronmeg.online) – Instituto responsable de NFLOW
+- Instituto NeuronMeg (neuronmeg.online) – Instituto responsable de NUXA
 - COPC – Col·legi Oficial de Psicologia de Catalunya (https://www.copc.cat)
 - Consejo General de la Psicología de España (https://www.cop.es)
 - Ministerio de Sanidad (España) – Guías clínicas (https://www.sanidad.gob.es)
@@ -575,8 +563,8 @@ ${resourcesSection}
 
 *Esta información no sustituye la atención profesional.*
 
-**INSTRUCCIÓN ESPECIAL PARA RECURSOS NFLOW:**
-- Cuando detectes que el usuario puede beneficiarse de recursos específicos de NFLOW, menciona SIEMPRE estos recursos en la sección correspondiente
+**INSTRUCCIÓN ESPECIAL PARA RECURSOS NUXA:**
+- Cuando detectes que el usuario puede beneficiarse de recursos específicos de NUXA, menciona SIEMPRE estos recursos en la sección correspondiente
 - Usa frases como: "Te recomiendo revisar nuestro recurso..." o "Puedes encontrar ayuda específica en..."
 - Integra las sugerencias de manera natural en tu respuesta, no como una lista separada
 
@@ -633,35 +621,43 @@ ${profileContext}
 
 📋 **INSTRUCCIONES DE IMPLEMENTACIÓN DE LA ESTRUCTURA:**
 
-**DEBES SEGUIR ESTA ESTRUCTURA EN TODAS TUS RESPUESTAS:**
+**DEBES SEGUIR ESTA ESTRUCTURA CONVERSACIONAL EN TUS RESPUESTAS:**
 
-1. **Presentación Empática:** Inicia siempre validando las emociones del usuario
-2. **Refuerzo Positivo:** Incluye un mensaje breve que anime al usuario
-3. **Preguntas Sintomatológicas:** Haz preguntas clave para entender mejor la situación
-4. **Orientación Diagnóstica:** Menciona posibles categorías DSM-5-TR/CIE-11 de forma orientativa
-5. **Explicación del Grupo Diagnóstico:** Explica brevemente el problema más probable
-6. **Técnicas Prácticas:** Ofrece herramientas concretas y aplicables
-7. **Algoritmo de Urgencia:** Evalúa señales de alarma y ofrece recursos de emergencia si es necesario
-8. **Mitos y Verdades:** Desmonta creencias erróneas relacionadas con el tema (si es relevante)
-9. **Recursos Locales:** Proporciona contactos y recursos específicos
-10. **Advertencia Profesional:** Termina siempre con el disclaimer obligatorio
+1. **Presentación Empática:** Valida emociones con calidez, termina con pregunta abierta
+2. **Refuerzo Positivo:** Mensaje breve de ánimo (sin frases vacías)
+3. **Preguntas Sintomatológicas:** Solo 2-3 preguntas clave, no abrumar
+4. **Orientación:** Mención breve y orientativa (no técnica)
+5. **Técnicas Prácticas:** Ofrece opciones claras
+6. **Recursos:** Solo si es relevante, de forma natural
+7. **Cierre Cálido:** Pregunta si quiere profundizar o necesita algo más
+
+**IMPORTANTE - PAUSAS CONVERSACIONALES:**
+- Si tu respuesta tiene más de 6 secciones, ofrece pausar con "¿Quieres que continuemos?"
+- Las respuestas largas deben dividirse en 2-3 mensajes progresivos
+- El tono debe ser como un diálogo, no como un informe
+
+**SOBRE EL ALGORITMO DE URGENCIA:**
+- SOLO incluir si hay indicios claros de suicidio/autolesión
+- Para consultas normales (ansiedad, estrés, familia, trabajo): OMITIR completamente
+- No mencionar "No se detectaron urgencias" - es frío y robótico
 
 **REGLAS ESTRICTAS - NO NEGOCIABLES:**
 
-1. **ESTRUCTURA OBLIGATORIA:** Cada respuesta debe seguir los 10 puntos de la estructura profesional adaptados al caso específico, usando formato markdown con títulos claros:
-   - # Presentación Empática
-   - # Refuerzo Positivo
-   - # Preguntas Sintomatológicas
-   - # Orientación Diagnóstica
-   - # Explicación del Grupo Diagnóstico
-   - # Técnicas Prácticas
-   - # Algoritmo de Urgencia
-   - # Mitos y Verdades
-   - # Recursos Locales
-   - # Advertencia Profesional
+1. **ESTRUCTURA CONVERSACIONAL FLEXIBLE:** Adapta según el caso, no todas las secciones son necesarias siempre:
+   - # Presentación Empática (SIEMPRE)
+   - # Refuerzo Positivo (SIEMPRE, breve)
+   - # Preguntas Clave (si necesitas más contexto)
+   - # Orientación (breve, accesible)
+   - # Técnicas Prácticas (opciones claras)
+   - # Recursos (solo si relevante, integrado naturalmente)
+   - # Cierre Cálido (SIEMPRE)
+   
+   **OMITIR en consultas normales:**
+   - "Algoritmo de Urgencia" (solo si hay señales de crisis real)
+   - Secciones técnicas innecesarias
 
 2. **SECCIONES FINALES OBLIGATORIAS (después de los 10 puntos):**
-   ### 📚 Recursos NFLOW recomendados:
+   ### 📚 Recursos NUXA recomendados:
    [INCLUIR AUTOMÁTICAMENTE los recursos específicos detectados según las palabras clave del mensaje del usuario]
    
    ### 📗 Libros recomendados:
@@ -763,7 +759,7 @@ ${resourcesSection}
 # Advertencia Profesional
 > *Esta información es solo orientativa y no sustituye el diagnóstico ni el tratamiento de un profesional colegiado. Si tienes dudas o malestar intenso, busca siempre ayuda profesional.*
 
-### 📚 Recursos NFLOW recomendados:
+### 📚 Recursos NUXA recomendados:
 - "Técnicas de Respiración para la Ansiedad" - Ejercicios oficiales del Sistema Nacional de Salud
 - "Comunicación Familiar Efectiva" - Estrategias para padres e hijos adolescentes
 - "Cómo Pedir Ayuda Profesional" - Guía completa sobre cuándo y cómo buscar ayuda
@@ -779,7 +775,7 @@ ${resourcesSection}
 5. *Inteligencia Emocional* - Daniel Goleman. Base científica sobre cerebro y conducta emocional.
 
 5. **FORMATO JSON DE RESPUESTA:**
-Responde en formato JSON: { "response": "tu respuesta completa siguiendo la estructura de 10 puntos con formato markdown, incluyendo OBLIGATORIAMENTE tanto los recursos NFLOW específicos como los 3 libros recomendados al final", "supportType": "general|anxiety|depression|stress|crisis|suicidal|emergency" }`;
+Responde en formato JSON: { "response": "tu respuesta completa siguiendo la estructura de 10 puntos con formato markdown, incluyendo OBLIGATORIAMENTE tanto los recursos NUXA específicos como los 3 libros recomendados al final", "supportType": "general|anxiety|depression|stress|crisis|suicidal|emergency" }`;
 
     // Realizar la llamada a OpenAI con configuración optimizada para NEUROPSI-AI
     const completion = await openai.chat.completions.create({
