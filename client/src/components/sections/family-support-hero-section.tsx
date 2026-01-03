@@ -1,5 +1,4 @@
 import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X, Brain, Heart } from "lucide-react";
-import nuxaRobotConnecting from "@assets/generated_images/nuxa_robot_connecting_people_unity.png";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -72,16 +71,6 @@ export default function FamilySupportHeroSection() {
                   </p>
                 </div>
               </div>
-            </div>
-
-            {/* Robot Image Separator */}
-            <div className="w-full py-6 overflow-hidden" style={{ marginLeft: 'calc(-50vw + 50%)', width: '100vw' }}>
-              <img 
-                src={nuxaRobotConnecting} 
-                alt="Robot NUXA conectando personas" 
-                className="w-full h-auto max-h-[250px] md:max-h-[300px] object-cover"
-                data-testid="img-nuxa-robot-features"
-              />
             </div>
 
             {/* Value proposition */}
