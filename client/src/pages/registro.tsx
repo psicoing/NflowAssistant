@@ -147,11 +147,11 @@ export default function Registro() {
   return (
     <>
       <SEOHead
-        title="Registro - NFLOW Psicólogo IA | Crear Cuenta Gratis"
-        description="Crea tu cuenta en NFLOW y accede a apoyo emocional profesional con IA. Psicólogo virtual 24/7 en español. Registro rápido y seguro."
-        keywords="registro NFLOW, crear cuenta psicólogo IA, registro salud mental, nueva cuenta terapia online"
-        ogTitle="Únete a NFLOW - Tu Psicólogo IA 24/7"
-        canonicalUrl="https://nflow.style/registro"
+        title="Registro - NUXA Psicólogo IA | Crear Cuenta Gratis"
+        description="Crea tu cuenta en NUXA y accede a apoyo emocional profesional con IA. Psicólogo virtual 24/7 en español. Registro rápido y seguro."
+        keywords="registro NUXA, crear cuenta psicólogo IA, registro salud mental, nueva cuenta terapia online"
+        ogTitle="Únete a NUXA - Tu Psicólogo IA 24/7"
+        canonicalUrl="https://nuxa.life/registro"
       />
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4 relative overflow-hidden">
       {/* Decorative Side Elements - Only visible on larger screens */}
@@ -161,10 +161,10 @@ export default function Registro() {
             <div className="w-24 h-24 bg-nflow-blue/30 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-nflow-blue/50">
               <UserPlus className="w-12 h-12 text-nflow-blue" />
             </div>
-            <h3 className="text-2xl font-bold text-white mb-2">NFLOW</h3>
+            <h3 className="text-2xl font-bold text-white mb-2">NUXA</h3>
             <p className="text-sm text-gray-400">Salud Mental Digital</p>
             <div className="mt-4 px-4 py-2 bg-nflow-blue/20 rounded-lg border border-nflow-blue/30">
-              <p className="text-xs text-nflow-blue font-semibold">nflow.style</p>
+              <p className="text-xs text-nflow-blue font-semibold">nuxa.life</p>
             </div>
           </div>
           <div className="space-y-3 text-center">
@@ -197,8 +197,8 @@ export default function Registro() {
             </div>
             <div>
               <p className="text-gray-400 text-sm mb-2">Únete a la comunidad</p>
-              <p className="text-3xl font-bold text-white">NFLOW</p>
-              <p className="text-nflow-blue font-semibold mt-1">nflow.style</p>
+              <p className="text-3xl font-bold text-white">NUXA</p>
+              <p className="text-nflow-blue font-semibold mt-1">nuxa.life</p>
             </div>
           </div>
         </div>
@@ -213,7 +213,7 @@ export default function Registro() {
             </div>
             <CardTitle className="text-2xl text-white">Crear Cuenta</CardTitle>
             <CardDescription className="text-gray-400">
-              Únete a NFLOW y comienza tu bienestar digital
+              Únete a NUXA y comienza tu bienestar digital
             </CardDescription>
           </CardHeader>
 

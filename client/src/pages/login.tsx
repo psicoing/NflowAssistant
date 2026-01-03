@@ -140,11 +140,11 @@ export default function Login() {
   return (
     <>
       <SEOHead
-        title="Acceso - NFLOW Psicólogo IA"
-        description="Inicia sesión en NFLOW y accede a tu psicólogo IA disponible 24/7. Apoyo emocional profesional en español para tu salud mental."
-        keywords="login NFLOW, acceso psicólogo IA, iniciar sesión salud mental, chat psicológico online"
-        ogTitle="Inicia sesión en NFLOW - Tu Psicólogo IA"
-        canonicalUrl="https://nflow.style/login"
+        title="Acceso - NUXA Psicólogo IA"
+        description="Inicia sesión en NUXA y accede a tu psicólogo IA disponible 24/7. Apoyo emocional profesional en español para tu salud mental."
+        keywords="login NUXA, acceso psicólogo IA, iniciar sesión salud mental, chat psicológico online"
+        ogTitle="Inicia sesión en NUXA - Tu Psicólogo IA"
+        canonicalUrl="https://nuxa.life/login"
       />
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
         <div className="w-full max-w-md">
@@ -155,7 +155,7 @@ export default function Login() {
             </div>
             <CardTitle className="text-2xl text-white">Iniciar Sesión</CardTitle>
             <CardDescription className="text-gray-400">
-              Accede a tu cuenta de NFLOW
+              Accede a tu cuenta de NUXA
             </CardDescription>
           </CardHeader>
 
