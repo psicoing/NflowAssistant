@@ -68,7 +68,7 @@ export default function FamilySupportHeroSection() {
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 border-2 border-white dark:border-slate-900"></div>
                   </div>
                   <p className="text-base text-gray-900 dark:text-gray-100 font-semibold">
-                    <span className="font-extrabold text-emerald-700 dark:text-emerald-400">+140,000</span> fuentes de psicología
+                    <span className="font-extrabold text-emerald-700 dark:text-emerald-400">NUXA ≠ ChatGPT</span> · Psicólogo IA especializado
                   </p>
                 </div>
               </div>
