@@ -1,4 +1,4 @@
-import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X, Brain, Heart } from "lucide-react";
+import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X, Brain, Heart, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -86,11 +86,11 @@ export default function FamilySupportHeroSection() {
             {/* CTA Button */}
             <div className="flex justify-center mb-10">
               <Button
-                onClick={() => setLocation("/ejemplos-chat")}
+                onClick={() => window.dispatchEvent(new CustomEvent("openNuxaMenu"))}
                 className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-10 py-7 text-xl font-bold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
                 data-testid="button-descubre-nuxa"
               >
-                <Heart className="w-6 h-6 mr-3" />
+                <Menu className="w-6 h-6 mr-3" />
                 Descubre NUXA
               </Button>
             </div>

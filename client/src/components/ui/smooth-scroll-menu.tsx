@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign, Star, User, Gift } from "lucide-react";
@@ -75,6 +75,12 @@ const menuItems = [
 export default function SmoothScrollMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [location] = useLocation();
+
+  useEffect(() => {
+    const handleOpenMenu = () => setIsOpen(true);
+    window.addEventListener("openNuxaMenu", handleOpenMenu);
+    return () => window.removeEventListener("openNuxaMenu", handleOpenMenu);
+  }, []);
 
   const scrollToSection = (sectionId: string, isPage?: boolean) => {
     setIsOpen(false);
