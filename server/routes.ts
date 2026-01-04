@@ -321,18 +321,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Magic Link Authentication - for Shopify customers
-  app.get("/api/auth/magic-link/:token", async (req, res) => {
+  // Using POST to prevent CSRF via embedded links/scripts
+  app.post("/api/auth/magic-link/:token", async (req, res) => {
     try {
       const { token } = req.params;
       
-      if (!token) {
+      if (!token || token.length !== 64) {
         return res.status(400).json({ 
           success: false,
-          message: "Token requerido" 
+          message: "Token inválido" 
         });
       }
       
-      // Find user by magic token
+      // Find user by magic token (atomic operation - fetch and validate)
       const user = await storage.getUserByMagicToken(token);
       
       if (!user) {
@@ -352,11 +353,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
+      // Clear magic link FIRST (single-use guarantee) before any other operations
+      await storage.clearMagicLink(user.id);
+      
       // Update login stats
       await storage.updateUserLogin(user.id);
-      
-      // Clear magic link (one-time use)
-      await storage.clearMagicLink(user.id);
       
       // Create session
       req.session.userId = user.id;
@@ -1444,11 +1445,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (result.success) {
         console.log("✅ Shopify order processed:", result.message);
+        
+        // Send magic link email if available
+        if (result.magicLink && result.customerEmail) {
+          try {
+            const { sendMagicLinkEmail } = await import('./emailService');
+            
+            // Get product name from first line item
+            const productName = orderData.line_items?.[0]?.title || 'Servicio NUXA';
+            const customerFirstName = orderData.customer?.first_name || 'Usuario';
+            
+            await sendMagicLinkEmail({
+              to: result.customerEmail,
+              customerName: customerFirstName,
+              magicLink: result.magicLink,
+              productName,
+              isNewUser: result.isNewUser || false
+            });
+            
+            console.log("📧 Magic link email sent successfully");
+          } catch (emailError) {
+            console.error("❌ Failed to send magic link email:", emailError);
+          }
+        }
+        
         res.status(200).json({ 
           received: true,
           processed: true,
           message: result.message,
-          transactionId: result.transactionId
+          transactionId: result.transactionId,
+          emailSent: !!result.magicLink
         });
       } else {
         console.error("❌ Failed to process order:", result.message);

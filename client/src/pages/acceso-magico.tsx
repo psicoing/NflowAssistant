@@ -22,8 +22,13 @@ export default function AccesoMagico() {
 
     const validateToken = async () => {
       try {
+        // Using POST to prevent CSRF attacks
         const response = await fetch(`/api/auth/magic-link/${token}`, {
+          method: "POST",
           credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
 
         const data = await response.json();
