@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { UserPlus, User, Building } from "lucide-react";
+import { UserPlus, User, Building, ShieldCheck } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useReferralCode } from "@/hooks/useReferralCode";
 import { SEOHead } from "@/components/SEOHead";
@@ -215,6 +215,19 @@ export default function Registro() {
             <CardDescription className="text-gray-400">
               Únete a NUXA y comienza tu bienestar digital
             </CardDescription>
+            
+            {/* Privacy Notice */}
+            <div className="mt-4 p-3 bg-emerald-900/30 border border-emerald-700/50 rounded-lg">
+              <div className="flex items-start gap-2">
+                <ShieldCheck className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                <div className="text-xs text-emerald-300/90 text-left leading-relaxed">
+                  <span className="font-semibold text-emerald-400">NUXA es totalmente confidencial:</span> no envía correos.
+                  El email solo sirve para la pasarela de pago.
+                  No hay confirmaciones ni recuperaciones.
+                  Nadie sabrá que lo has usado. <span className="font-semibold">Silencio total.</span>
+                </div>
+              </div>
+            </div>
           </CardHeader>
 
           <form onSubmit={handleSubmit}>
