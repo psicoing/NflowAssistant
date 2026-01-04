@@ -21,13 +21,13 @@ export default function FounderSection() {
 
             <div className="space-y-6 text-lg leading-relaxed text-blue-50">
               <p>
-                Con <strong>NFLOW</strong>, mi objetivo es ofrecer soluciones innovadoras que integren 
+                Con <strong>NUXA</strong>, mi objetivo es ofrecer soluciones innovadoras que integren 
                 salud mental y desarrollo laboral, alineadas con los principios de la normativa ISO 45003, 
                 centrada en el bienestar psicológico en el entorno de trabajo.
               </p>
               
               <p>
-                <strong>NFLOW</strong> es una aplicación para la salud mental de personas individuales, 
+                <strong>NUXA</strong> es una aplicación para la salud mental de personas individuales, 
                 familias y trabajadores. Funciona como un recurso digital de apoyo emocional continuo, 
                 generando entornos altamente digitalizados y adaptativos, capaces de responder a los 
                 nuevos desafíos del bienestar psicológico en todos los ámbitos de la vida.
@@ -87,7 +87,7 @@ export default function FounderSection() {
               <div className="w-56 h-56 mx-auto rounded-2xl mb-6 overflow-hidden shadow-xl">
                 <img 
                   src={founderImagePath} 
-                  alt="Ramón Molons de San Román - CEO y Fundador de NFLOW"
+                  alt="Ramón Molons de San Román - CEO y Fundador de NUXA"
                   className="w-full h-full object-cover object-center"
                 />
               </div>

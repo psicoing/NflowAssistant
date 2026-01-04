@@ -35,7 +35,7 @@ export default function NosotrosSection() {
         {/* Hero */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Sobre NFLOW
+            Sobre NUXA
           </h2>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
             Somos pioneros en el desarrollo de asistentes de inteligencia artificial especializados 
