@@ -1,6 +1,21 @@
 import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 import { storage } from './storage';
 import type { InsertShopifyTransaction } from '@shared/schema';
+
+/**
+ * Generate a secure random token for magic links
+ */
+export function generateMagicToken(): string {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+/**
+ * Generate a random password for auto-created accounts
+ */
+function generateRandomPassword(): string {
+  return crypto.randomBytes(16).toString('hex');
+}
 
 // Product mapping: SKU -> Product configuration
 interface ProductConfig {
@@ -79,6 +94,9 @@ export async function processShopifyOrder(orderData: any): Promise<{
   success: boolean;
   message: string;
   transactionId?: number;
+  magicLink?: string;
+  customerEmail?: string;
+  isNewUser?: boolean;
 }> {
   try {
     console.log('=== PROCESSING SHOPIFY ORDER ===');
@@ -107,8 +125,12 @@ export async function processShopifyOrder(orderData: any): Promise<{
       };
     }
     
-    // Extract customer email
+    // Extract customer email and name
     const customerEmail = orderData.email || orderData.customer?.email;
+    const customerFirstName = orderData.customer?.first_name || '';
+    const customerLastName = orderData.customer?.last_name || '';
+    const customerName = `${customerFirstName} ${customerLastName}`.trim() || 'Usuario';
+    
     if (!customerEmail) {
       console.error('❌ No customer email found');
       return {
@@ -117,19 +139,47 @@ export async function processShopifyOrder(orderData: any): Promise<{
       };
     }
     
-    // Find user by email
-    const users = await storage.getAllUsers();
-    const user = users.find(u => u.email === customerEmail);
+    // Find or create user by email
+    let user = await storage.getUserByEmail(customerEmail);
+    let isNewUser = false;
+    let magicToken: string | null = null;
     
     if (!user) {
-      console.error('❌ User not found for email:', customerEmail);
-      return {
-        success: false,
-        message: 'User not found'
-      };
+      console.log('🆕 User not found, creating new account for:', customerEmail);
+      
+      // Generate random password and magic link token
+      const randomPassword = generateRandomPassword();
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+      magicToken = generateMagicToken();
+      const magicLinkExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+      
+      // Create username from email (before @)
+      const baseUsername = customerEmail.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+      const timestamp = Date.now().toString().slice(-4);
+      const username = `${baseUsername}${timestamp}`;
+      
+      // Create new user
+      user = await storage.createUser({
+        username,
+        password: hashedPassword,
+        email: customerEmail,
+        userType: 'individual',
+        subscriptionStatus: 'inactive',
+      });
+      
+      // Set magic link
+      await storage.setMagicLink(user.id, magicToken, magicLinkExpiry);
+      
+      isNewUser = true;
+      console.log('✅ New user created:', user.username, 'ID:', user.id);
+    } else {
+      console.log('✅ Existing user found:', user.username, 'ID:', user.id);
+      
+      // Generate magic link for existing user too (for easy access)
+      magicToken = generateMagicToken();
+      const magicLinkExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+      await storage.setMagicLink(user.id, magicToken, magicLinkExpiry);
     }
-    
-    console.log('✅ User found:', user.username, 'ID:', user.id);
     
     // Process each line item
     for (const item of orderData.line_items) {
@@ -231,9 +281,19 @@ export async function processShopifyOrder(orderData: any): Promise<{
       }
     }
     
+    // Build magic link URL
+    const baseUrl = process.env.BASE_URL || 'https://nuxa.life';
+    const magicLinkUrl = magicToken ? `${baseUrl}/acceso/${magicToken}` : undefined;
+    
+    console.log('🔗 Magic link generated:', magicLinkUrl);
+    console.log('📧 Ready to send email to:', customerEmail);
+    
     return {
       success: true,
-      message: 'Order processed successfully'
+      message: isNewUser ? 'New user created and order processed' : 'Order processed successfully',
+      magicLink: magicLinkUrl,
+      customerEmail,
+      isNewUser
     };
     
   } catch (error) {

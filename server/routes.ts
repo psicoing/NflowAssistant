@@ -320,6 +320,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ success: true, message: "Logout exitoso" });
   });
 
+  // Magic Link Authentication - for Shopify customers
+  app.get("/api/auth/magic-link/:token", async (req, res) => {
+    try {
+      const { token } = req.params;
+      
+      if (!token) {
+        return res.status(400).json({ 
+          success: false,
+          message: "Token requerido" 
+        });
+      }
+      
+      // Find user by magic token
+      const user = await storage.getUserByMagicToken(token);
+      
+      if (!user) {
+        return res.status(404).json({ 
+          success: false,
+          message: "Link inválido o expirado" 
+        });
+      }
+      
+      // Check if token is expired
+      if (user.magicLinkExpiry && new Date() > user.magicLinkExpiry) {
+        // Clear expired token
+        await storage.clearMagicLink(user.id);
+        return res.status(410).json({ 
+          success: false,
+          message: "Este enlace ha expirado. Por favor solicita uno nuevo." 
+        });
+      }
+      
+      // Update login stats
+      await storage.updateUserLogin(user.id);
+      
+      // Clear magic link (one-time use)
+      await storage.clearMagicLink(user.id);
+      
+      // Create session
+      req.session.userId = user.id;
+      
+      console.log(`✅ Magic link login successful for user: ${user.username}`);
+      
+      res.json({ 
+        success: true, 
+        message: "Acceso exitoso",
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          subscriptionStatus: user.subscriptionStatus,
+          subscriptionPlan: user.subscriptionPlan,
+          prepaidQuestions: user.prepaidQuestions || 0,
+        }
+      });
+    } catch (error) {
+      console.error("Magic link auth error:", error);
+      res.status(500).json({ 
+        success: false,
+        message: "Error interno del servidor" 
+      });
+    }
+  });
+
   // Change password
   app.post("/api/auth/change-password", async (req, res) => {
     try {

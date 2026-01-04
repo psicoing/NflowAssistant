@@ -45,6 +45,7 @@ import BlogNew from "@/pages/blog-new";
 import FloatingCTAButton from "@/components/FloatingCTAButton";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import DownloadCSV from "@/pages/download-csv";
+import AccesoMagico from "@/pages/acceso-magico";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -55,6 +56,10 @@ function AuthenticatedRouter() {
 
     // Always allow access to public routes
     const publicRoutes = ["/", "/ejemplos-chat", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv"];
+    // Allow magic link access routes
+    if (location.startsWith("/acceso/")) {
+      return;
+    }
     // Allow blog article routes
     if (location.startsWith("/blog/")) {
       return;
@@ -120,6 +125,7 @@ function AuthenticatedRouter() {
       <Route path="/app-movil" component={AppMovil} />
       <Route path="/control-parental" component={ControlParental} />
       <Route path="/download-csv" component={DownloadCSV} />
+      <Route path="/acceso/:token" component={AccesoMagico} />
       <Route component={NotFound} />
     </Switch>
   );
