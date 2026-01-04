@@ -16,7 +16,7 @@ export default function ProfessionalMeritSection() {
             Respaldo Profesional y Credibilidad
           </h2>
           <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-            NFLOW está desarrollado por profesionales oficialmente colegiados y acreditados en psicología clínica
+            NUXA está desarrollado por profesionales oficialmente colegiados y acreditados en psicología clínica
           </p>
         </div>
 
@@ -92,7 +92,7 @@ export default function ProfessionalMeritSection() {
                     <span className="font-semibold text-nflow-orange">Garantía de Calidad</span>
                   </div>
                   <p className="text-sm text-gray-300">
-                    Esta acreditación garantiza que NFLOW cumple con los más altos estándares 
+                    Esta acreditación garantiza que NUXA cumple con los más altos estándares 
                     éticos y profesionales en salud mental digital.
                   </p>
                 </div>
@@ -105,7 +105,7 @@ export default function ProfessionalMeritSection() {
         <Card className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 shadow-xl mt-8">
           <CardContent className="p-8">
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-nflow-orange mb-4">Prefiero tener una vista con el psicólogo de NFLOW</h3>
+              <h3 className="text-2xl font-bold text-nflow-orange mb-4">Prefiero tener una vista con el psicólogo de NUXA</h3>
               <p className="text-gray-100 font-medium">Consulta personalizada con Ramón Molons de San Román - Instituto NeuronMeg</p>
             </div>
             
