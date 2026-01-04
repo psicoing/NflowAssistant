@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { LogIn, User } from "lucide-react";
+import { LogIn, User, ShieldAlert } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 
 export default function Login() {
@@ -157,6 +157,19 @@ export default function Login() {
             <CardDescription className="text-gray-400">
               Accede a tu cuenta de NUXA
             </CardDescription>
+            
+            {/* Password Warning Notice */}
+            <div className="mt-4 p-3 bg-amber-900/30 border border-amber-700/50 rounded-lg">
+              <div className="flex items-start gap-2">
+                <ShieldAlert className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                <div className="text-xs text-amber-300/90 text-left leading-relaxed">
+                  <span className="font-semibold text-amber-400">Aviso:</span> Guarda bien tu contraseña. No se puede recuperar.
+                  Si la pierdes, deberás registrarte de nuevo.
+                  <br /><br />
+                  <span className="text-emerald-400">NUXA es 100% confidencial</span> y usa encriptado de alta seguridad.
+                </div>
+              </div>
+            </div>
           </CardHeader>
 
           <form onSubmit={handleSubmit}>
