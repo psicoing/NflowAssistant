@@ -28,6 +28,9 @@ export const users = pgTable("users", {
   lastQuestionResetDate: timestamp("last_question_reset_date").defaultNow(),
   // Créditos prepagados (pago por uso)
   prepaidQuestions: integer("prepaid_questions").default(0),
+  // Magic Link para acceso directo después de compra
+  magicLinkToken: text("magic_link_token"),
+  magicLinkExpiry: timestamp("magic_link_expiry"),
 });
 
 export const conversations = pgTable("conversations", {

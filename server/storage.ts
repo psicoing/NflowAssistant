@@ -85,6 +85,12 @@ export interface IStorage {
   // Books
   getAllBooks(): Promise<Book[]>;
   getBooksByCategory(category: string): Promise<Book[]>;
+  
+  // Magic Link
+  getUserByEmail(email: string): Promise<User | undefined>;
+  getUserByMagicToken(token: string): Promise<User | undefined>;
+  setMagicLink(userId: number, token: string, expiry: Date): Promise<User>;
+  clearMagicLink(userId: number): Promise<User>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -545,6 +551,41 @@ export class DatabaseStorage implements IStorage {
 
   async getBooksByCategory(category: string): Promise<Book[]> {
     return await db.select().from(books).where(eq(books.category, category));
+  }
+
+  // Magic Link functions
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user || undefined;
+  }
+
+  async getUserByMagicToken(token: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.magicLinkToken, token));
+    return user || undefined;
+  }
+
+  async setMagicLink(userId: number, token: string, expiry: Date): Promise<User> {
+    const [updatedUser] = await db
+      .update(users)
+      .set({
+        magicLinkToken: token,
+        magicLinkExpiry: expiry,
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return updatedUser;
+  }
+
+  async clearMagicLink(userId: number): Promise<User> {
+    const [updatedUser] = await db
+      .update(users)
+      .set({
+        magicLinkToken: null,
+        magicLinkExpiry: null,
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return updatedUser;
   }
 }
 
