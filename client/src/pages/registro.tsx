@@ -221,9 +221,9 @@ export default function Registro() {
               <div className="flex items-start gap-2">
                 <ShieldCheck className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                 <div className="text-xs text-emerald-300/90 text-left leading-relaxed">
-                  <span className="font-semibold text-emerald-400">NUXA es totalmente confidencial:</span> no envía correos.
-                  El email solo sirve para la pasarela de pago.
-                  No hay confirmaciones ni recuperaciones.
+                  <span className="font-semibold text-emerald-400">NUXA es totalmente confidencial:</span> no enviamos correos.
+                  El email es obligatorio solo para la pasarela de pago.
+                  No hay confirmaciones ni recuperaciones de contraseña.
                   Nadie sabrá que lo has usado. <span className="font-semibold">Silencio total.</span>
                 </div>
               </div>
@@ -277,7 +277,7 @@ export default function Registro() {
 
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-gray-200">
-                  Email (opcional)
+                  Email *
                 </Label>
                 <Input
                   id="email"
@@ -286,8 +286,10 @@ export default function Registro() {
                   placeholder="tu@email.com"
                   value={formData.email}
                   onChange={handleChange}
+                  required
                   className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-nflow-blue"
                 />
+                <p className="text-xs text-gray-400">Solo para la pasarela de pago. No enviamos correos.</p>
               </div>
 
               <div className="space-y-2">

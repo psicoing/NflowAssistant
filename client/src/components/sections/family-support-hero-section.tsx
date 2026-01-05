@@ -77,9 +77,9 @@ export default function FamilySupportHeroSection() {
                 <div className="flex items-start gap-2">
                   <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                   <div className="text-xs text-emerald-700 dark:text-emerald-300/90 text-left leading-relaxed">
-                    <span className="font-semibold text-emerald-800 dark:text-emerald-400">NUXA es totalmente confidencial:</span> no envía correos.
-                    El email solo sirve para la pasarela de pago.
-                    No hay confirmaciones ni recuperaciones.
+                    <span className="font-semibold text-emerald-800 dark:text-emerald-400">NUXA es totalmente confidencial:</span> no enviamos correos.
+                    El email es obligatorio solo para la pasarela de pago.
+                    No hay confirmaciones ni recuperaciones de contraseña.
                     Nadie sabrá que lo has usado. <span className="font-semibold">Silencio total.</span>
                   </div>
                 </div>
