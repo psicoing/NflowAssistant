@@ -1069,7 +1069,7 @@ export default function RecursosGratis() {
 
               {/* Tab Recursos */}
               <TabsContent value="recursos">
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
                   <Card className="p-6">
                     <h3 className="text-lg font-bold text-gray-900 mb-4">Líneas de Ayuda</h3>
                     <div className="space-y-3">
@@ -1106,6 +1106,96 @@ export default function RecursosGratis() {
                     </div>
                   </Card>
                 </div>
+
+                {/* Artículo sobre Resiliencia */}
+                <Card className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
+                      <Shield className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900">Resiliencia: Concepto, bases y desarrollo práctico</h3>
+                      <p className="text-sm text-emerald-700">Recurso psicoeducativo</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6 text-gray-700">
+                    <div>
+                      <h4 className="font-bold text-emerald-800 mb-2">¿Qué es la resiliencia?</h4>
+                      <p className="text-sm leading-relaxed">
+                        La resiliencia es la capacidad de superar, adaptarse y recuperarse de situaciones adversas —traumas, pérdidas, estrés intenso— manteniendo un funcionamiento psicológico, social y vital adecuado. No es una cualidad heroica ni un don reservado a unos pocos. Es un proceso dinámico, aprendible y entrenable.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-bold text-emerald-800 mb-2">Bases de la resiliencia</h4>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-emerald-700 text-sm mb-1">🧠 Biológicas</p>
+                          <p className="text-xs text-gray-600">Sistemas de regulación del estrés, neurotransmisores, corteza prefrontal, hipocampo, amígdala y microbioma intestinal.</p>
+                        </div>
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-emerald-700 text-sm mb-1">💚 Psicológicas y sociales</p>
+                          <p className="text-xs text-gray-600">Autoestima, planificación realista, comunicación, regulación emocional y apoyo social/familiar.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="font-bold text-emerald-800 mb-2">Impacto en salud y bienestar</h4>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge className="bg-emerald-100 text-emerald-800 text-xs">Mayor bienestar físico y mental</Badge>
+                        <Badge className="bg-emerald-100 text-emerald-800 text-xs">Mejor adaptación al estrés</Badge>
+                        <Badge className="bg-emerald-100 text-emerald-800 text-xs">Envejecimiento saludable</Badge>
+                        <Badge className="bg-emerald-100 text-emerald-800 text-xs">Menor riesgo de depresión</Badge>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="font-bold text-emerald-800 mb-3">Estrategias prácticas para desarrollar resiliencia</h4>
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-sm text-gray-800">✔ Actitud positiva realista</p>
+                          <p className="text-xs text-gray-600">No negar la realidad, sino interpretarla con margen de maniobra.</p>
+                        </div>
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-sm text-gray-800">✔ Flexibilidad cognitiva</p>
+                          <p className="text-xs text-gray-600">Aceptar lo que no se puede cambiar, replantear situaciones.</p>
+                        </div>
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-sm text-gray-800">✔ Coherencia con valores</p>
+                          <p className="text-xs text-gray-600">Identificar qué es importante y actuar en consecuencia.</p>
+                        </div>
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-sm text-gray-800">✔ Afrontar, no evitar</p>
+                          <p className="text-xs text-gray-600">La evitación cronifica el miedo. Avanzar aunque incomode.</p>
+                        </div>
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-sm text-gray-800">✔ Red de apoyo</p>
+                          <p className="text-xs text-gray-600">Relaciones de confianza y participación comunitaria.</p>
+                        </div>
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-sm text-gray-800">✔ Cuidado físico</p>
+                          <p className="text-xs text-gray-600">Sueño, alimentación, ejercicio y técnicas de relajación.</p>
+                        </div>
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-sm text-gray-800">✔ Reconocer fortalezas</p>
+                          <p className="text-xs text-gray-600">La adversidad también revela capacidades. Potenciar lo que funciona.</p>
+                        </div>
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-sm text-gray-800">✔ Pedir ayuda profesional</p>
+                          <p className="text-xs text-gray-600">Saber cuándo no se puede solo es signo de fortaleza.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-emerald-100 rounded-xl border border-emerald-300">
+                      <p className="text-sm font-semibold text-emerald-900 text-center">
+                        💡 La resiliencia no elimina el dolor, pero evita que el dolor destruya a la persona. Se construye, se entrena y se refuerza a lo largo de la vida.
+                      </p>
+                    </div>
+                  </div>
+                </Card>
               </TabsContent>
             </Tabs>
           </div>
