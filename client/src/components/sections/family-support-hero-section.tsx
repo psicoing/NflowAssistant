@@ -61,12 +61,16 @@ export default function FamilySupportHeroSection() {
               {/* NUXA vs ChatGPT Badge */}
               <div className="flex justify-center items-center pt-4">
                 <div className="flex items-center gap-4 bg-gradient-to-r from-emerald-100 via-emerald-50 to-emerald-100 dark:from-emerald-900/50 dark:via-emerald-800/30 dark:to-emerald-900/50 px-6 py-4 rounded-full border-2 border-emerald-300 dark:border-emerald-600 shadow-lg">
-                  <Compass className="w-10 h-10 text-amber-600 dark:text-amber-400" />
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-300 via-amber-400 to-amber-600 p-2 shadow-lg ring-2 ring-amber-200">
+                    <Compass className="w-full h-full text-amber-900" />
+                  </div>
                   <div className="text-center">
                     <p className="text-base font-bold text-emerald-700 dark:text-emerald-300">NUXA entiende contextos.</p>
                     <p className="text-base font-bold text-emerald-600 dark:text-emerald-400">ChatGPT responde.</p>
                   </div>
-                  <Bot className="w-10 h-10 text-emerald-600 dark:text-emerald-400" />
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-300 via-emerald-400 to-emerald-600 p-2 shadow-lg ring-2 ring-emerald-200">
+                    <Bot className="w-full h-full text-emerald-900" />
+                  </div>
                 </div>
               </div>
               
