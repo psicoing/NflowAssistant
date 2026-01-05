@@ -1196,6 +1196,73 @@ export default function RecursosGratis() {
                     </div>
                   </div>
                 </Card>
+
+                {/* Artículo sobre Salud Emocional en el Trabajo */}
+                <Card className="p-6 mt-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                      <Briefcase className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900">Salud emocional en el trabajo</h3>
+                      <p className="text-sm text-blue-700">Gestión del estrés laboral</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6 text-gray-700">
+                    <div>
+                      <h4 className="font-bold text-blue-800 mb-2">¿Qué es la salud emocional en el trabajo?</h4>
+                      <p className="text-sm leading-relaxed">
+                        Es la capacidad de gestionar las emociones de manera adecuada, mantener un equilibrio mental y desarrollar relaciones saludables dentro del entorno laboral. Implica autorregulación emocional, comunicación efectiva, sentido del propósito y autocuidado.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-bold text-blue-800 mb-2">¿Cómo afrontar el estrés laboral?</h4>
+                      <p className="text-sm leading-relaxed mb-3">
+                        El estrés laboral puede gestionarse mediante estrategias de autogestión, intervenciones individuales, fomento de la resiliencia y regulación emocional.
+                      </p>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-blue-700 text-sm mb-1">🧠 Modificar la experiencia</p>
+                          <p className="text-xs text-gray-600">Trabajar en pensamientos, sentimientos y comportamiento ante el estrés.</p>
+                        </div>
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-blue-700 text-sm mb-1">🧘 Desconexión psicológica</p>
+                          <p className="text-xs text-gray-600">Relajación y ejercicio como herramientas de desconexión del estrés.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="font-bold text-blue-800 mb-3">Factores clave para gestionar el estrés</h4>
+                      <div className="grid sm:grid-cols-2 gap-3">
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-sm text-gray-800">✔ Resiliencia individual</p>
+                          <p className="text-xs text-gray-600">Rasgos estables, estilo de afrontamiento y autoeficacia para manejar estresores.</p>
+                        </div>
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-sm text-gray-800">✔ Regulación emocional</p>
+                          <p className="text-xs text-gray-600">Pensamiento positivo, cambio de humor y búsqueda de apoyo social.</p>
+                        </div>
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-sm text-gray-800">✔ Responsabilidad personal</p>
+                          <p className="text-xs text-gray-600">Las estrategias de afrontamiento influyen directamente en el bienestar emocional.</p>
+                        </div>
+                        <div className="p-3 bg-white/60 rounded-lg">
+                          <p className="font-semibold text-sm text-gray-800">✔ Intervenciones a corto plazo</p>
+                          <p className="text-xs text-gray-600">Técnicas con efectos beneficiosos a corto y mediano plazo para reducir síntomas.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-blue-100 rounded-xl border border-blue-300">
+                      <p className="text-sm font-semibold text-blue-900 text-center">
+                        💼 Un ambiente de trabajo positivo aumenta la productividad sin sacrificar el bienestar personal.
+                      </p>
+                    </div>
+                  </div>
+                </Card>
               </TabsContent>
             </Tabs>
           </div>
