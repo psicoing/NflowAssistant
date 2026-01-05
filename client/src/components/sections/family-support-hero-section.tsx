@@ -78,7 +78,7 @@ export default function FamilySupportHeroSection() {
                   <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                   <div className="text-xs text-emerald-700 dark:text-emerald-300/90 text-left leading-relaxed">
                     <span className="font-semibold text-emerald-800 dark:text-emerald-400">100% Confidencial.</span> Email solo para pago. Sin confirmaciones ni recuperaciones.
-                    Excepción: usuarios Shopify reciben email de acceso (seguridad extra). <span className="font-semibold">Silencio total.</span>
+                    Excepción: usuarios Shopify reciben email de acceso (seguridad extra). <span className="font-semibold">Confidencial total, todo entre tú y NUXA.</span>
                   </div>
                 </div>
               </div>
