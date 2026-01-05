@@ -163,10 +163,9 @@ export default function Login() {
               <div className="flex items-start gap-2">
                 <ShieldAlert className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
                 <div className="text-xs text-amber-300/90 text-left leading-relaxed">
-                  <span className="font-semibold text-amber-400">Aviso:</span> Guarda bien tu contraseña. No se puede recuperar.
-                  Si la pierdes, deberás registrarte de nuevo.
+                  <span className="font-semibold text-amber-400">Aviso:</span> Guarda tu contraseña. No se puede recuperar.
                   <br /><br />
-                  <span className="text-emerald-400">NUXA es 100% confidencial</span> y usa encriptado de alta seguridad.
+                  <span className="text-emerald-400">100% Confidencial.</span> Encriptado de alta seguridad. Usuarios Shopify reciben email de acceso.
                 </div>
               </div>
             </div>
