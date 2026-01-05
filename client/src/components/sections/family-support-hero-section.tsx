@@ -1,4 +1,4 @@
-import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X, Brain, Heart, Menu, ShieldCheck } from "lucide-react";
+import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X, Brain, Heart, Menu, ShieldCheck, Compass, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -58,13 +58,15 @@ export default function FamilySupportHeroSection() {
                 </p>
               </div>
 
-              {/* Social Proof */}
+              {/* NUXA vs ChatGPT Badge */}
               <div className="flex justify-center items-center pt-4">
-                <div className="flex items-center gap-3 bg-white dark:bg-slate-700 px-6 py-3 rounded-full border-2 border-emerald-300 dark:border-emerald-600 shadow-lg">
-                  <Heart className="w-8 h-8 text-emerald-500 fill-emerald-500" />
-                  <p className="text-base text-gray-900 dark:text-gray-100 font-semibold">
-                    <span className="font-extrabold text-emerald-700 dark:text-emerald-400">NUXA ≠ ChatGPT</span>
-                  </p>
+                <div className="flex items-center gap-4 bg-gradient-to-r from-emerald-100 via-emerald-50 to-emerald-100 dark:from-emerald-900/50 dark:via-emerald-800/30 dark:to-emerald-900/50 px-6 py-4 rounded-full border-2 border-emerald-300 dark:border-emerald-600 shadow-lg">
+                  <Compass className="w-10 h-10 text-amber-600 dark:text-amber-400" />
+                  <div className="text-center">
+                    <p className="text-base font-bold text-emerald-700 dark:text-emerald-300">NUXA entiende contextos.</p>
+                    <p className="text-base font-bold text-emerald-600 dark:text-emerald-400">ChatGPT responde.</p>
+                  </div>
+                  <Bot className="w-10 h-10 text-emerald-600 dark:text-emerald-400" />
                 </div>
               </div>
               
