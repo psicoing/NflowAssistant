@@ -61,13 +61,9 @@ export default function FamilySupportHeroSection() {
               {/* Social Proof */}
               <div className="flex justify-center items-center pt-4">
                 <div className="flex items-center gap-3 bg-white dark:bg-slate-700 px-6 py-3 rounded-full border-2 border-emerald-300 dark:border-emerald-600 shadow-lg">
-                  <div className="flex -space-x-2">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 border-2 border-white dark:border-slate-900"></div>
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 border-2 border-white dark:border-slate-900"></div>
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 border-2 border-white dark:border-slate-900"></div>
-                  </div>
+                  <Heart className="w-8 h-8 text-emerald-500 fill-emerald-500" />
                   <p className="text-base text-gray-900 dark:text-gray-100 font-semibold">
-                    <span className="font-extrabold text-emerald-700 dark:text-emerald-400">NUXA ≠ ChatGPT</span> · Psicólogo IA especializado
+                    <span className="font-extrabold text-emerald-700 dark:text-emerald-400">NUXA ≠ ChatGPT</span>
                   </p>
                 </div>
               </div>
