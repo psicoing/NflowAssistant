@@ -46,9 +46,9 @@ export default function FamilySupportHeroSection() {
                   ))}
                 </div>
 
-                <p className="text-[11px] text-blue-900 dark:text-blue-300 font-bold leading-relaxed max-w-xl mx-auto">
+                <div className="max-w-xl mx-auto px-4 py-3 rounded-full font-bold text-[11px] text-white leading-relaxed animate-traffic-light shadow-lg">
                   NUXA es un orientador en psicología que no hace tratamientos ni psicoterapia, ayuda a las personas y empresas a mejorar la salud mental. Habla 150 idiomas. NUXA no hace de psicólogo ni de psiquiatra, para eso debes buscar ayuda colegiada profesional.
-                </p>
+                </div>
               </div>
 
               {/* Target Audience */}
