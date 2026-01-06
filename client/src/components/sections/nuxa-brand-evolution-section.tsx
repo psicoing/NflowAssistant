@@ -1,4 +1,6 @@
-import { Users, Heart, Sparkles } from "lucide-react";
+import { Users, Heart, Sparkles, Phone } from "lucide-react";
+import { Link } from "wouter";
+import { Button } from "@/components/ui/button";
 import nuxaLogo from "@assets/generated_images/NUXA_logo_with_circle_person_ba9dba6f.png";
 
 export default function NuxaBrandEvolutionSection() {
@@ -48,6 +50,23 @@ export default function NuxaBrandEvolutionSection() {
               Psicología + IA
             </p>
           </div>
+        </div>
+
+        {/* Emergency Helplines Button */}
+        <div className="flex justify-center mt-8">
+          <Link href="/recursos?tab=recursos">
+            <Button 
+              size="lg"
+              className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold px-8 py-6 text-base shadow-lg"
+              data-testid="button-emergency-helplines"
+            >
+              <Phone className="w-5 h-5 mr-3" />
+              <div className="flex flex-col items-start leading-tight">
+                <span>TELÉFONOS DE URGENCIAS</span>
+                <span className="text-xs font-normal opacity-90">Emergency Helplines</span>
+              </div>
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
