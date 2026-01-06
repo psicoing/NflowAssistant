@@ -1055,7 +1055,7 @@ export default function EjemplosChat() {
                     
                     <div className="bg-yellow-400/20 backdrop-blur-sm rounded-xl p-4 border border-yellow-400/30">
                       <p className="text-white text-center font-medium">
-                        <span className="text-yellow-300">💡</span> Más de <strong>53.000 personas</strong> ya han probado NUXA
+                        <span className="text-yellow-300">💡</span> <strong>NUXA</strong> está ayudando a muchas personas cada día
                       </p>
                     </div>
                   </div>
