@@ -200,6 +200,14 @@ export default function RecursosGratis() {
   const [selectedActividad, setSelectedActividad] = useState<Actividad | null>(null);
   const [showHelpLinesModal, setShowHelpLinesModal] = useState(false);
 
+  // Check URL params to auto-open helplines modal
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('helplines') === 'true') {
+      setShowHelpLinesModal(true);
+    }
+  }, []);
+
   const emotions: Emotion[] = [
     { id: 'feliz', name: 'Feliz', emoji: '😊', color: 'bg-green-100 hover:bg-green-200 border-green-300' },
     { id: 'tranquilo', name: 'Tranquilo', emoji: '😌', color: 'bg-blue-100 hover:bg-blue-200 border-blue-300' },

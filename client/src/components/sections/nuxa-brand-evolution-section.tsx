@@ -54,7 +54,7 @@ export default function NuxaBrandEvolutionSection() {
 
         {/* Emergency Helplines Button */}
         <div className="flex justify-center mt-8">
-          <Link href="/recursos?tab=recursos">
+          <Link href="/recursos?helplines=true">
             <Button 
               size="lg"
               className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold px-8 py-6 text-base shadow-lg"
