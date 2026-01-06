@@ -822,7 +822,7 @@ export default function RecursosGratis() {
                 Registro Emocional
               </h3>
               <p className="text-gray-600 mb-4">
-                Registra cómo te sientes hoy. Toma conciencia de tus emociones y construye tu racha diaria.
+                Reflexiona sobre cómo te sientes hoy. Tus registros se guardan en este navegador para tu seguimiento personal.
               </p>
               <Badge className="bg-orange-100 text-orange-700 border-orange-200">
                 30 segundos
