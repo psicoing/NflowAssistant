@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { Check, Shield, Star, Gem, Users, Building, FileSpreadsheet, Lock, UserCheck, Eye, Globe, Briefcase } from "lucide-react";
+import { Check, Shield, Star, Gem, Users, Building, FileSpreadsheet, Lock, UserCheck, Eye, Globe, Briefcase, FileText } from "lucide-react";
 import PurchaseCreditsModal from "@/components/modals/purchase-credits-modal";
+import { useState } from "react";
 
 export default function PreciosSection() {
   const [, setLocation] = useLocation();
@@ -460,7 +461,7 @@ export default function PreciosSection() {
           </div>
 
           {/* ISO 45003 Badge */}
-          <div className="bg-gray-900 rounded-2xl p-6 text-center">
+          <div className="bg-gray-900 rounded-2xl p-6 text-center mb-10">
             <div className="flex items-center justify-center gap-3 mb-3">
               <Globe className="w-6 h-6 text-emerald-400" />
               <span className="text-emerald-400 font-bold">ISO 45003</span>
@@ -475,6 +476,32 @@ export default function PreciosSection() {
             >
               Contactar con Ventas
             </Button>
+          </div>
+
+          {/* Naturaleza Contractual */}
+          <div className="bg-gradient-to-r from-slate-50 to-gray-100 rounded-2xl p-6 border border-slate-200">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-slate-700 flex items-center justify-center flex-shrink-0">
+                <FileText className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h4 className="font-bold text-gray-900 mb-3">Naturaleza contractual del servicio NUXA para empresas e instituciones</h4>
+                <div className="text-sm text-gray-600 space-y-3">
+                  <p>
+                    El uso de la plataforma NUXA por parte de empresas e instituciones se articula exclusivamente bajo la modalidad de <strong>arrendamiento de servicios</strong>.
+                  </p>
+                  <p>
+                    Las empresas e instituciones que acceden y utilizan NUXA adquieren la condición de arrendatarias del servicio, en régimen de alquiler, sin que exista en ningún caso cesión de propiedad, licencia perpetua ni transmisión de derechos sobre la plataforma, su tecnología o sus contenidos.
+                  </p>
+                  <p>
+                    La contraprestación económica satisfecha por el uso de NUXA tiene naturaleza de renta por arrendamiento, por lo que la facturación se realizará conforme a dicho concepto y quedará sujeta al régimen fiscal aplicable a los rendimientos derivados de arrendamientos, incluyendo las obligaciones fiscales que correspondan según la normativa vigente.
+                  </p>
+                  <p className="text-gray-700 font-medium">
+                    Este modelo garantiza una relación contractual clara, transparente y jurídicamente delimitada, en la que NUXA actúa como proveedor del servicio y la empresa o institución como arrendataria del mismo, en los términos propios de un alquiler de uso tecnológico.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
