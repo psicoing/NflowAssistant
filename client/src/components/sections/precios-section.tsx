@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { Check, Shield, Star, Gem, Users, Building, FileSpreadsheet, Lock, UserCheck, Eye, Globe } from "lucide-react";
+import { Check, Shield, Star, Gem, Users, Building, FileSpreadsheet, Lock, UserCheck, Eye, Globe, Briefcase } from "lucide-react";
 import PurchaseCreditsModal from "@/components/modals/purchase-credits-modal";
 
 export default function PreciosSection() {
@@ -187,6 +187,138 @@ export default function PreciosSection() {
               <Check className="w-4 h-4" />
               Sin permanencia · Anula cuando quieras
             </span>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-gray-200 my-12"></div>
+
+        {/* Planes Empresariales */}
+        <div className="mb-16">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Planes Empresas
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Soluciones profesionales para organizaciones que priorizan el bienestar mental de sus equipos.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Plan Profesional */}
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow">
+              <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 text-white text-center">
+                <Briefcase className="w-10 h-10 mx-auto mb-3" />
+                <h3 className="text-xl font-bold">Plan Profesional</h3>
+                <div className="mt-2">
+                  <span className="text-3xl font-bold">€149.50</span>
+                  <span className="text-sm opacity-80">/mes</span>
+                </div>
+              </div>
+              <div className="p-6">
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    Hasta 50 clientes/pacientes
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    Panel de administración
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    Informes y analytics
+                  </li>
+                </ul>
+                <Button 
+                  onClick={() => setLocation("/partners")}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700"
+                  data-testid="button-plan-profesional"
+                >
+                  Contactar
+                </Button>
+              </div>
+            </div>
+
+            {/* Plan Empresarial - Destacado */}
+            <div className="bg-white rounded-2xl shadow-xl border-2 border-orange-400 overflow-hidden relative transform md:-translate-y-2">
+              <div className="absolute top-0 left-0 right-0 bg-orange-500 text-white text-center py-1 text-xs font-bold">
+                MÁS POPULAR
+              </div>
+              <div className="bg-gradient-to-r from-orange-500 to-red-600 p-6 pt-8 text-white text-center">
+                <Building className="w-10 h-10 mx-auto mb-3" />
+                <h3 className="text-xl font-bold">Plan Empresarial</h3>
+                <div className="mt-2">
+                  <span className="text-3xl font-bold">€598</span>
+                  <span className="text-sm opacity-80">/mes</span>
+                </div>
+              </div>
+              <div className="p-6">
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    Hasta 200 empleados
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    Soporte dedicado 24/7
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    Cumplimiento ISO 45003
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    Onboarding incluido
+                  </li>
+                </ul>
+                <Button 
+                  onClick={() => setLocation("/partners")}
+                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                  data-testid="button-plan-empresarial"
+                >
+                  Contactar
+                </Button>
+              </div>
+            </div>
+
+            {/* Plan Corporativo */}
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow">
+              <div className="bg-gradient-to-r from-purple-600 to-indigo-700 p-6 text-white text-center">
+                <Globe className="w-10 h-10 mx-auto mb-3" />
+                <h3 className="text-xl font-bold">Plan Corporativo</h3>
+                <div className="mt-2">
+                  <span className="text-2xl font-bold">Personalizado</span>
+                </div>
+              </div>
+              <div className="p-6">
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    Usuarios ilimitados
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    Implementación personalizada
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    Integración API completa
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    Cumplimiento GDPR
+                  </li>
+                </ul>
+                <Button 
+                  onClick={() => setLocation("/partners")}
+                  className="w-full bg-purple-600 hover:bg-purple-700"
+                  data-testid="button-plan-corporativo"
+                >
+                  Contactar Ventas
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 
