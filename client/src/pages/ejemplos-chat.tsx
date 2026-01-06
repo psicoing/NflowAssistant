@@ -1040,7 +1040,7 @@ export default function EjemplosChat() {
                         </li>
                         <li className="flex items-start gap-3">
                           <span className="text-emerald-300 font-bold">✓</span>
-                          <span><strong>Detecta urgencias</strong> y te conecta con profesionales</span>
+                          <span><strong>Detecta urgencias</strong> y te invita a que tomes decisiones voluntariamente</span>
                         </li>
                         <li className="flex items-start gap-3">
                           <span className="text-emerald-300 font-bold">✓</span>
