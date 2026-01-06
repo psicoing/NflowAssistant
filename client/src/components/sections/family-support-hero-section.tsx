@@ -56,6 +56,9 @@ export default function FamilySupportHeroSection() {
                 <p className="text-2xl md:text-3xl font-bold text-blue-900 dark:text-blue-300 tracking-wide" style={{ fontFamily: "'Poppins', sans-serif" }}>
                   PERSONAS, FAMILIAS Y EMPRESAS
                 </p>
+                <p className="text-[10px] text-blue-800/70 dark:text-blue-400/70 mt-1">
+                  (antes NUXA se llamaba NFLOW)
+                </p>
               </div>
             </div>
 
