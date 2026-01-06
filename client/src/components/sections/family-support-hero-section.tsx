@@ -57,33 +57,6 @@ export default function FamilySupportHeroSection() {
                   PERSONAS, FAMILIAS Y EMPRESAS
                 </p>
               </div>
-
-              {/* NUXA vs ChatGPT Badge */}
-              <div className="flex justify-center items-center pt-4">
-                <div className="flex items-center gap-4 bg-gradient-to-r from-emerald-100 via-emerald-50 to-emerald-100 dark:from-emerald-900/50 dark:via-emerald-800/30 dark:to-emerald-900/50 px-6 py-4 rounded-full border-2 border-emerald-300 dark:border-emerald-600 shadow-lg">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-300 via-amber-400 to-amber-600 p-2 shadow-lg ring-2 ring-amber-200">
-                    <Compass className="w-full h-full text-amber-900" />
-                  </div>
-                  <div className="text-center">
-                    <p className="text-base font-bold text-emerald-700 dark:text-emerald-300">NUXA entiende contextos.</p>
-                    <p className="text-base font-bold text-emerald-600 dark:text-emerald-400">ChatGPT responde.</p>
-                  </div>
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-300 via-emerald-400 to-emerald-600 p-2 shadow-lg ring-2 ring-emerald-200">
-                    <Bot className="w-full h-full text-emerald-900" />
-                  </div>
-                </div>
-              </div>
-              
-              {/* Privacy Notice */}
-              <div className="mt-4 max-w-lg mx-auto p-3 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700/50 rounded-lg">
-                <div className="flex items-start gap-2">
-                  <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <div className="text-xs text-emerald-700 dark:text-emerald-300/90 text-left leading-relaxed">
-                    <span className="font-semibold text-emerald-800 dark:text-emerald-400">100% Confidencial.</span> Email solo para pago. Sin confirmaciones ni recuperaciones.
-                    Excepción: usuarios Shopify reciben email de acceso (seguridad extra). <span className="font-semibold">Confidencial total, todo entre tú y NUXA.</span>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Value proposition */}
