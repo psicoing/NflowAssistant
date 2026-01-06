@@ -1,9 +1,42 @@
-import { Sparkles, MessageCircle, BookOpen, Zap, Check } from "lucide-react";
+import { Sparkles, MessageCircle, BookOpen, Zap, Check, FileText } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useState } from "react";
 
 export default function NflowToNuxaTransitionSection() {
+  const [isPdfOpen, setIsPdfOpen] = useState(false);
+
   return (
     <section className="relative bg-white dark:bg-slate-900 py-12 md:py-16">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Banner Departamento de Salud - Above the card */}
+        <div className="mb-8 max-w-3xl mx-auto">
+          <button
+            onClick={() => setIsPdfOpen(true)}
+            className="w-full bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border-2 border-emerald-400 dark:border-emerald-600 rounded-2xl p-4 hover:shadow-xl hover:border-emerald-500 dark:hover:border-emerald-500 transition-all duration-300 transform hover:scale-[1.02] group"
+            data-testid="button-departamento-salud"
+          >
+            <div className="flex items-center justify-center gap-4">
+              <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                <FileText className="w-5 h-5 text-white" />
+              </div>
+              <div className="text-left flex-1">
+                <p className="text-sm font-bold text-gray-900 dark:text-white mb-0.5 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
+                  Esta app recibió del Departamento de Salud de Catalunya - España una nota informativa de calidad
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+                  This app received a quality informative note from the Health Department of Catalonia - Spain
+                </p>
+              </div>
+              <div className="flex-shrink-0">
+                <svg className="w-5 h-5 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </button>
+        </div>
+
         <div className="relative bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-slate-800 dark:via-slate-800 dark:to-slate-700 rounded-3xl p-8 md:p-12 border-2 border-emerald-200 dark:border-emerald-700 shadow-2xl overflow-hidden">
           
           {/* Decorative Elements */}
@@ -112,6 +145,42 @@ export default function NflowToNuxaTransitionSection() {
           </div>
         </div>
       </div>
+
+      {/* Modal para Nota Informativa */}
+      <Dialog open={isPdfOpen} onOpenChange={setIsPdfOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] p-0 overflow-hidden">
+          <DialogHeader className="p-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+            <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                <FileText className="w-5 h-5 text-white" />
+              </div>
+              Nota Informativa - Departament de Salut
+            </DialogTitle>
+          </DialogHeader>
+          <div className="overflow-y-auto max-h-[calc(90vh-100px)] bg-white dark:bg-gray-900">
+            <div className="relative">
+              <div className="sticky top-0 z-10 bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-4 shadow-lg">
+                <div className="flex items-center justify-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-lg">NFlow.Style</span>
+                    <span className="text-xl">→</span>
+                    <span className="font-bold text-lg">NUXA.life</span>
+                  </div>
+                </div>
+                <p className="text-center text-sm mt-1 opacity-90">
+                  NFlow.Style is now NUXA.life
+                </p>
+              </div>
+              
+              <img
+                src="/nota-departamento-salud.png"
+                alt="Nota Informativa del Departament de Salut sobre NUXA.life"
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

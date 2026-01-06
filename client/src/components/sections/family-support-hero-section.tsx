@@ -84,34 +84,6 @@ export default function FamilySupportHeroSection() {
                   </div>
                 </div>
               </div>
-
-              {/* Banner Departamento de Salud - Moved here */}
-              <div className="mt-6 max-w-2xl mx-auto">
-                <button
-                  onClick={() => setIsPdfOpen(true)}
-                  className="w-full bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border-2 border-emerald-400 dark:border-emerald-600 rounded-2xl p-4 hover:shadow-xl hover:border-emerald-500 dark:hover:border-emerald-500 transition-all duration-300 transform hover:scale-105 group"
-                  data-testid="button-departamento-salud-main"
-                >
-                  <div className="flex items-center justify-center gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
-                      <FileText className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="text-left flex-1">
-                      <p className="text-sm font-bold text-gray-900 dark:text-white mb-0.5 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
-                        Esta app recibió del Departamento de Salud de Catalunya - España una nota informativa de calidad
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-                        This app received a quality informative note from the Health Department of Catalonia - Spain
-                      </p>
-                    </div>
-                    <div className="flex-shrink-0">
-                      <svg className="w-5 h-5 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </div>
-                </button>
-              </div>
             </div>
 
             {/* Value proposition */}
