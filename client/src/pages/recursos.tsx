@@ -849,7 +849,7 @@ export default function RecursosGratis() {
 
           {/* Evaluaciones */}
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Evaluaciones profesionales</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Screening Orientativo</h2>
             <div className="grid md:grid-cols-3 gap-4">
               <Card
                 className="p-6 hover:shadow-lg transition-all duration-300 cursor-pointer group"
