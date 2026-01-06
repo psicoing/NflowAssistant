@@ -1,4 +1,4 @@
-import { Users, Heart, Sparkles, Phone } from "lucide-react";
+import { Users, Heart, Sparkles, Phone, ArrowRight } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import nuxaLogo from "@assets/generated_images/NUXA_logo_with_circle_person_ba9dba6f.png";
@@ -17,8 +17,16 @@ export default function NuxaBrandEvolutionSection() {
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white text-center">
             🌿 <span className="text-orange-600 dark:text-orange-400">NUXA</span> — Tu espacio de bienestar
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 text-center max-w-xl">
-            La evolución de NFlow: ciencia, emoción y conexión humana
+          
+          {/* NFLOW to NUXA Evolution Badge */}
+          <div className="flex items-center gap-3 bg-gradient-to-r from-gray-100 via-emerald-50 to-gray-100 dark:from-slate-800 dark:via-emerald-900/30 dark:to-slate-800 px-5 py-3 rounded-full border border-gray-200 dark:border-gray-700 shadow-sm">
+            <span className="text-sm font-semibold text-gray-500 dark:text-gray-400 line-through decoration-2">NFLOW</span>
+            <ArrowRight className="w-4 h-4 text-emerald-500" />
+            <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">NUXA</span>
+          </div>
+          
+          <p className="text-gray-600 dark:text-gray-400 text-center max-w-xl text-sm">
+            Hemos evolucionado de NFLOW a NUXA: más ciencia, más emoción, más conexión humana
           </p>
         </div>
 
