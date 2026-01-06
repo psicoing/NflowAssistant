@@ -97,10 +97,10 @@ export default function NflowToNuxaTransitionSection() {
                   <div className="p-3 bg-emerald-500/20 rounded-xl">
                     <MessageCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">1. Chat con NEURO</h3>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">1. Chat con NEURO-PSI</h3>
                 </div>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  Puedes chatear con <span className="font-semibold text-emerald-600 dark:text-emerald-400">NEURO</span>, el asistente de NUXA. La experiencia es la de hablar con un psicólogo: escucha, responde con criterio y te acompaña en el proceso. <span className="font-medium">No simula, razona.</span>
+                  Puedes chatear con <span className="font-semibold text-emerald-600 dark:text-emerald-400">NEURO-PSI</span>, el asistente de NUXA. La experiencia es la de hablar con un psicólogo: escucha, responde con criterio y te acompaña en el proceso. <span className="font-medium">No simula, razona.</span>
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 italic">
                   La diferencia no se nota… y eso es precisamente lo importante.
@@ -148,7 +148,7 @@ export default function NflowToNuxaTransitionSection() {
                 </div>
               </div>
               <p className="text-center text-gray-600 dark:text-gray-400 mt-6 text-sm max-w-xl mx-auto">
-                Hoy puedes no querer hablar y solo leer. Mañana puedes querer orientación directa. Y pasado mañana, trabajar un recurso profesional acompañado por NEURO.
+                Hoy puedes no querer hablar y solo leer. Mañana puedes querer orientación directa. Y pasado mañana, trabajar un recurso profesional acompañado por NEURO-PSI.
               </p>
             </div>
 
