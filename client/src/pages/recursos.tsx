@@ -44,7 +44,9 @@ import {
   Briefcase,
   ArrowRight,
   Shield,
-  FileText
+  FileText,
+  Globe,
+  Phone
 } from "lucide-react";
 import { Link } from "wouter";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -196,6 +198,7 @@ export default function RecursosGratis() {
   const [evaluationAnswers, setEvaluationAnswers] = useState<Record<string, number>>({});
   const [evaluationResult, setEvaluationResult] = useState<number | null>(null);
   const [selectedActividad, setSelectedActividad] = useState<Actividad | null>(null);
+  const [showHelpLinesModal, setShowHelpLinesModal] = useState(false);
 
   const emotions: Emotion[] = [
     { id: 'feliz', name: 'Feliz', emoji: '😊', color: 'bg-green-100 hover:bg-green-200 border-green-300' },
@@ -1071,21 +1074,41 @@ export default function RecursosGratis() {
               <TabsContent value="recursos">
                 <div className="grid md:grid-cols-2 gap-6 mb-6">
                   <Card className="p-6">
-                    <h3 className="text-lg font-bold text-gray-900 mb-4">Líneas de Ayuda</h3>
+                    <div className="flex items-center gap-2 mb-4">
+                      <Globe className="w-5 h-5 text-blue-600" />
+                      <h3 className="text-lg font-bold text-gray-900">Líneas de Ayuda Nacionales e Internacionales</h3>
+                    </div>
                     <div className="space-y-3">
                       <div className="p-3 bg-blue-50 rounded-lg">
-                        <p className="font-bold text-blue-800">Teléfono de la Esperanza</p>
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">🇪🇸</span>
+                          <p className="font-bold text-blue-800">Teléfono de la Esperanza</p>
+                        </div>
                         <p className="text-blue-600 text-lg font-mono">717 003 717</p>
                       </div>
                       <div className="p-3 bg-green-50 rounded-lg">
-                        <p className="font-bold text-green-800">Emergencias</p>
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">🆘</span>
+                          <p className="font-bold text-green-800">Emergencias</p>
+                        </div>
                         <p className="text-green-600 text-lg font-mono">112</p>
                       </div>
                       <div className="p-3 bg-purple-50 rounded-lg">
-                        <p className="font-bold text-purple-800">Atención al menor</p>
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">👧</span>
+                          <p className="font-bold text-purple-800">Atención al menor</p>
+                        </div>
                         <p className="text-purple-600 text-lg font-mono">116 111</p>
                       </div>
                     </div>
+                    <Button 
+                      onClick={() => setShowHelpLinesModal(true)}
+                      className="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                      data-testid="button-show-helplines"
+                    >
+                      <Globe className="w-4 h-4 mr-2" />
+                      Ver todas las líneas internacionales
+                    </Button>
                   </Card>
 
                   <Card className="p-6">
@@ -1325,6 +1348,286 @@ export default function RecursosGratis() {
                   </div>
                 </>
               )}
+            </DialogContent>
+          </Dialog>
+
+          {/* Modal Líneas de Ayuda Internacionales */}
+          <Dialog open={showHelpLinesModal} onOpenChange={setShowHelpLinesModal}>
+            <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2 text-xl">
+                  <Globe className="w-6 h-6 text-blue-600" />
+                  Líneas de Ayuda Internacionales
+                </DialogTitle>
+              </DialogHeader>
+              
+              <div className="space-y-4">
+                {/* España */}
+                <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇪🇸</span>
+                    <h4 className="font-bold text-gray-900">España</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Teléfono de la Esperanza:</span> <span className="font-mono text-blue-600">717 003 717</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">112</span></p>
+                    <p><span className="font-semibold">Atención al menor:</span> <span className="font-mono text-purple-600">116 111</span></p>
+                  </div>
+                </div>
+
+                {/* Estados Unidos */}
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇺🇸</span>
+                    <h4 className="font-bold text-gray-900">Estados Unidos</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Suicide & Crisis Lifeline:</span> <span className="font-mono text-blue-600">988</span> (24/7)</p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">911</span></p>
+                    <p><span className="font-semibold">Crisis Text Line:</span> text HOME al <span className="font-mono text-purple-600">741741</span></p>
+                  </div>
+                </div>
+
+                {/* Canadá */}
+                <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇨🇦</span>
+                    <h4 className="font-bold text-gray-900">Canadá</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Suicide Crisis Helpline:</span> <span className="font-mono text-blue-600">988</span> (24/7, bilingüe)</p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">911</span></p>
+                  </div>
+                </div>
+
+                {/* Reino Unido */}
+                <div className="p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇬🇧</span>
+                    <h4 className="font-bold text-gray-900">Reino Unido</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Samaritans:</span> <span className="font-mono text-blue-600">+44 (0)8457 90 90 90</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">999 / 112</span></p>
+                  </div>
+                </div>
+
+                {/* Irlanda */}
+                <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇮🇪</span>
+                    <h4 className="font-bold text-gray-900">Irlanda</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Samaritans Ireland:</span> <span className="font-mono text-blue-600">116 123</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">112 / 999</span></p>
+                  </div>
+                </div>
+
+                {/* Francia */}
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇫🇷</span>
+                    <h4 className="font-bold text-gray-900">Francia</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Prévention du suicide:</span> <span className="font-mono text-blue-600">3114</span> (24/7)</p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">112 / 15</span></p>
+                  </div>
+                </div>
+
+                {/* Alemania */}
+                <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇩🇪</span>
+                    <h4 className="font-bold text-gray-900">Alemania</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">TelefonSeelsorge:</span> <span className="font-mono text-blue-600">0800 111 0 111</span> / <span className="font-mono text-blue-600">0800 111 0 222</span></p>
+                    <p><span className="font-semibold">Niños y jóvenes:</span> <span className="font-mono text-purple-600">116 111</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">112</span></p>
+                  </div>
+                </div>
+
+                {/* Países Bajos */}
+                <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇳🇱</span>
+                    <h4 className="font-bold text-gray-900">Países Bajos</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">113 Suicide Prevention:</span> <span className="font-mono text-blue-600">113</span> / <span className="font-mono text-blue-600">+31 80 00113</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">112</span></p>
+                  </div>
+                </div>
+
+                {/* Bélgica */}
+                <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇧🇪</span>
+                    <h4 className="font-bold text-gray-900">Bélgica</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Zelfmoordlijn:</span> <span className="font-mono text-blue-600">1813</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">112</span></p>
+                  </div>
+                </div>
+
+                {/* Suiza */}
+                <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇨🇭</span>
+                    <h4 className="font-bold text-gray-900">Suiza</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Dargebotene Hand:</span> <span className="font-mono text-blue-600">143</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">112 / 144</span></p>
+                  </div>
+                </div>
+
+                {/* Italia */}
+                <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇮🇹</span>
+                    <h4 className="font-bold text-gray-900">Italia</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Telefono Amico:</span> <span className="font-mono text-blue-600">+39 02 2327 2327</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">112</span></p>
+                  </div>
+                </div>
+
+                {/* Portugal */}
+                <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇵🇹</span>
+                    <h4 className="font-bold text-gray-900">Portugal</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Voz de Apoio:</span> <span className="font-mono text-blue-600">225 50 60 70</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">112</span></p>
+                  </div>
+                </div>
+
+                {/* Latinoamérica Header */}
+                <div className="border-t border-gray-300 pt-4 mt-4">
+                  <h3 className="font-bold text-lg text-gray-900 mb-3">🌎 Latinoamérica</h3>
+                </div>
+
+                {/* Brasil */}
+                <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇧🇷</span>
+                    <h4 className="font-bold text-gray-900">Brasil</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">CVV:</span> <span className="font-mono text-blue-600">188</span> (24/7, gratuito)</p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">190 / 192</span></p>
+                  </div>
+                </div>
+
+                {/* México */}
+                <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇲🇽</span>
+                    <h4 className="font-bold text-gray-900">México</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Línea de la Vida:</span> <span className="font-mono text-blue-600">800 911 2000</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">911</span></p>
+                  </div>
+                </div>
+
+                {/* Argentina */}
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇦🇷</span>
+                    <h4 className="font-bold text-gray-900">Argentina</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Centro de Atención al Suicida:</span> <span className="font-mono text-blue-600">+54 (11) 5275-1135</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">911 / 107</span></p>
+                  </div>
+                </div>
+
+                {/* Chile */}
+                <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇨🇱</span>
+                    <h4 className="font-bold text-gray-900">Chile</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Salud Responde:</span> <span className="font-mono text-blue-600">600 360 7777</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">131 / 133</span></p>
+                  </div>
+                </div>
+
+                {/* Colombia */}
+                <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇨🇴</span>
+                    <h4 className="font-bold text-gray-900">Colombia</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Línea 106 (Bogotá):</span> <span className="font-mono text-blue-600">106</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">123</span></p>
+                  </div>
+                </div>
+
+                {/* Asia-Pacífico Header */}
+                <div className="border-t border-gray-300 pt-4 mt-4">
+                  <h3 className="font-bold text-lg text-gray-900 mb-3">🌏 Asia-Pacífico</h3>
+                </div>
+
+                {/* India */}
+                <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇮🇳</span>
+                    <h4 className="font-bold text-gray-900">India</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Tele-MANAS:</span> <span className="font-mono text-blue-600">14416</span> / <span className="font-mono text-blue-600">1-800-891-4416</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">112</span></p>
+                  </div>
+                </div>
+
+                {/* Japón */}
+                <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇯🇵</span>
+                    <h4 className="font-bold text-gray-900">Japón</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Yorisoi Hotline:</span> <span className="font-mono text-blue-600">0120-279-338</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">110 / 119</span></p>
+                  </div>
+                </div>
+
+                {/* Australia */}
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">🇦🇺</span>
+                    <h4 className="font-bold text-gray-900">Australia</h4>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Lifeline:</span> <span className="font-mono text-blue-600">13 11 14</span></p>
+                    <p><span className="font-semibold">Emergencias:</span> <span className="font-mono text-green-600">000</span></p>
+                  </div>
+                </div>
+
+                {/* Recursos Globales */}
+                <div className="border-t border-gray-300 pt-4 mt-4">
+                  <h3 className="font-bold text-lg text-gray-900 mb-3">🌐 Recursos Globales (cualquier país)</h3>
+                  <div className="p-4 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg border border-emerald-200">
+                    <div className="space-y-2 text-sm">
+                      <p><span className="font-semibold">Befrienders Worldwide:</span> Directorio mundial de líneas de ayuda</p>
+                      <p><span className="font-semibold">Find A Helpline:</span> Buscador automático por país</p>
+                      <p><span className="font-semibold">IFRC / Cruz Roja:</span> Recursos locales en crisis</p>
+                    </div>
+                    <p className="text-xs text-gray-600 mt-3 italic">Si no encuentras tu país, estos directorios te ayudarán a localizar ayuda local.</p>
+                  </div>
+                </div>
+              </div>
             </DialogContent>
           </Dialog>
 

@@ -1,0 +1,172 @@
+🌍 LÍNEAS DE AYUDA INTERNACIONALES (SALUD MENTAL / CRISIS)
+
+🇪🇸 España
+	•	Teléfono de la Esperanza: 717 003 717
+	•	Emergencias: 112
+	•	Atención al menor: 116 111
+
+(Esto ya lo tienes bien, no lo toques.)
+
+⸻
+
+🇺🇸 Estados Unidos
+	•	988 – Suicide & Crisis Lifeline (llamada, chat y texto, 24/7)
+	•	Emergencias: 911
+	•	Crisis Text Line: text HOME al 741741
+
+Estados Unidos es claro: 988 es el estándar moderno. Punto.
+
+⸻
+
+🇨🇦 Canadá
+	•	988 – Suicide Crisis Helpline (24/7, bilingüe)
+	•	Emergencias: 911
+
+Canadá copió bien. Cuando algo funciona, no se reinventa.
+
+⸻
+
+🇬🇧 Reino Unido
+	•	Samaritans: +44 (0)8457 90 90 90
+	•	Emergencias: 999 o 112
+
+Aquí Samaritans es casi institución nacional.
+
+⸻
+
+🇮🇪 Irlanda
+	•	Samaritans Ireland: 116 123
+	•	Emergencias: 112 / 999
+
+⸻
+
+🇫🇷 Francia
+	•	3114 – Prévention du suicide (24/7)
+	•	Emergencias: 112 / 15
+
+Francia aquí lo ha hecho bien: un número único y claro.
+
+⸻
+
+🇩🇪 Alemania
+	•	TelefonSeelsorge:
+	•	0800 111 0 111
+	•	0800 111 0 222
+	•	Niños y jóvenes: 116 111
+	•	Emergencias: 112
+
+Sistema sólido, muy alemán: redundante y fiable.
+
+⸻
+
+🇳🇱 Países Bajos
+	•	113 Suicide Prevention: 113 o +31 80 00113
+	•	Emergencias: 112
+
+⸻
+
+🇧🇪 Bélgica
+	•	Zelfmoordlijn: 1813
+	•	Emergencias: 112
+
+⸻
+
+🇨🇭 Suiza
+	•	Dargebotene Hand: 143
+	•	Emergencias: 112 / 144
+
+⸻
+
+🇮🇹 Italia
+	•	Telefono Amico: +39 02 2327 2327
+	•	Emergencias: 112
+
+⸻
+
+🇵🇹 Portugal
+	•	Voz de Apoio: 225 50 60 70
+	•	Emergencias: 112
+
+⸻
+
+🇧🇷 Brasil
+	•	CVV: 188 (24/7, gratuito)
+	•	Emergencias: 190 / 192
+
+Brasil aquí es ejemplar: simple y accesible.
+
+⸻
+
+🇲🇽 México
+	•	Línea de la Vida: 800 911 2000
+	•	Emergencias: 911
+
+Muy buena cobertura nacional.
+
+⸻
+
+🇦🇷 Argentina
+	•	Centro de Atención al Suicida: +54 (11) 5275-1135
+	•	Emergencias: 911 / 107
+
+⸻
+
+🇨🇱 Chile
+	•	Salud Responde: 600 360 7777
+	•	Emergencias: 131 / 133
+
+⸻
+
+🇨🇴 Colombia
+	•	Línea 106 (Bogotá)
+	•	Emergencias: 123
+
+⸻
+
+🇮🇳 India
+	•	Tele-MANAS: 14416 o 1-800-891-4416
+	•	Emergencias: 112
+
+India va creciendo rápido en este terreno.
+
+⸻
+
+🇯🇵 Japón
+	•	Yorisoi Hotline: 0120-279-338
+	•	Emergencias: 110 / 119
+
+⸻
+
+🇨🇳 China
+	•	No hay número nacional único.
+	•	Existen líneas psicológicas provinciales y universitarias.
+
+👉 Aquí lo sensato para NUXA:
+
+“Si estás en China, usa directorios internacionales para localizar ayuda local.”
+
+⸻
+
+🇦🇺 Australia
+	•	Lifeline: 13 11 14
+	•	Emergencias: 000
+
+⸻
+
+🌐 GLOBAL (para cualquier país)
+
+Estas son las redes comodín, ideales cuando no hay número claro:
+	•	Befrienders Worldwide – directorio mundial
+	•	Find A Helpline – buscador automático por país
+	•	IFRC / Cruz Roja – recursos locales en crisis
+
+Estas tres deberían aparecer siempre como “Plan B”.
+
+⸻
+
+💡 Cómo lo mostraría yo en NUXA (sin reinventar la rueda)
+	•	Mostrar 3 niveles:
+	1.	Número local prioritario
+	2.	Emergencias
+	3.	Directorios globales
+	•	Con banderita 🇪🇸 🇺🇸 🇫🇷 (visual rápido, sin leer).
