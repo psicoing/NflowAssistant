@@ -11,7 +11,7 @@ export default function FamilyImageSection() {
           </h2>
           
           <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-            Cada persona merece apoyo emocional profesional. NFLOW conecta familias, 
+            Cada persona merece apoyo emocional profesional. NUXA conecta familias, 
             adolescentes, trabajadores y adultos con herramientas de bienestar mental 
             respaldadas por la ciencia y la experiencia clínica.
           </p>
@@ -21,7 +21,7 @@ export default function FamilyImageSection() {
         <div className="w-full">
           <img 
             src={familyImage} 
-            alt="Familia usando NFLOW para apoyo emocional" 
+            alt="Familia usando NUXA para apoyo emocional" 
             className="w-full h-auto object-cover"
           />
         </div>
