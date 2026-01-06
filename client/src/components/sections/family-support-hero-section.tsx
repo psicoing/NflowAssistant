@@ -84,6 +84,34 @@ export default function FamilySupportHeroSection() {
                   </div>
                 </div>
               </div>
+
+              {/* Banner Departamento de Salud - Moved here */}
+              <div className="mt-6 max-w-2xl mx-auto">
+                <button
+                  onClick={() => setIsPdfOpen(true)}
+                  className="w-full bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border-2 border-emerald-400 dark:border-emerald-600 rounded-2xl p-4 hover:shadow-xl hover:border-emerald-500 dark:hover:border-emerald-500 transition-all duration-300 transform hover:scale-105 group"
+                  data-testid="button-departamento-salud-main"
+                >
+                  <div className="flex items-center justify-center gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                      <FileText className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <p className="text-sm font-bold text-gray-900 dark:text-white mb-0.5 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
+                        Esta app recibió del Departamento de Salud de Catalunya - España una nota informativa de calidad
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+                        This app received a quality informative note from the Health Department of Catalonia - Spain
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <svg className="w-5 h-5 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              </div>
             </div>
 
             {/* Value proposition */}
@@ -162,54 +190,7 @@ export default function FamilySupportHeroSection() {
               </div>
             </div>
 
-            {/* Decorative Separator */}
-            <div className="flex items-center justify-center gap-4 my-10">
-              <div className="flex-1 h-1 bg-gradient-to-r from-transparent via-emerald-300 to-emerald-400 rounded-full"></div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-emerald-400 rounded-full"></div>
-                <div className="w-4 h-4 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-teal-400 rounded-full"></div>
-              </div>
-              <div className="flex-1 h-1 bg-gradient-to-l from-transparent via-teal-300 to-teal-400 rounded-full"></div>
             </div>
-
-            {/* Banner Departamento de Salud */}
-            <div className="max-w-3xl mx-auto">
-              <button
-                onClick={() => setIsPdfOpen(true)}
-                className="w-full bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border-2 border-emerald-400 dark:border-emerald-600 rounded-2xl p-6 hover:shadow-xl hover:border-emerald-500 dark:hover:border-emerald-500 transition-all duration-300 transform hover:scale-105 group"
-                data-testid="button-departamento-salud"
-              >
-                <div className="flex items-center justify-center gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
-                    <FileText className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="text-left flex-1">
-                    <h4 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
-                      Recomendado por Departamento de Salud
-                    </h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Haz clic para ver la nota informativa oficial
-                    </p>
-                  </div>
-                  {/* Iconos decorativos de salud mental */}
-                  <div className="hidden md:flex items-center gap-2 flex-shrink-0">
-                    <div className="w-10 h-10 bg-gradient-to-br from-teal-400/20 to-emerald-400/20 rounded-lg flex items-center justify-center border border-emerald-300/30">
-                      <Brain className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                    </div>
-                    <div className="w-10 h-10 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-lg flex items-center justify-center border border-emerald-300/30">
-                      <Heart className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                    </div>
-                  </div>
-                  <div className="flex-shrink-0">
-                    <svg className="w-6 h-6 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-              </button>
-            </div>
-          </div>
 
         </div>
       </div>
