@@ -119,18 +119,18 @@ export default function ContactoSection() {
         {/* Quick Contact Buttons */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <Button 
-            onClick={() => handleEmailContact("Consulta General sobre NFLOW")}
+            onClick={() => handleEmailContact("Consulta General sobre NUXA")}
             className="bg-blue-600 hover:bg-blue-700 text-white p-6 h-auto rounded-2xl"
           >
             <div className="text-center">
               <Mail className="w-8 h-8 mx-auto mb-2" />
               <div className="font-bold">Consulta General</div>
-              <div className="text-sm opacity-90">Información sobre NFLOW</div>
+              <div className="text-sm opacity-90">Información sobre NFLOW ahora NUXA</div>
             </div>
           </Button>
           
           <Button 
-            onClick={() => handleEmailContact("Soporte Técnico - NFLOW")}
+            onClick={() => handleEmailContact("Soporte Técnico - NUXA")}
             className="bg-green-600 hover:bg-green-700 text-white p-6 h-auto rounded-2xl"
           >
             <div className="text-center">
