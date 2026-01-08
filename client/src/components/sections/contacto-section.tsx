@@ -1,13 +1,15 @@
 import { Button } from "@/components/ui/button";
-import { Phone, Mail, MapPin, Clock, MessageCircle, Send, Globe } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Phone, Mail, MapPin, Clock, MessageCircle, Send, Globe, Bot, ShieldCheck } from "lucide-react";
+import { useState } from "react";
 
 const contactMethods = [
   {
     icon: Mail,
     title: "Email",
-    value: "empordajobs@gmail.com",
+    value: "jobda@jobda.es",
     description: "Respuesta en menos de 24 horas",
-    action: () => window.location.href = "mailto:empordajobs@gmail.com?subject=Consulta sobre NFLOW"
+    action: () => window.location.href = "mailto:jobda@jobda.es?subject=Consulta sobre NUXA"
   },
   {
     icon: Phone,
@@ -54,9 +56,12 @@ const supportOptions = [
 ];
 
 export default function ContactoSection() {
-  const handleEmailContact = (subject: string) => {
-    const email = "empordajobs@gmail.com";
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
+  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [contactSubject, setContactSubject] = useState("");
+
+  const handleOpenContact = (subject: string) => {
+    setContactSubject(subject);
+    setIsContactOpen(true);
   };
 
   return (
@@ -119,7 +124,7 @@ export default function ContactoSection() {
         {/* Quick Contact Buttons */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <Button 
-            onClick={() => handleEmailContact("Consulta General sobre NUXA")}
+            onClick={() => handleOpenContact("Consulta General sobre NUXA")}
             className="bg-blue-600 hover:bg-blue-700 text-white p-6 h-auto rounded-2xl"
           >
             <div className="text-center">
@@ -130,7 +135,7 @@ export default function ContactoSection() {
           </Button>
           
           <Button 
-            onClick={() => handleEmailContact("Soporte Técnico - NUXA")}
+            onClick={() => handleOpenContact("Soporte Técnico - NUXA")}
             className="bg-green-600 hover:bg-green-700 text-white p-6 h-auto rounded-2xl"
           >
             <div className="text-center">
@@ -141,7 +146,7 @@ export default function ContactoSection() {
           </Button>
           
           <Button 
-            onClick={() => handleEmailContact("Consulta Comercial - Planes y Precios")}
+            onClick={() => handleOpenContact("Consulta Comercial - Planes y Precios")}
             className="bg-purple-600 hover:bg-purple-700 text-white p-6 h-auto rounded-2xl"
           >
             <div className="text-center">
@@ -152,19 +157,48 @@ export default function ContactoSection() {
           </Button>
         </div>
 
-        {/* Business Hours */}
-        <div className="bg-gradient-to-r from-nflow-orange to-orange-600 rounded-3xl p-8 text-center">
-          <Clock className="w-12 h-12 text-white mx-auto mb-4" />
-          <h3 className="text-2xl font-bold text-white mb-4">Horario de Atención</h3>
-          <div className="text-white text-lg space-y-2">
-            <p><strong>Lunes a Viernes:</strong> 9:00 - 18:00 (CET)</p>
-            <p><strong>Fines de Semana:</strong> Solo emergencias</p>
-            <p className="text-white/80 mt-4">
-              * Para emergencias psicológicas, contacta con servicios de emergencia locales (112 en España)
+        {/* 100% Automatizado */}
+        <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl p-8 text-center">
+          <Bot className="w-12 h-12 text-white mx-auto mb-4" />
+          <h3 className="text-2xl font-bold text-white mb-4">100% Automatizado</h3>
+          <div className="text-white text-lg space-y-3">
+            <div className="flex items-center justify-center gap-2">
+              <ShieldCheck className="w-5 h-5" />
+              <span>Todo es <strong>anónimo y confidencial</strong></span>
+            </div>
+            <p className="text-white/80">
+              NUXA funciona las 24 horas del día, los 7 días de la semana, sin intervención humana.
             </p>
           </div>
         </div>
       </div>
+
+      {/* Modal de Contacto */}
+      <Dialog open={isContactOpen} onOpenChange={setIsContactOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+              <Mail className="w-6 h-6 text-emerald-600" />
+              {contactSubject}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="p-4 bg-gray-50 dark:bg-slate-800 rounded-xl">
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
+              Escríbenos a nuestro correo de contacto:
+            </p>
+            <a 
+              href={`mailto:jobda@jobda.es?subject=${encodeURIComponent(contactSubject)}`}
+              className="flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-4 rounded-xl font-bold text-lg transition-colors"
+            >
+              <Mail className="w-5 h-5" />
+              jobda@jobda.es
+            </a>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-4 text-center">
+              Te responderemos lo antes posible
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
