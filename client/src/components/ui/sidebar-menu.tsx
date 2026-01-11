@@ -27,7 +27,7 @@ const menuItems = [
   },
   {
     id: "precios",
-    name: "Precios",
+    name: "Plan y Suscripción",
     href: "/precios",
     icon: DollarSign
   },

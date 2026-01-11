@@ -46,7 +46,7 @@ const menuItems = [
   },
   {
     id: "precios",
-    name: "Precios",
+    name: "Plan y Suscripción",
     sectionId: "precios",
     icon: DollarSign,
     isPage: true

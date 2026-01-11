@@ -3,7 +3,7 @@ import Footer from "@/components/layout/footer";
 import PreciosSection from "@/components/sections/precios-section";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Brain, Moon, Smartphone, Heart, Leaf } from "lucide-react";
 import { useLocation } from "wouter";
 
 export default function PreciosPage() {
@@ -12,10 +12,10 @@ export default function PreciosPage() {
   return (
     <div className="min-h-screen bg-nflow-dark">
       <SEOHead
-        title="Precios - NUXA | Planes desde €2.99/mes + Pago Por Uso"
+        title="Plan y Suscripción - NUXA | Planes desde €2.99/mes + Pago Por Uso"
         description="NUXA: Suscripciones desde €2.99/mes o packs de créditos prepagados €5/15 preguntas. Sin caducidad. Apoyo emocional 24/7 con IA en 150+ idiomas. Elige la opción perfecta para ti."
         keywords="precios psicólogo IA, suscripción salud mental, pago por uso terapia, créditos prepagados IA, plan terapia online, NUXA precios, ISO 45003 empresas"
-        ogTitle="Planes y Precios NUXA - Flexible y Accesible"
+        ogTitle="Plan y Suscripción NUXA - Flexible y Accesible"
         ogDescription="Suscripciones mensuales o pago por uso. Créditos que nunca caducan. Apoyo emocional profesional 24/7 en 150+ idiomas."
         canonicalUrl="https://nuxa.life/precios"
       />
@@ -34,6 +34,87 @@ export default function PreciosPage() {
           </Button>
         </div>
 
+        {/* Sección Emocional - ¿Qué es NUXA? */}
+        <section className="bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 py-16 md:py-20">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+              {/* 5 Líneas emocionales */}
+              <div className="space-y-6">
+                <div className="flex items-start gap-4 group">
+                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl flex items-center justify-center border border-purple-500/30">
+                    <Brain className="w-6 h-6 text-purple-400" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-semibold text-white">Nuxa no es un chatbot</p>
+                    <p className="text-gray-400 text-sm mt-1">Es un lugar donde el ruido baja el volumen.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 group">
+                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-indigo-500/20 to-indigo-600/20 rounded-xl flex items-center justify-center border border-indigo-500/30">
+                    <Moon className="w-6 h-6 text-indigo-400" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-semibold text-white">Cuando la cabeza no para</p>
+                    <p className="text-gray-400 text-sm mt-1">alguien responde sin gritar, sin correr, sin juzgar.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 group">
+                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-xl flex items-center justify-center border border-blue-500/30">
+                    <Smartphone className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-semibold text-white">En el móvil, de noche o de día</p>
+                    <p className="text-gray-400 text-sm mt-1">cuando hablar con una persona no es posible.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 group">
+                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-rose-500/20 to-rose-600/20 rounded-xl flex items-center justify-center border border-rose-500/30">
+                    <Heart className="w-6 h-6 text-rose-400" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-semibold text-white">Recursos gratuitos primero</p>
+                    <p className="text-gray-400 text-sm mt-1">y conversación real solo si tú lo decides.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 group">
+                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 rounded-xl flex items-center justify-center border border-emerald-500/30">
+                    <Leaf className="w-6 h-6 text-emerald-400" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-semibold text-white">No promete milagros</p>
+                    <p className="text-gray-400 text-sm mt-1">promete acompañamiento humano.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Frase clave antes de pagar */}
+              <div className="flex flex-col justify-center">
+                <div className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/10 shadow-2xl">
+                  <div className="text-center space-y-6">
+                    <p className="text-xl md:text-2xl font-light text-white leading-relaxed italic">
+                      "No estás pagando por respuestas automáticas.
+                    </p>
+                    <p className="text-lg md:text-xl text-emerald-400 font-medium leading-relaxed">
+                      Estás entrando en un espacio donde alguien te responde con <span className="font-bold">calma, criterio y respeto</span>, cuando lo necesitas."
+                    </p>
+                    
+                    <div className="pt-4 border-t border-white/10">
+                      <p className="text-xs text-gray-500 leading-relaxed">
+                        Aquí no hay prisas, no hay juicios y no hay conversaciones enlatadas.<br/>
+                        <span className="text-gray-400 font-medium">Si esto no es lo que buscas, no pagues.</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -46,7 +127,7 @@ export default function PreciosPage() {
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-              Planes y <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Precios</span>
+              Plan y <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Suscripción</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
               Apoyo emocional profesional 24/7 para personas y empresas
