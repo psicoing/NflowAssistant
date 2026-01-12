@@ -51,9 +51,9 @@ export default function PreciosPage() {
                   <p className="text-gray-400 text-lg mb-4">
                     Let your mind be as it was before
                   </p>
-                  <p className="text-gray-500 text-sm leading-relaxed">
+                  <p className="text-gray-300 text-sm leading-relaxed">
                     A veces solo necesitas un espacio donde alguien te ayude a ajustar las piezas. Sin prisas, sin juicios.<br/>
-                    <span className="text-gray-600 italic">Sometimes you just need a space where someone helps you adjust the pieces. No rush, no judgment.</span>
+                    <span className="text-gray-400 italic">Sometimes you just need a space where someone helps you adjust the pieces. No rush, no judgment.</span>
                   </p>
                 </div>
                 <div className="flex items-center justify-center p-6 md:p-10">
