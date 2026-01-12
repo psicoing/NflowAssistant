@@ -775,18 +775,22 @@ export default function RecursosGratis() {
       <main className="pt-24 pb-12 px-4">
         <div className="max-w-6xl mx-auto">
           
-          {/* NUXA Racing Banner */}
-          <div className="mb-8 relative overflow-hidden rounded-3xl shadow-2xl">
+          {/* NUXA Racing Banner - Top */}
+          <div className="mb-10 relative overflow-hidden rounded-3xl shadow-2xl">
             <img 
               src={nuxaF1Img} 
-              alt="NUXA Racing - Tu mente en pole position" 
-              className="w-full h-48 md:h-64 object-cover"
+              alt="NUXA Racing - Luchamos para ofrecer lo mejor" 
+              className="w-full h-56 md:h-72 object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent flex items-center">
-              <div className="p-6 md:p-10">
-                <p className="text-white/80 text-sm font-medium mb-1">NUXA Racing</p>
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Tu mente en pole position</h2>
-                <p className="text-white/70 text-sm md:text-base">Your mind in pole position</p>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent flex items-center">
+              <div className="p-6 md:p-12">
+                <p className="text-lime-400 text-sm font-bold mb-2 tracking-wider">🏎️ NUXA RACING</p>
+                <h2 className="text-2xl md:text-4xl font-bold text-white mb-3 leading-tight">
+                  Luchamos para ofrecer gratis<br/>lo mejor de lo mejor
+                </h2>
+                <p className="text-white/80 text-sm md:text-lg">
+                  We fight to offer the best of the best for free
+                </p>
               </div>
             </div>
           </div>
