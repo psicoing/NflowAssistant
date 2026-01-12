@@ -5,6 +5,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Brain, Moon, Smartphone, Heart, Leaf } from "lucide-react";
 import { useLocation } from "wouter";
+import nuxaReparacionesImg from "@assets/image_1768235389814.png";
 
 export default function PreciosPage() {
   const [, setLocation] = useLocation();
@@ -34,9 +35,37 @@ export default function PreciosPage() {
           </Button>
         </div>
 
-        {/* Sección Emocional - ¿Qué es NUXA? */}
+        {/* Primera Tarjeta - NUXA Reparaciones */}
         <section className="bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 py-16 md:py-20">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Tarjeta NUXA Reparaciones con imagen */}
+            <div className="bg-gradient-to-br from-lime-50/10 via-white/5 to-emerald-50/10 backdrop-blur-sm rounded-3xl border border-lime-500/20 overflow-hidden mb-12">
+              <div className="grid md:grid-cols-2 gap-0 items-center">
+                <div className="p-8 md:p-12">
+                  <div className="inline-flex items-center gap-2 bg-lime-500/20 text-lime-300 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    🔧 NUXA Reparaciones
+                  </div>
+                  <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 leading-tight">
+                    Que tu mente vuelva a estar como antes
+                  </h2>
+                  <p className="text-gray-400 text-lg mb-4">
+                    Let your mind be as it was before
+                  </p>
+                  <p className="text-gray-500 text-sm leading-relaxed">
+                    A veces solo necesitas un espacio donde alguien te ayude a ajustar las piezas. Sin prisas, sin juicios.<br/>
+                    <span className="text-gray-600 italic">Sometimes you just need a space where someone helps you adjust the pieces. No rush, no judgment.</span>
+                  </p>
+                </div>
+                <div className="flex items-center justify-center p-6 md:p-10">
+                  <img 
+                    src={nuxaReparacionesImg} 
+                    alt="NUXA Reparaciones - Coco Nuxa" 
+                    className="max-w-full h-auto max-h-72 object-contain drop-shadow-2xl"
+                  />
+                </div>
+              </div>
+            </div>
+
             <div className="grid md:grid-cols-2 gap-8 md:gap-12">
               {/* 5 Líneas emocionales */}
               <div className="space-y-6">

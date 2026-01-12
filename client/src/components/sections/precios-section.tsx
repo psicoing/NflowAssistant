@@ -3,7 +3,6 @@ import { useLocation } from "wouter";
 import { Check, Shield, Star, Gem, Users, Building, FileSpreadsheet, Lock, UserCheck, Eye, Globe, Briefcase, FileText } from "lucide-react";
 import PurchaseCreditsModal from "@/components/modals/purchase-credits-modal";
 import { useState } from "react";
-import nuxaReparacionesImg from "@assets/image_1768235389814.png";
 
 export default function PreciosSection() {
   const [, setLocation] = useLocation();
@@ -19,32 +18,6 @@ export default function PreciosSection() {
     <section id="precios" className="py-16 px-4 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-6xl mx-auto">
         
-        {/* NUXA Reparaciones Card */}
-        <div className="mb-12">
-          <div className="bg-gradient-to-br from-lime-50 via-white to-emerald-50 rounded-3xl shadow-xl border border-lime-200 overflow-hidden max-w-3xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-0">
-              <div className="p-8 md:p-10 flex flex-col justify-center">
-                <div className="inline-flex items-center gap-2 bg-lime-100 text-lime-800 px-3 py-1 rounded-full text-sm font-medium mb-4 w-fit">
-                  🔧 NUXA Reparaciones
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 leading-tight">
-                  Que tu mente vuelva a estar como antes
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  A veces solo necesitas un espacio donde alguien te ayude a ajustar las piezas. Sin prisas, sin juicios.
-                </p>
-              </div>
-              <div className="flex items-center justify-center p-6 md:p-8 bg-white/50">
-                <img 
-                  src={nuxaReparacionesImg} 
-                  alt="NUXA Reparaciones - Coco Nuxa arreglando tu mente" 
-                  className="max-w-full h-auto max-h-64 object-contain"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Particulares Section */}
         <div className="mb-20">
           <div className="text-center mb-10">
