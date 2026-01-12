@@ -52,6 +52,7 @@ import { Link } from "wouter";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead } from "@/components/SEOHead";
+import nuxaF1Img from "@assets/image_1768242728947.png";
 
 interface Emotion {
   id: string;
@@ -774,6 +775,22 @@ export default function RecursosGratis() {
       <main className="pt-24 pb-12 px-4">
         <div className="max-w-6xl mx-auto">
           
+          {/* NUXA Racing Banner */}
+          <div className="mb-8 relative overflow-hidden rounded-3xl shadow-2xl">
+            <img 
+              src={nuxaF1Img} 
+              alt="NUXA Racing - Tu mente en pole position" 
+              className="w-full h-48 md:h-64 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent flex items-center">
+              <div className="p-6 md:p-10">
+                <p className="text-white/80 text-sm font-medium mb-1">NUXA Racing</p>
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Tu mente en pole position</h2>
+                <p className="text-white/70 text-sm md:text-base">Your mind in pole position</p>
+              </div>
+            </div>
+          </div>
+
           {/* Header */}
           <div className="text-center mb-12">
             <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 py-2 rounded-full mb-4">
