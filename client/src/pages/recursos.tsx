@@ -779,17 +779,24 @@ export default function RecursosGratis() {
           <div className="mb-10 relative overflow-hidden rounded-3xl shadow-2xl">
             <img 
               src={nuxaF1Img} 
-              alt="NUXA Racing - Luchamos para ofrecer lo mejor" 
-              className="w-full h-56 md:h-72 object-cover"
+              alt="NUXA - Tu bienestar, tu decisión" 
+              className="w-full h-auto min-h-64 md:min-h-80 object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent flex items-center">
-              <div className="p-6 md:p-12">
-                <p className="text-lime-400 text-sm font-bold mb-2 tracking-wider">🏎️ NUXA RACING</p>
-                <h2 className="text-2xl md:text-4xl font-bold text-white mb-3 leading-tight">
-                  Luchamos para ofrecer gratis<br/>lo mejor de lo mejor
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent flex items-center">
+              <div className="p-6 md:p-12 max-w-2xl">
+                <p className="text-lime-400 text-sm font-bold mb-3 tracking-wider">🏎️ NUXA · TU RITMO, TU CAMINO</p>
+                <h2 className="text-xl md:text-3xl font-bold text-white mb-4 leading-tight">
+                  Con o sin psicofármacos.<br/>
+                  Lo importante es encontrarse bien.
                 </h2>
-                <p className="text-white/80 text-sm md:text-lg">
-                  We fight to offer the best of the best for free
+                <p className="text-white/90 text-sm md:text-base mb-3 leading-relaxed">
+                  No importa lo que piensen de ti. Hay cosas que se comparten en la intimidad, no con todo el mundo.
+                </p>
+                <p className="text-white/70 text-xs md:text-sm italic">
+                  A nadie le importa si vas o no al psicólogo. Lo que importa es lo que tú decidas explicar, y a quién, si lo necesitas.
+                </p>
+                <p className="text-gray-400 text-xs mt-4 border-t border-white/20 pt-3">
+                  With or without medication. What matters is feeling well. You decide what to share and with whom.
                 </p>
               </div>
             </div>
