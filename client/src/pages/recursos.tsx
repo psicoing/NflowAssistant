@@ -776,28 +776,54 @@ export default function RecursosGratis() {
         <div className="max-w-6xl mx-auto">
           
           {/* NUXA Racing Banner - Top */}
-          <div className="mb-10 relative overflow-hidden rounded-3xl shadow-2xl">
-            <img 
-              src={nuxaF1Img} 
-              alt="NUXA - Tu bienestar, tu decisión" 
-              className="w-full h-auto min-h-64 md:min-h-80 object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent flex items-center">
-              <div className="p-6 md:p-12 max-w-2xl">
-                <p className="text-lime-400 text-sm font-bold mb-3 tracking-wider">🏎️ NUXA · TU RITMO, TU CAMINO</p>
-                <h2 className="text-xl md:text-3xl font-bold text-white mb-4 leading-tight">
-                  Con o sin psicofármacos.<br/>
-                  Lo importante es encontrarse bien.
+          <div className="mb-10 overflow-hidden rounded-3xl shadow-2xl">
+            {/* Mobile: Stack layout */}
+            <div className="md:hidden">
+              <img 
+                src={nuxaF1Img} 
+                alt="NUXA - Tu bienestar, tu decisión" 
+                className="w-full h-48 object-cover object-right"
+              />
+              <div className="bg-gradient-to-b from-slate-800 to-slate-900 p-6">
+                <p className="text-lime-400 text-xs font-bold mb-2 tracking-wider">🏎️ NUXA · TU RITMO, TU CAMINO</p>
+                <h2 className="text-lg font-bold text-white mb-3 leading-tight">
+                  Con o sin psicofármacos. Lo importante es encontrarse bien.
                 </h2>
-                <p className="text-white/90 text-sm md:text-base mb-3 leading-relaxed">
+                <p className="text-white/90 text-sm mb-2 leading-relaxed">
                   No importa lo que piensen de ti. Hay cosas que se comparten en la intimidad, no con todo el mundo.
                 </p>
-                <p className="text-white/70 text-xs md:text-sm italic">
+                <p className="text-white/70 text-xs italic mb-3">
                   A nadie le importa si vas o no al psicólogo. Lo que importa es lo que tú decidas explicar, y a quién, si lo necesitas.
                 </p>
-                <p className="text-gray-400 text-xs mt-4 border-t border-white/20 pt-3">
+                <p className="text-gray-400 text-xs border-t border-white/20 pt-3">
                   With or without medication. What matters is feeling well. You decide what to share and with whom.
                 </p>
+              </div>
+            </div>
+            {/* Desktop: Overlay layout */}
+            <div className="hidden md:block relative">
+              <img 
+                src={nuxaF1Img} 
+                alt="NUXA - Tu bienestar, tu decisión" 
+                className="w-full h-80 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent flex items-center">
+                <div className="p-12 max-w-2xl">
+                  <p className="text-lime-400 text-sm font-bold mb-3 tracking-wider">🏎️ NUXA · TU RITMO, TU CAMINO</p>
+                  <h2 className="text-3xl font-bold text-white mb-4 leading-tight">
+                    Con o sin psicofármacos.<br/>
+                    Lo importante es encontrarse bien.
+                  </h2>
+                  <p className="text-white/90 text-base mb-3 leading-relaxed">
+                    No importa lo que piensen de ti. Hay cosas que se comparten en la intimidad, no con todo el mundo.
+                  </p>
+                  <p className="text-white/70 text-sm italic">
+                    A nadie le importa si vas o no al psicólogo. Lo que importa es lo que tú decidas explicar, y a quién, si lo necesitas.
+                  </p>
+                  <p className="text-gray-400 text-xs mt-4 border-t border-white/20 pt-3">
+                    With or without medication. What matters is feeling well. You decide what to share and with whom.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
