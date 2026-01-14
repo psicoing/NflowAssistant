@@ -37,6 +37,26 @@ async function checkSubscription(userId: number): Promise<boolean> {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
+  // Security Headers Middleware
+  app.use((req, res, next) => {
+    // Prevent clickjacking - no one can embed your site in an iframe
+    res.setHeader('X-Frame-Options', 'DENY');
+    
+    // Prevent MIME type sniffing
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    
+    // Enable XSS filter in browsers
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    
+    // Control referrer information
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    
+    // Permissions Policy - restrict browser features
+    res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+    
+    next();
+  });
+
   // User registration
   app.post("/api/auth/register", async (req, res) => {
     try {
