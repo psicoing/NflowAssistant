@@ -37,6 +37,30 @@ async function checkSubscription(userId: number): Promise<boolean> {
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
+  // Block WordPress bot requests - return 404 immediately
+  app.use((req, res, next) => {
+    const blockedPaths = [
+      '/wp-admin',
+      '/wp-login.php',
+      '/wp-includes',
+      '/wp-content',
+      '/xmlrpc.php',
+      '/wp-config.php',
+      '/wp-cron.php',
+      '/wp-json',
+      '/.env',
+      '/phpmyadmin',
+      '/admin.php',
+      '/administrator'
+    ];
+    
+    const path = req.path.toLowerCase();
+    if (blockedPaths.some(blocked => path.startsWith(blocked))) {
+      return res.status(404).send('Not Found');
+    }
+    next();
+  });
+
   // Security Headers Middleware
   app.use((req, res, next) => {
     // Prevent clickjacking - no one can embed your site in an iframe
