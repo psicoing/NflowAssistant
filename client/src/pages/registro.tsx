@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { UserPlus, User, Building, ShieldCheck } from "lucide-react";
+import { UserPlus, User, Building, ShieldCheck, RefreshCw, Coins } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useReferralCode } from "@/hooks/useReferralCode";
 import { SEOHead } from "@/components/SEOHead";
@@ -154,52 +154,76 @@ export default function Registro() {
         canonicalUrl="https://nuxa.life/registro"
       />
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Decorative Side Elements - Only visible on larger screens */}
-      <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-64 bg-gradient-to-r from-nflow-blue/20 to-transparent">
-        <div className="h-full flex flex-col items-center justify-center p-8 space-y-8">
+      {/* Left Side - Subscriptions Option */}
+      <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-72 bg-gradient-to-r from-blue-900/40 to-transparent">
+        <div className="h-full flex flex-col items-center justify-center p-8 space-y-6">
           <div className="text-center">
-            <div className="w-24 h-24 bg-nflow-blue/30 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-nflow-blue/50">
-              <UserPlus className="w-12 h-12 text-nflow-blue" />
+            <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/30">
+              <RefreshCw className="w-10 h-10 text-white" />
             </div>
-            <h3 className="text-2xl font-bold text-white mb-2">NUXA</h3>
-            <p className="text-sm text-gray-400">Salud Mental Digital</p>
-            <div className="mt-4 px-4 py-2 bg-nflow-blue/20 rounded-lg border border-nflow-blue/30">
-              <p className="text-xs text-nflow-blue font-semibold">nuxa.life</p>
+            <h3 className="text-xl font-bold text-white mb-2">Suscripciones</h3>
+            <p className="text-sm text-blue-300 font-medium">Planes mensuales</p>
+          </div>
+          
+          <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 w-full">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-300">Plan Básico</span>
+                <span className="text-blue-400 font-bold">€2.99/mes</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-300">Plan Individual</span>
+                <span className="text-blue-400 font-bold">€5.99/mes</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-300">Plan Premium</span>
+                <span className="text-blue-400 font-bold">€32/año</span>
+              </div>
             </div>
           </div>
-          <div className="space-y-3 text-center">
-            <div className="flex items-center gap-2 text-gray-300">
-              <div className="w-2 h-2 bg-nflow-blue rounded-full"></div>
-              <span className="text-sm">Chat IA NEUROPSI</span>
-            </div>
-            <div className="flex items-center gap-2 text-gray-300">
-              <div className="w-2 h-2 bg-nflow-blue rounded-full"></div>
-              <span className="text-sm">ISO 45003</span>
-            </div>
-            <div className="flex items-center gap-2 text-gray-300">
-              <div className="w-2 h-2 bg-nflow-blue rounded-full"></div>
-              <span className="text-sm">Recursos Gratis</span>
-            </div>
+          
+          <div className="text-center">
+            <p className="text-xs text-gray-400 leading-relaxed">
+              Chat ilimitado cada mes<br/>
+              Renovación automática
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-64 bg-gradient-to-l from-nflow-blue/20 to-transparent">
-        <div className="h-full flex flex-col items-center justify-center p-8">
-          <div className="text-center space-y-6">
-            <div className="relative">
-              <div className="absolute inset-0 bg-nflow-blue/30 blur-xl rounded-full"></div>
-              <div className="relative w-32 h-32 bg-gradient-to-br from-nflow-blue to-blue-600 rounded-2xl flex items-center justify-center mx-auto transform rotate-12">
-                <div className="transform -rotate-12">
-                  <UserPlus className="w-16 h-16 text-white" />
-                </div>
+      {/* Right Side - Credits Option */}
+      <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-72 bg-gradient-to-l from-emerald-900/40 to-transparent">
+        <div className="h-full flex flex-col items-center justify-center p-8 space-y-6">
+          <div className="text-center">
+            <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/30">
+              <Coins className="w-10 h-10 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">Pago por Uso</h3>
+            <p className="text-sm text-emerald-300 font-medium">Sin suscripción</p>
+          </div>
+          
+          <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 w-full">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-300">Pack Básico</span>
+                <span className="text-emerald-400 font-bold">€5 → 15 preguntas</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-300">Pack Premium</span>
+                <span className="text-emerald-400 font-bold">€10 → 35 preguntas</span>
               </div>
             </div>
-            <div>
-              <p className="text-gray-400 text-sm mb-2">Únete a la comunidad</p>
-              <p className="text-3xl font-bold text-white">NUXA</p>
-              <p className="text-nflow-blue font-semibold mt-1">nuxa.life</p>
-            </div>
+          </div>
+          
+          <div className="text-center">
+            <p className="text-xs text-gray-400 leading-relaxed">
+              Créditos que no caducan<br/>
+              Sin renovación automática
+            </p>
+          </div>
+          
+          <div className="mt-4 px-4 py-2 bg-emerald-500/20 rounded-lg border border-emerald-500/30">
+            <p className="text-xs text-emerald-400 font-semibold text-center">Tú eliges cómo pagar</p>
           </div>
         </div>
       </div>
