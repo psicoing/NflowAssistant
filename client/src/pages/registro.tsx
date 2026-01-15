@@ -245,7 +245,7 @@ export default function Registro() {
               <div className="flex items-start gap-2">
                 <ShieldCheck className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                 <div className="text-xs text-emerald-300/90 text-left leading-relaxed">
-                  <span className="font-semibold text-emerald-400">100% Confidencial.</span> Email solo para pago. Sin confirmaciones ni recuperaciones. <span className="font-semibold">Confidencial total, todo entre tú y NUXA.</span>
+                  <span className="font-semibold text-emerald-400">100% Confidencial.</span> Email solo para pago. No enviamos confirmaciones ni correos de recuperación. <span className="font-semibold">Todo queda entre tú y NUXA.</span>
                 </div>
               </div>
             </div>
