@@ -228,6 +228,57 @@ export default function Registro() {
         </div>
       </div>
 
+      {/* Mobile Payment Options - Only visible on smaller screens */}
+      <div className="lg:hidden w-full max-w-md relative z-10 mb-4 px-2">
+        <div className="grid grid-cols-2 gap-3">
+          {/* Subscriptions */}
+          <div className="bg-blue-900/30 border border-blue-500/40 rounded-xl p-3">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                <RefreshCw className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-white font-bold text-sm">Suscripciones</span>
+            </div>
+            <div className="space-y-1 text-xs">
+              <div className="flex justify-between">
+                <span className="text-gray-400">Básico</span>
+                <span className="text-blue-400 font-semibold">€2.99/mes</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Individual</span>
+                <span className="text-blue-400 font-semibold">€5.99/mes</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Premium</span>
+                <span className="text-blue-400 font-semibold">€32/año</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Credits */}
+          <div className="bg-emerald-900/30 border border-emerald-500/40 rounded-xl p-3">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                <Coins className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-white font-bold text-sm">Pago por Uso</span>
+            </div>
+            <div className="space-y-1 text-xs">
+              <div className="flex justify-between">
+                <span className="text-gray-400">Pack Básico</span>
+                <span className="text-emerald-400 font-semibold">€5/15q</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Pack Premium</span>
+                <span className="text-emerald-400 font-semibold">€10/35q</span>
+              </div>
+              <div className="text-emerald-300/70 text-[10px] mt-1 text-center">Sin suscripción</div>
+            </div>
+          </div>
+        </div>
+        <p className="text-center text-gray-400 text-xs mt-2">Tú eliges cómo pagar después de registrarte</p>
+      </div>
+
       {/* Main Registration Card */}
       <div className="w-full max-w-md relative z-10">
         <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm shadow-2xl">
