@@ -228,31 +228,6 @@ export default function Registro() {
         </div>
       </div>
 
-      {/* Mobile Payment Info Button - Only visible on smaller screens */}
-      <div className="lg:hidden w-full max-w-md relative z-10 mb-4 px-4">
-        <div className="bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 border border-purple-500/40 rounded-xl p-4">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-              <RefreshCw className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-white font-bold">ó</span>
-            <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
-              <Coins className="w-4 h-4 text-white" />
-            </div>
-          </div>
-          <h3 className="text-white font-bold text-center text-base mb-2">
-            Dos formas de usar NUXA
-          </h3>
-          <p className="text-gray-300 text-center text-sm leading-relaxed">
-            <span className="text-blue-400 font-semibold">Suscripción mensual</span> con acceso ilimitado, 
-            o <span className="text-emerald-400 font-semibold">créditos prepago</span> que compras cuando quieras y nunca caducan.
-          </p>
-          <p className="text-gray-400 text-center text-xs mt-2">
-            Elige tu opción después de registrarte
-          </p>
-        </div>
-      </div>
-
       {/* Main Registration Card */}
       <div className="w-full max-w-md relative z-10">
         <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm shadow-2xl">
@@ -274,6 +249,26 @@ export default function Registro() {
                   Excepción: usuarios Shopify reciben email de acceso (seguridad extra). <span className="font-semibold">Confidencial total, todo entre tú y NUXA.</span>
                 </div>
               </div>
+            </div>
+            
+            {/* Mobile Payment Info - Only visible on smaller screens */}
+            <div className="lg:hidden mt-4 p-3 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 border border-purple-500/40 rounded-lg">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                  <RefreshCw className="w-3 h-3 text-white" />
+                </div>
+                <span className="text-gray-400 text-xs">ó</span>
+                <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
+                  <Coins className="w-3 h-3 text-white" />
+                </div>
+              </div>
+              <p className="text-gray-300 text-center text-xs leading-relaxed">
+                <span className="text-blue-400 font-semibold">Suscripción mensual</span> con acceso ilimitado, 
+                o <span className="text-emerald-400 font-semibold">créditos prepago</span> sin compromiso.
+              </p>
+              <p className="text-gray-500 text-center text-[10px] mt-1">
+                Elige tu opción después de registrarte
+              </p>
             </div>
           </CardHeader>
 
