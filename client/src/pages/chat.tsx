@@ -396,7 +396,7 @@ export default function Chat() {
             variant="ghost"
             size="sm"
             className="px-2 flex-shrink-0 text-white hover:bg-white/10"
-            title={chatMode === "classic" ? "Cambiar a modo burbujas" : "Cambiar a modo clásico"}
+            title={t('chat.mode.tap')}
           >
             <MessageSquare className="w-4 h-4" />
           </Button>
