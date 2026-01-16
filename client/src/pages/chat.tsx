@@ -6,6 +6,7 @@ import { useLanguageContext } from "@/components/LanguageProvider";
 import ChatHeader from "@/components/ui/chat-header";
 import ChatInterface from "@/components/ui/chat-interface";
 import ChatBubbleInterface from "@/components/ui/chat-bubble-interface";
+import ChatBriefInterface from "@/components/ui/chat-brief-interface";
 import UserProfileForm from "@/components/ui/user-profile-form";
 import QuestionLimitIndicator from "@/components/ui/question-limit-indicator";
 import ChatLanguageBanner from "@/components/ui/chat-language-banner";
@@ -34,9 +35,9 @@ export default function Chat() {
   const [userProfile, setUserProfile] = useState<any>(null);
   const [showProfileForm, setShowProfileForm] = useState(false);
   const [showConversationsSheet, setShowConversationsSheet] = useState(false);
-  const [chatMode, setChatMode] = useState<"classic" | "bubbles">(() => {
+  const [chatMode, setChatMode] = useState<"classic" | "bubbles" | "brief">(() => {
     const saved = localStorage.getItem('nflow-chat-mode');
-    return (saved === "bubbles" || saved === "classic") ? saved : "classic";
+    return (saved === "bubbles" || saved === "classic" || saved === "brief") ? saved : "classic";
   });
   const [showResourcesPanel, setShowResourcesPanel] = useState(false);
 
@@ -146,7 +147,8 @@ export default function Chat() {
         body: JSON.stringify({
           content,
           userProfile,
-          language: currentLanguage, // Also send in body for explicit language selection
+          language: currentLanguage,
+          chatMode, // Send chat mode for response style adaptation
         }),
         credentials: 'include',
       });
@@ -271,14 +273,21 @@ export default function Chat() {
     setLocation(`/chat/${conversationId}`);
   };
 
-  // Handle chat mode change
+  // Handle chat mode change - cycle through 3 modes
   const handleChatModeToggle = () => {
-    const newMode = chatMode === "classic" ? "bubbles" : "classic";
+    const modeOrder: Array<"classic" | "bubbles" | "brief"> = ["classic", "bubbles", "brief"];
+    const currentIndex = modeOrder.indexOf(chatMode);
+    const newMode = modeOrder[(currentIndex + 1) % modeOrder.length];
     setChatMode(newMode);
     localStorage.setItem('nflow-chat-mode', newMode);
+    const modeInfo = {
+      classic: { title: t('chat.mode.classic.activated'), desc: t('chat.mode.classic.description') },
+      bubbles: { title: t('chat.mode.bubbles.activated'), desc: t('chat.mode.bubbles.description') },
+      brief: { title: t('chat.mode.brief.activated'), desc: t('chat.mode.brief.description') }
+    };
     toast({
-      title: newMode === "bubbles" ? t('chat.mode.bubbles.activated') : t('chat.mode.classic.activated'),
-      description: newMode === "bubbles" ? t('chat.mode.bubbles.description') : t('chat.mode.classic.description'),
+      title: modeInfo[newMode].title,
+      description: modeInfo[newMode].desc,
       duration: 2000,
     });
   };
@@ -635,20 +644,21 @@ export default function Chat() {
               📚 {t('chat.resources')}
             </Button>
             
-            {/* Chat Mode Toggle Desktop */}
-            <div className="flex items-center justify-between bg-gray-700/30 rounded-lg p-3 border border-gray-600/30">
+            {/* Chat Mode Selector Desktop */}
+            <button
+              onClick={handleChatModeToggle}
+              className="w-full flex items-center justify-between bg-gray-700/30 rounded-lg p-3 border border-gray-600/30 hover:bg-gray-600/30 transition-colors"
+            >
               <div className="flex items-center space-x-2">
                 <MessageSquare className="w-4 h-4 text-gray-300" />
                 <span className="text-sm text-gray-300">
-                  {chatMode === "classic" ? t('chat.mode.classic') : t('chat.mode.bubbles')}
+                  {chatMode === "classic" ? t('chat.mode.classic') : chatMode === "bubbles" ? t('chat.mode.bubbles') : t('chat.mode.brief')}
                 </span>
               </div>
-              <Switch
-                checked={chatMode === "bubbles"}
-                onCheckedChange={handleChatModeToggle}
-                className="data-[state=checked]:bg-emerald-600"
-              />
-            </div>
+              <span className="text-xs text-gray-400 bg-gray-600/50 px-2 py-1 rounded">
+                {t('chat.mode.tap')}
+              </span>
+            </button>
             
             {/* New Chat Button */}
             <Button
@@ -765,6 +775,13 @@ export default function Chat() {
           {currentConversationId ? (
             chatMode === "bubbles" ? (
               <ChatBubbleInterface
+                messages={messages}
+                onSendMessage={handleSendMessage}
+                isLoading={sendMessageMutation.isPending}
+                isLoadingMessages={isLoadingMessages}
+              />
+            ) : chatMode === "brief" ? (
+              <ChatBriefInterface
                 messages={messages}
                 onSendMessage={handleSendMessage}
                 isLoading={sendMessageMutation.isPending}

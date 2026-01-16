@@ -110,7 +110,7 @@ function detectUserPreferences(history: Message[]): string {
 /**
  * Genera una respuesta mejorada usando OpenAI con ejemplos contextuales
  */
-export async function generateChatResponse(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es'): Promise<string> {
+export async function generateChatResponse(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic'): Promise<string> {
   try {
     // Seleccionar ejemplos relevantes basados en el mensaje del usuario
     const relevantExamples = selectRelevantExamples(userMessage, 2);
@@ -777,16 +777,47 @@ ${resourcesSection}
 5. **FORMATO JSON DE RESPUESTA:**
 Responde en formato JSON: { "response": "tu respuesta completa siguiendo la estructura de 10 puntos con formato markdown, incluyendo OBLIGATORIAMENTE tanto los recursos NUXA específicos como los 3 libros recomendados al final", "supportType": "general|anxiety|depression|stress|crisis|suicidal|emergency" }`;
 
+    // Brief mode: Use a simpler, concise prompt for Q&A style responses
+    const briefModePrompt = `${languageInstructions}
+
+${profileContext}
+
+TÚ ERES:
+NEUROPSI-AI en modo Q&A breve. Un asistente de salud mental que responde de forma directa, clara y concisa.
+
+REGLAS ESTRICTAS PARA MODO BREVE:
+1. Respuestas cortas: máximo 2-4 oraciones
+2. Ve directo al punto, sin introducciones ni despedidas elaboradas
+3. No incluyas listas largas, solo la información esencial
+4. No ofrezcas información adicional no solicitada
+5. Si el usuario necesita más detalle, espera a que lo pida
+6. Mantén un tono cálido pero eficiente
+7. Si detectas crisis o riesgo, sí proporciona recursos de emergencia
+
+EJEMPLOS DE RESPUESTAS BREVES:
+- Usuario: "¿Qué puedo hacer cuando me siento ansioso?"
+  Respuesta: "Prueba la respiración 4-7-8: inspira 4 segundos, mantén 7, exhala 8. Repite 3 veces. ¿Te gustaría que te explique más técnicas?"
+
+- Usuario: "Me cuesta dormir"
+  Respuesta: "Evita pantallas 1 hora antes de dormir y mantén un horario fijo. Si persiste más de 2 semanas, considera consultar a un profesional."
+
+FORMATO JSON:
+{ "response": "tu respuesta breve y directa", "supportType": "general|anxiety|depression|stress|crisis" }`;
+
+    // Choose prompt and parameters based on chat mode
+    const finalPrompt = chatMode === 'brief' ? briefModePrompt : systemPrompt;
+    const maxTokens = chatMode === 'brief' ? 500 : 4000;
+
     // Realizar la llamada a OpenAI con configuración optimizada para NEUROPSI-AI
     const completion = await openai.chat.completions.create({
       model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
       messages: [
-        { role: "system", content: systemPrompt },
+        { role: "system", content: finalPrompt },
         ...conversationHistory,
         { role: "user", content: userMessage }
       ],
       response_format: { type: "json_object" },
-      max_tokens: 4000,
+      max_tokens: maxTokens,
       temperature: 0.4,
       top_p: 0.9
     });
@@ -821,16 +852,16 @@ Responde en formato JSON: { "response": "tu respuesta completa siguiendo la estr
  * Procesa un mensaje del usuario y genera una respuesta usando OpenAI
  * con técnicas avanzadas de prompting (few-shot learning y chain-of-thought)
  */
-export async function processUserMessage(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es'): Promise<ChatResponse> {
+export async function processUserMessage(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic'): Promise<ChatResponse> {
   try {
-    console.log(`Procesando mensaje de usuario: "${userMessage.substring(0, 30)}..."`);
+    console.log(`Procesando mensaje de usuario: "${userMessage.substring(0, 30)}..." modo: ${chatMode}`);
     
     // Detectar si es consulta educativa ANTES de generar respuesta
     const isEducationalQuery = /\b(quiero saber|qué es|explícame|información sobre|cosas básicas|conocer sobre|entender|definir|aprender|curiosidad|diferencia entre|tipos de|causas de|síntomas de|cómo se trata|tratamiento de|características de|manual|guía|conceptos|teoría|explicación|información general)\b/i.test(userMessage) &&
     !/\b(me siento|tengo síntomas|sufro de|padezco|mis síntomas|estoy sintiendo|soy una persona que|me pasa que|me ocurre que|me está pasando|experiencia personal|mi situación personal|mi caso específico|mi problema personal|tengo problemas de|sufro problemas)\b/i.test(userMessage);
     
     // Generar respuesta usando OpenAI con prompt mejorado
-    const responseContent = await generateChatResponse(userMessage, history, userProfile, userLanguage);
+    const responseContent = await generateChatResponse(userMessage, history, userProfile, userLanguage, chatMode);
     
     console.log("Respuesta generada exitosamente");
     console.log(`isEducationalQuery: ${isEducationalQuery}`);

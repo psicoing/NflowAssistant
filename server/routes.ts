@@ -591,7 +591,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/conversations/:id/messages", async (req, res) => {
     try {
       const conversationId = parseInt(req.params.id);
-      const { content, userProfile, language } = req.body;
+      const { content, userProfile, language, chatMode } = req.body;
       const userId = req.session.userId;
 
       console.log(`Processing message for conversation ${conversationId}, user ${userId}`);
@@ -634,8 +634,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userLanguage = language || req.headers['accept-language']?.split(',')[0]?.split('-')[0] || 'es';
       
       // Process the message with AI
-      console.log("Calling processUserMessage with:", content, "language:", userLanguage);
-      const aiResponse = await processUserMessage(content, history, userProfile, userLanguage);
+      console.log("Calling processUserMessage with:", content, "language:", userLanguage, "mode:", chatMode);
+      const aiResponse = await processUserMessage(content, history, userProfile, userLanguage, chatMode);
       console.log("AI Response received:", aiResponse);
 
       // Increment question count after successful message processing
