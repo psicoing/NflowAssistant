@@ -15,12 +15,26 @@ interface LanguageProviderProps {
 }
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
-  const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
+  const [currentLanguage, setCurrentLanguage] = useState<Language>('es');
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem('nflow-language') as Language;
     if (savedLanguage && languages.find(lang => lang.code === savedLanguage)) {
       setCurrentLanguage(savedLanguage);
+    } else {
+      // Auto-detect browser language
+      const browserLang = navigator.language.toLowerCase().split('-')[0];
+      if (browserLang === 'en') {
+        setCurrentLanguage('en');
+        localStorage.setItem('nflow-language', 'en');
+      } else if (browserLang === 'fr') {
+        setCurrentLanguage('fr');
+        localStorage.setItem('nflow-language', 'fr');
+      } else {
+        // Default to Spanish for all other languages
+        setCurrentLanguage('es');
+        localStorage.setItem('nflow-language', 'es');
+      }
     }
   }, []);
 
