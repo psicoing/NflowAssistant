@@ -3,7 +3,7 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronUp, Bot, User, MessageCircle, Brain, Heart, Users, Sparkles, Shield, Clock, Zap, ArrowRight } from "lucide-react";
+import { ChevronDown, ChevronUp, Bot, User, MessageCircle, MessageSquare, Brain, Heart, Users, Sparkles, Shield, Clock, Zap, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 
@@ -1147,7 +1147,7 @@ export default function EjemplosChat() {
             </div>
 
             {/* Cartel informativo sobre las mejoras semanales */}
-            <div className="bg-gradient-to-r from-nflow-orange/20 to-orange-600/20 border border-nflow-orange/30 rounded-lg p-4 mb-12">
+            <div className="bg-gradient-to-r from-nflow-orange/20 to-orange-600/20 border border-nflow-orange/30 rounded-lg p-4 mb-6">
               <div className="flex items-start space-x-3">
                 <Bot className="w-5 h-5 text-nflow-orange flex-shrink-0 mt-0.5" />
                 <div>
@@ -1159,6 +1159,46 @@ export default function EjemplosChat() {
                   </p>
                 </div>
               </div>
+            </div>
+
+            {/* Tres modos de chat */}
+            <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-400/20 rounded-lg p-5 mb-12">
+              <h3 className="text-white font-semibold text-base mb-4 flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-blue-400" />
+                Tres formas de hablar con NUXA
+              </h3>
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700/50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 bg-nflow-orange rounded-full"></div>
+                    <span className="text-white font-medium text-sm">Modo Clásico</span>
+                  </div>
+                  <p className="text-gray-400 text-xs leading-relaxed">
+                    Respuestas completas y estructuradas con técnicas, ejercicios y recursos detallados. Ideal para explorar temas en profundidad.
+                  </p>
+                </div>
+                <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700/50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                    <span className="text-white font-medium text-sm">Modo Burbujas</span>
+                  </div>
+                  <p className="text-gray-400 text-xs leading-relaxed">
+                    Estilo WhatsApp con mensajes que aparecen progresivamente. Una experiencia más conversacional y amigable.
+                  </p>
+                </div>
+                <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700/50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <span className="text-white font-medium text-sm">Modo Q&A Breve</span>
+                  </div>
+                  <p className="text-gray-400 text-xs leading-relaxed">
+                    Respuestas directas y concisas de 2-4 oraciones. Perfecto para consultas rápidas sin información adicional.
+                  </p>
+                </div>
+              </div>
+              <p className="text-gray-500 text-xs mt-4 text-center">
+                Puedes cambiar entre modos en cualquier momento tocando el icono de mensaje en el chat.
+              </p>
             </div>
 
             <div className="space-y-4">
