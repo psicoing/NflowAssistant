@@ -10,17 +10,21 @@ export default function EsEnLanguageToggle() {
   useEffect(() => {
     const detectLocation = async () => {
       try {
+        console.log('🌍 Detecting location...');
         const response = await fetch('https://ipapi.co/json/');
         const data = await response.json();
+        console.log('🌍 Location data:', data);
         if (data.country_code) {
-          setUserCountry(data.country_code.toUpperCase());
+          const country = data.country_code.toUpperCase();
+          console.log('🌍 Country detected:', country);
+          setUserCountry(country);
           setShowAutoDetect(true);
           
-          // Auto-hide after 5 seconds
-          setTimeout(() => setShowAutoDetect(false), 5000);
+          // Auto-hide after 8 seconds
+          setTimeout(() => setShowAutoDetect(false), 8000);
         }
       } catch (error) {
-        console.log('Could not detect location:', error);
+        console.log('🌍 Could not detect location:', error);
       }
     };
     
@@ -61,7 +65,7 @@ export default function EsEnLanguageToggle() {
       </div>
       
       {showAutoDetect && userCountry && (
-        <div className="text-xs text-blue-300/80 animate-pulse hidden sm:block">
+        <div className="text-xs text-blue-300/80 animate-pulse">
           🌍 {userCountry}
         </div>
       )}
