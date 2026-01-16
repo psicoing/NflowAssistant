@@ -1,4 +1,5 @@
 import nuxaRobotForest from "@assets/generated_images/nuxa_robot_in_forest_setting.png";
+import personChattingCozy from "@assets/generated_images/person_chatting_on_sofa_cozy.png";
 import nuxaRobotBeach from "@assets/generated_images/nuxa_robot_on_sunset_beach.png";
 import nuxaRobotZen from "@assets/generated_images/nuxa_robot_in_zen_garden.png";
 import nuxaRobotMountain from "@assets/generated_images/nuxa_robot_on_mountain_top.png";
@@ -58,10 +59,10 @@ export function NuxaRobotForestSection() {
     <section className="relative w-full overflow-hidden">
       <div className="relative w-full">
         <img 
-          src={nuxaRobotForest} 
-          alt="Robot NUXA conversando en un bosque tranquilo" 
+          src={personChattingCozy} 
+          alt="Persona usando NUXA en un ambiente cálido y acogedor" 
           className="w-full h-auto object-cover md:max-h-[45vh]"
-          data-testid="img-nuxa-robot-forest"
+          data-testid="img-nuxa-hero-cozy"
         />
       </div>
     </section>
