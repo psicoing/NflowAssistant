@@ -390,14 +390,22 @@ export default function Chat() {
             {t('chat.conversations.new')}
           </Button>
           
-          {/* Chat Mode Toggle Mobile */}
+          {/* Chat Mode Toggle Mobile - with color indicator and pulse animation */}
           <Button
             onClick={handleChatModeToggle}
             variant="ghost"
             size="sm"
-            className="px-2 flex-shrink-0 text-white hover:bg-white/10"
+            className={`px-2 flex-shrink-0 hover:bg-white/10 relative ${
+              chatMode === "classic" ? "text-nflow-orange" : 
+              chatMode === "bubbles" ? "text-emerald-400" : 
+              "text-blue-400"
+            }`}
             title={t('chat.mode.tap')}
           >
+            <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full animate-pulse" style={{
+              backgroundColor: chatMode === "classic" ? "#f97316" : chatMode === "bubbles" ? "#34d399" : "#60a5fa",
+              animationDuration: "2s"
+            }} />
             <MessageSquare className="w-4 h-4" />
           </Button>
           
