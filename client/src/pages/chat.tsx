@@ -626,8 +626,8 @@ export default function Chat() {
       {/* Desktop: pt-16 for header only, fixed height with internal scrolling */}
       <div className="flex flex-col md:flex-row flex-1 pt-32 md:pt-16 md:overflow-hidden md:h-[calc(100vh-64px)] md:min-h-[calc(100vh-64px)]">
         {/* Sidebar - Hidden on mobile */}
-        <div className="hidden md:flex w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex-col backdrop-blur-sm flex-shrink-0">
-          <div className="p-6 border-b border-gray-700/50 space-y-4">
+        <div className="hidden md:flex w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex-col backdrop-blur-sm flex-shrink-0 overflow-hidden">
+          <div className="flex-shrink-0 p-6 border-b border-gray-700/50 space-y-4 overflow-y-auto max-h-[60vh]">
             {/* Question Limit Indicator */}
             <QuestionLimitIndicator />
             
@@ -777,7 +777,7 @@ export default function Chat() {
           </div>
 
           {/* Conversations List */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+          <div className="flex-1 overflow-y-auto p-4 space-y-2 min-h-0">
             {isLoadingConversations ? (
               <div className="text-center py-8">
                 <div className="animate-spin w-8 h-8 border-4 border-nflow-orange border-t-transparent rounded-full mx-auto mb-3" />
