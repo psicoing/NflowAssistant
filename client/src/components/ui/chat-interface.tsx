@@ -479,6 +479,7 @@ interface ChatInterfaceProps {
   isLoadingMessages: boolean;
   onRegenerateResponse?: (messageId: number) => void;
   isQuestionLimitReached?: boolean;
+  voiceEnabled?: boolean;
 }
 
 export default function ChatInterface({ 
@@ -487,8 +488,87 @@ export default function ChatInterface({
   isLoading, 
   isLoadingMessages,
   onRegenerateResponse,
-  isQuestionLimitReached = false
+  isQuestionLimitReached = false,
+  voiceEnabled = false
 }: ChatInterfaceProps) {
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [playingMessageId, setPlayingMessageId] = useState<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Function to play TTS for a message
+  const playMessageAudio = async (text: string, messageId: number) => {
+    if (isPlayingAudio) {
+      // Stop current audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      setIsPlayingAudio(false);
+      setPlayingMessageId(null);
+      return;
+    }
+
+    try {
+      setIsPlayingAudio(true);
+      setPlayingMessageId(messageId);
+      
+      // Strip markdown formatting for cleaner audio
+      const cleanText = text
+        .replace(/\*\*([^*]+)\*\*/g, '$1')
+        .replace(/\*([^*]+)\*/g, '$1')
+        .replace(/#{1,3}\s*/g, '')
+        .replace(/\[([^\]]+)\]/g, '$1')
+        .replace(/☐/g, '')
+        .slice(0, 4000);
+
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ text: cleanText, voice: 'nova' })
+      });
+
+      if (!response.ok) throw new Error('TTS failed');
+
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+      
+      audio.onended = () => {
+        setIsPlayingAudio(false);
+        setPlayingMessageId(null);
+        URL.revokeObjectURL(audioUrl);
+      };
+      
+      audio.onerror = () => {
+        setIsPlayingAudio(false);
+        setPlayingMessageId(null);
+        URL.revokeObjectURL(audioUrl);
+      };
+
+      await audio.play();
+    } catch (error) {
+      console.error('Error playing audio:', error);
+      setIsPlayingAudio(false);
+      setPlayingMessageId(null);
+    }
+  };
+
+  // Auto-play new AI messages when voice is enabled
+  useEffect(() => {
+    if (!voiceEnabled || messages.length === 0 || isLoading) return;
+    
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage.isUser && lastMessage.content) {
+      // Small delay to ensure message is rendered
+      const timer = setTimeout(() => {
+        playMessageAudio(lastMessage.content, lastMessage.id);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [messages.length, voiceEnabled, isLoading]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [responseTime, setResponseTime] = useState<number | null>(null);

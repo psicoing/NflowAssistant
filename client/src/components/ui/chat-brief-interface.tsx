@@ -9,6 +9,7 @@ interface ChatBriefInterfaceProps {
   onSendMessage: (content: string) => void;
   isLoading: boolean;
   isLoadingMessages?: boolean;
+  voiceEnabled?: boolean;
 }
 
 export default function ChatBriefInterface({
@@ -16,10 +17,61 @@ export default function ChatBriefInterface({
   onSendMessage,
   isLoading,
   isLoadingMessages = false,
+  voiceEnabled = false,
 }: ChatBriefInterfaceProps) {
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Auto-play TTS for new AI messages when voice is enabled
+  useEffect(() => {
+    if (!voiceEnabled || messages.length === 0 || isLoading) return;
+    
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage.isUser && lastMessage.content) {
+      const timer = setTimeout(async () => {
+        try {
+          setIsPlayingAudio(true);
+          const cleanText = lastMessage.content
+            .replace(/\*\*([^*]+)\*\*/g, '$1')
+            .replace(/\*([^*]+)\*/g, '$1')
+            .replace(/#{1,3}\s*/g, '')
+            .slice(0, 4000);
+
+          const response = await fetch('/api/tts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ text: cleanText, voice: 'nova' })
+          });
+
+          if (!response.ok) throw new Error('TTS failed');
+
+          const audioBlob = await response.blob();
+          const audioUrl = URL.createObjectURL(audioBlob);
+          const audio = new Audio(audioUrl);
+          audioRef.current = audio;
+          
+          audio.onended = () => {
+            setIsPlayingAudio(false);
+            URL.revokeObjectURL(audioUrl);
+          };
+          audio.onerror = () => {
+            setIsPlayingAudio(false);
+            URL.revokeObjectURL(audioUrl);
+          };
+          
+          await audio.play();
+        } catch (error) {
+          console.error('TTS error:', error);
+          setIsPlayingAudio(false);
+        }
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [messages.length, voiceEnabled, isLoading]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

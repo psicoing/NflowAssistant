@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
-import { MessageCircle, Plus, Search, Calendar, Clock, List, MessageSquare, Globe, BookOpen, Heart, Users, Briefcase, Brain, Sparkles, ArrowLeft, Lightbulb, Shield, Target, Smile, Moon, Dumbbell, TreePine } from "lucide-react";
+import { MessageCircle, Plus, Search, Calendar, Clock, List, MessageSquare, Globe, BookOpen, Heart, Users, Briefcase, Brain, Sparkles, ArrowLeft, Lightbulb, Shield, Target, Smile, Moon, Dumbbell, TreePine, Volume2, VolumeX } from "lucide-react";
 import { GoogleTranslateDialog } from "@/components/ui/google-translate-dialog";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
@@ -38,6 +38,10 @@ export default function Chat() {
   const [chatMode, setChatMode] = useState<"classic" | "bubbles" | "brief">(() => {
     const saved = localStorage.getItem('nflow-chat-mode');
     return (saved === "bubbles" || saved === "classic" || saved === "brief") ? saved : "classic";
+  });
+  const [voiceEnabled, setVoiceEnabled] = useState<boolean>(() => {
+    const saved = localStorage.getItem('nuxa-voice-enabled');
+    return saved === 'true';
   });
   const [showResourcesPanel, setShowResourcesPanel] = useState(false);
 
@@ -292,6 +296,18 @@ export default function Chat() {
     });
   };
 
+  // Handle voice toggle
+  const handleVoiceToggle = () => {
+    const newValue = !voiceEnabled;
+    setVoiceEnabled(newValue);
+    localStorage.setItem('nuxa-voice-enabled', newValue.toString());
+    toast({
+      title: newValue ? "🔊 Voz activada" : "🔇 Voz desactivada",
+      description: newValue ? "NUXA leerá las respuestas en voz alta" : "Las respuestas serán solo texto",
+      duration: 2000,
+    });
+  };
+
   // Helper function to filter conversations by date
   const isConversationInDateRange = (conversation: Conversation) => {
     if (selectedDateFilter === "all") return true;
@@ -407,6 +423,24 @@ export default function Chat() {
               animationDuration: "2s"
             }} />
             <MessageSquare className="w-4 h-4" />
+          </Button>
+
+          {/* Voice Toggle Mobile */}
+          <Button
+            onClick={handleVoiceToggle}
+            variant="ghost"
+            size="sm"
+            className={`px-2 flex-shrink-0 hover:bg-white/10 relative ${
+              voiceEnabled ? "text-purple-400" : "text-gray-400"
+            }`}
+            title={voiceEnabled ? "Desactivar voz" : "Activar voz"}
+          >
+            {voiceEnabled && (
+              <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-purple-400 animate-pulse" style={{
+                animationDuration: "2s"
+              }} />
+            )}
+            {voiceEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
           </Button>
           
           {/* Resources Button Mobile */}
@@ -787,6 +821,7 @@ export default function Chat() {
                 onSendMessage={handleSendMessage}
                 isLoading={sendMessageMutation.isPending}
                 isLoadingMessages={isLoadingMessages}
+                voiceEnabled={voiceEnabled}
               />
             ) : chatMode === "brief" ? (
               <ChatBriefInterface
@@ -794,6 +829,7 @@ export default function Chat() {
                 onSendMessage={handleSendMessage}
                 isLoading={sendMessageMutation.isPending}
                 isLoadingMessages={isLoadingMessages}
+                voiceEnabled={voiceEnabled}
               />
             ) : (
               <ChatInterface
@@ -801,6 +837,7 @@ export default function Chat() {
                 onSendMessage={handleSendMessage}
                 isLoading={sendMessageMutation.isPending}
                 isLoadingMessages={isLoadingMessages}
+                voiceEnabled={voiceEnabled}
               />
             )
           ) : (

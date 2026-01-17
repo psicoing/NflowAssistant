@@ -2062,6 +2062,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Text-to-Speech endpoint using OpenAI TTS
+  app.post("/api/tts", async (req, res) => {
+    try {
+      const userId = req.session?.userId;
+      if (!userId) {
+        return res.status(401).json({ error: "No autenticado" });
+      }
+
+      const { text, voice = "nova" } = req.body;
+      
+      if (!text || typeof text !== 'string') {
+        return res.status(400).json({ error: "Texto requerido" });
+      }
+
+      // Limit text length to prevent abuse
+      const maxLength = 4096;
+      const truncatedText = text.slice(0, maxLength);
+
+      const OpenAI = (await import("openai")).default;
+      const openai = new OpenAI({ 
+        apiKey: process.env.OPENAI_API_KEY || process.env.AI_INTEGRATIONS_OPENAI_API_KEY || "default_key",
+        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL || undefined
+      });
+
+      const response = await openai.audio.speech.create({
+        model: "tts-1",
+        voice: voice as "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer",
+        input: truncatedText,
+        response_format: "mp3"
+      });
+
+      // Get the audio as a buffer
+      const buffer = Buffer.from(await response.arrayBuffer());
+      
+      res.set({
+        'Content-Type': 'audio/mpeg',
+        'Content-Length': buffer.length
+      });
+      res.send(buffer);
+      
+    } catch (error: any) {
+      console.error("TTS Error:", error);
+      res.status(500).json({ error: "Error generando audio" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

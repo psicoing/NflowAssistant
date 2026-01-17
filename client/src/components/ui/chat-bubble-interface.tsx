@@ -238,6 +238,7 @@ interface ChatBubbleInterfaceProps {
   isLoadingMessages: boolean;
   onRegenerateResponse?: (messageId: number) => void;
   isQuestionLimitReached?: boolean;
+  voiceEnabled?: boolean;
 }
 
 export default function ChatBubbleInterface({
@@ -246,13 +247,64 @@ export default function ChatBubbleInterface({
   isLoading,
   isLoadingMessages,
   onRegenerateResponse,
-  isQuestionLimitReached = false
+  isQuestionLimitReached = false,
+  voiceEnabled = false
 }: ChatBubbleInterfaceProps) {
   const [inputValue, setInputValue] = useState("");
   const [characterCount, setCharacterCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Auto-play TTS for new AI messages when voice is enabled
+  useEffect(() => {
+    if (!voiceEnabled || messages.length === 0 || isLoading) return;
+    
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage.isUser && lastMessage.content) {
+      const timer = setTimeout(async () => {
+        try {
+          setIsPlayingAudio(true);
+          const cleanText = lastMessage.content
+            .replace(/\*\*([^*]+)\*\*/g, '$1')
+            .replace(/\*([^*]+)\*/g, '$1')
+            .replace(/#{1,3}\s*/g, '')
+            .slice(0, 4000);
+
+          const response = await fetch('/api/tts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ text: cleanText, voice: 'nova' })
+          });
+
+          if (!response.ok) throw new Error('TTS failed');
+
+          const audioBlob = await response.blob();
+          const audioUrl = URL.createObjectURL(audioBlob);
+          const audio = new Audio(audioUrl);
+          audioRef.current = audio;
+          
+          audio.onended = () => {
+            setIsPlayingAudio(false);
+            URL.revokeObjectURL(audioUrl);
+          };
+          audio.onerror = () => {
+            setIsPlayingAudio(false);
+            URL.revokeObjectURL(audioUrl);
+          };
+          
+          await audio.play();
+        } catch (error) {
+          console.error('TTS error:', error);
+          setIsPlayingAudio(false);
+        }
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [messages.length, voiceEnabled, isLoading]);
   
   // Estado para controlar cuántas burbujas mostrar de cada mensaje
   const [visibleBubbles, setVisibleBubbles] = useState<Record<number, number>>({});
