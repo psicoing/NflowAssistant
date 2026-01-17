@@ -952,6 +952,87 @@ export default function EjemplosChat() {
       <Header />
       
       <main className="pt-20 pb-16">
+        {/* Tres modos de chat - PRIMERA POSICIÓN ABSOLUTA */}
+        <section className="py-6 px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-400/20 rounded-lg p-6">
+              <h3 className="text-white font-semibold text-lg mb-2 flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-blue-400" />
+                Tres formas de hablar con NUXA
+              </h3>
+              <p className="text-gray-400 text-sm mb-5">Elige el estilo de conversación que mejor se adapte a tus necesidades</p>
+              
+              <div className="grid md:grid-cols-3 gap-4">
+                {/* Modo Clásico */}
+                <div className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 rounded-xl p-5 border border-nflow-orange/30 hover:border-nflow-orange/50 transition-colors">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-full bg-nflow-orange/20 flex items-center justify-center">
+                      <Brain className="w-5 h-5 text-nflow-orange" />
+                    </div>
+                    <div>
+                      <span className="text-white font-semibold text-sm block">Modo Clásico</span>
+                      <span className="text-nflow-orange text-xs">Completo y estructurado</span>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 text-sm leading-relaxed mb-3">
+                    Respuestas detalladas con estructura profesional: técnicas paso a paso, ejercicios prácticos, recursos recomendados y libros especializados.
+                  </p>
+                  <div className="text-xs text-gray-500 flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    <span>Ideal para explorar temas en profundidad</span>
+                  </div>
+                </div>
+                
+                {/* Modo Burbujas */}
+                <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 rounded-xl p-5 border border-emerald-400/30 hover:border-emerald-400/50 transition-colors">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                      <MessageCircle className="w-5 h-5 text-emerald-400" />
+                    </div>
+                    <div>
+                      <span className="text-white font-semibold text-sm block">Modo Burbujas</span>
+                      <span className="text-emerald-400 text-xs">Estilo WhatsApp</span>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 text-sm leading-relaxed mb-3">
+                    La misma información completa pero presentada en burbujas separadas que aparecen progresivamente, como una conversación natural de mensajería.
+                  </p>
+                  <div className="text-xs text-gray-500 flex items-center gap-1">
+                    <Sparkles className="w-3 h-3" />
+                    <span>Experiencia más cercana y amigable</span>
+                  </div>
+                </div>
+                
+                {/* Modo Q&A Breve */}
+                <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 rounded-xl p-5 border border-blue-400/30 hover:border-blue-400/50 transition-colors">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                      <Zap className="w-5 h-5 text-blue-400" />
+                    </div>
+                    <div>
+                      <span className="text-white font-semibold text-sm block">Modo Q&A Breve</span>
+                      <span className="text-blue-400 text-xs">Respuestas rápidas</span>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 text-sm leading-relaxed mb-3">
+                    Respuestas directas de 2-4 oraciones. NUXA te contesta lo esencial y espera tu siguiente pregunta sin añadir información extra.
+                  </p>
+                  <div className="text-xs text-gray-500 flex items-center gap-1">
+                    <ArrowRight className="w-3 h-3" />
+                    <span>Perfecto para consultas rápidas</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-5 p-3 bg-gray-800/50 rounded-lg border border-gray-700/30">
+                <p className="text-gray-400 text-xs text-center">
+                  <strong className="text-gray-300">Cambiar de modo:</strong> Toca el icono <MessageSquare className="w-3 h-3 inline mx-1" /> en la barra del chat para alternar entre los tres modos en cualquier momento.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Promotional Hero Card - Conversion focused */}
         <section className="py-8 px-4 bg-gradient-to-br from-nflow-dark via-purple-900/20 to-nflow-dark">
           <div className="max-w-5xl mx-auto">
@@ -1123,83 +1204,6 @@ export default function EjemplosChat() {
             <h2 className="text-3xl font-bold text-white text-center mb-6">
               Ejemplos reales por edades
             </h2>
-
-            {/* Tres modos de chat - PRIMERA POSICIÓN */}
-            <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-400/20 rounded-lg p-6 mb-8">
-              <h3 className="text-white font-semibold text-lg mb-2 flex items-center gap-2">
-                <MessageSquare className="w-5 h-5 text-blue-400" />
-                Tres formas de hablar con NUXA
-              </h3>
-              <p className="text-gray-400 text-sm mb-5">Elige el estilo de conversación que mejor se adapte a tus necesidades</p>
-              
-              <div className="grid md:grid-cols-3 gap-4">
-                {/* Modo Clásico */}
-                <div className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 rounded-xl p-5 border border-nflow-orange/30 hover:border-nflow-orange/50 transition-colors">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-full bg-nflow-orange/20 flex items-center justify-center">
-                      <Brain className="w-5 h-5 text-nflow-orange" />
-                    </div>
-                    <div>
-                      <span className="text-white font-semibold text-sm block">Modo Clásico</span>
-                      <span className="text-nflow-orange text-xs">Completo y estructurado</span>
-                    </div>
-                  </div>
-                  <p className="text-gray-300 text-sm leading-relaxed mb-3">
-                    Respuestas detalladas con estructura profesional: técnicas paso a paso, ejercicios prácticos, recursos recomendados y libros especializados.
-                  </p>
-                  <div className="text-xs text-gray-500 flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    <span>Ideal para explorar temas en profundidad</span>
-                  </div>
-                </div>
-                
-                {/* Modo Burbujas */}
-                <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 rounded-xl p-5 border border-emerald-400/30 hover:border-emerald-400/50 transition-colors">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                      <MessageCircle className="w-5 h-5 text-emerald-400" />
-                    </div>
-                    <div>
-                      <span className="text-white font-semibold text-sm block">Modo Burbujas</span>
-                      <span className="text-emerald-400 text-xs">Estilo WhatsApp</span>
-                    </div>
-                  </div>
-                  <p className="text-gray-300 text-sm leading-relaxed mb-3">
-                    La misma información completa pero presentada en burbujas separadas que aparecen progresivamente, como una conversación natural de mensajería.
-                  </p>
-                  <div className="text-xs text-gray-500 flex items-center gap-1">
-                    <Sparkles className="w-3 h-3" />
-                    <span>Experiencia más cercana y amigable</span>
-                  </div>
-                </div>
-                
-                {/* Modo Q&A Breve */}
-                <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 rounded-xl p-5 border border-blue-400/30 hover:border-blue-400/50 transition-colors">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
-                      <Zap className="w-5 h-5 text-blue-400" />
-                    </div>
-                    <div>
-                      <span className="text-white font-semibold text-sm block">Modo Q&A Breve</span>
-                      <span className="text-blue-400 text-xs">Respuestas rápidas</span>
-                    </div>
-                  </div>
-                  <p className="text-gray-300 text-sm leading-relaxed mb-3">
-                    Respuestas directas de 2-4 oraciones. NUXA te contesta lo esencial y espera tu siguiente pregunta sin añadir información extra.
-                  </p>
-                  <div className="text-xs text-gray-500 flex items-center gap-1">
-                    <ArrowRight className="w-3 h-3" />
-                    <span>Perfecto para consultas rápidas</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-5 p-3 bg-gray-800/50 rounded-lg border border-gray-700/30">
-                <p className="text-gray-400 text-xs text-center">
-                  <strong className="text-gray-300">Cambiar de modo:</strong> Toca el icono <MessageSquare className="w-3 h-3 inline mx-1" /> en la barra del chat para alternar entre los tres modos en cualquier momento.
-                </p>
-              </div>
-            </div>
 
             {/* Explicación sobre los ejemplos */}
             <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-emerald-500/30 rounded-2xl p-6 mb-8 max-w-3xl mx-auto">
