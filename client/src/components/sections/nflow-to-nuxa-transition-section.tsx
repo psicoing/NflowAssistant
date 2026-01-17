@@ -14,51 +14,53 @@ const qaConversation = [
 ];
 
 function QADemoAnimation() {
-  const [visibleMessages, setVisibleMessages] = useState<number[]>([]);
+  const [messages, setMessages] = useState<Array<{role: string; text: string}>>([]);
   const [isTyping, setIsTyping] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const indexRef = useRef(0);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   useEffect(() => {
-    let messageIndex = 0;
-    let timeoutId: NodeJS.Timeout;
-    
     const showNextMessage = () => {
-      if (messageIndex >= qaConversation.length) {
-        setTimeout(() => {
-          setVisibleMessages([]);
-          messageIndex = 0;
-          timeoutId = setTimeout(showNextMessage, 1500);
+      if (indexRef.current >= qaConversation.length) {
+        timeoutRef.current = setTimeout(() => {
+          setMessages([]);
+          setIsTyping(false);
+          indexRef.current = 0;
+          timeoutRef.current = setTimeout(showNextMessage, 1500);
         }, 3000);
         return;
       }
       
-      const currentMessage = qaConversation[messageIndex];
+      const currentMessage = qaConversation[indexRef.current];
       
       if (currentMessage.role === 'assistant') {
         setIsTyping(true);
-        timeoutId = setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
           setIsTyping(false);
-          setVisibleMessages(prev => [...prev, messageIndex]);
-          messageIndex++;
-          timeoutId = setTimeout(showNextMessage, 2000);
+          setMessages(prev => [...prev, currentMessage]);
+          indexRef.current++;
+          timeoutRef.current = setTimeout(showNextMessage, 2000);
         }, 1200);
       } else {
-        setVisibleMessages(prev => [...prev, messageIndex]);
-        messageIndex++;
-        timeoutId = setTimeout(showNextMessage, 800);
+        setMessages(prev => [...prev, currentMessage]);
+        indexRef.current++;
+        timeoutRef.current = setTimeout(showNextMessage, 800);
       }
     };
     
-    timeoutId = setTimeout(showNextMessage, 1000);
+    timeoutRef.current = setTimeout(showNextMessage, 1000);
     
-    return () => clearTimeout(timeoutId);
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, []);
   
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [visibleMessages, isTyping]);
+  }, [messages, isTyping]);
   
   return (
     <div className="bg-slate-900 rounded-2xl p-4 max-w-sm mx-auto shadow-2xl border border-slate-700/50 overflow-hidden">
@@ -82,35 +84,32 @@ function QADemoAnimation() {
         ref={containerRef}
         className="space-y-3 h-[280px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent pr-1"
       >
-        {visibleMessages.map((msgIndex) => {
-          const msg = qaConversation[msgIndex];
-          return (
-            <div 
-              key={msgIndex}
-              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2 duration-300`}
-            >
-              {msg.role === 'assistant' && (
-                <div className="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
-                  <Bot className="w-3.5 h-3.5 text-blue-400" />
-                </div>
-              )}
-              <div 
-                className={`max-w-[85%] px-3 py-2.5 rounded-xl text-sm leading-relaxed ${
-                  msg.role === 'user' 
-                    ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-br-sm' 
-                    : 'bg-slate-800 text-gray-100 border border-slate-600/50 rounded-bl-sm'
-                }`}
-              >
-                {msg.text}
+        {messages.map((msg, idx) => (
+          <div 
+            key={idx}
+            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2 duration-300`}
+          >
+            {msg.role === 'assistant' && (
+              <div className="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
+                <Bot className="w-3.5 h-3.5 text-blue-400" />
               </div>
-              {msg.role === 'user' && (
-                <div className="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center ml-2 flex-shrink-0 mt-1">
-                  <User className="w-3.5 h-3.5 text-orange-400" />
-                </div>
-              )}
+            )}
+            <div 
+              className={`max-w-[85%] px-3 py-2.5 rounded-xl text-sm leading-relaxed ${
+                msg.role === 'user' 
+                  ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-br-sm' 
+                  : 'bg-slate-800 text-gray-100 border border-slate-600/50 rounded-bl-sm'
+              }`}
+            >
+              {msg.text}
             </div>
-          );
-        })}
+            {msg.role === 'user' && (
+              <div className="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center ml-2 flex-shrink-0 mt-1">
+                <User className="w-3.5 h-3.5 text-orange-400" />
+              </div>
+            )}
+          </div>
+        ))}
         
         {isTyping && (
           <div className="flex justify-start animate-in slide-in-from-bottom-2 duration-200">
