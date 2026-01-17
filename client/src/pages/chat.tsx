@@ -702,6 +702,34 @@ export default function Chat() {
               </span>
             </button>
             
+            {/* Voice Toggle Desktop */}
+            <button
+              onClick={handleVoiceToggle}
+              className={`w-full flex items-center justify-between rounded-lg p-3 border transition-colors ${
+                voiceEnabled 
+                  ? "bg-purple-600/20 border-purple-500/50 hover:bg-purple-600/30" 
+                  : "bg-gray-700/30 border-gray-600/30 hover:bg-gray-600/30"
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                {voiceEnabled ? (
+                  <Volume2 className="w-4 h-4 text-purple-400" />
+                ) : (
+                  <VolumeX className="w-4 h-4 text-gray-400" />
+                )}
+                <span className={`text-sm ${voiceEnabled ? "text-purple-300" : "text-gray-300"}`}>
+                  {voiceEnabled ? "Voz activada" : "Voz desactivada"}
+                </span>
+              </div>
+              <div className={`w-10 h-5 rounded-full transition-colors relative ${
+                voiceEnabled ? "bg-purple-600" : "bg-gray-600"
+              }`}>
+                <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform ${
+                  voiceEnabled ? "right-0.5" : "left-0.5"
+                }`} />
+              </div>
+            </button>
+            
             {/* New Chat Button */}
             <Button
               onClick={handleNewChat}
