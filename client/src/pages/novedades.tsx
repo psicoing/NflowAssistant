@@ -1,6 +1,5 @@
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { 
@@ -42,9 +41,8 @@ export default function Novedades() {
 
           <div className="space-y-8">
             
-            <Card className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border-blue-500/30 overflow-hidden">
-              <CardContent className="p-0">
-                <div className="p-8">
+            <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-500/30 rounded-2xl overflow-hidden">
+              <div className="p-8">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
                       <Zap className="w-6 h-6 text-white" />
@@ -87,11 +85,10 @@ export default function Novedades() {
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+            </div>
 
-            <Card className="bg-gradient-to-br from-emerald-600/20 to-emerald-800/20 border-emerald-500/30 overflow-hidden">
-              <CardContent className="p-8">
+            <div className="bg-gradient-to-br from-emerald-600/20 to-emerald-800/20 border border-emerald-500/30 rounded-2xl overflow-hidden">
+              <div className="p-8">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
                     <Star className="w-6 h-6 text-white" />
@@ -126,11 +123,11 @@ export default function Novedades() {
                     <span>Punto pulsante con color del modo activo en móvil</span>
                   </li>
                 </ul>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <Card className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border-purple-500/30 overflow-hidden">
-              <CardContent className="p-8">
+            <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30 rounded-2xl overflow-hidden">
+              <div className="p-8">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg">
                     <Clock className="w-6 h-6 text-white" />
@@ -160,14 +157,14 @@ export default function Novedades() {
                     <span>Mejor organización del contenido en /ejemplos-chat</span>
                   </li>
                 </ul>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <Card className="bg-gradient-to-br from-amber-600/20 to-orange-800/20 border-amber-500/30 overflow-hidden relative">
+            <div className="bg-gradient-to-br from-amber-600/20 to-orange-800/20 border border-amber-500/30 rounded-2xl overflow-hidden relative">
               <div className="absolute top-4 right-4 bg-amber-500/30 text-amber-300 text-xs font-bold px-3 py-1 rounded-full animate-pulse">
                 PRÓXIMAMENTE
               </div>
-              <CardContent className="p-8">
+              <div className="p-8">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg">
                     <Volume2 className="w-6 h-6 text-white" />
@@ -191,12 +188,12 @@ export default function Novedades() {
                     <p className="text-gray-200 text-sm">Estamos trabajando para traerte esta función lo antes posible</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             <div className="text-center pt-8">
-              <Card className="bg-gradient-to-r from-emerald-600/30 to-blue-600/30 border-emerald-400/30 inline-block">
-                <CardContent className="p-8">
+              <div className="bg-gradient-to-r from-emerald-600/30 to-blue-600/30 border border-emerald-400/30 rounded-2xl inline-block">
+                <div className="p-8">
                   <div className="flex items-center justify-center gap-3 mb-4">
                     <Gift className="w-8 h-8 text-emerald-400" />
                     <h3 className="text-2xl font-bold text-white">¿Listo para probar?</h3>
@@ -210,8 +207,8 @@ export default function Novedades() {
                       <ArrowRight className="w-5 h-5 ml-2" />
                     </Button>
                   </Link>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
 
           </div>
