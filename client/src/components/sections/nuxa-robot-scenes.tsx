@@ -24,7 +24,7 @@ import nuxaRobotListening from "@assets/generated_images/nuxa_robot_listening_wi
 import nuxaRobotReveal from "@assets/generated_images/nuxa_robot_grand_reveal_celebration.png";
 import nuxaRobotProfessional from "@assets/generated_images/nuxa_robot_professional_certified_expert.png";
 import nuxaRobotFamilyTherapy from "@assets/generated_images/nuxa_robot_family_therapy_support.png";
-import nuxaRobotTransformation from "@assets/generated_images/nuxa_robot_new_dawn_fresh_start.png";
+import nuxaRobotTransformation from "@assets/generated_images/person_with_phone_companion_at_night.png";
 import nuxaRobotWellnessHealing from "@assets/generated_images/nuxa_robot_mental_wellness_healing.png";
 import nuxaRobotConnecting from "@assets/generated_images/nuxa_robot_connecting_people_unity.png";
 import nuxaRobotMultilingual from "@assets/generated_images/nuxa_robot_multilingual_global.png";
@@ -428,7 +428,7 @@ export function NuxaRobotTransformationSection() {
   return (
     <section className="relative w-full overflow-hidden">
       <div className="relative w-full">
-        <img src={nuxaRobotTransformation} alt="Robot NUXA transformación" className="w-full h-auto object-cover" data-testid="img-nuxa-robot-transformation" />
+        <img src={nuxaRobotTransformation} alt="NUXA vive dentro de tu teléfono - compañero digital siempre contigo" className="w-full h-auto object-cover" data-testid="img-nuxa-robot-transformation" />
       </div>
     </section>
   );
