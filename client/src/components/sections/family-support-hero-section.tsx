@@ -1,6 +1,6 @@
 import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X, Brain, Heart, Menu, ShieldCheck, Compass, Bot, Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react";
 
@@ -143,14 +143,14 @@ export default function FamilySupportHeroSection() {
 
             {/* Botón Novedades */}
             <div className="flex justify-center mt-6">
-              <a 
+              <Link 
                 href="/novedades"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
                 <Sparkles className="w-5 h-5" />
-                <span>Novedades 2026.01.17</span>
+                <span>Novedades</span>
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </Link>
             </div>
 
             </div>
