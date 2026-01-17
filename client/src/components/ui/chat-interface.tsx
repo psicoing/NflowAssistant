@@ -671,22 +671,32 @@ export default function ChatInterface({
         <div className="space-y-3 md:space-y-4">
           {messages.length === 0 ? (
             <div className="text-center py-8 md:py-12">
+              {/* Mode Indicator */}
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <div className="w-2 h-2 bg-nflow-orange rounded-full animate-pulse" />
+                <span className="text-sm font-medium text-nflow-orange">Modo Clásico</span>
+                <span className="text-xs text-gray-500">Respuestas completas y estructuradas</span>
+              </div>
+              
               <div className="relative mb-6 md:mb-8">
                 <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-nflow-orange to-nflow-orange-light rounded-2xl mx-auto flex items-center justify-center shadow-xl">
-                  <Bot className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                  <Brain className="w-8 h-8 md:w-10 md:h-10 text-white" />
                 </div>
                 <div className="absolute -inset-4 bg-gradient-to-r from-nflow-orange/20 to-nflow-blue/20 rounded-3xl blur-xl"></div>
               </div>
               <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
-                ¡Hola! Soy tu psicólogo NUXA
+                Modo Clásico
               </h3>
-              <p className="text-gray-300 mb-6 md:mb-8 max-w-sm md:max-w-md mx-auto leading-relaxed text-sm md:text-base px-4">
-                Estoy aquí para brindarte apoyo emocional profesional y confidencial. 
-                Comparte conmigo lo que te preocupa.
+              <p className="text-gray-300 mb-4 max-w-sm md:max-w-md mx-auto leading-relaxed text-sm md:text-base px-4">
+                Recibirás respuestas <strong className="text-nflow-orange">completas y detalladas</strong> con estructura profesional: 
+                técnicas paso a paso, ejercicios prácticos, recursos y libros recomendados.
+              </p>
+              <p className="text-gray-400 text-xs mb-6 max-w-xs mx-auto">
+                Ideal para explorar temas en profundidad y recibir orientación completa.
               </p>
               
               {/* Arrow pointing to prompt area */}
-              <div className="flex flex-col items-center mt-8 mb-4 px-4">
+              <div className="flex flex-col items-center mt-6 mb-4 px-4">
                 <div className="flex items-center space-x-3 bg-gradient-to-r from-nflow-orange/20 to-nflow-blue/20 border border-nflow-orange/30 rounded-xl px-4 py-3 mb-3">
                   <div className="w-2 h-2 bg-nflow-orange rounded-full animate-pulse"></div>
                   <p className="text-sm md:text-base text-white font-medium">

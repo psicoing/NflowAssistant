@@ -596,9 +596,16 @@ export default function ChatBubbleInterface({
       >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full py-12 px-4">
+            {/* Mode Indicator */}
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+              <span className="text-sm font-medium text-emerald-400">Modo Burbujas</span>
+              <span className="text-xs text-gray-500">Estilo WhatsApp</span>
+            </div>
+            
             <div className="relative mb-6">
               <div className="w-20 h-20 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-2xl ring-4 ring-emerald-500/20">
-                <Bot className="w-10 h-10 text-emerald-600 dark:text-emerald-400" />
+                <MessageCircle className="w-10 h-10 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center">
                 <Heart className="w-3 h-3 text-white" />
@@ -607,10 +614,13 @@ export default function ChatBubbleInterface({
             
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 max-w-sm text-center border border-gray-200 dark:border-gray-700">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                ¡Hola! Soy NUXA 👋
+                Modo Burbujas 💬
               </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
-                Tu psicólogo IA disponible 24/7. Estoy aquí para brindarte apoyo emocional profesional y confidencial.
+              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-3">
+                Recibirás la <strong className="text-emerald-500">misma información completa</strong> pero presentada en mensajes separados que aparecen progresivamente, como una conversación natural de WhatsApp.
+              </p>
+              <p className="text-gray-500 text-xs mb-4">
+                Experiencia más cercana y amigable.
               </p>
               <div className="flex items-center justify-center space-x-2 text-xs text-emerald-600 dark:text-emerald-400">
                 <CheckCheck className="w-4 h-4" />
