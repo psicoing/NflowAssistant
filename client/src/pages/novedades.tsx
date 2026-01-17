@@ -35,7 +35,7 @@ export default function Novedades() {
               NUXA <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-400">2026.01.17</span>
             </h1>
             
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-white max-w-2xl mx-auto">
               Descubre todas las novedades que hemos preparado para ti
             </p>
           </div>
@@ -55,7 +55,7 @@ export default function Novedades() {
                     </div>
                   </div>
                   
-                  <p className="text-gray-300 text-lg leading-relaxed mb-6">
+                  <p className="text-white text-lg leading-relaxed mb-6">
                     Ahora puedes elegir entre <strong className="text-white">tres modos de conversación</strong>: 
                     Clásico para respuestas completas, Burbujas estilo WhatsApp, o el nuevo <strong className="text-blue-400">Q&A Breve</strong> para 
                     respuestas rápidas y directas de 2-4 oraciones.
@@ -67,7 +67,7 @@ export default function Novedades() {
                         <Brain className="w-5 h-5 text-orange-400" />
                         <span className="text-orange-300 font-semibold">Clásico</span>
                       </div>
-                      <p className="text-gray-400 text-sm">Respuestas detalladas con técnicas y recursos</p>
+                      <p className="text-gray-200 text-sm">Respuestas detalladas con técnicas y recursos</p>
                     </div>
                     
                     <div className="bg-emerald-500/10 border border-emerald-400/30 rounded-xl p-4">
@@ -75,7 +75,7 @@ export default function Novedades() {
                         <MessageCircle className="w-5 h-5 text-emerald-400" />
                         <span className="text-emerald-300 font-semibold">Burbujas</span>
                       </div>
-                      <p className="text-gray-400 text-sm">Estilo mensajería con revelación progresiva</p>
+                      <p className="text-gray-200 text-sm">Estilo mensajería con revelación progresiva</p>
                     </div>
                     
                     <div className="bg-blue-500/10 border border-blue-400/30 rounded-xl p-4">
@@ -83,7 +83,7 @@ export default function Novedades() {
                         <Zap className="w-5 h-5 text-blue-400" />
                         <span className="text-blue-300 font-semibold">Q&A Breve</span>
                       </div>
-                      <p className="text-gray-400 text-sm">Respuestas cortas y directas al punto</p>
+                      <p className="text-gray-200 text-sm">Respuestas cortas y directas al punto</p>
                     </div>
                   </div>
                 </div>
@@ -102,26 +102,26 @@ export default function Novedades() {
                   </div>
                 </div>
                 
-                <p className="text-gray-300 text-lg leading-relaxed mb-6">
+                <p className="text-white text-lg leading-relaxed mb-6">
                   Ahora puedes ver claramente en qué modo estás gracias a los nuevos indicadores con 
                   <strong className="text-emerald-400"> iconos distintivos</strong>, colores únicos y descripciones 
                   claras en los estados vacíos del chat.
                 </p>
                 
                 <ul className="space-y-3">
-                  <li className="flex items-center gap-3 text-gray-300">
+                  <li className="flex items-center gap-3 text-white">
                     <Check className="w-5 h-5 text-emerald-400" />
                     <span>Icono de cerebro naranja para modo Clásico</span>
                   </li>
-                  <li className="flex items-center gap-3 text-gray-300">
+                  <li className="flex items-center gap-3 text-white">
                     <Check className="w-5 h-5 text-emerald-400" />
                     <span>Icono de mensaje verde para modo Burbujas</span>
                   </li>
-                  <li className="flex items-center gap-3 text-gray-300">
+                  <li className="flex items-center gap-3 text-white">
                     <Check className="w-5 h-5 text-emerald-400" />
                     <span>Icono de rayo azul para modo Q&A</span>
                   </li>
-                  <li className="flex items-center gap-3 text-gray-300">
+                  <li className="flex items-center gap-3 text-white">
                     <Check className="w-5 h-5 text-emerald-400" />
                     <span>Punto pulsante con color del modo activo en móvil</span>
                   </li>
@@ -141,21 +141,21 @@ export default function Novedades() {
                   </div>
                 </div>
                 
-                <p className="text-gray-300 text-lg leading-relaxed mb-6">
+                <p className="text-white text-lg leading-relaxed mb-6">
                   Navegación optimizada con <strong className="text-purple-400">barra fija</strong> que permanece 
                   visible mientras navegas y mejor acceso al selector de modos con indicador visual animado.
                 </p>
                 
                 <ul className="space-y-3">
-                  <li className="flex items-center gap-3 text-gray-300">
+                  <li className="flex items-center gap-3 text-white">
                     <Check className="w-5 h-5 text-purple-400" />
                     <span>Barra de navegación sticky con efecto blur</span>
                   </li>
-                  <li className="flex items-center gap-3 text-gray-300">
+                  <li className="flex items-center gap-3 text-white">
                     <Check className="w-5 h-5 text-purple-400" />
                     <span>Botón de modo con punto pulsante de color</span>
                   </li>
-                  <li className="flex items-center gap-3 text-gray-300">
+                  <li className="flex items-center gap-3 text-white">
                     <Check className="w-5 h-5 text-purple-400" />
                     <span>Mejor organización del contenido en /ejemplos-chat</span>
                   </li>
@@ -177,7 +177,7 @@ export default function Novedades() {
                   </div>
                 </div>
                 
-                <p className="text-gray-300 text-lg leading-relaxed mb-6">
+                <p className="text-white text-lg leading-relaxed mb-6">
                   Muy pronto podrás <strong className="text-amber-400">escuchar a NUXA</strong> con su propia voz. 
                   Una experiencia aún más cercana y humana para acompañarte en tus momentos de reflexión.
                 </p>
@@ -188,7 +188,7 @@ export default function Novedades() {
                   </div>
                   <div>
                     <p className="text-amber-300 font-semibold">En desarrollo activo</p>
-                    <p className="text-gray-400 text-sm">Estamos trabajando para traerte esta función lo antes posible</p>
+                    <p className="text-gray-200 text-sm">Estamos trabajando para traerte esta función lo antes posible</p>
                   </div>
                 </div>
               </CardContent>
@@ -201,10 +201,10 @@ export default function Novedades() {
                     <Gift className="w-8 h-8 text-emerald-400" />
                     <h3 className="text-2xl font-bold text-white">¿Listo para probar?</h3>
                   </div>
-                  <p className="text-gray-300 mb-6 max-w-md">
-                    Todas estas mejoras están disponibles ahora mismo. Inicia una conversación y experimenta la nueva NUXA.
+                  <p className="text-white mb-6 max-w-md">
+                    Todas estas mejoras están disponibles ahora mismo. Inicia sesión y experimenta la nueva NUXA.
                   </p>
-                  <Link href="/chat">
+                  <Link href="/login">
                     <Button size="lg" className="bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-bold px-8 py-6 text-lg">
                       Probar ahora
                       <ArrowRight className="w-5 h-5 ml-2" />
