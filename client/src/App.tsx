@@ -10,6 +10,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Chat from "@/pages/chat";
 import EjemplosChat from "@/pages/ejemplos-chat";
+import Novedades from "@/pages/novedades";
 import Resources from "@/pages/resources";
 import RecursosGratis from "@/pages/recursos";
 import Consejos from "@/pages/consejos";
@@ -93,6 +94,7 @@ function AuthenticatedRouter() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/ejemplos-chat" component={EjemplosChat} />
+      <Route path="/novedades" component={Novedades} />
       <Route path="/recursos" component={RecursosGratis} />
       <Route path="/login" component={Login} />
       <Route path="/registro" component={Registro} />
