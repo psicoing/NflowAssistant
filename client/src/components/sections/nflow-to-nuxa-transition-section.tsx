@@ -1,6 +1,146 @@
-import { Sparkles, MessageCircle, BookOpen, Zap, Check, FileText, Compass, Bot, ShieldCheck } from "lucide-react";
+import { Sparkles, MessageCircle, BookOpen, Zap, Check, FileText, Compass, Bot, ShieldCheck, User } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
+const qaConversation = [
+  { role: 'user', text: 'Me gustaría estar delgada!' },
+  { role: 'assistant', text: 'Es natural querer sentirse bien con uno mismo. Si buscas cambios saludables, considera consultar con un nutricionista para guiarte de manera segura.' },
+  { role: 'user', text: 'Puede que sea anorexia?' },
+  { role: 'assistant', text: 'Si tienes preocupaciones sobre tu relación con la comida o tu imagen corporal, es importante hablar con un profesional de salud mental. Ellos pueden ofrecerte una evaluación adecuada.' },
+  { role: 'user', text: 'No me gusta mi cuerpo!' },
+  { role: 'assistant', text: 'Es común sentirse insatisfecho con el propio cuerpo en ocasiones. Intenta enfocarte en lo que tu cuerpo puede hacer y busca apoyo si estos sentimientos persisten.' },
+  { role: 'user', text: 'Me veo gorda!' },
+  { role: 'assistant', text: 'Es natural tener preocupaciones sobre la imagen corporal, pero es importante recordar que todos los cuerpos son únicos. Hablar con un profesional puede ayudarte.' },
+];
+
+function QADemoAnimation() {
+  const [visibleMessages, setVisibleMessages] = useState<number[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    let messageIndex = 0;
+    let timeoutId: NodeJS.Timeout;
+    
+    const showNextMessage = () => {
+      if (messageIndex >= qaConversation.length) {
+        setTimeout(() => {
+          setVisibleMessages([]);
+          messageIndex = 0;
+          timeoutId = setTimeout(showNextMessage, 1500);
+        }, 3000);
+        return;
+      }
+      
+      const currentMessage = qaConversation[messageIndex];
+      
+      if (currentMessage.role === 'assistant') {
+        setIsTyping(true);
+        timeoutId = setTimeout(() => {
+          setIsTyping(false);
+          setVisibleMessages(prev => [...prev, messageIndex]);
+          messageIndex++;
+          timeoutId = setTimeout(showNextMessage, 2000);
+        }, 1200);
+      } else {
+        setVisibleMessages(prev => [...prev, messageIndex]);
+        messageIndex++;
+        timeoutId = setTimeout(showNextMessage, 800);
+      }
+    };
+    
+    timeoutId = setTimeout(showNextMessage, 1000);
+    
+    return () => clearTimeout(timeoutId);
+  }, []);
+  
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [visibleMessages, isTyping]);
+  
+  return (
+    <div className="bg-slate-900 rounded-2xl p-4 max-w-sm mx-auto shadow-2xl border border-slate-700/50 overflow-hidden">
+      <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-700/50">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+            <Zap className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <span className="text-white text-sm font-semibold">Modo Q&A Breve</span>
+            <span className="text-blue-400 text-xs block">Respuestas rápidas</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          <span className="text-green-400 text-xs">En vivo</span>
+        </div>
+      </div>
+      
+      <div 
+        ref={containerRef}
+        className="space-y-3 h-[280px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent pr-1"
+      >
+        {visibleMessages.map((msgIndex) => {
+          const msg = qaConversation[msgIndex];
+          return (
+            <div 
+              key={msgIndex}
+              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2 duration-300`}
+            >
+              {msg.role === 'assistant' && (
+                <div className="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
+                  <Bot className="w-3.5 h-3.5 text-blue-400" />
+                </div>
+              )}
+              <div 
+                className={`max-w-[85%] px-3 py-2.5 rounded-xl text-sm leading-relaxed ${
+                  msg.role === 'user' 
+                    ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-br-sm' 
+                    : 'bg-slate-800 text-gray-100 border border-slate-600/50 rounded-bl-sm'
+                }`}
+              >
+                {msg.text}
+              </div>
+              {msg.role === 'user' && (
+                <div className="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center ml-2 flex-shrink-0 mt-1">
+                  <User className="w-3.5 h-3.5 text-orange-400" />
+                </div>
+              )}
+            </div>
+          );
+        })}
+        
+        {isTyping && (
+          <div className="flex justify-start animate-in slide-in-from-bottom-2 duration-200">
+            <div className="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center mr-2 flex-shrink-0">
+              <Bot className="w-3.5 h-3.5 text-blue-400" />
+            </div>
+            <div className="bg-slate-800 border border-slate-600/50 px-4 py-3 rounded-xl rounded-bl-sm">
+              <div className="flex gap-1">
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      
+      <div className="mt-3 pt-2 border-t border-slate-700/50">
+        <div className="flex items-center gap-2 bg-slate-800/50 rounded-full px-4 py-2 border border-slate-600/30">
+          <span className="text-gray-500 text-sm flex-1">Escribe tu pregunta...</span>
+          <div className="w-7 h-7 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
+            <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function NflowToNuxaTransitionSection() {
   const [isPdfOpen, setIsPdfOpen] = useState(false);
@@ -89,39 +229,50 @@ export default function NflowToNuxaTransitionSection() {
               </p>
             </div>
 
-            {/* Two Ways Section */}
-            <div className="grid md:grid-cols-2 gap-6 mt-8">
-              {/* Option 1: Chat with NEURO */}
-              <div className="bg-white/70 dark:bg-slate-700/50 rounded-2xl p-6 border border-emerald-200 dark:border-emerald-600/30 shadow-lg">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 bg-emerald-500/20 rounded-xl">
-                    <MessageCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">1. Chat con NEURO-PSI</h3>
+            {/* Option 1: Chat with NEURO */}
+            <div className="bg-white/70 dark:bg-slate-700/50 rounded-2xl p-6 border border-emerald-200 dark:border-emerald-600/30 shadow-lg">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 bg-emerald-500/20 rounded-xl">
+                  <MessageCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  Puedes chatear con <span className="font-semibold text-emerald-600 dark:text-emerald-400">NEURO-PSI</span>, el asistente de NUXA. La experiencia es la de hablar con un psicólogo: escucha, responde con criterio y te acompaña en el proceso. <span className="font-medium">No simula, razona.</span>
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 italic">
-                  La diferencia no se nota… y eso es precisamente lo importante.
-                </p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">1. Chat con NEURO-PSI</h3>
               </div>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                Puedes chatear con <span className="font-semibold text-emerald-600 dark:text-emerald-400">NEURO-PSI</span>, el asistente de NUXA. La experiencia es la de hablar con un psicólogo: escucha, responde con criterio y te acompaña en el proceso. <span className="font-medium">No simula, razona.</span>
+              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 italic">
+                La diferencia no se nota… y eso es precisamente lo importante.
+              </p>
+            </div>
 
-              {/* Option 2: Access Resources */}
-              <div className="bg-white/70 dark:bg-slate-700/50 rounded-2xl p-6 border border-cyan-200 dark:border-cyan-600/30 shadow-lg">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 bg-cyan-500/20 rounded-xl">
-                    <BookOpen className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">2. Acceso a recursos</h3>
-                </div>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  Si no te apetece chatear, <span className="font-medium">no pasa nada</span>. NUXA te permite acceder directamente a recursos profesionales: materiales estructurados, guías y herramientas que no se encuentran al azar en internet.
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 italic">
-                  Recursos basados en protocolos clínicos reales.
+            {/* Q&A Demo Animation - Between Chat and Resources */}
+            <div className="my-8">
+              <div className="text-center mb-4">
+                <span className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-400/30 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-full text-sm font-medium">
+                  <Zap className="w-4 h-4" />
+                  Modo Q&A en acción
+                </span>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
+                  Conversación real en modo pregunta-respuesta breve
                 </p>
               </div>
+              <QADemoAnimation />
+            </div>
+
+            {/* Option 2: Access Resources */}
+            <div className="bg-white/70 dark:bg-slate-700/50 rounded-2xl p-6 border border-cyan-200 dark:border-cyan-600/30 shadow-lg">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 bg-cyan-500/20 rounded-xl">
+                  <BookOpen className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">2. Acceso a recursos</h3>
+              </div>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                Si no te apetece chatear, <span className="font-medium">no pasa nada</span>. NUXA te permite acceder directamente a recursos profesionales: materiales estructurados, guías y herramientas que no se encuentran al azar en internet.
+              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 italic">
+                Recursos basados en protocolos clínicos reales.
+              </p>
             </div>
 
             {/* The Real Value */}
