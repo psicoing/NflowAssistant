@@ -30,6 +30,13 @@ The frontend is developed using React 18, TypeScript, Vite, and Wouter for routi
   - **Smart Pause System**: Responses with >6 bubbles pause mid-conversation with "Continuar leyendo ▼" button
   - **Historical Optimization**: Past messages load instantly (no replay), only new AI responses use progressive reveal
   - **Implementation**: Uses hasHydratedHistory ref to distinguish initial message load from new streaming responses
+- **Voice Output (TTS)**: Text-to-Speech functionality allowing NUXA to read responses aloud:
+  - **Toggle Control**: Voice ON/OFF button in the chat navbar with visual indicator (purple when active)
+  - **Automatic Playback**: When voice is enabled, new AI responses are automatically read aloud
+  - **Natural Voice**: Uses OpenAI TTS-1 with "nova" voice for warm, natural speech
+  - **Persistence**: Voice preference saved in localStorage (`nuxa-voice-enabled`)
+  - **API Endpoint**: `/api/tts` POST endpoint converts text to MP3 audio
+  - **All Chat Modes**: Works with Classic, Bubbles, and Brief interfaces
 - **User & Subscription Management**: Supports user roles, registration, login, and automated subscription activation via PayPal and Stripe webhooks, including various plans (basic, individual, premium, group) and chat access control.
 - **Comprehensive Pricing Page** (`/precios`): Complete pricing presentation featuring:
   - **Hybrid Model Explanation**: Visual cards explaining the two payment options (Subscriptions vs Pay-Per-Use)
