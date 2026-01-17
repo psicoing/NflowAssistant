@@ -377,8 +377,8 @@ export default function Chat() {
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         <ChatHeader />
       
-      {/* Mobile Navigation Bar */}
-      <div className="md:hidden bg-gray-800/90 border-b border-gray-700/50 p-3 mt-16">
+      {/* Mobile Navigation Bar - Sticky below header */}
+      <div className="md:hidden bg-gray-800/95 border-b border-gray-700/50 p-3 fixed top-16 left-0 right-0 z-40 backdrop-blur-sm">
         <div className="flex items-center justify-between space-x-2">
           <Button
             onClick={handleNewChat}
@@ -588,9 +588,9 @@ export default function Chat() {
       </div>
 
       {/* Main Content - Different layouts for mobile vs desktop */}
-      {/* Mobile: Natural scroll without fixed height */}
-      {/* Desktop: Fixed height with internal scrolling */}
-      <div className="flex flex-col md:flex-row flex-1 pt-16 md:overflow-hidden md:h-[calc(100vh-64px)] md:min-h-[calc(100vh-64px)]">
+      {/* Mobile: pt-32 accounts for header (64px) + mobile navbar (~64px) */}
+      {/* Desktop: pt-16 for header only, fixed height with internal scrolling */}
+      <div className="flex flex-col md:flex-row flex-1 pt-32 md:pt-16 md:overflow-hidden md:h-[calc(100vh-64px)] md:min-h-[calc(100vh-64px)]">
         {/* Sidebar - Hidden on mobile */}
         <div className="hidden md:flex w-80 bg-gradient-to-b from-gray-800/80 to-gray-900/80 border-r border-gray-700/50 flex-col backdrop-blur-sm flex-shrink-0">
           <div className="p-6 border-b border-gray-700/50 space-y-4">
