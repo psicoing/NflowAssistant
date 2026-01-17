@@ -160,32 +160,48 @@ export default function Novedades() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-amber-600/20 to-orange-800/20 border border-amber-500/30 rounded-2xl overflow-hidden relative">
-              <div className="absolute top-4 right-4 bg-amber-500/30 text-amber-300 text-xs font-bold px-3 py-1 rounded-full animate-pulse">
-                PRÓXIMAMENTE
+            <div className="bg-gradient-to-br from-pink-600/20 to-rose-800/20 border border-pink-500/30 rounded-2xl overflow-hidden relative">
+              <div className="absolute top-4 right-4 bg-pink-500/30 text-pink-300 text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+                ¡NUEVO!
               </div>
               <div className="p-8">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center shadow-lg">
                     <Volume2 className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-white">La voz de NUXA</h2>
+                    <span className="bg-pink-500/30 text-pink-300 text-xs font-bold px-2 py-1 rounded-full">DISPONIBLE</span>
+                    <h2 className="text-2xl font-bold text-white mt-1">La voz de NUXA</h2>
                   </div>
                 </div>
                 
                 <p className="text-white text-lg leading-relaxed mb-6">
-                  Muy pronto podrás <strong className="text-amber-400">escuchar a NUXA</strong> con su propia voz. 
-                  Una experiencia aún más cercana y humana para acompañarte en tus momentos de reflexión.
+                  Ahora puedes <strong className="text-pink-400">escuchar a NUXA</strong> con su propia voz. 
+                  Una experiencia más cercana y humana que te acompaña en tus momentos de reflexión.
                 </p>
                 
-                <div className="flex items-center gap-4 p-4 bg-amber-500/10 rounded-xl border border-amber-400/20">
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-center gap-3 text-white">
+                    <Check className="w-5 h-5 text-pink-400" />
+                    <span>Activa la voz con el botón 🔊 en el chat</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-white">
+                    <Check className="w-5 h-5 text-pink-400" />
+                    <span>Voz natural y cálida con tecnología OpenAI</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-white">
+                    <Check className="w-5 h-5 text-pink-400" />
+                    <span>Tu preferencia se guarda automáticamente</span>
+                  </li>
+                </ul>
+                
+                <div className="flex items-center gap-4 p-4 bg-pink-500/10 rounded-xl border border-pink-400/20">
                   <div className="flex-shrink-0">
-                    <Rocket className="w-8 h-8 text-amber-400" />
+                    <Sparkles className="w-8 h-8 text-pink-400" />
                   </div>
                   <div>
-                    <p className="text-amber-300 font-semibold">En desarrollo activo</p>
-                    <p className="text-gray-200 text-sm">Estamos trabajando para traerte esta función lo antes posible</p>
+                    <p className="text-pink-300 font-semibold">¡Ya disponible!</p>
+                    <p className="text-gray-200 text-sm">Actívalo desde la barra de navegación del chat</p>
                   </div>
                 </div>
               </div>
