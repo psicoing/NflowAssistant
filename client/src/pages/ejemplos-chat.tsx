@@ -1124,45 +1124,8 @@ export default function EjemplosChat() {
               Ejemplos reales por edades
             </h2>
 
-            {/* Explicación sobre los ejemplos */}
-            <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-emerald-500/30 rounded-2xl p-6 mb-8 max-w-3xl mx-auto">
-              <div className="text-center">
-                <div className="text-3xl mb-3">🤖✨</div>
-                <h3 className="text-lg md:text-xl font-bold text-white mb-3">
-                  Mira cómo NUXA puede ayudarte
-                </h3>
-                <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
-                  Te dejamos ver <span className="text-emerald-400 font-semibold">ejemplos reales</span> de cómo procesa NUXA diferentes situaciones — quizás alguna refleje la tuya. La experiencia es tan auténtica que <span className="text-emerald-400 font-semibold">pensarás que hablas con un psicólogo sabio y experimentado</span>.
-                </p>
-                <p className="text-gray-400 text-sm mb-3">
-                  Para hacer tus propias preguntas, elige un plan. Cada conversación usa IA avanzada que requiere servidores, licencias y tokens — costes que todos pagamos para usar esta tecnología.
-                </p>
-                <p className="text-white/90 text-sm italic mb-4 border-l-2 border-emerald-400 pl-3">
-                  "Esto no solo responde: calma, orienta y te hace sentir escuchado."
-                </p>
-                <p className="text-emerald-400 font-semibold text-sm">
-                  💚 Consulta nuestros planes en el menú ☰ · Sin permanencia
-                </p>
-              </div>
-            </div>
-
-            {/* Cartel informativo sobre las mejoras semanales */}
-            <div className="bg-gradient-to-r from-nflow-orange/20 to-orange-600/20 border border-nflow-orange/30 rounded-lg p-4 mb-6">
-              <div className="flex items-start space-x-3">
-                <Bot className="w-5 h-5 text-nflow-orange flex-shrink-0 mt-0.5" />
-                <div>
-                  <h3 className="text-nflow-orange font-semibold text-sm mb-1">
-                    Ejemplos en constante evolución
-                  </h3>
-                  <p className="text-gray-300 text-sm leading-relaxed">
-                    Estos ejemplos mejoran cada semana dado que la versión del robot se va mejorando cada semana y es más potente y extenso en sus respuestas con diferentes mejoras. Nosotros te presentamos una versión beta 3.0.1 que es muy rigurosa.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Tres modos de chat */}
-            <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-400/20 rounded-lg p-6 mb-12">
+            {/* Tres modos de chat - PRIMERA POSICIÓN */}
+            <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-400/20 rounded-lg p-6 mb-8">
               <h3 className="text-white font-semibold text-lg mb-2 flex items-center gap-2">
                 <MessageSquare className="w-5 h-5 text-blue-400" />
                 Tres formas de hablar con NUXA
@@ -1235,6 +1198,43 @@ export default function EjemplosChat() {
                 <p className="text-gray-400 text-xs text-center">
                   <strong className="text-gray-300">Cambiar de modo:</strong> Toca el icono <MessageSquare className="w-3 h-3 inline mx-1" /> en la barra del chat para alternar entre los tres modos en cualquier momento.
                 </p>
+              </div>
+            </div>
+
+            {/* Explicación sobre los ejemplos */}
+            <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-emerald-500/30 rounded-2xl p-6 mb-8 max-w-3xl mx-auto">
+              <div className="text-center">
+                <div className="text-3xl mb-3">🤖✨</div>
+                <h3 className="text-lg md:text-xl font-bold text-white mb-3">
+                  Mira cómo NUXA puede ayudarte
+                </h3>
+                <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+                  Te dejamos ver <span className="text-emerald-400 font-semibold">ejemplos reales</span> de cómo procesa NUXA diferentes situaciones — quizás alguna refleje la tuya. La experiencia es tan auténtica que <span className="text-emerald-400 font-semibold">pensarás que hablas con un psicólogo sabio y experimentado</span>.
+                </p>
+                <p className="text-gray-400 text-sm mb-3">
+                  Para hacer tus propias preguntas, elige un plan. Cada conversación usa IA avanzada que requiere servidores, licencias y tokens — costes que todos pagamos para usar esta tecnología.
+                </p>
+                <p className="text-white/90 text-sm italic mb-4 border-l-2 border-emerald-400 pl-3">
+                  "Esto no solo responde: calma, orienta y te hace sentir escuchado."
+                </p>
+                <p className="text-emerald-400 font-semibold text-sm">
+                  💚 Consulta nuestros planes en el menú ☰ · Sin permanencia
+                </p>
+              </div>
+            </div>
+
+            {/* Cartel informativo sobre las mejoras semanales */}
+            <div className="bg-gradient-to-r from-nflow-orange/20 to-orange-600/20 border border-nflow-orange/30 rounded-lg p-4 mb-6">
+              <div className="flex items-start space-x-3">
+                <Bot className="w-5 h-5 text-nflow-orange flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="text-nflow-orange font-semibold text-sm mb-1">
+                    Ejemplos en constante evolución
+                  </h3>
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    Estos ejemplos mejoran cada semana dado que la versión del robot se va mejorando cada semana y es más potente y extenso en sus respuestas con diferentes mejoras. Nosotros te presentamos una versión beta 3.0.1 que es muy rigurosa.
+                  </p>
+                </div>
               </div>
             </div>
 
