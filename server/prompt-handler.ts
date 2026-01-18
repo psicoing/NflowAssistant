@@ -856,6 +856,16 @@ export async function processUserMessage(userMessage: string, history: Message[]
   try {
     console.log(`Procesando mensaje de usuario: "${userMessage.substring(0, 30)}..." modo: ${chatMode}`);
     
+    // FILTRO DE PROTECCIÓN: Detectar consultas fuera del ámbito de psicología
+    if (isOffTopicQuery(userMessage)) {
+      console.log("Consulta detectada como fuera de ámbito - rechazando amablemente");
+      return {
+        content: generateOffTopicResponse(userLanguage),
+        supportType: "off_topic",
+        tags: ["off_topic_filtered"]
+      };
+    }
+    
     // Detectar si es consulta educativa ANTES de generar respuesta
     const isEducationalQuery = /\b(quiero saber|qué es|explícame|información sobre|cosas básicas|conocer sobre|entender|definir|aprender|curiosidad|diferencia entre|tipos de|causas de|síntomas de|cómo se trata|tratamiento de|características de|manual|guía|conceptos|teoría|explicación|información general)\b/i.test(userMessage) &&
     !/\b(me siento|tengo síntomas|sufro de|padezco|mis síntomas|estoy sintiendo|soy una persona que|me pasa que|me ocurre que|me está pasando|experiencia personal|mi situación personal|mi caso específico|mi problema personal|tengo problemas de|sufro problemas)\b/i.test(userMessage);
@@ -892,6 +902,212 @@ export async function processUserMessage(userMessage: string, history: Message[]
       tags: []
     };
   }
+}
+
+/**
+ * Detecta si una consulta está fuera del ámbito de psicología y salud mental
+ * Retorna true si la consulta NO pertenece al ámbito de NUXA
+ */
+function isOffTopicQuery(userMessage: string): boolean {
+  const message = userMessage.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  
+  // Temas que SÍ son válidos para NUXA (psicología y salud mental en sentido amplio)
+  const validTopics = [
+    // Emociones y estados mentales
+    'ansiedad', 'depresion', 'estres', 'tristeza', 'miedo', 'panico', 'angustia', 'preocupacion',
+    'nervios', 'nervioso', 'agobiado', 'agotado', 'cansado', 'burnout', 'agotamiento',
+    'feliz', 'felicidad', 'emocion', 'emocional', 'sentimiento', 'siento', 'me siento',
+    'autoestima', 'confianza', 'inseguridad', 'soledad', 'vacio', 'desesperanza',
+    'irritabilidad', 'enfado', 'ira', 'frustracion', 'culpa', 'verguenza', 'celos',
+    
+    // Psicología clínica y trastornos
+    'psicologia', 'psicologo', 'terapeuta', 'terapia', 'psiquiatra', 'psiquiatria',
+    'trastorno', 'diagnostico', 'sintoma', 'tratamiento', 'medicacion', 'antidepresivo',
+    'fobia', 'obsesion', 'compulsion', 'toc', 'tdah', 'autismo', 'asperger', 'bipolar',
+    'esquizofrenia', 'psicosis', 'neurosis', 'personalidad', 'disociacion',
+    'trauma', 'ptsd', 'estres postraumatico', 'abuso', 'maltrato', 'violencia',
+    
+    // Psicobiología y neuropsicología
+    'psicobiologia', 'neuropsicologia', 'cerebro', 'neurona', 'neurotransmisor',
+    'serotonina', 'dopamina', 'cortisol', 'hormona', 'sistema nervioso', 'amigdala',
+    'hipocampo', 'corteza', 'neurociencia', 'psicofisiologia', 'biopsicologia',
+    
+    // Relaciones y familia
+    'relacion', 'pareja', 'matrimonio', 'divorcio', 'separacion', 'ruptura',
+    'familia', 'hijo', 'hija', 'padre', 'madre', 'hermano', 'padres', 'adolescente',
+    'conflicto', 'comunicacion', 'apego', 'dependencia', 'codependencia', 'toxico',
+    
+    // Trabajo y estrés laboral
+    'trabajo', 'laboral', 'jefe', 'compañero', 'oficina', 'empresa', 'profesional',
+    'mobbing', 'acoso laboral', 'hostigamiento', 'riesgo psicosocial', 'clima laboral',
+    'iso 45003', 'bienestar laboral', 'productividad', 'motivacion', 'liderazgo',
+    
+    // Educación y desarrollo
+    'aprendizaje', 'estudiar', 'estudiante', 'examen', 'universidad', 'colegio',
+    'concentracion', 'memoria', 'atencion', 'motivacion', 'procrastinacion',
+    'orientacion', 'vocacion', 'carrera', 'desarrollo personal', 'crecimiento',
+    
+    // Estadística aplicada a psicología
+    'estadistica', 'investigacion', 'estudio', 'escala', 'test', 'cuestionario',
+    'phq', 'beck', 'hamilton', 'gad', 'dsm', 'cie', 'evaluacion', 'medicion',
+    
+    // Sueño y hábitos
+    'dormir', 'sueño', 'insomnio', 'pesadilla', 'descanso', 'ritmo circadiano',
+    'habito', 'rutina', 'adiccion', 'dependencia', 'sustancia', 'alcohol', 'droga',
+    
+    // Alimentación y cuerpo
+    'comer', 'alimentacion', 'anorexia', 'bulimia', 'atracones', 'peso', 'imagen corporal',
+    
+    // Crisis y urgencias
+    'suicidio', 'autolesion', 'crisis', 'emergencia', 'ayuda', 'urgente',
+    
+    // Bienestar general
+    'bienestar', 'salud mental', 'calidad de vida', 'mindfulness', 'meditacion',
+    'relajacion', 'respiracion', 'ejercicio', 'autocuidado', 'resiliencia',
+    
+    // Duelo y pérdida
+    'duelo', 'perdida', 'muerte', 'fallecimiento', 'luto', 'despedida',
+    
+    // Sexualidad
+    'sexualidad', 'orientacion sexual', 'identidad', 'genero', 'lgbti', 'sexo',
+    
+    // Términos generales de consulta psicológica
+    'consejo', 'orientacion', 'ayuda', 'apoyo', 'necesito', 'problema', 'situacion',
+    'como puedo', 'que hago', 'me pasa', 'que significa', 'es normal', 'por que'
+  ];
+  
+  // Temas claramente FUERA del ámbito (off-topic)
+  const offTopicPatterns = [
+    // Vehículos y transporte
+    /\b(coche|carro|vehiculo|moto|motocicleta|bicicleta|bici|camion|furgoneta|autobus|tren|avion|barco|comprar.*coche|que.*coche|mejor.*coche|recomendar.*coche)\b/,
+    
+    // Tecnología y electrónica (no relacionada con salud mental)
+    /\b(ordenador|computadora|portatil|laptop|tablet|ipad|iphone|android|samsung|apple|telefono.*comprar|que.*movil|mejor.*telefono|television|tele|smart.*tv|playstation|xbox|nintendo|videojuego)\b/,
+    
+    // Cocina y recetas
+    /\b(receta|cocinar|ingrediente|como.*hacer.*comida|como.*preparar.*plato|como.*cocino|menu.*restaurante|restaurante.*recomendar)\b/,
+    
+    // Deportes (como espectáculo, no ejercicio personal)
+    /\b(futbol.*resultado|partido.*futbol|liga|champions|mundial|equipo.*futbol|fichaje|gol|arbitro|baloncesto.*nba|formula\s*1|tenis.*atp|ciclismo.*tour)\b/,
+    
+    // Finanzas y economía (no estrés financiero)
+    /\b(bolsa|acciones|criptomoneda|bitcoin|ethereum|invertir.*dinero|como.*invertir|mejor.*inversion|hipoteca|prestamo.*banco|cuenta.*bancaria|tarjeta.*credito)\b/,
+    
+    // Viajes y turismo (no ansiedad de viaje)
+    /\b(viajar.*donde|destino.*viaje|hotel.*recomendar|vuelo.*barato|mejor.*playa|turismo|vacaciones.*donde|excursion|crucero)\b/,
+    
+    // Compras generales
+    /\b(donde.*comprar|tienda.*recomendar|oferta|descuento|precio.*mejor|cuanto.*cuesta|amazon|aliexpress|ebay)\b/,
+    
+    // Entretenimiento (películas, música, etc.)
+    /\b(pelicula.*recomendar|serie.*ver|netflix|mejor.*serie|cancion|musica.*recomendar|spotify|concierto|teatro|espectaculo)\b/,
+    
+    // Política y actualidad
+    /\b(politica|gobierno|elecciones|partido.*politico|presidente|ministro|congreso|senado|votar.*quien)\b/,
+    
+    // Religión (no espiritualidad como bienestar)
+    /\b(cual.*religion|mejor.*iglesia|dios.*existe|biblia|coran|rezar.*como|misa|templo)\b/,
+    
+    // Jardinería, bricolaje, hogar
+    /\b(jardin|planta.*cuidar|flor.*regar|bricolaje|pintar.*pared|mueble.*montar|ikea|decorar.*casa|reformar)\b/,
+    
+    // Mascotas (no terapia asistida)
+    /\b(perro.*raza|gato.*comprar|mascota.*recomendar|veterinario|comida.*perro|pasear.*perro)\b/,
+    
+    // Matemáticas, física, química (no estadística psicológica)
+    /\b(ecuacion|derivada|integral|fisica.*cuantica|quimica.*organica|tabla.*periodica|formula.*matematica)\b/,
+    
+    // Programación y código
+    /\b(programar|codigo|python|javascript|java|html|css|software|app.*desarrollar|bug|error.*codigo)\b/,
+    
+    // Moda y belleza (no imagen corporal)
+    /\b(ropa.*comprar|moda.*tendencia|maquillaje|peluqueria|tinte.*pelo|unas.*manicura|zapatos.*recomendar)\b/,
+    
+    // Legal y jurídico (no derecho laboral de salud mental)
+    /\b(abogado.*divorcio|herencia|testamento|contrato.*firmar|demandar|juicio|multa.*trafico)\b/
+  ];
+  
+  // Primero verificar si contiene algún tema válido
+  const hasValidTopic = validTopics.some(topic => message.includes(topic));
+  
+  // Si tiene un tema válido, NO es off-topic
+  if (hasValidTopic) {
+    return false;
+  }
+  
+  // Verificar si coincide con patrones off-topic
+  const matchesOffTopic = offTopicPatterns.some(pattern => pattern.test(message));
+  
+  // Si coincide con off-topic Y no tiene temas válidos, es off-topic
+  if (matchesOffTopic) {
+    return true;
+  }
+  
+  // Para mensajes muy cortos o ambiguos, permitir (dar beneficio de la duda)
+  if (message.length < 20) {
+    return false;
+  }
+  
+  return false;
+}
+
+/**
+ * Genera mensaje de rechazo amable para consultas fuera de ámbito
+ */
+function generateOffTopicResponse(userLanguage: string): string {
+  const responses: Record<string, string> = {
+    es: `Entiendo tu consulta, pero NUXA es un asistente especializado en **salud mental y bienestar emocional**.
+
+Mi ámbito incluye:
+• Psicología clínica, educativa y familiar
+• Estrés, ansiedad, depresión y otras emociones
+• Relaciones personales y familiares
+• Bienestar laboral y estrés en el trabajo
+• Orientación psicológica general
+
+Para consultas sobre otros temas (coches, tecnología, viajes, etc.), te recomiendo usar un buscador general o asistente más adecuado.
+
+**¿Hay algo relacionado con tu bienestar emocional o salud mental en lo que pueda ayudarte?** 💚`,
+    
+    en: `I understand your question, but NUXA is a specialized assistant for **mental health and emotional well-being**.
+
+My scope includes:
+• Clinical, educational and family psychology
+• Stress, anxiety, depression and other emotions
+• Personal and family relationships
+• Workplace well-being and work stress
+• General psychological guidance
+
+For questions about other topics (cars, technology, travel, etc.), I recommend using a general search engine or a more suitable assistant.
+
+**Is there anything related to your emotional well-being or mental health that I can help you with?** 💚`,
+    
+    fr: `Je comprends votre question, mais NUXA est un assistant spécialisé en **santé mentale et bien-être émotionnel**.
+
+Mon domaine comprend:
+• Psychologie clinique, éducative et familiale
+• Stress, anxiété, dépression et autres émotions
+• Relations personnelles et familiales
+• Bien-être au travail et stress professionnel
+
+Pour d'autres sujets, je vous recommande d'utiliser un moteur de recherche général.
+
+**Y a-t-il quelque chose lié à votre bien-être émotionnel sur lequel je peux vous aider?** 💚`,
+    
+    de: `Ich verstehe Ihre Frage, aber NUXA ist ein spezialisierter Assistent für **psychische Gesundheit und emotionales Wohlbefinden**.
+
+Mein Bereich umfasst:
+• Klinische, pädagogische und Familienpsychologie
+• Stress, Angst, Depression und andere Emotionen
+• Persönliche und familiäre Beziehungen
+• Wohlbefinden am Arbeitsplatz
+
+Für andere Themen empfehle ich eine allgemeine Suchmaschine.
+
+**Gibt es etwas im Zusammenhang mit Ihrem emotionalen Wohlbefinden, bei dem ich helfen kann?** 💚`
+  };
+  
+  return responses[userLanguage] || responses.es;
 }
 
 /**
