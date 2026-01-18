@@ -6,6 +6,7 @@ import nuxaRobotMountain from "@assets/generated_images/nuxa_robot_on_mountain_t
 import nuxaRobotMeadow from "@assets/generated_images/nuxa_robot_in_flower_meadow.png";
 import nuxaRobotLibrary from "@assets/generated_images/nuxa_robot_in_cozy_library.png";
 import grandparentsConsultingNuxa from "@assets/stock_images/elderly_couple_grand_2819c768.jpg";
+import twoPeopleLookingAtPhone from "@assets/stock_images/two_people_friends_l_f15a4ee5.jpg";
 import nuxaRobotAurora from "@assets/generated_images/nuxa_robot_under_aurora_sky.png";
 import nuxaRobotLivingRoom from "@assets/generated_images/nuxa_robot_with_person_living_room.png";
 import nuxaRobotMeditation from "@assets/generated_images/nuxa_robot_meditation_candles_space.png";
@@ -390,10 +391,10 @@ export function NuxaRobotRevealSection() {
     <section className="relative w-full overflow-hidden">
       <div className="relative w-full">
         <img 
-          src={nuxaRobotReveal} 
-          alt="Robot NUXA celebrando su lanzamiento" 
+          src={twoPeopleLookingAtPhone} 
+          alt="Dos personas mirando NUXA en su móvil" 
           className="w-full h-auto object-cover"
-          data-testid="img-nuxa-robot-reveal"
+          data-testid="img-two-people-nuxa"
         />
       </div>
     </section>
