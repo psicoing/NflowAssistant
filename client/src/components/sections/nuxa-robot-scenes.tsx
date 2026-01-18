@@ -5,6 +5,7 @@ import nuxaRobotZen from "@assets/generated_images/nuxa_robot_in_zen_garden.png"
 import nuxaRobotMountain from "@assets/generated_images/nuxa_robot_on_mountain_top.png";
 import nuxaRobotMeadow from "@assets/generated_images/nuxa_robot_in_flower_meadow.png";
 import nuxaRobotLibrary from "@assets/generated_images/nuxa_robot_in_cozy_library.png";
+import grandparentsConsultingNuxa from "@assets/stock_images/elderly_couple_grand_2819c768.jpg";
 import nuxaRobotAurora from "@assets/generated_images/nuxa_robot_under_aurora_sky.png";
 import nuxaRobotLivingRoom from "@assets/generated_images/nuxa_robot_with_person_living_room.png";
 import nuxaRobotMeditation from "@assets/generated_images/nuxa_robot_meditation_candles_space.png";
@@ -134,10 +135,10 @@ export function NuxaRobotLibrarySection() {
     <section className="relative w-full overflow-hidden">
       <div className="relative w-full">
         <img 
-          src={nuxaRobotLibrary} 
-          alt="Robot NUXA conversando en una biblioteca acogedora" 
+          src={grandparentsConsultingNuxa} 
+          alt="Abuelos consultando NUXA en su tablet" 
           className="w-full h-auto object-cover"
-          data-testid="img-nuxa-robot-library"
+          data-testid="img-grandparents-nuxa"
         />
       </div>
     </section>
