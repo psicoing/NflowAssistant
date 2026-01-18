@@ -679,7 +679,7 @@ export function NuxaRobotBlogReadingSection() {
   return (
     <section className="relative w-full overflow-hidden">
       <div className="relative w-full">
-        <img src={nuxaRobotBlogReading} alt="Robot NUXA leyendo blog" className="w-full h-auto object-cover" data-testid="img-nuxa-robot-blog-reading" />
+        <img src={grandparentsConsultingNuxa} alt="Abuelos consultando NUXA en su tablet" className="w-full h-auto object-cover" data-testid="img-grandparents-nuxa-blog" />
       </div>
     </section>
   );
