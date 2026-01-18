@@ -1027,20 +1027,25 @@ function isOffTopicQuery(userMessage: string): boolean {
     /\b(abogado.*divorcio|herencia|testamento|contrato.*firmar|demandar|juicio|multa.*trafico)\b/
   ];
   
-  // Primero verificar si contiene algún tema válido
-  const hasValidTopic = validTopics.some(topic => message.includes(topic));
+  // Palabras genéricas que NO deben anular patrones off-topic
+  const genericWords = ['necesito', 'problema', 'situacion', 'ayuda', 'apoyo', 'consejo', 
+    'como puedo', 'que hago', 'me pasa', 'que significa', 'es normal', 'por que'];
   
-  // Si tiene un tema válido, NO es off-topic
-  if (hasValidTopic) {
-    return false;
-  }
+  // Palabras específicas de psicología que SÍ anulan off-topic
+  const strongPsychologyTopics = validTopics.filter(topic => !genericWords.includes(topic));
   
   // Verificar si coincide con patrones off-topic
   const matchesOffTopic = offTopicPatterns.some(pattern => pattern.test(message));
   
-  // Si coincide con off-topic Y no tiene temas válidos, es off-topic
+  // Si coincide con off-topic, solo permitir si tiene tema de psicología ESPECÍFICO
   if (matchesOffTopic) {
-    return true;
+    const hasStrongPsychologyTopic = strongPsychologyTopics.some(topic => message.includes(topic));
+    // Si no tiene tema fuerte de psicología, es off-topic
+    if (!hasStrongPsychologyTopic) {
+      return true;
+    }
+    // Si tiene tema psicológico específico (ej: "ansiedad por comprar coche"), permitir
+    return false;
   }
   
   // Para mensajes muy cortos o ambiguos, permitir (dar beneficio de la duda)
