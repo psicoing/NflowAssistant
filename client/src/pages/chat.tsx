@@ -466,12 +466,9 @@ export default function Chat() {
                 size="sm"
                 className="text-white hover:bg-white/20 px-2 flex-shrink-0"
               >
-                <List className="w-4 h-4 mr-1" />
-                <span className="text-xs font-medium min-w-0 truncate">
-                  {currentConversationId ? 
-                    (conversations.find(c => c.id === currentConversationId)?.title?.substring(0, 15) + "...") || "Chat" 
-                    : `${conversations.length || 0}`
-                  }
+                <List className="w-4 h-4" />
+                <span className="text-xs font-medium ml-1 bg-white/20 rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center">
+                  {conversations.length || 0}
                 </span>
               </Button>
             </SheetTrigger>
