@@ -13,6 +13,7 @@ import PackagesSection from "@/components/sections/packages-section";
 import PWAInstallationSection from "@/components/sections/pwa-installation-section";
 import AppMovilSection from "@/components/sections/app-movil-section";
 import MultilanguageCardSection from "@/components/sections/multilanguage-card-section";
+import StudentsCardSection from "@/components/sections/students-card-section";
 import MentalHealthHeroSection from "@/components/sections/mental-health-hero-section";
 import BorderlessSupportSection from "@/components/sections/borderless-support-section";
 import YouthMentalHealthSection from "@/components/sections/youth-mental-health-section";
@@ -116,6 +117,8 @@ export default function Home() {
         
         <NuxaRobotMultilingualSection />
         <MultilanguageCardSection />
+        
+        <StudentsCardSection />
         
         <NuxaRobotRevealSection />
         <NuxaPurposeSection />
