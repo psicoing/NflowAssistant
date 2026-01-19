@@ -214,7 +214,10 @@ export default function FamilySupportHeroSection() {
               <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
                 <Brain className="w-5 h-5 text-white" />
               </div>
-              AVISO SOBRE NUXA
+              <div>
+                <span>AVISO SOBRE NUXA</span>
+                <span className="block text-xs font-normal text-gray-500 dark:text-gray-400">Actualización: enero 2026</span>
+              </div>
             </DialogTitle>
           </DialogHeader>
           <div className="overflow-y-auto max-h-[calc(90vh-120px)] p-4 space-y-6 text-gray-700 dark:text-gray-300">
@@ -227,7 +230,7 @@ export default function FamilySupportHeroSection() {
             </p>
             
             <p className="leading-relaxed">
-              La plataforma permite a los usuarios reflexionar, orientarse y acceder a recursos de apoyo emocional, así como interactuar con funcionalidades digitales (texto y voz) destinadas a mejorar la comprensión del propio estado emocional y facilitar la orientación temprana.
+              La plataforma permite a los usuarios reflexionar, orientarse y acceder a recursos de apoyo emocional, así como interactuar con funcionalidades digitales (texto y voz, como medios de interacción digital) destinadas a mejorar la comprensión del propio estado emocional y facilitar la orientación temprana.
             </p>
             
             <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg p-4">
@@ -252,12 +255,24 @@ export default function FamilySupportHeroSection() {
               </p>
             </div>
             
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+              <p className="leading-relaxed font-semibold text-gray-800 dark:text-gray-200 text-center italic">
+                NUXA actúa exclusivamente como herramienta digital de orientación preventiva.
+              </p>
+            </div>
+            
             <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center">
               <p className="font-medium text-gray-800 dark:text-gray-200">
                 📋 <strong>Aceptación del aviso</strong>
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
                 El uso de NUXA implica la aceptación expresa de este aviso y del carácter orientativo, preventivo y no asistencial de la plataforma.
+              </p>
+            </div>
+            
+            <div className="text-center pt-2 border-t border-gray-200 dark:border-gray-700">
+              <p className="text-xs text-gray-400 dark:text-gray-500">
+                Última actualización del aviso: enero 2026
               </p>
             </div>
           </div>
