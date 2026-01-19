@@ -1,4 +1,4 @@
-import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X, Brain, Heart, Menu, ShieldCheck, Compass, Bot, Sparkles, ArrowRight } from "lucide-react";
+import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X, Brain, Heart, Menu, ShieldCheck, Compass, Bot, Sparkles, ArrowRight, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation, Link } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -7,6 +7,7 @@ import { useState } from "react";
 export default function FamilySupportHeroSection() {
   const [, setLocation] = useLocation();
   const [isPdfOpen, setIsPdfOpen] = useState(false);
+  const [isLegalNoticeOpen, setIsLegalNoticeOpen] = useState(false);
 
   return (
     <section className="relative bg-white dark:bg-slate-900 py-16 md:py-24 overflow-hidden">
@@ -141,8 +142,8 @@ export default function FamilySupportHeroSection() {
               </div>
             </div>
 
-            {/* Botón Novedades */}
-            <div className="flex justify-center mt-6">
+            {/* Botones Novedades y Aviso Legal */}
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mt-6">
               <Link 
                 href="/novedades"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
@@ -151,6 +152,14 @@ export default function FamilySupportHeroSection() {
                 <span>Novedades</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
+              
+              <button 
+                onClick={() => setIsLegalNoticeOpen(true)}
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              >
+                <AlertTriangle className="w-5 h-5" />
+                <span>Aviso Legal Usuarios</span>
+              </button>
             </div>
 
             </div>
@@ -192,6 +201,64 @@ export default function FamilySupportHeroSection() {
                 alt="Nota Informativa del Departament de Salut sobre NUXA.life"
                 className="w-full h-auto"
               />
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal Aviso Legal Usuarios */}
+      <Dialog open={isLegalNoticeOpen} onOpenChange={setIsLegalNoticeOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden">
+          <DialogHeader className="pb-4 border-b border-gray-200 dark:border-gray-700">
+            <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
+                <Brain className="w-5 h-5 text-white" />
+              </div>
+              AVISO SOBRE NUXA
+            </DialogTitle>
+          </DialogHeader>
+          <div className="overflow-y-auto max-h-[calc(90vh-120px)] p-4 space-y-6 text-gray-700 dark:text-gray-300">
+            <p className="leading-relaxed">
+              <strong>NUXA</strong> es una plataforma de software de orientación y apoyo emocional, diseñada con fines preventivos e informativos.
+            </p>
+            
+            <p className="leading-relaxed">
+              NUXA <strong>no presta asistencia sanitaria</strong>, no constituye una consulta psicológica ni médica, y no sustituye en ningún caso la evaluación, el diagnóstico o el tratamiento por parte de profesionales cualificados.
+            </p>
+            
+            <p className="leading-relaxed">
+              La plataforma permite a los usuarios reflexionar, orientarse y acceder a recursos de apoyo emocional, así como interactuar con funcionalidades digitales (texto y voz) destinadas a mejorar la comprensión del propio estado emocional y facilitar la orientación temprana.
+            </p>
+            
+            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg p-4">
+              <p className="text-amber-800 dark:text-amber-200 font-medium">
+                El uso de NUXA tiene un carácter <strong>no asistencial, no clínico y no terapéutico</strong>.
+              </p>
+              <p className="text-amber-700 dark:text-amber-300 text-sm mt-2">
+                En situaciones de malestar intenso, riesgo para la salud o emergencia, se recomienda acudir a los servicios sanitarios correspondientes o contactar con profesionales de referencia.
+              </p>
+            </div>
+            
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+              <h4 className="font-bold text-gray-900 dark:text-white mb-3">Uso por empresas, mutuas y entidades</h4>
+              <p className="leading-relaxed mb-3">
+                NUXA se ofrece a empresas, mutuas, aseguradoras y otras entidades en régimen de licencia o arrendamiento de software.
+              </p>
+              <p className="leading-relaxed mb-3">
+                El licenciante pone a disposición del licenciatario una herramienta digital de orientación y apoyo psicoemocional de carácter preventivo e informativo. El uso de la plataforma no constituye acto sanitario, ni implica la prestación de servicios clínicos, médicos o psicológicos directos por parte del licenciante.
+              </p>
+              <p className="leading-relaxed">
+                La integración de NUXA en programas de bienestar, prevención o apoyo psicosocial no sustituye los circuitos asistenciales propios de cada entidad, ni la intervención profesional cuando esta sea necesaria.
+              </p>
+            </div>
+            
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center">
+              <p className="font-medium text-gray-800 dark:text-gray-200">
+                📋 <strong>Aceptación del aviso</strong>
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                El uso de NUXA implica la aceptación expresa de este aviso y del carácter orientativo, preventivo y no asistencial de la plataforma.
+              </p>
             </div>
           </div>
         </DialogContent>
