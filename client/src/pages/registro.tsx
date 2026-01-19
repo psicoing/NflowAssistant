@@ -7,10 +7,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { UserPlus, User, Building, ShieldCheck, RefreshCw, Coins } from "lucide-react";
+import { UserPlus, User, Building, ShieldCheck, RefreshCw, Coins, Brain } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useReferralCode } from "@/hooks/useReferralCode";
 import { SEOHead } from "@/components/SEOHead";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function Registro() {
   const [, setLocation] = useLocation();
@@ -26,6 +28,8 @@ export default function Registro() {
   const [error, setError] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [createdCredentials, setCreatedCredentials] = useState({ username: "", password: "" });
+  const [acceptedNotice, setAcceptedNotice] = useState(false);
+  const [isLegalNoticeOpen, setIsLegalNoticeOpen] = useState(false);
   const { toast } = useToast();
   const { referralCode, isValidating, isValid, isFromUrl, updateReferralCode } = useReferralCode();
 
@@ -57,6 +61,12 @@ export default function Registro() {
 
     if (formData.password.length < 6) {
       setError("La contraseña debe tener al menos 6 caracteres");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!acceptedNotice) {
+      setError("Debes aceptar el Aviso sobre NUXA para continuar");
       setIsLoading(false);
       return;
     }
@@ -95,7 +105,9 @@ export default function Registro() {
           email: formData.email,
           birthDate: formData.userType === "individual" ? formData.birthDate : null,
           userType: formData.userType,
-          referralCode: referralCode.trim() || null
+          referralCode: referralCode.trim() || null,
+          acceptedNuxaNotice: true,
+          noticeVersion: "enero-2026"
         }),
       });
 
@@ -450,6 +462,26 @@ export default function Registro() {
                   </p>
                 )}
               </div>
+
+              <div className="flex items-start space-x-3 pt-4 border-t border-gray-600">
+                <Checkbox 
+                  id="acceptNotice" 
+                  checked={acceptedNotice}
+                  onCheckedChange={(checked) => setAcceptedNotice(checked === true)}
+                  className="mt-0.5 border-gray-500 data-[state=checked]:bg-nflow-blue data-[state=checked]:border-nflow-blue"
+                />
+                <label htmlFor="acceptNotice" className="text-sm text-gray-300 leading-relaxed cursor-pointer">
+                  He leído y acepto el{" "}
+                  <button
+                    type="button"
+                    onClick={() => setIsLegalNoticeOpen(true)}
+                    className="text-nflow-blue hover:underline font-medium"
+                  >
+                    Aviso sobre NUXA
+                  </button>
+                  {" "}y el carácter orientativo, preventivo y no asistencial de la plataforma.
+                </label>
+              </div>
             </CardContent>
 
             <CardFooter className="flex flex-col space-y-4">
@@ -494,6 +526,69 @@ export default function Registro() {
         </Card>
       </div>
     </div>
+
+    <Dialog open={isLegalNoticeOpen} onOpenChange={setIsLegalNoticeOpen}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden bg-gray-800 border-gray-700">
+        <DialogHeader className="pb-4 border-b border-gray-700">
+          <DialogTitle className="text-xl font-bold text-white flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
+              <Brain className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <span>AVISO SOBRE NUXA</span>
+              <span className="block text-xs font-normal text-gray-400">Actualización: enero 2026</span>
+            </div>
+          </DialogTitle>
+        </DialogHeader>
+        <div className="overflow-y-auto max-h-[calc(90vh-120px)] p-4 space-y-6 text-gray-300">
+          <p className="leading-relaxed">
+            <strong className="text-white">NUXA</strong> es una plataforma de software de orientación y apoyo emocional, diseñada con fines preventivos e informativos.
+          </p>
+          
+          <p className="leading-relaxed">
+            NUXA <strong className="text-white">no presta asistencia sanitaria</strong>, no constituye una consulta psicológica ni médica, y no sustituye en ningún caso la evaluación, el diagnóstico o el tratamiento por parte de profesionales cualificados.
+          </p>
+          
+          <p className="leading-relaxed">
+            La plataforma permite a los usuarios reflexionar, orientarse y acceder a recursos de apoyo emocional, así como interactuar con funcionalidades digitales (texto y voz, como medios de interacción digital) destinadas a mejorar la comprensión del propio estado emocional y facilitar la orientación temprana.
+          </p>
+          
+          <div className="bg-amber-900/30 border border-amber-700 rounded-lg p-4">
+            <p className="text-amber-200 font-medium">
+              El uso de NUXA tiene un carácter <strong>no asistencial, no clínico y no terapéutico</strong>.
+            </p>
+            <p className="text-amber-300/80 text-sm mt-2">
+              En situaciones de malestar intenso, riesgo para la salud o emergencia, se recomienda acudir a los servicios sanitarios correspondientes o contactar con profesionales de referencia.
+            </p>
+          </div>
+          
+          <div className="border-t border-gray-700 pt-4">
+            <h4 className="font-bold text-white mb-3">Uso por empresas, mutuas y entidades</h4>
+            <p className="leading-relaxed mb-3">
+              NUXA se ofrece a empresas, mutuas, aseguradoras y otras entidades en régimen de licencia o arrendamiento de software.
+            </p>
+            <p className="leading-relaxed mb-3">
+              El licenciante pone a disposición del licenciatario una herramienta digital de orientación y apoyo psicoemocional de carácter preventivo e informativo. El uso de la plataforma no constituye acto sanitario, ni implica la prestación de servicios clínicos, médicos o psicológicos directos por parte del licenciante.
+            </p>
+            <p className="leading-relaxed">
+              La integración de NUXA en programas de bienestar, prevención o apoyo psicosocial no sustituye los circuitos asistenciales propios de cada entidad, ni la intervención profesional cuando esta sea necesaria.
+            </p>
+          </div>
+          
+          <div className="border-t border-gray-700 pt-4">
+            <p className="leading-relaxed font-semibold text-white text-center italic">
+              NUXA actúa exclusivamente como herramienta digital de orientación preventiva.
+            </p>
+          </div>
+          
+          <div className="text-center pt-2 border-t border-gray-700">
+            <p className="text-xs text-gray-500">
+              Última actualización del aviso: enero 2026
+            </p>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
     </>
   );
 }

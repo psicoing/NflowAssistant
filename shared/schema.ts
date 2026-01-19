@@ -31,6 +31,10 @@ export const users = pgTable("users", {
   // Magic Link para acceso directo después de compra
   magicLinkToken: text("magic_link_token"),
   magicLinkExpiry: timestamp("magic_link_expiry"),
+  // Aceptación del aviso legal NUXA
+  acceptedNuxaNotice: boolean("accepted_nuxa_notice").default(false),
+  noticeAcceptedAt: timestamp("notice_accepted_at"),
+  noticeVersion: text("notice_version"),
 });
 
 export const conversations = pgTable("conversations", {
@@ -140,6 +144,9 @@ export const insertUserSchema = createInsertSchema(users).pick({
   userType: true,
   subscriptionStatus: true,
   hasCompletedPayment: true,
+  acceptedNuxaNotice: true,
+  noticeAcceptedAt: true,
+  noticeVersion: true,
 });
 
 export const insertConversationSchema = createInsertSchema(conversations).omit({

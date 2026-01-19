@@ -84,7 +84,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User registration
   app.post("/api/auth/register", async (req, res) => {
     try {
-      const { username, password, email, birthDate, userType, referralCode } = req.body;
+      const { username, password, email, birthDate, userType, referralCode, acceptedNuxaNotice, noticeVersion } = req.body;
       
       if (!username || !password) {
         return res.status(400).json({ 
@@ -152,7 +152,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         birthDate: userType === "individual" ? birthDate : null,
         userType: userType || "individual",
         subscriptionStatus: 'pending_payment',
-        hasCompletedPayment: false
+        hasCompletedPayment: false,
+        acceptedNuxaNotice: acceptedNuxaNotice === true,
+        noticeAcceptedAt: acceptedNuxaNotice === true ? new Date() : null,
+        noticeVersion: noticeVersion || null
       });
 
       // Set session for newly registered user
