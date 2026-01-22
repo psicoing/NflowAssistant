@@ -165,7 +165,7 @@ export default function Login() {
                 <div className="text-xs text-amber-300/90 text-left leading-relaxed">
                   <span className="font-semibold text-amber-400">Aviso:</span> Guarda tu contraseña. No se puede recuperar.
                   <br /><br />
-                  <span className="text-emerald-400">100% Confidencial.</span> Encriptado de alta seguridad. Usuarios Shopify reciben email de acceso.
+                  <span className="text-emerald-400">100% Confidencial.</span> Encriptado de alta seguridad.
                 </div>
               </div>
             </div>
