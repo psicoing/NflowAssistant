@@ -1,14 +1,10 @@
 import { GraduationCap, BookOpen, Brain, Stethoscope } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
 import studentsImage from "@assets/image_1768716364098.png";
 
 export default function StudentsCardSection() {
-  const scrollToPricing = () => {
-    const pricingSection = document.getElementById('precios');
-    if (pricingSection) {
-      pricingSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const [, setLocation] = useLocation();
 
   return (
     <section className="py-6 px-4 bg-nflow-dark overflow-x-hidden">
@@ -85,7 +81,7 @@ export default function StudentsCardSection() {
                 {/* CTA Button */}
                 <div className="pt-2 w-full">
                   <Button
-                    onClick={scrollToPricing}
+                    onClick={() => setLocation("/login")}
                     size="lg"
                     className="bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 
                       hover:from-teal-500 hover:via-emerald-500 hover:to-teal-500 
