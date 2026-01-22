@@ -1102,12 +1102,12 @@ export default function Chat() {
             </div>
 
             {/* CTA */}
-            <Card className="bg-gradient-to-r from-emerald-600/20 to-teal-600/20 border-emerald-500/30">
+            <Card className="bg-gradient-to-r from-emerald-100 to-teal-100 dark:from-emerald-600/20 dark:to-teal-600/20 border-emerald-300 dark:border-emerald-500/30">
               <CardContent className="p-8 text-center">
-                <h3 className="text-2xl font-bold text-white mb-3">
+                <h3 className="text-2xl font-bold text-emerald-800 dark:text-white mb-3">
                   {t('chat.resources.notFound')}
                 </h3>
-                <p className="text-gray-300 mb-6 max-w-xl mx-auto">
+                <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-xl mx-auto">
                   {t('chat.resources.notFound.desc')}
                 </p>
                 <Button
