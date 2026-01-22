@@ -164,7 +164,7 @@ export default function Login() {
                 <ShieldAlert className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
                 <div className="text-xs text-amber-300/90 text-left leading-relaxed">
                   <span className="font-semibold text-amber-400">Aviso:</span> Guarda tu contraseña. No se puede recuperar.
-                  <br /><br />
+                  <br />
                   <span className="text-emerald-400">100% Confidencial.</span> Encriptado de alta seguridad.
                 </div>
               </div>
