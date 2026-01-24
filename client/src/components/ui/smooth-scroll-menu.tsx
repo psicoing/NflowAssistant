@@ -52,11 +52,11 @@ const menuItems = [
     isPage: true
   },
   {
-    id: "partners",
-    name: "Partners",
-    sectionId: "partners",
+    id: "alquiler-nuxa",
+    name: "Alquiler Nuxa",
+    sectionId: "alquiler-nuxa",
     icon: Users,
-    isPage: true
+    externalUrl: "https://jobda.org/partners"
   },
   {
     id: "app-movil",
@@ -82,8 +82,14 @@ export default function SmoothScrollMenu() {
     return () => window.removeEventListener("openNuxaMenu", handleOpenMenu);
   }, []);
 
-  const scrollToSection = (sectionId: string, isPage?: boolean) => {
+  const scrollToSection = (sectionId: string, isPage?: boolean, externalUrl?: string) => {
     setIsOpen(false);
+    
+    // If it's an external URL, navigate to it
+    if (externalUrl) {
+      window.open(externalUrl, "_blank");
+      return;
+    }
     
     if (sectionId === "top") {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -135,7 +141,7 @@ export default function SmoothScrollMenu() {
               return (
                 <button
                   key={item.id}
-                  onClick={() => scrollToSection(item.sectionId, (item as any).isPage)}
+                  onClick={() => scrollToSection(item.sectionId, (item as any).isPage, (item as any).externalUrl)}
                   className="w-full flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200"
                 >
                   <IconComponent className="w-5 h-5" />
