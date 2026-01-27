@@ -53,7 +53,7 @@ const menuItems = [
   },
   {
     id: "alquiler-nuxa",
-    name: "Alquiler Nuxa",
+    name: "Gestión licencias",
     sectionId: "alquiler-nuxa",
     icon: Users,
     externalUrl: "https://jobda.org/partners"
