@@ -198,32 +198,17 @@ export default function PartnerRegister() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="partnerType">Tipo de Partner *</Label>
+              <Label htmlFor="partnerType">Tipo de licitación *</Label>
               <Select onValueChange={handleSelectChange} required>
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecciona el tipo de partner" />
+                  <SelectValue placeholder="Selecciona el tipo de licitación" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="healthcare">Centro de Salud Mental</SelectItem>
-                  <SelectItem value="education">Institución Educativa</SelectItem>
-                  <SelectItem value="corporate">Empresa/Corporativo</SelectItem>
-                  <SelectItem value="clinic">Clínica Privada</SelectItem>
+                  <SelectItem value="public">Licitación de gestión pública</SelectItem>
+                  <SelectItem value="private">Licitación de gestión privada</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-
-            {(formData.partnerType === 'healthcare' || formData.partnerType === 'clinic') && (
-              <div className="space-y-2">
-                <Label htmlFor="licenseNumber">Número de Licencia/Colegiado</Label>
-                <Input
-                  id="licenseNumber"
-                  name="licenseNumber"
-                  value={formData.licenseNumber}
-                  onChange={handleInputChange}
-                  placeholder="Ej: COL-12345"
-                />
-              </div>
-            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -250,19 +235,6 @@ export default function PartnerRegister() {
                   placeholder="••••••••"
                 />
               </div>
-            </div>
-
-            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-              <h3 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
-                Beneficios del Programa de Partners
-              </h3>
-              <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                <li>• Comisión del 10% por cada referido que se suscriba</li>
-                <li>• Dashboard para trackear tus referencias y ganancias</li>
-                <li>• Códigos de referencia personalizados</li>
-                <li>• Soporte dedicado para partners</li>
-                <li>• Acceso a materiales promocionales</li>
-              </ul>
             </div>
 
             <Button
