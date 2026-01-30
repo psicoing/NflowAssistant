@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { apiRequest } from "@/lib/queryClient";
 import { Link, useLocation } from "wouter";
+import { AlertTriangle, Key } from "lucide-react";
 
 export default function PartnerRegister() {
   const [, setLocation] = useLocation();
@@ -105,6 +106,33 @@ export default function PartnerRegister() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-700 rounded-lg">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="w-6 h-6 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-amber-800 dark:text-amber-200 mb-2">
+                  Aviso importante sobre el registro Partner
+                </h3>
+                <p className="text-sm text-amber-700 dark:text-amber-300 mb-3">
+                  Este software funciona bajo <strong>licencia en régimen de arrendamiento</strong>. 
+                  El acceso no es libre: el registro está vinculado a un contrato de arrendamiento 
+                  con el propietario del software.
+                </p>
+                <div className="flex items-start gap-2 bg-amber-100 dark:bg-amber-800/40 p-3 rounded-md">
+                  <Key className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-amber-800 dark:text-amber-200">
+                    Antes de continuar, debe ponerse en contacto con el propietario, quien le facilitará 
+                    las <strong>"llaves de acceso"</strong>, del mismo modo que ocurre con un piso, un coche o un barco.
+                  </p>
+                </div>
+                <p className="text-sm text-amber-700 dark:text-amber-300 mt-3">
+                  Una vez obtenido este permiso, podrá continuar automáticamente con todo el proceso de alta, 
+                  tanto si se trata de una empresa pública estatal como de una empresa privada.
+                </p>
+              </div>
+            </div>
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
