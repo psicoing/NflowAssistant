@@ -17,7 +17,7 @@ export default function Footer() {
                 versión beta 1-04
               </span>
             </div>
-            <p className="text-gray-400 mb-6 max-w-md">
+            <p className="text-gray-400 mb-6 max-w-md text-xs">
               Transformando el acceso a la salud mental a través de la tecnología, 
               proporcionando orientación en psicología accesible y efectiva para todos.
             </p>
