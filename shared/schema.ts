@@ -111,6 +111,11 @@ export const partners = pgTable("partners", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   approvedAt: timestamp("approved_at"),
   approvedBy: integer("approved_by"), // ID del admin que aprobó
+  // Campos de gestión de licencia rental
+  activeUsersCount: integer("active_users_count").default(0), // Usuarios activos actualmente
+  activeUsersLimit: integer("active_users_limit").default(10), // Límite máximo de usuarios activos
+  monthlyQuota: text("monthly_quota").default("0"), // Cuota mensual comprometida en €
+  licenseStatus: text("license_status").default("pending"), // active, pending, suspended
 });
 
 // Tabla para referencias de partners
