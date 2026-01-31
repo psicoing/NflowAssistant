@@ -129,9 +129,8 @@ export default function Footer() {
             <span className="text-white font-semibold text-sm">GRUPO JOBDA</span>
             <span className="text-gray-500 text-xs">Empordajobs SL • B02701100 • Portbou, España</span>
           </div>
-          <div className="flex flex-col md:flex-row justify-between items-center text-gray-500 text-xs gap-1">
+          <div className="text-gray-500 text-xs">
             <p>© 2025 JOBDA. Todos los derechos reservados. • empordajobs@gmail.com • +34 660 45 21 36</p>
-            <p>Desarrollado con ❤️ para mejorar la salud mental</p>
           </div>
         </div>
       </div>
