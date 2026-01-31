@@ -125,12 +125,9 @@ export default function Footer() {
 
         {/* Bottom Section - Compacted */}
         <div className="border-t border-gray-800 mt-6 pt-4">
-          <div className="flex items-center gap-3 mb-3">
+          <div className="flex flex-wrap items-center gap-2 text-xs">
             <span className="text-white font-semibold text-sm">GRUPO JOBDA</span>
-            <span className="text-gray-500 text-xs">Empordajobs SL • B02701100 • Portbou, España</span>
-          </div>
-          <div className="text-gray-500 text-xs">
-            <p>© 2025 JOBDA. Todos los derechos reservados. • empordajobs@gmail.com • +34 660 45 21 36</p>
+            <span className="text-gray-500">Empordajobs SL • B02701100 • Portbou, España • © 2025 Todos los derechos reservados • empordajobs@gmail.com • +34 660 45 21 36</span>
           </div>
         </div>
       </div>
