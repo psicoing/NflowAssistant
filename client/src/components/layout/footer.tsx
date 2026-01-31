@@ -19,7 +19,7 @@ export default function Footer() {
             </div>
             <p className="text-gray-400 mb-6 max-w-md">
               Transformando el acceso a la salud mental a través de la tecnología, 
-              proporcionando apoyo psicológico accesible y efectivo para todos.
+              proporcionando orientación en psicología accesible y efectiva para todos.
             </p>
             <div className="flex space-x-4">
               <a 
