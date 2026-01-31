@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2, BarChart3, ExternalLink, Calendar, CheckCircle, Clock, UserCheck, Shield, AlertTriangle, Upload, FileSpreadsheet, Loader2 } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 
 interface Partner {
@@ -40,7 +40,6 @@ export default function PartnerDashboardSimple() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [referralCode, setReferralCode] = useState("");
-  const [isUploading, setIsUploading] = useState(false);
   const [uploadResult, setUploadResult] = useState<{success: number; errors: string[]; created: string[]} | null>(null);
 
   const { data: partner, isLoading: partnerLoading, error } = useQuery<Partner>({
@@ -155,11 +154,45 @@ export default function PartnerDashboardSimple() {
     return <Badge variant={config.variant}>{config.label}</Badge>;
   };
 
+  const uploadMutation = useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/partners/upload-users', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.message || 'Error al subir archivo');
+      }
+      return result;
+    },
+    onSuccess: (result) => {
+      setUploadResult(result);
+      toast({
+        title: "Importación completada",
+        description: `${result.success} usuarios creados correctamente`,
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/profile"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/referrals"] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Error al procesar el archivo",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
     const allowedExtensions = ['.csv', '.xlsx', '.xls', '.ods'];
     const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
     if (!allowedExtensions.includes(fileExtension)) {
@@ -171,43 +204,9 @@ export default function PartnerDashboardSimple() {
       return;
     }
 
-    setIsUploading(true);
     setUploadResult(null);
-
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/partners/upload-users', {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Error al subir archivo');
-      }
-
-      setUploadResult(result);
-      toast({
-        title: "Importación completada",
-        description: `${result.success} usuarios creados correctamente`,
-      });
-
-      // Reset file input
-      event.target.value = '';
-
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Error al procesar el archivo",
-        variant: "destructive",
-      });
-    } finally {
-      setIsUploading(false);
-    }
+    uploadMutation.mutate(file);
+    event.target.value = '';
   };
 
   return (
@@ -356,20 +355,20 @@ export default function PartnerDashboardSimple() {
                   className="hidden"
                   accept=".csv,.xlsx,.xls,.ods"
                   onChange={handleFileUpload}
-                  disabled={isUploading || partner.licenseStatus === 'suspended'}
+                  disabled={uploadMutation.isPending || partner.licenseStatus === 'suspended'}
                 />
                 <label
                   htmlFor="file-upload"
-                  className={`cursor-pointer ${isUploading || partner.licenseStatus === 'suspended' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`cursor-pointer ${uploadMutation.isPending || partner.licenseStatus === 'suspended' ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <div className="flex flex-col items-center">
-                    {isUploading ? (
+                    {uploadMutation.isPending ? (
                       <Loader2 className="w-10 h-10 text-gray-400 animate-spin mb-2" />
                     ) : (
                       <Upload className="w-10 h-10 text-gray-400 mb-2" />
                     )}
                     <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {isUploading ? 'Procesando archivo...' : 'Haz clic para seleccionar archivo'}
+                      {uploadMutation.isPending ? 'Procesando archivo...' : 'Haz clic para seleccionar archivo'}
                     </span>
                     <span className="text-xs text-gray-500 mt-1">
                       CSV, XLSX, XLS o ODS (máx. 5MB)
