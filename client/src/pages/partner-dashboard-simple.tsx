@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2, BarChart3, ExternalLink, Calendar, CheckCircle, Clock, UserCheck, Shield, AlertTriangle } from "lucide-react";
+import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2, BarChart3, ExternalLink, Calendar, CheckCircle, Clock, UserCheck, Shield, AlertTriangle, Upload, FileSpreadsheet, Loader2 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 
@@ -40,6 +40,8 @@ export default function PartnerDashboardSimple() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [referralCode, setReferralCode] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadResult, setUploadResult] = useState<{success: number; errors: string[]; created: string[]} | null>(null);
 
   const { data: partner, isLoading: partnerLoading, error } = useQuery<Partner>({
     queryKey: ["/api/partners/profile"],
@@ -151,6 +153,61 @@ export default function PartnerDashboardSimple() {
     };
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.pending;
     return <Badge variant={config.variant}>{config.label}</Badge>;
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedExtensions = ['.csv', '.xlsx', '.xls', '.ods'];
+    const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+    if (!allowedExtensions.includes(fileExtension)) {
+      toast({
+        title: "Error",
+        description: "Formato no soportado. Use CSV, XLSX, XLS o ODS.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadResult(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/partners/upload-users', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Error al subir archivo');
+      }
+
+      setUploadResult(result);
+      toast({
+        title: "Importación completada",
+        description: `${result.success} usuarios creados correctamente`,
+      });
+
+      // Reset file input
+      event.target.value = '';
+
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Error al procesar el archivo",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -275,6 +332,80 @@ export default function PartnerDashboardSimple() {
                   Cuota Mensual
                 </div>
               </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* File Upload Section */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileSpreadsheet className="w-5 h-5" />
+              Importar Usuarios
+            </CardTitle>
+            <CardDescription>
+              Carga usuarios masivamente desde un archivo CSV, XLSX o ODS
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
+                <input
+                  type="file"
+                  id="file-upload"
+                  className="hidden"
+                  accept=".csv,.xlsx,.xls,.ods"
+                  onChange={handleFileUpload}
+                  disabled={isUploading || partner.licenseStatus === 'suspended'}
+                />
+                <label
+                  htmlFor="file-upload"
+                  className={`cursor-pointer ${isUploading || partner.licenseStatus === 'suspended' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  <div className="flex flex-col items-center">
+                    {isUploading ? (
+                      <Loader2 className="w-10 h-10 text-gray-400 animate-spin mb-2" />
+                    ) : (
+                      <Upload className="w-10 h-10 text-gray-400 mb-2" />
+                    )}
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      {isUploading ? 'Procesando archivo...' : 'Haz clic para seleccionar archivo'}
+                    </span>
+                    <span className="text-xs text-gray-500 mt-1">
+                      CSV, XLSX, XLS o ODS (máx. 5MB)
+                    </span>
+                  </div>
+                </label>
+              </div>
+
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg text-sm">
+                <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">Formato requerido:</p>
+                <p className="text-blue-700 dark:text-blue-300">
+                  El archivo debe tener columnas: <strong>email</strong> (o correo), <strong>nombre</strong> (o name/usuario), 
+                  y opcionalmente <strong>password</strong> (o contraseña/clave).
+                </p>
+              </div>
+
+              {uploadResult && (
+                <div className={`p-4 rounded-lg ${uploadResult.errors.length > 0 ? 'bg-yellow-50 dark:bg-yellow-900/20' : 'bg-green-50 dark:bg-green-900/20'}`}>
+                  <p className="font-medium text-green-800 dark:text-green-200">
+                    ✓ {uploadResult.success} usuarios creados correctamente
+                  </p>
+                  {uploadResult.errors.length > 0 && (
+                    <div className="mt-2">
+                      <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">Errores:</p>
+                      <ul className="text-sm text-yellow-700 dark:text-yellow-300 list-disc list-inside">
+                        {uploadResult.errors.slice(0, 5).map((error, i) => (
+                          <li key={i}>{error}</li>
+                        ))}
+                        {uploadResult.errors.length > 5 && (
+                          <li>... y {uploadResult.errors.length - 5} errores más</li>
+                        )}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
