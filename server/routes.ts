@@ -2,7 +2,7 @@ import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners } from "@shared/schema";
+import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
 import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
 import bcrypt from "bcrypt";
@@ -10,6 +10,8 @@ import fetch from "node-fetch";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import "./types"; // Import session types
+import multer from "multer";
+import * as XLSX from "xlsx";
 
 // Helper function to check if user has active subscription
 async function checkSubscription(userId: number): Promise<boolean> {
@@ -1015,6 +1017,218 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error validating referral code:", error);
       res.json({ valid: false, message: "Error validando código" });
+    }
+  });
+
+  // Multer configuration for file uploads
+  const upload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
+    fileFilter: (req, file, cb) => {
+      const allowedMimes = [
+        'text/csv',
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.oasis.opendocument.spreadsheet'
+      ];
+      if (allowedMimes.includes(file.mimetype) || 
+          file.originalname.endsWith('.csv') || 
+          file.originalname.endsWith('.xlsx') || 
+          file.originalname.endsWith('.xls') ||
+          file.originalname.endsWith('.ods')) {
+        cb(null, true);
+      } else {
+        cb(new Error('Formato de archivo no soportado. Use CSV, XLSX, XLS o ODS.'));
+      }
+    }
+  });
+
+  // Partner upload users from file (CSV, XLSX, ODS)
+  app.post("/api/partners/upload-users", upload.single('file'), async (req, res) => {
+    try {
+      const partnerId = req.session.partnerId;
+      
+      if (!partnerId) {
+        return res.status(401).json({ message: "No autenticado como partner" });
+      }
+      
+      const partner = await storage.getPartner(partnerId);
+      if (!partner) {
+        return res.status(404).json({ message: "Partner no encontrado" });
+      }
+
+      // Check license status
+      if (partner.licenseStatus === 'suspended') {
+        return res.status(403).json({ message: "Licencia suspendida. Contacta con el administrador." });
+      }
+
+      if (!req.file) {
+        return res.status(400).json({ message: "No se ha enviado ningún archivo" });
+      }
+
+      // Parse the file
+      let workbook;
+      try {
+        workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+      } catch (parseError) {
+        return res.status(400).json({ message: "Error al leer el archivo. Asegúrate de que es un archivo válido." });
+      }
+
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const data = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as string[][];
+
+      if (data.length < 2) {
+        return res.status(400).json({ message: "El archivo debe tener al menos una fila de cabecera y una fila de datos" });
+      }
+
+      // Get headers (first row)
+      const headers = data[0].map((h: any) => String(h).toLowerCase().trim());
+      
+      // Find column indices
+      const emailIndex = headers.findIndex((h: string) => h.includes('email') || h.includes('correo'));
+      const nameIndex = headers.findIndex((h: string) => h.includes('nombre') || h.includes('name') || h.includes('usuario'));
+      const passwordIndex = headers.findIndex((h: string) => h.includes('password') || h.includes('contraseña') || h.includes('clave'));
+
+      if (emailIndex === -1) {
+        return res.status(400).json({ 
+          message: "El archivo debe tener una columna 'email' o 'correo'",
+          headers: headers 
+        });
+      }
+
+      if (nameIndex === -1) {
+        return res.status(400).json({ 
+          message: "El archivo debe tener una columna 'nombre', 'name' o 'usuario'",
+          headers: headers 
+        });
+      }
+
+      // Check user limits
+      const currentActiveUsers = partner.activeUsersCount || 0;
+      const userLimit = partner.activeUsersLimit || 10;
+      const availableSlots = userLimit - currentActiveUsers;
+      const usersToImport = data.length - 1; // Exclude header
+
+      if (usersToImport > availableSlots) {
+        return res.status(400).json({ 
+          message: `No tienes suficientes slots disponibles. Disponibles: ${availableSlots}, Intentando importar: ${usersToImport}`,
+          availableSlots,
+          usersToImport
+        });
+      }
+
+      // Process users
+      const results = {
+        success: 0,
+        errors: [] as string[],
+        created: [] as string[]
+      };
+
+      for (let i = 1; i < data.length; i++) {
+        const row = data[i];
+        if (!row || row.length === 0) continue;
+
+        const email = row[emailIndex]?.toString().trim().toLowerCase();
+        const name = row[nameIndex]?.toString().trim();
+        const password = passwordIndex !== -1 ? row[passwordIndex]?.toString() : null;
+
+        if (!email || !name) {
+          results.errors.push(`Fila ${i + 1}: Email o nombre vacío`);
+          continue;
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          results.errors.push(`Fila ${i + 1}: Email inválido (${email})`);
+          continue;
+        }
+
+        try {
+          // Check if user already exists
+          const existingUser = await storage.getUserByUsername(email);
+          if (existingUser) {
+            results.errors.push(`Fila ${i + 1}: Usuario ya existe (${email})`);
+            continue;
+          }
+
+          // Generate password if not provided
+          const finalPassword = password || Math.random().toString(36).slice(-8);
+          const hashedPassword = await bcrypt.hash(finalPassword, 10);
+
+          // Create user with partner association using direct db insert
+          await db.insert(users).values({
+            username: email,
+            email: email,
+            password: hashedPassword,
+            role: 'user',
+            userType: 'individual',
+            subscriptionStatus: 'active',
+            subscriptionPlan: 'partner',
+            monthlyQuestionLimit: 100, // Partner users get more questions
+          });
+
+          results.success++;
+          results.created.push(email);
+
+        } catch (userError: any) {
+          results.errors.push(`Fila ${i + 1}: Error creando usuario (${email}): ${userError.message}`);
+        }
+      }
+
+      // Update partner active users count
+      if (results.success > 0) {
+        await db.update(partners)
+          .set({ activeUsersCount: currentActiveUsers + results.success })
+          .where(eq(partners.id, partnerId));
+      }
+
+      res.json({
+        message: `Importación completada: ${results.success} usuarios creados`,
+        success: results.success,
+        errors: results.errors,
+        created: results.created,
+        newActiveCount: currentActiveUsers + results.success
+      });
+
+    } catch (error: any) {
+      console.error("Error uploading users:", error);
+      res.status(500).json({ message: "Error procesando archivo: " + error.message });
+    }
+  });
+
+  // Get partner users list
+  app.get("/api/partners/users", async (req, res) => {
+    try {
+      const partnerId = req.session.partnerId;
+      
+      if (!partnerId) {
+        return res.status(401).json({ message: "No autenticado como partner" });
+      }
+      
+      const partner = await storage.getPartner(partnerId);
+      if (!partner) {
+        return res.status(404).json({ message: "Partner no encontrado" });
+      }
+
+      // Get users with partner subscription plan
+      const partnerUsers = await db.select()
+        .from(users)
+        .where(eq(users.subscriptionPlan, 'partner'));
+
+      res.json(partnerUsers.map(u => ({
+        id: u.id,
+        username: u.username,
+        email: u.email,
+        createdAt: u.createdAt,
+        lastLoginAt: u.lastLoginAt,
+        subscriptionStatus: u.subscriptionStatus
+      })));
+
+    } catch (error: any) {
+      console.error("Error fetching partner users:", error);
+      res.status(500).json({ message: "Error obteniendo usuarios" });
     }
   });
 
