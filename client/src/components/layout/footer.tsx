@@ -21,7 +21,7 @@ export default function Footer() {
               Transformando el acceso a la salud mental a través de la tecnología, 
               proporcionando orientación en psicología accesible y efectiva para todos.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3">
               <a 
                 href="https://www.linkedin.com/in/empordajobs/"
                 target="_blank"
@@ -30,6 +30,33 @@ export default function Footer() {
                 aria-label="LinkedIn"
               >
                 <Linkedin className="w-4 h-4 text-gray-400 hover:text-white" />
+              </a>
+              <a 
+                href="https://jobda.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-teal-500 transition-colors"
+                aria-label="Jobda"
+              >
+                <span className="text-gray-400 hover:text-white text-xs font-semibold">JB</span>
+              </a>
+              <a 
+                href="https://appia.jobda.es/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-teal-500 transition-colors"
+                aria-label="Appia"
+              >
+                <span className="text-gray-400 hover:text-white text-xs font-semibold">AP</span>
+              </a>
+              <a 
+                href="https://neuronmeg.net/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-teal-500 transition-colors"
+                aria-label="Neuronmeg"
+              >
+                <span className="text-gray-400 hover:text-white text-xs font-semibold">IN</span>
               </a>
             </div>
           </div>
