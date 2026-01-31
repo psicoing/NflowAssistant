@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2, BarChart3, ExternalLink, Calendar, CheckCircle, Clock, UserCheck } from "lucide-react";
+import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2, BarChart3, ExternalLink, Calendar, CheckCircle, Clock, UserCheck, Shield, AlertTriangle } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 
@@ -20,6 +20,10 @@ interface Partner {
   totalReferrals: number;
   totalEarnings: string;
   createdAt: string;
+  activeUsersCount: number;
+  activeUsersLimit: number;
+  monthlyQuota: string;
+  licenseStatus: string;
 }
 
 interface Referral {
@@ -197,6 +201,83 @@ export default function PartnerDashboardSimple() {
             </CardContent>
           </Card>
         )}
+
+        {/* License Info Block */}
+        <Card className={`mb-8 ${
+          partner.licenseStatus === 'suspended' 
+            ? 'border-red-300 bg-red-50 dark:bg-red-900/20' 
+            : partner.licenseStatus === 'active'
+            ? 'border-emerald-300 bg-emerald-50 dark:bg-emerald-900/20'
+            : 'border-yellow-300 bg-yellow-50 dark:bg-yellow-900/20'
+        }`}>
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Shield className="w-5 h-5" />
+                Estado de Licencia
+              </CardTitle>
+              <Badge 
+                variant={
+                  partner.licenseStatus === 'active' ? 'default' : 
+                  partner.licenseStatus === 'suspended' ? 'destructive' : 'secondary'
+                }
+                className={
+                  partner.licenseStatus === 'active' ? 'bg-emerald-500' : ''
+                }
+              >
+                {partner.licenseStatus === 'active' && <CheckCircle className="w-3 h-3 mr-1" />}
+                {partner.licenseStatus === 'pending' && <Clock className="w-3 h-3 mr-1" />}
+                {partner.licenseStatus === 'suspended' && <AlertTriangle className="w-3 h-3 mr-1" />}
+                {partner.licenseStatus === 'active' ? 'Activa' : 
+                 partner.licenseStatus === 'suspended' ? 'Suspendida' : 'Pendiente'}
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {partner.licenseStatus === 'suspended' && (
+              <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/40 rounded-lg border border-red-200 dark:border-red-800">
+                <p className="text-sm text-red-700 dark:text-red-300 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4" />
+                  Licencia suspendida. Contacta con el administrador para reactivar tu cuenta.
+                </p>
+              </div>
+            )}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {partner.activeUsersCount || 0}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Usuarios Activos
+                </div>
+              </div>
+              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {partner.activeUsersLimit || 0}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Límite de Usuarios
+                </div>
+              </div>
+              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                  {Math.max(0, (partner.activeUsersLimit || 0) - (partner.activeUsersCount || 0))}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Disponibles
+                </div>
+              </div>
+              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+                <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {partner.monthlyQuota || '0'}€
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Cuota Mensual
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
