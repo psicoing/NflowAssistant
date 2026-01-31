@@ -46,6 +46,19 @@ The frontend is developed using React 18, TypeScript, Vite, and Wouter for routi
   - **Business Plans Section**: Enterprise solutions (Profesional €149.50/mes, Empresarial €598/mes, Corporativo custom)
   - **Updated SEO**: Meta tags include "pago por uso" and "créditos prepagados" keywords
 - **Content & Partner Management**: Provides categorized articles, guides, exercises, and a comprehensive partner program with application, approval, referral tracking, and a dedicated dashboard.
+- **Partner Bulk User Import**: Partners can upload users in bulk via CSV, XLSX, XLS, or ODS files. Features:
+  - **File Upload**: Drag-and-drop or click to upload (max 5MB)
+  - **Required Columns**: `email` (or `correo`) and `nombre` (or `name`/`usuario`)
+  - **Optional Password**: Auto-generates secure passwords if not provided
+  - **License Validation**: Checks partner's `activeUsersLimit` before creating users
+  - **User Creation**: Creates users with `subscriptionPlan='partner'`, `monthlyQuestionLimit=100`
+  - **Counter Update**: Automatically updates partner's `activeUsersCount`
+  - **API Endpoint**: `POST /api/partners/upload-users` using multer for file handling
+  - **UI Location**: "Importar Usuarios" section in partner dashboard at `/partners/dashboard`
+- **Partner License Management**: Dashboard displays license status with visual indicators:
+  - **Metrics**: Active users, user limit, available slots, monthly quota
+  - **Status Badge**: Green (active), yellow (pending), red (suspended)
+  - **Database Fields**: `activeUsersCount`, `activeUsersLimit`, `monthlyQuota`, `licenseStatus` in partners table
 - **Free Resources**: Offers unauthenticated access to emotional logging, daily streak tracking, affirmations, and professional assessments, primarily managed client-side.
 - **SEO**: Implements dynamic meta tags, Schema.org JSON-LD, sitemap, and optimized content.
 - **Cookie Consent**: Includes a GDPR-compliant cookie consent system.

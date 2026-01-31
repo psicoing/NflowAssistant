@@ -66,6 +66,41 @@ export default function PartnerDashboardSimple() {
     }
   }, [partner]);
 
+  const uploadMutation = useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/partners/upload-users', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.message || 'Error al subir archivo');
+      }
+      return result;
+    },
+    onSuccess: (result) => {
+      setUploadResult(result);
+      toast({
+        title: "Importación completada",
+        description: `${result.success} usuarios creados correctamente`,
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/profile"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/referrals"] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Error al procesar el archivo",
+        variant: "destructive",
+      });
+    },
+  });
+
   if (partnerLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
@@ -153,41 +188,6 @@ export default function PartnerDashboardSimple() {
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.pending;
     return <Badge variant={config.variant}>{config.label}</Badge>;
   };
-
-  const uploadMutation = useMutation({
-    mutationFn: async (file: File) => {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/partners/upload-users', {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
-      });
-
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(result.message || 'Error al subir archivo');
-      }
-      return result;
-    },
-    onSuccess: (result) => {
-      setUploadResult(result);
-      toast({
-        title: "Importación completada",
-        description: `${result.success} usuarios creados correctamente`,
-      });
-      queryClient.invalidateQueries({ queryKey: ["/api/partners/profile"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/partners/referrals"] });
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.message || "Error al procesar el archivo",
-        variant: "destructive",
-      });
-    },
-  });
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
