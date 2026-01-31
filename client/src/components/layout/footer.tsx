@@ -1,6 +1,5 @@
 import { Link } from "wouter";
-import { Brain, Linkedin, ExternalLink } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Brain, Linkedin } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -126,19 +125,9 @@ export default function Footer() {
 
         {/* Bottom Section - Compacted */}
         <div className="border-t border-gray-800 mt-6 pt-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-3 mb-3">
-            <div className="flex items-center gap-3">
-              <span className="text-white font-semibold text-sm">GRUPO JOBDA</span>
-              <span className="text-gray-500 text-xs">Empordajobs SL • B02701100 • Portbou, España</span>
-            </div>
-            <Button 
-              onClick={() => window.open('https://jobda.biz', '_blank')}
-              size="sm"
-              className="bg-teal-500 hover:bg-teal-600 text-white text-xs px-3 py-1"
-            >
-              <ExternalLink className="w-3 h-3 mr-1" />
-              Visitar JOBDA
-            </Button>
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-white font-semibold text-sm">GRUPO JOBDA</span>
+            <span className="text-gray-500 text-xs">Empordajobs SL • B02701100 • Portbou, España</span>
           </div>
           <div className="flex flex-col md:flex-row justify-between items-center text-gray-500 text-xs gap-1">
             <p>© 2025 JOBDA. Todos los derechos reservados. • empordajobs@gmail.com • +34 660 45 21 36</p>
