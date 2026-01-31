@@ -124,47 +124,25 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* GRUPO JOBDA Section */}
-        <div className="border-t border-gray-800 mt-8 pt-8">
-          <div className="bg-gradient-to-r from-gray-800/50 to-gray-900/50 rounded-lg p-6 border border-gray-700/50">
-            <div className="flex flex-col md:flex-row items-center justify-between">
-              <div className="text-center md:text-left mb-4 md:mb-0">
-                <h3 className="text-xl font-bold text-white mb-2">GRUPO JOBDA</h3>
-                <p className="text-gray-400 text-xs mb-2">
-                  Empresa Empordajobs SL B02701100 - Spain
-                </p>
-                <p className="text-gray-300 text-sm">
-                  Soluciones empresariales innovadoras para el crecimiento de tu negocio
-                </p>
-              </div>
-              <Button 
-                onClick={() => window.open('https://jobda.biz', '_blank')}
-                className="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Visitar JOBDA
-              </Button>
+        {/* Bottom Section - Compacted */}
+        <div className="border-t border-gray-800 mt-6 pt-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-3 mb-3">
+            <div className="flex items-center gap-3">
+              <span className="text-white font-semibold text-sm">GRUPO JOBDA</span>
+              <span className="text-gray-500 text-xs">Empordajobs SL • B02701100 • Portbou, España</span>
             </div>
+            <Button 
+              onClick={() => window.open('https://jobda.biz', '_blank')}
+              size="sm"
+              className="bg-teal-500 hover:bg-teal-600 text-white text-xs px-3 py-1"
+            >
+              <ExternalLink className="w-3 h-3 mr-1" />
+              Visitar JOBDA
+            </Button>
           </div>
-        </div>
-
-        {/* Bottom Section */}
-        <div className="border-t border-gray-800 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-4">
-            <p className="text-gray-400 text-sm">
-              © 2025 JOBDA, filial de EMPORDAJOBS SL. Todos los derechos reservados.
-            </p>
-            <p className="text-gray-400 text-sm mt-2 md:mt-0">
-              Desarrollado con ❤️ para mejorar la salud mental
-            </p>
-          </div>
-          <div className="text-center md:text-left">
-            <p className="text-gray-500 text-xs">
-              JOBDA, filial de EMPORDAJOBS SL • CIF: B02701100 • Portbou, Girona, España
-            </p>
-            <p className="text-gray-500 text-xs mt-1">
-              Email: empordajobs@gmail.com • Teléfono: +34 660 45 21 36
-            </p>
+          <div className="flex flex-col md:flex-row justify-between items-center text-gray-500 text-xs gap-1">
+            <p>© 2025 JOBDA. Todos los derechos reservados. • empordajobs@gmail.com • +34 660 45 21 36</p>
+            <p>Desarrollado con ❤️ para mejorar la salud mental</p>
           </div>
         </div>
       </div>
