@@ -40,24 +40,36 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Servicios</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#precios" className="text-gray-400 hover:text-white transition-colors">
+                <button 
+                  onClick={() => window.dispatchEvent(new CustomEvent('openNuxaMenu'))}
+                  className="text-gray-400 hover:text-white transition-colors text-left"
+                >
                   Chat de Apoyo
-                </a>
+                </button>
               </li>
               <li>
-                <Link href="/resources" className="text-gray-400 hover:text-white transition-colors">
+                <button 
+                  onClick={() => window.dispatchEvent(new CustomEvent('openNuxaMenu'))}
+                  className="text-gray-400 hover:text-white transition-colors text-left"
+                >
                   Recursos
-                </Link>
+                </button>
               </li>
               <li>
-                <a href="#servicios" className="text-gray-400 hover:text-white transition-colors">
+                <button 
+                  onClick={() => window.dispatchEvent(new CustomEvent('openNuxaMenu'))}
+                  className="text-gray-400 hover:text-white transition-colors text-left"
+                >
                   Consejos
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#precios" className="text-gray-400 hover:text-white transition-colors">
+                <button 
+                  onClick={() => window.dispatchEvent(new CustomEvent('openNuxaMenu'))}
+                  className="text-gray-400 hover:text-white transition-colors text-left"
+                >
                   Planes Premium
-                </a>
+                </button>
               </li>
             </ul>
           </div>
