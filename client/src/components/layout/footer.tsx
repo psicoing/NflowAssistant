@@ -36,12 +36,12 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Servicios</h4>
-            <ul className="space-y-2">
+            <h4 className="text-white font-semibold mb-3 text-sm">Servicios</h4>
+            <ul className="space-y-1.5">
               <li>
                 <button 
                   onClick={() => window.dispatchEvent(new CustomEvent('openNuxaMenu'))}
-                  className="text-gray-400 hover:text-white transition-colors text-left"
+                  className="text-gray-400 hover:text-white transition-colors text-left text-sm"
                 >
                   Chat de Apoyo
                 </button>
@@ -49,7 +49,7 @@ export default function Footer() {
               <li>
                 <button 
                   onClick={() => window.dispatchEvent(new CustomEvent('openNuxaMenu'))}
-                  className="text-gray-400 hover:text-white transition-colors text-left"
+                  className="text-gray-400 hover:text-white transition-colors text-left text-sm"
                 >
                   Recursos
                 </button>
@@ -57,7 +57,7 @@ export default function Footer() {
               <li>
                 <button 
                   onClick={() => window.dispatchEvent(new CustomEvent('openNuxaMenu'))}
-                  className="text-gray-400 hover:text-white transition-colors text-left"
+                  className="text-gray-400 hover:text-white transition-colors text-left text-sm"
                 >
                   Consejos
                 </button>
@@ -65,7 +65,7 @@ export default function Footer() {
               <li>
                 <button 
                   onClick={() => window.dispatchEvent(new CustomEvent('openNuxaMenu'))}
-                  className="text-gray-400 hover:text-white transition-colors text-left"
+                  className="text-gray-400 hover:text-white transition-colors text-left text-sm"
                 >
                   Planes Premium
                 </button>
@@ -75,14 +75,14 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Legal</h4>
-            <ul className="space-y-2">
+            <h4 className="text-white font-semibold mb-3 text-sm">Legal</h4>
+            <ul className="space-y-1.5">
               <li>
                 <a 
                   href="https://jobda.org/legal" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-white transition-colors text-sm"
                 >
                   Aviso legal
                 </a>
@@ -92,7 +92,7 @@ export default function Footer() {
                   href="https://jobda.org/privacy" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-white transition-colors text-sm"
                 >
                   Política de privacidad
                 </a>
@@ -102,7 +102,7 @@ export default function Footer() {
                   href="https://jobda.org/cookies" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-white transition-colors text-sm"
                 >
                   Política de cookies
                 </a>
@@ -110,11 +110,10 @@ export default function Footer() {
               <li>
                 <button 
                   onClick={() => {
-                    // Abrir preferencias de cookies
                     const event = new CustomEvent('openCookiePreferences');
                     window.dispatchEvent(event);
                   }}
-                  className="text-gray-400 hover:text-white transition-colors text-left"
+                  className="text-gray-400 hover:text-white transition-colors text-left text-sm"
                 >
                   Preferencias de cookies
                 </button>
