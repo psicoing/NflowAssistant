@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2, BarChart3, ExternalLink, Calendar, CheckCircle, Clock, UserCheck, Shield, AlertTriangle, Upload, FileSpreadsheet, Loader2 } from "lucide-react";
+import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2, BarChart3, ExternalLink, Calendar, CheckCircle, Clock, UserCheck, Shield, AlertTriangle, Upload, FileSpreadsheet, Loader2, Ban, Trash2, Play, Lock } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 
@@ -114,6 +114,63 @@ export default function PartnerDashboardSimple() {
       toast({
         title: "Error",
         description: error.message || "Error al procesar el archivo",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Mutation to update user status (activate/block)
+  const updateStatusMutation = useMutation({
+    mutationFn: async ({ userId, status }: { userId: number; status: 'active' | 'inactive' }) => {
+      const response = await fetch(`/api/partners/users/${userId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+        credentials: 'include',
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message);
+      return result;
+    },
+    onSuccess: (_, variables) => {
+      toast({
+        title: variables.status === 'active' ? "Usuario activado" : "Usuario bloqueado",
+        description: `El usuario ha sido ${variables.status === 'active' ? 'activado' : 'bloqueado'} correctamente`,
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/users"] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Mutation to delete user
+  const deleteUserMutation = useMutation({
+    mutationFn: async (userId: number) => {
+      const response = await fetch(`/api/partners/users/${userId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message);
+      return result;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Usuario eliminado",
+        description: "El usuario ha sido eliminado correctamente",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/users"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/profile"] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message,
         variant: "destructive",
       });
     },
@@ -466,6 +523,7 @@ export default function PartnerDashboardSimple() {
                         <th className="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Uso Mensual</th>
                         <th className="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Último Acceso</th>
                         <th className="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Sesiones</th>
+                        <th className="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -476,18 +534,18 @@ export default function PartnerDashboardSimple() {
                           </td>
                           <td className="py-3 px-3">
                             <Badge variant={user.subscriptionStatus === 'active' ? 'default' : 'secondary'}>
-                              {user.subscriptionStatus === 'active' ? 'Activo' : 'Inactivo'}
+                              {user.subscriptionStatus === 'active' ? 'Activo' : user.questionsUsedThisMonth >= user.monthlyQuestionLimit ? 'Bloqueado' : 'Inactivo'}
                             </Badge>
                           </td>
                           <td className="py-3 px-3">
                             <div className="flex items-center gap-2">
                               <div className="w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                 <div 
-                                  className="bg-emerald-500 h-2 rounded-full" 
+                                  className={`h-2 rounded-full ${user.questionsUsedThisMonth >= user.monthlyQuestionLimit ? 'bg-red-500' : 'bg-emerald-500'}`}
                                   style={{ width: `${Math.min((user.questionsUsedThisMonth / user.monthlyQuestionLimit) * 100, 100)}%` }}
                                 ></div>
                               </div>
-                              <span className="text-xs text-gray-600 dark:text-gray-400">
+                              <span className={`text-xs ${user.questionsUsedThisMonth >= user.monthlyQuestionLimit ? 'text-red-600 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>
                                 {user.questionsUsedThisMonth}/{user.monthlyQuestionLimit}
                               </span>
                             </div>
@@ -500,6 +558,47 @@ export default function PartnerDashboardSimple() {
                           </td>
                           <td className="py-3 px-3 text-gray-600 dark:text-gray-400">
                             {user.loginCount || 0}
+                          </td>
+                          <td className="py-3 px-3">
+                            <div className="flex items-center gap-1">
+                              {user.subscriptionStatus === 'active' ? (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => updateStatusMutation.mutate({ userId: user.id, status: 'inactive' })}
+                                  disabled={updateStatusMutation.isPending}
+                                  className="h-8 px-2 text-yellow-600 hover:text-yellow-700 hover:bg-yellow-50"
+                                  title="Bloquear usuario"
+                                >
+                                  <Lock className="w-4 h-4" />
+                                </Button>
+                              ) : (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => updateStatusMutation.mutate({ userId: user.id, status: 'active' })}
+                                  disabled={updateStatusMutation.isPending}
+                                  className="h-8 px-2 text-green-600 hover:text-green-700 hover:bg-green-50"
+                                  title="Activar usuario"
+                                >
+                                  <Play className="w-4 h-4" />
+                                </Button>
+                              )}
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  if (confirm(`¿Eliminar usuario ${user.email}? Esta acción no se puede deshacer.`)) {
+                                    deleteUserMutation.mutate(user.id);
+                                  }
+                                }}
+                                disabled={deleteUserMutation.isPending}
+                                className="h-8 px-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                                title="Eliminar usuario"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
                           </td>
                         </tr>
                       ))}

@@ -1166,7 +1166,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             userType: 'individual',
             subscriptionStatus: 'active',
             subscriptionPlan: 'partner',
-            monthlyQuestionLimit: 100, // Partner users get more questions
+            monthlyQuestionLimit: 10, // Partner users get 10 questions per month
             createdByPartnerId: partnerId, // Track which partner created this user
           });
 
@@ -1233,6 +1233,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error("Error fetching partner users:", error);
       res.status(500).json({ message: "Error obteniendo usuarios" });
+    }
+  });
+
+  // Update partner user status (activate/block)
+  app.patch("/api/partners/users/:userId/status", async (req, res) => {
+    try {
+      const partnerId = req.session.partnerId;
+      const userId = parseInt(req.params.userId);
+      const { status } = req.body; // 'active' or 'inactive'
+      
+      if (!partnerId) {
+        return res.status(401).json({ message: "No autenticado como partner" });
+      }
+
+      if (!['active', 'inactive'].includes(status)) {
+        return res.status(400).json({ message: "Estado inválido. Usa 'active' o 'inactive'" });
+      }
+
+      // Verify user belongs to this partner
+      const [user] = await db.select().from(users).where(eq(users.id, userId));
+      if (!user || user.createdByPartnerId !== partnerId) {
+        return res.status(404).json({ message: "Usuario no encontrado o no pertenece a tu organización" });
+      }
+
+      // Update user status
+      await db.update(users)
+        .set({ subscriptionStatus: status })
+        .where(eq(users.id, userId));
+
+      res.json({ message: `Usuario ${status === 'active' ? 'activado' : 'bloqueado'} correctamente` });
+
+    } catch (error: any) {
+      console.error("Error updating user status:", error);
+      res.status(500).json({ message: "Error actualizando estado del usuario" });
+    }
+  });
+
+  // Delete partner user
+  app.delete("/api/partners/users/:userId", async (req, res) => {
+    try {
+      const partnerId = req.session.partnerId;
+      const userId = parseInt(req.params.userId);
+      
+      if (!partnerId) {
+        return res.status(401).json({ message: "No autenticado como partner" });
+      }
+
+      // Verify user belongs to this partner
+      const [user] = await db.select().from(users).where(eq(users.id, userId));
+      if (!user || user.createdByPartnerId !== partnerId) {
+        return res.status(404).json({ message: "Usuario no encontrado o no pertenece a tu organización" });
+      }
+
+      // Delete user
+      await db.delete(users).where(eq(users.id, userId));
+
+      // Update partner active users count
+      const partner = await storage.getPartner(partnerId);
+      if (partner && (partner.activeUsersCount ?? 0) > 0) {
+        await db.update(partners)
+          .set({ activeUsersCount: (partner.activeUsersCount ?? 1) - 1 })
+          .where(eq(partners.id, partnerId));
+      }
+
+      res.json({ message: "Usuario eliminado correctamente" });
+
+    } catch (error: any) {
+      console.error("Error deleting user:", error);
+      res.status(500).json({ message: "Error eliminando usuario" });
     }
   });
 
