@@ -24,6 +24,9 @@ interface Partner {
   activeUsersLimit: number;
   monthlyQuota: string;
   licenseStatus: string;
+  monthlyCost?: string;
+  licenseRenewalDate?: string;
+  companyLogo?: string;
 }
 
 interface Referral {
@@ -333,7 +336,61 @@ export default function PartnerDashboardSimple() {
           </Card>
         )}
 
-        {/* License Info Block */}
+        {/* Contract Info Block - Datos del Contrato */}
+        <Card className="mb-8 border-blue-300 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 dark:border-blue-700">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-blue-600" />
+                Contrato de Licencia
+              </CardTitle>
+              <Badge className="bg-blue-600">
+                <Calendar className="w-3 h-3 mr-1" />
+                Arrendamiento Mensual
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-blue-200 dark:border-blue-800">
+                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                  €{partner.monthlyCost || '0'}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Coste Mensual
+                </div>
+              </div>
+              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-blue-200 dark:border-blue-800">
+                <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {partner.activeUsersLimit || 0}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Usuarios Contratados
+                </div>
+              </div>
+              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-blue-200 dark:border-blue-800">
+                <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                  {partner.activeUsersCount || 0} / {partner.activeUsersLimit || 0}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Usuarios Activos
+                </div>
+              </div>
+              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-blue-200 dark:border-blue-800">
+                <div className="text-lg font-bold text-gray-900 dark:text-white">
+                  {partner.licenseRenewalDate 
+                    ? new Date(partner.licenseRenewalDate).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })
+                    : 'No definida'}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Próxima Renovación
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* License Status Block */}
         <Card className={`mb-8 ${
           partner.licenseStatus === 'suspended' 
             ? 'border-red-300 bg-red-50 dark:bg-red-900/20' 
@@ -373,7 +430,7 @@ export default function PartnerDashboardSimple() {
                 </p>
               </div>
             )}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                 <div className="text-2xl font-bold text-gray-900 dark:text-white">
                   {partner.activeUsersCount || 0}
@@ -383,27 +440,19 @@ export default function PartnerDashboardSimple() {
                 </div>
               </div>
               <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {partner.activeUsersLimit || 0}
-                </div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  Límite de Usuarios
-                </div>
-              </div>
-              <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                 <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                   {Math.max(0, (partner.activeUsersLimit || 0) - (partner.activeUsersCount || 0))}
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  Disponibles
+                  Plazas Disponibles
                 </div>
               </div>
               <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                 <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {partner.monthlyQuota || '0'}€
+                  10
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  Cuota Mensual
+                  Preguntas/Usuario/Mes
                 </div>
               </div>
             </div>
