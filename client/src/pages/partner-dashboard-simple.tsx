@@ -488,6 +488,134 @@ export default function PartnerDashboardSimple() {
           </CardContent>
         </Card>
 
+        {/* Company Logo Section */}
+        <Card className="mb-8">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Shield className="w-5 h-5" />
+              Logo de la Empresa
+            </CardTitle>
+            <CardDescription>
+              Sube el logo de tu empresa (máx. 2MB, formatos: JPG, PNG, GIF, WebP, SVG)
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-6">
+              {/* Logo preview */}
+              <div className="w-24 h-24 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center overflow-hidden bg-gray-50 dark:bg-gray-800">
+                {partner.companyLogo ? (
+                  <img src={partner.companyLogo} alt="Logo" className="max-w-full max-h-full object-contain" />
+                ) : (
+                  <div className="text-center text-gray-400">
+                    <Upload className="w-8 h-8 mx-auto mb-1" />
+                    <span className="text-xs">Sin logo</span>
+                  </div>
+                )}
+              </div>
+              
+              {/* Upload controls */}
+              <div className="flex-1 space-y-3">
+                <div className="flex gap-2">
+                  <label className="flex-1">
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/gif,image/webp,image/svg+xml"
+                      className="hidden"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        
+                        if (file.size > 2 * 1024 * 1024) {
+                          toast({
+                            title: "Error",
+                            description: "El archivo es demasiado grande. Máximo 2MB.",
+                            variant: "destructive",
+                          });
+                          return;
+                        }
+                        
+                        const formData = new FormData();
+                        formData.append('logo', file);
+                        
+                        try {
+                          const response = await fetch('/api/partners/logo', {
+                            method: 'POST',
+                            credentials: 'include',
+                            body: formData,
+                          });
+                          
+                          const result = await response.json();
+                          if (response.ok) {
+                            toast({
+                              title: "Logo actualizado",
+                              description: "El logo de tu empresa ha sido actualizado correctamente",
+                            });
+                            queryClient.invalidateQueries({ queryKey: ["/api/partners/profile"] });
+                          } else {
+                            throw new Error(result.message);
+                          }
+                        } catch (error: any) {
+                          toast({
+                            title: "Error",
+                            description: error.message || "Error al subir el logo",
+                            variant: "destructive",
+                          });
+                        }
+                        
+                        e.target.value = '';
+                      }}
+                    />
+                    <Button variant="outline" className="w-full cursor-pointer" asChild>
+                      <span>
+                        <Upload className="w-4 h-4 mr-2" />
+                        {partner.companyLogo ? 'Cambiar Logo' : 'Subir Logo'}
+                      </span>
+                    </Button>
+                  </label>
+                  {partner.companyLogo && (
+                    <Button
+                      variant="outline"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      onClick={async () => {
+                        if (!confirm('¿Eliminar el logo de la empresa?')) return;
+                        
+                        try {
+                          const response = await fetch('/api/partners/logo', {
+                            method: 'DELETE',
+                            credentials: 'include',
+                          });
+                          
+                          if (response.ok) {
+                            toast({
+                              title: "Logo eliminado",
+                              description: "El logo ha sido eliminado correctamente",
+                            });
+                            queryClient.invalidateQueries({ queryKey: ["/api/partners/profile"] });
+                          } else {
+                            const result = await response.json();
+                            throw new Error(result.message);
+                          }
+                        } catch (error: any) {
+                          toast({
+                            title: "Error",
+                            description: error.message || "Error al eliminar el logo",
+                            variant: "destructive",
+                          });
+                        }
+                      }}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
+                <p className="text-xs text-gray-500">
+                  Este logo aparecerá en las comunicaciones con tus usuarios
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* License Status Block */}
         <Card className={`mb-8 ${
           partner.licenseStatus === 'suspended' 

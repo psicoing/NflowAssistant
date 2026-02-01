@@ -1441,6 +1441,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Partner logo upload
+  const logoUpload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 2 * 1024 * 1024 }, // 2MB max
+    fileFilter: (req, file, cb) => {
+      const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+      if (allowed.includes(file.mimetype)) {
+        cb(null, true);
+      } else {
+        cb(new Error('Formato de imagen no válido. Use JPG, PNG, GIF, WebP o SVG.'));
+      }
+    }
+  });
+
+  app.post("/api/partners/logo", logoUpload.single('logo'), async (req, res) => {
+    try {
+      const partnerId = req.session.partnerId;
+      if (!partnerId) {
+        return res.status(401).json({ message: "No autenticado" });
+      }
+
+      if (!req.file) {
+        return res.status(400).json({ message: "No se recibió ningún archivo" });
+      }
+
+      // Convert to base64 data URL
+      const base64 = req.file.buffer.toString('base64');
+      const dataUrl = `data:${req.file.mimetype};base64,${base64}`;
+
+      // Update partner with logo
+      await db.update(partners)
+        .set({ companyLogo: dataUrl })
+        .where(eq(partners.id, partnerId));
+
+      res.json({ message: "Logo actualizado correctamente", logoUrl: dataUrl });
+    } catch (error: any) {
+      console.error("Error uploading logo:", error);
+      res.status(500).json({ message: error.message || "Error al subir el logo" });
+    }
+  });
+
+  app.delete("/api/partners/logo", async (req, res) => {
+    try {
+      const partnerId = req.session.partnerId;
+      if (!partnerId) {
+        return res.status(401).json({ message: "No autenticado" });
+      }
+
+      await db.update(partners)
+        .set({ companyLogo: null })
+        .where(eq(partners.id, partnerId));
+
+      res.json({ message: "Logo eliminado correctamente" });
+    } catch (error: any) {
+      console.error("Error deleting logo:", error);
+      res.status(500).json({ message: "Error al eliminar el logo" });
+    }
+  });
+
   // Stripe checkout session - simplificado para máxima compatibilidad
   app.post("/api/stripe/create-checkout-session", async (req, res) => {
     try {
