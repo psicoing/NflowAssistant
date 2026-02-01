@@ -28,6 +28,7 @@ export default function Registro() {
   const [createdCredentials, setCreatedCredentials] = useState({ username: "", password: "" });
   const [acceptedNotice, setAcceptedNotice] = useState(false);
   const [isLegalNoticeOpen, setIsLegalNoticeOpen] = useState(false);
+  const [showFreeAccessInfo, setShowFreeAccessInfo] = useState(false);
   const { toast } = useToast();
   const { referralCode, isValidating, isValid, isFromUrl, updateReferralCode } = useReferralCode();
 
@@ -278,6 +279,43 @@ export default function Registro() {
               </p>
             </div>
           </CardHeader>
+
+          {/* Acceso Gratuito Banner */}
+          <div className="px-6 pt-4">
+            <div className="bg-gradient-to-r from-emerald-900/30 to-teal-900/30 border border-emerald-500/40 rounded-lg p-4">
+              <button
+                type="button"
+                onClick={() => setShowFreeAccessInfo(!showFreeAccessInfo)}
+                className="w-full flex items-center justify-between text-left"
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-emerald-500/20 rounded-full flex items-center justify-center">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <span className="text-emerald-300 font-medium">¿Tienes acceso gratuito?</span>
+                </div>
+                <span className="text-emerald-400 text-sm">{showFreeAccessInfo ? '▲' : '▼'}</span>
+              </button>
+              
+              {showFreeAccessInfo && (
+                <div className="mt-4 pt-4 border-t border-emerald-500/20 space-y-3">
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    Si tu <span className="text-emerald-400 font-medium">empresa</span>, <span className="text-emerald-400 font-medium">mutua</span> o <span className="text-emerald-400 font-medium">administración pública</span> te ha dado acceso gratuito a NUXA, ya te habrán proporcionado tus códigos de acceso (usuario y contraseña).
+                  </p>
+                  <p className="text-gray-400 text-sm">
+                    No necesitas registrarte. Ve directamente a iniciar sesión.
+                  </p>
+                  <Button
+                    type="button"
+                    onClick={() => setLocation("/login")}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                  >
+                    Ir a Iniciar Sesión
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
