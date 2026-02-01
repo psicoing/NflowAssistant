@@ -779,7 +779,7 @@ export default function PartnerDashboardSimple() {
                 
                 <h4 className="font-medium">2. Gestiona tu Licencia</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Controla el estado de tu licencia, usuarios activos y límite de usuarios. Podrás ver cuántos espacios tienes disponibles.
+                  Visualiza en tiempo real el estado de tu licencia: usuarios activos, límite contratado, espacios disponibles y cuota mensual. Todo desde el panel "Estado de Licencia".
                 </p>
               </div>
               
