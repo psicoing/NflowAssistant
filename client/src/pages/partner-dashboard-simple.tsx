@@ -1044,12 +1044,28 @@ export default function PartnerDashboardSimple() {
           </Card>
         </div>
 
-        {/* Stats Grid */}
+        {/* Licencia de Explotación Header */}
+        <div className="mb-6 mt-8">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-1 h-8 bg-gradient-to-b from-purple-600 to-indigo-600 rounded-full"></div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-purple-600" />
+                Licencia de Explotación
+              </h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Programa de afiliados - Gana comisiones por cada suscripción referida
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Grid - Affiliate Program */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
+          <Card className="border-purple-200 dark:border-purple-800 bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Referidos</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
+              <Users className="h-4 w-4 text-purple-600" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{partner.totalReferrals}</div>
@@ -1059,26 +1075,26 @@ export default function PartnerDashboardSimple() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-purple-200 dark:border-purple-800 bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Ganancias Totales</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
+              <DollarSign className="h-4 w-4 text-purple-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{partner.totalEarnings}€</div>
+              <div className="text-2xl font-bold text-purple-600">{partner.totalEarnings}€</div>
               <p className="text-xs text-muted-foreground">
                 Total de comisiones generadas
               </p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-purple-200 dark:border-purple-800 bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Tasa de Comisión</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <TrendingUp className="h-4 w-4 text-purple-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">10%</div>
+              <div className="text-2xl font-bold text-purple-600">10%</div>
               <p className="text-xs text-muted-foreground">
                 Por cada suscripción referida
               </p>
