@@ -281,34 +281,34 @@ export default function Registro() {
           </CardHeader>
 
           {/* Acceso Gratuito Banner */}
-          <div className="px-6 pt-4">
-            <div className="bg-gradient-to-r from-emerald-900/30 to-teal-900/30 border border-emerald-500/40 rounded-lg p-4">
+          <div className="px-4 sm:px-6 pt-3 sm:pt-4">
+            <div className="bg-gradient-to-r from-emerald-900/30 to-teal-900/30 border border-emerald-500/40 rounded-lg p-3 sm:p-4">
               <button
                 type="button"
                 onClick={() => setShowFreeAccessInfo(!showFreeAccessInfo)}
-                className="w-full flex items-center justify-between text-left"
+                className="w-full flex items-center justify-between text-left gap-2"
               >
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-emerald-500/20 rounded-full flex items-center justify-center">
-                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-emerald-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />
                   </div>
-                  <span className="text-emerald-300 font-medium">¿Tienes acceso gratuito?</span>
+                  <span className="text-emerald-300 font-medium text-sm sm:text-base">¿Tienes acceso gratuito?</span>
                 </div>
-                <span className="text-emerald-400 text-sm">{showFreeAccessInfo ? '▲' : '▼'}</span>
+                <span className="text-emerald-400 text-sm flex-shrink-0">{showFreeAccessInfo ? '▲' : '▼'}</span>
               </button>
               
               {showFreeAccessInfo && (
-                <div className="mt-4 pt-4 border-t border-emerald-500/20 space-y-3">
-                  <p className="text-gray-300 text-sm leading-relaxed">
+                <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-emerald-500/20 space-y-2 sm:space-y-3">
+                  <p className="text-gray-300 text-xs sm:text-sm leading-relaxed">
                     Si tu <span className="text-emerald-400 font-medium">empresa</span>, <span className="text-emerald-400 font-medium">mutua</span> o <span className="text-emerald-400 font-medium">administración pública</span> te ha dado acceso gratuito a NUXA, ya te habrán proporcionado tus códigos de acceso (usuario y contraseña).
                   </p>
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-gray-400 text-xs sm:text-sm">
                     No necesitas registrarte. Ve directamente a iniciar sesión.
                   </p>
                   <Button
                     type="button"
                     onClick={() => setLocation("/login")}
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base py-2 sm:py-2.5"
                   >
                     Ir a Iniciar Sesión
                   </Button>
