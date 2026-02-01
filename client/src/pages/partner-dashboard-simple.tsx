@@ -225,7 +225,7 @@ export default function PartnerDashboardSimple() {
             </div>
             <div className="flex items-center space-x-4">
               {getStatusBadge(partner.status)}
-              <Button variant="outline" onClick={handleLogout}>
+              <Button variant="outline" onClick={handleLogout} className="border-gray-300 text-gray-700 dark:text-gray-200 dark:border-gray-600">
                 <LogOut className="w-4 h-4 mr-2" />
                 Cerrar Sesión
               </Button>
