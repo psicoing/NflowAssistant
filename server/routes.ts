@@ -1441,16 +1441,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Partner logo upload
+  // Partner logo upload - SVG excluded for XSS security
   const logoUpload = multer({
     storage: multer.memoryStorage(),
     limits: { fileSize: 2 * 1024 * 1024 }, // 2MB max
     fileFilter: (req, file, cb) => {
-      const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+      const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
       if (allowed.includes(file.mimetype)) {
         cb(null, true);
       } else {
-        cb(new Error('Formato de imagen no válido. Use JPG, PNG, GIF, WebP o SVG.'));
+        cb(new Error('Formato de imagen no válido. Use JPG, PNG, GIF o WebP.'));
       }
     }
   });

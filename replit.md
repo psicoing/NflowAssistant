@@ -59,6 +59,25 @@ The frontend is developed using React 18, TypeScript, Vite, and Wouter for routi
   - **Metrics**: Active users, user limit, available slots, monthly quota
   - **Status Badge**: Green (active), yellow (pending), red (suspended)
   - **Database Fields**: `activeUsersCount`, `activeUsersLimit`, `monthlyQuota`, `licenseStatus` in partners table
+- **Partner Contract Info**: Prominent section displaying rental agreement details:
+  - **Monthly Cost**: Display `monthlyCost` field (e.g., €1350/month)
+  - **Users Contracted**: Total user limit from license agreement
+  - **Renewal Date**: `licenseRenewalDate` field showing next billing date
+- **Multiple Administrators**: Partners can delegate admin access to multiple team members:
+  - **Tables**: `partnerAdmins` stores additional admin accounts per partner
+  - **Roles**: Admin or Viewer roles for granular permissions
+  - **CRUD Operations**: Create, view, delete admins via `/api/partners/admins` endpoints
+  - **Owner Protection**: Primary partner account cannot be deleted
+- **Activity Log**: Complete audit trail of all administrative actions:
+  - **Table**: `partnerActivityLog` stores all tracked events
+  - **Actions Tracked**: create_user, delete_user, block_user, activate_user, import_users, create_admin, delete_admin, login
+  - **Details**: Stores actor email, target user email, timestamps, and metadata
+  - **UI**: Scrollable activity feed in partner dashboard
+- **Company Logo Upload**: Partners can upload and display their company branding:
+  - **API Endpoints**: `POST/DELETE /api/partners/logo` for upload/removal
+  - **Formats Supported**: JPG, PNG, GIF, WebP (max 2MB) - SVG excluded for security
+  - **Storage**: Base64 data URL stored in `companyLogo` field
+  - **UI**: Preview with upload/delete controls in dashboard
 - **Free Resources**: Offers unauthenticated access to emotional logging, daily streak tracking, affirmations, and professional assessments, primarily managed client-side.
 - **SEO**: Implements dynamic meta tags, Schema.org JSON-LD, sitemap, and optimized content.
 - **Cookie Consent**: Includes a GDPR-compliant cookie consent system.

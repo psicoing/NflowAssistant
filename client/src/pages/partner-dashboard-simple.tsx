@@ -496,7 +496,7 @@ export default function PartnerDashboardSimple() {
               Logo de la Empresa
             </CardTitle>
             <CardDescription>
-              Sube el logo de tu empresa (máx. 2MB, formatos: JPG, PNG, GIF, WebP, SVG)
+              Sube el logo de tu empresa (máx. 2MB, formatos: JPG, PNG, GIF, WebP)
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -519,7 +519,7 @@ export default function PartnerDashboardSimple() {
                   <label className="flex-1">
                     <input
                       type="file"
-                      accept="image/jpeg,image/png,image/gif,image/webp,image/svg+xml"
+                      accept="image/jpeg,image/png,image/gif,image/webp"
                       className="hidden"
                       onChange={async (e) => {
                         const file = e.target.files?.[0];
