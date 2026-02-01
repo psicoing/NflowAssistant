@@ -7,7 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2, BarChart3, ExternalLink, Calendar, CheckCircle, Clock, UserCheck, Shield, AlertTriangle, Upload, FileSpreadsheet, Loader2, Ban, Trash2, Play, Lock, UserPlus, Activity, History } from "lucide-react";
+import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2, BarChart3, ExternalLink, Calendar, CheckCircle, Clock, UserCheck, Shield, AlertTriangle, Upload, FileSpreadsheet, Loader2, Ban, Trash2, Play, Lock, UserPlus, Activity, History, Globe } from "lucide-react";
+import { GoogleTranslateDialog } from "@/components/ui/google-translate-dialog";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 
@@ -400,6 +401,14 @@ export default function PartnerDashboardSimple() {
               </p>
             </div>
             <div className="flex items-center space-x-4">
+              <GoogleTranslateDialog 
+                trigger={
+                  <Button variant="outline" size="sm" className="border-gray-300 text-gray-700 dark:text-gray-200 dark:border-gray-600">
+                    <Globe className="w-4 h-4 mr-2" />
+                    Idiomas
+                  </Button>
+                }
+              />
               {getStatusBadge(partner.status)}
               <Button variant="outline" onClick={handleLogout} className="border-gray-300 text-gray-700 dark:text-gray-200 dark:border-gray-600">
                 <LogOut className="w-4 h-4 mr-2" />
