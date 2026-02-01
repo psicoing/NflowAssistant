@@ -247,10 +247,10 @@ export default function PartnerDashboardSimple() {
                 </div>
                 <div className="ml-3">
                   <h3 className="text-sm font-medium text-green-800 dark:text-green-200">
-                    Partner Aprobado
+                    Licencia Aprobada
                   </h3>
                   <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-                    Tu cuenta de partner ha sido aprobada. Ya puedes generar códigos de referencia y comenzar a ganar comisiones.
+                    Tu licencia ha sido aprobada. Si eres empresa privada, puedes seguir toda la progresión de tu equipo. Si eres entidad pública o sin ánimo de lucro, también puedes acceder a todas las funcionalidades.
                   </p>
                 </div>
               </div>
