@@ -36,6 +36,18 @@ interface Referral {
   createdAt: string;
 }
 
+interface PartnerUser {
+  id: number;
+  username: string;
+  email: string;
+  createdAt: string;
+  lastLoginAt: string | null;
+  loginCount: number;
+  questionsUsedThisMonth: number;
+  monthlyQuestionLimit: number;
+  subscriptionStatus: string;
+}
+
 export default function PartnerDashboardSimple() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
@@ -49,6 +61,11 @@ export default function PartnerDashboardSimple() {
 
   const { data: referrals = [], isLoading: referralsLoading } = useQuery<Referral[]>({
     queryKey: ["/api/partners/referrals"],
+    retry: false,
+  });
+
+  const { data: partnerUsers = [], isLoading: usersLoading } = useQuery<PartnerUser[]>({
+    queryKey: ["/api/partners/users"],
     retry: false,
   });
 
@@ -91,6 +108,7 @@ export default function PartnerDashboardSimple() {
       });
       queryClient.invalidateQueries({ queryKey: ["/api/partners/profile"] });
       queryClient.invalidateQueries({ queryKey: ["/api/partners/referrals"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/users"] });
     },
     onError: (error: any) => {
       toast({
@@ -406,6 +424,90 @@ export default function PartnerDashboardSimple() {
                 </div>
               )}
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Partner Users Management Section */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <UserCheck className="w-5 h-5" />
+              Usuarios de tu Equipo
+            </CardTitle>
+            <CardDescription>
+              Gestiona y visualiza los usuarios importados de tu organización
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {usersLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+                <span className="ml-2 text-gray-600">Cargando usuarios...</span>
+              </div>
+            ) : partnerUsers.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                <Users className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                <p>Aún no has importado usuarios.</p>
+                <p className="text-sm mt-1">Usa la sección "Importar Usuarios" para añadir miembros de tu equipo.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between mb-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <strong>{partnerUsers.length}</strong> usuarios en tu equipo
+                  </p>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b dark:border-gray-700">
+                        <th className="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Email</th>
+                        <th className="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Estado</th>
+                        <th className="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Uso Mensual</th>
+                        <th className="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Último Acceso</th>
+                        <th className="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Sesiones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {partnerUsers.map((user) => (
+                        <tr key={user.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
+                          <td className="py-3 px-3">
+                            <div className="font-medium text-gray-900 dark:text-gray-100">{user.email}</div>
+                          </td>
+                          <td className="py-3 px-3">
+                            <Badge variant={user.subscriptionStatus === 'active' ? 'default' : 'secondary'}>
+                              {user.subscriptionStatus === 'active' ? 'Activo' : 'Inactivo'}
+                            </Badge>
+                          </td>
+                          <td className="py-3 px-3">
+                            <div className="flex items-center gap-2">
+                              <div className="w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div 
+                                  className="bg-emerald-500 h-2 rounded-full" 
+                                  style={{ width: `${Math.min((user.questionsUsedThisMonth / user.monthlyQuestionLimit) * 100, 100)}%` }}
+                                ></div>
+                              </div>
+                              <span className="text-xs text-gray-600 dark:text-gray-400">
+                                {user.questionsUsedThisMonth}/{user.monthlyQuestionLimit}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-3 px-3 text-gray-600 dark:text-gray-400">
+                            {user.lastLoginAt 
+                              ? new Date(user.lastLoginAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })
+                              : 'Nunca'
+                            }
+                          </td>
+                          <td className="py-3 px-3 text-gray-600 dark:text-gray-400">
+                            {user.loginCount || 0}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 

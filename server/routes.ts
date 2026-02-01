@@ -1167,6 +1167,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             subscriptionStatus: 'active',
             subscriptionPlan: 'partner',
             monthlyQuestionLimit: 100, // Partner users get more questions
+            createdByPartnerId: partnerId, // Track which partner created this user
           });
 
           results.success++;
@@ -1212,10 +1213,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Partner no encontrado" });
       }
 
-      // Get users with partner subscription plan
+      // Get users created by this specific partner
       const partnerUsers = await db.select()
         .from(users)
-        .where(eq(users.subscriptionPlan, 'partner'));
+        .where(eq(users.createdByPartnerId, partnerId));
 
       res.json(partnerUsers.map(u => ({
         id: u.id,
@@ -1223,6 +1224,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         email: u.email,
         createdAt: u.createdAt,
         lastLoginAt: u.lastLoginAt,
+        loginCount: u.loginCount,
+        questionsUsedThisMonth: u.questionsUsedThisMonth,
+        monthlyQuestionLimit: u.monthlyQuestionLimit,
         subscriptionStatus: u.subscriptionStatus
       })));
 

@@ -35,6 +35,8 @@ export const users = pgTable("users", {
   acceptedNuxaNotice: boolean("accepted_nuxa_notice").default(false),
   noticeAcceptedAt: timestamp("notice_accepted_at"),
   noticeVersion: text("notice_version"),
+  // Partner que creó este usuario (para usuarios importados por empresas)
+  createdByPartnerId: integer("created_by_partner_id"),
 });
 
 export const conversations = pgTable("conversations", {
