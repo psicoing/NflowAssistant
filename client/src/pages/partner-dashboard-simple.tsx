@@ -1142,7 +1142,7 @@ export default function PartnerDashboardSimple() {
               <TrendingUp className="h-4 w-4 text-purple-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-purple-600">10%</div>
+              <div className="text-2xl font-bold text-purple-600">75%</div>
               <p className="text-xs text-muted-foreground">
                 Por cada suscripción referida
               </p>
