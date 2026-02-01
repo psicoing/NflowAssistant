@@ -764,34 +764,34 @@ export default function PartnerDashboardSimple() {
         {/* How to Use Section */}
         <Card className="mt-8">
           <CardHeader>
-            <CardTitle>Cómo Usar tu Dashboard de Partners</CardTitle>
+            <CardTitle>Cómo Usar tu Dashboard</CardTitle>
             <CardDescription>
-              Guía rápida para comenzar a generar referencias
+              Guía para empresas que gestionan NUXA para su equipo
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <h4 className="font-medium">1. Genera tu Código</h4>
-                <p className="text-sm text-gray-600">
-                  Haz clic en "Generar Código de Referencia" para crear un código único que identifique tus referencias.
+                <h4 className="font-medium">1. Importa tu Equipo</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Sube un archivo CSV o Excel con los datos de tu equipo. Cada usuario recibirá acceso automático a NUXA con 100 preguntas mensuales.
                 </p>
                 
-                <h4 className="font-medium">2. Comparte con Contactos</h4>
-                <p className="text-sm text-gray-600">
-                  Envía tu código a clínicas, profesionales de salud mental, o cualquier contacto que pueda beneficiarse de NFLOW.
+                <h4 className="font-medium">2. Gestiona tu Licencia</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Controla el estado de tu licencia, usuarios activos y límite de usuarios. Podrás ver cuántos espacios tienes disponibles.
                 </p>
               </div>
               
               <div className="space-y-4">
-                <h4 className="font-medium">3. Trackea tus Ganancias</h4>
-                <p className="text-sm text-gray-600">
-                  Cuando alguien se suscriba usando tu código, verás la referencia y tu comisión del 10% aquí.
+                <h4 className="font-medium">3. Sigue la Progresión</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Como empresa privada o entidad pública sin ánimo de lucro, puedes seguir el uso y progresión de tu equipo en tiempo real.
                 </p>
                 
-                <h4 className="font-medium">4. Recibe Pagos</h4>
-                <p className="text-sm text-gray-600">
-                  Las comisiones se procesan mensualmente y se envían a tu cuenta bancaria registrada.
+                <h4 className="font-medium">4. Amplía cuando lo Necesites</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Si necesitas más usuarios o cuota mensual, contacta con nosotros para ampliar tu licencia según las necesidades de tu organización.
                 </p>
               </div>
             </div>
