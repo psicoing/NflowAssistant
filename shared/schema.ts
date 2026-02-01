@@ -118,6 +118,38 @@ export const partners = pgTable("partners", {
   activeUsersLimit: integer("active_users_limit").default(10), // Límite máximo de usuarios activos
   monthlyQuota: text("monthly_quota").default("0"), // Cuota mensual comprometida en €
   licenseStatus: text("license_status").default("pending"), // active, pending, suspended
+  // Campos adicionales de contrato
+  monthlyCost: text("monthly_cost").default("0"), // Coste fijo mensual del arrendamiento (€)
+  licenseRenewalDate: timestamp("license_renewal_date"), // Fecha de renovación de licencia
+  companyLogo: text("company_logo"), // URL/path del logo de la empresa
+});
+
+// Tabla para administradores adicionales de partners
+export const partnerAdmins = pgTable("partner_admins", {
+  id: serial("id").primaryKey(),
+  partnerId: integer("partner_id").notNull(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  password: text("password").notNull(),
+  role: text("role").default("admin"), // admin, viewer
+  isActive: boolean("is_active").default(true),
+  lastLoginAt: timestamp("last_login_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdBy: integer("created_by"), // ID del admin que lo creó
+});
+
+// Tabla para log de actividad de partners
+export const partnerActivityLog = pgTable("partner_activity_log", {
+  id: serial("id").primaryKey(),
+  partnerId: integer("partner_id").notNull(),
+  adminId: integer("admin_id"), // ID del admin que realizó la acción (null si es el partner principal)
+  adminEmail: text("admin_email"), // Email del admin para referencia
+  action: text("action").notNull(), // create_user, delete_user, block_user, activate_user, import_users, login, etc.
+  targetUserId: integer("target_user_id"), // ID del usuario afectado (si aplica)
+  targetUserEmail: text("target_user_email"), // Email del usuario afectado
+  details: text("details"), // Detalles adicionales en JSON
+  ipAddress: text("ip_address"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 // Tabla para referencias de partners
