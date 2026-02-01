@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2, BarChart3, ExternalLink, Calendar, CheckCircle, Clock, UserCheck, Shield, AlertTriangle, Upload, FileSpreadsheet, Loader2, Ban, Trash2, Play, Lock } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Copy, LogOut, Users, TrendingUp, DollarSign, Link2, BarChart3, ExternalLink, Calendar, CheckCircle, Clock, UserCheck, Shield, AlertTriangle, Upload, FileSpreadsheet, Loader2, Ban, Trash2, Play, Lock, UserPlus, Activity, History } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 
@@ -51,11 +53,32 @@ interface PartnerUser {
   subscriptionStatus: string;
 }
 
+interface PartnerAdmin {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+  lastLoginAt: string | null;
+  createdAt: string;
+}
+
+interface ActivityLog {
+  id: number;
+  action: string;
+  adminEmail: string | null;
+  targetUserEmail: string | null;
+  details: string | null;
+  createdAt: string;
+}
+
 export default function PartnerDashboardSimple() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [referralCode, setReferralCode] = useState("");
   const [uploadResult, setUploadResult] = useState<{success: number; errors: string[]; created: string[]} | null>(null);
+  const [newAdminForm, setNewAdminForm] = useState({ name: '', email: '', password: '' });
+  const [showAdminForm, setShowAdminForm] = useState(false);
 
   const { data: partner, isLoading: partnerLoading, error } = useQuery<Partner>({
     queryKey: ["/api/partners/profile"],
@@ -69,6 +92,16 @@ export default function PartnerDashboardSimple() {
 
   const { data: partnerUsers = [], isLoading: usersLoading } = useQuery<PartnerUser[]>({
     queryKey: ["/api/partners/users"],
+    retry: false,
+  });
+
+  const { data: admins = [] } = useQuery<PartnerAdmin[]>({
+    queryKey: ["/api/partners/admins"],
+    retry: false,
+  });
+
+  const { data: activityLog = [] } = useQuery<ActivityLog[]>({
+    queryKey: ["/api/partners/activity-log"],
     retry: false,
   });
 
@@ -178,6 +211,71 @@ export default function PartnerDashboardSimple() {
       });
     },
   });
+
+  const createAdminMutation = useMutation({
+    mutationFn: async (data: { name: string; email: string; password: string }) => {
+      const response = await apiRequest("POST", "/api/partners/admins", data);
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Administrador creado",
+        description: "El nuevo administrador ha sido añadido correctamente",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/admins"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/activity-log"] });
+      setNewAdminForm({ name: '', email: '', password: '' });
+      setShowAdminForm(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteAdminMutation = useMutation({
+    mutationFn: async (adminId: number) => {
+      const response = await fetch(`/api/partners/admins/${adminId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message);
+      return result;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Administrador eliminado",
+        description: "El administrador ha sido eliminado correctamente",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/admins"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners/activity-log"] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const getActionLabel = (action: string) => {
+    const labels: Record<string, string> = {
+      'create_user': 'Creó usuario',
+      'delete_user': 'Eliminó usuario',
+      'block_user': 'Bloqueó usuario',
+      'activate_user': 'Activó usuario',
+      'import_users': 'Importó usuarios',
+      'create_admin': 'Creó administrador',
+      'delete_admin': 'Eliminó administrador',
+      'login': 'Inició sesión',
+    };
+    return labels[action] || action;
+  };
 
   if (partnerLoading) {
     return (
@@ -658,6 +756,165 @@ export default function PartnerDashboardSimple() {
             )}
           </CardContent>
         </Card>
+
+        {/* Admins and Activity Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Administradores Section */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <UserPlus className="w-5 h-5" />
+                  Administradores
+                </CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowAdminForm(!showAdminForm)}
+                >
+                  {showAdminForm ? 'Cancelar' : 'Añadir'}
+                </Button>
+              </div>
+              <CardDescription>
+                Usuarios con acceso al dashboard de gestión
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {showAdminForm && (
+                <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border">
+                  <div className="grid gap-3">
+                    <div>
+                      <Label htmlFor="adminName">Nombre</Label>
+                      <Input
+                        id="adminName"
+                        value={newAdminForm.name}
+                        onChange={(e) => setNewAdminForm({ ...newAdminForm, name: e.target.value })}
+                        placeholder="Nombre del administrador"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="adminEmail">Email</Label>
+                      <Input
+                        id="adminEmail"
+                        type="email"
+                        value={newAdminForm.email}
+                        onChange={(e) => setNewAdminForm({ ...newAdminForm, email: e.target.value })}
+                        placeholder="email@empresa.com"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="adminPassword">Contraseña</Label>
+                      <Input
+                        id="adminPassword"
+                        type="password"
+                        value={newAdminForm.password}
+                        onChange={(e) => setNewAdminForm({ ...newAdminForm, password: e.target.value })}
+                        placeholder="Contraseña de acceso"
+                      />
+                    </div>
+                    <Button
+                      onClick={() => createAdminMutation.mutate(newAdminForm)}
+                      disabled={createAdminMutation.isPending || !newAdminForm.name || !newAdminForm.email || !newAdminForm.password}
+                      className="w-full"
+                    >
+                      {createAdminMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                      Crear Administrador
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                {/* Primary admin (partner owner) */}
+                <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">{partner.contactName}</div>
+                    <div className="text-sm text-gray-500">{partner.email}</div>
+                  </div>
+                  <Badge className="bg-blue-600">Propietario</Badge>
+                </div>
+
+                {/* Additional admins */}
+                {admins.map((admin) => (
+                  <div key={admin.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">{admin.name}</div>
+                      <div className="text-sm text-gray-500">{admin.email}</div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary">{admin.role === 'admin' ? 'Admin' : 'Visor'}</Badge>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          if (confirm(`¿Eliminar administrador ${admin.name}?`)) {
+                            deleteAdminMutation.mutate(admin.id);
+                          }
+                        }}
+                        className="h-8 px-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+
+                {admins.length === 0 && (
+                  <p className="text-sm text-gray-500 text-center py-2">
+                    No hay administradores adicionales
+                  </p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Activity Log Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <History className="w-5 h-5" />
+                Registro de Actividad
+              </CardTitle>
+              <CardDescription>
+                Últimas acciones realizadas en el panel
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2 max-h-80 overflow-y-auto">
+                {activityLog.length === 0 ? (
+                  <p className="text-sm text-gray-500 text-center py-4">
+                    No hay actividad registrada
+                  </p>
+                ) : (
+                  activityLog.slice(0, 20).map((log) => (
+                    <div key={log.id} className="flex items-start gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded">
+                      <div className="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Activity className="w-4 h-4 text-gray-500" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          {getActionLabel(log.action)}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {log.targetUserEmail && <span>Usuario: {log.targetUserEmail}</span>}
+                          {log.adminEmail && <span className="ml-2">Por: {log.adminEmail}</span>}
+                        </div>
+                        <div className="text-xs text-gray-400">
+                          {new Date(log.createdAt).toLocaleDateString('es-ES', { 
+                            day: '2-digit', 
+                            month: 'short', 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

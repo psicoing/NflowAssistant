@@ -2,13 +2,13 @@ import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users } from "@shared/schema";
+import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
 import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import "./types"; // Import session types
 import multer from "multer";
 import * as XLSX from "xlsx";
@@ -1299,9 +1299,145 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({ message: "Usuario eliminado correctamente" });
 
+      // Log activity
+      await db.insert(partnerActivityLog).values({
+        partnerId,
+        adminEmail: partner?.email || 'unknown',
+        action: 'delete_user',
+        targetUserId: userId,
+        targetUserEmail: user.email,
+        details: JSON.stringify({ username: user.username }),
+      });
+
     } catch (error: any) {
       console.error("Error deleting user:", error);
       res.status(500).json({ message: "Error eliminando usuario" });
+    }
+  });
+
+  // ============ Partner Admins Management ============
+
+  // Get all admins for a partner
+  app.get("/api/partners/admins", async (req, res) => {
+    try {
+      const partnerId = req.session.partnerId;
+      if (!partnerId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      const admins = await db.select().from(partnerAdmins).where(eq(partnerAdmins.partnerId, partnerId));
+      res.json(admins);
+    } catch (error: any) {
+      console.error("Error fetching admins:", error);
+      res.status(500).json({ message: "Error fetching admins" });
+    }
+  });
+
+  // Create a new admin
+  app.post("/api/partners/admins", async (req, res) => {
+    try {
+      const partnerId = req.session.partnerId;
+      if (!partnerId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      const { name, email, password, role = 'admin' } = req.body;
+
+      if (!name || !email || !password) {
+        return res.status(400).json({ message: "Nombre, email y contraseña son requeridos" });
+      }
+
+      // Check if email already exists
+      const existingAdmin = await db.select().from(partnerAdmins).where(eq(partnerAdmins.email, email));
+      if (existingAdmin.length > 0) {
+        return res.status(400).json({ message: "Ya existe un administrador con este email" });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const [newAdmin] = await db.insert(partnerAdmins).values({
+        partnerId,
+        name,
+        email,
+        password: hashedPassword,
+        role,
+        createdBy: partnerId,
+      }).returning();
+
+      // Log activity
+      const partner = await storage.getPartner(partnerId);
+      await db.insert(partnerActivityLog).values({
+        partnerId,
+        adminEmail: partner?.email || 'unknown',
+        action: 'create_admin',
+        details: JSON.stringify({ adminName: name, adminEmail: email }),
+      });
+
+      res.json({ success: true, admin: { id: newAdmin.id, name: newAdmin.name, email: newAdmin.email, role: newAdmin.role } });
+    } catch (error: any) {
+      console.error("Error creating admin:", error);
+      res.status(500).json({ message: "Error creating admin" });
+    }
+  });
+
+  // Delete an admin
+  app.delete("/api/partners/admins/:adminId", async (req, res) => {
+    try {
+      const partnerId = req.session.partnerId;
+      const adminId = parseInt(req.params.adminId);
+
+      if (!partnerId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      // Verify admin belongs to this partner
+      const [admin] = await db.select().from(partnerAdmins).where(
+        and(eq(partnerAdmins.id, adminId), eq(partnerAdmins.partnerId, partnerId))
+      );
+
+      if (!admin) {
+        return res.status(404).json({ message: "Administrador no encontrado" });
+      }
+
+      await db.delete(partnerAdmins).where(eq(partnerAdmins.id, adminId));
+
+      // Log activity
+      const partner = await storage.getPartner(partnerId);
+      await db.insert(partnerActivityLog).values({
+        partnerId,
+        adminEmail: partner?.email || 'unknown',
+        action: 'delete_admin',
+        details: JSON.stringify({ adminName: admin.name, adminEmail: admin.email }),
+      });
+
+      res.json({ message: "Administrador eliminado correctamente" });
+    } catch (error: any) {
+      console.error("Error deleting admin:", error);
+      res.status(500).json({ message: "Error deleting admin" });
+    }
+  });
+
+  // ============ Activity Log ============
+
+  // Get activity log for a partner
+  app.get("/api/partners/activity-log", async (req, res) => {
+    try {
+      const partnerId = req.session.partnerId;
+      if (!partnerId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      const limit = parseInt(req.query.limit as string) || 50;
+      const logs = await db.select()
+        .from(partnerActivityLog)
+        .where(eq(partnerActivityLog.partnerId, partnerId))
+        .orderBy(desc(partnerActivityLog.createdAt))
+        .limit(limit);
+
+      res.json(logs);
+    } catch (error: any) {
+      console.error("Error fetching activity log:", error);
+      res.status(500).json({ message: "Error fetching activity log" });
     }
   });
 
