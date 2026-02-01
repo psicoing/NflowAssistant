@@ -434,6 +434,51 @@ export default function PartnerDashboardSimple() {
           </Card>
         )}
 
+        {/* Section Navigator */}
+        <div className="mb-8 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Tu dashboard tiene dos secciones:</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a href="#arrendamiento" className="flex items-center gap-3 p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border-2 border-blue-300 dark:border-blue-600 hover:shadow-md transition-shadow cursor-pointer">
+              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <Users className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <div className="font-bold text-blue-900 dark:text-blue-100">Licencia de Arrendamiento</div>
+                <div className="text-xs text-blue-700 dark:text-blue-300">Gestión de usuarios y equipo</div>
+                <div className="text-xs text-gray-500 mt-1">Para todas las organizaciones</div>
+              </div>
+            </a>
+            <a href="#explotacion" className="flex items-center gap-3 p-4 rounded-lg bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/30 dark:to-indigo-900/30 border-2 border-purple-300 dark:border-purple-600 hover:shadow-md transition-shadow cursor-pointer">
+              <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <TrendingUp className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <div className="font-bold text-purple-900 dark:text-purple-100">Licencia de Explotación</div>
+                <div className="text-xs text-purple-700 dark:text-purple-300">Programa de afiliados y comisiones</div>
+                <div className="text-xs text-gray-500 mt-1">Solo empresas privadas</div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        {/* Licencia de Arrendamiento Header */}
+        <div id="arrendamiento" className="mb-6">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-1 h-8 bg-gradient-to-b from-blue-600 to-indigo-600 rounded-full"></div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <Users className="w-5 h-5 text-blue-600" />
+                Licencia de Arrendamiento
+              </h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Gestión de tu equipo - Todas las organizaciones
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Contract Info Block - Datos del Contrato */}
         <Card className="mb-8 border-blue-300 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 dark:border-blue-700">
           <CardHeader className="pb-3">
@@ -1045,7 +1090,7 @@ export default function PartnerDashboardSimple() {
         </div>
 
         {/* Licencia de Explotación Header */}
-        <div className="mb-6 mt-8">
+        <div id="explotacion" className="mb-6 mt-8">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-1 h-8 bg-gradient-to-b from-purple-600 to-indigo-600 rounded-full"></div>
             <div>
@@ -1057,6 +1102,9 @@ export default function PartnerDashboardSimple() {
                 Programa de afiliados - Gana comisiones por cada suscripción referida
               </p>
             </div>
+            <Badge className="ml-auto bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200 border border-purple-300">
+              Solo empresas privadas
+            </Badge>
           </div>
         </div>
 
