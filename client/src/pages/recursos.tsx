@@ -219,6 +219,29 @@ export default function RecursosGratis() {
   const [bilateralSpeed, setBilateralSpeed] = useState<'slow' | 'medium' | 'fast'>('medium');
   const [isoAnswers, setIsoAnswers] = useState<number[]>([2, 2, 2, 2, 2, 2]);
   const [isoResult, setIsoResult] = useState<{level: string; score: number; recommendations: string[]} | null>(null);
+  const [showBibliographyModal, setShowBibliographyModal] = useState(false);
+
+  // Bibliography data by topic
+  const bibliographyData = {
+    ansiedad: [
+      { title: "El poder del ahora", author: "Eckhart Tolle", description: "Guía para vivir en el presente y reducir la ansiedad anticipatoria." },
+      { title: "Mindfulness para principiantes", author: "Jon Kabat-Zinn", description: "Introducción práctica a la atención plena para calmar la mente." },
+      { title: "Ansiedad: cómo enfrentar el mal del siglo", author: "Daniel López Rosetti", description: "Comprensión médica y psicológica de la ansiedad con estrategias prácticas." },
+      { title: "La trampa de la felicidad", author: "Russ Harris", description: "Terapia de Aceptación y Compromiso (ACT) aplicada a la ansiedad." }
+    ],
+    depresion: [
+      { title: "Salir del abismo", author: "Rafael Santandreu", description: "Técnicas cognitivo-conductuales para superar la depresión." },
+      { title: "El demonio de la depresión", author: "Andrew Solomon", description: "Exploración profunda de la depresión desde múltiples perspectivas." },
+      { title: "La auténtica felicidad", author: "Martin Seligman", description: "Psicología positiva aplicada para construir bienestar duradero." },
+      { title: "Mindfulness y ciencia", author: "Vicente Simón", description: "Base científica de la meditación para la salud mental." }
+    ],
+    estres: [
+      { title: "El estrés laboral", author: "Francisco Gil-Monte", description: "Análisis del síndrome de burnout y estrategias de prevención." },
+      { title: "La trampa del trabajo", author: "Bryan E. Robinson", description: "Cómo identificar y superar la adicción al trabajo." },
+      { title: "Mindfulness en la vida cotidiana", author: "Jon Kabat-Zinn", description: "Aplicación de la atención plena en el día a día laboral." },
+      { title: "Trabajar sin sufrir", author: "Christophe Dejours", description: "Psicodinámica del trabajo y bienestar ocupacional." }
+    ]
+  };
 
   // Check URL params to auto-open helplines modal
   useEffect(() => {
@@ -2088,6 +2111,23 @@ export default function RecursosGratis() {
                 Empresas
               </Badge>
             </Card>
+
+            <Card 
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-amber-50 to-yellow-50 border-amber-100"
+              onClick={() => setShowBibliographyModal(true)}
+              data-testid="card-bibliography"
+            >
+              <BookOpen className="w-10 h-10 text-amber-600 mb-3" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                📚 Bibliografía Recomendada
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Lecturas básicas sobre ansiedad, depresión y estrés laboral
+              </p>
+              <Badge className="bg-amber-100 text-amber-700 border-amber-200">
+                Autoayuda
+              </Badge>
+            </Card>
           </div>
 
           {/* Evaluaciones */}
@@ -2878,6 +2918,80 @@ export default function RecursosGratis() {
                     <p className="text-xs text-gray-600 mt-3 italic">Si no encuentras tu país, estos directorios te ayudarán a localizar ayuda local.</p>
                   </div>
                 </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* Modal Bibliografía Recomendada */}
+          <Dialog open={showBibliographyModal} onOpenChange={setShowBibliographyModal}>
+            <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2 text-xl">
+                  <BookOpen className="w-6 h-6 text-amber-600" />
+                  Bibliografía Recomendada
+                </DialogTitle>
+              </DialogHeader>
+              
+              <Tabs defaultValue="ansiedad" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 mb-4">
+                  <TabsTrigger value="ansiedad" className="text-sm">😰 Ansiedad</TabsTrigger>
+                  <TabsTrigger value="depresion" className="text-sm">😢 Depresión</TabsTrigger>
+                  <TabsTrigger value="estres" className="text-sm">💼 Estrés Laboral</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="ansiedad" className="space-y-3">
+                  <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                    <h4 className="font-semibold text-blue-800 mb-1 flex items-center gap-2">
+                      <Brain className="w-4 h-4" /> Lecturas para la ansiedad
+                    </h4>
+                    <p className="text-xs text-blue-600">Libros validados por la evidencia científica</p>
+                  </div>
+                  {bibliographyData.ansiedad.map((book, idx) => (
+                    <div key={idx} className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+                      <h5 className="font-bold text-gray-900">📖 {book.title}</h5>
+                      <p className="text-sm text-gray-600 italic">por {book.author}</p>
+                      <p className="text-sm text-gray-700 mt-2">{book.description}</p>
+                    </div>
+                  ))}
+                </TabsContent>
+
+                <TabsContent value="depresion" className="space-y-3">
+                  <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                    <h4 className="font-semibold text-purple-800 mb-1 flex items-center gap-2">
+                      <Heart className="w-4 h-4" /> Lecturas para la depresión
+                    </h4>
+                    <p className="text-xs text-purple-600">Recursos para entender y afrontar estados depresivos</p>
+                  </div>
+                  {bibliographyData.depresion.map((book, idx) => (
+                    <div key={idx} className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+                      <h5 className="font-bold text-gray-900">📖 {book.title}</h5>
+                      <p className="text-sm text-gray-600 italic">por {book.author}</p>
+                      <p className="text-sm text-gray-700 mt-2">{book.description}</p>
+                    </div>
+                  ))}
+                </TabsContent>
+
+                <TabsContent value="estres" className="space-y-3">
+                  <div className="bg-amber-50 rounded-lg p-3 border border-amber-200">
+                    <h4 className="font-semibold text-amber-800 mb-1 flex items-center gap-2">
+                      <Briefcase className="w-4 h-4" /> Lecturas para estrés laboral
+                    </h4>
+                    <p className="text-xs text-amber-600">Prevención del burnout y bienestar ocupacional</p>
+                  </div>
+                  {bibliographyData.estres.map((book, idx) => (
+                    <div key={idx} className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+                      <h5 className="font-bold text-gray-900">📖 {book.title}</h5>
+                      <p className="text-sm text-gray-600 italic">por {book.author}</p>
+                      <p className="text-sm text-gray-700 mt-2">{book.description}</p>
+                    </div>
+                  ))}
+                </TabsContent>
+              </Tabs>
+
+              <div className="mt-4 p-3 bg-gray-100 rounded-lg">
+                <p className="text-xs text-gray-600 text-center">
+                  💡 Estos libros son recomendaciones orientativas. Para tratamiento profesional, consulta con un psicólogo o psiquiatra.
+                </p>
               </div>
             </DialogContent>
           </Dialog>
