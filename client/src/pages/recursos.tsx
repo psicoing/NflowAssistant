@@ -190,7 +190,7 @@ const alertasClinicas = [
 
 export default function RecursosGratis() {
   const { toast } = useToast();
-  const [currentView, setCurrentView] = useState<'main' | 'emotional-log' | 'affirmation' | 'evaluation' | 'emotion-history' | 'breathing' | 'gratitude'>('main');
+  const [currentView, setCurrentView] = useState<'main' | 'emotional-log' | 'affirmation' | 'evaluation' | 'emotion-history' | 'breathing' | 'gratitude' | 'bad-day' | 'grounding' | 'bilateral' | 'iso-check'>('main');
   const [selectedEmotion, setSelectedEmotion] = useState<string>('');
   const [emotionalNote, setEmotionalNote] = useState('');
   const [currentAffirmationIndex, setCurrentAffirmationIndex] = useState(0);
@@ -210,6 +210,15 @@ export default function RecursosGratis() {
   const [isBreathingActive, setIsBreathingActive] = useState(false);
   const [gratitudeItems, setGratitudeItems] = useState<string[]>(['', '', '']);
   const [todayGratitudeSaved, setTodayGratitudeSaved] = useState(false);
+  
+  // New features: grounding, bilateral, ISO check
+  const [groundingStep, setGroundingStep] = useState(0);
+  const [groundingInputs, setGroundingInputs] = useState<string[]>(['', '', '', '', '']);
+  const [bilateralActive, setBilateralActive] = useState(false);
+  const [bilateralSide, setBilateralSide] = useState<'left' | 'right'>('left');
+  const [bilateralSpeed, setBilateralSpeed] = useState<'slow' | 'medium' | 'fast'>('medium');
+  const [isoAnswers, setIsoAnswers] = useState<number[]>([2, 2, 2, 2, 2, 2]);
+  const [isoResult, setIsoResult] = useState<{level: string; score: number; recommendations: string[]} | null>(null);
 
   // Check URL params to auto-open helplines modal
   useEffect(() => {
@@ -470,6 +479,54 @@ export default function RecursosGratis() {
     
     return () => clearInterval(interval);
   }, [isBreathingActive, breathingTechnique]);
+
+  // Bilateral stimulation effect
+  useEffect(() => {
+    if (!bilateralActive) return;
+    
+    const speeds = { slow: 1200, medium: 800, fast: 500 };
+    const interval = setInterval(() => {
+      setBilateralSide(prev => prev === 'left' ? 'right' : 'left');
+    }, speeds[bilateralSpeed]);
+    
+    return () => clearInterval(interval);
+  }, [bilateralActive, bilateralSpeed]);
+
+  // ISO 45003 calculation
+  const calculateIsoResult = () => {
+    const avg = isoAnswers.reduce((a, b) => a + b, 0) / isoAnswers.length;
+    const riskScore = 4 - avg;
+    
+    let level = "Bajo";
+    let recommendations = [
+      "Mantener rutinas de descanso y límites razonables.",
+      "Revisar carga de trabajo periódicamente.",
+      "Refuerzo de reconocimiento y comunicación clara."
+    ];
+    
+    if (riskScore >= 1.6 && riskScore < 2.8) {
+      level = "Medio";
+      recommendations = [
+        "Revisar carga, plazos y autonomía (ajustes rápidos).",
+        "Formación breve en liderazgo y prevención de desgaste.",
+        "Canal de conflictos seguro y trazable.",
+        "Evaluar distribución de tareas y recursos."
+      ];
+    }
+    
+    if (riskScore >= 2.8) {
+      level = "Alto";
+      recommendations = [
+        "Evaluación psicosocial formal y plan de acción con responsables.",
+        "Medidas inmediatas: carga, horarios, rol y recursos.",
+        "Intervención sobre liderazgo tóxico / cultura del miedo.",
+        "Seguimiento con indicadores y revisiones periódicas.",
+        "Considerar apoyo psicológico para el equipo."
+      ];
+    }
+    
+    setIsoResult({ level, score: riskScore, recommendations });
+  };
 
   const saveEmotionalLog = () => {
     if (!selectedEmotion) {
@@ -986,6 +1043,490 @@ export default function RecursosGratis() {
     );
   }
 
+  // Bad Day - Emergency Protocol View
+  if (currentView === 'bad-day') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50 to-rose-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-2xl mx-auto">
+            <Button
+              variant="ghost"
+              onClick={() => setCurrentView('main')}
+              className="mb-6"
+              data-testid="button-back-to-main"
+            >
+              ← Volver
+            </Button>
+
+            <Card className="p-8">
+              <div className="text-center mb-8">
+                <span className="text-6xl mb-4 block">🆘</span>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                  No estoy bien hoy
+                </h2>
+                <p className="text-gray-600">
+                  Vamos a lo básico. No hay que "arreglarlo todo". Solo bajar el volumen.
+                </p>
+              </div>
+
+              <div className="space-y-4 mb-8">
+                <Card className="p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-100">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">1</div>
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">🫁 Respira 2 minutos</h3>
+                      <p className="text-gray-600 text-sm mb-3">La respiración lenta activa el sistema nervioso parasimpático y baja la alerta.</p>
+                      <Button 
+                        size="sm" 
+                        className="bg-blue-500 hover:bg-blue-600"
+                        onClick={() => {
+                          setBreathingTechnique('4-7-8');
+                          setCurrentView('breathing');
+                        }}
+                      >
+                        Ir a respiración guiada
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-5 bg-gradient-to-r from-green-50 to-emerald-50 border-green-100">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">2</div>
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">🧩 Grounding 5-4-3-2-1</h3>
+                      <p className="text-gray-600 text-sm mb-3">Usa tus sentidos para volver al presente. Funciona muy bien para ansiedad.</p>
+                      <Button 
+                        size="sm" 
+                        className="bg-green-500 hover:bg-green-600"
+                        onClick={() => {
+                          setGroundingStep(0);
+                          setGroundingInputs(['', '', '', '', '']);
+                          setCurrentView('grounding');
+                        }}
+                      >
+                        Ir a Grounding
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-5 bg-gradient-to-r from-amber-50 to-orange-50 border-amber-100">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">3</div>
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">🚿 Una acción pequeña</h3>
+                      <p className="text-gray-600 text-sm">
+                        Elige una cosa pequeña que puedas hacer ahora mismo:
+                      </p>
+                      <ul className="text-sm text-gray-600 mt-2 space-y-1">
+                        <li>• Beber un vaso de agua</li>
+                        <li>• Ducharte o lavarte la cara</li>
+                        <li>• Abrir una ventana</li>
+                        <li>• Caminar 3 minutos</li>
+                        <li>• Cambiar de habitación</li>
+                      </ul>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+
+              <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-red-800 mb-1">Si hay riesgo real</h4>
+                    <p className="text-sm text-red-700">
+                      Si tienes ideas de hacerte daño, descontrol severo o crisis intensa, pide ayuda profesional inmediata. 
+                      <Button 
+                        variant="link" 
+                        className="text-red-700 underline p-0 h-auto font-semibold"
+                        onClick={() => setShowHelpLinesModal(true)}
+                      >
+                        Ver líneas de ayuda
+                      </Button>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Grounding 5-4-3-2-1 View
+  if (currentView === 'grounding') {
+    const groundingSteps = [
+      { count: 5, sense: 'VER', icon: '👁️', prompt: '5 cosas que puedas VER ahora mismo', color: 'from-blue-500 to-cyan-500' },
+      { count: 4, sense: 'TOCAR', icon: '✋', prompt: '4 cosas que puedas TOCAR', color: 'from-green-500 to-emerald-500' },
+      { count: 3, sense: 'OÍR', icon: '👂', prompt: '3 cosas que puedas OÍR', color: 'from-purple-500 to-violet-500' },
+      { count: 2, sense: 'OLER', icon: '👃', prompt: '2 cosas que puedas OLER', color: 'from-amber-500 to-orange-500' },
+      { count: 1, sense: 'SABOREAR', icon: '👅', prompt: '1 cosa que puedas SABOREAR', color: 'from-pink-500 to-rose-500' }
+    ];
+    
+    const currentStep = groundingSteps[groundingStep];
+    const isComplete = groundingStep >= 5;
+    
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-green-50 to-emerald-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-2xl mx-auto">
+            <Button
+              variant="ghost"
+              onClick={() => setCurrentView('main')}
+              className="mb-6"
+              data-testid="button-back-to-main"
+            >
+              ← Volver
+            </Button>
+
+            <Card className="p-8">
+              <div className="text-center mb-8">
+                <span className="text-6xl mb-4 block">🧩</span>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                  Grounding 5-4-3-2-1
+                </h2>
+                <p className="text-gray-600">
+                  Usa tus sentidos para anclarte al presente
+                </p>
+              </div>
+
+              {/* Progress */}
+              <div className="flex justify-center gap-2 mb-8">
+                {groundingSteps.map((step, idx) => (
+                  <div 
+                    key={idx}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold transition-all ${
+                      idx < groundingStep 
+                        ? 'bg-green-500 text-white' 
+                        : idx === groundingStep 
+                          ? `bg-gradient-to-r ${step.color} text-white scale-110` 
+                          : 'bg-gray-200 text-gray-400'
+                    }`}
+                  >
+                    {idx < groundingStep ? '✓' : step.count}
+                  </div>
+                ))}
+              </div>
+
+              {isComplete ? (
+                <div className="text-center py-8">
+                  <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">¡Ejercicio completado!</h3>
+                  <p className="text-gray-600 mb-6">
+                    Has recorrido tus 5 sentidos y estás más conectado/a con el presente.
+                  </p>
+                  <div className="bg-green-50 rounded-xl p-4 mb-6">
+                    <p className="text-green-800 text-sm">
+                      💡 <strong>Tip:</strong> Repite este ejercicio cada vez que sientas que tu mente se acelera o te desconectas del momento presente.
+                    </p>
+                  </div>
+                  <Button 
+                    onClick={() => {
+                      setGroundingStep(0);
+                      setGroundingInputs(['', '', '', '', '']);
+                    }}
+                    className="bg-gradient-to-r from-green-500 to-emerald-500"
+                  >
+                    Repetir ejercicio
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <div className={`bg-gradient-to-r ${currentStep.color} rounded-2xl p-6 text-white text-center`}>
+                    <div className="text-5xl mb-3">{currentStep.icon}</div>
+                    <h3 className="text-2xl font-bold mb-2">{currentStep.prompt}</h3>
+                    <p className="text-white/80 text-sm">
+                      Nombra {currentStep.count} cosa{currentStep.count > 1 ? 's' : ''} en voz alta o escríbelo abajo
+                    </p>
+                  </div>
+
+                  <Textarea
+                    placeholder={`Escribe ${currentStep.count} cosa${currentStep.count > 1 ? 's' : ''} que puedas ${currentStep.sense.toLowerCase()}...`}
+                    value={groundingInputs[groundingStep]}
+                    onChange={(e) => {
+                      const newInputs = [...groundingInputs];
+                      newInputs[groundingStep] = e.target.value;
+                      setGroundingInputs(newInputs);
+                    }}
+                    rows={3}
+                    className="text-lg"
+                  />
+
+                  <div className="flex gap-3">
+                    {groundingStep > 0 && (
+                      <Button 
+                        variant="outline"
+                        onClick={() => setGroundingStep(prev => prev - 1)}
+                      >
+                        ← Anterior
+                      </Button>
+                    )}
+                    <Button 
+                      className={`flex-1 bg-gradient-to-r ${currentStep.color}`}
+                      onClick={() => setGroundingStep(prev => prev + 1)}
+                    >
+                      {groundingStep === 4 ? 'Finalizar' : 'Siguiente →'}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Bilateral Stimulation View
+  if (currentView === 'bilateral') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-violet-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-2xl mx-auto">
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setBilateralActive(false);
+                setCurrentView('main');
+              }}
+              className="mb-6"
+              data-testid="button-back-to-main"
+            >
+              ← Volver
+            </Button>
+
+            <Card className="p-8">
+              <div className="text-center mb-8">
+                <span className="text-6xl mb-4 block">👆</span>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                  Estimulación Bilateral
+                </h2>
+                <p className="text-gray-600">
+                  Sigue el punto con los ojos (tipo EMDR). Ayuda a regular emociones intensas.
+                </p>
+              </div>
+
+              {/* Speed selector */}
+              <div className="flex justify-center gap-2 mb-8">
+                <Button
+                  variant={bilateralSpeed === 'slow' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setBilateralSpeed('slow')}
+                >
+                  🐢 Lento
+                </Button>
+                <Button
+                  variant={bilateralSpeed === 'medium' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setBilateralSpeed('medium')}
+                >
+                  🚶 Medio
+                </Button>
+                <Button
+                  variant={bilateralSpeed === 'fast' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setBilateralSpeed('fast')}
+                >
+                  🏃 Rápido
+                </Button>
+              </div>
+
+              {/* Visual stimulus */}
+              <div className="bg-gray-900 rounded-2xl p-8 mb-6 h-48 relative overflow-hidden">
+                <div 
+                  className={`absolute top-1/2 -translate-y-1/2 w-12 h-12 bg-gradient-to-r from-purple-500 to-violet-500 rounded-full shadow-lg shadow-purple-500/50 transition-all ${
+                    bilateralActive 
+                      ? bilateralSpeed === 'slow' 
+                        ? 'duration-[1200ms]' 
+                        : bilateralSpeed === 'medium' 
+                          ? 'duration-[800ms]' 
+                          : 'duration-[500ms]'
+                      : 'duration-300'
+                  }`}
+                  style={{
+                    left: bilateralActive 
+                      ? bilateralSide === 'left' ? '10%' : 'calc(90% - 48px)'
+                      : '50%',
+                    transform: bilateralActive 
+                      ? 'translateY(-50%)' 
+                      : 'translate(-50%, -50%)'
+                  }}
+                />
+                {!bilateralActive && (
+                  <div className="absolute inset-0 flex items-center justify-center text-white/60 text-sm">
+                    Pulsa "Iniciar" para comenzar
+                  </div>
+                )}
+              </div>
+
+              <div className="flex justify-center gap-4 mb-6">
+                <Button
+                  size="lg"
+                  className={bilateralActive 
+                    ? 'bg-red-500 hover:bg-red-600' 
+                    : 'bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600'
+                  }
+                  onClick={() => setBilateralActive(!bilateralActive)}
+                >
+                  {bilateralActive ? '⏹ Detener' : '▶ Iniciar'}
+                </Button>
+              </div>
+
+              <div className="bg-purple-50 rounded-xl p-4">
+                <h4 className="font-semibold text-purple-800 mb-2">💡 Cómo usar:</h4>
+                <ul className="text-sm text-purple-700 space-y-1">
+                  <li>• Sigue el punto con los ojos sin mover la cabeza</li>
+                  <li>• Respira con calma mientras miras</li>
+                  <li>• Si te cansas, cierra los ojos unos segundos</li>
+                  <li>• Haz entre 1-3 minutos según necesites</li>
+                </ul>
+              </div>
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // ISO 45003 Check View
+  if (currentView === 'iso-check') {
+    const isoQuestions = [
+      { id: 0, text: '¿Cómo percibes tu carga de trabajo?', low: 'Muy alta', high: 'Adecuada' },
+      { id: 1, text: '¿Tienes claridad sobre tu rol y responsabilidades?', low: 'Nada claro', high: 'Muy claro' },
+      { id: 2, text: '¿Tienes autonomía para tomar decisiones en tu trabajo?', low: 'Ninguna', high: 'Mucha' },
+      { id: 3, text: '¿Cómo es el apoyo de tus superiores/compañeros?', low: 'Muy malo', high: 'Excelente' },
+      { id: 4, text: '¿Cómo calificarías el clima laboral?', low: 'Muy tóxico', high: 'Muy positivo' },
+      { id: 5, text: '¿Puedes conciliar tu vida laboral y personal?', low: 'Imposible', high: 'Perfectamente' }
+    ];
+    
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-2xl mx-auto">
+            <Button
+              variant="ghost"
+              onClick={() => setCurrentView('main')}
+              className="mb-6"
+              data-testid="button-back-to-main"
+            >
+              ← Volver
+            </Button>
+
+            <Card className="p-8">
+              <div className="text-center mb-8">
+                <span className="text-6xl mb-4 block">📋</span>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                  Autochequeo ISO 45003
+                </h2>
+                <p className="text-gray-600">
+                  Evalúa tu riesgo psicosocial en el trabajo (orientativo)
+                </p>
+              </div>
+
+              {isoResult ? (
+                <div className="space-y-6">
+                  <div className={`text-center p-6 rounded-2xl ${
+                    isoResult.level === 'Bajo' 
+                      ? 'bg-green-100 border-2 border-green-300' 
+                      : isoResult.level === 'Medio' 
+                        ? 'bg-amber-100 border-2 border-amber-300' 
+                        : 'bg-red-100 border-2 border-red-300'
+                  }`}>
+                    <div className="text-4xl mb-2">
+                      {isoResult.level === 'Bajo' ? '🟢' : isoResult.level === 'Medio' ? '🟡' : '🔴'}
+                    </div>
+                    <h3 className={`text-2xl font-bold ${
+                      isoResult.level === 'Bajo' 
+                        ? 'text-green-800' 
+                        : isoResult.level === 'Medio' 
+                          ? 'text-amber-800' 
+                          : 'text-red-800'
+                    }`}>
+                      Riesgo {isoResult.level}
+                    </h3>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-xl p-5">
+                    <h4 className="font-semibold text-gray-900 mb-3">📌 Recomendaciones:</h4>
+                    <ul className="space-y-2">
+                      {isoResult.recommendations.map((rec, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-gray-700">
+                          <span className="text-blue-500">•</span>
+                          {rec}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="bg-slate-100 rounded-xl p-4">
+                    <p className="text-xs text-gray-500 text-center">
+                      Este resultado es orientativo basado en el enfoque ISO 45003. Para decisiones organizativas, 
+                      se recomienda una evaluación psicosocial formal por profesionales.
+                    </p>
+                  </div>
+
+                  <Button 
+                    className="w-full"
+                    variant="outline"
+                    onClick={() => {
+                      setIsoAnswers([2, 2, 2, 2, 2, 2]);
+                      setIsoResult(null);
+                    }}
+                  >
+                    Repetir evaluación
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {isoQuestions.map((q) => (
+                    <div key={q.id} className="space-y-2">
+                      <label className="font-medium text-gray-900">{q.text}</label>
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs text-gray-500 w-20">{q.low}</span>
+                        <input
+                          type="range"
+                          min="0"
+                          max="4"
+                          value={isoAnswers[q.id]}
+                          onChange={(e) => {
+                            const newAnswers = [...isoAnswers];
+                            newAnswers[q.id] = parseInt(e.target.value);
+                            setIsoAnswers(newAnswers);
+                          }}
+                          className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                        />
+                        <span className="text-xs text-gray-500 w-20 text-right">{q.high}</span>
+                      </div>
+                    </div>
+                  ))}
+
+                  <Button 
+                    size="lg"
+                    className="w-full bg-gradient-to-r from-slate-600 to-gray-700 hover:from-slate-700 hover:to-gray-800"
+                    onClick={calculateIsoResult}
+                  >
+                    📊 Calcular resultado
+                  </Button>
+                </div>
+              )}
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   if (currentView === 'emotional-log') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
@@ -1425,6 +1966,126 @@ export default function RecursosGratis() {
               </p>
               <Badge className="bg-amber-100 text-amber-700 border-amber-200">
                 🙏 Diario
+              </Badge>
+            </Card>
+          </div>
+
+          {/* Regulación y Emergencias */}
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Regulación y Emergencias</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <Card 
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-red-50 to-rose-50 border-red-100"
+              onClick={() => setCurrentView('bad-day')}
+              data-testid="card-bad-day"
+            >
+              <AlertTriangle className="w-10 h-10 text-red-500 mb-3" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                🆘 Día Malo
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Protocolo de emergencia suave cuando no estás bien
+              </p>
+              <Badge className="bg-red-100 text-red-700 border-red-200">
+                Primeros auxilios
+              </Badge>
+            </Card>
+
+            <Card 
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-orange-50 to-amber-50 border-orange-100"
+              onClick={() => {
+                toast({
+                  title: "🚦 Señales de Alerta",
+                  description: (
+                    <div className="mt-2 text-sm">
+                      <p className="font-semibold mb-2">Si pasa esto, pide ayuda profesional:</p>
+                      <ul className="list-disc pl-4 space-y-1">
+                        <li>Empeoras rápido o cada día estás peor</li>
+                        <li>Ideas de hacerte daño o no querer seguir</li>
+                        <li>Aislamiento extremo</li>
+                        <li>Insomnio casi total varios días</li>
+                        <li>Crisis de pánico repetidas</li>
+                        <li>Consumo de sustancias para aguantar</li>
+                      </ul>
+                      <p className="mt-3 text-xs text-gray-500">La gente fuerte también pide ayuda.</p>
+                    </div>
+                  ),
+                  duration: 15000
+                });
+              }}
+              data-testid="card-alerts"
+            >
+              <Shield className="w-10 h-10 text-orange-500 mb-3" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                🚦 Señales de Alerta
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Cuándo parar y buscar ayuda profesional
+              </p>
+              <Badge className="bg-orange-100 text-orange-700 border-orange-200">
+                Seguridad
+              </Badge>
+            </Card>
+
+            <Card 
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-green-50 to-emerald-50 border-green-100"
+              onClick={() => {
+                setGroundingStep(0);
+                setGroundingInputs(['', '', '', '', '']);
+                setCurrentView('grounding');
+              }}
+              data-testid="card-grounding"
+            >
+              <Eye className="w-10 h-10 text-green-500 mb-3" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                🧩 Grounding 5-4-3-2-1
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Técnica de anclaje sensorial para volver al presente
+              </p>
+              <Badge className="bg-green-100 text-green-700 border-green-200">
+                Ansiedad
+              </Badge>
+            </Card>
+
+            <Card 
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-purple-50 to-violet-50 border-purple-100"
+              onClick={() => {
+                setBilateralActive(false);
+                setBilateralSide('left');
+                setCurrentView('bilateral');
+              }}
+              data-testid="card-bilateral"
+            >
+              <Waves className="w-10 h-10 text-purple-500 mb-3" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                👆 Estimulación Bilateral
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Tapping visual para regulación emocional (tipo EMDR)
+              </p>
+              <Badge className="bg-purple-100 text-purple-700 border-purple-200">
+                Regulación
+              </Badge>
+            </Card>
+
+            <Card 
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-slate-50 to-gray-100 border-slate-200"
+              onClick={() => {
+                setIsoAnswers([2, 2, 2, 2, 2, 2]);
+                setIsoResult(null);
+                setCurrentView('iso-check');
+              }}
+              data-testid="card-iso-check"
+            >
+              <Briefcase className="w-10 h-10 text-slate-600 mb-3" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                📋 Autochequeo ISO 45003
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Evalúa tu riesgo psicosocial en el trabajo
+              </p>
+              <Badge className="bg-slate-100 text-slate-700 border-slate-300">
+                Empresas
               </Badge>
             </Card>
           </div>
