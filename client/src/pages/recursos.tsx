@@ -190,7 +190,7 @@ const alertasClinicas = [
 
 export default function RecursosGratis() {
   const { toast } = useToast();
-  const [currentView, setCurrentView] = useState<'main' | 'emotional-log' | 'affirmation' | 'evaluation'>('main');
+  const [currentView, setCurrentView] = useState<'main' | 'emotional-log' | 'affirmation' | 'evaluation' | 'emotion-history' | 'breathing' | 'gratitude'>('main');
   const [selectedEmotion, setSelectedEmotion] = useState<string>('');
   const [emotionalNote, setEmotionalNote] = useState('');
   const [currentAffirmationIndex, setCurrentAffirmationIndex] = useState(0);
@@ -200,6 +200,16 @@ export default function RecursosGratis() {
   const [evaluationResult, setEvaluationResult] = useState<number | null>(null);
   const [selectedActividad, setSelectedActividad] = useState<Actividad | null>(null);
   const [showHelpLinesModal, setShowHelpLinesModal] = useState(false);
+  
+  // New features states
+  const [emotionHistory, setEmotionHistory] = useState<Array<{emotion: string; note: string; date: string}>>([]);
+  const [selectedMonth, setSelectedMonth] = useState(new Date());
+  const [breathingPhase, setBreathingPhase] = useState<'idle' | 'inhale' | 'hold' | 'exhale'>('idle');
+  const [breathingCount, setBreathingCount] = useState(0);
+  const [breathingTechnique, setBreathingTechnique] = useState<'4-7-8' | 'box' | 'coherence'>('4-7-8');
+  const [isBreathingActive, setIsBreathingActive] = useState(false);
+  const [gratitudeItems, setGratitudeItems] = useState<string[]>(['', '', '']);
+  const [todayGratitudeSaved, setTodayGratitudeSaved] = useState(false);
 
   // Check URL params to auto-open helplines modal
   useEffect(() => {
@@ -403,7 +413,63 @@ export default function RecursosGratis() {
       localStorage.setItem('nflow-streak', '0');
       setStreak(0);
     }
+    
+    // Load emotion history
+    const logs = JSON.parse(localStorage.getItem('nflow-emotion-logs') || '[]');
+    setEmotionHistory(logs);
+    
+    // Check if gratitude was saved today
+    const savedGratitude = localStorage.getItem('nflow-gratitude-today');
+    if (savedGratitude === today) {
+      setTodayGratitudeSaved(true);
+      const todayItems = JSON.parse(localStorage.getItem('nflow-gratitude-items') || '["","",""]');
+      setGratitudeItems(todayItems);
+    }
   }, []);
+  
+  // Breathing exercise effect
+  useEffect(() => {
+    if (!isBreathingActive) return;
+    
+    const techniques = {
+      '4-7-8': { inhale: 4, hold: 7, exhale: 8 },
+      'box': { inhale: 4, hold: 4, exhale: 4 },
+      'coherence': { inhale: 5, hold: 0, exhale: 5 }
+    };
+    
+    const timing = techniques[breathingTechnique];
+    let phase: 'inhale' | 'hold' | 'exhale' = 'inhale';
+    let seconds = timing.inhale;
+    
+    setBreathingPhase('inhale');
+    setBreathingCount(timing.inhale);
+    
+    const interval = setInterval(() => {
+      seconds--;
+      
+      // Check for phase transition before updating count
+      if (seconds <= 0) {
+        if (phase === 'inhale' && timing.hold > 0) {
+          phase = 'hold';
+          seconds = timing.hold;
+          setBreathingPhase('hold');
+        } else if ((phase === 'inhale' && timing.hold === 0) || phase === 'hold') {
+          phase = 'exhale';
+          seconds = timing.exhale;
+          setBreathingPhase('exhale');
+        } else if (phase === 'exhale') {
+          phase = 'inhale';
+          seconds = timing.inhale;
+          setBreathingPhase('inhale');
+        }
+      }
+      
+      // Update count after potential transition
+      setBreathingCount(seconds);
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, [isBreathingActive, breathingTechnique]);
 
   const saveEmotionalLog = () => {
     if (!selectedEmotion) {
@@ -437,6 +503,9 @@ export default function RecursosGratis() {
     const existingLogs = JSON.parse(localStorage.getItem('nflow-emotion-logs') || '[]');
     existingLogs.push(emotionLog);
     localStorage.setItem('nflow-emotion-logs', JSON.stringify(existingLogs));
+    
+    // Update emotion history state immediately so calendar reflects new entry
+    setEmotionHistory(existingLogs);
 
     toast({
       title: "¡Registro guardado!",
@@ -511,6 +580,411 @@ export default function RecursosGratis() {
       description: "La afirmación se ha guardado en tu dispositivo"
     });
   };
+
+  const saveGratitude = () => {
+    const filledItems = gratitudeItems.filter(item => item.trim() !== '');
+    if (filledItems.length === 0) {
+      toast({
+        title: "Escribe al menos una cosa",
+        description: "Por favor escribe al menos una cosa por la que estés agradecido/a",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const today = new Date().toDateString();
+    localStorage.setItem('nflow-gratitude-today', today);
+    localStorage.setItem('nflow-gratitude-items', JSON.stringify(gratitudeItems));
+    
+    // Save to history
+    const gratitudeHistory = JSON.parse(localStorage.getItem('nflow-gratitude-history') || '[]');
+    gratitudeHistory.push({
+      items: gratitudeItems.filter(i => i.trim()),
+      date: new Date().toISOString()
+    });
+    localStorage.setItem('nflow-gratitude-history', JSON.stringify(gratitudeHistory));
+    
+    setTodayGratitudeSaved(true);
+    
+    toast({
+      title: "¡Gratitud guardada!",
+      description: "Tu diario de gratitud de hoy ha sido guardado"
+    });
+  };
+
+  const getEmotionEmoji = (emotionId: string) => {
+    const emotion = emotions.find(e => e.id === emotionId);
+    return emotion?.emoji || '📅';
+  };
+
+  const getMonthDays = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDay = firstDay.getDay();
+    
+    return { daysInMonth, startingDay };
+  };
+
+  const getEmotionForDay = (day: number) => {
+    const year = selectedMonth.getFullYear();
+    const month = selectedMonth.getMonth();
+    const targetDate = new Date(year, month, day).toDateString();
+    
+    const logs = emotionHistory.filter(log => {
+      const logDate = new Date(log.date).toDateString();
+      return logDate === targetDate;
+    });
+    
+    return logs.length > 0 ? logs[logs.length - 1] : null;
+  };
+
+  // Emotion History View
+  if (currentView === 'emotion-history') {
+    const { daysInMonth, startingDay } = getMonthDays(selectedMonth);
+    const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+    const emptyDays = Array.from({ length: startingDay }, (_, i) => i);
+    
+    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-2xl mx-auto">
+            <Button
+              variant="ghost"
+              onClick={() => setCurrentView('main')}
+              className="mb-6"
+              data-testid="button-back-to-main"
+            >
+              ← Volver
+            </Button>
+
+            <Card className="p-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                📅 Historial Emocional
+              </h2>
+              <p className="text-gray-600 mb-6">Visualiza tus emociones registradas en el calendario</p>
+              
+              {/* Month Navigation */}
+              <div className="flex items-center justify-between mb-6">
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() - 1))}
+                >
+                  ← Anterior
+                </Button>
+                <h3 className="text-xl font-bold text-gray-800">
+                  {monthNames[selectedMonth.getMonth()]} {selectedMonth.getFullYear()}
+                </h3>
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1))}
+                >
+                  Siguiente →
+                </Button>
+              </div>
+              
+              {/* Calendar Grid */}
+              <div className="grid grid-cols-7 gap-2 mb-6">
+                {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map(day => (
+                  <div key={day} className="text-center text-sm font-semibold text-gray-500 py-2">
+                    {day}
+                  </div>
+                ))}
+                
+                {emptyDays.map(i => (
+                  <div key={`empty-${i}`} className="aspect-square"></div>
+                ))}
+                
+                {days.map(day => {
+                  const log = getEmotionForDay(day);
+                  const isToday = new Date().toDateString() === new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), day).toDateString();
+                  
+                  return (
+                    <div
+                      key={day}
+                      className={`aspect-square rounded-lg flex flex-col items-center justify-center text-sm transition-all ${
+                        isToday ? 'ring-2 ring-blue-500 bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'
+                      } ${log ? 'cursor-pointer' : ''}`}
+                      title={log?.note || ''}
+                    >
+                      <span className="text-gray-600 text-xs">{day}</span>
+                      {log && (
+                        <span className="text-xl">{getEmotionEmoji(log.emotion)}</span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              
+              {/* Legend */}
+              <div className="border-t pt-4">
+                <h4 className="font-semibold text-gray-700 mb-3">Leyenda de emociones:</h4>
+                <div className="flex flex-wrap gap-3">
+                  {emotions.map(emotion => (
+                    <div key={emotion.id} className="flex items-center gap-1 text-sm">
+                      <span className="text-lg">{emotion.emoji}</span>
+                      <span className="text-gray-600">{emotion.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Stats */}
+              <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl">
+                <h4 className="font-semibold text-gray-700 mb-2">Resumen del mes:</h4>
+                <p className="text-gray-600">
+                  Has registrado <span className="font-bold text-purple-600">
+                    {emotionHistory.filter(log => {
+                      const logDate = new Date(log.date);
+                      return logDate.getMonth() === selectedMonth.getMonth() && 
+                             logDate.getFullYear() === selectedMonth.getFullYear();
+                    }).length}
+                  </span> emociones este mes
+                </p>
+              </div>
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Breathing Exercise View
+  if (currentView === 'breathing') {
+    const phaseColors = {
+      idle: 'from-gray-200 to-gray-300',
+      inhale: 'from-blue-400 to-cyan-500',
+      hold: 'from-purple-400 to-violet-500',
+      exhale: 'from-teal-400 to-green-500'
+    };
+    
+    const phaseText = {
+      idle: 'Preparado',
+      inhale: 'INHALA',
+      hold: 'MANTÉN',
+      exhale: 'EXHALA'
+    };
+    
+    const techniqueInfo = {
+      '4-7-8': { name: 'Técnica 4-7-8', desc: 'Inhala 4s, mantén 7s, exhala 8s. Ideal para dormir.' },
+      'box': { name: 'Respiración Cuadrada', desc: 'Inhala 4s, mantén 4s, exhala 4s. Reduce ansiedad.' },
+      'coherence': { name: 'Coherencia Cardíaca', desc: 'Inhala 5s, exhala 5s. Equilibra el sistema nervioso.' }
+    };
+    
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-2xl mx-auto">
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setCurrentView('main');
+                setIsBreathingActive(false);
+                setBreathingPhase('idle');
+              }}
+              className="mb-6"
+              data-testid="button-back-to-main"
+            >
+              ← Volver
+            </Button>
+
+            <Card className="p-8 text-center">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                🌬️ Ejercicios de Respiración
+              </h2>
+              <p className="text-gray-600 mb-8">Técnicas de respiración guiada para reducir el estrés</p>
+              
+              {/* Technique Selector */}
+              <div className="flex flex-wrap justify-center gap-3 mb-8">
+                {(Object.keys(techniqueInfo) as Array<'4-7-8' | 'box' | 'coherence'>).map(tech => (
+                  <Button
+                    key={tech}
+                    variant={breathingTechnique === tech ? 'default' : 'outline'}
+                    onClick={() => {
+                      setBreathingTechnique(tech);
+                      setIsBreathingActive(false);
+                      setBreathingPhase('idle');
+                    }}
+                    className={breathingTechnique === tech ? 'bg-gradient-to-r from-blue-500 to-purple-500' : ''}
+                    disabled={isBreathingActive}
+                  >
+                    {techniqueInfo[tech].name}
+                  </Button>
+                ))}
+              </div>
+              
+              <p className="text-sm text-gray-500 mb-8">{techniqueInfo[breathingTechnique].desc}</p>
+              
+              {/* Animated Circle */}
+              <div className="relative w-64 h-64 mx-auto mb-8">
+                <div 
+                  className={`absolute inset-0 rounded-full bg-gradient-to-br ${phaseColors[breathingPhase]} transition-all duration-1000 flex items-center justify-center ${
+                    isBreathingActive && breathingPhase === 'inhale' ? 'scale-110' : 
+                    isBreathingActive && breathingPhase === 'exhale' ? 'scale-90' : 'scale-100'
+                  }`}
+                  style={{
+                    boxShadow: isBreathingActive ? '0 0 60px rgba(99, 102, 241, 0.5)' : 'none'
+                  }}
+                >
+                  <div className="text-center text-white">
+                    <div className="text-5xl font-bold mb-2">
+                      {isBreathingActive ? breathingCount : '•'}
+                    </div>
+                    <div className="text-xl font-semibold uppercase tracking-wider">
+                      {phaseText[breathingPhase]}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Pulsing ring animation */}
+                {isBreathingActive && (
+                  <div className={`absolute inset-0 rounded-full border-4 animate-ping opacity-20 ${
+                    breathingPhase === 'inhale' ? 'border-blue-400' : 
+                    breathingPhase === 'hold' ? 'border-purple-400' : 'border-green-400'
+                  }`}></div>
+                )}
+              </div>
+              
+              {/* Control Button */}
+              <Button
+                size="lg"
+                onClick={() => setIsBreathingActive(!isBreathingActive)}
+                className={`text-lg px-12 ${
+                  isBreathingActive 
+                    ? 'bg-red-500 hover:bg-red-600' 
+                    : 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600'
+                }`}
+              >
+                {isBreathingActive ? '⏹ Detener' : '▶ Comenzar'}
+              </Button>
+              
+              {/* Tips */}
+              <div className="mt-8 p-4 bg-gray-50 rounded-xl text-left">
+                <h4 className="font-semibold text-gray-700 mb-2">💡 Consejos:</h4>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Siéntate cómodo con la espalda recta</li>
+                  <li>• Respira por la nariz si es posible</li>
+                  <li>• Practica 3-5 minutos para mejores resultados</li>
+                </ul>
+              </div>
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Gratitude Journal View
+  if (currentView === 'gratitude') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-2xl mx-auto">
+            <Button
+              variant="ghost"
+              onClick={() => setCurrentView('main')}
+              className="mb-6"
+              data-testid="button-back-to-main"
+            >
+              ← Volver
+            </Button>
+
+            <Card className="p-8">
+              <div className="text-center mb-8">
+                <span className="text-6xl mb-4 block">🙏</span>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                  Diario de Gratitud
+                </h2>
+                <p className="text-gray-600">
+                  Escribe 3 cosas por las que estés agradecido/a hoy
+                </p>
+              </div>
+              
+              {todayGratitudeSaved ? (
+                <div className="text-center py-8">
+                  <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">¡Ya has escrito tu gratitud de hoy!</h3>
+                  <div className="bg-green-50 rounded-xl p-6 mt-6 text-left">
+                    <h4 className="font-semibold text-green-800 mb-3">Tus agradecimientos de hoy:</h4>
+                    {gratitudeItems.filter(i => i.trim()).map((item, index) => (
+                      <div key={index} className="flex items-start gap-2 mb-2">
+                        <span className="text-green-500">✓</span>
+                        <span className="text-gray-700">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="mt-6"
+                    onClick={() => {
+                      // Clear localStorage so changes persist on refresh
+                      localStorage.removeItem('nflow-gratitude-today');
+                      localStorage.removeItem('nflow-gratitude-items');
+                      setTodayGratitudeSaved(false);
+                      setGratitudeItems(['', '', '']);
+                    }}
+                  >
+                    Escribir de nuevo
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-4 mb-6">
+                    {[0, 1, 2].map(index => (
+                      <div key={index} className="relative">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold">
+                          {index + 1}
+                        </div>
+                        <Textarea
+                          placeholder={`¿Por qué estás agradecido/a? ${index === 0 ? '(ej: Mi familia, mi salud...)' : ''}`}
+                          value={gratitudeItems[index]}
+                          onChange={(e) => {
+                            const newItems = [...gratitudeItems];
+                            newItems[index] = e.target.value;
+                            setGratitudeItems(newItems);
+                          }}
+                          className="pl-16 min-h-[60px]"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  <Button
+                    size="lg"
+                    className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+                    onClick={saveGratitude}
+                  >
+                    💛 Guardar mi gratitud
+                  </Button>
+                  
+                  <div className="mt-6 p-4 bg-amber-50 rounded-xl">
+                    <h4 className="font-semibold text-amber-800 mb-2">🌟 Beneficios del diario de gratitud:</h4>
+                    <ul className="text-sm text-amber-700 space-y-1">
+                      <li>• Mejora el estado de ánimo y bienestar general</li>
+                      <li>• Reduce el estrés y la ansiedad</li>
+                      <li>• Fortalece las relaciones personales</li>
+                      <li>• Mejora la calidad del sueño</li>
+                    </ul>
+                  </div>
+                </>
+              )}
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (currentView === 'emotional-log') {
     return (
@@ -897,6 +1371,60 @@ export default function RecursosGratis() {
               </p>
               <Badge className="bg-purple-100 text-purple-700 border-purple-200">
                 1 minuto
+              </Badge>
+            </Card>
+          </div>
+
+          {/* Nuevas Herramientas */}
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <Card 
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100"
+              onClick={() => setCurrentView('emotion-history')}
+              data-testid="card-emotion-history"
+            >
+              <Calendar className="w-10 h-10 text-blue-500 mb-3" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Historial Emocional
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Visualiza tus emociones en un calendario mensual con emojis
+              </p>
+              <Badge className="bg-blue-100 text-blue-700 border-blue-200">
+                📅 Calendario
+              </Badge>
+            </Card>
+
+            <Card 
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-100"
+              onClick={() => setCurrentView('breathing')}
+              data-testid="card-breathing"
+            >
+              <Activity className="w-10 h-10 text-teal-500 mb-3" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Respiración Guiada
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Ejercicios animados de respiración para reducir el estrés
+              </p>
+              <Badge className="bg-teal-100 text-teal-700 border-teal-200">
+                🌬️ 3 técnicas
+              </Badge>
+            </Card>
+
+            <Card 
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-amber-50 to-orange-50 border-amber-100"
+              onClick={() => setCurrentView('gratitude')}
+              data-testid="card-gratitude"
+            >
+              <Star className="w-10 h-10 text-amber-500 mb-3" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Diario de Gratitud
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Escribe 3 cosas positivas del día para mejorar tu bienestar
+              </p>
+              <Badge className="bg-amber-100 text-amber-700 border-amber-200">
+                🙏 Diario
               </Badge>
             </Card>
           </div>
