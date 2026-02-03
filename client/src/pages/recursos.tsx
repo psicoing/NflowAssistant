@@ -1261,7 +1261,7 @@ export default function RecursosGratis() {
               <div className="bg-gradient-to-b from-slate-800 to-slate-900 p-6">
                 <p className="text-lime-400 text-xs font-bold mb-2 tracking-wider">🏎️ NUXA · TU RITMO, TU CAMINO</p>
                 <h2 className="text-lg font-bold text-white mb-3 leading-tight">
-                  Con o sin psicofármacos. Lo importante es encontrarse bien.
+                  Con o sin psicofármacos, pero siempre psicoterapia. Lo importante es encontrarse bien.
                 </h2>
                 <p className="text-white/90 text-sm mb-2 leading-relaxed">
                   No importa lo que piensen de ti. Hay cosas que se comparten en la intimidad, no con todo el mundo.
@@ -1285,7 +1285,7 @@ export default function RecursosGratis() {
                 <div className="p-12 max-w-2xl">
                   <p className="text-lime-400 text-sm font-bold mb-3 tracking-wider">🏎️ NUXA · TU RITMO, TU CAMINO</p>
                   <h2 className="text-3xl font-bold text-white mb-4 leading-tight">
-                    Con o sin psicofármacos.<br/>
+                    Con o sin psicofármacos, pero siempre psicoterapia.<br/>
                     Lo importante es encontrarse bien.
                   </h2>
                   <p className="text-white/90 text-base mb-3 leading-relaxed">
