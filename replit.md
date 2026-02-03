@@ -90,6 +90,12 @@ The frontend is developed using React 18, TypeScript, Vite, and Wouter for routi
   - **Daily Affirmations**: Positive messages with share/download functionality
   - **Professional Assessments**: Anxiety, depression, and self-esteem evaluations
   - **Daily Streak Tracking**: Gamification element encouraging consistent engagement
+  - **Regulation & Emergency Tools** (new section):
+    - **Bad Day Protocol**: 3-step emergency protocol (breathing, grounding, simple action) with links to detailed exercises
+    - **Alert Signals**: Toast notification showing when to seek professional help (warning signs like suicidal ideation, extreme isolation, panic attacks)
+    - **Grounding 5-4-3-2-1**: Progressive sensory anchoring technique (5 things to see, 4 to touch, 3 to hear, 2 to smell, 1 to taste)
+    - **Bilateral Stimulation**: Visual tapping exercise with moving ball for emotional regulation (EMDR-style), 3 speed options
+    - **ISO 45003 Self-Check**: 6-question workplace psychosocial risk assessment with risk level calculation (Bajo/Medio/Alto) and recommendations
 - **SEO**: Implements dynamic meta tags, Schema.org JSON-LD, sitemap, and optimized content.
 - **Cookie Consent**: Includes a GDPR-compliant cookie consent system.
 - **Interactive Showcase**: Features an interactive carousel of phone mockups demonstrating NUXA's mental health conversations.
