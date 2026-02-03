@@ -78,7 +78,18 @@ The frontend is developed using React 18, TypeScript, Vite, and Wouter for routi
   - **Formats Supported**: JPG, PNG, GIF, WebP (max 2MB) - SVG excluded for security
   - **Storage**: Base64 data URL stored in `companyLogo` field
   - **UI**: Preview with upload/delete controls in dashboard
-- **Free Resources**: Offers unauthenticated access to emotional logging, daily streak tracking, affirmations, and professional assessments, primarily managed client-side.
+- **Free Resources** (`/recursos`): Offers unauthenticated access to mental health tools, primarily managed client-side with localStorage:
+  - **Emotional Logging**: Register daily emotions with emojis and optional notes
+  - **Emotion History Calendar**: Interactive monthly calendar view showing registered emotions with emojis for each day, month navigation, and monthly summaries
+  - **Breathing Exercises**: Animated guided breathing with 3 techniques:
+    - Technique 4-7-8: Inhale 4s, hold 7s, exhale 8s (ideal for sleep)
+    - Box Breathing: Inhale 4s, hold 4s, exhale 4s (reduces anxiety)
+    - Cardiac Coherence: Inhale 5s, exhale 5s (balances nervous system)
+    - Visual animated circle with phase indicators (INHALA/MANTÉN/EXHALA) and countdown
+  - **Gratitude Journal**: Write 3 positive things per day, saved to localStorage with history
+  - **Daily Affirmations**: Positive messages with share/download functionality
+  - **Professional Assessments**: Anxiety, depression, and self-esteem evaluations
+  - **Daily Streak Tracking**: Gamification element encouraging consistent engagement
 - **SEO**: Implements dynamic meta tags, Schema.org JSON-LD, sitemap, and optimized content.
 - **Cookie Consent**: Includes a GDPR-compliant cookie consent system.
 - **Interactive Showcase**: Features an interactive carousel of phone mockups demonstrating NUXA's mental health conversations.
