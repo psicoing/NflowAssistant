@@ -1,0 +1,519 @@
+// NUXA Recursos - versión web simple para Replit (sin frameworks)
+// Todo se guarda en el navegador (local).
+
+const $ = (sel) => document.querySelector(sel);
+
+const store = {
+  get(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch {
+      return fallback;
+    }
+  },
+  set(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  },
+};
+
+const todayISO = () => new Date().toISOString().slice(0, 10);
+const daysBetween = (aISO, bISO) => {
+  const a = new Date(aISO);
+  const b = new Date(bISO);
+  const ms = Math.abs(b - a);
+  return Math.floor(ms / (1000 * 60 * 60 * 24));
+};
+
+function openModal(title, bodyHTML, footerButtons = []) {
+  $("#modalTitle").textContent = title;
+  $("#modalBody").innerHTML = bodyHTML;
+
+  const footer = $("#modalFooter");
+  footer.innerHTML = "";
+  footerButtons.forEach((btn) => footer.appendChild(btn));
+
+  $("#modal").hidden = false;
+}
+
+function closeModal() {
+  $("#modal").hidden = true;
+}
+
+$("#modalClose").addEventListener("click", closeModal);
+$("#modal").addEventListener("click", (e) => {
+  if (e.target.id === "modal") closeModal();
+});
+
+// ----------------- Afirmaciones
+const affirmations = [
+  "Hoy no necesito hacerlo perfecto. Solo hacerlo posible.",
+  "Puedo ir despacio. Ir despacio también es avanzar.",
+  "Mi cuerpo se está protegiendo. Puedo ayudarle a bajar el volumen.",
+  "No tengo que pelear con mis pensamientos para estar bien.",
+  "Una cosa pequeña bien hecha vale más que diez cosas a medias.",
+  "Puedo sostener este momento. Pasará.",
+];
+
+function setAffirmation() {
+  const i = Math.floor(Math.random() * affirmations.length);
+  $("#affirmation").textContent = "“" + affirmations[i] + "”";
+}
+
+$("#btnNewAff").addEventListener("click", setAffirmation);
+$("#btnCopyAff").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText($("#affirmation").textContent.replaceAll("“", "").replaceAll("”", ""));
+    $("#btnCopyAff").textContent = "✅ Copiado";
+    setTimeout(() => ($("#btnCopyAff").textContent = "📋 Copiar"), 900);
+  } catch {
+    // Sin drama.
+  }
+});
+
+// ----------------- Racha
+function renderStreak() {
+  const data = store.get("nuxa_streak", { days: 0, last: null });
+  $("#streakDays").textContent = String(data.days);
+
+  if (data.last) {
+    $("#lastCheckInfo").textContent = "Último check-in: " + data.last;
+  } else {
+    $("#lastCheckInfo").textContent = "";
+  }
+}
+
+$("#btnCheckIn").addEventListener("click", () => {
+  const data = store.get("nuxa_streak", { days: 0, last: null });
+  const t = todayISO();
+
+  if (!data.last) {
+    data.days = 1;
+    data.last = t;
+    store.set("nuxa_streak", data);
+    renderStreak();
+    return;
+  }
+
+  if (data.last === t) {
+    // Ya marcado hoy
+    return;
+  }
+
+  const gap = daysBetween(data.last, t);
+
+  if (gap === 1) data.days += 1;
+  else data.days = 1;
+
+  data.last = t;
+  store.set("nuxa_streak", data);
+  renderStreak();
+});
+
+$("#btnResetStreak").addEventListener("click", () => {
+  store.set("nuxa_streak", { days: 0, last: null });
+  renderStreak();
+});
+
+// ----------------- Registro emocional + progreso
+$("#btnSaveMood").addEventListener("click", () => {
+  const mood = $("#moodSelect").value;
+  const note = $("#moodNote").value.trim();
+  const entry = { date: todayISO(), mood, note };
+
+  const log = store.get("nuxa_mood_log", []);
+  // Si ya hay entrada hoy, reemplaza (mejor que duplicar)
+  const idx = log.findIndex((x) => x.date === entry.date);
+  if (idx >= 0) log[idx] = entry;
+  else log.push(entry);
+
+  store.set("nuxa_mood_log", log);
+  $("#moodNote").value = "";
+  toast("Guardado ✅");
+});
+
+$("#btnViewProgress").addEventListener("click", () => {
+  const log = store.get("nuxa_mood_log", []);
+  if (!log.length) {
+    openModal("📈 Mi evolución", "<p class='muted'>Aún no hay registros. Haz uno (30 segundos) y vuelve.</p>", [
+      mkBtn("Cerrar", "ghost", closeModal),
+    ]);
+    return;
+  }
+
+  // Conteo simple por estados
+  const count = {};
+  log.forEach((e) => (count[e.mood] = (count[e.mood] || 0) + 1));
+
+  const sorted = Object.entries(count).sort((a, b) => b[1] - a[1]);
+  const fav = sorted.slice(0, 3).map(([k, v]) => `<li><b>${k}</b>: ${v}</li>`).join("");
+
+  const last = log.slice(-8).reverse().map((e) => {
+    const n = e.note ? ` — <span class="muted">${escapeHtml(e.note)}</span>` : "";
+    return `<div style="padding:8px 10px; border:1px solid var(--line); border-radius:14px; margin:8px 0; background: rgba(0,0,0,.18)">
+      <b>${e.date}</b> · ${emojiMood(e.mood)} ${e.mood}${n}
+    </div>`;
+  }).join("");
+
+  openModal(
+    "📈 Mi evolución",
+    `
+      <p class="muted">Resumen simple (sin nube, sin historias raras):</p>
+      <div style="display:flex; gap:14px; flex-wrap:wrap">
+        <div style="flex:1; min-width:220px; padding:10px 12px; border:1px solid var(--line); border-radius:14px; background: rgba(0,0,0,.18)">
+          <b>Total registros:</b> ${log.length}<br/>
+          <b>Top estados:</b>
+          <ul style="margin:8px 0 0 18px">${fav}</ul>
+        </div>
+        <div style="flex:2; min-width:260px">
+          <b>Últimos registros</b>
+          ${last}
+        </div>
+      </div>
+    `,
+    [mkBtn("Cerrar", "ghost", closeModal)]
+  );
+});
+
+// ----------------- Micro psicoeducación
+const micro = [
+  {
+    title: "Por qué la ansiedad no es peligrosa",
+    body:
+      "La ansiedad es una alarma, no un enemigo. Puede ser muy molesta, pero está diseñada para pasar. Tu objetivo no es “eliminarla ya”, sino bajar la intensidad con respiración, cuerpo y enfoque en el presente."
+  },
+  {
+    title: "Pensamientos automáticos",
+    body:
+      "Un pensamiento automático es una frase rápida que aparece sin pedir permiso. No es un hecho. Puedes observarlo, etiquetarlo (“esto es una preocupación”) y volver a la tarea."
+  },
+  {
+    title: "El cuerpo manda antes que la cabeza",
+    body:
+      "El sistema nervioso se activa antes de que puedas razonarlo. Primero regula el cuerpo (respiración, postura, ritmo), después la mente se ordena mejor."
+  },
+  {
+    title: "Qué hace un psicofármaco (en general)",
+    body:
+      "Puede bajar síntomas (ansiedad, insomnio, ánimo) y dar margen para recuperar hábitos y terapia. No arregla la vida por sí solo. Si lo tomas o no, es una decisión clínica y personal."
+  },
+];
+
+function renderMicro() {
+  const box = $("#microList");
+  box.innerHTML = "";
+  micro.forEach((m, idx) => {
+    const b = document.createElement("button");
+    b.className = "chip";
+    b.textContent = m.title;
+    b.addEventListener("click", () => {
+      $("#microTitle").textContent = m.title;
+      $("#microBody").textContent = m.body;
+      $("#microBox").hidden = false;
+    });
+    box.appendChild(b);
+  });
+}
+
+$("#btnMicroClose").addEventListener("click", () => ($("#microBox").hidden = true));
+
+// ----------------- Día malo (modo emergencia suave)
+$("#btnDayBad").addEventListener("click", () => {
+  openModal(
+    "🆘 No estoy bien hoy",
+    `
+      <p><b>Vamos a lo básico.</b> No hay que “arreglarlo todo”. Solo bajar el volumen.</p>
+      <div style="display:grid; gap:10px; margin-top:10px">
+        <div style="padding:10px 12px; border:1px solid var(--line); border-radius:14px; background: rgba(0,0,0,.18)">
+          1) <b>Respira 2 minutos</b> (te guío).
+        </div>
+        <div style="padding:10px 12px; border:1px solid var(--line); border-radius:14px; background: rgba(0,0,0,.18)">
+          2) <b>Grounding 5-4-3-2-1</b> para volver al presente.
+        </div>
+        <div style="padding:10px 12px; border:1px solid var(--line); border-radius:14px; background: rgba(0,0,0,.18)">
+          3) <b>Una acción pequeña</b>: agua, ducha, abrir ventana, caminar 3 min.
+        </div>
+      </div>
+      <p class="muted tiny" style="margin-top:10px">
+        Si hay riesgo real (ideas de hacerse daño, descontrol, etc.), pide ayuda profesional inmediata.
+      </p>
+    `,
+    [
+      mkBtn("🫁 Respiración 2 min", "", () => { closeModal(); startBreath(120); }),
+      mkBtn("🧩 5-4-3-2-1", "ghost", () => { closeModal(); startGrounding(); }),
+      mkBtn("Cerrar", "ghost", closeModal),
+    ]
+  );
+});
+
+// ----------------- Señales de alerta
+$("#btnAlerts").addEventListener("click", () => {
+  openModal(
+    "🚦 Señales de alerta (cuando parar)",
+    `
+      <p><b>Si pasa esto, no lo lleves solo.</b> Pide ayuda profesional.</p>
+      <ul>
+        <li>Empeoras rápido o cada día estás peor</li>
+        <li>Ideas de hacerte daño o de no querer seguir</li>
+        <li>Aislamiento extremo</li>
+        <li>Insomnio casi total varios días</li>
+        <li>Crisis de pánico repetidas</li>
+        <li>Consumo de alcohol/drogas para aguantar</li>
+      </ul>
+      <p class="muted tiny">
+        Esto no es para asustar: es para protegerte. La gente fuerte también pide ayuda.
+      </p>
+      <div style="padding:10px 12px; border:1px solid rgba(255,107,107,.35); border-radius:14px; background: rgba(255,107,107,.10)">
+        <b>Si hay peligro inmediato:</b> servicios de urgencias / emergencias de tu zona.
+      </div>
+    `,
+    [mkBtn("Cerrar", "ghost", closeModal)]
+  );
+});
+
+// ----------------- 3 minutos de silencio
+$("#btnSilence").addEventListener("click", () => startSilence(180));
+
+// ----------------- Reguladores: botones
+$("#btnBreath2").addEventListener("click", () => startBreath(120));
+$("#btnBilateral").addEventListener("click", startBilateral);
+$("#btnGrounding").addEventListener("click", startGrounding);
+
+// ----------------- ISO autochequeo
+$("#btnIsoCalc").addEventListener("click", () => {
+  const sliders = [...document.querySelectorAll("#isoForm input[type='range']")];
+  // 0 = mal, 4 = bien (pero para riesgo conviene invertir)
+  const values = sliders.map((s) => Number(s.value));
+  const avg = values.reduce((a, b) => a + b, 0) / values.length; // 0..4
+  const riskScore = 4 - avg; // 0..4 (más alto = más riesgo)
+
+  let level = "Bajo";
+  let rec = [
+    "Mantener rutinas de descanso y límites razonables.",
+    "Revisar carga de trabajo periódicamente.",
+    "Refuerzo de reconocimiento y comunicación clara.",
+  ];
+
+  if (riskScore >= 1.6 && riskScore < 2.8) {
+    level = "Medio";
+    rec = [
+      "Revisar carga, plazos y autonomía (ajustes rápidos).",
+      "Formación breve en liderazgo y prevención de desgaste.",
+      "Canal de conflictos seguro y trazable.",
+    ];
+  }
+
+  if (riskScore >= 2.8) {
+    level = "Alto";
+    rec = [
+      "Evaluación psicosocial formal y plan de acción con responsables.",
+      "Medidas inmediatas: carga, horarios, rol y recursos.",
+      "Intervención sobre liderazgo tóxico / cultura del miedo.",
+      "Seguimiento con indicadores y revisiones periódicas.",
+    ];
+  }
+
+  const badge = `<span class="isoBadge">${level}</span>`;
+  const tip = `<p class="tiny muted">Basado en enfoque ISO 45003 (orientativo). Para decisiones, usar evaluación formal.</p>`;
+
+  $("#isoResult").innerHTML = `
+    ${badge}
+    <p><b>Riesgo psicosocial estimado:</b> ${level}</p>
+    <ul>${rec.map((x) => `<li>${x}</li>`).join("")}</ul>
+    ${tip}
+  `;
+  $("#isoResult").hidden = false;
+});
+
+$("#btnIsoReset").addEventListener("click", () => {
+  [...document.querySelectorAll("#isoForm input[type='range']")].forEach((s) => (s.value = 2));
+  $("#isoResult").hidden = true;
+});
+
+// ----------------- Screening (placeholder)
+document.querySelectorAll("[data-screen]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const kind = btn.getAttribute("data-screen");
+    openModal(
+      "🧪 Screening orientativo",
+      `
+        <p><b>${kind.toUpperCase()}</b></p>
+        <p class="muted">Aquí puedes enlazar tu test real o incrustarlo.</p>
+        <p class="tiny muted">Sugerencia: abre un enlace o muestra un formulario propio.</p>
+      `,
+      [mkBtn("Cerrar", "ghost", closeModal)]
+    );
+  });
+});
+
+// ----------------- Utilidades de ejercicios
+function startBreath(seconds) {
+  let remaining = seconds;
+  openModal(
+    "🫁 Respiración guiada",
+    `
+      <p><b>Inhala 4</b> · <b>Retén 2</b> · <b>Exhala 6</b></p>
+      <div style="padding:12px; border:1px solid var(--line); border-radius:14px; background: rgba(0,0,0,.18); margin-top:10px">
+        <div id="breathTimer" style="font-size:28px; font-weight:900">--:--</div>
+        <div id="breathPhase" class="muted" style="margin-top:8px; font-weight:800"></div>
+      </div>
+      <p class="tiny muted" style="margin-top:10px">Si te mareas, baja el ritmo. Aquí no hay medallas.</p>
+    `,
+    [mkBtn("Terminar", "ghost", closeModal)]
+  );
+
+  const timerEl = $("#breathTimer");
+  const phaseEl = $("#breathPhase");
+
+  let phase = 0;
+  const phases = [
+    { name: "Inhala (4)", dur: 4 },
+    { name: "Retén (2)", dur: 2 },
+    { name: "Exhala (6)", dur: 6 },
+  ];
+  let phaseRemain = phases[0].dur;
+
+  const tick = () => {
+    const m = String(Math.floor(remaining / 60)).padStart(2, "0");
+    const s = String(remaining % 60).padStart(2, "0");
+    timerEl.textContent = `${m}:${s}`;
+    phaseEl.textContent = phases[phase].name + ` · ${phaseRemain}s`;
+
+    if (remaining <= 0) {
+      phaseEl.textContent = "Hecho ✅";
+      return;
+    }
+
+    remaining -= 1;
+    phaseRemain -= 1;
+
+    if (phaseRemain <= 0) {
+      phase = (phase + 1) % phases.length;
+      phaseRemain = phases[phase].dur;
+    }
+
+    if (!$("#modal").hidden) setTimeout(tick, 1000);
+  };
+
+  tick();
+}
+
+function startGrounding() {
+  openModal(
+    "🧩 Técnica 5-4-3-2-1",
+    `
+      <p class="muted">Vuelve al presente, sin discutir con la mente.</p>
+      <ol>
+        <li><b>5 cosas</b> que ves</li>
+        <li><b>4 cosas</b> que sientes (contacto, ropa, silla)</li>
+        <li><b>3 cosas</b> que oyes</li>
+        <li><b>2 cosas</b> que hueles</li>
+        <li><b>1 cosa</b> que saboreas</li>
+      </ol>
+      <p class="tiny muted">Hazlo despacio. No hay prisa.</p>
+    `,
+    [mkBtn("Cerrar", "ghost", closeModal)]
+  );
+}
+
+function startBilateral() {
+  openModal(
+    "↔️ Estimulación bilateral (1–2 min)",
+    `
+      <p><b>Opción simple (sin aparatos):</b></p>
+      <ol>
+        <li>Da golpecitos suaves alternando izquierda/derecha en muslos o hombros.</li>
+        <li>Ritmo cómodo. 60–90 segundos.</li>
+        <li>Luego para, respira y nota cambios.</li>
+      </ol>
+      <p class="tiny muted">Si te altera, lo dejas. Esto es para regular, no para forzar.</p>
+    `,
+    [mkBtn("Cerrar", "ghost", closeModal)]
+  );
+}
+
+function startSilence(seconds) {
+  let remaining = seconds;
+
+  openModal(
+    "🕯️ 3 minutos de silencio",
+    `
+      <p class="muted">Pantalla en calma. Solo respira y deja pasar.</p>
+      <div style="padding:14px; border:1px solid var(--line); border-radius:14px; background: rgba(0,0,0,.30); margin-top:10px; text-align:center">
+        <div id="silenceTimer" style="font-size:44px; font-weight:900">--:--</div>
+        <div class="muted" style="margin-top:8px; font-weight:800">Sin hacer nada también es hacer algo</div>
+      </div>
+    `,
+    [mkBtn("Terminar", "ghost", closeModal)]
+  );
+
+  const tEl = $("#silenceTimer");
+
+  const tick = () => {
+    const m = String(Math.floor(remaining / 60)).padStart(2, "0");
+    const s = String(remaining % 60).padStart(2, "0");
+    tEl.textContent = `${m}:${s}`;
+
+    if (remaining <= 0) {
+      tEl.textContent = "✅";
+      return;
+    }
+
+    remaining -= 1;
+    if (!$("#modal").hidden) setTimeout(tick, 1000);
+  };
+
+  tick();
+}
+
+// ----------------- Pequeñas ayudas UI
+function toast(text) {
+  const d = document.createElement("div");
+  d.textContent = text;
+  d.style.position = "fixed";
+  d.style.bottom = "18px";
+  d.style.right = "18px";
+  d.style.padding = "10px 12px";
+  d.style.border = "1px solid var(--line)";
+  d.style.borderRadius = "14px";
+  d.style.background = "rgba(0,0,0,.55)";
+  d.style.color = "var(--text)";
+  d.style.fontWeight = "900";
+  d.style.boxShadow = "var(--shadow)";
+  document.body.appendChild(d);
+  setTimeout(() => d.remove(), 1100);
+}
+
+function mkBtn(text, variant, onClick) {
+  const b = document.createElement("button");
+  b.className = "btn" + (variant ? " " + variant : "");
+  b.textContent = text;
+  b.addEventListener("click", onClick);
+  return b;
+}
+
+function emojiMood(mood) {
+  const map = {
+    bien: "🙂",
+    neutro: "😐",
+    triste: "😔",
+    ansioso: "😰",
+    irritable: "😤",
+    agotado: "🥱",
+  };
+  return map[mood] || "🙂";
+}
+
+function escapeHtml(str) {
+  return str
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+// ----------------- Arranque
+setAffirmation();
+renderStreak();
+renderMicro();
