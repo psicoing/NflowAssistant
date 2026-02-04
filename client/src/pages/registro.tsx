@@ -102,12 +102,12 @@ export default function Registro() {
                     <Badge className="bg-purple-100 text-purple-700 border-purple-200">+150 idiomas</Badge>
                     <Badge className="bg-amber-100 text-amber-700 border-amber-200">IA 24/7</Badge>
                   </div>
-                  <Link href="/partners">
+                  <a href="https://jobda.org/partners" target="_blank" rel="noopener noreferrer">
                     <Button className="bg-indigo-600 hover:bg-indigo-700">
                       Información para empresas
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
-                  </Link>
+                  </a>
                 </div>
 
                 <div className="text-center border-t border-gray-200 pt-6">
