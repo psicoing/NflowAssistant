@@ -158,14 +158,27 @@ export default function Login() {
               Accede a tu cuenta de NUXA
             </CardDescription>
             
-            {/* Password Warning Notice */}
-            <div className="mt-4 p-3 bg-amber-900/30 border border-amber-700/50 rounded-lg">
-              <div className="flex items-start gap-2">
-                <ShieldAlert className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
-                <div className="text-xs text-amber-300/90 text-left leading-relaxed">
-                  <span className="font-semibold text-amber-400">Aviso:</span> Guarda tu contraseña. No se puede recuperar.
-                  <br />
-                  <span className="text-emerald-400">100% Confidencial.</span> Encriptado de alta seguridad.
+            {/* Password Security Notice */}
+            <div className="mt-4 p-4 bg-gradient-to-r from-emerald-900/40 to-teal-900/40 border border-emerald-600/50 rounded-xl">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <ShieldAlert className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-semibold text-emerald-400 mb-1">
+                    🔐 Protege tu privacidad
+                  </p>
+                  <p className="text-xs text-gray-300 leading-relaxed mb-2">
+                    <strong className="text-white">Primer paso al entrar:</strong> Cambia tu contraseña en el Panel de Control para que todas tus conversaciones queden protegidas y encriptadas.
+                  </p>
+                  <div className="flex flex-wrap gap-2 text-xs">
+                    <span className="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full">
+                      ✓ Encriptación de alta seguridad
+                    </span>
+                    <span className="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full">
+                      ✓ 100% Confidencial
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
