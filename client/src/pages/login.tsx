@@ -237,13 +237,12 @@ export default function Login() {
               </Button>
 
               <div className="text-center text-gray-400">
-                <span>¿No tienes cuenta? </span>
                 <button
                   type="button"
                   onClick={() => setLocation("/registro")}
-                  className="text-orange-500 hover:underline"
+                  className="text-orange-400 hover:text-orange-300 hover:underline flex items-center justify-center gap-1 mx-auto"
                 >
-                  Regístrate aquí
+                  <span>❓</span> ¿Cómo puedo obtener acceso a NUXA?
                 </button>
               </div>
 
