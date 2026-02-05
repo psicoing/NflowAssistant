@@ -49,7 +49,7 @@ const menuItems = [
     name: "Plan y Suscripción",
     sectionId: "precios",
     icon: DollarSign,
-    isPage: true
+    externalUrl: "https://jobda.org/partners"
   },
   {
     id: "alquiler-nuxa",

@@ -28,8 +28,9 @@ const menuItems = [
   {
     id: "precios",
     name: "Plan y Suscripción",
-    href: "/precios",
-    icon: DollarSign
+    href: "https://jobda.org/partners",
+    icon: DollarSign,
+    isExternal: true
   },
   {
     id: "partners",
@@ -119,6 +120,26 @@ export default function SidebarMenu() {
                         <IconComponent className="mr-3 h-5 w-5" />
                         <span className="text-base">{item.name}</span>
                       </Button>
+                    );
+                  }
+
+                  if ((item as any).isExternal) {
+                    return (
+                      <a 
+                        key={item.id} 
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start h-14 text-left px-4 transition-all duration-200 text-white hover:bg-white/10 hover:text-nflow-blue"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          <IconComponent className="mr-3 h-5 w-5" />
+                          <span className="text-base">{item.name}</span>
+                        </Button>
+                      </a>
                     );
                   }
                   
