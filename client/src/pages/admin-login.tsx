@@ -34,7 +34,7 @@ export default function AdminLogin() {
       const data = await response.json();
 
       if (data.success) {
-        setLocation("/admin/dashboard");
+        window.location.href = "/admin/dashboard";
       } else {
         setError(data.message || "Credenciales incorrectas");
       }
