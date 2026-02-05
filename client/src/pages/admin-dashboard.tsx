@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { 
   Users, 
   DollarSign, 
@@ -18,7 +21,10 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  Bell
+  Bell,
+  Edit,
+  Pause,
+  Play
 } from "lucide-react";
 
 interface DashboardStats {
@@ -30,6 +36,13 @@ interface DashboardStats {
   todayPayments: number;
 }
 
+interface LicenseFormData {
+  activeUsersLimit: string;
+  monthlyCost: string;
+  licenseRenewalDate: string;
+  commissionRate: string;
+}
+
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -37,6 +50,15 @@ export default function AdminDashboard() {
   const [partners, setPartners] = useState<any[]>([]);
   const [pendingPartners, setPendingPartners] = useState<any[]>([]);
   const [pendingUsers, setPendingUsers] = useState<any[]>([]);
+  const [editingPartner, setEditingPartner] = useState<any | null>(null);
+  const [showLicenseModal, setShowLicenseModal] = useState(false);
+  const [licenseForm, setLicenseForm] = useState<LicenseFormData>({
+    activeUsersLimit: "10",
+    monthlyCost: "0",
+    licenseRenewalDate: "",
+    commissionRate: "10"
+  });
+  const [isApproving, setIsApproving] = useState(false);
 
   useEffect(() => {
     checkAuthAndFetchStats();
@@ -76,13 +98,66 @@ export default function AdminDashboard() {
     }
   };
 
-  const handlePartnerAction = async (partnerId: number, action: 'approve' | 'reject') => {
+  const openApprovalModal = (partner: any) => {
+    setEditingPartner(partner);
+    setIsApproving(true);
+    setLicenseForm({
+      activeUsersLimit: partner.activeUsersLimit?.toString() || "10",
+      monthlyCost: partner.monthlyCost || "0",
+      licenseRenewalDate: partner.licenseRenewalDate ? new Date(partner.licenseRenewalDate).toISOString().split('T')[0] : "",
+      commissionRate: partner.commissionRate || "10"
+    });
+    setShowLicenseModal(true);
+  };
+
+  const openEditModal = (partner: any) => {
+    setEditingPartner(partner);
+    setIsApproving(false);
+    setLicenseForm({
+      activeUsersLimit: partner.activeUsersLimit?.toString() || "10",
+      monthlyCost: partner.monthlyCost || "0",
+      licenseRenewalDate: partner.licenseRenewalDate ? new Date(partner.licenseRenewalDate).toISOString().split('T')[0] : "",
+      commissionRate: partner.commissionRate || "10"
+    });
+    setShowLicenseModal(true);
+  };
+
+  const handleSaveLicense = async () => {
+    if (!editingPartner) return;
+    
+    try {
+      const endpoint = isApproving 
+        ? `/api/admin/partners/${editingPartner.id}/approve`
+        : `/api/admin/partners/${editingPartner.id}/license`;
+      
+      const response = await fetch(endpoint, {
+        method: isApproving ? 'POST' : 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          activeUsersLimit: licenseForm.activeUsersLimit,
+          monthlyCost: licenseForm.monthlyCost,
+          licenseRenewalDate: licenseForm.licenseRenewalDate || null,
+          commissionRate: licenseForm.commissionRate
+        })
+      });
+      
+      if (response.ok) {
+        setShowLicenseModal(false);
+        setEditingPartner(null);
+        fetchPartners();
+      }
+    } catch (error) {
+      console.error("Error saving license:", error);
+    }
+  };
+
+  const handlePartnerAction = async (partnerId: number, action: 'reject' | 'suspend' | 'activate') => {
     try {
       const response = await fetch(`/api/admin/partners/${partnerId}/${action}`, {
         method: 'POST'
       });
       if (response.ok) {
-        fetchPartners(); // Refresh the list
+        fetchPartners();
       }
     } catch (error) {
       console.error(`Error ${action}ing partner:`, error);
@@ -388,16 +463,18 @@ export default function AdminDashboard() {
                             <div className="mt-2 flex items-center space-x-2">
                               <Badge 
                                 variant={
-                                  partner.status === 'approved' ? 'default' :
+                                  partner.status === 'approved' || partner.status === 'active' ? 'default' :
                                   partner.status === 'pending' ? 'secondary' : 'destructive'
                                 }
                                 className={
-                                  partner.status === 'approved' ? 'bg-green-600' :
-                                  partner.status === 'pending' ? 'bg-yellow-600' : 'bg-red-600'
+                                  partner.status === 'approved' || partner.status === 'active' ? 'bg-green-600' :
+                                  partner.status === 'pending' ? 'bg-yellow-600' :
+                                  partner.status === 'suspended' ? 'bg-amber-600' : 'bg-red-600'
                                 }
                               >
-                                {partner.status === 'approved' ? 'Aprobado' :
-                                 partner.status === 'pending' ? 'Pendiente' : 'Rechazado'}
+                                {partner.status === 'approved' || partner.status === 'active' ? 'Activo' :
+                                 partner.status === 'pending' ? 'Pendiente' :
+                                 partner.status === 'suspended' ? 'Suspendido' : 'Rechazado'}
                               </Badge>
                               <Badge variant="outline" className="border-gray-600 text-gray-300">
                                 {partner.partnerType}
@@ -405,35 +482,79 @@ export default function AdminDashboard() {
                             </div>
                             <div className="mt-2 text-sm text-gray-400">
                               Solicitud: {new Date(partner.createdAt).toLocaleDateString('es-ES')}
-                              {partner.status === 'approved' && (
+                              {(partner.status === 'approved' || partner.status === 'active') && (
                                 <>
                                   <span className="mx-2">•</span>
-                                  Referidos: {partner.totalReferrals} • Ganancias: €{partner.totalEarnings}
+                                  <span className="text-blue-400">Usuarios: {partner.activeUsersCount || 0}/{partner.activeUsersLimit || 10}</span>
+                                  <span className="mx-2">•</span>
+                                  <span className="text-green-400">€{partner.monthlyCost || 0}/mes</span>
+                                  {partner.licenseRenewalDate && (
+                                    <>
+                                      <span className="mx-2">•</span>
+                                      <span className="text-amber-400">Renovación: {new Date(partner.licenseRenewalDate).toLocaleDateString('es-ES')}</span>
+                                    </>
+                                  )}
                                 </>
                               )}
                             </div>
                           </div>
                           
-                          {partner.status === 'pending' && (
-                            <div className="flex space-x-2 ml-4">
+                          <div className="flex flex-col space-y-2 ml-4">
+                            {partner.status === 'pending' && (
+                              <div className="flex space-x-2">
+                                <Button
+                                  size="sm"
+                                  className="bg-green-600 hover:bg-green-700"
+                                  onClick={() => openApprovalModal(partner)}
+                                >
+                                  <CheckCircle className="h-4 w-4 mr-1" />
+                                  Aprobar
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="destructive"
+                                  onClick={() => handlePartnerAction(partner.id, 'reject')}
+                                >
+                                  <XCircle className="h-4 w-4 mr-1" />
+                                  Rechazar
+                                </Button>
+                              </div>
+                            )}
+                            
+                            {(partner.status === 'approved' || partner.status === 'active') && (
+                              <div className="flex space-x-2">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="border-blue-500 text-blue-400 hover:bg-blue-500/20"
+                                  onClick={() => openEditModal(partner)}
+                                >
+                                  <Edit className="h-4 w-4 mr-1" />
+                                  Editar
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="border-amber-500 text-amber-400 hover:bg-amber-500/20"
+                                  onClick={() => handlePartnerAction(partner.id, 'suspend')}
+                                >
+                                  <Pause className="h-4 w-4 mr-1" />
+                                  Suspender
+                                </Button>
+                              </div>
+                            )}
+                            
+                            {partner.status === 'suspended' && (
                               <Button
                                 size="sm"
                                 className="bg-green-600 hover:bg-green-700"
-                                onClick={() => handlePartnerAction(partner.id, 'approve')}
+                                onClick={() => handlePartnerAction(partner.id, 'activate')}
                               >
-                                <CheckCircle className="h-4 w-4 mr-1" />
-                                Aprobar
+                                <Play className="h-4 w-4 mr-1" />
+                                Reactivar
                               </Button>
-                              <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() => handlePartnerAction(partner.id, 'reject')}
-                              >
-                                <XCircle className="h-4 w-4 mr-1" />
-                                Rechazar
-                              </Button>
-                            </div>
-                          )}
+                            )}
+                          </div>
                         </div>
                       ))
                     )}
@@ -500,6 +621,84 @@ export default function AdminDashboard() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* License Edit Modal */}
+      <Dialog open={showLicenseModal} onOpenChange={setShowLicenseModal}>
+        <DialogContent className="bg-gray-800 border-gray-700 text-white max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white">
+              {isApproving ? '✅ Aprobar Partner' : '✏️ Editar Licencia'}
+            </DialogTitle>
+            <DialogDescription className="text-gray-400">
+              {editingPartner?.companyName} - {editingPartner?.email}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label className="text-gray-200">Límite de usuarios</Label>
+              <Input
+                type="number"
+                value={licenseForm.activeUsersLimit}
+                onChange={(e) => setLicenseForm(prev => ({ ...prev, activeUsersLimit: e.target.value }))}
+                className="bg-gray-700 border-gray-600 text-white"
+                placeholder="10"
+              />
+              <p className="text-xs text-gray-400">Máximo de usuarios que puede crear este partner</p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label className="text-gray-200">Coste mensual (€)</Label>
+              <Input
+                type="text"
+                value={licenseForm.monthlyCost}
+                onChange={(e) => setLicenseForm(prev => ({ ...prev, monthlyCost: e.target.value }))}
+                className="bg-gray-700 border-gray-600 text-white"
+                placeholder="0"
+              />
+              <p className="text-xs text-gray-400">Cuota mensual de arrendamiento</p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label className="text-gray-200">Fecha de renovación</Label>
+              <Input
+                type="date"
+                value={licenseForm.licenseRenewalDate}
+                onChange={(e) => setLicenseForm(prev => ({ ...prev, licenseRenewalDate: e.target.value }))}
+                className="bg-gray-700 border-gray-600 text-white"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label className="text-gray-200">Comisión (%)</Label>
+              <Input
+                type="text"
+                value={licenseForm.commissionRate}
+                onChange={(e) => setLicenseForm(prev => ({ ...prev, commissionRate: e.target.value }))}
+                className="bg-gray-700 border-gray-600 text-white"
+                placeholder="10"
+              />
+              <p className="text-xs text-gray-400">Porcentaje de comisión por referidos</p>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowLicenseModal(false)}
+              className="border-gray-600 text-gray-300"
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleSaveLicense}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              {isApproving ? 'Aprobar y Guardar' : 'Guardar Cambios'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
