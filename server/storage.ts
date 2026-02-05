@@ -68,6 +68,13 @@ export interface IStorage {
   updatePartnerStatus(partnerId: number, status: string): Promise<Partner>;
   getAllPartners(): Promise<Partner[]>;
   getPartnersByStatus(status: string): Promise<Partner[]>;
+  updatePartnerLicense(partnerId: number, licenseData: {
+    activeUsersLimit?: number;
+    monthlyCost?: string;
+    licenseRenewalDate?: Date | null;
+    licenseStatus?: string;
+    commissionRate?: string;
+  }): Promise<Partner>;
   
   // Partner referrals
   createPartnerReferral(referral: InsertPartnerReferral): Promise<PartnerReferral>;
@@ -353,6 +360,21 @@ export class DatabaseStorage implements IStorage {
 
   async getPartnersByStatus(status: string): Promise<Partner[]> {
     return await db.select().from(partners).where(eq(partners.status, status));
+  }
+
+  async updatePartnerLicense(partnerId: number, licenseData: {
+    activeUsersLimit?: number;
+    monthlyCost?: string;
+    licenseRenewalDate?: Date | null;
+    licenseStatus?: string;
+    commissionRate?: string;
+  }): Promise<Partner> {
+    const [partner] = await db
+      .update(partners)
+      .set(licenseData)
+      .where(eq(partners.id, partnerId))
+      .returning();
+    return partner;
   }
 
   // Partner referrals

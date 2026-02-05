@@ -839,6 +839,109 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== ADMIN PARTNER MANAGEMENT =====
+  
+  // Get all partners for admin
+  app.get("/api/admin/partners", async (req, res) => {
+    try {
+      const allPartners = await storage.getAllPartners();
+      res.json(allPartners);
+    } catch (error) {
+      console.error("Error fetching partners:", error);
+      res.status(500).json({ message: "Error fetching partners" });
+    }
+  });
+
+  // Approve partner
+  app.post("/api/admin/partners/:partnerId/approve", async (req, res) => {
+    try {
+      const partnerId = parseInt(req.params.partnerId);
+      const { activeUsersLimit, monthlyCost, licenseRenewalDate, commissionRate } = req.body;
+      
+      // Update status to approved/active
+      await storage.updatePartnerStatus(partnerId, 'active');
+      
+      // Update license settings if provided
+      const licenseData: any = { licenseStatus: 'active' };
+      if (activeUsersLimit) licenseData.activeUsersLimit = parseInt(activeUsersLimit);
+      if (monthlyCost) licenseData.monthlyCost = monthlyCost;
+      if (licenseRenewalDate) licenseData.licenseRenewalDate = new Date(licenseRenewalDate);
+      if (commissionRate) licenseData.commissionRate = commissionRate;
+      
+      const partner = await storage.updatePartnerLicense(partnerId, licenseData);
+      
+      // Generate referral code if doesn't exist
+      if (!partner.referralCode) {
+        const referralCode = generateReferralCode(partner.companyName, partner.id);
+        await db.update(partners).set({ referralCode }).where(eq(partners.id, partnerId));
+      }
+      
+      res.json({ success: true, partner });
+    } catch (error) {
+      console.error("Error approving partner:", error);
+      res.status(500).json({ message: "Error approving partner" });
+    }
+  });
+
+  // Reject partner
+  app.post("/api/admin/partners/:partnerId/reject", async (req, res) => {
+    try {
+      const partnerId = parseInt(req.params.partnerId);
+      const partner = await storage.updatePartnerStatus(partnerId, 'rejected');
+      res.json({ success: true, partner });
+    } catch (error) {
+      console.error("Error rejecting partner:", error);
+      res.status(500).json({ message: "Error rejecting partner" });
+    }
+  });
+
+  // Suspend partner
+  app.post("/api/admin/partners/:partnerId/suspend", async (req, res) => {
+    try {
+      const partnerId = parseInt(req.params.partnerId);
+      await storage.updatePartnerStatus(partnerId, 'suspended');
+      const partner = await storage.updatePartnerLicense(partnerId, { licenseStatus: 'suspended' });
+      res.json({ success: true, partner });
+    } catch (error) {
+      console.error("Error suspending partner:", error);
+      res.status(500).json({ message: "Error suspending partner" });
+    }
+  });
+
+  // Reactivate partner
+  app.post("/api/admin/partners/:partnerId/activate", async (req, res) => {
+    try {
+      const partnerId = parseInt(req.params.partnerId);
+      await storage.updatePartnerStatus(partnerId, 'active');
+      const partner = await storage.updatePartnerLicense(partnerId, { licenseStatus: 'active' });
+      res.json({ success: true, partner });
+    } catch (error) {
+      console.error("Error activating partner:", error);
+      res.status(500).json({ message: "Error activating partner" });
+    }
+  });
+
+  // Update partner license settings
+  app.patch("/api/admin/partners/:partnerId/license", async (req, res) => {
+    try {
+      const partnerId = parseInt(req.params.partnerId);
+      const { activeUsersLimit, monthlyCost, licenseRenewalDate, licenseStatus, commissionRate } = req.body;
+      
+      const licenseData: any = {};
+      if (activeUsersLimit !== undefined) licenseData.activeUsersLimit = parseInt(activeUsersLimit);
+      if (monthlyCost !== undefined) licenseData.monthlyCost = monthlyCost;
+      if (licenseRenewalDate !== undefined) licenseData.licenseRenewalDate = licenseRenewalDate ? new Date(licenseRenewalDate) : null;
+      if (licenseStatus !== undefined) licenseData.licenseStatus = licenseStatus;
+      if (commissionRate !== undefined) licenseData.commissionRate = commissionRate;
+      
+      const partner = await storage.updatePartnerLicense(partnerId, licenseData);
+      res.json({ success: true, partner });
+    } catch (error) {
+      console.error("Error updating partner license:", error);
+      res.status(500).json({ message: "Error updating partner license" });
+    }
+  });
+
   // ===== PARTNER ROUTES =====
   
   // Partner login
