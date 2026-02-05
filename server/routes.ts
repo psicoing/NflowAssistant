@@ -797,8 +797,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Admin login
-  app.post("/api/admin/login", async (req, res) => {
+  // Admin login (both endpoints for compatibility)
+  const adminLoginHandler = async (req: any, res: any) => {
     try {
       const { username, password } = req.body;
       
@@ -813,7 +813,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Admin login error:", error);
       res.status(500).json({ success: false, message: "Server error" });
     }
-  });
+  };
+  
+  app.post("/api/admin/login", adminLoginHandler);
+  app.post("/api/admin/auth", adminLoginHandler);
 
   // Admin stats
   app.get("/api/admin/stats", async (req, res) => {
