@@ -9,18 +9,18 @@ const popupContent = {
     title: "¿Te vas sin hablar de lo que te preocupa?",
     description: "NUXA te escucha 24/7, sin juicios, en tu idioma.",
     highlight: "La experiencia es tan real que pensarás que hablas con un psicólogo sabio.",
-    price: "Desde solo 2,99€/mes",
-    noCommitment: "Sin permanencia · Cancela cuando quieras",
-    cta: "Quiero probar NUXA",
+    price: "Pide a tu empresa o administración que active NUXA para ti",
+    noCommitment: "Sin coste para el usuario · Disponible para empresas y sector público",
+    cta: "Más información para organizaciones",
     dismiss: "No gracias, prefiero seguir solo/a"
   },
   en: {
     title: "Leaving without talking about what worries you?",
     description: "NUXA listens 24/7, without judgment, in your language.",
     highlight: "The experience is so real you'll think you're talking to a wise psychologist.",
-    price: "From only €2.99/month",
-    noCommitment: "No commitment · Cancel anytime",
-    cta: "I want to try NUXA",
+    price: "Ask your company or administration to activate NUXA for you",
+    noCommitment: "Free for users · Available for businesses and public sector",
+    cta: "More info for organizations",
     dismiss: "No thanks, I prefer to go it alone"
   }
 };
@@ -110,7 +110,7 @@ export default function ExitIntentPopup() {
 
   const handleCTA = () => {
     setIsVisible(false);
-    setLocation("/precios");
+    window.open("https://jobda.org/partners", "_blank");
   };
 
   if (!isVisible) return null;
