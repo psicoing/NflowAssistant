@@ -1,4 +1,4 @@
-import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X, Brain, Heart, Menu, ShieldCheck, Compass, Bot, Sparkles, ArrowRight, AlertTriangle } from "lucide-react";
+import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X, Brain, Heart, Menu, ShieldCheck, Compass, Bot, Sparkles, ArrowRight, AlertTriangle, BookOpen, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation, Link } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -106,6 +106,12 @@ export default function FamilySupportHeroSection() {
                   <h3 className="font-extrabold text-gray-900 dark:text-white mb-2 text-lg">Para Toda la Familia</h3>
                   <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">Apoyo integral desde los 12 años</p>
                 </div>
+                <Link
+                  href="/quienes-somos"
+                  className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-700 hover:shadow-md transition-all duration-200"
+                >
+                  Saber más <ArrowRight className="w-3 h-3" />
+                </Link>
               </div>
 
               {/* 100% Confidencial */}
@@ -117,6 +123,12 @@ export default function FamilySupportHeroSection() {
                   <h3 className="font-extrabold text-gray-900 dark:text-white mb-2 text-lg">100% Confidencial</h3>
                   <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">Privacidad y anonimato garantizados</p>
                 </div>
+                <button
+                  onClick={() => setIsLegalNoticeOpen(true)}
+                  className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 bg-cyan-50 dark:bg-cyan-900/30 px-3 py-1.5 rounded-full border border-cyan-200 dark:border-cyan-700 hover:shadow-md transition-all duration-200"
+                >
+                  Ver aviso legal <ArrowRight className="w-3 h-3" />
+                </button>
               </div>
 
               {/* Profesional */}
@@ -128,6 +140,12 @@ export default function FamilySupportHeroSection() {
                   <h3 className="font-extrabold text-gray-900 dark:text-white mb-2 text-lg">Profesional</h3>
                   <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">Basado en 30+ años de experiencia</p>
                 </div>
+                <Link
+                  href="/ejemplos-chat"
+                  className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 bg-teal-50 dark:bg-teal-900/30 px-3 py-1.5 rounded-full border border-teal-200 dark:border-teal-700 hover:shadow-md transition-all duration-200"
+                >
+                  Ver ejemplos <ArrowRight className="w-3 h-3" />
+                </Link>
               </div>
 
               {/* Con nuxa, equilibrio presente */}
@@ -139,11 +157,17 @@ export default function FamilySupportHeroSection() {
                   <h3 className="font-extrabold text-gray-900 dark:text-white mb-2 text-lg">Con nuxa, equilibrio presente</h3>
                   <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">Apoyo cuando lo necesites</p>
                 </div>
+                <Link
+                  href="/recursos"
+                  className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-3 py-1.5 rounded-full border border-blue-200 dark:border-blue-700 hover:shadow-md transition-all duration-200"
+                >
+                  Probar gratis <ArrowRight className="w-3 h-3" />
+                </Link>
               </div>
             </div>
 
-            {/* Botones Novedades y Aviso Legal */}
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mt-6">
+            {/* Botones de acceso rápido */}
+            <div className="flex flex-wrap justify-center items-center gap-3 mt-6">
               <Link 
                 href="/novedades"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
@@ -152,6 +176,28 @@ export default function FamilySupportHeroSection() {
                 <span>Novedades</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
+
+              <Link 
+                href="/recursos"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              >
+                <BookOpen className="w-5 h-5" />
+                <span>Recursos Gratuitos</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+
+              <a 
+                href="#testimonials"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <Star className="w-5 h-5" />
+                <span>Opiniones</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
               
               <button 
                 onClick={() => setIsLegalNoticeOpen(true)}
