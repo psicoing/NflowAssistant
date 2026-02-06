@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign, Star, User, Gift } from "lucide-react";
+import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign, Star, User, Gift, Building2, Landmark } from "lucide-react";
 import { useLocation } from "wouter";
 
 const menuItems = [
@@ -30,6 +30,20 @@ const menuItems = [
     name: "Nuestro Software",
     sectionId: "quienes-somos",
     icon: User,
+    isPage: true
+  },
+  {
+    id: "empresa-privada",
+    name: "Empresa Privada",
+    sectionId: "empresa-privada",
+    icon: Building2,
+    isPage: true
+  },
+  {
+    id: "sector-publico",
+    name: "Sector Público",
+    sectionId: "sector-publico",
+    icon: Landmark,
     isPage: true
   },
   {

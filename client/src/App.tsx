@@ -47,6 +47,8 @@ import FloatingCTAButton from "@/components/FloatingCTAButton";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import DownloadCSV from "@/pages/download-csv";
 import AccesoMagico from "@/pages/acceso-magico";
+import EmpresaPrivada from "@/pages/empresa-privada";
+import SectorPublico from "@/pages/sector-publico";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -56,7 +58,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico"];
     // Allow magic link access routes
     if (location.startsWith("/acceso/")) {
       return;
@@ -127,6 +129,8 @@ function AuthenticatedRouter() {
       <Route path="/app-movil" component={AppMovil} />
       <Route path="/control-parental" component={ControlParental} />
       <Route path="/download-csv" component={DownloadCSV} />
+      <Route path="/empresa-privada" component={EmpresaPrivada} />
+      <Route path="/sector-publico" component={SectorPublico} />
       <Route path="/acceso/:token" component={AccesoMagico} />
       <Route component={NotFound} />
     </Switch>
