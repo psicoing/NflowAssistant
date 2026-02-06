@@ -1086,22 +1086,6 @@ export default function EjemplosChat() {
                       </div>
                     </div>
                     
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                      <Link href="/precios">
-                        <Button 
-                          size="lg" 
-                          className="w-full sm:w-auto bg-white text-emerald-700 hover:bg-gray-100 font-bold text-lg px-8 py-6 shadow-xl"
-                          data-testid="button-get-nuxa"
-                        >
-                          Escoge tu plan
-                          <ArrowRight className="w-5 h-5 ml-2" />
-                        </Button>
-                      </Link>
-                    </div>
-                    
-                    <p className="text-white/70 text-sm">
-                      Sin permanencia · Cancela cuando quieras · También pago por uso
-                    </p>
                   </div>
                   
                   {/* Right content - Key differentiators */}
