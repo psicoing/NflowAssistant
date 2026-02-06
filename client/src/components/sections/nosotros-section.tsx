@@ -106,8 +106,8 @@ export default function NosotrosSection() {
           <div>
             <h3 className="text-2xl font-bold text-gray-900 mb-6">Información Corporativa</h3>
             <div className="space-y-4 text-gray-600">
-              <p><strong>Razón Social:</strong> JOBDA, filial de EMPORDAJOBS SL</p>
-              <p><strong>CIF:</strong> B02701100</p>
+              <p><strong>Desarrollador de Software:</strong> Ramón Molons de San Román</p>
+              <p><strong>DNI:</strong> 40436705Z</p>
               <p><strong>Domicilio:</strong> Portbou, Girona, España</p>
               <p><strong>Email:</strong> empordajobs@gmail.com</p>
               <p><strong>Teléfono:</strong> +34 660 45 21 36</p>

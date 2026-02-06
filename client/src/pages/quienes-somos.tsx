@@ -24,6 +24,15 @@ export default function QuienesSomosPage() {
       />
       <Header showBanner={false} />
       <main className="pt-16">
+        {/* Banner de Licitación */}
+        <div className="bg-gradient-to-r from-emerald-600 to-teal-600 border-b border-emerald-500">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
+            <p className="text-white font-semibold text-sm md:text-base">
+              NUXA es un proyecto de licitación de software para empresas privadas y públicas en el sector de la salud mental personal y laboral
+            </p>
+          </div>
+        </div>
+
         {/* Botón de Volver */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <Button
