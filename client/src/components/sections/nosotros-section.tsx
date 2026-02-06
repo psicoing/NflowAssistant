@@ -101,25 +101,6 @@ export default function NosotrosSection() {
           </div>
         </div>
 
-
-        {/* CTA */}
-        <div className="text-center bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-12">
-          <h3 className="text-3xl font-bold text-gray-900 mb-6">
-            ¿Tienes preguntas sobre NFLOW?
-          </h3>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Estamos aquí para ayudarte. Contacta con nuestro equipo o prueba 
-            nuestro asistente de IA ahora mismo.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              onClick={() => setLocation("/login")}
-              className="bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white px-8 py-4 rounded-2xl font-bold text-lg"
-            >
-              Comenzar Ahora
-            </Button>
-          </div>
-        </div>
       </div>
     </section>
   );
