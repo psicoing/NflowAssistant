@@ -12,7 +12,7 @@ export default function FounderSection() {
           <div className="text-white space-y-8">
             <div>
               <Badge className="bg-orange-500 text-white mb-4 text-sm px-3 py-1">
-                Fundador y Director Ejecutivo
+                Desarrollador del Software
               </Badge>
               <h2 className="text-4xl lg:text-5xl font-bold mb-6">
                 Liderando la Innovación en Salud Mental Digital
