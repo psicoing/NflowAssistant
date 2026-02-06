@@ -153,18 +153,6 @@ export default function NosotrosSection() {
             >
               Comenzar Ahora
             </Button>
-            <Button 
-              onClick={() => {
-                const email = "empordajobs@gmail.com";
-                const subject = "Consulta sobre NFLOW";
-                window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
-              }}
-              variant="outline"
-              className="border-nflow-orange text-nflow-orange hover:bg-nflow-orange hover:text-white px-8 py-4 rounded-2xl font-bold text-lg"
-            >
-              <Phone className="w-5 h-5 mr-2" />
-              Contactar
-            </Button>
           </div>
         </div>
       </div>
