@@ -190,9 +190,10 @@ const alertasClinicas = [
 
 export default function RecursosGratis() {
   const { toast } = useToast();
-  const [currentView, setCurrentView] = useState<'main' | 'emotional-log' | 'affirmation' | 'evaluation' | 'emotion-history' | 'breathing' | 'gratitude' | 'bad-day' | 'grounding' | 'bilateral' | 'iso-check' | 'emotion-wheel'>('main');
+  const [currentView, setCurrentView] = useState<'main' | 'emotional-log' | 'affirmation' | 'evaluation' | 'emotion-history' | 'breathing' | 'gratitude' | 'bad-day' | 'grounding' | 'bilateral' | 'iso-check' | 'emotion-wheel' | 'body-stress'>('main');
   const [wheelSelectedEmotion, setWheelSelectedEmotion] = useState<any>(null);
   const [wheelLayer, setWheelLayer] = useState<'core' | 'middle' | 'outer'>('core');
+  const [selectedBodyZone, setSelectedBodyZone] = useState<string | null>(null);
   const [selectedEmotion, setSelectedEmotion] = useState<string>('');
   const [emotionalNote, setEmotionalNote] = useState('');
   const [currentAffirmationIndex, setCurrentAffirmationIndex] = useState(0);
@@ -1552,6 +1553,334 @@ export default function RecursosGratis() {
     );
   }
 
+  if (currentView === 'body-stress') {
+    const bodyZones = [
+      {
+        id: 'cabeza',
+        name: 'Cabeza',
+        emoji: '🧠',
+        color: '#8B5CF6',
+        symptoms: ['Dolor de cabeza', 'Pensamientos acelerados', 'Dificultad para concentrarse', 'Mareos'],
+        causes: 'El estrés laboral activa la respuesta de "lucha o huida", liberando cortisol que genera tensión en los vasos sanguíneos craneales.',
+        exercises: [
+          { name: 'Masaje de sienes', duration: '2 min', steps: ['Coloca los dedos índice y medio en las sienes', 'Haz círculos suaves durante 30 segundos', 'Cambia de dirección otros 30 segundos', 'Presiona suavemente y suelta 5 veces'] },
+          { name: 'Técnica 5-4-3-2-1', duration: '3 min', steps: ['Nombra 5 cosas que ves ahora mismo', 'Toca 4 texturas diferentes a tu alrededor', 'Identifica 3 sonidos que escuches', 'Percibe 2 olores distintos', 'Saborea 1 cosa (agua, caramelo...)'] },
+        ],
+        tip: 'Si el dolor de cabeza persiste más de 3 días seguidos, consulta con un profesional.'
+      },
+      {
+        id: 'ojos',
+        name: 'Ojos y Frente',
+        emoji: '👁️',
+        color: '#6366F1',
+        symptoms: ['Vista cansada', 'Tensión en el entrecejo', 'Ojos secos', 'Visión borrosa'],
+        causes: 'Las pantallas reducen el parpadeo un 60%. El estrés añade tensión muscular constante en la zona frontal y orbicular.',
+        exercises: [
+          { name: 'Regla 20-20-20', duration: '1 min', steps: ['Cada 20 minutos de pantalla', 'Mira algo a 20 pies (6 metros) de distancia', 'Durante 20 segundos', 'Parpadea voluntariamente 10 veces'] },
+          { name: 'Palming ocular', duration: '2 min', steps: ['Frota las palmas de las manos hasta calentarlas', 'Colócalas sobre los ojos cerrados sin presionar', 'Respira profundamente 5 veces', 'Siente el calor relajando los músculos oculares'] },
+        ],
+        tip: 'Ajusta el brillo de la pantalla al nivel de la luz ambiente para reducir la fatiga visual.'
+      },
+      {
+        id: 'mandibula',
+        name: 'Mandíbula',
+        emoji: '😬',
+        color: '#EC4899',
+        symptoms: ['Apretar los dientes (bruxismo)', 'Dolor al masticar', 'Chasquidos al abrir la boca', 'Tensión facial'],
+        causes: 'El bruxismo es una de las respuestas más comunes al estrés crónico. La mandíbula acumula tensión inconsciente, especialmente durante la noche y en situaciones de presión.',
+        exercises: [
+          { name: 'Relajación mandibular', duration: '2 min', steps: ['Separa los labios manteniendo los dientes sin tocar', 'Coloca la lengua en el paladar, detrás de los dientes', 'Deja caer la mandíbula suavemente por gravedad', 'Mantén 30 segundos, repite 4 veces'] },
+          { name: 'Estiramiento de apertura', duration: '1 min', steps: ['Abre la boca despacio todo lo que puedas sin dolor', 'Mueve la mandíbula hacia la derecha, mantén 5s', 'Vuelve al centro', 'Mueve hacia la izquierda, mantén 5s', 'Repite 3 veces'] },
+        ],
+        tip: 'Si aprietas los dientes al dormir, un protector nocturno puede prevenir el desgaste dental.'
+      },
+      {
+        id: 'cuello',
+        name: 'Cuello y Cervicales',
+        emoji: '🦒',
+        color: '#F59E0B',
+        symptoms: ['Rigidez al girar', 'Dolor cervical', 'Tortícolis', 'Sensación de carga pesada'],
+        causes: 'La postura frente al ordenador y el estrés emocional generan contracturas en el trapecio superior y los músculos cervicales. "Cargar con responsabilidades" se manifiesta literalmente aquí.',
+        exercises: [
+          { name: 'Rotación cervical suave', duration: '2 min', steps: ['Siéntate erguido con hombros relajados', 'Gira la cabeza hacia la derecha, mantén 10s', 'Vuelve al centro despacio', 'Gira hacia la izquierda, mantén 10s', 'Repite 5 veces cada lado'] },
+          { name: 'Estiramiento lateral', duration: '2 min', steps: ['Inclina la oreja derecha hacia el hombro derecho', 'Con la mano derecha, presiona suavemente la cabeza', 'Mantén 20 segundos sintiendo el estiramiento', 'Cambia al lado izquierdo', 'Repite 3 veces por lado'] },
+        ],
+        tip: 'Coloca la pantalla a la altura de los ojos. Cada centímetro de inclinación de cabeza añade 5kg de presión a las cervicales.'
+      },
+      {
+        id: 'hombros',
+        name: 'Hombros y Trapecio',
+        emoji: '💪',
+        color: '#EF4444',
+        symptoms: ['Hombros elevados involuntariamente', 'Contracturas', 'Dolor al mover los brazos', 'Nudos musculares'],
+        causes: 'La respuesta de estrés activa los trapecios como mecanismo de protección primitivo. El trabajo prolongado con ratón y teclado agrava la tensión unilateral.',
+        exercises: [
+          { name: 'Elevación y soltar', duration: '1 min', steps: ['Sube los hombros hacia las orejas con fuerza', 'Mantén la tensión 5 segundos', 'Suelta de golpe dejándolos caer', 'Siente la diferencia entre tensión y relajación', 'Repite 8 veces'] },
+          { name: 'Círculos de hombros', duration: '2 min', steps: ['Haz 10 círculos amplios hacia adelante', 'Haz 10 círculos amplios hacia atrás', 'Junta los omóplatos atrás, mantén 10s', 'Redondea la espalda hacia adelante, mantén 10s', 'Repite toda la secuencia 2 veces'] },
+        ],
+        tip: 'Programa una alarma cada hora para hacer un "body check": ¿tienes los hombros subidos? Suéltalos.'
+      },
+      {
+        id: 'pecho',
+        name: 'Pecho y Respiración',
+        emoji: '🫁',
+        color: '#14B8A6',
+        symptoms: ['Opresión en el pecho', 'Respiración superficial', 'Sensación de ahogo', 'Palpitaciones'],
+        causes: 'La ansiedad laboral provoca respiración torácica superficial, reduciendo el oxígeno un 30%. Los músculos intercostales se tensan, creando sensación de opresión.',
+        exercises: [
+          { name: 'Respiración diafragmática', duration: '3 min', steps: ['Coloca una mano en el pecho y otra en el abdomen', 'Inhala por la nariz 4 segundos: solo la mano del abdomen debe subir', 'Mantén 4 segundos', 'Exhala por la boca 6 segundos: el abdomen baja', 'Repite 6 ciclos completos'] },
+          { name: 'Apertura torácica', duration: '2 min', steps: ['De pie, entrelaza las manos detrás de la espalda', 'Estira los brazos y abre el pecho mirando arriba', 'Mantén 15 segundos respirando profundamente', 'Suelta y deja los brazos colgando relajados', 'Repite 4 veces'] },
+        ],
+        tip: 'Si sientes opresión intensa, palpitaciones fuertes o dolor irradiado al brazo, busca atención médica inmediata.'
+      },
+      {
+        id: 'espalda',
+        name: 'Espalda Media y Lumbar',
+        emoji: '🔙',
+        color: '#F97316',
+        symptoms: ['Dolor lumbar crónico', 'Rigidez al levantarse', 'Pinchazos al agacharse', 'Fatiga muscular'],
+        causes: 'Estar sentado más de 6 horas al día comprime los discos intervertebrales. El estrés emocional aumenta la tensión de la musculatura paravertebral hasta un 40%.',
+        exercises: [
+          { name: 'Gato-Vaca en silla', duration: '2 min', steps: ['Siéntate al borde de la silla, pies planos en el suelo', 'Inhala: arquea la espalda sacando pecho (vaca)', 'Exhala: redondea la espalda metiendo la barbilla (gato)', 'Mueve despacio, sincroniza con la respiración', 'Repite 10 ciclos'] },
+          { name: 'Rotación espinal sentado', duration: '2 min', steps: ['Siéntate erguido, cruza la pierna derecha sobre la izquierda', 'Gira el torso hacia la derecha, mano izquierda en la rodilla derecha', 'Mantén 20 segundos respirando', 'Cambia de lado', 'Repite 3 veces por lado'] },
+        ],
+        tip: 'Levántate y camina al menos 2 minutos cada hora. Tu espalda lo agradecerá más que cualquier silla ergonómica.'
+      },
+      {
+        id: 'estomago',
+        name: 'Estómago y Digestivo',
+        emoji: '🫃',
+        color: '#A855F7',
+        symptoms: ['Nudos en el estómago', 'Náuseas por ansiedad', 'Digestión pesada', 'Colon irritable'],
+        causes: 'El intestino tiene 500 millones de neuronas (el "segundo cerebro"). El estrés altera la microbiota, la motilidad intestinal y la producción de serotonina (el 90% se produce en el intestino).',
+        exercises: [
+          { name: 'Masaje abdominal', duration: '3 min', steps: ['Túmbate o siéntate cómodamente', 'Coloca ambas manos sobre el ombligo', 'Haz círculos en sentido horario, suaves y amplios', 'Aumenta ligeramente la presión durante 2 minutos', 'Termina con 5 respiraciones abdominales profundas'] },
+          { name: 'Postura de liberación', duration: '2 min', steps: ['Siéntate y lleva las rodillas al pecho (o una sola)', 'Abrázalas con las manos', 'Balancea suavemente de lado a lado', 'Respira lenta y profundamente', 'Mantén 1 minuto y suelta despacio'] },
+        ],
+        tip: 'Evita comer frente al ordenador. Comer con estrés reduce la absorción de nutrientes un 20%.'
+      },
+      {
+        id: 'manos',
+        name: 'Manos y Muñecas',
+        emoji: '🤲',
+        color: '#0EA5E9',
+        symptoms: ['Hormigueo en los dedos', 'Dolor al escribir', 'Rigidez matutina', 'Síndrome del túnel carpiano'],
+        causes: 'El uso repetitivo del teclado y ratón inflama los tendones flexores. El estrés aumenta la tensión muscular, agravando la compresión del nervio mediano.',
+        exercises: [
+          { name: 'Estiramientos de muñeca', duration: '2 min', steps: ['Extiende el brazo con la palma hacia arriba', 'Con la otra mano, tira de los dedos hacia abajo suavemente', 'Mantén 15 segundos', 'Gira la palma hacia abajo y repite', 'Haz ambas muñecas, 3 repeticiones'] },
+          { name: 'Puño y abanico', duration: '1 min', steps: ['Cierra los puños con fuerza, mantén 5 segundos', 'Abre las manos extendiendo todos los dedos al máximo', 'Separa los dedos como un abanico, mantén 5 segundos', 'Sacude las manos relajadamente 10 segundos', 'Repite toda la secuencia 5 veces'] },
+        ],
+        tip: 'Coloca el ratón cerca del teclado y usa reposamanos. Tu muñeca debe estar en posición neutra, nunca doblada.'
+      },
+      {
+        id: 'piernas',
+        name: 'Piernas y Pies',
+        emoji: '🦵',
+        color: '#22C55E',
+        symptoms: ['Piernas inquietas', 'Hinchazón por retención', 'Calambres nocturnos', 'Pesadez al caminar'],
+        causes: 'Estar sentado comprime la circulación venosa. El estrés aumenta la retención de líquidos y la tensión muscular de gemelos y cuádriceps, causando pesadez y calambres.',
+        exercises: [
+          { name: 'Activación en la silla', duration: '2 min', steps: ['Sentado, levanta los talones del suelo 20 veces', 'Ahora levanta las puntas de los pies 20 veces', 'Extiende una pierna paralela al suelo, mantén 10s', 'Cambia de pierna', 'Repite todo 3 veces'] },
+          { name: 'Estiramiento de gemelos', duration: '2 min', steps: ['De pie, apoya las manos en la pared', 'Lleva un pie atrás con el talón en el suelo', 'Inclínate hacia la pared hasta sentir el estiramiento', 'Mantén 20 segundos cada pierna', 'Repite 3 veces por lado'] },
+        ],
+        tip: 'Si trabajas sentado, usa la regla de las 3S: Sentado 25 min, Sube (camina) 3 min, Stretching (estira) 2 min.'
+      },
+    ];
+
+    const selectedZone = bodyZones.find(z => z.id === selectedBodyZone);
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-4xl mx-auto">
+            <Button variant="ghost" onClick={() => { setCurrentView('main'); setSelectedBodyZone(null); }} className="mb-6">
+              ← Volver
+            </Button>
+
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-200 px-4 py-2 rounded-full mb-4">
+                <span className="text-red-500 font-semibold text-sm">Estrés Laboral</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Mapa de Estrés Corporal</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Tu cuerpo habla. Toca la zona donde sientes tensión y descubre ejercicios específicos para aliviarla en tu puesto de trabajo.
+              </p>
+            </div>
+
+            {!selectedZone ? (
+              <>
+                <div className="relative max-w-md mx-auto mb-10">
+                  <div className="bg-gradient-to-b from-slate-50 to-slate-100 rounded-3xl p-8 border-2 border-slate-200 shadow-inner">
+                    <div className="text-center mb-4">
+                      <p className="text-sm text-gray-500 font-medium">Toca donde sientes tensión</p>
+                    </div>
+                    <div className="flex flex-col items-center gap-2">
+                      {/* Head */}
+                      <button
+                        onClick={() => setSelectedBodyZone('cabeza')}
+                        className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-100 to-purple-200 border-2 border-purple-300 hover:border-purple-500 hover:shadow-lg hover:scale-110 transition-all flex items-center justify-center text-3xl cursor-pointer"
+                      >🧠</button>
+
+                      {/* Eyes */}
+                      <button
+                        onClick={() => setSelectedBodyZone('ojos')}
+                        className="w-16 h-10 rounded-full bg-gradient-to-br from-indigo-100 to-indigo-200 border-2 border-indigo-300 hover:border-indigo-500 hover:shadow-lg hover:scale-110 transition-all flex items-center justify-center text-xl cursor-pointer"
+                      >👁️</button>
+
+                      {/* Jaw */}
+                      <button
+                        onClick={() => setSelectedBodyZone('mandibula')}
+                        className="w-14 h-10 rounded-full bg-gradient-to-br from-pink-100 to-pink-200 border-2 border-pink-300 hover:border-pink-500 hover:shadow-lg hover:scale-110 transition-all flex items-center justify-center text-xl cursor-pointer"
+                      >😬</button>
+
+                      {/* Neck */}
+                      <button
+                        onClick={() => setSelectedBodyZone('cuello')}
+                        className="w-12 h-10 rounded-lg bg-gradient-to-br from-amber-100 to-amber-200 border-2 border-amber-300 hover:border-amber-500 hover:shadow-lg hover:scale-110 transition-all flex items-center justify-center text-xl cursor-pointer"
+                      >🦒</button>
+
+                      {/* Shoulders */}
+                      <button
+                        onClick={() => setSelectedBodyZone('hombros')}
+                        className="w-48 h-12 rounded-full bg-gradient-to-br from-red-100 to-red-200 border-2 border-red-300 hover:border-red-500 hover:shadow-lg hover:scale-110 transition-all flex items-center justify-center text-xl cursor-pointer"
+                      >💪 Hombros 💪</button>
+
+                      {/* Chest */}
+                      <button
+                        onClick={() => setSelectedBodyZone('pecho')}
+                        className="w-36 h-16 rounded-2xl bg-gradient-to-br from-teal-100 to-teal-200 border-2 border-teal-300 hover:border-teal-500 hover:shadow-lg hover:scale-110 transition-all flex items-center justify-center text-xl cursor-pointer"
+                      >🫁</button>
+
+                      <div className="flex gap-3 items-start">
+                        {/* Hands left */}
+                        <button
+                          onClick={() => setSelectedBodyZone('manos')}
+                          className="w-14 h-14 rounded-xl bg-gradient-to-br from-sky-100 to-sky-200 border-2 border-sky-300 hover:border-sky-500 hover:shadow-lg hover:scale-110 transition-all flex items-center justify-center text-xl cursor-pointer mt-8"
+                        >🤲</button>
+
+                        <div className="flex flex-col items-center gap-2">
+                          {/* Stomach */}
+                          <button
+                            onClick={() => setSelectedBodyZone('estomago')}
+                            className="w-32 h-14 rounded-2xl bg-gradient-to-br from-violet-100 to-violet-200 border-2 border-violet-300 hover:border-violet-500 hover:shadow-lg hover:scale-110 transition-all flex items-center justify-center text-xl cursor-pointer"
+                          >🫃</button>
+
+                          {/* Back */}
+                          <button
+                            onClick={() => setSelectedBodyZone('espalda')}
+                            className="w-32 h-14 rounded-2xl bg-gradient-to-br from-orange-100 to-orange-200 border-2 border-orange-300 hover:border-orange-500 hover:shadow-lg hover:scale-110 transition-all flex items-center justify-center text-xl cursor-pointer"
+                          >🔙 Espalda</button>
+                        </div>
+
+                        {/* Hands right */}
+                        <button
+                          onClick={() => setSelectedBodyZone('manos')}
+                          className="w-14 h-14 rounded-xl bg-gradient-to-br from-sky-100 to-sky-200 border-2 border-sky-300 hover:border-sky-500 hover:shadow-lg hover:scale-110 transition-all flex items-center justify-center text-xl cursor-pointer mt-8"
+                        >✋</button>
+                      </div>
+
+                      {/* Legs */}
+                      <button
+                        onClick={() => setSelectedBodyZone('piernas')}
+                        className="w-36 h-20 rounded-2xl bg-gradient-to-br from-green-100 to-green-200 border-2 border-green-300 hover:border-green-500 hover:shadow-lg hover:scale-110 transition-all flex items-center justify-center text-xl cursor-pointer"
+                      >🦵 Piernas 🦵</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-3">
+                  {bodyZones.map((zone) => (
+                    <Card
+                      key={zone.id}
+                      className="p-4 cursor-pointer hover:shadow-lg transition-all hover:scale-[1.02] flex items-center gap-4"
+                      onClick={() => setSelectedBodyZone(zone.id)}
+                    >
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0" style={{ backgroundColor: zone.color + '20' }}>
+                        {zone.emoji}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-gray-900">{zone.name}</h3>
+                        <p className="text-xs text-gray-500 truncate">{zone.symptoms.slice(0, 2).join(' · ')}</p>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                    </Card>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="animate-in fade-in duration-300">
+                <Button variant="outline" onClick={() => setSelectedBodyZone(null)} className="mb-6">
+                  ← Volver al mapa
+                </Button>
+
+                <div className="mb-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-4xl" style={{ backgroundColor: selectedZone.color + '20' }}>
+                      {selectedZone.emoji}
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900">{selectedZone.name}</h3>
+                      <p className="text-sm text-gray-500">Zona de estrés laboral</p>
+                    </div>
+                  </div>
+                </div>
+
+                <Card className="p-5 mb-4 border-l-4" style={{ borderLeftColor: selectedZone.color }}>
+                  <h4 className="font-bold text-gray-900 mb-3">Síntomas comunes</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedZone.symptoms.map((s, i) => (
+                      <Badge key={i} className="bg-gray-100 text-gray-700 border-gray-200 text-sm py-1">{s}</Badge>
+                    ))}
+                  </div>
+                </Card>
+
+                <Card className="p-5 mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+                  <h4 className="font-bold text-gray-900 mb-2">¿Por qué duele aquí?</h4>
+                  <p className="text-gray-700 text-sm leading-relaxed">{selectedZone.causes}</p>
+                </Card>
+
+                <h4 className="font-bold text-gray-900 mb-4 text-lg">Ejercicios recomendados</h4>
+                {selectedZone.exercises.map((exercise, exIdx) => (
+                  <Card key={exIdx} className="p-5 mb-4 hover:shadow-md transition-all">
+                    <div className="flex items-center justify-between mb-4">
+                      <h5 className="font-bold text-gray-900 text-lg">{exercise.name}</h5>
+                      <Badge style={{ backgroundColor: selectedZone.color + '20', color: selectedZone.color }} className="border-0 font-semibold">
+                        {exercise.duration}
+                      </Badge>
+                    </div>
+                    <ol className="space-y-3">
+                      {exercise.steps.map((step, stepIdx) => (
+                        <li key={stepIdx} className="flex items-start gap-3">
+                          <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0 mt-0.5" style={{ backgroundColor: selectedZone.color }}>
+                            {stepIdx + 1}
+                          </div>
+                          <p className="text-gray-700 text-sm leading-relaxed">{step}</p>
+                        </li>
+                      ))}
+                    </ol>
+                  </Card>
+                ))}
+
+                <Card className="p-5 bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-bold text-amber-800 mb-1">Consejo profesional</h4>
+                      <p className="text-amber-700 text-sm">{selectedZone.tip}</p>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            )}
+
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   if (currentView === 'emotion-wheel') {
     const plutchikEmotions = {
       core: [
@@ -2184,6 +2513,34 @@ export default function RecursosGratis() {
               </Badge>
             </Card>
           </div>
+
+          {/* Mapa de Estrés Corporal - Destacado */}
+          <Card
+            className="mb-12 p-6 md:p-8 hover:shadow-2xl transition-all cursor-pointer bg-gradient-to-r from-red-50 via-orange-50 to-amber-50 border-2 border-red-200 hover:border-red-400 group"
+            onClick={() => setCurrentView('body-stress')}
+            data-testid="card-body-stress"
+          >
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-5xl shadow-lg group-hover:scale-110 transition-transform">
+                🧍
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <Badge className="bg-red-500 text-white border-0 mb-2">Estrés Laboral</Badge>
+                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Mapa de Estrés Corporal</h3>
+                <p className="text-gray-600 mb-3">
+                  Toca la zona de tu cuerpo donde sientes tensión y descubre ejercicios específicos para aliviarla desde tu puesto de trabajo. 10 zonas, 20 ejercicios guiados paso a paso.
+                </p>
+                <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+                  <Badge className="bg-white text-gray-700 border-gray-200">🧠 Cabeza</Badge>
+                  <Badge className="bg-white text-gray-700 border-gray-200">🦒 Cuello</Badge>
+                  <Badge className="bg-white text-gray-700 border-gray-200">💪 Hombros</Badge>
+                  <Badge className="bg-white text-gray-700 border-gray-200">🔙 Espalda</Badge>
+                  <Badge className="bg-white text-gray-700 border-gray-200">+6 más</Badge>
+                </div>
+              </div>
+              <ChevronRight className="w-8 h-8 text-gray-400 group-hover:text-red-500 transition-colors hidden md:block" />
+            </div>
+          </Card>
 
           {/* Regulación y Emergencias */}
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Regulación y Emergencias</h2>
