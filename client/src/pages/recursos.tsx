@@ -190,7 +190,9 @@ const alertasClinicas = [
 
 export default function RecursosGratis() {
   const { toast } = useToast();
-  const [currentView, setCurrentView] = useState<'main' | 'emotional-log' | 'affirmation' | 'evaluation' | 'emotion-history' | 'breathing' | 'gratitude' | 'bad-day' | 'grounding' | 'bilateral' | 'iso-check'>('main');
+  const [currentView, setCurrentView] = useState<'main' | 'emotional-log' | 'affirmation' | 'evaluation' | 'emotion-history' | 'breathing' | 'gratitude' | 'bad-day' | 'grounding' | 'bilateral' | 'iso-check' | 'emotion-wheel'>('main');
+  const [wheelSelectedEmotion, setWheelSelectedEmotion] = useState<any>(null);
+  const [wheelLayer, setWheelLayer] = useState<'core' | 'middle' | 'outer'>('core');
   const [selectedEmotion, setSelectedEmotion] = useState<string>('');
   const [emotionalNote, setEmotionalNote] = useState('');
   const [currentAffirmationIndex, setCurrentAffirmationIndex] = useState(0);
@@ -1550,6 +1552,179 @@ export default function RecursosGratis() {
     );
   }
 
+  if (currentView === 'emotion-wheel') {
+    const plutchikEmotions = {
+      core: [
+        { name: 'Éxtasis', emoji: '🤩', color: '#FFD700', family: 'Alegría', description: 'Felicidad intensa y desbordante' },
+        { name: 'Admiración', emoji: '🤩', color: '#7CFC00', family: 'Confianza', description: 'Profundo respeto y admiración' },
+        { name: 'Terror', emoji: '😱', color: '#228B22', family: 'Miedo', description: 'Miedo extremo e incontrolable' },
+        { name: 'Asombro', emoji: '😲', color: '#00CED1', family: 'Sorpresa', description: 'Impacto total ante lo inesperado' },
+        { name: 'Duelo', emoji: '😭', color: '#4169E1', family: 'Tristeza', description: 'Dolor profundo por una pérdida' },
+        { name: 'Asco', emoji: '🤢', color: '#9370DB', family: 'Repugnancia', description: 'Rechazo intenso y visceral' },
+        { name: 'Furia', emoji: '🤬', color: '#FF4500', family: 'Ira', description: 'Ira descontrolada y explosiva' },
+        { name: 'Vigilancia', emoji: '👁️', color: '#FF8C00', family: 'Anticipación', description: 'Atención máxima ante una amenaza' },
+      ],
+      middle: [
+        { name: 'Alegría', emoji: '😊', color: '#FFD700', family: 'Alegría', description: 'Sensación de bienestar y felicidad' },
+        { name: 'Confianza', emoji: '🤝', color: '#7CFC00', family: 'Confianza', description: 'Seguridad en uno mismo o en otros' },
+        { name: 'Miedo', emoji: '😨', color: '#228B22', family: 'Miedo', description: 'Reacción ante un peligro percibido' },
+        { name: 'Sorpresa', emoji: '😮', color: '#00CED1', family: 'Sorpresa', description: 'Reacción ante algo inesperado' },
+        { name: 'Tristeza', emoji: '😢', color: '#4169E1', family: 'Tristeza', description: 'Dolor emocional o melancolía' },
+        { name: 'Repugnancia', emoji: '😖', color: '#9370DB', family: 'Repugnancia', description: 'Rechazo hacia algo desagradable' },
+        { name: 'Ira', emoji: '😠', color: '#FF4500', family: 'Ira', description: 'Enfado fuerte ante una injusticia' },
+        { name: 'Anticipación', emoji: '🔮', color: '#FF8C00', family: 'Anticipación', description: 'Expectativa ante lo que viene' },
+      ],
+      outer: [
+        { name: 'Serenidad', emoji: '😌', color: '#FFD700', family: 'Alegría', description: 'Calma y paz interior' },
+        { name: 'Aceptación', emoji: '🙂', color: '#7CFC00', family: 'Confianza', description: 'Apertura a lo que es' },
+        { name: 'Aprensión', emoji: '😟', color: '#228B22', family: 'Miedo', description: 'Inquietud ligera ante algo' },
+        { name: 'Distracción', emoji: '🫤', color: '#00CED1', family: 'Sorpresa', description: 'Falta de enfoque o atención' },
+        { name: 'Melancolía', emoji: '😔', color: '#4169E1', family: 'Tristeza', description: 'Nostalgia suave y reflexiva' },
+        { name: 'Aburrimiento', emoji: '😑', color: '#9370DB', family: 'Repugnancia', description: 'Falta de interés o estímulo' },
+        { name: 'Molestia', emoji: '😤', color: '#FF4500', family: 'Ira', description: 'Irritación leve por algo' },
+        { name: 'Interés', emoji: '🤔', color: '#FF8C00', family: 'Anticipación', description: 'Curiosidad hacia algo nuevo' },
+      ]
+    };
+
+    const combinedEmotions = [
+      { name: 'Amor', emoji: '❤️', from: 'Alegría + Confianza', color: 'from-yellow-400 to-green-400', description: 'Vínculo profundo de afecto y seguridad' },
+      { name: 'Sumisión', emoji: '🙇', from: 'Confianza + Miedo', color: 'from-green-400 to-emerald-600', description: 'Ceder ante la autoridad o presión' },
+      { name: 'Susto', emoji: '😰', from: 'Miedo + Sorpresa', color: 'from-emerald-600 to-cyan-500', description: 'Reacción repentina de miedo' },
+      { name: 'Decepción', emoji: '😞', from: 'Sorpresa + Tristeza', color: 'from-cyan-500 to-blue-500', description: 'Desilusión ante expectativas rotas' },
+      { name: 'Remordimiento', emoji: '😣', from: 'Tristeza + Repugnancia', color: 'from-blue-500 to-purple-500', description: 'Culpa por algo que hicimos' },
+      { name: 'Desprecio', emoji: '😒', from: 'Repugnancia + Ira', color: 'from-purple-500 to-red-500', description: 'Rechazo con indignación' },
+      { name: 'Agresividad', emoji: '💢', from: 'Ira + Anticipación', color: 'from-red-500 to-orange-500', description: 'Impulso de ataque o confrontación' },
+      { name: 'Optimismo', emoji: '🌟', from: 'Anticipación + Alegría', color: 'from-orange-500 to-yellow-400', description: 'Expectativa positiva del futuro' },
+    ];
+
+    const currentEmotions = plutchikEmotions[wheelLayer];
+    const layerLabels = { core: 'Intensas', middle: 'Básicas', outer: 'Suaves' };
+
+    const saveWheelEmotion = (emotion: any) => {
+      const log = {
+        date: new Date().toISOString(),
+        emotion: emotion.name,
+        emoji: emotion.emoji,
+        family: emotion.family,
+        layer: wheelLayer,
+        description: emotion.description
+      };
+      const existing = JSON.parse(localStorage.getItem('nuxa-wheel-history') || '[]');
+      existing.push(log);
+      localStorage.setItem('nuxa-wheel-history', JSON.stringify(existing));
+      toast({ title: `${emotion.emoji} ${emotion.name}`, description: `Registrado: ${emotion.description}` });
+    };
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-3xl mx-auto">
+            <Button variant="ghost" onClick={() => { setCurrentView('main'); setWheelSelectedEmotion(null); setWheelLayer('core'); }} className="mb-6">
+              ← Volver
+            </Button>
+
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">Rueda de Emociones</h2>
+              <p className="text-gray-600">Basada en la teoría de Robert Plutchik. Explora tus emociones desde las más intensas hasta las más suaves.</p>
+            </div>
+
+            <div className="flex justify-center gap-2 mb-8">
+              {(['core', 'middle', 'outer'] as const).map((layer) => (
+                <Button
+                  key={layer}
+                  variant={wheelLayer === layer ? 'default' : 'outline'}
+                  onClick={() => { setWheelLayer(layer); setWheelSelectedEmotion(null); }}
+                  className={wheelLayer === layer ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white' : ''}
+                >
+                  {layer === 'core' ? '🔥 Intensas' : layer === 'middle' ? '⚡ Básicas' : '🌊 Suaves'}
+                </Button>
+              ))}
+            </div>
+
+            <div className="relative mb-8">
+              <div className="grid grid-cols-4 gap-3">
+                {currentEmotions.map((emotion, index) => (
+                  <Card
+                    key={emotion.name}
+                    className={`p-4 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg text-center ${
+                      wheelSelectedEmotion?.name === emotion.name ? 'ring-2 ring-offset-2 shadow-xl scale-105' : ''
+                    }`}
+                    style={{
+                      borderColor: emotion.color,
+                      borderWidth: '2px',
+                      background: wheelSelectedEmotion?.name === emotion.name
+                        ? `linear-gradient(135deg, ${emotion.color}20, ${emotion.color}10)`
+                        : undefined
+                    }}
+                    onClick={() => setWheelSelectedEmotion(emotion)}
+                  >
+                    <span className="text-3xl block mb-2">{emotion.emoji}</span>
+                    <p className="font-semibold text-sm text-gray-900">{emotion.name}</p>
+                    <p className="text-xs text-gray-500 mt-1">{emotion.family}</p>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {wheelSelectedEmotion && (
+              <Card className="p-6 mb-8 border-2 animate-in fade-in duration-300" style={{ borderColor: wheelSelectedEmotion.color }}>
+                <div className="flex items-start gap-4">
+                  <span className="text-5xl">{wheelSelectedEmotion.emoji}</span>
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold text-gray-900">{wheelSelectedEmotion.name}</h3>
+                    <p className="text-sm text-gray-500 mb-2">Familia: {wheelSelectedEmotion.family} · Intensidad: {layerLabels[wheelLayer]}</p>
+                    <p className="text-gray-700 mb-4">{wheelSelectedEmotion.description}</p>
+                    <Button
+                      onClick={() => { saveWheelEmotion(wheelSelectedEmotion); }}
+                      className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white"
+                    >
+                      📝 Registrar esta emoción
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            )}
+
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">Emociones Combinadas (Díadas)</h3>
+              <p className="text-gray-600 text-center text-sm mb-6">Cuando dos emociones básicas se mezclan, surgen emociones complejas</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {combinedEmotions.map((emotion) => (
+                  <Card
+                    key={emotion.name}
+                    className="p-4 cursor-pointer hover:shadow-lg transition-all text-center hover:scale-105"
+                    onClick={() => {
+                      setWheelSelectedEmotion({ ...emotion, family: emotion.from });
+                    }}
+                  >
+                    <div className={`w-10 h-10 rounded-full bg-gradient-to-r ${emotion.color} mx-auto mb-2 flex items-center justify-center`}>
+                      <span className="text-lg">{emotion.emoji}</span>
+                    </div>
+                    <p className="font-semibold text-sm text-gray-900">{emotion.name}</p>
+                    <p className="text-xs text-gray-500 mt-1">{emotion.from}</p>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            <Card className="p-6 bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-200">
+              <h3 className="font-bold text-gray-900 mb-2">💡 ¿Para qué sirve?</h3>
+              <ul className="text-sm text-gray-700 space-y-2">
+                <li>• <strong>Ampliar tu vocabulario emocional</strong> — Pasar de "estoy mal" a identificar exactamente qué sientes</li>
+                <li>• <strong>Comprender la intensidad</strong> — No es lo mismo molestia que furia, ni melancolía que duelo</li>
+                <li>• <strong>Descubrir emociones mixtas</strong> — Muchas veces sentimos combinaciones, como amor (alegría + confianza)</li>
+                <li>• <strong>Comunicar mejor</strong> — Saber nombrar lo que sientes facilita la comunicación con los demás</li>
+              </ul>
+            </Card>
+
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   if (currentView === 'emotional-log') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
@@ -1940,7 +2115,7 @@ export default function RecursosGratis() {
           </div>
 
           {/* Nuevas Herramientas */}
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             <Card 
               className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100"
               onClick={() => setCurrentView('emotion-history')}
@@ -1955,6 +2130,23 @@ export default function RecursosGratis() {
               </p>
               <Badge className="bg-blue-100 text-blue-700 border-blue-200">
                 📅 Calendario
+              </Badge>
+            </Card>
+
+            <Card 
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100"
+              onClick={() => setCurrentView('emotion-wheel')}
+              data-testid="card-emotion-wheel"
+            >
+              <Target className="w-10 h-10 text-indigo-500 mb-3" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Rueda de Emociones
+              </h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Identifica con precisión lo que sientes con la rueda de Plutchik
+              </p>
+              <Badge className="bg-indigo-100 text-indigo-700 border-indigo-200">
+                🎯 24 emociones
               </Badge>
             </Card>
 
