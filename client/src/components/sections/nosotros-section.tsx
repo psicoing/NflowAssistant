@@ -101,41 +101,6 @@ export default function NosotrosSection() {
           </div>
         </div>
 
-        {/* Company Info */}
-        <div className="grid md:grid-cols-2 gap-12 mb-16">
-          <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Información Corporativa</h3>
-            <div className="space-y-4 text-gray-600">
-              <p><strong>Desarrollador de Software:</strong> Ramón Molons de San Román</p>
-              <p><strong>DNI:</strong> 40436705Z</p>
-              <p><strong>Domicilio:</strong> Portbou, Girona, España</p>
-              <p><strong>Email:</strong> empordajobs@gmail.com</p>
-              <p><strong>Teléfono:</strong> +34 660 45 21 36</p>
-            </div>
-          </div>
-          
-          <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Tecnología y Seguridad</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <Shield className="w-5 h-5 text-green-500" />
-                <span className="text-gray-600">Cifrado end-to-end</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Shield className="w-5 h-5 text-green-500" />
-                <span className="text-gray-600">Cumplimiento RGPD</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Shield className="w-5 h-5 text-green-500" />
-                <span className="text-gray-600">Servidores seguros en UE</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Shield className="w-5 h-5 text-green-500" />
-                <span className="text-gray-600">Auditorías de seguridad regulares</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* CTA */}
         <div className="text-center bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-12">
