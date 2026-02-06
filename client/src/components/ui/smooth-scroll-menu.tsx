@@ -27,7 +27,7 @@ const menuItems = [
   },
   {
     id: "quienes-somos",
-    name: "Quienes Somos",
+    name: "Nuestro Software",
     sectionId: "quienes-somos",
     icon: User,
     isPage: true
