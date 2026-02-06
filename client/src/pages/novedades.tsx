@@ -31,7 +31,7 @@ export default function Novedades() {
             </div>
             
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              NUXA <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-400">2026.01.17</span>
+              NUXA <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-400">Novedades</span>
             </h1>
             
             <p className="text-xl text-white max-w-2xl mx-auto">
