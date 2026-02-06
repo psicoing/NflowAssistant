@@ -9,8 +9,8 @@ const popupContent = {
     title: "¿Te vas sin hablar de lo que te preocupa?",
     description: "NUXA te escucha 24/7, sin juicios, en tu idioma.",
     highlight: "La experiencia es tan real que pensarás que hablas con un psicólogo sabio.",
-    price: "Pide a tu empresa o administración que active NUXA para ti",
-    noCommitment: "Sin coste para el usuario · Disponible para empresas y sector público",
+    price: "Pide a tu empresa o administración que active NUXA para vosotros",
+    noCommitment: "Gratis si tu organización lo ofrece · También disponible a través de profesionales autorizados",
     cta: "Más información para organizaciones",
     dismiss: "No gracias, prefiero seguir solo/a"
   },
@@ -18,8 +18,8 @@ const popupContent = {
     title: "Leaving without talking about what worries you?",
     description: "NUXA listens 24/7, without judgment, in your language.",
     highlight: "The experience is so real you'll think you're talking to a wise psychologist.",
-    price: "Ask your company or administration to activate NUXA for you",
-    noCommitment: "Free for users · Available for businesses and public sector",
+    price: "Ask your company or administration to activate NUXA for your team",
+    noCommitment: "Free if your organization offers it · Also available through authorized professionals",
     cta: "More info for organizations",
     dismiss: "No thanks, I prefer to go it alone"
   }
