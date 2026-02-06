@@ -77,29 +77,6 @@ export default function NosotrosSection() {
           </div>
         </div>
 
-        {/* Professional Credentials */}
-        <div className="bg-gray-900 rounded-3xl p-12 mb-16">
-          <h3 className="text-3xl font-bold text-white text-center mb-8">
-            Respaldo Profesional
-          </h3>
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="bg-nflow-orange rounded-2xl p-6 mb-8 inline-block">
-              <Award className="w-16 h-16 text-white mx-auto mb-4" />
-              <h4 className="text-2xl font-bold text-white mb-2">
-                Llic. Ramón Molons de San Román
-              </h4>
-              <div className="text-white/90 text-lg space-y-1">
-                <p>Colegiado Colegio de Psicólogos de Barcelona #7851</p>
-                <p>Licencia Sanitaria Estatal E-17928702</p>
-              </div>
-            </div>
-            <p className="text-gray-300 text-lg leading-relaxed">
-              Nuestro equipo está dirigido por psicólogos colegiados con años de experiencia 
-              en salud mental y tecnología. Cada respuesta de nuestro asistente IA está fundamentada 
-              en evidencia científica y supervisada por profesionales cualificados.
-            </p>
-          </div>
-        </div>
 
       </div>
     </section>
