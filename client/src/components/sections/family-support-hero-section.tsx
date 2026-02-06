@@ -98,68 +98,68 @@ export default function FamilySupportHeroSection() {
             {/* Features Grid */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
               {/* Para Toda la Familia */}
-              <div className="flex flex-col items-center text-center gap-3 bg-white dark:bg-slate-800 p-6 rounded-2xl border-2 border-emerald-200 dark:border-slate-700 hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-600 transition-all duration-300 transform hover:scale-105">
+              <div className="flex flex-col items-center text-center gap-3 bg-white dark:bg-slate-800 p-6 pb-4 rounded-2xl border-2 border-emerald-200 dark:border-slate-700 hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-600 transition-all duration-300 transform hover:scale-105">
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
                   <Users className="w-7 h-7 text-white" />
                 </div>
-                <div>
+                <div className="flex-1">
                   <h3 className="font-extrabold text-gray-900 dark:text-white mb-2 text-lg">Para Toda la Familia</h3>
                   <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">Apoyo integral desde los 12 años</p>
                 </div>
                 <Link
                   href="/quienes-somos"
-                  className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-700 hover:shadow-md transition-all duration-200"
+                  className="mt-auto inline-flex items-center justify-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/30 px-4 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-700 hover:shadow-md transition-all duration-200"
                 >
                   Saber más <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
 
               {/* 100% Confidencial */}
-              <div className="flex flex-col items-center text-center gap-3 bg-white dark:bg-slate-800 p-6 rounded-2xl border-2 border-cyan-200 dark:border-slate-700 hover:shadow-xl hover:border-cyan-400 dark:hover:border-cyan-600 transition-all duration-300 transform hover:scale-105">
+              <div className="flex flex-col items-center text-center gap-3 bg-white dark:bg-slate-800 p-6 pb-4 rounded-2xl border-2 border-cyan-200 dark:border-slate-700 hover:shadow-xl hover:border-cyan-400 dark:hover:border-cyan-600 transition-all duration-300 transform hover:scale-105">
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg">
                   <Shield className="w-7 h-7 text-white" />
                 </div>
-                <div>
+                <div className="flex-1">
                   <h3 className="font-extrabold text-gray-900 dark:text-white mb-2 text-lg">100% Confidencial</h3>
                   <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">Privacidad y anonimato garantizados</p>
                 </div>
                 <button
                   onClick={() => setIsLegalNoticeOpen(true)}
-                  className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 bg-cyan-50 dark:bg-cyan-900/30 px-3 py-1.5 rounded-full border border-cyan-200 dark:border-cyan-700 hover:shadow-md transition-all duration-200"
+                  className="mt-auto inline-flex items-center justify-center gap-1 text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 bg-cyan-50 dark:bg-cyan-900/30 px-4 py-1.5 rounded-full border border-cyan-200 dark:border-cyan-700 hover:shadow-md transition-all duration-200"
                 >
                   Ver aviso legal <ArrowRight className="w-3 h-3" />
                 </button>
               </div>
 
               {/* Profesional */}
-              <div className="flex flex-col items-center text-center gap-3 bg-white dark:bg-slate-800 p-6 rounded-2xl border-2 border-teal-200 dark:border-slate-700 hover:shadow-xl hover:border-teal-400 dark:hover:border-teal-600 transition-all duration-300 transform hover:scale-105">
+              <div className="flex flex-col items-center text-center gap-3 bg-white dark:bg-slate-800 p-6 pb-4 rounded-2xl border-2 border-teal-200 dark:border-slate-700 hover:shadow-xl hover:border-teal-400 dark:hover:border-teal-600 transition-all duration-300 transform hover:scale-105">
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
                   <Award className="w-7 h-7 text-white" />
                 </div>
-                <div>
+                <div className="flex-1">
                   <h3 className="font-extrabold text-gray-900 dark:text-white mb-2 text-lg">Profesional</h3>
                   <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">Basado en 30+ años de experiencia</p>
                 </div>
                 <Link
                   href="/ejemplos-chat"
-                  className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 bg-teal-50 dark:bg-teal-900/30 px-3 py-1.5 rounded-full border border-teal-200 dark:border-teal-700 hover:shadow-md transition-all duration-200"
+                  className="mt-auto inline-flex items-center justify-center gap-1 text-xs font-semibold text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 bg-teal-50 dark:bg-teal-900/30 px-4 py-1.5 rounded-full border border-teal-200 dark:border-teal-700 hover:shadow-md transition-all duration-200"
                 >
                   Ver ejemplos <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
 
               {/* Con nuxa, equilibrio presente */}
-              <div className="flex flex-col items-center text-center gap-3 bg-white dark:bg-slate-800 p-6 rounded-2xl border-2 border-blue-200 dark:border-slate-700 hover:shadow-xl hover:border-blue-400 dark:hover:border-blue-600 transition-all duration-300 transform hover:scale-105">
+              <div className="flex flex-col items-center text-center gap-3 bg-white dark:bg-slate-800 p-6 pb-4 rounded-2xl border-2 border-blue-200 dark:border-slate-700 hover:shadow-xl hover:border-blue-400 dark:hover:border-blue-600 transition-all duration-300 transform hover:scale-105">
                 <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                   <Clock className="w-7 h-7 text-white" />
                 </div>
-                <div>
+                <div className="flex-1">
                   <h3 className="font-extrabold text-gray-900 dark:text-white mb-2 text-lg">Con nuxa, equilibrio presente</h3>
                   <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">Apoyo cuando lo necesites</p>
                 </div>
                 <Link
                   href="/recursos"
-                  className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-3 py-1.5 rounded-full border border-blue-200 dark:border-blue-700 hover:shadow-md transition-all duration-200"
+                  className="mt-auto inline-flex items-center justify-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-4 py-1.5 rounded-full border border-blue-200 dark:border-blue-700 hover:shadow-md transition-all duration-200"
                 >
                   Probar gratis <ArrowRight className="w-3 h-3" />
                 </Link>
