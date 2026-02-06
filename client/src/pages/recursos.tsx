@@ -3114,12 +3114,12 @@ export default function RecursosGratis() {
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   <strong className="text-blue-700 dark:text-blue-400">NUXA para empresas:</strong> Guías, tests orientativos y estrategias de prevención
                 </p>
-                <Link href="/precios">
+                <a href="https://jobda.org/partners" target="_blank" rel="noopener noreferrer">
                   <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold">
                     Ver planes empresas
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
-                </Link>
+                </a>
               </div>
             </div>
           </Card>
@@ -3170,7 +3170,7 @@ export default function RecursosGratis() {
                   </div>
                   
                   <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                    <Link href="/precios">
+                    <a href="https://jobda.org/partners" target="_blank" rel="noopener noreferrer">
                       <Button 
                         size="lg" 
                         className="w-full sm:w-auto bg-white text-emerald-700 hover:bg-gray-100 font-bold text-lg px-8 py-6 shadow-xl"
@@ -3179,12 +3179,8 @@ export default function RecursosGratis() {
                         Escoge tu plan
                         <ArrowRight className="w-5 h-5 ml-2" />
                       </Button>
-                    </Link>
+                    </a>
                   </div>
-                  
-                  <p className="text-white/70 text-sm">
-                    Sin permanencia · Cancela cuando quieras · También pago por uso
-                  </p>
                 </div>
                 
                 {/* Right content - Examples */}
