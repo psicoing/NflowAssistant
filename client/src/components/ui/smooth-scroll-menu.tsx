@@ -65,10 +65,11 @@ const menuItems = [
     icon: Smartphone
   },
   {
-    id: "contacto",
-    name: "Contacto",
-    sectionId: "contacto",
-    icon: Phone
+    id: "contacto-licitacion",
+    name: "Contacto Licitación",
+    sectionId: "contacto-licitacion",
+    icon: Phone,
+    externalUrl: "https://jobda.org/partners"
   }
 ];
 
