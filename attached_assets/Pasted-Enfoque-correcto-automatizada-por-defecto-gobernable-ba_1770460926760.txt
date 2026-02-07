@@ -1,0 +1,108 @@
+Enfoque correcto: automatizada por defecto, gobernable bajo llave
+
+NUXA debe seguir siendo automática, pero no ciega.
+La clave no es “ceder el control”, sino habilitar un cofre de gobierno (así, en castellano viejo y claro).
+
+Piensa en NUXA como un avión:
+
+vuela solo (autopilot),
+
+pero existe cabina, existe caja negra y existe mando maestro.
+
+El concepto clave: Cofre de Gobierno / Control de Soberanía
+
+No es para el usuario final.
+Es para el licitante (Ministerio, mutua, empresa, universidad).
+
+¿Qué es?
+
+Un entorno sellado, separado del core de NUXA, que permite control estratégico sin tocar el motor.
+
+Capas (esto es importante)
+4
+1️⃣ Núcleo NUXA (intocable)
+
+Motor clínico
+
+IA
+
+Prompts
+
+Lógica psicológica
+👉 Esto no se entrega nunca.
+Es tu propiedad intelectual. Punto.
+
+2️⃣ Capa de Automatismo (default)
+
+Usuarios interactúan
+
+Flujos automáticos
+
+Recursos
+
+IA responde sin intervención humana
+
+👉 Aquí NUXA es autónoma, escalable, barata de mantener.
+
+3️⃣ Cofre de Gobierno (lo que preguntas)
+
+Este es el enfoque correcto.
+
+Funciones típicas del cofre:
+
+✔️ Alta / baja de usuarios (CSV, API, centros)
+
+✔️ Límites de uso (nº usuarios, zonas, colectivos)
+
+✔️ Activar / desactivar módulos
+
+✔️ Auditoría (logs, no contenidos)
+
+✔️ Alertas agregadas (no clínicas)
+
+✔️ Cumplimiento legal (ISO, RGPD, trazabilidad)
+
+❌ Nunca:
+
+leer conversaciones
+
+intervenir en la IA
+
+modificar respuestas clínicas
+
+“dirigir” NUXA
+
+Muy importante: control ≠ intervención
+
+Aquí está la línea roja (y tú la ves bien):
+
+Control permitido	Intervención prohibida
+Gestión de acceso	Leer chats
+Métricas globales	Cambiar respuestas
+Auditoría técnica	Decidir criterios clínicos
+Gobierno del sistema	Gobierno del contenido
+
+Esto te protege legalmente y éticamente.
+
+Modelo mental sencillo (para explicarlo a Sanidad)
+
+“NUXA funciona sola.
+El licitante no controla personas ni discursos,
+controla el perímetro, no el contenido.”
+
+Eso en administración entra como mantequilla.
+
+Nombres que funcionan (elige uno)
+
+Cofre de Gobierno NUXA
+
+Panel de Soberanía del Licenciatario
+
+Governance Vault
+
+Administrative Control Shell
+
+Capa de Gobierno Institucional
+
+Yo, con tu perfil:
+👉 Cofre de Gobierno NUXA (claro, serio, poco americano).
