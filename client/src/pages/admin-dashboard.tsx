@@ -59,6 +59,7 @@ export default function AdminDashboard() {
     commissionRate: "10"
   });
   const [isApproving, setIsApproving] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
     checkAuthAndFetchStats();
@@ -283,7 +284,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Main Content Tabs */}
-        <Tabs defaultValue="overview" className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="bg-gray-800/50 border-gray-700">
             <TabsTrigger value="overview" className="data-[state=active]:bg-orange-600">Resumen</TabsTrigger>
             <TabsTrigger value="users" className="data-[state=active]:bg-orange-600">Usuarios</TabsTrigger>
@@ -330,31 +331,28 @@ export default function AdminDashboard() {
                 <CardContent className="space-y-3">
                   <Button 
                     className="w-full bg-blue-600 hover:bg-blue-700"
-                    onClick={() => setLocation("/admin/users")}
+                    onClick={() => setActiveTab("users")}
                   >
                     <Users className="h-4 w-4 mr-2" />
                     Gestionar Usuarios
                   </Button>
                   <Button 
                     className="w-full bg-green-600 hover:bg-green-700"
-                    onClick={() => setLocation("/admin/subscriptions")}
+                    onClick={() => setActiveTab("subscriptions")}
                   >
                     <CreditCard className="h-4 w-4 mr-2" />
                     Gestionar Suscripciones
                   </Button>
                   <Button 
                     className="w-full bg-purple-600 hover:bg-purple-700"
-                    onClick={() => setLocation("/admin/content")}
+                    onClick={() => setActiveTab("content")}
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     Gestionar Contenido
                   </Button>
                   <Button 
                     className="w-full bg-orange-600 hover:bg-orange-700 relative"
-                    onClick={() => {
-                      const partnersTab = document.querySelector('[data-state="inactive"][value="partners"]') as HTMLButtonElement;
-                      partnersTab?.click();
-                    }}
+                    onClick={() => setActiveTab("partners")}
                   >
                     <HandHeart className="h-4 w-4 mr-2" />
                     Gestionar Partners
