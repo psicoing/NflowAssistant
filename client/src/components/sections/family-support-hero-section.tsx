@@ -178,7 +178,7 @@ export default function FamilySupportHeroSection() {
               </Link>
 
               <Link 
-                href="/recursos"
+                href="/recursos-gratuitos"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
                 <BookOpen className="w-5 h-5" />

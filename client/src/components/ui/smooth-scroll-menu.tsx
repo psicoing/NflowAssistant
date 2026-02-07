@@ -19,9 +19,9 @@ const menuItems = [
     isPage: true
   },
   {
-    id: "recursos",
+    id: "recursos-gratuitos",
     name: "Recursos Gratis",
-    sectionId: "recursos",
+    sectionId: "recursos-gratuitos",
     icon: BookOpen,
     isPage: true
   },

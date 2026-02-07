@@ -60,7 +60,7 @@ export default function FreeResourcesCardSection() {
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold text-lg px-8 self-start group"
-                onClick={() => window.location.href = "/recursos"}
+                onClick={() => window.location.href = "/recursos-gratuitos"}
                 data-testid="button-go-to-free-resources"
               >
                 Explorar Recursos Gratis
