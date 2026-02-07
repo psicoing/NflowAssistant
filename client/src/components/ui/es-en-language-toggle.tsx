@@ -34,7 +34,7 @@ export default function EsEnLanguageToggle() {
   const langOptions: { code: Language; flag: string; label: string }[] = [
     { code: 'es', flag: '🇪🇸', label: 'ES' },
     { code: 'fr', flag: '🇫🇷', label: 'FR' },
-    { code: 'en', flag: '🇬🇧', label: 'GB' },
+    { code: 'en', flag: '🇺🇸', label: 'US' },
   ];
 
   return (
