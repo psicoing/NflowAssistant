@@ -2,7 +2,7 @@ import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog } from "@shared/schema";
+import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog, conversations, messages } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
 import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
 import bcrypt from "bcrypt";
@@ -839,6 +839,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching admin stats:", error);
       res.status(500).json({ message: "Error fetching stats" });
+    }
+  });
+
+  // ===== ADMIN USER MANAGEMENT =====
+
+  // Get all users for admin
+  app.get("/api/admin/users", async (req, res) => {
+    if (!req.session.isAdmin) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+    try {
+      const allUsers = await storage.getAllUsers();
+      const safeUsers = allUsers.map(u => ({
+        id: u.id,
+        username: u.username,
+        email: u.email,
+        role: u.role,
+        subscriptionStatus: u.subscriptionStatus,
+        subscriptionPlan: u.subscriptionPlan,
+        monthlyQuestionLimit: u.monthlyQuestionLimit,
+        questionsUsedThisMonth: u.questionsUsedThisMonth,
+        prepaidQuestions: u.prepaidQuestions,
+        createdAt: u.createdAt,
+        lastLoginAt: u.lastLoginAt,
+        loginCount: u.loginCount,
+        createdByPartnerId: u.createdByPartnerId,
+        acceptedNuxaNotice: u.acceptedNuxaNotice
+      }));
+      res.json(safeUsers);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ message: "Error fetching users" });
+    }
+  });
+
+  // Update user subscription/plan
+  app.patch("/api/admin/users/:userId", async (req, res) => {
+    if (!req.session.isAdmin) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+    try {
+      const userId = parseInt(req.params.userId);
+      const { subscriptionStatus, subscriptionPlan, monthlyQuestionLimit, role } = req.body;
+      const updateData: any = {};
+      if (subscriptionStatus !== undefined) updateData.subscriptionStatus = subscriptionStatus;
+      if (subscriptionPlan !== undefined) updateData.subscriptionPlan = subscriptionPlan;
+      if (monthlyQuestionLimit !== undefined) updateData.monthlyQuestionLimit = parseInt(monthlyQuestionLimit);
+      if (role !== undefined) updateData.role = role;
+
+      const [updated] = await db.update(users).set(updateData).where(eq(users.id, userId)).returning();
+      if (!updated) return res.status(404).json({ message: "Usuario no encontrado" });
+      res.json({ success: true, user: { id: updated.id, username: updated.username, subscriptionStatus: updated.subscriptionStatus, subscriptionPlan: updated.subscriptionPlan, monthlyQuestionLimit: updated.monthlyQuestionLimit, role: updated.role } });
+    } catch (error) {
+      console.error("Error updating user:", error);
+      res.status(500).json({ message: "Error updating user" });
+    }
+  });
+
+  // Delete user
+  app.delete("/api/admin/users/:userId", async (req, res) => {
+    if (!req.session.isAdmin) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+    try {
+      const userId = parseInt(req.params.userId);
+      const userConversations = await db.select({ id: conversations.id }).from(conversations).where(eq(conversations.userId, userId));
+      for (const conv of userConversations) {
+        await db.delete(messages).where(eq(messages.conversationId, conv.id));
+      }
+      await db.delete(conversations).where(eq(conversations.userId, userId));
+      await db.delete(users).where(eq(users.id, userId));
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      res.status(500).json({ message: "Error deleting user" });
     }
   });
 

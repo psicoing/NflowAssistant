@@ -24,7 +24,12 @@ import {
   Bell,
   Edit,
   Pause,
-  Play
+  Play,
+  Search,
+  Trash2,
+  Book,
+  RefreshCw,
+  Eye
 } from "lucide-react";
 
 interface DashboardStats {
@@ -60,6 +65,17 @@ export default function AdminDashboard() {
   });
   const [isApproving, setIsApproving] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
+  const [adminUsers, setAdminUsers] = useState<any[]>([]);
+  const [usersLoading, setUsersLoading] = useState(false);
+  const [userSearch, setUserSearch] = useState("");
+  const [userStatusFilter, setUserStatusFilter] = useState("all");
+  const [editingUser, setEditingUser] = useState<any | null>(null);
+  const [showEditUserModal, setShowEditUserModal] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<number | null>(null);
+  const [editUserForm, setEditUserForm] = useState({ subscriptionStatus: "", subscriptionPlan: "", monthlyQuestionLimit: "", role: "" });
+  const [resources, setResources] = useState<any[]>([]);
+  const [books, setBooks] = useState<any[]>([]);
+  const [contentLoading, setContentLoading] = useState(false);
 
   useEffect(() => {
     checkAuthAndFetchStats();
@@ -68,6 +84,106 @@ export default function AdminDashboard() {
   useEffect(() => {
     fetchPartners();
   }, []);
+
+  useEffect(() => {
+    if (activeTab === "users" || activeTab === "subscriptions" || activeTab === "revenue") {
+      if (adminUsers.length === 0) fetchAdminUsers();
+    }
+    if (activeTab === "content") {
+      if (resources.length === 0 && books.length === 0) fetchContent();
+    }
+  }, [activeTab]);
+
+  const fetchAdminUsers = async () => {
+    setUsersLoading(true);
+    try {
+      const response = await fetch("/api/admin/users");
+      if (response.ok) {
+        const data = await response.json();
+        setAdminUsers(data);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    } finally {
+      setUsersLoading(false);
+    }
+  };
+
+  const fetchContent = async () => {
+    setContentLoading(true);
+    try {
+      const [resResponse, booksResponse] = await Promise.all([
+        fetch("/api/resources"),
+        fetch("/api/books")
+      ]);
+      if (resResponse.ok) setResources(await resResponse.json());
+      if (booksResponse.ok) setBooks(await booksResponse.json());
+    } catch (error) {
+      console.error("Error fetching content:", error);
+    } finally {
+      setContentLoading(false);
+    }
+  };
+
+  const handleEditUser = (user: any) => {
+    setEditingUser(user);
+    setEditUserForm({
+      subscriptionStatus: user.subscriptionStatus || "inactive",
+      subscriptionPlan: user.subscriptionPlan || "",
+      monthlyQuestionLimit: (user.monthlyQuestionLimit || 10).toString(),
+      role: user.role || "user"
+    });
+    setShowEditUserModal(true);
+  };
+
+  const handleSaveUser = async () => {
+    if (!editingUser) return;
+    try {
+      const response = await fetch(`/api/admin/users/${editingUser.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subscriptionStatus: editUserForm.subscriptionStatus,
+          subscriptionPlan: editUserForm.subscriptionPlan || null,
+          monthlyQuestionLimit: parseInt(editUserForm.monthlyQuestionLimit) || 10,
+          role: editUserForm.role
+        })
+      });
+      if (response.ok) {
+        setShowEditUserModal(false);
+        setEditingUser(null);
+        fetchAdminUsers();
+      }
+    } catch (error) {
+      console.error("Error saving user:", error);
+    }
+  };
+
+  const handleDeleteUser = async (userId: number) => {
+    try {
+      const response = await fetch(`/api/admin/users/${userId}`, { method: "DELETE" });
+      if (response.ok) {
+        setShowDeleteConfirm(null);
+        fetchAdminUsers();
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
+  const handleToggleSubscription = async (user: any) => {
+    const newStatus = user.subscriptionStatus === "active" ? "inactive" : "active";
+    try {
+      const response = await fetch(`/api/admin/users/${user.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subscriptionStatus: newStatus })
+      });
+      if (response.ok) fetchAdminUsers();
+    } catch (error) {
+      console.error("Error toggling subscription:", error);
+    }
+  };
 
   const checkAuthAndFetchStats = async () => {
     try {
@@ -563,62 +679,457 @@ export default function AdminDashboard() {
           </TabsContent>
 
           <TabsContent value="users">
-            <Card className="bg-gray-800/50 border-gray-700">
-              <CardHeader>
-                <CardTitle className="text-white">Gestión de Usuarios</CardTitle>
-                <CardDescription className="text-gray-400">
-                  Administrar cuentas de usuario y permisos
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300">Módulo de gestión de usuarios - En desarrollo</p>
-              </CardContent>
-            </Card>
+            <div className="space-y-6">
+              <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-white font-semibold text-lg">Total: {adminUsers.length} usuarios</h3>
+                  <Button size="sm" variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-700" onClick={fetchAdminUsers}>
+                    <RefreshCw className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                  <div className="relative flex-1 md:w-64">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input placeholder="Buscar por nombre o email..." value={userSearch} onChange={(e) => setUserSearch(e.target.value)} className="bg-gray-700 border-gray-600 text-white pl-9" />
+                  </div>
+                  <div className="flex gap-2">
+                    {["all", "active", "inactive"].map((status) => (
+                      <Button key={status} size="sm" variant={userStatusFilter === status ? "default" : "outline"} className={userStatusFilter === status ? "bg-orange-600" : "border-gray-600 text-gray-300 hover:bg-gray-700"} onClick={() => setUserStatusFilter(status)}>
+                        {status === "all" ? "Todos" : status === "active" ? "Activos" : "Inactivos"}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <Card className="bg-gray-800/50 border-gray-700">
+                <CardContent className="p-0">
+                  {usersLoading ? (
+                    <div className="text-center py-12 text-gray-400">Cargando usuarios...</div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b border-gray-700">
+                            <th className="text-left p-4 text-gray-400 text-sm font-medium">Usuario</th>
+                            <th className="text-left p-4 text-gray-400 text-sm font-medium">Email</th>
+                            <th className="text-left p-4 text-gray-400 text-sm font-medium">Plan</th>
+                            <th className="text-left p-4 text-gray-400 text-sm font-medium">Estado</th>
+                            <th className="text-left p-4 text-gray-400 text-sm font-medium">Preguntas</th>
+                            <th className="text-left p-4 text-gray-400 text-sm font-medium">Último Login</th>
+                            <th className="text-left p-4 text-gray-400 text-sm font-medium">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {adminUsers
+                            .filter((u) => {
+                              const matchesSearch = !userSearch || u.username?.toLowerCase().includes(userSearch.toLowerCase()) || u.email?.toLowerCase().includes(userSearch.toLowerCase());
+                              const matchesStatus = userStatusFilter === "all" || u.subscriptionStatus === userStatusFilter;
+                              return matchesSearch && matchesStatus;
+                            })
+                            .map((user) => (
+                              <tr key={user.id} className="border-b border-gray-700/50 hover:bg-gray-700/20">
+                                <td className="p-4 text-white font-medium">{user.username}</td>
+                                <td className="p-4 text-gray-300 text-sm">{user.email || "—"}</td>
+                                <td className="p-4">
+                                  <Badge variant="outline" className="border-gray-600 text-gray-300">{user.subscriptionPlan || "Sin plan"}</Badge>
+                                </td>
+                                <td className="p-4">
+                                  <Badge className={user.subscriptionStatus === "active" ? "bg-green-600" : user.subscriptionStatus === "cancelled" ? "bg-red-600" : "bg-gray-600"}>
+                                    {user.subscriptionStatus || "inactive"}
+                                  </Badge>
+                                </td>
+                                <td className="p-4 text-gray-300 text-sm">{user.questionsUsedThisMonth || 0}/{user.monthlyQuestionLimit || 10}</td>
+                                <td className="p-4 text-gray-400 text-sm">{user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleDateString("es-ES") : "Nunca"}</td>
+                                <td className="p-4">
+                                  <div className="flex gap-2">
+                                    <Button size="sm" variant="outline" className="border-blue-500 text-blue-400 hover:bg-blue-500/20" onClick={() => handleEditUser(user)}>
+                                      <Edit className="h-3 w-3" />
+                                    </Button>
+                                    <Button size="sm" variant="outline" className="border-red-500 text-red-400 hover:bg-red-500/20" onClick={() => setShowDeleteConfirm(user.id)}>
+                                      <Trash2 className="h-3 w-3" />
+                                    </Button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                      {adminUsers.filter((u) => {
+                        const matchesSearch = !userSearch || u.username?.toLowerCase().includes(userSearch.toLowerCase()) || u.email?.toLowerCase().includes(userSearch.toLowerCase());
+                        const matchesStatus = userStatusFilter === "all" || u.subscriptionStatus === userStatusFilter;
+                        return matchesSearch && matchesStatus;
+                      }).length === 0 && (
+                        <div className="text-center py-8 text-gray-400">No se encontraron usuarios</div>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="subscriptions">
-            <Card className="bg-gray-800/50 border-gray-700">
-              <CardHeader>
-                <CardTitle className="text-white">Gestión de Suscripciones</CardTitle>
-                <CardDescription className="text-gray-400">
-                  Administrar planes y suscripciones gratuitas
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300">Módulo de suscripciones - En desarrollo</p>
-              </CardContent>
-            </Card>
+            <div className="space-y-6">
+              {(() => {
+                const subscribers = adminUsers.filter((u) => u.subscriptionPlan || u.subscriptionStatus === "active");
+                const planCounts = { basic: 0, individual: 0, premium: 0, partner: 0 };
+                subscribers.forEach((u) => {
+                  const plan = u.subscriptionPlan as keyof typeof planCounts;
+                  if (plan && plan in planCounts) planCounts[plan]++;
+                });
+                return (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      {(["basic", "individual", "premium", "partner"] as const).map((plan) => (
+                        <Card key={plan} className="bg-gray-800/50 border-gray-700">
+                          <CardContent className="p-6">
+                            <p className="text-sm font-medium text-gray-400 capitalize">{plan}</p>
+                            <p className="text-3xl font-bold text-white mt-1">{planCounts[plan]}</p>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {plan === "basic" ? "€2.99/mes" : plan === "individual" ? "€5.99/mes" : plan === "premium" ? "€32/año" : "Personalizado"}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+
+                    <Card className="bg-gray-800/50 border-gray-700">
+                      <CardHeader>
+                        <CardTitle className="text-white flex items-center">
+                          <CreditCard className="h-5 w-5 mr-2" />
+                          Suscripciones ({subscribers.length})
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="p-0">
+                        {usersLoading ? (
+                          <div className="text-center py-12 text-gray-400">Cargando...</div>
+                        ) : (
+                          <div className="overflow-x-auto">
+                            <table className="w-full">
+                              <thead>
+                                <tr className="border-b border-gray-700">
+                                  <th className="text-left p-4 text-gray-400 text-sm font-medium">Usuario</th>
+                                  <th className="text-left p-4 text-gray-400 text-sm font-medium">Email</th>
+                                  <th className="text-left p-4 text-gray-400 text-sm font-medium">Plan</th>
+                                  <th className="text-left p-4 text-gray-400 text-sm font-medium">Estado</th>
+                                  <th className="text-left p-4 text-gray-400 text-sm font-medium">Límite Mensual</th>
+                                  <th className="text-left p-4 text-gray-400 text-sm font-medium">Créditos Prepago</th>
+                                  <th className="text-left p-4 text-gray-400 text-sm font-medium">Expiración</th>
+                                  <th className="text-left p-4 text-gray-400 text-sm font-medium">Acción</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {subscribers.map((user) => (
+                                  <tr key={user.id} className="border-b border-gray-700/50 hover:bg-gray-700/20">
+                                    <td className="p-4 text-white font-medium">{user.username}</td>
+                                    <td className="p-4 text-gray-300 text-sm">{user.email || "—"}</td>
+                                    <td className="p-4">
+                                      <Badge variant="outline" className="border-gray-600 text-gray-300 capitalize">{user.subscriptionPlan || "—"}</Badge>
+                                    </td>
+                                    <td className="p-4">
+                                      <Badge className={user.subscriptionStatus === "active" ? "bg-green-600" : user.subscriptionStatus === "cancelled" ? "bg-red-600" : "bg-gray-600"}>
+                                        {user.subscriptionStatus || "inactive"}
+                                      </Badge>
+                                    </td>
+                                    <td className="p-4 text-gray-300 text-sm">{user.monthlyQuestionLimit || 10}</td>
+                                    <td className="p-4 text-gray-300 text-sm">{user.prepaidQuestions || 0}</td>
+                                    <td className="p-4 text-gray-400 text-sm">{user.subscriptionExpiresAt ? new Date(user.subscriptionExpiresAt).toLocaleDateString("es-ES") : "—"}</td>
+                                    <td className="p-4">
+                                      <Button size="sm" variant="outline" className={user.subscriptionStatus === "active" ? "border-red-500 text-red-400 hover:bg-red-500/20" : "border-green-500 text-green-400 hover:bg-green-500/20"} onClick={() => handleToggleSubscription(user)}>
+                                        {user.subscriptionStatus === "active" ? <><Pause className="h-3 w-3 mr-1" /> Desactivar</> : <><Play className="h-3 w-3 mr-1" /> Activar</>}
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                            {subscribers.length === 0 && <div className="text-center py-8 text-gray-400">No hay suscripciones registradas</div>}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </>
+                );
+              })()}
+            </div>
           </TabsContent>
 
           <TabsContent value="revenue">
-            <Card className="bg-gray-800/50 border-gray-700">
-              <CardHeader>
-                <CardTitle className="text-white">Análisis de Ingresos</CardTitle>
-                <CardDescription className="text-gray-400">
-                  Reportes financieros y estadísticas de pago
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300">Módulo de ingresos - En desarrollo</p>
-              </CardContent>
-            </Card>
+            <div className="space-y-6">
+              {(() => {
+                const planPrices = { basic: 2.99, individual: 5.99, premium: 32 / 12, partner: 0 };
+                const planLabels = { basic: "€2.99/mes", individual: "€5.99/mes", premium: "€32/año", partner: "Personalizado" };
+                const planCounts = { basic: 0, individual: 0, premium: 0, partner: 0 };
+                let totalPrepaid = 0;
+                const activeSubscribers = adminUsers.filter((u) => u.subscriptionStatus === "active");
+                activeSubscribers.forEach((u) => {
+                  const plan = u.subscriptionPlan as keyof typeof planCounts;
+                  if (plan && plan in planCounts) planCounts[plan]++;
+                });
+                adminUsers.forEach((u) => { totalPrepaid += u.prepaidQuestions || 0; });
+                const monthlyRevenue = planCounts.basic * 2.99 + planCounts.individual * 5.99 + (planCounts.premium * 32) / 12;
+                const avgPerUser = activeSubscribers.length > 0 ? monthlyRevenue / activeSubscribers.length : 0;
+                return (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <Card className="bg-gray-800/50 border-gray-700">
+                        <CardContent className="p-6">
+                          <div className="flex items-center">
+                            <DollarSign className="h-8 w-8 text-green-500" />
+                            <div className="ml-4">
+                              <p className="text-sm font-medium text-gray-400">Ingresos Mensuales Est.</p>
+                              <p className="text-2xl font-bold text-white">€{monthlyRevenue.toFixed(2)}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card className="bg-gray-800/50 border-gray-700">
+                        <CardContent className="p-6">
+                          <div className="flex items-center">
+                            <Users className="h-8 w-8 text-blue-500" />
+                            <div className="ml-4">
+                              <p className="text-sm font-medium text-gray-400">Suscriptores Activos</p>
+                              <p className="text-2xl font-bold text-white">{activeSubscribers.length}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card className="bg-gray-800/50 border-gray-700">
+                        <CardContent className="p-6">
+                          <div className="flex items-center">
+                            <TrendingUp className="h-8 w-8 text-yellow-500" />
+                            <div className="ml-4">
+                              <p className="text-sm font-medium text-gray-400">Promedio por Usuario</p>
+                              <p className="text-2xl font-bold text-white">€{avgPerUser.toFixed(2)}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <Card className="bg-gray-800/50 border-gray-700">
+                        <CardHeader>
+                          <CardTitle className="text-white">Desglose por Plan</CardTitle>
+                          <CardDescription className="text-gray-400">Ingresos estimados por tipo de plan</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-4">
+                            {(["basic", "individual", "premium", "partner"] as const).map((plan) => (
+                              <div key={plan} className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
+                                <div>
+                                  <p className="text-white font-medium capitalize">{plan}</p>
+                                  <p className="text-gray-400 text-sm">{planLabels[plan]}</p>
+                                </div>
+                                <div className="text-right">
+                                  <p className="text-white font-bold">{planCounts[plan]} usuarios</p>
+                                  <p className="text-green-400 text-sm">
+                                    {plan === "partner" ? "—" : `€${(planCounts[plan] * (plan === "premium" ? 32 : planPrices[plan])).toFixed(2)}${plan === "premium" ? "/año" : "/mes"}`}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      <Card className="bg-gray-800/50 border-gray-700">
+                        <CardHeader>
+                          <CardTitle className="text-white">Créditos Prepago</CardTitle>
+                          <CardDescription className="text-gray-400">Resumen de créditos vendidos</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
+                              <span className="text-gray-300">Total créditos prepago activos</span>
+                              <span className="text-white font-bold">{totalPrepaid}</span>
+                            </div>
+                            <div className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
+                              <span className="text-gray-300">Usuarios con créditos prepago</span>
+                              <span className="text-white font-bold">{adminUsers.filter((u) => (u.prepaidQuestions || 0) > 0).length}</span>
+                            </div>
+                            <div className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
+                              <span className="text-gray-300">Ingresos totales reportados</span>
+                              <span className="text-white font-bold">€{stats?.totalRevenue || "0"}</span>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
           </TabsContent>
 
           <TabsContent value="content">
-            <Card className="bg-gray-800/50 border-gray-700">
-              <CardHeader>
-                <CardTitle className="text-white">Gestión de Contenido</CardTitle>
-                <CardDescription className="text-gray-400">
-                  Administrar recursos y materiales de apoyo
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300">Módulo de contenido - En desarrollo</p>
-              </CardContent>
-            </Card>
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="bg-gray-800/50 border-gray-700">
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <FileText className="h-8 w-8 text-purple-500" />
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-400">Total Recursos</p>
+                        <p className="text-2xl font-bold text-white">{resources.length}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-gray-800/50 border-gray-700">
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <Book className="h-8 w-8 text-orange-500" />
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-400">Total Libros</p>
+                        <p className="text-2xl font-bold text-white">{books.length}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {contentLoading ? (
+                <div className="text-center py-12 text-gray-400">Cargando contenido...</div>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <Card className="bg-gray-800/50 border-gray-700">
+                    <CardHeader>
+                      <CardTitle className="text-white flex items-center">
+                        <FileText className="h-5 w-5 mr-2" />
+                        Recursos ({resources.length})
+                      </CardTitle>
+                      <CardDescription className="text-gray-400">Artículos, guías y ejercicios</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3 max-h-96 overflow-y-auto">
+                        {resources.length === 0 ? (
+                          <p className="text-gray-400 text-center py-4">No hay recursos</p>
+                        ) : (
+                          resources.map((resource) => (
+                            <div key={resource.id} className="p-3 bg-gray-700/30 rounded-lg border border-gray-600/50">
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-white font-medium truncate">{resource.title}</p>
+                                  <p className="text-gray-400 text-sm mt-1 line-clamp-2">{resource.content?.substring(0, 100)}...</p>
+                                </div>
+                                <div className="flex gap-2 ml-2 flex-shrink-0">
+                                  <Badge variant="outline" className="border-purple-500/50 text-purple-300">{resource.category}</Badge>
+                                  <Badge variant="outline" className="border-gray-600 text-gray-400">{resource.type}</Badge>
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-gray-800/50 border-gray-700">
+                    <CardHeader>
+                      <CardTitle className="text-white flex items-center">
+                        <Book className="h-5 w-5 mr-2" />
+                        Libros ({books.length})
+                      </CardTitle>
+                      <CardDescription className="text-gray-400">Libros recomendados con enlaces de afiliado</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3 max-h-96 overflow-y-auto">
+                        {books.length === 0 ? (
+                          <p className="text-gray-400 text-center py-4">No hay libros</p>
+                        ) : (
+                          books.map((book) => (
+                            <div key={book.id} className="p-3 bg-gray-700/30 rounded-lg border border-gray-600/50">
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-white font-medium truncate">{book.title}</p>
+                                  <p className="text-gray-400 text-sm">{book.author}</p>
+                                </div>
+                                <div className="flex gap-2 ml-2 flex-shrink-0">
+                                  {book.category && <Badge variant="outline" className="border-orange-500/50 text-orange-300">{book.category}</Badge>}
+                                  {book.affiliateLink && (
+                                    <a href={book.affiliateLink} target="_blank" rel="noopener noreferrer">
+                                      <Button size="sm" variant="outline" className="border-gray-600 text-gray-300 hover:bg-gray-700">
+                                        <Eye className="h-3 w-3" />
+                                      </Button>
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+            </div>
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Edit User Modal */}
+      <Dialog open={showEditUserModal} onOpenChange={setShowEditUserModal}>
+        <DialogContent className="bg-gray-800 border-gray-700 text-white max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white">Editar Usuario</DialogTitle>
+            <DialogDescription className="text-gray-400">{editingUser?.username} - {editingUser?.email}</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label className="text-gray-200">Estado de Suscripción</Label>
+              <select value={editUserForm.subscriptionStatus} onChange={(e) => setEditUserForm((prev) => ({ ...prev, subscriptionStatus: e.target.value }))} className="w-full bg-gray-700 border border-gray-600 text-white rounded-md p-2">
+                <option value="active">Activo</option>
+                <option value="inactive">Inactivo</option>
+                <option value="cancelled">Cancelado</option>
+                <option value="pending_payment">Pago pendiente</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-gray-200">Plan de Suscripción</Label>
+              <select value={editUserForm.subscriptionPlan} onChange={(e) => setEditUserForm((prev) => ({ ...prev, subscriptionPlan: e.target.value }))} className="w-full bg-gray-700 border border-gray-600 text-white rounded-md p-2">
+                <option value="">Sin plan</option>
+                <option value="basic">Basic (€2.99/mes)</option>
+                <option value="individual">Individual (€5.99/mes)</option>
+                <option value="premium">Premium (€32/año)</option>
+                <option value="partner">Partner</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-gray-200">Límite mensual de preguntas</Label>
+              <Input type="number" value={editUserForm.monthlyQuestionLimit} onChange={(e) => setEditUserForm((prev) => ({ ...prev, monthlyQuestionLimit: e.target.value }))} className="bg-gray-700 border-gray-600 text-white" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-gray-200">Rol</Label>
+              <select value={editUserForm.role} onChange={(e) => setEditUserForm((prev) => ({ ...prev, role: e.target.value }))} className="w-full bg-gray-700 border border-gray-600 text-white rounded-md p-2">
+                <option value="user">Usuario</option>
+                <option value="admin">Admin</option>
+                <option value="partner">Partner</option>
+              </select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowEditUserModal(false)} className="border-gray-600 text-gray-300">Cancelar</Button>
+            <Button onClick={handleSaveUser} className="bg-green-600 hover:bg-green-700">Guardar Cambios</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete User Confirmation */}
+      <Dialog open={showDeleteConfirm !== null} onOpenChange={() => setShowDeleteConfirm(null)}>
+        <DialogContent className="bg-gray-800 border-gray-700 text-white max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="text-white">Confirmar Eliminación</DialogTitle>
+            <DialogDescription className="text-gray-400">¿Estás seguro de que quieres eliminar este usuario? Esta acción no se puede deshacer.</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteConfirm(null)} className="border-gray-600 text-gray-300">Cancelar</Button>
+            <Button variant="destructive" onClick={() => showDeleteConfirm && handleDeleteUser(showDeleteConfirm)}>Eliminar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* License Edit Modal */}
       <Dialog open={showLicenseModal} onOpenChange={setShowLicenseModal}>
