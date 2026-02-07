@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Brain, Globe, LogIn, UserPlus, ChevronDown, Wifi, WifiOff } from "lucide-react";
 import SmoothScrollMenu from "@/components/ui/smooth-scroll-menu";
 import EsEnLanguageToggle from "@/components/ui/es-en-language-toggle";
-import GiftPrizesModal from "@/components/modals/gift-prizes-modal";
-import giftBoxImage from "@assets/generated_images/Orange_gift_box_icon_198e60f2.png";
 
 interface HeaderProps {
   showBanner?: boolean;
@@ -56,22 +54,6 @@ export default function Header({ showBanner = false }: HeaderProps) {
 
           {/* Desktop and Mobile Navigation */}
           <div className="flex items-center space-x-2 sm:space-x-4">
-            {/* Gift Box - Opens Prizes Modal */}
-            <GiftPrizesModal>
-              <button
-                className="group relative flex items-center justify-center hover:scale-110 transition-transform duration-300 cursor-pointer"
-                data-testid="button-gift-prizes"
-                aria-label="Ver premios"
-              >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden bg-gradient-to-br from-orange-400 to-orange-600 p-1.5 shadow-lg group-hover:shadow-orange-500/50 transition-shadow">
-                  <img 
-                    src={giftBoxImage} 
-                    alt="Regalo" 
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              </button>
-            </GiftPrizesModal>
             
             {/* Language Toggle - Always visible for UK market expansion */}
             <EsEnLanguageToggle />
