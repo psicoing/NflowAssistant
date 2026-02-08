@@ -504,7 +504,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const hasActiveSubscription = await checkSubscription(userId);
       if (!hasActiveSubscription) {
         return res.status(403).json({ 
-          message: "NFLOW es aplicación de pago - Suscripción requerida",
+          message: "NUXA es aplicación de pago - Suscripción requerida",
           requiresPayment: true 
         });
       }
@@ -531,7 +531,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const hasActiveSubscription = await checkSubscription(userId);
       if (!hasActiveSubscription) {
         return res.status(403).json({ 
-          message: "NFLOW es aplicación de pago - Suscripción requerida",
+          message: "NUXA es aplicación de pago - Suscripción requerida",
           requiresPayment: true 
         });
       }
@@ -579,7 +579,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const hasActiveSubscription = await checkSubscription(userId);
       if (!hasActiveSubscription) {
         return res.status(403).json({ 
-          message: "NFLOW es aplicación de pago - Suscripción requerida",
+          message: "NUXA es aplicación de pago - Suscripción requerida",
           requiresPayment: true 
         });
       }
@@ -609,7 +609,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const hasActiveSubscription = await checkSubscription(userId);
       if (!hasActiveSubscription) {
         return res.status(402).json({ 
-          message: "NFLOW es aplicación de pago - Suscripción requerida",
+          message: "NUXA es aplicación de pago - Suscripción requerida",
           needsPayment: true 
         });
       }
@@ -1704,17 +1704,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const planConfig: Record<string, { amount: number; name: string; interval: 'month' | 'year'; intervalCount?: number }> = {
         basic: {
           amount: 299, // €2.99 in cents
-          name: 'NFLOW Plan Básico',
+          name: 'NUXA Plan Básico',
           interval: 'month'
         },
         individual: {
           amount: 599, // €5.99 in cents
-          name: 'NFLOW Plan Individual',
+          name: 'NUXA Plan Individual',
           interval: 'month'
         },
         premium: {
           amount: 3200, // €32 in cents
-          name: 'NFLOW Plan Premium',
+          name: 'NUXA Plan Premium',
           interval: 'month',
           intervalCount: 12 // Facturado cada 12 meses
         }
@@ -1773,8 +1773,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             quantity: 1,
           },
         ],
-        success_url: "https://nflow.style/stripe-return?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url: "https://nflow.style/cancel",
+        success_url: "https://nuxa.life/stripe-return?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: "https://nuxa.life/cancel",
         metadata
       });
       
@@ -2458,8 +2458,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             quantity: 1,
           },
         ],
-        success_url: "https://nflow.style/chat?credits_purchased=true",
-        cancel_url: "https://nflow.style/chat",
+        success_url: "https://nuxa.life/chat?credits_purchased=true",
+        cancel_url: "https://nuxa.life/chat",
         metadata: {
           userId: userId.toString(),
           packType: pack,

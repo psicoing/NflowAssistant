@@ -10,7 +10,7 @@ export default function SoporteActivacionBanner() {
             <AlertCircle className="w-4 h-4 text-white" />
           </div>
           <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-            🚀 NFLOW Beta 4.0.0
+            🚀 NUXA Beta 4.0.0
           </div>
           <span className="text-blue-200 text-sm">Mejorando métodos de pago</span>
         </div>
@@ -47,7 +47,7 @@ export default function SoporteActivacionBanner() {
             </a>
             
             <a 
-              href="mailto:jobda@jobda.es?subject=Activación NFLOW - Ayuda"
+              href="mailto:jobda@jobda.es?subject=Activación NUXA - Ayuda"
               className="flex items-center gap-2 bg-orange-500/20 text-orange-300 px-3 py-2 rounded-lg border border-orange-500/30 hover:bg-orange-500/30 transition-colors"
             >
               <Mail className="w-4 h-4" />

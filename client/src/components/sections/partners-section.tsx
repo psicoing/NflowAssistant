@@ -11,7 +11,7 @@ const partnerBenefits = [
   {
     icon: Award,
     title: "Certificación Oficial",
-    description: "Acceso a formación especializada y certificación como Partner NFLOW"
+    description: "Acceso a formación especializada y certificación como Partner NUXA"
   },
   {
     icon: Heart,

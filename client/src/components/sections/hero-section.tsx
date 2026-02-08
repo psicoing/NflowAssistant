@@ -67,7 +67,7 @@ export default function HeroSection() {
               <div className="transform hover:scale-105 transition-transform duration-500 nflow-package-card">
                 <img 
                   src={nflowPackageImage} 
-                  alt="NFLOW Salud Mental Individual"
+                  alt="NUXA Salud Mental Individual"
                   className="w-4/5 mx-auto h-auto rounded-3xl shadow-2xl border border-gray-700/50 select-none"
                 />
               </div>
@@ -86,7 +86,7 @@ export default function HeroSection() {
               <div className="transform hover:scale-105 transition-transform duration-500 nflow-package-card">
                 <img 
                   src={nflowFamilyImage} 
-                  alt="NFLOW Salud Mental Familiar"
+                  alt="NUXA Salud Mental Familiar"
                   className="w-4/5 mx-auto h-auto rounded-3xl shadow-2xl border border-gray-700/50 select-none"
                 />
               </div>

@@ -308,7 +308,7 @@ export default function AdminDashboard() {
               <Settings className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white">Panel de Administración NFLOW</h1>
+              <h1 className="text-xl font-bold text-white">Panel de Administración NUXA</h1>
               <p className="text-gray-400 text-sm">Gestión integral de la plataforma</p>
             </div>
           </div>

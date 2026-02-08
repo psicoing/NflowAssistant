@@ -8,7 +8,7 @@ export default function PaidAppNotice() {
           <div className="flex items-center justify-center space-x-4 mb-4">
             <AlertTriangle className="w-8 h-8 text-yellow-400" />
             <h2 className="text-2xl font-bold text-white text-center">
-              NFLOW es una Aplicación de Pago
+              NUXA es una Aplicación de Pago
             </h2>
             <CreditCard className="w-8 h-8 text-yellow-400" />
           </div>

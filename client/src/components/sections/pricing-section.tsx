@@ -17,7 +17,7 @@ export default function PricingSection() {
       id: "basic",
       name: "Plan Básico",
       price: "€2.99",
-      description: "Perfecto para quienes quieren probar NFLOW o solo necesitan orientación puntual",
+      description: "Perfecto para quienes quieren probar NUXA o solo necesitan orientación puntual",
       icon: Calendar,
       questions: "10 al mes",
       features: [
@@ -136,7 +136,7 @@ export default function PricingSection() {
       <section id="precios" className="py-20 px-4 bg-nflow-navy">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Planes de Suscripción NFLOW</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Planes de Suscripción NUXA</h2>
           <h3 className="text-2xl font-semibold text-gray-300 mb-6">Salud mental digital sin postureo</h3>
           <p className="text-xl text-gray-400 max-w-4xl mx-auto">
             Solo tú, tu mejora personal y la IA. Todo 100% automático, seguro y privado. Aquí lo que ves es lo que hay.
@@ -267,7 +267,7 @@ export default function PricingSection() {
               </div>
               <h4 className="text-lg font-semibold text-white mb-2">Plan Básico</h4>
               <p className="text-sm text-gray-300">
-                Acceso mensual limitado, perfecto para quienes quieren probar NFLOW o solo necesitan orientación puntual.
+                Acceso mensual limitado, perfecto para quienes quieren probar NUXA o solo necesitan orientación puntual.
               </p>
             </div>
             
@@ -320,9 +320,9 @@ export default function PricingSection() {
         {/* Philosophy Section */}
         <div className="mt-8 text-center">
           <div className="inline-block bg-gradient-to-r from-nflow-orange/10 to-orange-600/10 rounded-2xl p-6 border border-nflow-orange/20">
-            <h4 className="text-lg font-bold text-white mb-2">Filosofía NFLOW</h4>
+            <h4 className="text-lg font-bold text-white mb-2">Filosofía NUXA</h4>
             <p className="text-gray-300 text-sm max-w-2xl">
-              NFLOW es una aplicación para la salud mental de personas individuales, familias y trabajadores.<br/>
+              NUXA es una aplicación para la salud mental de personas individuales, familias y trabajadores.<br/>
               <span className="text-nflow-orange font-medium">Solo tú, tu mejora personal y la IA.</span>
             </p>
           </div>
@@ -335,9 +335,9 @@ export default function PricingSection() {
           <div className="text-center mb-12">
             <div className="flex items-center justify-center mb-4">
               <Building className="w-8 h-8 text-nflow-orange mr-3" />
-              <h2 className="text-3xl md:text-4xl font-bold text-white">Planes NFLOW Empresas & Instituciones</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-white">Planes NUXA Empresas & Instituciones</h2>
             </div>
-            <h3 className="text-xl font-semibold text-gray-300 mb-6">¿Por qué NFLOW para tu organización?</h3>
+            <h3 className="text-xl font-semibold text-gray-300 mb-6">¿Por qué NUXA para tu organización?</h3>
             <p className="text-lg text-gray-400 max-w-4xl mx-auto mb-6">
               Mejora la salud mental de tus equipos con soluciones innovadoras alineadas con la normativa ISO 45003.
             </p>
@@ -534,7 +534,7 @@ export default function PricingSection() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Button 
                   className="bg-nflow-orange hover:bg-nflow-orange-light text-white px-8 py-3"
-                  onClick={() => window.open('mailto:empordajobs@gmail.com?subject=Consulta%20NFLOW%20Empresas&body=Hola,%20me%20interesa%20conocer%20más%20sobre%20los%20planes%20de%20NFLOW%20para%20empresas.', '_blank')}
+                  onClick={() => window.open('mailto:empordajobs@gmail.com?subject=Consulta%20NUXA%20Empresas&body=Hola,%20me%20interesa%20conocer%20más%20sobre%20los%20planes%20de%20NUXA%20para%20empresas.', '_blank')}
                 >
                   Solicitar Información
                 </Button>
@@ -585,8 +585,8 @@ export default function PricingSection() {
               <Button 
                 className="w-full bg-nflow-blue hover:bg-nflow-blue-dark text-white"
                 onClick={() => {
-                  const subject = `Consulta NFLOW Empresas - ${selectedPlan || 'Plan empresarial'}`;
-                  const body = `Hola,\n\nMe interesa conocer más sobre ${selectedPlan || 'los planes empresariales'} de NFLOW.\n\nPor favor, envíenme información detallada sobre:\n- Precios y condiciones\n- Proceso de implementación\n- Soporte técnico\n- Funcionalidades específicas\n\nGracias.`;
+                  const subject = `Consulta NUXA Empresas - ${selectedPlan || 'Plan empresarial'}`;
+                  const body = `Hola,\n\nMe interesa conocer más sobre ${selectedPlan || 'los planes empresariales'} de NUXA.\n\nPor favor, envíenme información detallada sobre:\n- Precios y condiciones\n- Proceso de implementación\n- Soporte técnico\n- Funcionalidades específicas\n\nGracias.`;
                   window.open(`mailto:empordajobs@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
                   setIsContactDialogOpen(false);
                 }}

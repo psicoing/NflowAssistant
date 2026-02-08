@@ -39,7 +39,7 @@ export default function NosotrosPage() {
             </Link>
             <div className="flex items-center gap-2">
               <Heart className="h-6 w-6 text-nflow-orange" />
-              <span className="text-xl font-bold text-nflow-orange">NFLOW</span>
+              <span className="text-xl font-bold text-nflow-orange">NUXA</span>
             </div>
           </div>
         </div>
@@ -49,7 +49,7 @@ export default function NosotrosPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Nosotros - NFLOW Psychology
+            Nosotros - NUXA Psychology
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Más de 30 años de experiencia en psicología clínica aplicada a la innovación tecnológica
@@ -69,7 +69,7 @@ export default function NosotrosPage() {
                     Llic. Ramón Molons de San Román
                   </h2>
                   <p className="text-gray-600 dark:text-gray-300 mb-4 text-lg">
-                    Director y Fundador de NFLOW • NeuroEngineer & PsychoClinic
+                    Director y Fundador de NUXA • NeuroEngineer & PsychoClinic
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 py-1 px-3">
@@ -149,7 +149,7 @@ export default function NosotrosPage() {
                 <div className="border-l-4 border-nflow-orange pl-6">
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <h4 className="font-semibold text-lg text-nflow-orange">NFLOW Psychology - Director de Proyecto</h4>
+                      <h4 className="font-semibold text-lg text-nflow-orange">NUXA Psychology - Director de Proyecto</h4>
                       <p className="text-gray-600 dark:text-gray-400">Marzo 2025 - Presente</p>
                     </div>
                     <Badge variant="outline" className="bg-orange-50 text-orange-700">Actual</Badge>
@@ -213,7 +213,7 @@ export default function NosotrosPage() {
             <CardContent className="p-8">
               <h3 className="text-2xl font-semibold mb-6 flex items-center gap-3">
                 <TrendingUp className="h-6 w-6 text-nflow-orange" />
-                Especialización NFLOW
+                Especialización NUXA
               </h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -284,7 +284,7 @@ export default function NosotrosPage() {
                     JOBDA.BIZ - Ecosistema Integral de Servicios
                   </h4>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                    NFLOW forma parte del <strong>Grupo JOBDA</strong>, una plataforma integral de multiservicios 
+                    NUXA forma parte del <strong>Grupo JOBDA</strong>, una plataforma integral de multiservicios 
                     que opera bajo la marca <strong>JOBDA.BIZ</strong>. Este ecosistema empresarial está 
                     legalmente constituido bajo <strong>JOBDA, filial de EMPORDAJOBS SL</strong> (CIF: B02701100).
                   </p>
@@ -333,16 +333,16 @@ export default function NosotrosPage() {
             </CardContent>
           </Card>
 
-          {/* Misión NFLOW */}
+          {/* Misión NUXA */}
           <Card className="border-nflow-orange/30 bg-gradient-to-r from-orange-50 to-blue-50 dark:from-orange-950/10 dark:to-blue-950/10 shadow-lg">
             <CardContent className="p-8">
               <h3 className="text-2xl font-semibold mb-4 flex items-center gap-3">
                 <Heart className="h-6 w-6 text-nflow-orange" />
-                Misión de NFLOW
+                Misión de NUXA
               </h3>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg mb-6">
                 Integrar neurociencia e inteligencia artificial para crear una herramienta de salud mental 
-                accesible y efectiva. NFLOW representa un avance en la democratización del apoyo psicológico, 
+                accesible y efectiva. NUXA representa un avance en la democratización del apoyo psicológico, 
                 proporcionando respuestas basadas en principios de psicología clínica y escolar con un 
                 lenguaje cercano y profesional.
               </p>

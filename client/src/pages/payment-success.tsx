@@ -90,7 +90,7 @@ export default function PaymentSuccess() {
             </div>
             <CardTitle className="text-2xl text-white">Procesando Pago</CardTitle>
             <CardDescription className="text-gray-400">
-              Estamos activando tu cuenta NFLOW...
+              Estamos activando tu cuenta NUXA...
             </CardDescription>
           </CardHeader>
         </Card>
@@ -110,7 +110,7 @@ export default function PaymentSuccess() {
           </CardTitle>
           <CardDescription className="text-gray-400">
             {activationComplete 
-              ? "Tu suscripción NFLOW está activa. Accede al chat de apoyo psicológico profesional."
+              ? "Tu suscripción NUXA está activa. Accede al chat de apoyo psicológico profesional."
               : "Tu pago se procesó correctamente pero hubo un problema con la activación."
             }
           </CardDescription>

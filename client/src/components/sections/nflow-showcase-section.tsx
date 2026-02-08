@@ -12,7 +12,7 @@ export default function NFlowShowcaseSection() {
           <div className="text-white space-y-8">
             <div className="space-y-4">
               <h2 className="text-4xl md:text-5xl font-bold leading-tight">
-                Descubre <span className="text-orange-400">NFLOW</span>
+                Descubre <span className="text-orange-400">NUXA</span>
               </h2>
               <h3 className="text-2xl md:text-3xl font-light text-blue-200">
                 Tu asistente de salud mental inteligente
@@ -89,7 +89,7 @@ export default function NFlowShowcaseSection() {
             <div className="relative z-10">
               <img 
                 src={nflowImage} 
-                alt="NFLOW - Asistente de salud mental inteligente" 
+                alt="NUXA - Asistente de salud mental inteligente" 
                 className="w-full h-auto rounded-3xl shadow-2xl"
               />
             </div>

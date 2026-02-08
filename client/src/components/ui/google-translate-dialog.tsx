@@ -81,7 +81,7 @@ export function GoogleTranslateDialog({
           {/* Content */}
           <div className="p-4 space-y-4">
             <p className="text-sm text-muted-foreground">
-              Usa la traducción automática integrada de tu navegador para ver NFLOW en tu idioma preferido
+              Usa la traducción automática integrada de tu navegador para ver NUXA en tu idioma preferido
             </p>
 
             {/* Chrome Instructions */}
@@ -120,7 +120,7 @@ export function GoogleTranslateDialog({
                 📱 Nota para móviles
               </h3>
               <p className="text-xs text-blue-800 dark:text-blue-200">
-                Abre NFLOW en <strong>Google Chrome</strong> o <strong>Safari</strong> para acceder 
+                Abre NUXA en <strong>Google Chrome</strong> o <strong>Safari</strong> para acceder 
                 a la traducción automática.
               </p>
             </div>

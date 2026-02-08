@@ -50,10 +50,10 @@ export const translations = {
     'services.modern.title1': 'Cuatro Soluciones',
     'services.modern.title2': 'Especializadas',
     'services.modern.description': 'Cada una diseñada para abordar necesidades específicas de salud mental',
-    'services.modern.feature1': 'NFLOW Familias - Apoyo para toda la familia',
-    'services.modern.feature2': 'NFLOW Adolescentes - Apoyo personalizado (supervisión parental requerida)',
-    'services.modern.feature3': 'NFLOW Laboral - Salud mental en el trabajo',
-    'services.modern.feature4': 'NFLOW Adultos - Terapia personalizada',
+    'services.modern.feature1': 'NUXA Familias - Apoyo para toda la familia',
+    'services.modern.feature2': 'NUXA Adolescentes - Apoyo personalizado (supervisión parental requerida)',
+    'services.modern.feature3': 'NUXA Laboral - Salud mental en el trabajo',
+    'services.modern.feature4': 'NUXA Adultos - Terapia personalizada',
     
     // Examples Section
     'examples.assistant.title': 'Tu Asistente de IA Especializado',
@@ -233,9 +233,9 @@ export const translations = {
     'services.modern.title1': 'Four Specialized',
     'services.modern.title2': 'Solutions',
     'services.modern.description': 'Each designed to address specific mental health needs',
-    'services.modern.feature1': 'NFLOW Families - Support for the whole family',
-    'services.modern.feature2': 'NFLOW Workplace - Mental health at work',
-    'services.modern.feature3': 'NFLOW Adults - Personalized therapy',
+    'services.modern.feature1': 'NUXA Families - Support for the whole family',
+    'services.modern.feature2': 'NUXA Workplace - Mental health at work',
+    'services.modern.feature3': 'NUXA Adults - Personalized therapy',
     
     // Examples Section
     'examples.assistant.title': 'Your Specialized AI Assistant',
@@ -416,10 +416,10 @@ export const translations = {
     'services.modern.title1': 'Quatre Solutions',
     'services.modern.title2': 'Spécialisées',
     'services.modern.description': 'Chacune conçue pour répondre à des besoins spécifiques en santé mentale',
-    'services.modern.feature1': 'NFLOW Familles - Soutien pour toute la famille',
-    'services.modern.feature2': 'NFLOW Adolescents - Soutien personnalisé (supervision parentale requise)',
-    'services.modern.feature3': 'NFLOW Travail - Santé mentale au travail',
-    'services.modern.feature4': 'NFLOW Adultes - Thérapie personnalisée',
+    'services.modern.feature1': 'NUXA Familles - Soutien pour toute la famille',
+    'services.modern.feature2': 'NUXA Adolescents - Soutien personnalisé (supervision parentale requise)',
+    'services.modern.feature3': 'NUXA Travail - Santé mentale au travail',
+    'services.modern.feature4': 'NUXA Adultes - Thérapie personnalisée',
     
     // Examples Section
     'examples.assistant.title': 'Votre Assistant IA Spécialisé',

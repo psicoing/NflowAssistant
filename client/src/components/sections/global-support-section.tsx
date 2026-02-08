@@ -10,7 +10,7 @@ export default function GlobalSupportSection() {
             La Salud Mental No Tiene Fronteras
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            NFLOW es una aplicación para la salud mental de personas individuales, familias y trabajadores. 
+            NUXA es una aplicación para la salud mental de personas individuales, familias y trabajadores. 
             Funciona como un recurso digital de apoyo emocional continuo, donde estés, cuando lo necesites.
           </p>
         </div>
@@ -113,9 +113,9 @@ export default function GlobalSupportSection() {
         <div className="mt-16 text-center">
           <div className="inline-block bg-gradient-to-r from-teal-500/10 to-cyan-500/10 rounded-2xl p-8 border border-teal-500/20">
             <blockquote className="text-2xl font-medium text-white mb-4">
-              "NFLOW ofrece soluciones innovadoras alineadas con ISO 45003, centradas en el bienestar psicológico de individuos, familias y trabajadores."
+              "NUXA ofrece soluciones innovadoras alineadas con ISO 45003, centradas en el bienestar psicológico de individuos, familias y trabajadores."
             </blockquote>
-            <p className="text-gray-400 italic">- Filosofía NFLOW</p>
+            <p className="text-gray-400 italic">- Filosofía NUXA</p>
           </div>
         </div>
       </div>

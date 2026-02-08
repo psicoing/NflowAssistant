@@ -79,7 +79,7 @@ export default function PoliticaPrivacidad() {
               En cumplimiento del Reglamento (UE) 2016/679 del Parlamento Europeo (RGPD) y la 
               Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía 
               de los derechos digitales, EMPORDAJOBS SL informa sobre el tratamiento de datos 
-              personales que realizamos a través de la plataforma NFLOW.
+              personales que realizamos a través de la plataforma NUXA.
             </p>
 
             <h2>2. Datos Personales que Tratamos</h2>

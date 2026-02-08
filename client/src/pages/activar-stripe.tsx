@@ -64,7 +64,7 @@ export default function ActivarStripe() {
           </CardTitle>
           
           <CardDescription className="text-gray-300">
-            Completa tu pago de Stripe y activa tu cuenta NFLOW
+            Completa tu pago de Stripe y activa tu cuenta NUXA
           </CardDescription>
         </CardHeader>
         
@@ -85,7 +85,7 @@ export default function ActivarStripe() {
 
           <div className="space-y-3">
             <p className="text-gray-200 text-sm text-center">
-              Haz clic en el botón para activar tu cuenta NFLOW después de completar el pago con Stripe.
+              Haz clic en el botón para activar tu cuenta NUXA después de completar el pago con Stripe.
             </p>
             
             <Button 

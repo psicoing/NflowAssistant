@@ -14,15 +14,15 @@ export function ClientLanguageProvider({ children }: LanguageProviderProps) {
     
     // Update page title based on language
     const titles = {
-      es: 'NFLOW - Tu Psicólogo de Bolsillo',
-      en: 'NFLOW - Your Pocket Psychologist',
-      fr: 'NFLOW - Votre Psychologue de Poche',
-      de: 'NFLOW - Ihr Taschen-Psychologe',
-      it: 'NFLOW - Il Tuo Psicologo Tascabile',
-      pt: 'NFLOW - O Seu Psicólogo de Bolso',
-      ca: 'NFLOW - El Teu Psicòleg de Butxaca',
-      eu: 'NFLOW - Zure Poltsa-psikologoa',
-      gl: 'NFLOW - O Teu Psicólogo de Peto'
+      es: 'NUXA - Tu Psicólogo de Bolsillo',
+      en: 'NUXA - Your Pocket Psychologist',
+      fr: 'NUXA - Votre Psychologue de Poche',
+      de: 'NUXA - Ihr Taschen-Psychologe',
+      it: 'NUXA - Il Tuo Psicologo Tascabile',
+      pt: 'NUXA - O Seu Psicólogo de Bolso',
+      ca: 'NUXA - El Teu Psicòleg de Butxaca',
+      eu: 'NUXA - Zure Poltsa-psikologoa',
+      gl: 'NUXA - O Teu Psicólogo de Peto'
     };
     
     document.title = titles[currentLanguage as keyof typeof titles] || titles.es;

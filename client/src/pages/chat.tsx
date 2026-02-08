@@ -361,7 +361,7 @@ export default function Chat() {
             <MessageCircle className="w-16 h-16 mx-auto mb-4 text-nflow-orange" />
             <h2 className="text-2xl font-bold mb-2 text-white">Chat Solo Para Suscriptores</h2>
             <p className="text-gray-300 mb-6">
-              <strong>NFLOW es una aplicación de pago.</strong> El chat con IA requiere suscripción activa. Sin excepción, sin pruebas gratuitas.
+              <strong>NUXA es una aplicación de pago.</strong> El chat con IA requiere suscripción activa. Sin excepción, sin pruebas gratuitas.
             </p>
             <Button 
               onClick={() => setLocation("/#precios")}
@@ -384,11 +384,11 @@ export default function Chat() {
   return (
     <>
       <SEOHead
-        title="Chat - NEUROPSI-AI | NFLOW Psicólogo IA"
+        title="Chat - NEUROPSI-AI | NUXA Psicólogo IA"
         description="Chatea con NEUROPSI-AI, tu psicólogo virtual disponible 24/7. Apoyo emocional profesional con inteligencia artificial en español."
         keywords="chat psicólogo IA, NEUROPSI-AI, conversación salud mental, terapia online chat, psicólogo virtual"
         ogTitle="Chat con NEUROPSI-AI - Tu Psicólogo IA Personal"
-        canonicalUrl="https://nflow.style/chat"
+        canonicalUrl="https://nuxa.life/chat"
       />
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         <ChatHeader />

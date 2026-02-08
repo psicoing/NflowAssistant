@@ -1344,13 +1344,13 @@ export default function PartnerDashboardSimple() {
                   <label className="text-sm font-medium">Para WhatsApp</label>
                   <div className="flex items-center space-x-2">
                     <div className="flex-1 p-2 bg-gray-100 dark:bg-gray-800 rounded text-xs break-all">
-                      ¡Hola! Te recomiendo NFLOW para salud mental con IA. Usa mi código: {referralCode}
+                      ¡Hola! Te recomiendo NUXA para salud mental con IA. Usa mi código: {referralCode}
                     </div>
                     <Button 
                       variant="outline" 
                       size="sm" 
                       onClick={() => {
-                        const message = `¡Hola! Te recomiendo NFLOW para salud mental con IA. Usa mi código: ${referralCode} - ${getBaseUrl()}/registro?ref=${referralCode}`;
+                        const message = `¡Hola! Te recomiendo NUXA para salud mental con IA. Usa mi código: ${referralCode} - ${getBaseUrl()}/registro?ref=${referralCode}`;
                         navigator.clipboard.writeText(message);
                         toast({ title: "Mensaje de WhatsApp copiado" });
                       }}
@@ -1364,14 +1364,14 @@ export default function PartnerDashboardSimple() {
                   <label className="text-sm font-medium">Para Email</label>
                   <div className="flex items-center space-x-2">
                     <div className="flex-1 p-2 bg-gray-100 dark:bg-gray-800 rounded text-xs break-all">
-                      Asunto: Herramienta de Salud Mental con IA - NFLOW
+                      Asunto: Herramienta de Salud Mental con IA - NUXA
                     </div>
                     <Button 
                       variant="outline" 
                       size="sm" 
                       onClick={() => {
-                        const subject = "Herramienta de Salud Mental con IA - NFLOW";
-                        const body = `Hola,\n\nQuería recomendarte NFLOW, una innovadora herramienta de salud mental que utiliza IA para brindar apoyo 24/7.\n\nPuedes probarla usando mi código de referencia: ${referralCode}\n\nEnlace: ${getBaseUrl()}/registro?ref=${referralCode}\n\n¡Espero que te sea útil!\n\nSaludos`;
+                        const subject = "Herramienta de Salud Mental con IA - NUXA";
+                        const body = `Hola,\n\nQuería recomendarte NUXA, una innovadora herramienta de salud mental que utiliza IA para brindar apoyo 24/7.\n\nPuedes probarla usando mi código de referencia: ${referralCode}\n\nEnlace: ${getBaseUrl()}/registro?ref=${referralCode}\n\n¡Espero que te sea útil!\n\nSaludos`;
                         navigator.clipboard.writeText(`${subject}\n\n${body}`);
                         toast({ title: "Plantilla de email copiada" });
                       }}
@@ -1385,13 +1385,13 @@ export default function PartnerDashboardSimple() {
                   <label className="text-sm font-medium">Para Redes Sociales</label>
                   <div className="flex items-center space-x-2">
                     <div className="flex-1 p-2 bg-gray-100 dark:bg-gray-800 rounded text-xs break-all">
-                      🧠 NFLOW: IA para salud mental 24/7. Código: {referralCode}
+                      🧠 NUXA: IA para salud mental 24/7. Código: {referralCode}
                     </div>
                     <Button 
                       variant="outline" 
                       size="sm" 
                       onClick={() => {
-                        const message = `🧠 Descubre NFLOW: Revolucionaria herramienta de salud mental con IA disponible 24/7 💙\n\n✅ Apoyo profesional inmediato\n✅ Completamente confidencial\n✅ Basado en ISO 45003\n\nUsa mi código: ${referralCode}\n\n${getBaseUrl()}/registro?ref=${referralCode}\n\n#SaludMental #IA #NFLOW #Bienestar`;
+                        const message = `🧠 Descubre NUXA: Revolucionaria herramienta de salud mental con IA disponible 24/7 💙\n\n✅ Apoyo profesional inmediato\n✅ Completamente confidencial\n✅ Basado en ISO 45003\n\nUsa mi código: ${referralCode}\n\n${getBaseUrl()}/registro?ref=${referralCode}\n\n#SaludMental #IA #NUXA #Bienestar`;
                         navigator.clipboard.writeText(message);
                         toast({ title: "Post para redes sociales copiado" });
                       }}

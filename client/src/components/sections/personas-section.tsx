@@ -12,7 +12,7 @@ const personas = [
     title: "Adolescentes", 
     description: "Apoyo para gestionar emociones, estrés escolar y relaciones sociales",
     bgColor: "bg-gradient-to-br from-orange-500 to-orange-600",
-    appName: "NFLOW",
+    appName: "NUXA",
     subtitle: "Salud Mental",
     image: adolescentesImage
   },
@@ -21,7 +21,7 @@ const personas = [
     title: "Padres y Madres",
     description: "Orientación para comprender y apoyar el desarrollo emocional de tus hijos",
     bgColor: "bg-gradient-to-br from-orange-500 to-orange-600", 
-    appName: "NFLOW",
+    appName: "NUXA",
     subtitle: "Salud Mental Familiar",
     image: padresImage
   },
@@ -39,7 +39,7 @@ const personas = [
     title: "Salud Laboral", 
     description: "Soporte para el manejo del estrés, ansiedad y desafíos en el entorno profesional",
     bgColor: "bg-gradient-to-br from-orange-500 to-orange-600",
-    appName: "NFLOW", 
+    appName: "NUXA", 
     subtitle: "SALUD MENTAL LABORAL",
     image: laboralImage
   }
@@ -52,7 +52,7 @@ export default function PersonasSection() {
     <section className="py-20 px-4 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-          NFLOW, un psicólogo en tu bolsillo
+          NUXA, un psicólogo en tu bolsillo
         </h2>
         <div className="w-24 h-1 bg-nflow-blue mx-auto mb-6"></div>
         <p className="text-xl text-gray-300 mb-16 max-w-4xl mx-auto">

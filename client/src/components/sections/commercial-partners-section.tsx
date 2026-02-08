@@ -19,7 +19,7 @@ export default function CommercialPartnersSection() {
             Nuestros Partners Comerciales
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Conoce al equipo de profesionales que impulsa el crecimiento de NFLOW, 
+            Conoce al equipo de profesionales que impulsa el crecimiento de NUXA, 
             comprometidos con llevar la innovación en salud mental a cada rincón del mundo.
           </p>
         </div>
@@ -37,7 +37,7 @@ export default function CommercialPartnersSection() {
             
             <p className="text-gray-600 dark:text-gray-300 mb-8 max-w-xl mx-auto">
               Profesionales experimentados en marketing, desarrollo comercial y estrategia empresarial, 
-              dedicados a expandir NFLOW globalmente.
+              dedicados a expandir NUXA globalmente.
             </p>
             
             <Link href="/partners-comerciales" data-testid="link-partners-comerciales">

@@ -28,7 +28,7 @@ export default function PoliticaCookies() {
                   Política de Cookies
                 </CardTitle>
                 <p className="text-amber-100 mt-2">
-                  Información sobre el uso de cookies en NFLOW
+                  Información sobre el uso de cookies en NUXA
                 </p>
               </div>
             </div>
@@ -62,7 +62,7 @@ export default function PoliticaCookies() {
               propietarios del sitio.
             </p>
             <p className="text-gray-700">
-              En NFLOW utilizamos cookies para mejorar su experiencia de usuario, personalizar 
+              En NUXA utilizamos cookies para mejorar su experiencia de usuario, personalizar 
               contenido y analizar el tráfico de nuestro sitio web.
             </p>
           </CardContent>

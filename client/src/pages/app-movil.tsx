@@ -27,14 +27,14 @@ export default function AppMovil() {
               </Badge>
               
               <h1 className="text-5xl md:text-7xl font-bold text-white mb-8">
-                NFLOW en tu{" "}
+                NUXA en tu{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-nflow-orange via-nflow-orange-light to-nflow-blue">
                   móvil
                 </span>
               </h1>
               
               <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed mb-12">
-                Instala NFLOW directamente en tu dispositivo móvil sin necesidad de App Store o Google Play. 
+                Instala NUXA directamente en tu dispositivo móvil sin necesidad de App Store o Google Play. 
                 Una experiencia nativa completa con todas las funcionalidades.
               </p>
 
@@ -44,7 +44,7 @@ export default function AppMovil() {
                   className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white px-8 py-4 text-lg font-semibold"
                 >
                   <Download className="w-5 h-5 mr-2" />
-                  Instalar NFLOW Ahora
+                  Instalar NUXA Ahora
                 </Button>
                 <Button 
                   variant="outline" 
@@ -119,7 +119,7 @@ export default function AppMovil() {
                 </span>
               </h2>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Sigue estos sencillos pasos para tener NFLOW en tu pantalla de inicio
+                Sigue estos sencillos pasos para tener NUXA en tu pantalla de inicio
               </p>
             </div>
 
@@ -140,8 +140,8 @@ export default function AppMovil() {
                           1
                         </div>
                         <div>
-                          <h4 className="text-white font-semibold mb-2">Abre NFLOW en Chrome</h4>
-                          <p className="text-gray-300 text-sm">Navega a la página web de NFLOW usando Google Chrome en tu Android</p>
+                          <h4 className="text-white font-semibold mb-2">Abre NUXA en Chrome</h4>
+                          <p className="text-gray-300 text-sm">Navega a la página web de NUXA usando Google Chrome en tu Android</p>
                           <div className="mt-3 p-3 bg-gray-800/50 rounded-lg">
                             <p className="text-nflow-orange text-sm font-mono">https://nflow.biz/</p>
                           </div>
@@ -169,7 +169,7 @@ export default function AppMovil() {
                           <h4 className="text-white font-semibold mb-2 flex items-center">
                             Toca "Instalar" <Download className="w-4 h-4 ml-2 text-green-500" />
                           </h4>
-                          <p className="text-gray-300 text-sm">Confirma la instalación y NFLOW se añadirá a tu pantalla de inicio</p>
+                          <p className="text-gray-300 text-sm">Confirma la instalación y NUXA se añadirá a tu pantalla de inicio</p>
                         </div>
                       </div>
 
@@ -179,7 +179,7 @@ export default function AppMovil() {
                         </div>
                         <div>
                           <h4 className="text-white font-semibold mb-2">¡Listo para usar!</h4>
-                          <p className="text-gray-300 text-sm">NFLOW aparecerá como cualquier otra app en tu dispositivo Android</p>
+                          <p className="text-gray-300 text-sm">NUXA aparecerá como cualquier otra app en tu dispositivo Android</p>
                         </div>
                       </div>
                     </div>
@@ -192,7 +192,7 @@ export default function AppMovil() {
                     <h4 className="text-white font-semibold mb-4 text-center">Así se ve en Android:</h4>
                     <div className="bg-gray-900 rounded-lg p-4 text-center">
                       <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 mb-3">
-                        <p className="text-green-300 text-sm">🔗 ¿Instalar NFLOW?</p>
+                        <p className="text-green-300 text-sm">🔗 ¿Instalar NUXA?</p>
                         <p className="text-gray-300 text-xs">Esta aplicación se puede instalar en tu dispositivo</p>
                       </div>
                       <div className="flex space-x-2 justify-center">
@@ -222,7 +222,7 @@ export default function AppMovil() {
                           1
                         </div>
                         <div>
-                          <h4 className="text-white font-semibold mb-2">Abre NFLOW en Safari</h4>
+                          <h4 className="text-white font-semibold mb-2">Abre NUXA en Safari</h4>
                           <p className="text-gray-300 text-sm">Es importante usar Safari (navegador nativo de iOS) para la instalación</p>
                           <div className="mt-3 p-3 bg-gray-800/50 rounded-lg">
                             <p className="text-nflow-orange text-sm font-mono">https://nflow.biz/</p>
@@ -273,7 +273,7 @@ export default function AppMovil() {
                         </div>
                         <div>
                           <h4 className="text-white font-semibold mb-2">¡Perfecto!</h4>
-                          <p className="text-gray-300 text-sm">NFLOW estará en tu pantalla de inicio con su propio ícono, como cualquier app nativa</p>
+                          <p className="text-gray-300 text-sm">NUXA estará en tu pantalla de inicio con su propio ícono, como cualquier app nativa</p>
                         </div>
                       </div>
                     </div>
@@ -297,7 +297,7 @@ export default function AppMovil() {
                         </div>
                       </div>
                       <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-2">
-                        <p className="text-blue-300 text-xs">NFLOW aparecerá en tu pantalla de inicio</p>
+                        <p className="text-blue-300 text-xs">NUXA aparecerá en tu pantalla de inicio</p>
                       </div>
                     </div>
                   </CardContent>
@@ -312,7 +312,7 @@ export default function AppMovil() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Ventajas de NFLOW{" "}
+                Ventajas de NUXA{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-nflow-orange to-nflow-blue">
                   como PWA
                 </span>
@@ -378,7 +378,7 @@ export default function AppMovil() {
             <div className="space-y-6">
               <Card className="bg-gradient-to-br from-gray-800/60 via-gray-800/40 to-gray-900/60 border border-gray-700/30 backdrop-blur-xl">
                 <CardContent className="p-6">
-                  <h3 className="text-white font-semibold mb-3">¿Es seguro instalar NFLOW como PWA?</h3>
+                  <h3 className="text-white font-semibold mb-3">¿Es seguro instalar NUXA como PWA?</h3>
                   <p className="text-gray-300">Sí, es completamente seguro. Las PWA utilizan la misma tecnología de seguridad que las páginas web (HTTPS) y no tienen acceso a datos sensibles de tu dispositivo.</p>
                 </CardContent>
               </Card>
@@ -386,28 +386,28 @@ export default function AppMovil() {
               <Card className="bg-gradient-to-br from-gray-800/60 via-gray-800/40 to-gray-900/60 border border-gray-700/30 backdrop-blur-xl">
                 <CardContent className="p-6">
                   <h3 className="text-white font-semibold mb-3">¿Funciona igual que una app nativa?</h3>
-                  <p className="text-gray-300">Sí, una vez instalada, NFLOW funciona exactamente como una aplicación nativa: aparece en tu pantalla de inicio, se abre en pantalla completa y funciona sin conexión cuando es posible.</p>
+                  <p className="text-gray-300">Sí, una vez instalada, NUXA funciona exactamente como una aplicación nativa: aparece en tu pantalla de inicio, se abre en pantalla completa y funciona sin conexión cuando es posible.</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-gradient-to-br from-gray-800/60 via-gray-800/40 to-gray-900/60 border border-gray-700/30 backdrop-blur-xl">
                 <CardContent className="p-6">
                   <h3 className="text-white font-semibold mb-3">¿Ocupa mucho espacio en mi móvil?</h3>
-                  <p className="text-gray-300">No, las PWA ocupan muy poco espacio comparado con las apps nativas. NFLOW ocupará menos de 5MB en tu dispositivo.</p>
+                  <p className="text-gray-300">No, las PWA ocupan muy poco espacio comparado con las apps nativas. NUXA ocupará menos de 5MB en tu dispositivo.</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-gradient-to-br from-gray-800/60 via-gray-800/40 to-gray-900/60 border border-gray-700/30 backdrop-blur-xl">
                 <CardContent className="p-6">
-                  <h3 className="text-white font-semibold mb-3">¿Cómo desinstalo NFLOW si ya no la quiero?</h3>
-                  <p className="text-gray-300">Puedes desinstalar NFLOW como cualquier otra app: mantén presionado el ícono y selecciona "Desinstalar" o "Eliminar". En iOS, también puedes ir a Configuración → General → Almacenamiento.</p>
+                  <h3 className="text-white font-semibold mb-3">¿Cómo desinstalo NUXA si ya no la quiero?</h3>
+                  <p className="text-gray-300">Puedes desinstalar NUXA como cualquier otra app: mantén presionado el ícono y selecciona "Desinstalar" o "Eliminar". En iOS, también puedes ir a Configuración → General → Almacenamiento.</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-gradient-to-br from-gray-800/60 via-gray-800/40 to-gray-900/60 border border-gray-700/30 backdrop-blur-xl">
                 <CardContent className="p-6">
                   <h3 className="text-white font-semibold mb-3">¿Funciona sin conexión a internet?</h3>
-                  <p className="text-gray-300">NFLOW puede mostrar contenido previamente cargado sin conexión, pero necesitas internet para el chat con IA y para sincronizar nuevos datos.</p>
+                  <p className="text-gray-300">NUXA puede mostrar contenido previamente cargado sin conexión, pero necesitas internet para el chat con IA y para sincronizar nuevos datos.</p>
                 </CardContent>
               </Card>
             </div>
@@ -418,7 +418,7 @@ export default function AppMovil() {
         <section className="py-20 bg-gradient-to-b from-gray-800 to-nflow-dark">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              ¿Listo para tener NFLOW{" "}
+              ¿Listo para tener NUXA{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-nflow-orange to-nflow-blue">
                 en tu móvil?
               </span>
@@ -435,7 +435,7 @@ export default function AppMovil() {
                   className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white px-8 py-4 text-lg font-semibold"
                 >
                   <Smartphone className="w-5 h-5 mr-2" />
-                  Ir a NFLOW e Instalar
+                  Ir a NUXA e Instalar
                 </Button>
               </Link>
               

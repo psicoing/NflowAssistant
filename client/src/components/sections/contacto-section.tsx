@@ -130,7 +130,7 @@ export default function ContactoSection() {
             <div className="text-center">
               <Mail className="w-8 h-8 mx-auto mb-2" />
               <div className="font-bold">Consulta General</div>
-              <div className="text-sm opacity-90">Información sobre NFLOW ahora NUXA</div>
+              <div className="text-sm opacity-90">Información sobre NUXA</div>
             </div>
           </Button>
           

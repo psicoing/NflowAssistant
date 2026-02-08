@@ -638,7 +638,7 @@ export default function RecursosGratis() {
     if (navigator.share) {
       navigator.share({ 
         title: text, 
-        text: `${text}\n\n${subtext}\n\n- Afirmación del día de NFLOW` 
+        text: `${text}\n\n${subtext}\n\n- Afirmación del día de NUXA` 
       });
     } else {
       navigator.clipboard.writeText(`${text}\n\n${subtext}`);
@@ -650,11 +650,11 @@ export default function RecursosGratis() {
   };
 
   const handleDownload = (text: string, subtext: string) => {
-    const blob = new Blob([`${text}\n\n${subtext}\n\n- Afirmación del día de NFLOW`], { type: 'text/plain' });
+    const blob = new Blob([`${text}\n\n${subtext}\n\n- Afirmación del día de NUXA`], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'afirmacion-nflow.txt';
+    a.download = 'afirmacion-nuxa.txt';
     a.click();
     URL.revokeObjectURL(url);
     
@@ -2305,11 +2305,11 @@ export default function RecursosGratis() {
   return (
     <>
       <SEOHead
-        title="Recursos Gratis - NFLOW | Herramientas de Bienestar"
+        title="Recursos Gratis - NUXA | Herramientas de Bienestar"
         description="Accede gratis a herramientas de bienestar emocional: registro emocional, afirmaciones diarias, tests de ansiedad y depresión. Sin necesidad de registro."
         keywords="recursos salud mental gratis, test ansiedad gratis, test depresión, afirmaciones positivas, registro emocional"
-        ogTitle="Recursos Gratis de Salud Mental - NFLOW"
-        canonicalUrl="https://nflow.style/recursos"
+        ogTitle="Recursos Gratis de Salud Mental - NUXA"
+        canonicalUrl="https://nuxa.life/recursos"
       />
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
         <Header />

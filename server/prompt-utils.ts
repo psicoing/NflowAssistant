@@ -171,7 +171,7 @@ export function selectRelevantExamples(userMessage: string, maxExamples: number 
           return `==== ${getCategoryTitle(example.category)} ====
 Usuario: "${example.userPrompt}"
 
-NFLOW: "${example.response}"
+NUXA: "${example.response}"
 `;
         } catch (e) {
           console.error("Error al formatear ejemplo específico:", e);
@@ -210,7 +210,7 @@ function getDefaultExample(): string {
       return `==== CONSULTA GENERAL ====
 Usuario: "Estoy atravesando un momento difícil y no sé cómo manejar la situación. ¿Me puedes dar algún consejo?"
 
-NFLOW: "Gracias por compartir que estás pasando por un momento difícil. Reconocer que necesitamos apoyo ya es un gran primer paso y muestra tu fortaleza interior. Puedo ofrecerte algunas estrategias generales: 1) Mantén rutinas básicas de autocuidado, 2) Encuentra formas de expresar tus emociones de manera saludable, 3) Recuerda que las situaciones difíciles son temporales. Estoy aquí para escucharte si quieres compartir más detalles."
+NUXA: "Gracias por compartir que estás pasando por un momento difícil. Reconocer que necesitamos apoyo ya es un gran primer paso y muestra tu fortaleza interior. Puedo ofrecerte algunas estrategias generales: 1) Mantén rutinas básicas de autocuidado, 2) Encuentra formas de expresar tus emociones de manera saludable, 3) Recuerda que las situaciones difíciles son temporales. Estoy aquí para escucharte si quieres compartir más detalles."
 `;
     }
     
@@ -218,7 +218,7 @@ NFLOW: "Gracias por compartir que estás pasando por un momento difícil. Recono
     return `==== CONSULTA GENERAL ====
 Usuario: "${generalExample.userPrompt}"
 
-NFLOW: "${generalExample.response}"
+NUXA: "${generalExample.response}"
 `;
   } catch (error) {
     console.error("Error en getDefaultExample:", error);
@@ -226,7 +226,7 @@ NFLOW: "${generalExample.response}"
     return `==== CONSULTA GENERAL ====
 Usuario: "Necesito ayuda con mi bienestar emocional"
 
-NFLOW: "Comprendo que estás buscando apoyo para tu bienestar emocional. Es importante reconocer que cuidar nuestra salud mental es tan fundamental como cuidar nuestra salud física. Te sugiero empezar con técnicas de mindfulness, establecer rutinas saludables y buscar conexiones sociales positivas. Recuerda que pedir ayuda es un signo de fortaleza, no de debilidad."
+NUXA: "Comprendo que estás buscando apoyo para tu bienestar emocional. Es importante reconocer que cuidar nuestra salud mental es tan fundamental como cuidar nuestra salud física. Te sugiero empezar con técnicas de mindfulness, establecer rutinas saludables y buscar conexiones sociales positivas. Recuerda que pedir ayuda es un signo de fortaleza, no de debilidad."
 `;
   }
 }

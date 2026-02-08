@@ -325,7 +325,7 @@ export default function ChatUserMenu() {
               Planes Disponibles
             </DialogTitle>
             <DialogDescription className="text-gray-400">
-              Información sobre los planes de suscripción de NFLOW
+              Información sobre los planes de suscripción de NUXA
             </DialogDescription>
           </DialogHeader>
           <div className="mt-4 p-4 bg-gray-700/50 rounded-lg border border-gray-600">
@@ -365,7 +365,7 @@ export default function ChatUserMenu() {
               Perfil de Usuario
             </DialogTitle>
             <DialogDescription className="text-gray-400">
-              Información de tu cuenta en NFLOW
+              Información de tu cuenta en NUXA
             </DialogDescription>
           </DialogHeader>
           <div className="mt-4 space-y-4">

@@ -12,7 +12,7 @@ export default function YouthMentalHealthSection() {
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <img 
                 src={youthImage} 
-                alt="Jóvenes usando NFLOW para apoyo en salud mental"
+                alt="Jóvenes usando NUXA para apoyo en salud mental"
                 className="w-full h-auto object-cover"
               />
               {/* Overlay with subtle gradient */}
@@ -23,7 +23,7 @@ export default function YouthMentalHealthSection() {
                 <div className="flex items-center space-x-3">
                   <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">NFLOW Adolescentes</p>
+                    <p className="text-sm font-semibold text-gray-900">NUXA Adolescentes</p>
                     <p className="text-xs text-gray-600">Control Parental</p>
                   </div>
                 </div>

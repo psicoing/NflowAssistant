@@ -713,7 +713,7 @@ export default function ChatInterface({
             <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-800"></div>
           </div>
           <div>
-            <h3 className="font-bold text-xl text-white">NFLOW Assistant</h3>
+            <h3 className="font-bold text-xl text-white">NUXA Assistant</h3>
             <p className="text-sm text-gray-300 flex items-center">
               <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
               Conectado · Tu psicólogo digital

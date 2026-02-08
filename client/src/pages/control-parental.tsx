@@ -39,7 +39,7 @@ export default function ControlParentalPage() {
               </Button>
             </Link>
             <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">
-              NFLOW
+              NUXA
             </div>
           </div>
         </div>
@@ -120,7 +120,7 @@ export default function ControlParentalPage() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img 
                   src={youthControlImage} 
-                  alt="Jóvenes usando NFLOW con supervisión parental responsable"
+                  alt="Jóvenes usando NUXA con supervisión parental responsable"
                   className="w-full h-auto object-cover"
                 />
                 {/* Overlay */}
@@ -132,7 +132,7 @@ export default function ControlParentalPage() {
                     <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
                     <div>
                       <p className="text-sm font-semibold text-gray-900">Supervisión Activa</p>
-                      <p className="text-xs text-gray-600">Control Parental NFLOW</p>
+                      <p className="text-xs text-gray-600">Control Parental NUXA</p>
                     </div>
                   </div>
                 </div>
@@ -262,7 +262,7 @@ export default function ControlParentalPage() {
                   <h3 className="font-bold text-gray-900 dark:text-white text-lg mb-2">Autorización de Uso</h3>
                   <p className="text-gray-600 dark:text-gray-300">
                     Los menores necesitan autorización expresa de padres o tutores para acceder 
-                    a NFLOW, cumpliendo con las normativas de protección de menores.
+                    a NUXA, cumpliendo con las normativas de protección de menores.
                   </p>
                 </div>
               </div>
@@ -286,7 +286,7 @@ export default function ControlParentalPage() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img 
                   src={youthControlImage} 
-                  alt="Jóvenes usando NFLOW con supervisión parental responsable"
+                  alt="Jóvenes usando NUXA con supervisión parental responsable"
                   className="w-full h-auto object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
@@ -492,7 +492,7 @@ export default function ControlParentalPage() {
               Protege a Tus Hijos con Responsabilidad
             </h2>
             <p className="text-xl text-blue-100 mb-8 leading-relaxed">
-              El bienestar mental de tus hijos es invaluable. Con NFLOW Control Parental, 
+              El bienestar mental de tus hijos es invaluable. Con NUXA Control Parental, 
               puedes brindarles el apoyo que necesitan mientras mantienes la supervisión 
               responsable que merecen.
             </p>
@@ -533,7 +533,7 @@ export default function ControlParentalPage() {
               </h3>
             </div>
             <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-              <strong>NFLOW</strong> está dirigido por psicólogos colegiados especializados en infancia 
+              <strong>NUXA</strong> está dirigido por psicólogos colegiados especializados en infancia 
               y adolescencia. Entendemos que la participación de los padres no solo es importante, 
               <strong>es fundamental</strong> para el éxito del proceso terapéutico en menores.
             </p>

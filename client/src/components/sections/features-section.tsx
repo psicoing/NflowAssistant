@@ -30,7 +30,7 @@ export default function FeaturesSection() {
                   <Bot className="w-4 h-4 text-white" />
                 </div>
                 <div className="bg-blue-600 text-white p-3 rounded-2xl rounded-tl-none max-w-xs">
-                  <p className="text-sm">¡Hola! Soy tu asistente de NFLOW. ¿Cómo te sientes hoy?</p>
+                  <p className="text-sm">¡Hola! Soy tu asistente de NUXA. ¿Cómo te sientes hoy?</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3 justify-end">
@@ -79,7 +79,7 @@ export default function FeaturesSection() {
               <div className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light p-4 rounded-xl text-white">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-semibold mb-1">NFLOW - Recursos</h4>
+                    <h4 className="font-semibold mb-1">NUXA - Recursos</h4>
                     <p className="text-sm opacity-90">Biblioteca de contenido</p>
                   </div>
                   <ArrowRight className="w-5 h-5" />

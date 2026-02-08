@@ -27,7 +27,7 @@ export default function AvisoLegal() {
                   Aviso Legal
                 </CardTitle>
                 <p className="text-slate-200 mt-2">
-                  Información legal sobre el uso de la plataforma NFLOW
+                  Información legal sobre el uso de la plataforma NUXA
                 </p>
               </div>
             </div>
@@ -67,10 +67,10 @@ export default function AvisoLegal() {
             <p>
               En cumplimiento de lo establecido en la Ley 34/2002, de 11 de julio, de Servicios 
               de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), EMPORDAJOBS SL 
-              informa a los usuarios de la plataforma NFLOW de los siguientes datos:
+              informa a los usuarios de la plataforma NUXA de los siguientes datos:
             </p>
             <p>
-              El presente aviso legal regula el uso de la plataforma NFLOW, propiedad de 
+              El presente aviso legal regula el uso de la plataforma NUXA, propiedad de 
               EMPORDAJOBS SL. La navegación por la plataforma atribuye la condición de usuario 
               de la misma e implica la aceptación plena y sin reservas de todas las disposiciones 
               incluidas en este aviso legal.
@@ -78,7 +78,7 @@ export default function AvisoLegal() {
 
             <h2>2. Objeto y Finalidad</h2>
             <p>
-              NFLOW es una plataforma digital que tiene como finalidad:
+              NUXA es una plataforma digital que tiene como finalidad:
             </p>
             <ul>
               <li>Proporcionar apoyo psicológico mediante inteligencia artificial</li>

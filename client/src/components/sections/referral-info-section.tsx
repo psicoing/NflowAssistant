@@ -10,10 +10,10 @@ export default function ReferralInfoSection() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              ¿Te recomendó alguien NFLOW?
+              ¿Te recomendó alguien NUXA?
             </h2>
             <p className="text-xl text-blue-200 max-w-2xl mx-auto">
-              Si un asesor, comercial o conocido te habló de NFLOW, pueden haberte dado un código especial
+              Si un asesor, comercial o conocido te habló de NUXA, pueden haberte dado un código especial
             </p>
           </div>
 
@@ -38,7 +38,7 @@ export default function ReferralInfoSection() {
                 <div className="space-y-3 text-sm text-blue-200">
                   <div className="flex items-center space-x-2">
                     <Gift className="h-4 w-4 text-green-400" />
-                    <span>Apoyas a quien te recomendó NFLOW</span>
+                    <span>Apoyas a quien te recomendó NUXA</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Gift className="h-4 w-4 text-green-400" />
@@ -83,7 +83,7 @@ export default function ReferralInfoSection() {
           <div className="mt-8 text-center">
             <p className="text-sm text-blue-300 max-w-3xl mx-auto">
               💡 <strong>¿No tienes código?</strong> No te preocupes. Puedes registrarte normalmente. 
-              Los códigos son solo para agradecer a quienes promocionan NFLOW, pero no son obligatorios.
+              Los códigos son solo para agradecer a quienes promocionan NUXA, pero no son obligatorios.
             </p>
           </div>
         </div>

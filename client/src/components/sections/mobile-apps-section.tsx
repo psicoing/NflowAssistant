@@ -8,12 +8,12 @@ import appImage2 from "@assets/image_1749306865658.png";
 import neuronmegImage from "@assets/image_1750083116326.png";
 
 export default function MobileAppsSection() {
-  const [activeApp, setActiveApp] = useState(1); // Set NFLOW Adolescentes as default active
+  const [activeApp, setActiveApp] = useState(1); // Set NUXA Adolescentes as default active
 
   const appCategories = [
     {
       icon: Heart,
-      title: "NFLOW Familias",
+      title: "NUXA Familias",
       description: "Bienestar familiar",
       longDescription: "Herramientas especializadas para fortalecer los vínculos familiares y la comunicación",
       color: "from-nflow-blue to-blue-600",
@@ -23,7 +23,7 @@ export default function MobileAppsSection() {
     },
     {
       icon: Users,
-      title: "NFLOW Adolescentes",
+      title: "NUXA Adolescentes",
       description: "Apoyo para gestionar emociones, estrés escolar y relaciones sociales",
       longDescription: "Herramientas especializadas para adolescentes, enfocadas en desarrollo emocional y bienestar mental",
       color: "from-purple-500 to-pink-500",
@@ -33,7 +33,7 @@ export default function MobileAppsSection() {
     },
     {
       icon: Smartphone,
-      title: "NFLOW Laboral",
+      title: "NUXA Laboral",
       description: "Wellness empresarial",
       longDescription: "Soluciones integrales de bienestar mental para equipos y organizaciones",
       color: "from-green-500 to-emerald-600",
@@ -43,7 +43,7 @@ export default function MobileAppsSection() {
     },
     {
       icon: Heart,
-      title: "NFLOW Adultos",
+      title: "NUXA Adultos",
       description: "Salud mental adulta",
       longDescription: "Terapia personalizada con IA avanzada para el cuidado individual de la salud mental en adultos",
       color: "from-nflow-orange to-orange-600",

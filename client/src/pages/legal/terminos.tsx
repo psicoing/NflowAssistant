@@ -27,7 +27,7 @@ export default function TerminosCondiciones() {
                   Términos y Condiciones
                 </CardTitle>
                 <p className="text-blue-100 mt-2">
-                  EMPORDAJOBS SL - NFLOW Platform
+                  EMPORDAJOBS SL - NUXA Platform
                 </p>
               </div>
             </div>
@@ -59,7 +59,7 @@ export default function TerminosCondiciones() {
           <CardContent className="p-8 prose prose-gray max-w-none">
             <h2>1. Objeto y Aceptación</h2>
             <p>
-              Los presentes Términos y Condiciones regulan el uso de la plataforma digital NFLOW, 
+              Los presentes Términos y Condiciones regulan el uso de la plataforma digital NUXA, 
               propiedad de EMPORDAJOBS SL (en adelante, "la Empresa"), con CIF B02701100 y domicilio 
               en Portbou, Girona, España.
             </p>
@@ -71,10 +71,10 @@ export default function TerminosCondiciones() {
 
             <h2>2. Descripción del Servicio</h2>
             <p>
-              NFLOW es una aplicación para la salud mental de personas individuales, familias y trabajadores. 
+              NUXA es una aplicación para la salud mental de personas individuales, familias y trabajadores. 
               Ofrece soluciones innovadoras que integren salud mental y desarrollo laboral, alineadas con los 
               principios de la normativa ISO 45003, centrada en el bienestar psicológico en el entorno de trabajo. 
-              NFLOW funciona como un recurso digital de apoyo emocional continuo que proporciona:
+              NUXA funciona como un recurso digital de apoyo emocional continuo que proporciona:
             </p>
             <ul>
               <li>Asistente conversacional de apoyo psicológico basado en IA</li>
@@ -155,7 +155,7 @@ export default function TerminosCondiciones() {
 
             <h2>8. Propiedad Intelectual</h2>
             <p>
-              Todos los derechos de propiedad intelectual de la plataforma NFLOW, incluyendo 
+              Todos los derechos de propiedad intelectual de la plataforma NUXA, incluyendo 
               diseño, código, marca y contenidos, pertenecen a EMPORDAJOBS SL.
             </p>
             <p>

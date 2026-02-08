@@ -252,7 +252,7 @@ export default function ChatUserMenu() {
               Perfil de Usuario
             </DialogTitle>
             <DialogDescription className="text-gray-400">
-              Información de tu cuenta en NFLOW
+              Información de tu cuenta en NUXA
             </DialogDescription>
           </DialogHeader>
           <div className="mt-4 space-y-4">

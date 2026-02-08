@@ -18,7 +18,7 @@ export default function LGBTISupportSection() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 px-4 py-2 rounded-full border border-purple-500/30 mb-6">
             <Heart className="w-4 h-4 text-pink-400" />
-            <span className="text-sm font-medium text-purple-300">NFLOW LGBTI+ Apoyo Especializado</span>
+            <span className="text-sm font-medium text-purple-300">NUXA LGBTI+ Apoyo Especializado</span>
           </div>
           
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
@@ -31,7 +31,7 @@ export default function LGBTISupportSection() {
           
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Reconocemos que la comunidad LGBTI+ enfrenta vulnerabilidades únicas en salud mental. 
-            En NFLOW, ofrecemos un espacio seguro, libre de juicios y con apoyo especializado.
+            En NUXA, ofrecemos un espacio seguro, libre de juicios y con apoyo especializado.
           </p>
         </div>
 
@@ -115,7 +115,7 @@ export default function LGBTISupportSection() {
               </p>
               <div className="flex items-center gap-2 text-sm">
                 <Heart className="w-4 h-4 text-pink-400" />
-                <span className="text-pink-300 font-medium">Con amor y respeto, equipo NFLOW</span>
+                <span className="text-pink-300 font-medium">Con amor y respeto, equipo NUXA</span>
               </div>
             </div>
 

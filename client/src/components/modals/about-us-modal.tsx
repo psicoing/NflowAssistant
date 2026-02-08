@@ -44,7 +44,7 @@ export default function AboutUsModal({ trigger, onOpenChange }: AboutUsModalProp
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl">
             <Heart className="h-6 w-6 text-nflow-orange" />
-            Nosotros - NFLOW Psychology
+            Nosotros - NUXA Psychology
           </DialogTitle>
         </DialogHeader>
         
@@ -61,7 +61,7 @@ export default function AboutUsModal({ trigger, onOpenChange }: AboutUsModalProp
                     Dr. Ramón Molons de San Román
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 mb-3">
-                    Director y Fundador de NFLOW • NeuroEngineer & PsychoClinic
+                    Director y Fundador de NUXA • NeuroEngineer & PsychoClinic
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
@@ -137,7 +137,7 @@ export default function AboutUsModal({ trigger, onOpenChange }: AboutUsModalProp
                 <div className="border-l-4 border-nflow-orange pl-4">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h5 className="font-medium text-nflow-orange">NFLOW Psychology - Director de Proyecto</h5>
+                      <h5 className="font-medium text-nflow-orange">NUXA Psychology - Director de Proyecto</h5>
                       <p className="text-sm text-gray-600 dark:text-gray-400">Marzo 2025 - Presente</p>
                     </div>
                     <Badge variant="outline" className="bg-orange-50 text-orange-700">Actual</Badge>
@@ -169,7 +169,7 @@ export default function AboutUsModal({ trigger, onOpenChange }: AboutUsModalProp
             <CardContent className="p-6">
               <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <TrendingUp className="h-5 w-5 text-nflow-orange" />
-                Especialización NFLOW
+                Especialización NUXA
               </h4>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
@@ -226,16 +226,16 @@ export default function AboutUsModal({ trigger, onOpenChange }: AboutUsModalProp
             </CardContent>
           </Card>
 
-          {/* Misión NFLOW */}
+          {/* Misión NUXA */}
           <Card className="border-nflow-orange/30 bg-gradient-to-r from-orange-50 to-blue-50 dark:from-orange-950/10 dark:to-blue-950/10">
             <CardContent className="p-6">
               <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
                 <Heart className="h-5 w-5 text-nflow-orange" />
-                Misión de NFLOW
+                Misión de NUXA
               </h4>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                 Integrar neurociencia e inteligencia artificial para crear una herramienta de salud mental 
-                accesible y efectiva. NFLOW representa un avance en la democratización del apoyo psicológico, 
+                accesible y efectiva. NUXA representa un avance en la democratización del apoyo psicológico, 
                 proporcionando respuestas basadas en principios de psicología clínica y escolar con un 
                 lenguaje cercano y profesional.
               </p>

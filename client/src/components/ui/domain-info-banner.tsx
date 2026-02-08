@@ -10,7 +10,7 @@ export default function DomainInfoBanner() {
         <div className="flex items-center justify-center gap-3 text-sm font-medium">
           <Globe className="w-4 h-4 text-blue-100" />
           <span>
-            <strong>✅ NFLOW Oficial</strong> - Nos puedes conocer por{" "}
+            <strong>✅ NUXA Oficial</strong> - Nos puedes conocer por{" "}
             <span className="font-bold text-blue-100">nflow.es • nflow.biz • nflow.gal • nflow.store • nflow.style</span>
           </span>
           <Shield className="w-4 h-4 text-blue-100" />

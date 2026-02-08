@@ -40,7 +40,7 @@ const blogPosts = [
         
         <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white p-8 rounded-2xl text-center">
           <h4 class="text-xl font-bold mb-4">¿Quieres experimentar el futuro de la salud mental?</h4>
-          <p class="mb-6">Únete a miles de jóvenes que ya están transformando su bienestar con NFLOW.</p>
+          <p class="mb-6">Únete a miles de jóvenes que ya están transformando su bienestar con NUXA.</p>
         </div>
       </div>
     `,
@@ -106,7 +106,7 @@ const blogPosts = [
         
         <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-8 rounded-2xl text-center">
           <h4 class="text-xl font-bold mb-4">¿Eres un profesional de la salud mental?</h4>
-          <p class="mb-6">Descubre cómo NFLOW puede potenciar tu práctica terapéutica y mejorar los resultados de tus pacientes.</p>
+          <p class="mb-6">Descubre cómo NUXA puede potenciar tu práctica terapéutica y mejorar los resultados de tus pacientes.</p>
         </div>
       </div>
     `,
@@ -230,7 +230,7 @@ export default function BlogPage() {
               {/* CTA final */}
               <div className="mt-12 bg-gradient-to-r from-orange-500 to-red-500 text-white p-8 rounded-2xl text-center">
                 <h3 className="text-2xl font-bold mb-4">¿Te interesó este artículo?</h3>
-                <p className="text-lg mb-6">Únete a NFLOW y experimenta el futuro de la salud mental digital.</p>
+                <p className="text-lg mb-6">Únete a NUXA y experimenta el futuro de la salud mental digital.</p>
                 <Button 
                   onClick={() => window.location.href = '/login'}
                   className="bg-white text-orange-600 hover:bg-gray-100 font-bold px-8 py-3 rounded-xl"
@@ -260,7 +260,7 @@ export default function BlogPage() {
                 <Sparkles className="w-6 h-6 text-yellow-300 absolute -top-2 -right-2 animate-pulse" />
               </div>
               <h1 className="text-4xl md:text-6xl font-bold">
-                Blog NFLOW
+                Blog NUXA
               </h1>
             </div>
             <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto leading-relaxed">
@@ -358,7 +358,7 @@ export default function BlogPage() {
               onClick={() => window.location.href = '/login'}
               className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
-              Únete a NFLOW
+              Únete a NUXA
               <Sparkles className="w-5 h-5 ml-2" />
             </Button>
           </div>

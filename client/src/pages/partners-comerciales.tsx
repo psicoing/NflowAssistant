@@ -10,7 +10,7 @@ export default function PartnersComerciales() {
       name: "Ramón Molons San Román",
       dni: "40436705Z", 
       role: "Socio Fundador & Director Técnico",
-      description: "Especialista en ISO 45003 y fundador de NFLOW, Ramón combina su experiencia técnica con una visión comercial estratégica. Su dedicación y compromiso con la excelencia han sido fundamentales para posicionar NFLOW como referente en salud mental digital.",
+      description: "Especialista en ISO 45003 y fundador de NUXA, Ramón combina su experiencia técnica con una visión comercial estratégica. Su dedicación y compromiso con la excelencia han sido fundamentales para posicionar NUXA como referente en salud mental digital.",
       specialties: ["ISO 45003", "Dirección Técnica", "Innovación Digital", "Estrategia Empresarial"], 
       icon: Star,
       gradient: "from-purple-500 to-indigo-500"
@@ -44,7 +44,7 @@ export default function PartnersComerciales() {
             Nuestros Partners Comerciales
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Conoce al equipo de profesionales que impulsa el crecimiento de NFLOW, 
+            Conoce al equipo de profesionales que impulsa el crecimiento de NUXA, 
             comprometidos con llevar la innovación en salud mental a cada rincón del mundo.
           </p>
         </div>

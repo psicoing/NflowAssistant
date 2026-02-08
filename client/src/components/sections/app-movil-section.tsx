@@ -48,7 +48,7 @@ export default function AppMovilSection() {
           </div>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Lleva tu bienestar mental siempre contigo. Nuestra app móvil te ofrece 
-            todas las funcionalidades de NFLOW optimizadas para tu smartphone.
+            todas las funcionalidades de NUXA optimizadas para tu smartphone.
           </p>
         </div>
 
@@ -72,10 +72,10 @@ export default function AppMovilSection() {
                   <div className="bg-nflow-orange rounded-2xl p-4 mb-4">
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center p-1">
-                        <img src="/favicon.png" alt="NFLOW" className="w-full h-full rounded-md" />
+                        <img src="/favicon.png" alt="NUXA" className="w-full h-full rounded-md" />
                       </div>
                       <div>
-                        <h3 className="text-white font-bold">NFLOW</h3>
+                        <h3 className="text-white font-bold">NUXA</h3>
                         <p className="text-white/80 text-xs">Tu asistente de bienestar</p>
                       </div>
                     </div>
@@ -160,7 +160,7 @@ export default function AppMovilSection() {
         {/* Download Buttons */}
         <div className="text-center">
           <h3 className="text-2xl font-bold text-white mb-6">
-            Descarga NFLOW ahora
+            Descarga NUXA ahora
           </h3>
           <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
             Disponible próximamente en App Store y Google Play. 

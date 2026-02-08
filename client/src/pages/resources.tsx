@@ -371,7 +371,7 @@ export default function Resources() {
           </div>
         </section>
 
-        {/* NFLOW Explicativa Section */}
+        {/* NUXA Explicativa Section */}
         <section className="py-16 px-4 bg-gradient-to-br from-nflow-dark via-gray-900 to-nflow-navy">
           <div className="max-w-5xl mx-auto">
             <Card className="bg-gradient-to-br from-gray-800/60 via-gray-800/40 to-gray-900/60 border border-nflow-orange/30 backdrop-blur-xl shadow-2xl">
@@ -381,10 +381,10 @@ export default function Resources() {
                     <div className="w-12 h-12 bg-nflow-orange/20 rounded-xl flex items-center justify-center">
                       <Brain className="w-7 h-7 text-nflow-orange" />
                     </div>
-                    NFLOW: Pensado para Personas y Empresas
+                    NUXA: Pensado para Personas y Empresas
                   </h2>
                   <p className="text-xl text-gray-300 leading-relaxed">
-                    NFLOW nace con una misión clara: Ofrecer apoyo psicológico profesional, inmediato y asequible tanto para personas como para empresas. Porque todos merecen bienestar mental, sin importar su tamaño, edad o situación.
+                    NUXA nace con una misión clara: Ofrecer apoyo psicológico profesional, inmediato y asequible tanto para personas como para empresas. Porque todos merecen bienestar mental, sin importar su tamaño, edad o situación.
                   </p>
                 </div>
 
@@ -401,7 +401,7 @@ export default function Resources() {
                       Si eres particular, aquí tienes ayuda real y sin barreras económicas. Sabemos que todos necesitamos apoyo alguna vez. Olvida lo de "ya iré cuando pueda permitírmelo". El momento es ahora y el precio ya no es el problema.
                     </p>
                     <div className="text-sm text-blue-300">
-                      ✓ Precio al alcance de todos: Si puedes pagar Netflix, puedes pagar NFLOW
+                      ✓ Precio al alcance de todos: Si puedes pagar Netflix, puedes pagar NUXA
                     </div>
                   </div>
 
@@ -414,7 +414,7 @@ export default function Resources() {
                       <h3 className="text-xl font-semibold text-white">Para Empresas</h3>
                     </div>
                     <p className="text-gray-300 mb-4">
-                      Si eres empresa, NFLOW es la solución práctica y ética para cuidar de tu equipo sin arruinar tus cuentas. ¿Quieres de verdad cuidar la salud mental de tu equipo? Da un paso al frente con NFLOW.
+                      Si eres empresa, NUXA es la solución práctica y ética para cuidar de tu equipo sin arruinar tus cuentas. ¿Quieres de verdad cuidar la salud mental de tu equipo? Da un paso al frente con NUXA.
                     </p>
                     <div className="text-sm text-orange-300">
                       ✓ No más programas carísimos que nadie usa. Soluciones prácticas a coste de café
@@ -449,17 +449,17 @@ export default function Resources() {
                 {/* Call to Action */}
                 <div className="text-center bg-gradient-to-r from-nflow-orange/10 to-nflow-blue/10 p-6 rounded-xl border border-nflow-orange/20">
                   <p className="text-lg font-semibold text-white mb-2">
-                    El bienestar mental ya no tiene excusa. NFLOW es para todos.
+                    El bienestar mental ya no tiene excusa. NUXA es para todos.
                   </p>
                   <p className="text-gray-300 mb-4">
-                    La salud mental profesional ya no es un lujo. Con NFLOW, el bienestar está en el bolsillo de todos.
+                    La salud mental profesional ya no es un lujo. Con NUXA, el bienestar está en el bolsillo de todos.
                   </p>
                   <Button 
                     className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light hover:from-nflow-orange-light hover:to-nflow-orange text-white px-8 py-3 text-lg font-semibold rounded-xl"
-                    onClick={() => window.open('https://nflow.biz', '_blank')}
+                    onClick={() => window.open('https://nuxa.life', '_blank')}
                   >
                     <Globe className="w-5 h-5 mr-2" />
-                    Visita nflow.biz
+                    Visita nuxa.life
                   </Button>
                 </div>
               </CardContent>

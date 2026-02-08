@@ -122,7 +122,7 @@ export default function QuickActivate() {
                   Pago completado exitosamente
                 </p>
                 <p className="text-xs text-orange-200">
-                  Ingresa tu nombre de usuario para activar automáticamente tu cuenta NFLOW.
+                  Ingresa tu nombre de usuario para activar automáticamente tu cuenta NUXA.
                 </p>
               </div>
             </div>

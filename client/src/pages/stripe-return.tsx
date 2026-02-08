@@ -59,7 +59,7 @@ export default function StripeReturn() {
             console.log('Stripe subscription activation result:', result);
             
             setStatus('success');
-            setMessage('Tu cuenta NFLOW ha sido activada exitosamente. Ya puedes acceder al chat de apoyo psicológico.');
+            setMessage('Tu cuenta NUXA ha sido activada exitosamente. Ya puedes acceder al chat de apoyo psicológico.');
             
             toast({
               title: "¡Cuenta Activada!",
@@ -86,7 +86,7 @@ export default function StripeReturn() {
 
           if (response.ok) {
             setStatus('success');
-            setMessage('Tu cuenta NFLOW ha sido activada exitosamente. Ya puedes acceder al chat de apoyo psicológico.');
+            setMessage('Tu cuenta NUXA ha sido activada exitosamente. Ya puedes acceder al chat de apoyo psicológico.');
             
             toast({
               title: "¡Cuenta Activada!",
@@ -178,7 +178,7 @@ export default function StripeReturn() {
                 <div className="flex items-center space-x-3">
                   <AlertTriangle className="w-5 h-5 text-red-400" />
                   <span className="text-sm text-red-300">
-                    Contacta soporte: support@nflow.app
+                    Contacta soporte: support@nuxa.life
                   </span>
                 </div>
               </div>

@@ -24,7 +24,7 @@ export default function PackagesSection() {
             Soluciones Especializadas
           </Badge>
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-8">
-            NFLOW,{" "}
+            NUXA,{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-nflow-orange via-nflow-orange-light to-nflow-blue">
               un psicólogo en tu bolsillo
             </span>
@@ -57,7 +57,7 @@ export default function PackagesSection() {
               </h3>
               
               <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-                Cada paquete NFLOW está diseñado con herramientas específicas y recursos 
+                Cada paquete NUXA está diseñado con herramientas específicas y recursos 
                 adaptados para diferentes grupos de edad y necesidades particulares.
               </p>
               

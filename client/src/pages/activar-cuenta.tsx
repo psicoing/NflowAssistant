@@ -217,7 +217,7 @@ export default function ActivarCuenta() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-white mb-4">
-              Activar Tu Cuenta NFLOW
+              Activar Tu Cuenta NUXA
             </h1>
             <p className="text-xl text-gray-300 mb-4">
               Elige tu método de pago para comenzar
@@ -230,7 +230,7 @@ export default function ActivarCuenta() {
                 <h3 className="text-blue-200 font-bold text-lg">Información Importante</h3>
               </div>
               <p className="text-blue-100 text-sm leading-relaxed">
-                <strong className="text-white">NFLOW</strong> es una marca registrada que pertenece a <strong className="text-blue-300">Empordajobs SL</strong>
+                <strong className="text-white">NUXA</strong> es una marca registrada que pertenece a <strong className="text-blue-300">Empordajobs SL</strong>
               </p>
               <p className="text-blue-200 text-xs mt-2">
                 💳 En tu extracto bancario aparecerá el cargo como "Empordajobs SL" - es completamente normal y seguro
@@ -270,7 +270,7 @@ export default function ActivarCuenta() {
                     <Input
                       id="referralCode"
                       type="text"
-                      placeholder="Ej: NFLOWCEOTESTPA_1234"
+                      placeholder="Ej: NUXACEOTESTPA_1234"
                       value={referralCode}
                       onChange={(e) => updateReferralCode(e.target.value)}
                       className="bg-white/90 border-white/30 text-gray-800 placeholder:text-gray-500"
@@ -309,7 +309,7 @@ export default function ActivarCuenta() {
                   )}
                   
                   <p className="text-xs text-gray-300">
-                    Los códigos de referencia apoyan a partners que promocionan NFLOW
+                    Los códigos de referencia apoyan a partners que promocionan NUXA
                   </p>
                 </div>
               </CardContent>
@@ -567,7 +567,7 @@ export default function ActivarCuenta() {
                   </a>
                   
                   <a 
-                    href="mailto:jobda@jobda.es?subject=Plan Personalizado NFLOW"
+                    href="mailto:jobda@jobda.es?subject=Plan Personalizado NUXA"
                     className="flex items-center gap-2 bg-orange-500/20 text-orange-300 px-4 py-2 rounded-lg border border-orange-500/30 hover:bg-orange-500/30 transition-colors"
                   >
                     <Mail className="w-4 h-4" />

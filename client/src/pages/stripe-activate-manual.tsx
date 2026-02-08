@@ -92,7 +92,7 @@ export default function StripeActivateManual() {
                   Pago completado con Stripe
                 </p>
                 <p className="text-xs text-blue-200">
-                  Ingresa tu nombre de usuario para activar tu cuenta NFLOW.
+                  Ingresa tu nombre de usuario para activar tu cuenta NUXA.
                 </p>
               </div>
             </div>

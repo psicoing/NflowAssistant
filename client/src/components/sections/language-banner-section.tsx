@@ -61,7 +61,7 @@ export default function LanguageBannerSection() {
 
         // Subtitle
         const subtitle = document.createElement('p');
-        subtitle.innerHTML = 'Traduce NFLOW a cualquier idioma instantáneamente';
+        subtitle.innerHTML = 'Traduce NUXA a cualquier idioma instantáneamente';
         subtitle.style.cssText = `
           margin: 0 0 24px 0;
           fontSize: 16px;

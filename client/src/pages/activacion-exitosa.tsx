@@ -66,7 +66,7 @@ export default function ActivacionExitosa() {
         console.log('✅ Activación exitosa:', result);
         
         setStatus('success');
-        setMessage('¡Tu cuenta NFLOW ha sido activada exitosamente! Ya puedes acceder al chat de apoyo psicológico.');
+        setMessage('¡Tu cuenta NUXA ha sido activada exitosamente! Ya puedes acceder al chat de apoyo psicológico.');
         
         toast({
           title: "¡Cuenta Activada!",
@@ -147,7 +147,7 @@ export default function ActivacionExitosa() {
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="w-5 h-5 text-orange-400" />
                   <span className="text-sm text-orange-300">
-                    Tu pago fue exitoso. Contacta soporte: support@nflow.app
+                    Tu pago fue exitoso. Contacta soporte: support@nuxa.life
                   </span>
                 </div>
               </div>

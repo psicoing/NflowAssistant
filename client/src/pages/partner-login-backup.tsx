@@ -69,7 +69,7 @@ export default function PartnerLogin() {
                 <div className="flex items-center space-x-2">
                   <Brain className="w-6 h-6 text-orange-600" />
                   <CardTitle className="text-xl font-bold text-orange-800">
-                    AVISO PARA NUEVOS PARTNERS DE NFLOW
+                    AVISO PARA NUEVOS PARTNERS DE NUXA
                   </CardTitle>
                 </div>
               </CardHeader>
@@ -78,13 +78,13 @@ export default function PartnerLogin() {
                   Estimadas colaboradoras y colaboradores,
                 </p>
                 <p className="text-gray-700 leading-relaxed">
-                  En tiempos donde proliferan las estafas digitales, los proyectos vacíos de valor real y las alianzas interesadas, el grupo JOBDA ha decidido establecer un criterio claro y ético para formar parte del ecosistema de NFlow, nuestro servicio de salud mental inteligente y consciente.
+                  En tiempos donde proliferan las estafas digitales, los proyectos vacíos de valor real y las alianzas interesadas, el grupo JOBDA ha decidido establecer un criterio claro y ético para formar parte del ecosistema de NUXA, nuestro servicio de salud mental inteligente y consciente.
                 </p>
                 
                 <Alert className="border-orange-200 bg-orange-50">
                   <Shield className="h-4 w-4 text-orange-600" />
                   <AlertDescription className="text-orange-800 font-medium">
-                    <strong>🔐 Requisito para ser partner oficial de NFlow:</strong>
+                    <strong>🔐 Requisito para ser partner oficial de NUXA:</strong>
                   </AlertDescription>
                 </Alert>
                 
@@ -128,7 +128,7 @@ export default function PartnerLogin() {
                 </Alert>
                 
                 <div className="bg-gray-900 text-white p-4 rounded-lg text-center">
-                  <p className="font-bold mb-2">Con NFlow no jugamos.</p>
+                  <p className="font-bold mb-2">Con NUXA no jugamos.</p>
                   <p className="text-sm">
                     Esto no es una app más: es una herramienta sensible, potente y hecha para cuidar a millones de personas.<br />
                     Por eso, los que entran, entran de verdad.

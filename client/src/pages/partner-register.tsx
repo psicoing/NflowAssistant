@@ -102,7 +102,7 @@ export default function PartnerRegister() {
             Registro de Partners
           </CardTitle>
           <CardDescription className="text-center">
-            Únete a nuestro programa de partners y genera ingresos con NFLOW
+            Únete a nuestro programa de partners y genera ingresos con NUXA
           </CardDescription>
         </CardHeader>
         <CardContent>
