@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign, Star, User, Building2, Landmark, Shield } from "lucide-react";
+import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign, Star, User, Building2, Landmark, Shield, Trophy } from "lucide-react";
 import { useLocation } from "wouter";
 
 const menuItems = [
@@ -44,6 +44,13 @@ const menuItems = [
     name: "Sector Público",
     sectionId: "sector-publico",
     icon: Landmark,
+    isPage: true
+  },
+  {
+    id: "competencia-nuxa",
+    name: "Competencia NUXA",
+    sectionId: "competencia-nuxa",
+    icon: Trophy,
     isPage: true
   },
   {
