@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign, Star, User, Building2, Landmark, Shield, Trophy } from "lucide-react";
+import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign, Star, User, Building2, Landmark, Shield, Trophy, Scale } from "lucide-react";
 import { useLocation } from "wouter";
 
 const menuItems = [
@@ -91,6 +91,13 @@ const menuItems = [
     name: "Aplicación Móvil",
     sectionId: "app-movil",
     icon: Smartphone
+  },
+  {
+    id: "marco-legal",
+    name: "Marco Legal",
+    sectionId: "marco-legal",
+    icon: Scale,
+    externalUrl: "https://jobda.org/investors"
   },
   {
     id: "contacto-licitacion",
