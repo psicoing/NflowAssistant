@@ -148,7 +148,7 @@ export default function QuienesSomosPage() {
                   "Reglamento General de Protección de Datos (RGPD)",
                   "Evaluación de Impacto en Protección de Datos (EIPD)",
                   "Consentimientos informados claros",
-                  "Infraestructura alojada en la Unión Europea",
+                  "Sistema principal en EE.UU. (Replit) + copia operativa en AWS EU Frankfurt",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 bg-emerald-500/5 border border-emerald-500/10 rounded-xl px-4 py-3">
                     <ShieldCheck className="w-4 h-4 text-emerald-400 flex-shrink-0" />
