@@ -103,6 +103,7 @@ export interface IStorage {
   // Sorteo
   createSorteoEntry(entry: InsertSorteoEntry): Promise<SorteoEntry>;
   getSorteoEntryByEmail(email: string): Promise<SorteoEntry | undefined>;
+  incrementSorteoEntryCount(email: string): Promise<SorteoEntry | undefined>;
   getAllSorteoEntries(): Promise<SorteoEntry[]>;
 }
 
@@ -624,6 +625,17 @@ export class DatabaseStorage implements IStorage {
   async getSorteoEntryByEmail(email: string): Promise<SorteoEntry | undefined> {
     const [entry] = await db.select().from(sorteoEntries).where(eq(sorteoEntries.email, email));
     return entry || undefined;
+  }
+
+  async incrementSorteoEntryCount(email: string): Promise<SorteoEntry | undefined> {
+    const [updated] = await db.update(sorteoEntries)
+      .set({ 
+        entryCount: sql`${sorteoEntries.entryCount} + 1`,
+        lastEntryAt: new Date()
+      })
+      .where(eq(sorteoEntries.email, email))
+      .returning();
+    return updated || undefined;
   }
 
   async getAllSorteoEntries(): Promise<SorteoEntry[]> {

@@ -786,18 +786,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Email válido requerido" });
       }
 
-      const existing = await storage.getSorteoEntryByEmail(email.toLowerCase().trim());
+      const normalizedEmail = email.toLowerCase().trim();
+      const existing = await storage.getSorteoEntryByEmail(normalizedEmail);
+      
       if (existing) {
-        return res.json({ message: "Ya estás participando en el sorteo", alreadyRegistered: true });
+        const updated = await storage.incrementSorteoEntryCount(normalizedEmail);
+        return res.json({ 
+          message: `¡Participación registrada! Llevas ${updated?.entryCount || existing.entryCount + 1} visitas.`, 
+          alreadyRegistered: true,
+          entryCount: updated?.entryCount || existing.entryCount + 1
+        });
       }
 
       const entry = await storage.createSorteoEntry({
-        email: email.toLowerCase().trim(),
+        email: normalizedEmail,
         source: source || "recursos_gratuitos",
         status: "participando",
       });
 
-      res.json({ message: "¡Te has inscrito en el sorteo!", entry });
+      res.json({ message: "¡Te has inscrito en el sorteo!", entry, entryCount: 1 });
     } catch (error) {
       console.error("Error creating sorteo entry:", error);
       res.status(500).json({ message: "Error al registrar participación" });

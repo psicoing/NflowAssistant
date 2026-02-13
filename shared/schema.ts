@@ -261,9 +261,11 @@ export const sorteoEntries = pgTable("sorteo_entries", {
   email: text("email").notNull(),
   source: text("source").default("recursos_gratuitos"),
   status: text("status").default("participando"),
+  entryCount: integer("entry_count").default(1).notNull(),
+  lastEntryAt: timestamp("last_entry_at").defaultNow().notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const insertSorteoEntrySchema = createInsertSchema(sorteoEntries).omit({ id: true, createdAt: true });
+export const insertSorteoEntrySchema = createInsertSchema(sorteoEntries).omit({ id: true, entryCount: true, lastEntryAt: true, createdAt: true });
 export type InsertSorteoEntry = z.infer<typeof insertSorteoEntrySchema>;
 export type SorteoEntry = typeof sorteoEntries.$inferSelect;

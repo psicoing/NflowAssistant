@@ -14,6 +14,8 @@ export default function SorteoRecursos() {
   const [, setLocation] = useLocation();
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [entryCount, setEntryCount] = useState(0);
+  const [isReturning, setIsReturning] = useState(false);
   const { toast } = useToast();
 
   const sorteoMutation = useMutation({
@@ -23,9 +25,13 @@ export default function SorteoRecursos() {
     },
     onSuccess: (data) => {
       setSubmitted(true);
+      setEntryCount(data.entryCount || 1);
+      setIsReturning(!!data.alreadyRegistered);
       toast({
-        title: data.alreadyRegistered ? "Ya participas" : "¡Inscripción completada!",
-        description: data.message,
+        title: data.alreadyRegistered ? "¡Bienvenido/a de nuevo!" : "¡Inscripción completada!",
+        description: data.alreadyRegistered 
+          ? `¡Te has inscrito en el sorteo! Llevas ${data.entryCount} visitas.` 
+          : "¡Te has inscrito en el sorteo!",
       });
     },
     onError: () => {
@@ -155,8 +161,21 @@ export default function SorteoRecursos() {
                     <CheckCircle className="w-8 h-8 text-emerald-400" />
                   </div>
                 </div>
-                <p className="text-white font-semibold text-lg mb-2">¡Estás en el sorteo!</p>
-                <p className="text-gray-400 text-sm">Te avisaremos si eres seleccionado/a. Mucha suerte.</p>
+                <p className="text-white font-semibold text-lg mb-2">
+                  {isReturning ? "¡Bienvenido/a de nuevo!" : "¡Estás en el sorteo!"}
+                </p>
+                <p className="text-gray-400 text-sm mb-3">
+                  {isReturning 
+                    ? "Nos alegra verte otra vez. Sigues participando en el sorteo." 
+                    : "Te avisaremos si eres seleccionado/a. Mucha suerte."}
+                </p>
+                {entryCount > 1 && (
+                  <div className="inline-flex items-center gap-2 bg-purple-500/15 border border-purple-500/20 rounded-full px-4 py-2">
+                    <span className="text-purple-300 text-sm font-medium">
+                      Visitas registradas: {entryCount}
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>
