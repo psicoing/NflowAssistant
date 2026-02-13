@@ -158,7 +158,7 @@ export default function FamilySupportHeroSection() {
                   <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">Apoyo cuando lo necesites</p>
                 </div>
                 <Link
-                  href="/recursos"
+                  href="/sorteo-recursos"
                   className="mt-auto inline-flex items-center justify-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-4 py-1.5 rounded-full border border-blue-200 dark:border-blue-700 hover:shadow-md transition-all duration-200"
                 >
                   Probar gratis <ArrowRight className="w-3 h-3" />

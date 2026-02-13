@@ -123,7 +123,7 @@ export default function RecursosIntro() {
               Elige la categoría que mejor se ajuste a lo que necesitas hoy y explora los recursos a tu ritmo.
             </p>
             <Button
-              onClick={() => setLocation("/recursos")}
+              onClick={() => setLocation("/sorteo-recursos")}
               className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-8 py-4 text-lg rounded-xl"
             >
               Ir directamente a los recursos
@@ -178,7 +178,7 @@ export default function RecursosIntro() {
                       </div>
 
                       <Button
-                        onClick={() => setLocation("/recursos")}
+                        onClick={() => setLocation("/sorteo-recursos")}
                         variant="ghost"
                         className={`${cat.iconColor} hover:bg-white/10 group`}
                       >
@@ -224,7 +224,7 @@ export default function RecursosIntro() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
-                  onClick={() => setLocation("/recursos")}
+                  onClick={() => setLocation("/sorteo-recursos")}
                   className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-8 py-4 text-lg rounded-xl"
                 >
                   Empezar a explorar

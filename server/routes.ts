@@ -778,6 +778,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Sorteo - participate in monthly raffle
+  app.post("/api/sorteo", async (req, res) => {
+    try {
+      const { email, source } = req.body;
+      if (!email || typeof email !== "string" || !email.includes("@")) {
+        return res.status(400).json({ message: "Email válido requerido" });
+      }
+
+      const existing = await storage.getSorteoEntryByEmail(email.toLowerCase().trim());
+      if (existing) {
+        return res.json({ message: "Ya estás participando en el sorteo", alreadyRegistered: true });
+      }
+
+      const entry = await storage.createSorteoEntry({
+        email: email.toLowerCase().trim(),
+        source: source || "recursos_gratuitos",
+        status: "participando",
+      });
+
+      res.json({ message: "¡Te has inscrito en el sorteo!", entry });
+    } catch (error) {
+      console.error("Error creating sorteo entry:", error);
+      res.status(500).json({ message: "Error al registrar participación" });
+    }
+  });
+
   // Get all books
   app.get("/api/books", async (req, res) => {
     try {
