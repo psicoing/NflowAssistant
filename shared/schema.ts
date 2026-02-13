@@ -255,3 +255,15 @@ export type InsertPartnerReferral = z.infer<typeof insertPartnerReferralSchema>;
 export type PartnerReferral = typeof partnerReferrals.$inferSelect;
 export type InsertBook = z.infer<typeof insertBookSchema>;
 export type Book = typeof books.$inferSelect;
+
+export const sorteoEntries = pgTable("sorteo_entries", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull(),
+  source: text("source").default("recursos_gratuitos"),
+  status: text("status").default("participando"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertSorteoEntrySchema = createInsertSchema(sorteoEntries).omit({ id: true, createdAt: true });
+export type InsertSorteoEntry = z.infer<typeof insertSorteoEntrySchema>;
+export type SorteoEntry = typeof sorteoEntries.$inferSelect;

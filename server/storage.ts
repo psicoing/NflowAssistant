@@ -1,5 +1,5 @@
 import { 
-  users, conversations, messages, resources, stripeTransactions, shopifyTransactions, partners, partnerReferrals, books,
+  users, conversations, messages, resources, stripeTransactions, shopifyTransactions, partners, partnerReferrals, books, sorteoEntries,
   type User, type InsertUser, 
   type Conversation, type InsertConversation,
   type Message, type InsertMessage,
@@ -8,7 +8,8 @@ import {
   type ShopifyTransaction, type InsertShopifyTransaction,
   type Partner, type InsertPartner,
   type PartnerReferral, type InsertPartnerReferral,
-  type Book
+  type Book,
+  type SorteoEntry, type InsertSorteoEntry
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql } from "drizzle-orm";
@@ -98,6 +99,11 @@ export interface IStorage {
   getUserByMagicToken(token: string): Promise<User | undefined>;
   setMagicLink(userId: number, token: string, expiry: Date): Promise<User>;
   clearMagicLink(userId: number): Promise<User>;
+
+  // Sorteo
+  createSorteoEntry(entry: InsertSorteoEntry): Promise<SorteoEntry>;
+  getSorteoEntryByEmail(email: string): Promise<SorteoEntry | undefined>;
+  getAllSorteoEntries(): Promise<SorteoEntry[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -608,6 +614,20 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, userId))
       .returning();
     return updatedUser;
+  }
+
+  async createSorteoEntry(entry: InsertSorteoEntry): Promise<SorteoEntry> {
+    const [sorteoEntry] = await db.insert(sorteoEntries).values(entry).returning();
+    return sorteoEntry;
+  }
+
+  async getSorteoEntryByEmail(email: string): Promise<SorteoEntry | undefined> {
+    const [entry] = await db.select().from(sorteoEntries).where(eq(sorteoEntries.email, email));
+    return entry || undefined;
+  }
+
+  async getAllSorteoEntries(): Promise<SorteoEntry[]> {
+    return await db.select().from(sorteoEntries);
   }
 }
 
