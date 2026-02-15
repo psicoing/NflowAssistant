@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Calendar, Users, User, Building, Shield, TrendingUp, Phone, Mail, X } from "lucide-react";
+import { CheckCircle, Calendar, Users, User, Building, Shield, TrendingUp, Phone, Mail, X, FileText, ExternalLink } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -526,6 +526,24 @@ export default function PricingSection() {
               <p className="text-purple-300 text-sm text-center">
                 <strong>¿Menos de 10 usuarios?</strong> Utiliza los planes individuales estándar mostrados arriba.
               </p>
+            </div>
+
+            {/* Licensing CTA */}
+            <div className="mt-8 bg-gradient-to-r from-indigo-900/40 to-blue-900/40 rounded-2xl p-6 border border-indigo-500/30 text-center">
+              <h5 className="text-xl font-bold text-white mb-2">Licitar el software NUXA</h5>
+              <p className="text-gray-300 text-sm mb-5 max-w-xl mx-auto">
+                Las organizaciones deben licitar el software para activar NUXA. Consulta toda la información sobre licencias, condiciones y proceso de contratación.
+              </p>
+              <a href="https://jobda.org/nuxa-licencias" target="_blank" rel="noopener noreferrer">
+                <Button 
+                  size="lg"
+                  className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white px-10 py-3 text-base font-semibold shadow-lg"
+                >
+                  <FileText className="w-5 h-5 mr-2" />
+                  Licitar software NUXA
+                  <ExternalLink className="w-4 h-4 ml-2" />
+                </Button>
+              </a>
             </div>
 
             {/* Contact Information */}
