@@ -257,6 +257,14 @@ export default function Registro() {
                       <UserPlus className="w-4 h-4 ml-2" />
                     </Button>
                   </form>
+                  <div className="mt-3 pt-3 border-t border-gray-100">
+                    <Link href="/precios">
+                      <Button variant="outline" size="sm" className="w-full text-orange-600 border-orange-200 hover:bg-orange-50">
+                        Ver planes y precios
+                        <ArrowRight className="w-3 h-3 ml-1" />
+                      </Button>
+                    </Link>
+                  </div>
                   <p className="text-xs text-gray-400 text-center mt-2">Mayores de 18 años</p>
                 </CardContent>
               </Card>
