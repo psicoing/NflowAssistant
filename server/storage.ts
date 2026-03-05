@@ -192,13 +192,15 @@ export class DatabaseStorage implements IStorage {
 
   // Helper function to determine monthly question limit based on plan
   private getQuestionLimitByPlan(plan: string): number {
-    const planLimits = {
+    const planLimits: Record<string, number> = {
       'basic': 10,
-      'pro': 20, 
+      'individual': 20,
+      'pro': 20,
       'premium': 30,
-      'annual': 40
+      'annual': 30,
+      'partner': 100,
     };
-    return planLimits[plan as keyof typeof planLimits] || 10;
+    return planLimits[plan] ?? 10;
   }
 
   async updateUserSubscription(userId: number, subscriptionData: {

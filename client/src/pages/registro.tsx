@@ -26,7 +26,7 @@ const individualPlans = [
     features: ["10 preguntas al mes", "Respuestas en +150 idiomas", "Soporte básico 24/7", "Acceso a recursos gratuitos"],
   },
   {
-    id: "pro",
+    id: "individual",
     name: "Plan Pro",
     price: "€5.99",
     period: "/mes",
@@ -40,14 +40,14 @@ const individualPlans = [
   {
     id: "premium",
     name: "Plan Anual",
-    price: "€49",
+    price: "€32",
     period: "/año",
-    questions: "200 preguntas/mes",
+    questions: "30 preguntas/mes",
     color: "from-amber-500 to-orange-600",
     border: "border-amber-300",
-    badge: "Ahorra 48%",
+    badge: "Mejor valor",
     icon: Star,
-    features: ["200 preguntas al mes", "Respuestas en +150 idiomas", "Soporte VIP 24/7", "Acceso completo ilimitado", "Historial + exportación", "Equivale a €4.08/mes"],
+    features: ["30 preguntas al mes", "Respuestas en +150 idiomas", "Soporte VIP 24/7", "Acceso completo durante 1 año", "Historial + exportación", "Equivale a €2.67/mes"],
   },
 ];
 
