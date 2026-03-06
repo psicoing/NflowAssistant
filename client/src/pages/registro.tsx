@@ -1,13 +1,47 @@
-import { ArrowRight, Gift, Sparkles, User, Building2, Heart, Briefcase, GraduationCap, Building, Hospital } from "lucide-react";
+import { ArrowRight, Gift, Sparkles, User, Building2, Heart, Briefcase, GraduationCap, Building, Hospital, CheckCircle, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { SEOHead } from "@/components/SEOHead";
 import { Link } from "wouter";
+import { useState } from "react";
+import { apiRequest } from "@/lib/queryClient";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 
+const PLANES = [
+  { id: "basico", label: "Plan Básico", price: "€2.99/mes", color: "border-purple-300 bg-purple-50 text-purple-700" },
+  { id: "pro",    label: "Plan Pro",    price: "€5.99/mes", color: "border-indigo-300 bg-indigo-50 text-indigo-700" },
+  { id: "anual",  label: "Plan Anual",  price: "€32/año",   color: "border-blue-300 bg-blue-50 text-blue-700" },
+];
+
 export default function Registro() {
+  const [form, setForm] = useState({ nombre: "", apellidos: "", email: "", plan: "basico" });
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<{ skrillLink: string } | null>(null);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      const res = await apiRequest("POST", "/api/registro-individual", form);
+      const data = await res.json();
+      if (data.success) {
+        setResult({ skrillLink: data.skrillLink });
+      } else {
+        setError(data.message || "Error al procesar la solicitud");
+      }
+    } catch {
+      setError("Error de conexión. Inténtalo de nuevo.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <>
       <SEOHead 
@@ -82,44 +116,124 @@ export default function Registro() {
               </CardContent>
             </Card>
 
-            {/* Aviso próximamente - planes individuales */}
+            {/* Planes individuales - mini formulario */}
             <Card className="border-2 border-purple-200 shadow-xl overflow-hidden mb-8 relative">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-indigo-50 opacity-60" />
-              <CardContent className="relative p-8 text-center">
-                <div className="flex justify-center mb-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <User className="w-9 h-9 text-white" />
+              <CardContent className="relative p-8">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow">
+                    <User className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900">Planes individuales para personas</h2>
+                    <p className="text-sm text-gray-500">Apoyo emocional con IA, 24/7 en +150 idiomas</p>
                   </div>
                 </div>
-                <Badge className="bg-purple-600 text-white text-sm px-4 py-1.5 mb-4 shadow">
-                  <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                  Próximamente
-                </Badge>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-                  Planes individuales para personas
-                </h2>
-                <p className="text-gray-600 text-base max-w-lg mx-auto leading-relaxed mb-5">
-                  Muy pronto podrás registrarte en NUXA de forma individual y acceder a planes personales 
-                  desde <strong>€2.99/mes</strong>. Apoyo emocional con IA, disponible 24/7 en +150 idiomas.
-                </p>
-                <div className="flex flex-wrap justify-center gap-3 mb-6 text-sm">
-                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-purple-100">
-                    <span className="text-purple-500 font-bold">✓</span>
-                    <span className="text-gray-600">Plan Básico desde €2.99/mes</span>
+
+                {result ? (
+                  <div className="text-center py-4">
+                    <CheckCircle className="w-14 h-14 text-emerald-500 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">¡Solicitud recibida!</h3>
+                    <p className="text-gray-600 text-sm mb-6">
+                      Hemos enviado un enlace de pago a tu correo. También puedes pagar directamente aquí:
+                    </p>
+                    <a href={result.skrillLink} target="_blank" rel="noopener noreferrer">
+                      <Button size="lg" className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold shadow-lg">
+                        Pagar con Skrill
+                        <ExternalLink className="w-4 h-4 ml-2" />
+                      </Button>
+                    </a>
+                    <p className="text-xs text-gray-400 mt-4">
+                      ¿Ya tienes cuenta?{" "}
+                      <Link href="/login" className="text-purple-600 underline font-medium">Iniciar sesión</Link>
+                    </p>
                   </div>
-                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-purple-100">
-                    <span className="text-purple-500 font-bold">✓</span>
-                    <span className="text-gray-600">Plan Pro €5.99/mes</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-purple-100">
-                    <span className="text-purple-500 font-bold">✓</span>
-                    <span className="text-gray-600">Plan Anual €32/año</span>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-400">
-                  ¿Ya tienes cuenta?{" "}
-                  <Link href="/login" className="text-purple-600 underline font-medium">Iniciar sesión</Link>
-                </p>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Plan selector */}
+                    <div>
+                      <Label className="text-sm font-semibold text-gray-700 mb-2 block">Elige tu plan</Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {PLANES.map(p => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => setForm(f => ({ ...f, plan: p.id }))}
+                            className={`border-2 rounded-xl p-3 text-center transition-all cursor-pointer ${
+                              form.plan === p.id
+                                ? "border-purple-500 bg-purple-100 shadow-sm"
+                                : "border-gray-200 bg-white hover:border-purple-300"
+                            }`}
+                          >
+                            <div className="font-semibold text-gray-900 text-sm">{p.label}</div>
+                            <div className="text-purple-600 font-bold text-base">{p.price}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      <div>
+                        <Label htmlFor="nombre" className="text-sm font-medium text-gray-700">Nombre</Label>
+                        <Input
+                          id="nombre"
+                          placeholder="Tu nombre"
+                          value={form.nombre}
+                          onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))}
+                          required
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="apellidos" className="text-sm font-medium text-gray-700">Apellidos</Label>
+                        <Input
+                          id="apellidos"
+                          placeholder="Tus apellidos"
+                          value={form.apellidos}
+                          onChange={e => setForm(f => ({ ...f, apellidos: e.target.value }))}
+                          required
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="email" className="text-sm font-medium text-gray-700">Correo electrónico</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="tu@correo.com"
+                        value={form.email}
+                        onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                        required
+                        className="mt-1"
+                      />
+                    </div>
+
+                    {error && (
+                      <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
+                    )}
+
+                    <Button
+                      type="submit"
+                      size="lg"
+                      disabled={loading}
+                      className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold shadow-lg"
+                    >
+                      {loading ? "Procesando..." : (
+                        <>
+                          Recibir enlace de pago Skrill
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </>
+                      )}
+                    </Button>
+                    <p className="text-xs text-gray-400 text-center">
+                      Recibirás un email con el enlace de pago. Sin permanencia. Cancela cuando quieras.
+                      {" · "}
+                      <Link href="/login" className="text-purple-600 underline">Ya tengo cuenta</Link>
+                    </p>
+                  </form>
+                )}
               </CardContent>
             </Card>
 

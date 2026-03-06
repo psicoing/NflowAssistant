@@ -2,6 +2,7 @@ import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { buildSkrillLink, sendSkrillRegistrationEmail } from "./emailService";
 import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog, conversations, messages } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
 import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
@@ -808,6 +809,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error creating sorteo entry:", error);
       res.status(500).json({ message: "Error al registrar participación" });
+    }
+  });
+
+  // Individual plan pre-registration with Skrill payment link
+  app.post("/api/registro-individual", async (req, res) => {
+    try {
+      const { nombre, apellidos, email, plan } = req.body;
+      if (!nombre || !apellidos || !email || !plan) {
+        return res.status(400).json({ message: "Todos los campos son obligatorios" });
+      }
+      if (!email.includes("@")) {
+        return res.status(400).json({ message: "Email no válido" });
+      }
+      const validPlans = ["basico", "pro", "anual"];
+      if (!validPlans.includes(plan)) {
+        return res.status(400).json({ message: "Plan no válido" });
+      }
+
+      const skrillLink = buildSkrillLink({ nombre, apellidos, email, plan });
+
+      // Send email to user asynchronously — don't block the response
+      sendSkrillRegistrationEmail({ to: email, nombre, apellidos, plan, skrillLink })
+        .catch(err => console.error("Skrill email error:", err));
+
+      return res.json({ success: true, skrillLink });
+    } catch (error) {
+      console.error("Error in registro-individual:", error);
+      res.status(500).json({ message: "Error al procesar la solicitud" });
     }
   });
 

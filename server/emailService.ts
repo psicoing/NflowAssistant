@@ -40,6 +40,126 @@ async function getUncachableSendGridClient() {
   };
 }
 
+// -------------------------------------------------------
+// Skrill payment link email for individual plan registration
+// -------------------------------------------------------
+
+const SKRILL_MERCHANT_EMAIL = "rmportbou@gmail.com";
+
+const PLAN_DETAILS: Record<string, { label: string; amount: string; description: string }> = {
+  basico:    { label: "Plan Básico NUXA",    amount: "2.99",  description: "Suscripción mensual – Plan Básico" },
+  pro:       { label: "Plan Pro NUXA",       amount: "5.99",  description: "Suscripción mensual – Plan Pro" },
+  anual:     { label: "Plan Anual NUXA",     amount: "32.00", description: "Suscripción anual – Plan Premium" },
+};
+
+export function buildSkrillLink(params: { nombre: string; apellidos: string; email: string; plan: string }): string {
+  const plan = PLAN_DETAILS[params.plan] ?? PLAN_DETAILS["basico"];
+  const base = "https://www.skrill.com/app/";
+  const qs = new URLSearchParams({
+    pay_to_email: SKRILL_MERCHANT_EMAIL,
+    currency: "EUR",
+    amount: plan.amount,
+    language: "ES",
+    detail1_description: plan.label,
+    detail1_text: plan.description,
+    firstname: params.nombre,
+    lastname: params.apellidos,
+    pay_from_email: params.email,
+  });
+  return `${base}?${qs.toString()}`;
+}
+
+interface SkrillRegistrationEmailParams {
+  to: string;
+  nombre: string;
+  apellidos: string;
+  plan: string;
+  skrillLink: string;
+}
+
+export async function sendSkrillRegistrationEmail(params: SkrillRegistrationEmailParams): Promise<boolean> {
+  try {
+    const { client, fromEmail } = await getUncachableSendGridClient();
+    const planInfo = PLAN_DETAILS[params.plan] ?? PLAN_DETAILS["basico"];
+
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activa tu plan NUXA</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f4ff;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f0f4ff; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08);">
+          <tr>
+            <td style="background: linear-gradient(135deg, #6366f1, #8b5cf6); padding: 40px 30px; text-align: center;">
+              <h1 style="color: white; margin: 0; font-size: 32px; font-weight: bold;">NUXA</h1>
+              <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 16px;">Tu asistente de salud mental con IA</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 40px 30px;">
+              <h2 style="color: #1a202c; margin: 0 0 16px 0; font-size: 22px;">¡Hola, ${params.nombre}!</h2>
+              <p style="color: #4a5568; font-size: 16px; line-height: 1.7; margin: 0 0 20px 0;">
+                Has solicitado el <strong>${planInfo.label}</strong>. Para activar tu acceso, realiza el pago mensual a través del siguiente enlace seguro de Skrill:
+              </p>
+              <div style="background: #f7f8ff; border: 1px solid #e0e7ff; border-radius: 12px; padding: 20px; margin: 24px 0; text-align: center;">
+                <p style="color: #6366f1; font-size: 14px; font-weight: 600; margin: 0 0 4px 0;">Importe a pagar</p>
+                <p style="color: #1a202c; font-size: 28px; font-weight: bold; margin: 0;">€${planInfo.amount}${params.plan === "anual" ? "/año" : "/mes"}</p>
+              </div>
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin: 28px 0;">
+                <tr>
+                  <td align="center">
+                    <a href="${params.skrillLink}" style="display: inline-block; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; text-decoration: none; padding: 16px 44px; border-radius: 12px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 15px rgba(99,102,241,0.35);">
+                      Pagar con Skrill →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              <p style="color: #718096; font-size: 13px; line-height: 1.6; margin: 20px 0 0 0; text-align: center;">
+                Si el botón no funciona, copia este enlace en tu navegador:<br>
+                <span style="color: #6366f1; word-break: break-all;">${params.skrillLink}</span>
+              </p>
+              <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+              <p style="color: #a0aec0; font-size: 13px; line-height: 1.6; text-align: center; margin: 0;">
+                Una vez realizado el pago, recibirás un correo de confirmación con tus datos de acceso a NUXA.<br>
+                ¿Tienes dudas? Escríbenos a <a href="mailto:empordajobs@gmail.com" style="color: #6366f1;">empordajobs@gmail.com</a>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color: #f7f8ff; padding: 20px 30px; text-align: center;">
+              <p style="color: #a0aec0; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} NUXA by Empordajobs SL. Sin permanencia. Cancela cuando quieras.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+    const msg = {
+      to: params.to,
+      from: { email: fromEmail, name: "NUXA" },
+      subject: `Tu enlace de pago para ${planInfo.label}`,
+      text: `Hola ${params.nombre},\n\nPara activar tu ${planInfo.label} (€${planInfo.amount}), usa este enlace de Skrill:\n${params.skrillLink}\n\nNUXA by Empordajobs SL`,
+      html: htmlContent,
+    };
+
+    await client.send(msg);
+    console.log(`✅ Skrill registration email sent to: ${params.to}`);
+    return true;
+  } catch (error) {
+    console.error("❌ Error sending Skrill registration email:", error);
+    return false;
+  }
+}
+
 interface MagicLinkEmailParams {
   to: string;
   customerName: string;
