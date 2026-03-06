@@ -1,116 +1,13 @@
-import { useState } from "react";
-import { Building2, Heart, ArrowRight, Briefcase, Hospital, GraduationCap, Building, Gift, Sparkles, User, Calendar, Star, Zap, Check } from "lucide-react";
+import { Building2, Heart, ArrowRight, Briefcase, Hospital, GraduationCap, Building, Gift, Sparkles, User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { SEOHead } from "@/components/SEOHead";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
-import { useToast } from "@/hooks/use-toast";
-import { queryClient } from "@/lib/queryClient";
-
-const individualPlans = [
-  {
-    id: "basic",
-    name: "Plan Básico",
-    price: "€2.99",
-    period: "/mes",
-    questions: "10 preguntas/mes",
-    color: "from-blue-500 to-blue-700",
-    border: "border-blue-200",
-    badge: null,
-    icon: Calendar,
-    features: ["10 preguntas al mes", "Respuestas en +150 idiomas", "Soporte básico 24/7", "Acceso a recursos gratuitos"],
-  },
-  {
-    id: "individual",
-    name: "Plan Pro",
-    price: "€5.99",
-    period: "/mes",
-    questions: "20 preguntas/mes",
-    color: "from-purple-500 to-indigo-700",
-    border: "border-purple-300",
-    badge: "Más popular",
-    icon: User,
-    features: ["20 preguntas al mes", "Respuestas en +150 idiomas", "Soporte prioritario 24/7", "Acceso a todos los recursos", "Historial completo"],
-  },
-  {
-    id: "premium",
-    name: "Plan Anual",
-    price: "€32",
-    period: "/año",
-    questions: "30 preguntas/mes",
-    color: "from-amber-500 to-orange-600",
-    border: "border-amber-300",
-    badge: "Mejor valor",
-    icon: Star,
-    features: ["30 preguntas al mes", "Respuestas en +150 idiomas", "Soporte VIP 24/7", "Acceso completo durante 1 año", "Historial + exportación", "Equivale a €2.67/mes"],
-  },
-];
 
 export default function Registro() {
-  const [, setLocation] = useLocation();
-  const { toast } = useToast();
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({ username: "", email: "", password: "" });
-  const [error, setError] = useState("");
-
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    if (!formData.username || !formData.email || !formData.password) {
-      setError("Todos los campos son obligatorios.");
-      return;
-    }
-    if (formData.password.length < 6) {
-      setError("La contraseña debe tener al menos 6 caracteres.");
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-          userType: "individual",
-          acceptedNuxaNotice: true,
-          noticeVersion: "1.0",
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        localStorage.setItem("userId", data.userId?.toString() || "");
-        localStorage.setItem("username", formData.username);
-        localStorage.setItem("user_email", formData.email);
-        await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
-
-        toast({
-          title: "Cuenta creada",
-          description: "Ahora elige tu plan para activar el acceso.",
-        });
-
-        setLocation("/precios");
-      } else {
-        setError(data.message || "Error al crear la cuenta.");
-      }
-    } catch {
-      setError("Error de conexión. Inténtalo de nuevo.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <>
       <SEOHead 
@@ -134,143 +31,46 @@ export default function Registro() {
               </p>
             </div>
 
-            {/* Planes individuales */}
-            <div className="mb-8">
-              <div className="text-center mb-5">
-                <Badge className="bg-purple-100 text-purple-700 border border-purple-200 text-sm px-4 py-1 mb-3">
-                  <User className="w-3.5 h-3.5 mr-1.5" />
-                  Para personas individuales
-                </Badge>
-                <h2 className="text-2xl font-bold text-gray-900">Planes de suscripción</h2>
-                <p className="text-gray-500 text-sm mt-1">Crea tu cuenta y elige el plan que mejor se adapte a ti</p>
-              </div>
-
-              <div className="grid md:grid-cols-3 gap-4 mb-5">
-                {individualPlans.map((plan) => {
-                  const Icon = plan.icon;
-                  const isSelected = selectedPlan === plan.id;
-                  return (
-                    <Card
-                      key={plan.id}
-                      onClick={() => setSelectedPlan(plan.id)}
-                      className={`border-2 shadow-lg overflow-hidden cursor-pointer transition-all hover:shadow-xl ${isSelected ? `${plan.border} ring-2 ring-offset-2 ring-purple-400 scale-[1.02]` : "border-gray-200 hover:border-gray-300"}`}
-                    >
-                      {plan.badge && (
-                        <div className="text-center py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600">
-                          <span className="text-white text-xs font-semibold tracking-wide">{plan.badge}</span>
-                        </div>
-                      )}
-                      <div className={`bg-gradient-to-br ${plan.color} p-5 text-white text-center`}>
-                        <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-2">
-                          <Icon className="w-7 h-7" />
-                        </div>
-                        <h3 className="text-lg font-bold">{plan.name}</h3>
-                        <div className="mt-1">
-                          <span className="text-3xl font-extrabold">{plan.price}</span>
-                          <span className="text-white/80 text-sm">{plan.period}</span>
-                        </div>
-                        <p className="text-white/80 text-xs mt-1">{plan.questions}</p>
-                      </div>
-                      <CardContent className="p-4">
-                        <ul className="space-y-1.5 mb-4">
-                          {plan.features.map((f, i) => (
-                            <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
-                              <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                              {f}
-                            </li>
-                          ))}
-                        </ul>
-                        <div className={`text-center py-2 rounded-lg text-sm font-semibold transition-colors ${isSelected ? "bg-purple-600 text-white" : "bg-gray-100 text-gray-500"}`}>
-                          {isSelected ? "✓ Seleccionado" : "Seleccionar plan"}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
-
-              {/* Formulario de registro */}
-              <Card className="border-2 border-purple-200 shadow-xl overflow-hidden">
-                <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 text-white text-center">
-                  <Zap className="w-6 h-6 mx-auto mb-1" />
-                  <h3 className="text-lg font-bold">Crear cuenta y activar plan</h3>
-                  <p className="text-purple-100 text-xs mt-0.5">
-                    {selectedPlan
-                      ? `Plan seleccionado: ${individualPlans.find(p => p.id === selectedPlan)?.name}`
-                      : "Selecciona un plan arriba o crea tu cuenta para elegir después"}
-                  </p>
+            {/* Aviso próximamente - planes individuales */}
+            <Card className="border-2 border-purple-200 shadow-xl overflow-hidden mb-8 relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-indigo-50 opacity-60" />
+              <CardContent className="relative p-8 text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <User className="w-9 h-9 text-white" />
+                  </div>
                 </div>
-                <CardContent className="p-5">
-                  <form onSubmit={handleRegister} className="grid sm:grid-cols-3 gap-4 items-end">
-                    <div>
-                      <Label htmlFor="username" className="text-xs text-gray-600 font-medium">Nombre de usuario</Label>
-                      <Input
-                        id="username"
-                        placeholder="Tu nombre de usuario"
-                        value={formData.username}
-                        onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                        className="mt-1 h-10"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="email" className="text-xs text-gray-600 font-medium">Correo electrónico</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="tu@email.com"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="mt-1 h-10"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="password" className="text-xs text-gray-600 font-medium">Contraseña</Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        placeholder="Mínimo 6 caracteres"
-                        value={formData.password}
-                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                        className="mt-1 h-10"
-                        minLength={6}
-                        required
-                      />
-                    </div>
-                    {error && (
-                      <div className="sm:col-span-3">
-                        <p className="text-xs text-red-600 bg-red-50 p-2 rounded border border-red-100">{error}</p>
-                      </div>
-                    )}
-                    <div className="sm:col-span-3">
-                      <Button
-                        type="submit"
-                        disabled={isLoading}
-                        size="lg"
-                        className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold shadow-lg"
-                      >
-                        {isLoading ? "Creando cuenta..." : "Crear cuenta y elegir plan"}
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                      <p className="text-xs text-gray-400 text-center mt-2">
-                        Al registrarte aceptas nuestra{" "}
-                        <Link href="/legal/privacidad" className="underline text-purple-600">política de privacidad</Link>{" "}
-                        y el{" "}
-                        <Link href="/legal/aviso-legal" className="underline text-purple-600">aviso legal</Link>
-                      </p>
-                    </div>
-                  </form>
-                </CardContent>
-              </Card>
-
-              <div className="text-center mt-3">
-                <p className="text-sm text-gray-500">
+                <Badge className="bg-purple-600 text-white text-sm px-4 py-1.5 mb-4 shadow">
+                  <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+                  Próximamente
+                </Badge>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+                  Planes individuales para personas
+                </h2>
+                <p className="text-gray-600 text-base max-w-lg mx-auto leading-relaxed mb-5">
+                  Muy pronto podrás registrarte en NUXA de forma individual y acceder a planes personales 
+                  desde <strong>€2.99/mes</strong>. Apoyo emocional con IA, disponible 24/7 en +150 idiomas.
+                </p>
+                <div className="flex flex-wrap justify-center gap-3 mb-6 text-sm">
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-purple-100">
+                    <span className="text-purple-500 font-bold">✓</span>
+                    <span className="text-gray-600">Plan Básico desde €2.99/mes</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-purple-100">
+                    <span className="text-purple-500 font-bold">✓</span>
+                    <span className="text-gray-600">Plan Pro €5.99/mes</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-purple-100">
+                    <span className="text-purple-500 font-bold">✓</span>
+                    <span className="text-gray-600">Plan Anual €32/año</span>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-400">
                   ¿Ya tienes cuenta?{" "}
                   <Link href="/login" className="text-purple-600 underline font-medium">Iniciar sesión</Link>
                 </p>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
 
             {/* Divider */}
             <div className="relative my-8">
