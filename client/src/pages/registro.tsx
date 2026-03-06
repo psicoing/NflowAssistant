@@ -1,4 +1,4 @@
-import { Building2, ArrowRight, Gift, Sparkles, User } from "lucide-react";
+import { ArrowRight, Gift, Sparkles, User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -91,9 +91,8 @@ export default function Registro() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-5 mb-8">
-
-              {/* Sorteo */}
+            {/* Sorteo */}
+            <div className="max-w-xl mx-auto mb-8">
               <Card className="border-2 border-emerald-300 shadow-xl overflow-hidden relative group hover:shadow-2xl transition-shadow">
                 <div className="absolute top-3 right-3 z-10">
                   <Badge className="bg-emerald-500 text-white text-xs px-3 py-1 animate-pulse">
@@ -140,43 +139,6 @@ export default function Registro() {
                     </Button>
                   </Link>
                   <p className="text-xs text-gray-400 text-center mt-2">Solo necesitas tu correo electrónico</p>
-                </CardContent>
-              </Card>
-
-              {/* Corporativo - Próximamente */}
-              <Card className="border-2 border-blue-200 shadow-xl overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 opacity-60" />
-                <CardContent className="relative p-8 text-center">
-                  <div className="flex justify-center mb-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-                      <Building2 className="w-9 h-9 text-white" />
-                    </div>
-                  </div>
-                  <Badge className="bg-blue-600 text-white text-sm px-4 py-1.5 mb-4 shadow">
-                    <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                    Próximamente
-                  </Badge>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-                    Planes para empresas y organizaciones
-                  </h2>
-                  <p className="text-gray-600 text-base max-w-lg mx-auto leading-relaxed mb-5">
-                    Muy pronto podrás contratar NUXA directamente para tu organización. Licencias corporativas 
-                    con panel de gestión, cumplimiento <strong>ISO 45003</strong> y soporte dedicado.
-                  </p>
-                  <div className="flex flex-wrap justify-center gap-3 mb-6 text-sm">
-                    <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-blue-100">
-                      <span className="text-blue-500 font-bold">✓</span>
-                      <span className="text-gray-600">Plan Profesional €149.50/mes</span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-blue-100">
-                      <span className="text-blue-500 font-bold">✓</span>
-                      <span className="text-gray-600">Plan Empresarial €598/mes</span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-blue-100">
-                      <span className="text-blue-500 font-bold">✓</span>
-                      <span className="text-gray-600">Plan Corporativo a medida</span>
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
             </div>
