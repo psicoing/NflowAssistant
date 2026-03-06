@@ -18,36 +18,6 @@ const PLANES_INDIVIDUAL = [
   { id: "anual",  label: "Plan Anual",  price: "€32/año"   },
 ];
 
-const PLANES_EMPRESA = [
-  { id: "empresa_100", label: "100 trabajadores", price: "€5.000/año"  },
-  { id: "empresa_200", label: "200 trabajadores", price: "€10.000/año" },
-  { id: "empresa_300", label: "300 trabajadores", price: "€15.000/año" },
-];
-
-function SuccessBox({ skrillLink }: { skrillLink: string }) {
-  return (
-    <div className="text-center py-4">
-      <CheckCircle className="w-14 h-14 text-emerald-500 mx-auto mb-3" />
-      <h3 className="text-xl font-bold text-gray-900 mb-2">¡Solicitud recibida!</h3>
-      <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-5 text-left">
-        <p className="text-amber-800 text-sm font-semibold mb-1">⏱ Activación en 24 horas</p>
-        <p className="text-amber-700 text-xs leading-relaxed">
-          Tu solicitud ha sido registrada. Recibirás un correo de activación en un plazo máximo de <strong>24 horas</strong> con tus credenciales de acceso a NUXA. Mientras tanto, puedes completar el pago:
-        </p>
-      </div>
-      <a href={skrillLink} target="_blank" rel="noopener noreferrer">
-        <Button size="lg" className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold shadow-lg">
-          Pagar con Skrill
-          <ExternalLink className="w-4 h-4 ml-2" />
-        </Button>
-      </a>
-      <p className="text-xs text-gray-400 mt-4">
-        ¿Ya tienes cuenta?{" "}
-        <Link href="/login" className="text-purple-600 underline font-medium">Iniciar sesión</Link>
-      </p>
-    </div>
-  );
-}
 
 export default function Registro() {
   // Individual plan form state
@@ -56,10 +26,10 @@ export default function Registro() {
   const [result, setResult] = useState<{ skrillLink: string } | null>(null);
   const [error, setError] = useState("");
 
-  // Empresa plan form state
-  const [eForm, setEForm] = useState({ empresa: "", nombre: "", apellidos: "", email: "", plan: "empresa_100" });
+  // Empresa licitacion form state
+  const [eForm, setEForm] = useState({ empresa: "", nombre: "", apellidos: "", email: "" });
   const [eLoading, setELoading] = useState(false);
-  const [eResult, setEResult] = useState<{ skrillLink: string } | null>(null);
+  const [eResult, setEResult] = useState(false);
   const [eError, setEError] = useState("");
 
   const [skrillModalOpen, setSkrillModalOpen] = useState(false);
@@ -91,7 +61,7 @@ export default function Registro() {
       const res = await apiRequest("POST", "/api/registro-empresa", eForm);
       const data = await res.json();
       if (data.success) {
-        setEResult({ skrillLink: data.skrillLink });
+        setEResult(true);
       } else {
         setEError(data.message || "Error al procesar la solicitud");
       }
@@ -146,36 +116,41 @@ export default function Registro() {
                 </div>
 
                 {eResult ? (
-                  <SuccessBox skrillLink={eResult.skrillLink} />
+                  <div className="text-center py-4">
+                    <CheckCircle className="w-14 h-14 text-emerald-500 mx-auto mb-3" />
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">¡Solicitud recibida!</h3>
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-5 text-left">
+                      <p className="text-amber-800 text-sm font-semibold mb-1">⏱ Te contactamos en 24 horas</p>
+                      <p className="text-amber-700 text-xs leading-relaxed">
+                        Tu solicitud de licitación ha sido registrada. Nos pondremos en contacto contigo en un plazo máximo de <strong>24 horas</strong> para iniciar el proceso.
+                      </p>
+                    </div>
+                    <a href="https://jobda.org/nuxa-licencias" target="_blank" rel="noopener noreferrer">
+                      <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold shadow-lg">
+                        <Building2 className="w-4 h-4 mr-2" />
+                        Iniciar licitación ahora
+                        <ExternalLink className="w-4 h-4 ml-2" />
+                      </Button>
+                    </a>
+                  </div>
                 ) : (
                   <form onSubmit={handleEmpresaSubmit} className="space-y-4">
-                    {/* Plan selector */}
-                    <div>
-                      <Label className="text-sm font-semibold text-gray-700 mb-2 block">Elige tu plan</Label>
-                      <div className="grid grid-cols-3 gap-2">
-                        {PLANES_EMPRESA.map(p => (
-                          <button
-                            key={p.id}
-                            type="button"
-                            onClick={() => setEForm(f => ({ ...f, plan: p.id }))}
-                            className={`border-2 rounded-xl p-3 text-center transition-all cursor-pointer ${
-                              eForm.plan === p.id
-                                ? "border-blue-500 bg-blue-100 shadow-sm"
-                                : "border-gray-200 bg-white hover:border-blue-300"
-                            }`}
-                          >
-                            <div className="font-semibold text-gray-900 text-xs">{p.label}</div>
-                            <div className="text-blue-600 font-bold text-sm">{p.price}</div>
-                          </button>
-                        ))}
+                    {/* Licitaciones badge */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 flex items-center gap-3">
+                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Building2 className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-blue-900 font-bold text-sm">Licitaciones a partir de 40.000 trabajadores</p>
+                        <p className="text-blue-600 text-xs">Proceso oficial de contratación pública y privada · ISO 45003</p>
                       </div>
                     </div>
 
                     <div>
-                      <Label htmlFor="empresa" className="text-sm font-medium text-gray-700">Nombre de la empresa</Label>
+                      <Label htmlFor="empresa" className="text-sm font-medium text-gray-700">Nombre de la organización</Label>
                       <Input
                         id="empresa"
-                        placeholder="Nombre de tu organización"
+                        placeholder="Nombre de tu empresa u organización"
                         value={eForm.empresa}
                         onChange={e => setEForm(f => ({ ...f, empresa: e.target.value }))}
                         required
@@ -213,7 +188,7 @@ export default function Registro() {
                       <Input
                         id="e-email"
                         type="email"
-                        placeholder="contacto@empresa.com"
+                        placeholder="contacto@organizacion.com"
                         value={eForm.email}
                         onChange={e => setEForm(f => ({ ...f, email: e.target.value }))}
                         required
@@ -233,24 +208,14 @@ export default function Registro() {
                     >
                       {eLoading ? "Procesando..." : (
                         <>
-                          Recibir enlace de pago Skrill
+                          Solicitar información de licitación
                           <ArrowRight className="w-4 h-4 ml-2" />
                         </>
                       )}
                     </Button>
                     <p className="text-xs text-gray-400 text-center">
-                      Activación en 24h · Sin permanencia · Cancela cuando quieras
+                      Te contactamos en menos de 24h · Proceso totalmente gratuito
                     </p>
-                    <div className="flex justify-center">
-                      <button
-                        type="button"
-                        onClick={() => setSkrillModalOpen(true)}
-                        className="inline-flex items-center gap-2 bg-[#6B2D8B] hover:bg-[#5a2575] text-white text-xs font-semibold px-4 py-2 rounded-full shadow transition-colors"
-                      >
-                        <ShieldCheck className="w-4 h-4" />
-                        Skrill 100% seguro
-                      </button>
-                    </div>
                   </form>
                 )}
               </CardContent>

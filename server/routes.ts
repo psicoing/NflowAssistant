@@ -838,26 +838,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Empresa plan registration (saved to DB)
+  // Empresa licitacion registration (saved to DB)
   app.post("/api/registro-empresa", async (req, res) => {
     try {
-      const { empresa, nombre, apellidos, email, plan } = req.body;
-      if (!empresa || !nombre || !apellidos || !email || !plan) {
+      const { empresa, nombre, apellidos, email } = req.body;
+      if (!empresa || !nombre || !apellidos || !email) {
         return res.status(400).json({ message: "Todos los campos son obligatorios" });
       }
       if (!email.includes("@")) {
         return res.status(400).json({ message: "Email no válido" });
       }
-      const validPlans = ["empresa_100", "empresa_200", "empresa_300"];
-      if (!validPlans.includes(plan)) {
-        return res.status(400).json({ message: "Plan no válido" });
-      }
 
-      const skrillLink = buildSkrillLink({ nombre, apellidos, email, plan });
+      const licitacionUrl = "https://jobda.org/nuxa-licencias";
+      await storage.createEmpresaRegistration({ empresa, nombre, apellidos, email, plan: "licitacion", skrillLink: licitacionUrl, status: "pendiente" });
 
-      await storage.createEmpresaRegistration({ empresa, nombre, apellidos, email, plan, skrillLink, status: "pendiente" });
-
-      return res.json({ success: true, skrillLink });
+      return res.json({ success: true });
     } catch (error) {
       console.error("Error in registro-empresa:", error);
       res.status(500).json({ message: "Error al procesar la solicitud" });
