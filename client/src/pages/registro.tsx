@@ -1,4 +1,4 @@
-import { ArrowRight, Gift, Sparkles, User, Building2 } from "lucide-react";
+import { ArrowRight, Gift, Sparkles, User, Building2, Heart, Briefcase, GraduationCap, Building, Hospital } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -129,7 +129,7 @@ export default function Registro() {
             </div>
 
             {/* Sorteo */}
-            <div className="max-w-xl mx-auto mb-8">
+            <div className="max-w-xl mx-auto mb-10">
               <Card className="border-2 border-emerald-300 shadow-xl overflow-hidden relative group hover:shadow-2xl transition-shadow">
                 <div className="absolute top-3 right-3 z-10">
                   <Badge className="bg-emerald-500 text-white text-xs px-3 py-1 animate-pulse">
@@ -180,6 +180,57 @@ export default function Registro() {
               </Card>
             </div>
 
+            {/* ¿Quieres que tu organización licencie NUXA? */}
+            <Card className="border border-gray-200 shadow-lg overflow-hidden">
+              <CardContent className="p-8">
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                    <Heart className="w-5 h-5 text-red-500" />
+                    ¿Quieres que tu organización licencie NUXA?
+                  </h3>
+                  <p className="text-sm text-gray-500 mb-5">Habla con el responsable de tu organización para que contrate NUXA y toda tu comunidad tenga acceso.</p>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                      <Briefcase className="w-8 h-8 text-blue-600 mb-2" />
+                      <h4 className="font-semibold text-gray-900">Tu empresa</h4>
+                      <p className="text-sm text-gray-600">Recursos Humanos o Prevención de Riesgos Laborales</p>
+                    </div>
+                    <div className="bg-green-50 rounded-xl p-4 border border-green-100">
+                      <Hospital className="w-8 h-8 text-green-600 mb-2" />
+                      <h4 className="font-semibold text-gray-900">Tu centro de salud</h4>
+                      <p className="text-sm text-gray-600">Atención primaria o salud mental</p>
+                    </div>
+                    <div className="bg-purple-50 rounded-xl p-4 border border-purple-100">
+                      <GraduationCap className="w-8 h-8 text-purple-600 mb-2" />
+                      <h4 className="font-semibold text-gray-900">Tu centro educativo</h4>
+                      <p className="text-sm text-gray-600">Universidad, instituto o colegio</p>
+                    </div>
+                    <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
+                      <Building className="w-8 h-8 text-amber-600 mb-2" />
+                      <h4 className="font-semibold text-gray-900">Entidad pública</h4>
+                      <p className="text-sm text-gray-600">Ayuntamiento, servicios sociales, etc.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-center mt-2">
+                  <a href="https://jobda.org/nuxa-licencias" target="_blank" rel="noopener noreferrer">
+                    <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white px-10 font-semibold shadow-lg">
+                      <Building2 className="w-5 h-5 mr-2" />
+                      Licitar software NUXA
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </a>
+                </div>
+
+                <div className="mt-5 p-4 bg-gray-100 rounded-xl">
+                  <p className="text-xs text-gray-500 text-center">
+                    <strong>¿Por qué este modelo?</strong> NUXA prioriza la seguridad y el marco legal. 
+                    Al operar mediante licencias corporativas garantizamos un entorno controlado y profesional para el bienestar psicológico de los usuarios.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
             
           </div>
         </main>
