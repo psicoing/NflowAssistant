@@ -1,4 +1,4 @@
-import { Building2, Heart, ArrowRight, Briefcase, Hospital, GraduationCap, Building, Gift, Sparkles, User } from "lucide-react";
+import { Building2, ArrowRight, Gift, Sparkles, User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -181,46 +181,6 @@ export default function Registro() {
               </Card>
             </div>
 
-            {/* Anima a tu entorno */}
-            <Card className="border border-gray-200 shadow-lg overflow-hidden">
-              <CardContent className="p-8">
-                <div className="mb-8">
-                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <Heart className="w-5 h-5 text-red-500" />
-                    ¿Quieres que tu organización licencie NUXA?
-                  </h3>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
-                      <Briefcase className="w-8 h-8 text-blue-600 mb-2" />
-                      <h4 className="font-semibold text-gray-900">Tu empresa</h4>
-                      <p className="text-sm text-gray-600">Recursos Humanos o Prevención de Riesgos Laborales</p>
-                    </div>
-                    <div className="bg-green-50 rounded-xl p-4 border border-green-100">
-                      <Hospital className="w-8 h-8 text-green-600 mb-2" />
-                      <h4 className="font-semibold text-gray-900">Tu centro de salud</h4>
-                      <p className="text-sm text-gray-600">Atención primaria o salud mental</p>
-                    </div>
-                    <div className="bg-purple-50 rounded-xl p-4 border border-purple-100">
-                      <GraduationCap className="w-8 h-8 text-purple-600 mb-2" />
-                      <h4 className="font-semibold text-gray-900">Tu centro educativo</h4>
-                      <p className="text-sm text-gray-600">Universidad, instituto o colegio</p>
-                    </div>
-                    <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
-                      <Building className="w-8 h-8 text-amber-600 mb-2" />
-                      <h4 className="font-semibold text-gray-900">Entidad pública</h4>
-                      <p className="text-sm text-gray-600">Ayuntamiento, servicios sociales, etc.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4 p-4 bg-gray-100 rounded-xl">
-                  <p className="text-xs text-gray-500 text-center">
-                    <strong>¿Por qué este modelo?</strong> NUXA prioriza la seguridad y el marco legal. 
-                    Al operar mediante licencias corporativas garantizamos un entorno controlado y profesional para el bienestar psicológico de los usuarios.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
             
           </div>
         </main>
