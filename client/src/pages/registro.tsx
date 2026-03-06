@@ -18,6 +18,12 @@ const PLANES_INDIVIDUAL = [
   { id: "anual",  label: "Plan Anual",  price: "€32/año"   },
 ];
 
+const PLANES_MEDIANA = [
+  { id: "empresa_100", label: "100 trabajadores", price: "€5.000/año"  },
+  { id: "empresa_200", label: "200 trabajadores", price: "€10.000/año" },
+  { id: "empresa_300", label: "300 trabajadores", price: "€15.000/año" },
+];
+
 
 export default function Registro() {
   // Individual plan form state
@@ -31,6 +37,12 @@ export default function Registro() {
   const [eLoading, setELoading] = useState(false);
   const [eResult, setEResult] = useState(false);
   const [eError, setEError] = useState("");
+
+  // Mediana empresa form state
+  const [mForm, setMForm] = useState({ empresa: "", nombre: "", apellidos: "", email: "", plan: "empresa_100" });
+  const [mLoading, setMLoading] = useState(false);
+  const [mResult, setMResult] = useState<{ skrillLink: string } | null>(null);
+  const [mError, setMError] = useState("");
 
   const [skrillModalOpen, setSkrillModalOpen] = useState(false);
 
@@ -69,6 +81,25 @@ export default function Registro() {
       setEError("Error de conexión. Inténtalo de nuevo.");
     } finally {
       setELoading(false);
+    }
+  }
+
+  async function handleMedianaSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setMError("");
+    setMLoading(true);
+    try {
+      const res = await apiRequest("POST", "/api/registro-empresa-media", mForm);
+      const data = await res.json();
+      if (data.success) {
+        setMResult({ skrillLink: data.skrillLink });
+      } else {
+        setMError(data.message || "Error al procesar la solicitud");
+      }
+    } catch {
+      setMError("Error de conexión. Inténtalo de nuevo.");
+    } finally {
+      setMLoading(false);
     }
   }
 
@@ -216,6 +247,151 @@ export default function Registro() {
                     <p className="text-xs text-gray-400 text-center">
                       Te contactamos en menos de 24h · Proceso totalmente gratuito
                     </p>
+                  </form>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Planes mediana empresa */}
+            <Card className="border-2 border-indigo-200 shadow-xl overflow-hidden mb-6 relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-blue-50 opacity-60" />
+              <CardContent className="relative p-8">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-xl flex items-center justify-center shadow">
+                    <Briefcase className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <h2 className="text-xl font-bold text-gray-900">Planes para empresas y organizaciones medias</h2>
+                      <div className="inline-flex items-center gap-1 bg-emerald-500 text-white font-bold text-xs px-2.5 py-1 rounded-full animate-pulse">
+                        <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+                        ACTIVO
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-500">Hasta 300 trabajadores · ISO 45003 · Panel de gestión</p>
+                  </div>
+                </div>
+
+                {mResult ? (
+                  <div className="text-center py-4">
+                    <CheckCircle className="w-14 h-14 text-emerald-500 mx-auto mb-3" />
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">¡Solicitud recibida!</h3>
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-5 text-left">
+                      <p className="text-amber-800 text-sm font-semibold mb-1">⏱ Activación en 24 horas</p>
+                      <p className="text-amber-700 text-xs leading-relaxed">
+                        Tu solicitud ha sido registrada. Recibirás un correo de activación en un plazo máximo de <strong>24 horas</strong> con tus credenciales de acceso a NUXA. Mientras tanto, puedes completar el pago:
+                      </p>
+                    </div>
+                    <a href={mResult.skrillLink} target="_blank" rel="noopener noreferrer">
+                      <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold shadow-lg">
+                        Pagar con Skrill
+                        <ExternalLink className="w-4 h-4 ml-2" />
+                      </Button>
+                    </a>
+                  </div>
+                ) : (
+                  <form onSubmit={handleMedianaSubmit} className="space-y-4">
+                    <div>
+                      <Label className="text-sm font-semibold text-gray-700 mb-2 block">Elige tu plan</Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {PLANES_MEDIANA.map(p => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => setMForm(f => ({ ...f, plan: p.id }))}
+                            className={`border-2 rounded-xl p-3 text-center transition-all cursor-pointer ${
+                              mForm.plan === p.id
+                                ? "border-indigo-500 bg-indigo-100 shadow-sm"
+                                : "border-gray-200 bg-white hover:border-indigo-300"
+                            }`}
+                          >
+                            <div className="font-semibold text-gray-900 text-xs">{p.label}</div>
+                            <div className="text-indigo-600 font-bold text-sm">{p.price}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="m-empresa" className="text-sm font-medium text-gray-700">Nombre de la empresa</Label>
+                      <Input
+                        id="m-empresa"
+                        placeholder="Nombre de tu organización"
+                        value={mForm.empresa}
+                        onChange={e => setMForm(f => ({ ...f, empresa: e.target.value }))}
+                        required
+                        className="mt-1"
+                      />
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      <div>
+                        <Label htmlFor="m-nombre" className="text-sm font-medium text-gray-700">Nombre contacto</Label>
+                        <Input
+                          id="m-nombre"
+                          placeholder="Tu nombre"
+                          value={mForm.nombre}
+                          onChange={e => setMForm(f => ({ ...f, nombre: e.target.value }))}
+                          required
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="m-apellidos" className="text-sm font-medium text-gray-700">Apellidos</Label>
+                        <Input
+                          id="m-apellidos"
+                          placeholder="Tus apellidos"
+                          value={mForm.apellidos}
+                          onChange={e => setMForm(f => ({ ...f, apellidos: e.target.value }))}
+                          required
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="m-email" className="text-sm font-medium text-gray-700">Correo de contacto</Label>
+                      <Input
+                        id="m-email"
+                        type="email"
+                        placeholder="contacto@empresa.com"
+                        value={mForm.email}
+                        onChange={e => setMForm(f => ({ ...f, email: e.target.value }))}
+                        required
+                        className="mt-1"
+                      />
+                    </div>
+
+                    {mError && (
+                      <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">{mError}</p>
+                    )}
+
+                    <Button
+                      type="submit"
+                      size="lg"
+                      disabled={mLoading}
+                      className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold shadow-lg"
+                    >
+                      {mLoading ? "Procesando..." : (
+                        <>
+                          Recibir enlace de pago Skrill
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </>
+                      )}
+                    </Button>
+                    <p className="text-xs text-gray-400 text-center">
+                      Activación en 24h · Sin permanencia · Cancela cuando quieras
+                    </p>
+                    <div className="flex justify-center">
+                      <button
+                        type="button"
+                        onClick={() => setSkrillModalOpen(true)}
+                        className="inline-flex items-center gap-2 bg-[#6B2D8B] hover:bg-[#5a2575] text-white text-xs font-semibold px-4 py-2 rounded-full shadow transition-colors"
+                      >
+                        <ShieldCheck className="w-4 h-4" />
+                        Skrill 100% seguro
+                      </button>
+                    </div>
                   </form>
                 )}
               </CardContent>

@@ -838,6 +838,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Mediana empresa plan registration with Skrill link
+  app.post("/api/registro-empresa-media", async (req, res) => {
+    try {
+      const { empresa, nombre, apellidos, email, plan } = req.body;
+      if (!empresa || !nombre || !apellidos || !email || !plan) {
+        return res.status(400).json({ message: "Todos los campos son obligatorios" });
+      }
+      if (!email.includes("@")) {
+        return res.status(400).json({ message: "Email no válido" });
+      }
+      const validPlans = ["empresa_100", "empresa_200", "empresa_300"];
+      if (!validPlans.includes(plan)) {
+        return res.status(400).json({ message: "Plan no válido" });
+      }
+      const skrillLink = buildSkrillLink({ nombre, apellidos, email, plan });
+      await storage.createEmpresaRegistration({ empresa, nombre, apellidos, email, plan, skrillLink, status: "pendiente" });
+      return res.json({ success: true, skrillLink });
+    } catch (error) {
+      console.error("Error in registro-empresa-media:", error);
+      res.status(500).json({ message: "Error al procesar la solicitud" });
+    }
+  });
+
   // Empresa licitacion registration (saved to DB)
   app.post("/api/registro-empresa", async (req, res) => {
     try {
