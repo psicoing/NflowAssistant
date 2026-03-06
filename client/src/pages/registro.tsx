@@ -1,9 +1,10 @@
-import { ArrowRight, Gift, Sparkles, User, Building2, Heart, Briefcase, GraduationCap, Building, Hospital, CheckCircle, ExternalLink } from "lucide-react";
+import { ArrowRight, Gift, Sparkles, User, Building2, Heart, Briefcase, GraduationCap, Building, Hospital, CheckCircle, ExternalLink, ShieldCheck, X } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/SEOHead";
 import { Link } from "wouter";
 import { useState } from "react";
@@ -22,6 +23,7 @@ export default function Registro() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{ skrillLink: string } | null>(null);
   const [error, setError] = useState("");
+  const [skrillModalOpen, setSkrillModalOpen] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -226,6 +228,18 @@ export default function Registro() {
                       {" · "}
                       <Link href="/login" className="text-purple-600 underline">Ya tengo cuenta</Link>
                     </p>
+
+                    {/* Skrill security badge */}
+                    <div className="flex justify-center pt-1">
+                      <button
+                        type="button"
+                        onClick={() => setSkrillModalOpen(true)}
+                        className="inline-flex items-center gap-2 bg-[#6B2D8B] hover:bg-[#5a2575] text-white text-xs font-semibold px-4 py-2 rounded-full shadow transition-colors cursor-pointer"
+                      >
+                        <ShieldCheck className="w-4 h-4" />
+                        Skrill 100% seguro
+                      </button>
+                    </div>
                   </form>
                 )}
               </CardContent>
@@ -340,6 +354,28 @@ export default function Registro() {
         
         <Footer />
       </div>
+
+      {/* Skrill legal info modal */}
+      <Dialog open={skrillModalOpen} onOpenChange={setSkrillModalOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-[#6B2D8B]">
+              <ShieldCheck className="w-5 h-5" />
+              Información legal de Skrill
+            </DialogTitle>
+          </DialogHeader>
+          <div className="bg-[#4a1a6e] rounded-xl p-5 mt-2">
+            <p className="text-white text-sm leading-relaxed">
+              Copyright 2024 Paysafe Holdings UK Limited. Todos los derechos reservados. Skrill® es una marca registrada de Paysafe Holdings UK Limited. Paysafe Payment Solutions Limited está registrada en Irlanda con el número de empresa 626665 y su domicilio social se encuentra en 70 Sir John Rogerson's Quay, Dublín 2, D02 R296, Irlanda, operando como Skrill, Skrill Money Transfer, Rapid Transfer y Skrill Quick Checkout. Paysafe Payment Solutions Limited está autorizada por el Banco Central de Irlanda (Registro: C184986) según los Reglamentos de las Comunidades Europeas (Dinero electrónico) de 2011 para la emisión de dinero electrónico e instrumentos de pago. Paysafe Payment Solutions Limited está autorizada como Proveedora de Servicios de Criptoactivos por el Banco Central de Irlanda.
+            </p>
+          </div>
+          <div className="flex justify-center mt-2">
+            <a href="https://www.skrill.com" target="_blank" rel="noopener noreferrer" className="text-xs text-[#6B2D8B] underline hover:text-[#5a2575]">
+              www.skrill.com
+            </a>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
