@@ -1,5 +1,5 @@
 import { 
-  users, conversations, messages, resources, stripeTransactions, shopifyTransactions, partners, partnerReferrals, books, sorteoEntries, individualRegistrations,
+  users, conversations, messages, resources, stripeTransactions, shopifyTransactions, partners, partnerReferrals, books, sorteoEntries, individualRegistrations, empresaRegistrations,
   type User, type InsertUser, 
   type Conversation, type InsertConversation,
   type Message, type InsertMessage,
@@ -10,7 +10,8 @@ import {
   type PartnerReferral, type InsertPartnerReferral,
   type Book,
   type SorteoEntry, type InsertSorteoEntry,
-  type IndividualRegistration, type InsertIndividualRegistration
+  type IndividualRegistration, type InsertIndividualRegistration,
+  type EmpresaRegistration, type InsertEmpresaRegistration
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql } from "drizzle-orm";
@@ -108,6 +109,8 @@ export interface IStorage {
   getAllSorteoEntries(): Promise<SorteoEntry[]>;
   createIndividualRegistration(data: InsertIndividualRegistration): Promise<IndividualRegistration>;
   getAllIndividualRegistrations(): Promise<IndividualRegistration[]>;
+  createEmpresaRegistration(data: InsertEmpresaRegistration): Promise<EmpresaRegistration>;
+  getAllEmpresaRegistrations(): Promise<EmpresaRegistration[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -654,6 +657,15 @@ export class DatabaseStorage implements IStorage {
 
   async getAllIndividualRegistrations(): Promise<IndividualRegistration[]> {
     return await db.select().from(individualRegistrations).orderBy(individualRegistrations.createdAt);
+  }
+
+  async createEmpresaRegistration(data: InsertEmpresaRegistration): Promise<EmpresaRegistration> {
+    const [reg] = await db.insert(empresaRegistrations).values(data).returning();
+    return reg;
+  }
+
+  async getAllEmpresaRegistrations(): Promise<EmpresaRegistration[]> {
+    return await db.select().from(empresaRegistrations).orderBy(empresaRegistrations.createdAt);
   }
 }
 

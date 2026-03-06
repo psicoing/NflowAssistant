@@ -284,3 +284,19 @@ export const individualRegistrations = pgTable("individual_registrations", {
 export const insertIndividualRegistrationSchema = createInsertSchema(individualRegistrations).omit({ id: true, createdAt: true });
 export type InsertIndividualRegistration = z.infer<typeof insertIndividualRegistrationSchema>;
 export type IndividualRegistration = typeof individualRegistrations.$inferSelect;
+
+export const empresaRegistrations = pgTable("empresa_registrations", {
+  id: serial("id").primaryKey(),
+  empresa: text("empresa").notNull(),
+  nombre: text("nombre").notNull(),
+  apellidos: text("apellidos").notNull(),
+  email: text("email").notNull(),
+  plan: text("plan").notNull(),
+  skrillLink: text("skrill_link").notNull(),
+  status: text("status").default("pendiente").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertEmpresaRegistrationSchema = createInsertSchema(empresaRegistrations).omit({ id: true, createdAt: true });
+export type InsertEmpresaRegistration = z.infer<typeof insertEmpresaRegistrationSchema>;
+export type EmpresaRegistration = typeof empresaRegistrations.$inferSelect;

@@ -12,17 +12,56 @@ import { apiRequest } from "@/lib/queryClient";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 
-const PLANES = [
-  { id: "basico", label: "Plan Básico", price: "€2.99/mes", color: "border-purple-300 bg-purple-50 text-purple-700" },
-  { id: "pro",    label: "Plan Pro",    price: "€5.99/mes", color: "border-indigo-300 bg-indigo-50 text-indigo-700" },
-  { id: "anual",  label: "Plan Anual",  price: "€32/año",   color: "border-blue-300 bg-blue-50 text-blue-700" },
+const PLANES_INDIVIDUAL = [
+  { id: "basico", label: "Plan Básico", price: "€2.99/mes" },
+  { id: "pro",    label: "Plan Pro",    price: "€5.99/mes" },
+  { id: "anual",  label: "Plan Anual",  price: "€32/año"   },
 ];
 
+const PLANES_EMPRESA = [
+  { id: "empresa_100", label: "100 trabajadores", price: "€5.000/año"  },
+  { id: "empresa_200", label: "200 trabajadores", price: "€10.000/año" },
+  { id: "empresa_300", label: "300 trabajadores", price: "€15.000/año" },
+];
+
+function SuccessBox({ skrillLink }: { skrillLink: string }) {
+  return (
+    <div className="text-center py-4">
+      <CheckCircle className="w-14 h-14 text-emerald-500 mx-auto mb-3" />
+      <h3 className="text-xl font-bold text-gray-900 mb-2">¡Solicitud recibida!</h3>
+      <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-5 text-left">
+        <p className="text-amber-800 text-sm font-semibold mb-1">⏱ Activación en 24 horas</p>
+        <p className="text-amber-700 text-xs leading-relaxed">
+          Tu solicitud ha sido registrada. Recibirás un correo de activación en un plazo máximo de <strong>24 horas</strong> con tus credenciales de acceso a NUXA. Mientras tanto, puedes completar el pago:
+        </p>
+      </div>
+      <a href={skrillLink} target="_blank" rel="noopener noreferrer">
+        <Button size="lg" className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold shadow-lg">
+          Pagar con Skrill
+          <ExternalLink className="w-4 h-4 ml-2" />
+        </Button>
+      </a>
+      <p className="text-xs text-gray-400 mt-4">
+        ¿Ya tienes cuenta?{" "}
+        <Link href="/login" className="text-purple-600 underline font-medium">Iniciar sesión</Link>
+      </p>
+    </div>
+  );
+}
+
 export default function Registro() {
+  // Individual plan form state
   const [form, setForm] = useState({ nombre: "", apellidos: "", email: "", plan: "basico" });
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{ skrillLink: string } | null>(null);
   const [error, setError] = useState("");
+
+  // Empresa plan form state
+  const [eForm, setEForm] = useState({ empresa: "", nombre: "", apellidos: "", email: "", plan: "empresa_100" });
+  const [eLoading, setELoading] = useState(false);
+  const [eResult, setEResult] = useState<{ skrillLink: string } | null>(null);
+  const [eError, setEError] = useState("");
+
   const [skrillModalOpen, setSkrillModalOpen] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -41,6 +80,25 @@ export default function Registro() {
       setError("Error de conexión. Inténtalo de nuevo.");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleEmpresaSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setEError("");
+    setELoading(true);
+    try {
+      const res = await apiRequest("POST", "/api/registro-empresa", eForm);
+      const data = await res.json();
+      if (data.success) {
+        setEResult({ skrillLink: data.skrillLink });
+      } else {
+        setEError(data.message || "Error al procesar la solicitud");
+      }
+    } catch {
+      setEError("Error de conexión. Inténtalo de nuevo.");
+    } finally {
+      setELoading(false);
     }
   }
 
@@ -67,48 +125,134 @@ export default function Registro() {
               </p>
             </div>
 
-            {/* Planes empresa - ACTIVO arriba del todo */}
+            {/* Planes empresa - formulario */}
             <Card className="border-2 border-blue-200 shadow-xl overflow-hidden mb-6 relative">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 opacity-60" />
-              <CardContent className="relative p-8 text-center">
-                <div className="flex justify-center mb-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <Building2 className="w-9 h-9 text-white" />
+              <CardContent className="relative p-8">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow">
+                    <Building2 className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <h2 className="text-xl font-bold text-gray-900">Planes para empresas y organizaciones</h2>
+                      <div className="inline-flex items-center gap-1 bg-emerald-500 text-white font-bold text-xs px-2.5 py-1 rounded-full animate-pulse">
+                        <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+                        ACTIVO
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-500">Licencias corporativas · ISO 45003 · Panel de gestión</p>
                   </div>
                 </div>
-                <div className="inline-flex items-center gap-2 bg-emerald-500 text-white font-bold text-sm px-5 py-2 rounded-full shadow-lg animate-pulse mb-4">
-                  <span className="w-2 h-2 bg-white rounded-full"></span>
-                  ACTIVO
-                  <span className="w-2 h-2 bg-white rounded-full"></span>
-                </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-                  Planes para empresas y organizaciones
-                </h2>
-                <p className="text-gray-600 text-base max-w-lg mx-auto leading-relaxed mb-5">
-                  Muy pronto podrás contratar NUXA directamente para tu organización. Licencias corporativas 
-                  con panel de gestión, cumplimiento <strong>ISO 45003</strong> y soporte dedicado.
-                </p>
-                <div className="flex flex-wrap justify-center gap-3 mb-6 text-sm">
-                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-blue-100">
-                    <span className="text-blue-500 font-bold">✓</span>
-                    <span className="text-gray-600">Plan Profesional €149.50/mes</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-blue-100">
-                    <span className="text-blue-500 font-bold">✓</span>
-                    <span className="text-gray-600">Plan Empresarial €598/mes</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-blue-100">
-                    <span className="text-blue-500 font-bold">✓</span>
-                    <span className="text-gray-600">Plan Corporativo a medida</span>
-                  </div>
-                </div>
-                <a href="https://jobda.org/nuxa-licencias" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white px-10 font-semibold shadow-lg">
-                    <Building2 className="w-5 h-5 mr-2" />
-                    Licitar software NUXA
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </a>
+
+                {eResult ? (
+                  <SuccessBox skrillLink={eResult.skrillLink} />
+                ) : (
+                  <form onSubmit={handleEmpresaSubmit} className="space-y-4">
+                    {/* Plan selector */}
+                    <div>
+                      <Label className="text-sm font-semibold text-gray-700 mb-2 block">Elige tu plan</Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {PLANES_EMPRESA.map(p => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => setEForm(f => ({ ...f, plan: p.id }))}
+                            className={`border-2 rounded-xl p-3 text-center transition-all cursor-pointer ${
+                              eForm.plan === p.id
+                                ? "border-blue-500 bg-blue-100 shadow-sm"
+                                : "border-gray-200 bg-white hover:border-blue-300"
+                            }`}
+                          >
+                            <div className="font-semibold text-gray-900 text-xs">{p.label}</div>
+                            <div className="text-blue-600 font-bold text-sm">{p.price}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="empresa" className="text-sm font-medium text-gray-700">Nombre de la empresa</Label>
+                      <Input
+                        id="empresa"
+                        placeholder="Nombre de tu organización"
+                        value={eForm.empresa}
+                        onChange={e => setEForm(f => ({ ...f, empresa: e.target.value }))}
+                        required
+                        className="mt-1"
+                      />
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      <div>
+                        <Label htmlFor="e-nombre" className="text-sm font-medium text-gray-700">Nombre contacto</Label>
+                        <Input
+                          id="e-nombre"
+                          placeholder="Tu nombre"
+                          value={eForm.nombre}
+                          onChange={e => setEForm(f => ({ ...f, nombre: e.target.value }))}
+                          required
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="e-apellidos" className="text-sm font-medium text-gray-700">Apellidos</Label>
+                        <Input
+                          id="e-apellidos"
+                          placeholder="Tus apellidos"
+                          value={eForm.apellidos}
+                          onChange={e => setEForm(f => ({ ...f, apellidos: e.target.value }))}
+                          required
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="e-email" className="text-sm font-medium text-gray-700">Correo de contacto</Label>
+                      <Input
+                        id="e-email"
+                        type="email"
+                        placeholder="contacto@empresa.com"
+                        value={eForm.email}
+                        onChange={e => setEForm(f => ({ ...f, email: e.target.value }))}
+                        required
+                        className="mt-1"
+                      />
+                    </div>
+
+                    {eError && (
+                      <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">{eError}</p>
+                    )}
+
+                    <Button
+                      type="submit"
+                      size="lg"
+                      disabled={eLoading}
+                      className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold shadow-lg"
+                    >
+                      {eLoading ? "Procesando..." : (
+                        <>
+                          Recibir enlace de pago Skrill
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </>
+                      )}
+                    </Button>
+                    <p className="text-xs text-gray-400 text-center">
+                      Activación en 24h · Sin permanencia · Cancela cuando quieras
+                    </p>
+                    <div className="flex justify-center">
+                      <button
+                        type="button"
+                        onClick={() => setSkrillModalOpen(true)}
+                        className="inline-flex items-center gap-2 bg-[#6B2D8B] hover:bg-[#5a2575] text-white text-xs font-semibold px-4 py-2 rounded-full shadow transition-colors"
+                      >
+                        <ShieldCheck className="w-4 h-4" />
+                        Skrill 100% seguro
+                      </button>
+                    </div>
+                  </form>
+                )}
               </CardContent>
             </Card>
 
@@ -156,7 +300,7 @@ export default function Registro() {
                     <div>
                       <Label className="text-sm font-semibold text-gray-700 mb-2 block">Elige tu plan</Label>
                       <div className="grid grid-cols-3 gap-2">
-                        {PLANES.map(p => (
+                        {PLANES_INDIVIDUAL.map(p => (
                           <button
                             key={p.id}
                             type="button"
