@@ -1,4 +1,4 @@
-import { ArrowRight, Gift, Sparkles, User } from "lucide-react";
+import { ArrowRight, Gift, Sparkles, User, Building2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -39,6 +39,43 @@ export default function Registro() {
                 Elige la opción que mejor se adapte a ti
               </p>
             </div>
+
+            {/* Aviso próximamente - licencias corporativas */}
+            <Card className="border-2 border-blue-200 shadow-xl overflow-hidden mb-6 relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 opacity-60" />
+              <CardContent className="relative p-8 text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <Building2 className="w-9 h-9 text-white" />
+                  </div>
+                </div>
+                <Badge className="bg-blue-600 text-white text-sm px-4 py-1.5 mb-4 shadow">
+                  <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+                  Próximamente
+                </Badge>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+                  Planes para empresas y organizaciones
+                </h2>
+                <p className="text-gray-600 text-base max-w-lg mx-auto leading-relaxed mb-5">
+                  Muy pronto podrás contratar NUXA directamente para tu organización. Licencias corporativas 
+                  con panel de gestión, cumplimiento <strong>ISO 45003</strong> y soporte dedicado.
+                </p>
+                <div className="flex flex-wrap justify-center gap-3 text-sm">
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-blue-100">
+                    <span className="text-blue-500 font-bold">✓</span>
+                    <span className="text-gray-600">Plan Profesional €149.50/mes</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-blue-100">
+                    <span className="text-blue-500 font-bold">✓</span>
+                    <span className="text-gray-600">Plan Empresarial €598/mes</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2 shadow-sm border border-blue-100">
+                    <span className="text-blue-500 font-bold">✓</span>
+                    <span className="text-gray-600">Plan Corporativo a medida</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Aviso próximamente - planes individuales */}
             <Card className="border-2 border-purple-200 shadow-xl overflow-hidden mb-8 relative">
