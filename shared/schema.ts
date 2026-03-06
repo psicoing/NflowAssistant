@@ -269,3 +269,18 @@ export const sorteoEntries = pgTable("sorteo_entries", {
 export const insertSorteoEntrySchema = createInsertSchema(sorteoEntries).omit({ id: true, entryCount: true, lastEntryAt: true, createdAt: true });
 export type InsertSorteoEntry = z.infer<typeof insertSorteoEntrySchema>;
 export type SorteoEntry = typeof sorteoEntries.$inferSelect;
+
+export const individualRegistrations = pgTable("individual_registrations", {
+  id: serial("id").primaryKey(),
+  nombre: text("nombre").notNull(),
+  apellidos: text("apellidos").notNull(),
+  email: text("email").notNull(),
+  plan: text("plan").notNull(),
+  skrillLink: text("skrill_link").notNull(),
+  status: text("status").default("pendiente").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertIndividualRegistrationSchema = createInsertSchema(individualRegistrations).omit({ id: true, createdAt: true });
+export type InsertIndividualRegistration = z.infer<typeof insertIndividualRegistrationSchema>;
+export type IndividualRegistration = typeof individualRegistrations.$inferSelect;

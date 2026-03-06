@@ -1,5 +1,5 @@
 import { 
-  users, conversations, messages, resources, stripeTransactions, shopifyTransactions, partners, partnerReferrals, books, sorteoEntries,
+  users, conversations, messages, resources, stripeTransactions, shopifyTransactions, partners, partnerReferrals, books, sorteoEntries, individualRegistrations,
   type User, type InsertUser, 
   type Conversation, type InsertConversation,
   type Message, type InsertMessage,
@@ -9,7 +9,8 @@ import {
   type Partner, type InsertPartner,
   type PartnerReferral, type InsertPartnerReferral,
   type Book,
-  type SorteoEntry, type InsertSorteoEntry
+  type SorteoEntry, type InsertSorteoEntry,
+  type IndividualRegistration, type InsertIndividualRegistration
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql } from "drizzle-orm";
@@ -105,6 +106,8 @@ export interface IStorage {
   getSorteoEntryByEmail(email: string): Promise<SorteoEntry | undefined>;
   incrementSorteoEntryCount(email: string): Promise<SorteoEntry | undefined>;
   getAllSorteoEntries(): Promise<SorteoEntry[]>;
+  createIndividualRegistration(data: InsertIndividualRegistration): Promise<IndividualRegistration>;
+  getAllIndividualRegistrations(): Promise<IndividualRegistration[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -642,6 +645,15 @@ export class DatabaseStorage implements IStorage {
 
   async getAllSorteoEntries(): Promise<SorteoEntry[]> {
     return await db.select().from(sorteoEntries);
+  }
+
+  async createIndividualRegistration(data: InsertIndividualRegistration): Promise<IndividualRegistration> {
+    const [reg] = await db.insert(individualRegistrations).values(data).returning();
+    return reg;
+  }
+
+  async getAllIndividualRegistrations(): Promise<IndividualRegistration[]> {
+    return await db.select().from(individualRegistrations).orderBy(individualRegistrations.createdAt);
   }
 }
 

@@ -128,11 +128,17 @@ export default function Registro() {
 
                 {result ? (
                   <div className="text-center py-4">
-                    <CheckCircle className="w-14 h-14 text-emerald-500 mx-auto mb-4" />
+                    <CheckCircle className="w-14 h-14 text-emerald-500 mx-auto mb-3" />
                     <h3 className="text-xl font-bold text-gray-900 mb-2">¡Solicitud recibida!</h3>
-                    <p className="text-gray-600 text-sm mb-6">
-                      Hemos enviado un enlace de pago a tu correo. También puedes pagar directamente aquí:
-                    </p>
+
+                    {/* 24h activation notice */}
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-5 text-left">
+                      <p className="text-amber-800 text-sm font-semibold mb-1">⏱ Activación en 24 horas</p>
+                      <p className="text-amber-700 text-xs leading-relaxed">
+                        Tu solicitud ha sido registrada. Recibirás un correo de activación en un plazo máximo de <strong>24 horas</strong> con tus credenciales de acceso a NUXA. Mientras tanto, puedes completar el pago:
+                      </p>
+                    </div>
+
                     <a href={result.skrillLink} target="_blank" rel="noopener noreferrer">
                       <Button size="lg" className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold shadow-lg">
                         Pagar con Skrill

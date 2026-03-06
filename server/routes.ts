@@ -812,7 +812,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Individual plan pre-registration with Skrill payment link
+  // Individual plan pre-registration with Skrill payment link (saved to DB, no email)
   app.post("/api/registro-individual", async (req, res) => {
     try {
       const { nombre, apellidos, email, plan } = req.body;
@@ -829,9 +829,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const skrillLink = buildSkrillLink({ nombre, apellidos, email, plan });
 
-      // Send email to user asynchronously — don't block the response
-      sendSkrillRegistrationEmail({ to: email, nombre, apellidos, plan, skrillLink })
-        .catch(err => console.error("Skrill email error:", err));
+      await storage.createIndividualRegistration({ nombre, apellidos, email, plan, skrillLink, status: "pendiente" });
 
       return res.json({ success: true, skrillLink });
     } catch (error) {
