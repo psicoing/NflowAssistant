@@ -22,6 +22,15 @@ export default function Registro() {
         <main className="pt-24 pb-16 px-4">
           <div className="max-w-5xl mx-auto">
 
+            {/* Banner ACTIVO */}
+            <div className="flex justify-center mb-6">
+              <div className="inline-flex items-center gap-2 bg-red-600 text-white font-bold text-sm px-5 py-2 rounded-full shadow-lg animate-pulse">
+                <span className="w-2 h-2 bg-white rounded-full"></span>
+                ACTIVO
+                <span className="w-2 h-2 bg-white rounded-full"></span>
+              </div>
+            </div>
+
             <div className="text-center mb-8">
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
                 ¿Cómo acceder a NUXA?
