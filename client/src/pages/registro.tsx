@@ -22,15 +22,6 @@ export default function Registro() {
         <main className="pt-24 pb-16 px-4">
           <div className="max-w-5xl mx-auto">
 
-            {/* Banner ACTIVO */}
-            <div className="flex justify-center mb-6">
-              <div className="inline-flex items-center gap-2 bg-red-600 text-white font-bold text-sm px-5 py-2 rounded-full shadow-lg animate-pulse">
-                <span className="w-2 h-2 bg-white rounded-full"></span>
-                ACTIVO
-                <span className="w-2 h-2 bg-white rounded-full"></span>
-              </div>
-            </div>
-
             <div className="text-center mb-8">
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
                 ¿Cómo acceder a NUXA?
@@ -43,6 +34,13 @@ export default function Registro() {
             {/* Aviso próximamente - licencias corporativas */}
             <Card className="border-2 border-blue-200 shadow-xl overflow-hidden mb-6 relative">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 opacity-60" />
+              <div className="absolute top-3 right-3 z-10">
+                <div className="inline-flex items-center gap-1.5 bg-red-600 text-white font-bold text-xs px-3 py-1.5 rounded-full shadow animate-pulse">
+                  <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+                  ACTIVO
+                  <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+                </div>
+              </div>
               <CardContent className="relative p-8 text-center">
                 <div className="flex justify-center mb-4">
                   <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
