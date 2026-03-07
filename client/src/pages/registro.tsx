@@ -19,9 +19,9 @@ const PLANES_INDIVIDUAL = [
 ];
 
 const PLANES_MEDIANA = [
-  { id: "empresa_100", label: "100 trabajadores", price: "€5.000/año"  },
-  { id: "empresa_200", label: "200 trabajadores", price: "€10.000/año" },
-  { id: "empresa_300", label: "300 trabajadores", price: "€15.000/año" },
+  { id: "empresa_100", label: "100 trab.", price: "€5.000/año"  },
+  { id: "empresa_200", label: "200 trab.", price: "€10.000/año" },
+  { id: "empresa_300", label: "300 trab.", price: "€15.000/año" },
 ];
 
 
@@ -306,6 +306,21 @@ export default function Registro() {
                   </div>
                 ) : (
                   <form onSubmit={handleMedianaSubmit} className="space-y-4">
+                    <a href="https://jobda.org/nuxa-licencias" target="_blank" rel="noopener noreferrer" className="block">
+                      <div className="flex items-center justify-between bg-white border border-indigo-200 rounded-xl px-4 py-3 hover:bg-indigo-50 hover:border-indigo-400 transition-colors cursor-pointer group">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-200 transition-colors">
+                            <ExternalLink className="w-4 h-4 text-indigo-600" />
+                          </div>
+                          <div>
+                            <p className="text-indigo-900 font-semibold text-sm">Información de planes empresa</p>
+                            <p className="text-indigo-500 text-xs">Consulta precios, plazos y requisitos antes de solicitar</p>
+                          </div>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-indigo-400 group-hover:text-indigo-600 transition-colors flex-shrink-0" />
+                      </div>
+                    </a>
+
                     <div>
                       <Label className="text-sm font-semibold text-gray-700 mb-2 block">Elige tu plan</Label>
                       <div className="grid grid-cols-3 gap-2">
@@ -314,14 +329,14 @@ export default function Registro() {
                             key={p.id}
                             type="button"
                             onClick={() => setMForm(f => ({ ...f, plan: p.id }))}
-                            className={`border-2 rounded-xl p-3 text-center transition-all cursor-pointer ${
+                            className={`border-2 rounded-xl p-2 text-center transition-all cursor-pointer ${
                               mForm.plan === p.id
                                 ? "border-indigo-500 bg-indigo-100 shadow-sm"
                                 : "border-gray-200 bg-white hover:border-indigo-300"
                             }`}
                           >
-                            <div className="font-semibold text-gray-900 text-xs">{p.label}</div>
-                            <div className="text-indigo-600 font-bold text-sm">{p.price}</div>
+                            <div className="font-semibold text-gray-900 text-[11px] leading-tight break-words">{p.label}</div>
+                            <div className="text-indigo-600 font-bold text-xs leading-tight mt-0.5">{p.price}</div>
                           </button>
                         ))}
                       </div>
