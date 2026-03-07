@@ -177,6 +177,21 @@ export default function Registro() {
                       </div>
                     </div>
 
+                    <a href="https://jobda.org/nuxa-licencias" target="_blank" rel="noopener noreferrer" className="block">
+                      <div className="flex items-center justify-between bg-white border border-blue-200 rounded-xl px-4 py-3 hover:bg-blue-50 hover:border-blue-400 transition-colors cursor-pointer group">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-blue-200 transition-colors">
+                            <ExternalLink className="w-4 h-4 text-blue-600" />
+                          </div>
+                          <div>
+                            <p className="text-blue-900 font-semibold text-sm">Información del proceso de licitación</p>
+                            <p className="text-blue-500 text-xs">Consulta precios, plazos y requisitos antes de solicitar</p>
+                          </div>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-blue-400 group-hover:text-blue-600 transition-colors flex-shrink-0" />
+                      </div>
+                    </a>
+
                     <div>
                       <Label htmlFor="empresa" className="text-sm font-medium text-gray-700">Nombre de la organización</Label>
                       <Input
