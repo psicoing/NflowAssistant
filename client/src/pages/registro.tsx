@@ -476,14 +476,14 @@ export default function Registro() {
                             key={p.id}
                             type="button"
                             onClick={() => setForm(f => ({ ...f, plan: p.id }))}
-                            className={`border-2 rounded-xl p-3 text-center transition-all cursor-pointer ${
+                            className={`border-2 rounded-xl p-2 text-center transition-all cursor-pointer ${
                               form.plan === p.id
                                 ? "border-purple-500 bg-purple-100 shadow-sm"
                                 : "border-gray-200 bg-white hover:border-purple-300"
                             }`}
                           >
-                            <div className="font-semibold text-gray-900 text-sm">{p.label}</div>
-                            <div className="text-purple-600 font-bold text-base">{p.price}</div>
+                            <div className="font-semibold text-gray-900 text-[11px] leading-tight">{p.label}</div>
+                            <div className="text-purple-600 font-bold text-xs leading-tight mt-0.5">{p.price}</div>
                           </button>
                         ))}
                       </div>
