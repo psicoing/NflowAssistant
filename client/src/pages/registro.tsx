@@ -13,9 +13,9 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 
 const PLANES_INDIVIDUAL = [
-  { id: "basico", label: "Plan Básico", price: "€2.99/mes" },
-  { id: "pro",    label: "Plan Pro",    price: "€5.99/mes" },
-  { id: "anual",  label: "Plan Anual",  price: "€32/año"   },
+  { id: "basico", label: "10 preguntas", price: "€2.99" },
+  { id: "pro",    label: "20 preguntas", price: "€5.99" },
+  { id: "anual",  label: "100 preguntas", price: "€32"  },
 ];
 
 const PLANES_MEDIANA = [
@@ -437,7 +437,7 @@ export default function Registro() {
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-gray-900">Planes individuales para personas</h2>
-                    <p className="text-sm text-gray-500">Apoyo emocional con IA, 24/7 en +150 idiomas</p>
+                    <p className="text-sm text-gray-500">Pago por uso · Sin suscripción · Sin permanencia</p>
                   </div>
                 </div>
 
@@ -545,7 +545,7 @@ export default function Registro() {
                       )}
                     </Button>
                     <p className="text-xs text-gray-400 text-center">
-                      Recibirás un email con el enlace de pago. Sin permanencia. Cancela cuando quieras.
+                      Pago único · Las preguntas no caducan · Sin suscripción
                       {" · "}
                       <Link href="/login" className="text-purple-600 underline">Ya tengo cuenta</Link>
                     </p>

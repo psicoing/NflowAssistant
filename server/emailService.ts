@@ -47,9 +47,9 @@ async function getUncachableSendGridClient() {
 const SKRILL_MERCHANT_EMAIL = "rmportbou@gmail.com";
 
 const PLAN_DETAILS: Record<string, { label: string; amount: string; description: string }> = {
-  basico:       { label: "Plan Básico NUXA",          amount: "2.99",    description: "Suscripción mensual – Plan Básico" },
-  pro:          { label: "Plan Pro NUXA",             amount: "5.99",    description: "Suscripción mensual – Plan Pro" },
-  anual:        { label: "Plan Anual NUXA",           amount: "32.00",   description: "Suscripción anual – Plan Premium" },
+  basico:       { label: "NUXA – 10 preguntas",        amount: "2.99",    description: "Pago por uso – 10 preguntas" },
+  pro:          { label: "NUXA – 20 preguntas",       amount: "5.99",    description: "Pago por uso – 20 preguntas" },
+  anual:        { label: "NUXA – 100 preguntas",      amount: "32.00",   description: "Pago por uso – 100 preguntas" },
   empresa_100:  { label: "NUXA Empresa 100 usuarios", amount: "5000.00", description: "Licencia anual – 100 trabajadores" },
   empresa_200:  { label: "NUXA Empresa 200 usuarios", amount: "10000.00",description: "Licencia anual – 200 trabajadores" },
   empresa_300:  { label: "NUXA Empresa 300 usuarios", amount: "15000.00",description: "Licencia anual – 300 trabajadores" },
