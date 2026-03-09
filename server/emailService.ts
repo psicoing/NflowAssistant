@@ -72,6 +72,89 @@ export function buildSkrillLink(params: { nombre: string; apellidos: string; ema
   return `${base}?${qs.toString()}`;
 }
 
+const OWNER_EMAIL = "rmportbou@gmail.com";
+
+export async function sendOwnerNotification(params: {
+  tipo: "individual" | "empresa_media" | "licitacion";
+  empresa?: string;
+  nombre: string;
+  apellidos: string;
+  email: string;
+  plan: string;
+}): Promise<boolean> {
+  try {
+    const { client, fromEmail } = await getUncachableSendGridClient();
+
+    const tipoLabel: Record<string, string> = {
+      individual:    "👤 Plan Individual",
+      empresa_media: "🏢 Empresa mediana",
+      licitacion:    "📋 Licitación grandes organizaciones",
+    };
+
+    const planLabel: Record<string, string> = {
+      basico:       "10 preguntas – €2.99",
+      pro:          "20 preguntas – €5.99",
+      anual:        "100 preguntas – €32",
+      empresa_100:  "100 trabajadores – €5.000/año",
+      empresa_200:  "200 trabajadores – €10.000/año",
+      empresa_300:  "300 trabajadores – €15.000/año",
+      licitacion:   "Licitación a partir de 40.000 trabajadores",
+    };
+
+    const fecha = new Date().toLocaleString("es-ES", { timeZone: "Europe/Madrid" });
+    const tipo = tipoLabel[params.tipo] ?? params.tipo;
+    const plan = planLabel[params.plan] ?? params.plan;
+    const empresaFila = params.empresa ? `<tr><td style="padding:6px 0;color:#6b7280;font-size:14px;">Empresa</td><td style="padding:6px 0;font-weight:600;font-size:14px;">${params.empresa}</td></tr>` : "";
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;background:#f3f4f6;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:32px 16px;">
+    <tr><td align="center">
+      <table width="520" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+        <tr><td style="background:linear-gradient(135deg,#6366f1,#8b5cf6);padding:28px 32px;">
+          <p style="margin:0;font-size:22px;font-weight:700;color:#fff;">🔔 Nueva solicitud en NUXA</p>
+          <p style="margin:4px 0 0;color:#c7d2fe;font-size:14px;">${tipo}</p>
+        </td></tr>
+        <tr><td style="padding:28px 32px;">
+          <table width="100%" cellpadding="0" cellspacing="0">
+            ${empresaFila}
+            <tr><td style="padding:6px 0;color:#6b7280;font-size:14px;">Nombre</td><td style="padding:6px 0;font-weight:600;font-size:14px;">${params.nombre} ${params.apellidos}</td></tr>
+            <tr><td style="padding:6px 0;color:#6b7280;font-size:14px;">Email</td><td style="padding:6px 0;font-weight:600;font-size:14px;color:#6366f1;">${params.email}</td></tr>
+            <tr><td style="padding:6px 0;color:#6b7280;font-size:14px;">Plan</td><td style="padding:6px 0;font-weight:600;font-size:14px;">${plan}</td></tr>
+            <tr><td style="padding:6px 0;color:#6b7280;font-size:14px;">Fecha</td><td style="padding:6px 0;font-size:13px;color:#9ca3af;">${fecha}</td></tr>
+          </table>
+          <div style="margin-top:20px;padding:14px 16px;background:#fef3c7;border-radius:10px;border-left:4px solid #f59e0b;">
+            <p style="margin:0;font-size:13px;color:#92400e;font-weight:600;">⏱ Acción requerida</p>
+            <p style="margin:4px 0 0;font-size:12px;color:#b45309;">Envía el enlace de pago Skrill a <strong>${params.email}</strong> en las próximas 24h.</p>
+          </div>
+        </td></tr>
+        <tr><td style="padding:16px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;">
+          <p style="margin:0;font-size:11px;color:#9ca3af;text-align:center;">NUXA · Sistema de notificaciones automático</p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+    await client.send({
+      to: OWNER_EMAIL,
+      from: fromEmail,
+      subject: `[NUXA] Nueva solicitud – ${params.nombre} ${params.apellidos} (${plan})`,
+      html,
+      text: `Nueva solicitud NUXA\nTipo: ${tipo}\nNombre: ${params.nombre} ${params.apellidos}\nEmail: ${params.email}\nPlan: ${plan}\nFecha: ${fecha}`,
+    });
+
+    return true;
+  } catch (err) {
+    console.error("sendOwnerNotification error:", err);
+    return false;
+  }
+}
+
 interface SkrillRegistrationEmailParams {
   to: string;
   nombre: string;

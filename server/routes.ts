@@ -2,7 +2,7 @@ import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { buildSkrillLink, sendSkrillRegistrationEmail } from "./emailService";
+import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification } from "./emailService";
 import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog, conversations, messages } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
 import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
@@ -831,6 +831,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       await storage.createIndividualRegistration({ nombre, apellidos, email, plan, skrillLink, status: "pendiente" });
 
+      sendOwnerNotification({ tipo: "individual", nombre, apellidos, email, plan }).catch(() => {});
+
       return res.json({ success: true, skrillLink });
     } catch (error) {
       console.error("Error in registro-individual:", error);
@@ -854,6 +856,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       const skrillLink = buildSkrillLink({ nombre, apellidos, email, plan });
       await storage.createEmpresaRegistration({ empresa, nombre, apellidos, email, plan, skrillLink, status: "pendiente" });
+      sendOwnerNotification({ tipo: "empresa_media", empresa, nombre, apellidos, email, plan }).catch(() => {});
       return res.json({ success: true, skrillLink });
     } catch (error) {
       console.error("Error in registro-empresa-media:", error);
@@ -874,6 +877,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const licitacionUrl = "https://jobda.org/nuxa-licencias";
       await storage.createEmpresaRegistration({ empresa, nombre, apellidos, email, plan: "licitacion", skrillLink: licitacionUrl, status: "pendiente" });
+
+      sendOwnerNotification({ tipo: "licitacion", empresa, nombre, apellidos, email, plan: "licitacion" }).catch(() => {});
 
       return res.json({ success: true });
     } catch (error) {
