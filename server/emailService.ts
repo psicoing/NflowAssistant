@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import sgMail from '@sendgrid/mail';
+import twilio from 'twilio';
 
 // -------------------------------------------------------
 // Resend client (owner notifications)
@@ -364,6 +365,62 @@ export async function sendMagicLinkEmail(params: MagicLinkEmailParams): Promise<
     return true;
   } catch (error) {
     console.error('❌ Error sending magic link email:', error);
+    return false;
+  }
+}
+
+// -------------------------------------------------------
+// Owner SMS notification via Twilio
+// -------------------------------------------------------
+
+export async function sendOwnerSMS(params: {
+  tipo: "individual" | "empresa_media" | "licitacion";
+  empresa?: string;
+  nombre: string;
+  apellidos: string;
+  email: string;
+  plan: string;
+}): Promise<boolean> {
+  try {
+    const accountSid = process.env.TWILIO_ACCOUNT_SID;
+    const authToken  = process.env.TWILIO_AUTH_TOKEN;
+    const from       = process.env.TWILIO_FROM_NUMBER;
+    const to         = process.env.OWNER_PHONE_NUMBER;
+
+    if (!accountSid || !authToken || !from || !to) {
+      console.warn("Twilio credentials not fully configured, skipping SMS");
+      return false;
+    }
+
+    const tipoLabel: Record<string, string> = {
+      individual:    "Plan individual",
+      empresa_media: "Empresa mediana",
+      licitacion:    "Licitación grande",
+    };
+
+    const planLabel: Record<string, string> = {
+      basico:       "10q €2.99",
+      pro:          "20q €5.99",
+      anual:        "100q €32",
+      empresa_100:  "100 trabajadores €5k",
+      empresa_200:  "200 trabajadores €10k",
+      empresa_300:  "300 trabajadores €15k",
+      licitacion:   "+40.000 trabajadores",
+    };
+
+    const tipo  = tipoLabel[params.tipo] ?? params.tipo;
+    const plan  = planLabel[params.plan] ?? params.plan;
+    const empresa = params.empresa ? ` | ${params.empresa}` : "";
+
+    const body = `🔔 NUXA – Nueva solicitud\n${tipo}${empresa}\n👤 ${params.nombre} ${params.apellidos}\n📧 ${params.email}\n📦 ${plan}`;
+
+    const client = twilio(accountSid, authToken);
+    await client.messages.create({ body, from, to });
+
+    console.log(`✅ Owner SMS sent to ${to}`);
+    return true;
+  } catch (err) {
+    console.error("sendOwnerSMS error:", err);
     return false;
   }
 }
