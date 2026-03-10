@@ -1,58 +1,67 @@
-// SendGrid Email Service - Integration with Replit Connectors
+import { Resend } from 'resend';
 import sgMail from '@sendgrid/mail';
+
+// -------------------------------------------------------
+// Resend client (owner notifications)
+// -------------------------------------------------------
+
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) throw new Error('RESEND_API_KEY not set');
+  return new Resend(apiKey);
+}
+
+// -------------------------------------------------------
+// SendGrid client (legacy – magic links, Skrill emails)
+// -------------------------------------------------------
 
 let connectionSettings: any;
 
 async function getCredentials() {
   const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
-  const xReplitToken = process.env.REPL_IDENTITY 
-    ? 'repl ' + process.env.REPL_IDENTITY 
-    : process.env.WEB_REPL_RENEWAL 
-    ? 'depl ' + process.env.WEB_REPL_RENEWAL 
+  const xReplitToken = process.env.REPL_IDENTITY
+    ? 'repl ' + process.env.REPL_IDENTITY
+    : process.env.WEB_REPL_RENEWAL
+    ? 'depl ' + process.env.WEB_REPL_RENEWAL
     : null;
 
-  if (!xReplitToken) {
-    throw new Error('X_REPLIT_TOKEN not found for repl/depl');
-  }
+  if (!xReplitToken) throw new Error('X_REPLIT_TOKEN not found for repl/depl');
 
   connectionSettings = await fetch(
     'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=sendgrid',
     {
       headers: {
-        'Accept': 'application/json',
-        'X_REPLIT_TOKEN': xReplitToken
-      }
+        Accept: 'application/json',
+        X_REPLIT_TOKEN: xReplitToken,
+      },
     }
   ).then(res => res.json()).then(data => data.items?.[0]);
 
-  if (!connectionSettings || (!connectionSettings.settings.api_key || !connectionSettings.settings.from_email)) {
+  if (!connectionSettings || !connectionSettings.settings.api_key || !connectionSettings.settings.from_email) {
     throw new Error('SendGrid not connected');
   }
-  return {apiKey: connectionSettings.settings.api_key, email: connectionSettings.settings.from_email};
+  return { apiKey: connectionSettings.settings.api_key, email: connectionSettings.settings.from_email };
 }
 
 async function getUncachableSendGridClient() {
-  const {apiKey, email} = await getCredentials();
+  const { apiKey, email } = await getCredentials();
   sgMail.setApiKey(apiKey);
-  return {
-    client: sgMail,
-    fromEmail: email
-  };
+  return { client: sgMail, fromEmail: email };
 }
 
 // -------------------------------------------------------
-// Skrill payment link email for individual plan registration
+// Skrill helpers
 // -------------------------------------------------------
 
 const SKRILL_MERCHANT_EMAIL = "rmportbou@gmail.com";
 
 const PLAN_DETAILS: Record<string, { label: string; amount: string; description: string }> = {
-  basico:       { label: "NUXA – 10 preguntas",        amount: "2.99",    description: "Pago por uso – 10 preguntas" },
-  pro:          { label: "NUXA – 20 preguntas",       amount: "5.99",    description: "Pago por uso – 20 preguntas" },
-  anual:        { label: "NUXA – 100 preguntas",      amount: "32.00",   description: "Pago por uso – 100 preguntas" },
-  empresa_100:  { label: "NUXA Empresa 100 usuarios", amount: "5000.00", description: "Licencia anual – 100 trabajadores" },
-  empresa_200:  { label: "NUXA Empresa 200 usuarios", amount: "10000.00",description: "Licencia anual – 200 trabajadores" },
-  empresa_300:  { label: "NUXA Empresa 300 usuarios", amount: "15000.00",description: "Licencia anual – 300 trabajadores" },
+  basico:       { label: "NUXA – 10 preguntas",        amount: "2.99",     description: "Pago por uso – 10 preguntas" },
+  pro:          { label: "NUXA – 20 preguntas",        amount: "5.99",     description: "Pago por uso – 20 preguntas" },
+  anual:        { label: "NUXA – 100 preguntas",       amount: "32.00",    description: "Pago por uso – 100 preguntas" },
+  empresa_100:  { label: "NUXA Empresa 100 usuarios",  amount: "5000.00",  description: "Licencia anual – 100 trabajadores" },
+  empresa_200:  { label: "NUXA Empresa 200 usuarios",  amount: "10000.00", description: "Licencia anual – 200 trabajadores" },
+  empresa_300:  { label: "NUXA Empresa 300 usuarios",  amount: "15000.00", description: "Licencia anual – 300 trabajadores" },
 };
 
 export function buildSkrillLink(params: { nombre: string; apellidos: string; email: string; plan: string }): string {
@@ -72,6 +81,10 @@ export function buildSkrillLink(params: { nombre: string; apellidos: string; ema
   return `${base}?${qs.toString()}`;
 }
 
+// -------------------------------------------------------
+// Owner notification via Resend
+// -------------------------------------------------------
+
 const OWNER_EMAIL = "rmportbou@gmail.com";
 
 export async function sendOwnerNotification(params: {
@@ -83,7 +96,7 @@ export async function sendOwnerNotification(params: {
   plan: string;
 }): Promise<boolean> {
   try {
-    const { client, fromEmail } = await getUncachableSendGridClient();
+    const resend = getResendClient();
 
     const tipoLabel: Record<string, string> = {
       individual:    "👤 Plan Individual",
@@ -102,12 +115,13 @@ export async function sendOwnerNotification(params: {
     };
 
     const fecha = new Date().toLocaleString("es-ES", { timeZone: "Europe/Madrid" });
-    const tipo = tipoLabel[params.tipo] ?? params.tipo;
-    const plan = planLabel[params.plan] ?? params.plan;
-    const empresaFila = params.empresa ? `<tr><td style="padding:6px 0;color:#6b7280;font-size:14px;">Empresa</td><td style="padding:6px 0;font-weight:600;font-size:14px;">${params.empresa}</td></tr>` : "";
+    const tipo  = tipoLabel[params.tipo] ?? params.tipo;
+    const plan  = planLabel[params.plan] ?? params.plan;
+    const empresaFila = params.empresa
+      ? `<tr><td style="padding:6px 0;color:#6b7280;font-size:14px;">Empresa</td><td style="padding:6px 0;font-weight:600;font-size:14px;">${params.empresa}</td></tr>`
+      : "";
 
-    const html = `
-<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"></head>
 <body style="margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;background:#f3f4f6;">
@@ -140,20 +154,29 @@ export async function sendOwnerNotification(params: {
 </body>
 </html>`;
 
-    await client.send({
+    const { error } = await resend.emails.send({
+      from: 'NUXA <onboarding@resend.dev>',
       to: OWNER_EMAIL,
-      from: fromEmail,
       subject: `[NUXA] Nueva solicitud – ${params.nombre} ${params.apellidos} (${plan})`,
       html,
-      text: `Nueva solicitud NUXA\nTipo: ${tipo}\nNombre: ${params.nombre} ${params.apellidos}\nEmail: ${params.email}\nPlan: ${plan}\nFecha: ${fecha}`,
     });
 
+    if (error) {
+      console.error("sendOwnerNotification Resend error:", error);
+      return false;
+    }
+
+    console.log(`✅ Owner notification sent to ${OWNER_EMAIL}`);
     return true;
   } catch (err) {
     console.error("sendOwnerNotification error:", err);
     return false;
   }
 }
+
+// -------------------------------------------------------
+// Skrill registration email (SendGrid)
+// -------------------------------------------------------
 
 interface SkrillRegistrationEmailParams {
   to: string;
@@ -168,8 +191,7 @@ export async function sendSkrillRegistrationEmail(params: SkrillRegistrationEmai
     const { client, fromEmail } = await getUncachableSendGridClient();
     const planInfo = PLAN_DETAILS[params.plan] ?? PLAN_DETAILS["basico"];
 
-    const htmlContent = `
-<!DOCTYPE html>
+    const htmlContent = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -191,7 +213,7 @@ export async function sendSkrillRegistrationEmail(params: SkrillRegistrationEmai
             <td style="padding: 40px 30px;">
               <h2 style="color: #1a202c; margin: 0 0 16px 0; font-size: 22px;">¡Hola, ${params.nombre}!</h2>
               <p style="color: #4a5568; font-size: 16px; line-height: 1.7; margin: 0 0 20px 0;">
-                Has solicitado el <strong>${planInfo.label}</strong>. Para activar tu acceso, realiza el pago mensual a través del siguiente enlace seguro de Skrill:
+                Has solicitado el <strong>${planInfo.label}</strong>. Para activar tu acceso, realiza el pago a través del siguiente enlace seguro de Skrill:
               </p>
               <div style="background: #f7f8ff; border: 1px solid #e0e7ff; border-radius: 12px; padding: 20px; margin: 24px 0; text-align: center;">
                 <p style="color: #6366f1; font-size: 14px; font-weight: 600; margin: 0 0 4px 0;">Importe a pagar</p>
@@ -246,6 +268,10 @@ export async function sendSkrillRegistrationEmail(params: SkrillRegistrationEmai
   }
 }
 
+// -------------------------------------------------------
+// Magic link email (SendGrid)
+// -------------------------------------------------------
+
 interface MagicLinkEmailParams {
   to: string;
   customerName: string;
@@ -257,13 +283,12 @@ interface MagicLinkEmailParams {
 export async function sendMagicLinkEmail(params: MagicLinkEmailParams): Promise<boolean> {
   try {
     const { client, fromEmail } = await getUncachableSendGridClient();
-    
-    const subject = params.isNewUser 
+
+    const subject = params.isNewUser
       ? '¡Bienvenido a NUXA! Tu acceso está listo'
       : '¡Gracias por tu compra! Accede a NUXA';
 
-    const htmlContent = `
-<!DOCTYPE html>
+    const htmlContent = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -275,38 +300,27 @@ export async function sendMagicLinkEmail(params: MagicLinkEmailParams): Promise<
     <tr>
       <td align="center">
         <table width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #16213e; border-radius: 16px; overflow: hidden;">
-          <!-- Header -->
           <tr>
             <td style="background: linear-gradient(135deg, #6366f1, #8b5cf6); padding: 40px 30px; text-align: center;">
               <h1 style="color: white; margin: 0; font-size: 32px; font-weight: bold;">NUXA</h1>
               <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 16px;">Tu bienestar emocional, siempre contigo</p>
             </td>
           </tr>
-          
-          <!-- Content -->
           <tr>
             <td style="padding: 40px 30px;">
               <h2 style="color: white; margin: 0 0 20px 0; font-size: 24px;">
                 ${params.isNewUser ? '¡Bienvenido a NUXA!' : '¡Gracias por tu compra!'}
               </h2>
-              
+              <p style="color: #a0aec0; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">Hola ${params.customerName},</p>
               <p style="color: #a0aec0; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
-                Hola ${params.customerName},
+                ${params.isNewUser
+                  ? 'Tu cuenta NUXA ha sido creada automáticamente y tu compra ha sido activada.'
+                  : 'Tu compra ha sido procesada exitosamente. Tu servicio ya está activo y listo para usar.'}
               </p>
-              
-              <p style="color: #a0aec0; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
-                ${params.isNewUser 
-                  ? 'Tu cuenta NUXA ha sido creada automáticamente y tu compra ha sido activada. Hemos preparado todo para que puedas empezar a cuidar tu bienestar emocional.'
-                  : 'Tu compra ha sido procesada exitosamente. Tu servicio ya está activo y listo para usar.'
-                }
-              </p>
-              
               <div style="background-color: #1e3a5f; border-radius: 12px; padding: 20px; margin: 25px 0;">
                 <p style="color: #a0aec0; font-size: 14px; margin: 0 0 5px 0;">Producto:</p>
                 <p style="color: white; font-size: 18px; font-weight: bold; margin: 0;">${params.productName}</p>
               </div>
-              
-              <!-- CTA Button -->
               <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0;">
                 <tr>
                   <td align="center">
@@ -316,26 +330,18 @@ export async function sendMagicLinkEmail(params: MagicLinkEmailParams): Promise<
                   </td>
                 </tr>
               </table>
-              
               <p style="color: #718096; font-size: 14px; line-height: 1.6; margin: 25px 0 0 0; text-align: center;">
                 Este enlace es válido por 7 días y solo puede usarse una vez.
               </p>
-              
               <p style="color: #4a5568; font-size: 12px; line-height: 1.6; margin: 15px 0 0 0; text-align: center; word-break: break-all;">
                 Si el botón no funciona, copia este enlace: ${params.magicLink}
               </p>
             </td>
           </tr>
-          
-          <!-- Footer -->
           <tr>
             <td style="background-color: #0f172a; padding: 25px 30px; text-align: center;">
-              <p style="color: #64748b; font-size: 12px; margin: 0;">
-                © ${new Date().getFullYear()} NUXA by Empordajobs SL. Todos los derechos reservados.
-              </p>
-              <p style="color: #475569; font-size: 11px; margin: 10px 0 0 0;">
-                Sin permanencia. Cancela cuando quieras.
-              </p>
+              <p style="color: #64748b; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} NUXA by Empordajobs SL. Todos los derechos reservados.</p>
+              <p style="color: #475569; font-size: 11px; margin: 10px 0 0 0;">Sin permanencia. Cancela cuando quieras.</p>
             </td>
           </tr>
         </table>
@@ -343,37 +349,13 @@ export async function sendMagicLinkEmail(params: MagicLinkEmailParams): Promise<
     </tr>
   </table>
 </body>
-</html>
-`;
-
-    const textContent = `
-¡${params.isNewUser ? 'Bienvenido' : 'Gracias por tu compra'}, ${params.customerName}!
-
-${params.isNewUser 
-  ? 'Tu cuenta NUXA ha sido creada automáticamente y tu compra ha sido activada.'
-  : 'Tu compra ha sido procesada exitosamente.'
-}
-
-Producto: ${params.productName}
-
-Accede a NUXA con este enlace:
-${params.magicLink}
-
-Este enlace es válido por 7 días y solo puede usarse una vez.
-
----
-NUXA by Empordajobs SL
-Sin permanencia. Cancela cuando quieras.
-`;
+</html>`;
 
     const msg = {
       to: params.to,
-      from: {
-        email: fromEmail,
-        name: 'NUXA'
-      },
+      from: { email: fromEmail, name: 'NUXA' },
       subject,
-      text: textContent,
+      text: `¡${params.isNewUser ? 'Bienvenido' : 'Gracias por tu compra'}, ${params.customerName}!\n\nProducto: ${params.productName}\n\nAccede a NUXA:\n${params.magicLink}\n\nEste enlace es válido por 7 días.\n\nNUXA by Empordajobs SL`,
       html: htmlContent,
     };
 
