@@ -79,17 +79,17 @@ export default function FamilySupportHeroSection() {
             {/* CTA Button */}
             <div className="flex justify-center mb-10">
               <Button
-                onClick={() => window.dispatchEvent(new CustomEvent("openNuxaMenu"))}
+                onClick={() => setLocation("/prueba-gratis")}
                 className="group relative bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:via-teal-600 hover:to-emerald-700 text-white px-12 py-8 text-xl font-bold rounded-2xl shadow-[0_10px_40px_rgba(16,185,129,0.4)] hover:shadow-[0_15px_50px_rgba(16,185,129,0.6)] transition-all duration-500 transform hover:scale-110 active:scale-95 border-2 border-white/20"
                 style={{
                   animation: 'colorShift 3s ease-in-out infinite'
                 }}
-                data-testid="button-descubre-nuxa"
+                data-testid="button-prueba-nuxa-gratis"
               >
                 <span className="absolute inset-0 rounded-2xl bg-gradient-to-t from-white/0 to-white/20 pointer-events-none"></span>
                 <span className="flex items-center gap-3">
-                  <Menu className="w-7 h-7 group-hover:rotate-90 transition-transform duration-300" />
-                  <span>Descubre NUXA</span>
+                  <Sparkles className="w-7 h-7 group-hover:scale-110 transition-transform duration-300" />
+                  <span>Prueba NUXA gratis</span>
                   <span className="text-2xl group-hover:translate-x-1 transition-transform duration-300">→</span>
                 </span>
               </Button>
