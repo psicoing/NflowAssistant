@@ -9,7 +9,7 @@ import { authenticatePartner, registerPartner, generateReferralCode } from "./pa
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 import { db } from "./db";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, gte, count } from "drizzle-orm";
 import "./types"; // Import session types
 import multer from "multer";
 import * as XLSX from "xlsx";
@@ -818,6 +818,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Free trial registration – 2 questions, no payment required
+  const TRIAL_MONTHLY_CAP = 250;
+
+  async function countTrialUsersThisMonth(): Promise<number> {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const [result] = await db
+      .select({ total: count() })
+      .from(users)
+      .where(and(eq(users.subscriptionStatus, "trial"), gte(users.createdAt, startOfMonth)));
+    return result?.total ?? 0;
+  }
+
+  // Public endpoint: check if monthly trial cap is reached
+  app.get("/api/prueba-gratis/estado", async (_req, res) => {
+    try {
+      const used = await countTrialUsersThisMonth();
+      const cap = TRIAL_MONTHLY_CAP;
+      res.json({ cupoLleno: used >= cap, used, cap });
+    } catch (error) {
+      console.error("Error checking trial status:", error);
+      res.json({ cupoLleno: false, used: 0, cap: TRIAL_MONTHLY_CAP });
+    }
+  });
+
   app.post("/api/prueba-gratis", async (req, res) => {
     try {
       const { username, email, password } = req.body;
@@ -830,6 +854,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!email.includes("@")) {
         return res.status(400).json({ message: "Email no válido" });
       }
+
+      // Check monthly cap
+      const trialCount = await countTrialUsersThisMonth();
+      if (trialCount >= TRIAL_MONTHLY_CAP) {
+        return res.status(429).json({ message: "Cupo mensual completo", cupoLleno: true });
+      }
+
       const existing = await storage.getUserByUsername(username);
       if (existing) {
         return res.status(409).json({ message: "El nombre de usuario ya está en uso" });
