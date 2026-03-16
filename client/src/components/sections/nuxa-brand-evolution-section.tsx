@@ -1,4 +1,4 @@
-import { Users, Heart, Sparkles, Phone, ArrowRight } from "lucide-react";
+import { Users, Heart, Sparkles, Phone, ArrowRight, MessageCircle, CheckCircle } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import nuxaLogo from "@assets/generated_images/NUXA_logo_with_circle_person_ba9dba6f.png";
@@ -74,6 +74,44 @@ export default function NuxaBrandEvolutionSection() {
                 <span className="text-xs font-normal opacity-90">Emergency Helplines</span>
               </div>
             </Button>
+          </Link>
+        </div>
+
+        {/* Free trial banner */}
+        <div className="mt-6 max-w-3xl mx-auto">
+          <Link href="/registro/planes">
+            <div className="group relative overflow-hidden rounded-2xl border-2 border-emerald-300 bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 hover:from-emerald-100 hover:to-teal-100 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 cursor-pointer">
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-teal-500/5 pointer-events-none" />
+              <div className="relative px-6 py-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-md">
+                  <Sparkles className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-lg font-bold text-emerald-800">¿No estás seguro? Pruébalo gratis</span>
+                    <span className="inline-flex items-center bg-emerald-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                      GRATIS
+                    </span>
+                  </div>
+                  <p className="text-emerald-700 text-sm leading-relaxed mb-2">
+                    Accede ahora con 2 consultas sin coste ni tarjeta de crédito. Habla con NUXA y decide después si quieres continuar con un plan.
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    {["2 preguntas gratis", "Sin tarjeta de crédito", "Acceso inmediato"].map((item) => (
+                      <span key={item} className="inline-flex items-center gap-1 text-xs text-emerald-700 font-medium">
+                        <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex-shrink-0 flex items-center gap-2 text-emerald-700 font-semibold text-sm group-hover:gap-3 transition-all">
+                  <MessageCircle className="w-5 h-5" />
+                  <span>Empezar ahora</span>
+                  <ArrowRight className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
           </Link>
         </div>
       </div>
