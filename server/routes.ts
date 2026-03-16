@@ -20,6 +20,11 @@ async function checkSubscription(userId: number): Promise<boolean> {
     const user = await storage.getUser(userId);
     if (!user) return false;
     
+    // Trial users always get access (question limit enforced separately)
+    if (user.subscriptionStatus === 'trial') {
+      return true;
+    }
+
     // Check if subscription is active and not expired
     if (user.subscriptionStatus === 'active') {
       if (user.subscriptionExpiresAt) {
@@ -809,6 +814,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error creating sorteo entry:", error);
       res.status(500).json({ message: "Error al registrar participación" });
+    }
+  });
+
+  // Free trial registration – 2 questions, no payment required
+  app.post("/api/prueba-gratis", async (req, res) => {
+    try {
+      const { username, email, password } = req.body;
+      if (!username || !email || !password) {
+        return res.status(400).json({ message: "Todos los campos son obligatorios" });
+      }
+      if (password.length < 6) {
+        return res.status(400).json({ message: "La contraseña debe tener al menos 6 caracteres" });
+      }
+      if (!email.includes("@")) {
+        return res.status(400).json({ message: "Email no válido" });
+      }
+      const existing = await storage.getUserByUsername(username);
+      if (existing) {
+        return res.status(409).json({ message: "El nombre de usuario ya está en uso" });
+      }
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUser = await storage.createUser({
+        username,
+        password: hashedPassword,
+        email,
+        subscriptionPlan: "trial",
+        subscriptionStatus: "trial",
+        monthlyQuestionLimit: 2,
+        hasCompletedPayment: false,
+      });
+      req.session.userId = newUser.id;
+      return res.json({ success: true, userId: newUser.id });
+    } catch (error) {
+      console.error("Error in prueba-gratis:", error);
+      res.status(500).json({ message: "Error al procesar la solicitud" });
     }
   });
 
@@ -2494,6 +2534,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const used = user.questionsUsedThisMonth || 0;
       const limit = user.monthlyQuestionLimit || 10;
       const prepaid = user.prepaidQuestions || 0;
+      const isTrial = user.subscriptionStatus === 'trial';
       const subscriptionRemaining = Math.max(0, limit - used);
       const totalRemaining = prepaid + subscriptionRemaining;
       
@@ -2504,6 +2545,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         prepaidQuestions: prepaid,
         totalRemaining,
         canAsk: totalRemaining > 0,
+        isTrial,
         resetDate: new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString()
       });
     } catch (error) {

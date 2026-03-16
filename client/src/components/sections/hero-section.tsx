@@ -8,7 +8,7 @@ export default function HeroSection() {
   const [, setLocation] = useLocation();
 
   const handleStartRegistration = () => {
-    setLocation("/registro");
+    setLocation("/prueba-gratis");
   };
 
   const scrollToSection = (id: string) => {
@@ -55,7 +55,7 @@ export default function HeroSection() {
             className="bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 transform hover:scale-110 shadow-2xl animate-pulse hover:animate-none border-2 border-orange-400 hover:border-red-400"
           >
             <MessageCircle className="w-6 h-6 mr-3" />
-            ¡Comenzar Ahora!
+            Prueba NUXA gratis
           </Button>
         </div>
 

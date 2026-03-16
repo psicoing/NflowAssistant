@@ -86,6 +86,14 @@ export default function Chat() {
     }
   }, [user?.id, user?.hasActiveSubscription, user?.profileCompleted, user?.ageRange, user?.gender]);
 
+  // Fetch question limit (used to detect trial exhaustion)
+  const { data: questionLimit } = useQuery<{ canAsk: boolean; isTrial: boolean; remaining: number; used: number; limit: number }>({
+    queryKey: ["/api/question-limit"],
+    enabled: !!user && user.hasActiveSubscription,
+    refetchInterval: 10000,
+  });
+  const isTrialExhausted = questionLimit?.isTrial && !questionLimit?.canAsk;
+
   // Fetch conversations list (subscription already verified in login)
   const { data: conversations = [], isLoading: isLoadingConversations } = useQuery<Conversation[]>({
     queryKey: ["/api/conversations"],
@@ -839,7 +847,48 @@ export default function Chat() {
 
         {/* Chat Interface */}
         <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-          {currentConversationId ? (
+          {/* Trial exhausted banner */}
+          {isTrialExhausted && (
+            <div className="flex-1 flex items-center justify-center p-6 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900">
+              <div className="max-w-md w-full text-center">
+                <div className="w-16 h-16 rounded-full bg-indigo-500/20 flex items-center justify-center mx-auto mb-5">
+                  <svg className="w-8 h-8 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m0 0v2m0-2h2m-2 0H10m9-7a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h2 className="text-2xl font-bold text-white mb-3">Has completado tu prueba gratuita</h2>
+                <p className="text-slate-400 text-base leading-relaxed mb-6">
+                  Has utilizado tus 2 consultas de prueba. Para seguir hablando con NUXA, elige el plan que mejor se adapta a ti.
+                </p>
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6 text-left space-y-3">
+                  {[
+                    { plan: "10 consultas", precio: "€2.99", desc: "Acceso básico puntual" },
+                    { plan: "20 consultas", precio: "€5.99", desc: "Uso regular con soporte continuo" },
+                    { plan: "100 consultas", precio: "€32/año", desc: "Mejor valor · Todo incluido" },
+                  ].map((item) => (
+                    <div key={item.plan} className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-white text-sm font-medium">{item.plan}</p>
+                        <p className="text-slate-500 text-xs">{item.desc}</p>
+                      </div>
+                      <span className="text-indigo-300 font-semibold text-sm whitespace-nowrap">{item.precio}</span>
+                    </div>
+                  ))}
+                </div>
+                <a
+                  href="/registro/planes"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-600 hover:to-violet-600 text-white font-semibold px-8 py-3.5 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/25 w-full justify-center"
+                >
+                  Ver planes y continuar
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </a>
+                <p className="text-slate-600 text-xs mt-4">Sin permanencia · Cancela cuando quieras</p>
+              </div>
+            </div>
+          )}
+          {!isTrialExhausted && currentConversationId ? (
             chatMode === "bubbles" ? (
               <ChatBubbleInterface
                 messages={messages}

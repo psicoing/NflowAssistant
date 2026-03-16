@@ -20,6 +20,7 @@ import Recompensas from "@/pages/recompensas";
 import Login from "@/pages/login";
 import Registro from "@/pages/registro";
 import RegistroSeleccion from "@/pages/registro-seleccion";
+import PruebaGratis from "@/pages/prueba-gratis";
 import AdminLogin from "@/pages/admin-login";
 import AdminDashboard from "@/pages/admin-dashboard";
 import PartnerLogin from "@/pages/partner-login";
@@ -63,7 +64,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos"];
     // Allow magic link access routes
     if (location.startsWith("/acceso/")) {
       return;
@@ -106,6 +107,7 @@ function AuthenticatedRouter() {
       <Route path="/login" component={Login} />
       <Route path="/registro" component={RegistroSeleccion} />
       <Route path="/registro/planes" component={Registro} />
+      <Route path="/prueba-gratis" component={PruebaGratis} />
       <Route path="/activar-cuenta" component={ActivarCuenta} />
       <Route path="/chat" component={Chat} />
       <Route path="/chat/:id" component={Chat} />
