@@ -123,9 +123,6 @@ export default function Home() {
         <StudentsCardSection />
         
         <NuxaRobotRevealSection />
-        <NuxaPurposeSection />
-        
-        <NuxaRobotPhoneShowcaseSection />
 
         {/* Free Demo Banner */}
         <div className="relative bg-white py-6 px-4">
@@ -184,6 +181,9 @@ export default function Home() {
           </div>
         </div>
 
+        <NuxaPurposeSection />
+        
+        <NuxaRobotPhoneShowcaseSection />
         <NuxaPhonesShowcaseSection />
         
         <NuxaRobotWelcomingSection />
