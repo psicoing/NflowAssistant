@@ -1,3 +1,5 @@
+import { Link } from "wouter";
+import { Sparkles, ArrowRight, Star } from "lucide-react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/sections/hero-section";
@@ -124,6 +126,64 @@ export default function Home() {
         <NuxaPurposeSection />
         
         <NuxaRobotPhoneShowcaseSection />
+
+        {/* Free Demo Banner */}
+        <div className="relative bg-white py-6 px-4">
+          <div className="max-w-4xl mx-auto">
+            <Link href="/prueba-gratis">
+              <div className="group relative overflow-hidden rounded-3xl cursor-pointer">
+                {/* Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 rounded-3xl" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-pink-400/20 via-transparent to-transparent rounded-3xl" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-cyan-400/15 via-transparent to-transparent rounded-3xl" />
+
+                {/* Decorative stars */}
+                <div className="absolute top-4 right-8 opacity-40">
+                  <Star className="w-3 h-3 text-yellow-300 fill-yellow-300" />
+                </div>
+                <div className="absolute top-8 right-16 opacity-25">
+                  <Star className="w-2 h-2 text-yellow-200 fill-yellow-200" />
+                </div>
+                <div className="absolute bottom-5 left-10 opacity-30">
+                  <Star className="w-2.5 h-2.5 text-pink-300 fill-pink-300" />
+                </div>
+
+                {/* Content */}
+                <div className="relative px-8 py-7 flex flex-col sm:flex-row sm:items-center gap-5">
+                  {/* Icon */}
+                  <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/20 shadow-lg group-hover:scale-105 transition-transform duration-300">
+                    <Sparkles className="w-7 h-7 text-white" />
+                  </div>
+
+                  {/* Text */}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-1.5 flex-wrap">
+                      <span className="text-white/60 text-xs font-semibold tracking-widest uppercase">NUXA AI</span>
+                      <span className="inline-flex items-center bg-white/20 backdrop-blur-sm border border-white/25 text-white text-xs font-bold px-3 py-0.5 rounded-full tracking-wide">
+                        FREE
+                      </span>
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-none mb-1">
+                      Free Demo
+                    </h3>
+                    <p className="text-white/75 text-sm font-medium tracking-wide">
+                      No credit card required · Start in seconds · 2 free conversations
+                    </p>
+                  </div>
+
+                  {/* CTA */}
+                  <div className="flex-shrink-0">
+                    <div className="inline-flex items-center gap-2.5 bg-white text-purple-700 font-bold text-sm px-6 py-3 rounded-2xl shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
+                      <span>Try it now</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+
         <NuxaPhonesShowcaseSection />
         
         <NuxaRobotWelcomingSection />
