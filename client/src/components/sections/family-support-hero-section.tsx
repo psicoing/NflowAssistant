@@ -17,7 +17,15 @@ export default function FamilySupportHeroSection() {
           {/* Content */}
           <div className="space-y-6 md:space-y-8">
             {/* Main Hero Card */}
-            <div className="bg-gradient-to-br from-white to-emerald-50/30 dark:from-slate-800 dark:to-slate-800 rounded-3xl border-2 border-emerald-200 dark:border-slate-700 shadow-xl p-8 md:p-12">
+            <div className="relative overflow-hidden bg-gradient-to-br from-white to-emerald-50/30 dark:from-slate-800 dark:to-slate-800 rounded-3xl border-2 border-emerald-200 dark:border-slate-700 shadow-xl p-8 md:p-12">
+              {/* Diagonal ribbon */}
+              <div className="absolute top-0 right-0 overflow-hidden w-36 h-36 pointer-events-none">
+                <div className="absolute top-[28px] right-[-36px] w-[160px] bg-red-600 text-white text-[10px] font-black tracking-wider text-center py-1.5 rotate-45 shadow-lg uppercase leading-tight">
+                  <span>Free Trial</span>
+                  <br />
+                  <span className="font-semibold tracking-widest opacity-90">No VISA</span>
+                </div>
+              </div>
               <div className="mb-8">
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight text-gray-900 dark:text-white mb-6" style={{ WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
                   NUXA
