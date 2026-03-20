@@ -41,7 +41,14 @@ export default function PruebaGratis() {
     setLoading(true);
     try {
       await apiRequest("POST", "/api/prueba-gratis", form);
-      setLocation("/chat");
+      // Auto-create a conversation so user lands directly in the chat
+      try {
+        const conv = await apiRequest("POST", "/api/conversations", { title: "Mi primera consulta" });
+        const data = await conv.json();
+        setLocation(`/chat/${data.id}`);
+      } catch {
+        setLocation("/chat");
+      }
     } catch (err: any) {
       const msg = err?.message || "";
       if (msg.includes("429")) {
