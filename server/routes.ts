@@ -876,7 +876,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         hasCompletedPayment: false,
       });
       req.session.userId = newUser.id;
-      return res.json({ success: true, userId: newUser.id });
+      req.session.save((err) => {
+        if (err) {
+          console.error("Session save error in prueba-gratis:", err);
+          return res.status(500).json({ message: "Error al guardar sesión" });
+        }
+        return res.json({ success: true, userId: newUser.id });
+      });
     } catch (error) {
       console.error("Error in prueba-gratis:", error);
       res.status(500).json({ message: "Error al procesar la solicitud" });

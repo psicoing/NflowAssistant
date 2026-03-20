@@ -66,6 +66,11 @@ export default function Chat() {
   // Check for existing user profile
   useEffect(() => {
     if (user?.id && user.hasActiveSubscription) {
+      // Trial users skip the profile form — go straight to chat
+      if ((user as any).subscriptionStatus === 'trial' || (user as any).subscriptionPlan === 'trial') {
+        setShowProfileForm(false);
+        return;
+      }
       // Check if profile is completed in database
       if (user.profileCompleted && user.ageRange && user.gender) {
         setUserProfile({
