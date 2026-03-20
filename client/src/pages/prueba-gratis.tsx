@@ -42,12 +42,13 @@ export default function PruebaGratis() {
     try {
       await apiRequest("POST", "/api/prueba-gratis", form);
       // Auto-create a conversation so user lands directly in the chat
+      // Use full page reload so auth state refreshes before route guard runs
       try {
         const conv = await apiRequest("POST", "/api/conversations", { title: "Mi primera consulta" });
         const data = await conv.json();
-        setLocation(`/chat/${data.id}`);
+        window.location.href = `/chat/${data.id}`;
       } catch {
-        setLocation("/chat");
+        window.location.href = "/chat";
       }
     } catch (err: any) {
       const msg = err?.message || "";
