@@ -19,9 +19,9 @@ const PLANES_INDIVIDUAL = [
 ];
 
 const PLANES_MEDIANA = [
-  { id: "empresa_1000", label: "1.000 trab.", price: "€2.990/año"  },
-  { id: "empresa_2000", label: "2.000 trab.", price: "€5.980/año" },
-  { id: "empresa_3000", label: "3.000 trab.", price: "€8.970/año" },
+  { id: "empresa_1000", label: "1.000 trab.", price: "€35.880/año"  },
+  { id: "empresa_2000", label: "2.000 trab.", price: "€71.760/año" },
+  { id: "empresa_3000", label: "3.000 trab.", price: "€107.640/año" },
 ];
 
 
