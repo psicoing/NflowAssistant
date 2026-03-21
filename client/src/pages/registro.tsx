@@ -426,32 +426,19 @@ export default function Registro() {
                       <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">{mError}</p>
                     )}
 
-                    <Button
-                      type="submit"
-                      size="lg"
-                      disabled={mLoading}
-                      className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold shadow-lg"
-                    >
-                      {mLoading ? "Procesando..." : (
-                        <>
-                          Recibir enlace de pago Skrill
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </>
-                      )}
-                    </Button>
-                    <p className="text-xs text-gray-400 text-center">
-                      Activación en 24h · Sin permanencia · Cancela cuando quieras
-                    </p>
-                    <div className="flex justify-center">
-                      <button
+                    <a href="https://jobda.org/nuxa-licencias" target="_blank" rel="noopener noreferrer" className="block">
+                      <Button
                         type="button"
-                        onClick={() => setSkrillModalOpen(true)}
-                        className="inline-flex items-center gap-2 bg-[#6B2D8B] hover:bg-[#5a2575] text-white text-xs font-semibold px-4 py-2 rounded-full shadow transition-colors"
+                        size="lg"
+                        className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold shadow-lg"
                       >
-                        <ShieldCheck className="w-4 h-4" />
-                        Skrill 100% seguro
-                      </button>
-                    </div>
+                        Solicitar información de licitación
+                        <ExternalLink className="w-4 h-4 ml-2" />
+                      </Button>
+                    </a>
+                    <p className="text-xs text-gray-400 text-center">
+                      Te contactamos en menos de 24h · Proceso totalmente gratuito
+                    </p>
                   </form>
                 )}
               </CardContent>
@@ -552,36 +539,22 @@ export default function Registro() {
                       <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
                     )}
 
-                    <Button
-                      type="submit"
-                      size="lg"
-                      disabled={loading}
-                      className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold shadow-lg"
-                    >
-                      {loading ? "Procesando..." : (
-                        <>
-                          Recibir enlace de pago Skrill
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </>
-                      )}
-                    </Button>
+                    {/* En fase de construcción */}
+                    <div className="w-full border-2 border-dashed border-amber-300 bg-amber-50 rounded-xl px-5 py-4 text-center">
+                      <div className="flex items-center justify-center gap-2 mb-1">
+                        <span className="text-amber-500 text-lg">🚧</span>
+                        <span className="text-amber-800 font-bold text-sm">En fase de construcción</span>
+                        <span className="text-amber-500 text-lg">🚧</span>
+                      </div>
+                      <p className="text-amber-700 text-xs leading-relaxed">
+                        El pago individual estará disponible muy pronto. Mientras tanto, puedes{" "}
+                        <Link href="/prueba-gratis" className="text-amber-800 underline font-semibold">probar NUXA gratis</Link>
+                        {" "}o contactarnos para más información.
+                      </p>
+                    </div>
                     <p className="text-xs text-gray-400 text-center">
-                      Pago único · Las preguntas no caducan · Sin suscripción
-                      {" · "}
                       <Link href="/login" className="text-purple-600 underline">Ya tengo cuenta</Link>
                     </p>
-
-                    {/* Skrill security badge */}
-                    <div className="flex justify-center pt-1">
-                      <button
-                        type="button"
-                        onClick={() => setSkrillModalOpen(true)}
-                        className="inline-flex items-center gap-2 bg-[#6B2D8B] hover:bg-[#5a2575] text-white text-xs font-semibold px-4 py-2 rounded-full shadow transition-colors cursor-pointer"
-                      >
-                        <ShieldCheck className="w-4 h-4" />
-                        Skrill 100% seguro
-                      </button>
-                    </div>
                   </form>
                 )}
               </CardContent>
