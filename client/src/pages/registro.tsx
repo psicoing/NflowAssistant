@@ -213,6 +213,31 @@ export default function Registro() {
                       </div>
                     </div>
 
+                    {/* Plan selector grandes organizaciones */}
+                    <div>
+                      <Label className="text-sm font-semibold text-gray-700 mb-2 block">Elige tu volumen</Label>
+                      <div className="grid grid-cols-2 gap-3">
+                        {[
+                          { id: "licitacion_40000", label: "40.000 trab.", price: "€1.435.200/año" },
+                          { id: "licitacion_70000", label: "70.000 trab.", price: "€2.512.800/año" },
+                        ].map(p => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => setEForm(f => ({ ...f, plan: p.id } as any))}
+                            className={`border-2 rounded-xl p-3 text-center transition-all cursor-pointer ${
+                              (eForm as any).plan === p.id
+                                ? "border-blue-500 bg-blue-100 shadow-sm"
+                                : "border-gray-200 bg-white hover:border-blue-300"
+                            }`}
+                          >
+                            <div className="font-semibold text-gray-900 text-sm leading-tight">{p.label}</div>
+                            <div className="text-blue-600 font-bold text-xs leading-tight mt-0.5">{p.price}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
                     <a href="https://jobda.org/nuxa-licencias" target="_blank" rel="noopener noreferrer" className="block">
                       <div className="flex items-center justify-between bg-white border border-blue-200 rounded-xl px-4 py-3 hover:bg-blue-50 hover:border-blue-400 transition-colors cursor-pointer group">
                         <div className="flex items-center gap-3">
