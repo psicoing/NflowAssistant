@@ -179,12 +179,19 @@ export default function Home() {
           </div>
         </div>
 
+        <NuxaPurposeSection />
+        
+        <NuxaRobotPhoneShowcaseSection />
+        <NuxaPhonesShowcaseSection />
+        
+        <NuxaRobotWelcomingSection />
+        <IntroCardSection />
+
         {/* NeuronMeg Banner */}
         <div className="bg-white py-4 px-4">
           <div className="max-w-4xl mx-auto">
             <div className="rounded-3xl border border-teal-200 bg-gradient-to-br from-teal-50 via-cyan-50 to-emerald-50 shadow-md px-6 py-6">
               <div className="flex flex-col gap-4">
-                {/* Top row: icon + text */}
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-teal-100 border border-teal-200 flex items-center justify-center shadow-sm mt-0.5">
                     <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
@@ -207,7 +214,6 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
-                {/* Bottom row: buttons */}
                 <div className="flex flex-row gap-3 flex-wrap">
                   <a
                     href="https://neuronmeg.online/plans"
@@ -233,14 +239,6 @@ export default function Home() {
           </div>
         </div>
 
-        <NuxaPurposeSection />
-        
-        <NuxaRobotPhoneShowcaseSection />
-        <NuxaPhonesShowcaseSection />
-        
-        <NuxaRobotWelcomingSection />
-        <IntroCardSection />
-        
         <NuxaRobotFreeResourcesSection />
         <FreeResourcesCardSection />
         
