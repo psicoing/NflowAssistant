@@ -180,40 +180,35 @@ export default function Home() {
         </div>
 
         {/* NeuronMeg Banner */}
-        <div className="relative bg-white py-4 px-4">
+        <div className="bg-white py-4 px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="relative overflow-hidden rounded-3xl border border-teal-200 bg-gradient-to-br from-teal-50 via-cyan-50 to-emerald-50 shadow-md">
-              {/* Decorative blobs */}
-              <div className="absolute -top-6 -right-6 w-32 h-32 bg-teal-200/30 rounded-full blur-2xl pointer-events-none" />
-              <div className="absolute -bottom-6 -left-6 w-28 h-28 bg-emerald-200/30 rounded-full blur-2xl pointer-events-none" />
-
-              <div className="relative px-7 py-6 flex flex-col sm:flex-row sm:items-center gap-5">
-                {/* Icon */}
-                <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-teal-100 border border-teal-200 flex items-center justify-center shadow-sm">
-                  <svg className="w-7 h-7 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                  </svg>
-                </div>
-
-                {/* Text */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="text-teal-600 text-xs font-bold tracking-widest uppercase">Alternativa profesional</span>
-                    <span className="inline-flex items-center bg-teal-100 border border-teal-300 text-teal-700 text-xs font-bold px-2.5 py-0.5 rounded-full">
-                      Psicólogos colegiados
-                    </span>
+            <div className="rounded-3xl border border-teal-200 bg-gradient-to-br from-teal-50 via-cyan-50 to-emerald-50 shadow-md px-6 py-6">
+              <div className="flex flex-col gap-4">
+                {/* Top row: icon + text */}
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-teal-100 border border-teal-200 flex items-center justify-center shadow-sm mt-0.5">
+                    <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                    </svg>
                   </div>
-                  <h3 className="text-lg sm:text-xl font-black text-gray-900 leading-tight mb-1">
-                    ¿Prefieres hablar con un profesional?
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    NUXA no sustituye a un psicólogo. Si buscas atención profesional, <span className="font-semibold text-teal-700">NeuronMeg</span> ofrece videollamadas y visitas a domicilio con psicólogos colegiados — una opción completamente legítima y recomendada.
-                  </p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <span className="text-teal-600 text-xs font-bold tracking-widest uppercase">Alternativa profesional</span>
+                      <span className="inline-flex items-center bg-teal-100 border border-teal-300 text-teal-700 text-xs font-bold px-2.5 py-0.5 rounded-full">
+                        Psicólogos colegiados
+                      </span>
+                    </div>
+                    <h3 className="text-base sm:text-lg font-black text-gray-900 leading-tight mb-1">
+                      ¿Prefieres hablar con un profesional?
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      NUXA no sustituye a un psicólogo. Si buscas atención profesional, <span className="font-semibold text-teal-700">NeuronMeg</span> ofrece videollamadas y visitas a domicilio con psicólogos colegiados — una opción completamente legítima y recomendada.
+                    </p>
+                  </div>
                 </div>
-
-                {/* Buttons */}
-                <div className="flex-shrink-0 flex flex-col sm:flex-col gap-2 min-w-max">
+                {/* Bottom row: buttons */}
+                <div className="flex flex-row gap-3 flex-wrap">
                   <a
                     href="https://neuronmeg.online/plans"
                     target="_blank"
