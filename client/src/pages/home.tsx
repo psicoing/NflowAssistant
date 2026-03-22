@@ -124,13 +124,12 @@ export default function Home() {
                   {/* Text */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-2 flex-wrap">
-                      <span className="text-white/70 text-xs font-bold tracking-widest uppercase">¿NUXA no es para ti?</span>
                       <span className="inline-flex items-center bg-white/20 border border-white/30 text-white text-xs font-bold px-2.5 py-0.5 rounded-full">
                         🏥 Psicólogos colegiados
                       </span>
                     </div>
                     <h3 className="text-xl sm:text-2xl font-black text-white leading-tight mb-1.5">
-                      Habla con un profesional real en NeuronMeg
+                      ¿NUXA no es para ti? <span className="underline decoration-white/60 underline-offset-4">Solicita un profesional</span>
                     </h3>
                     <p className="text-white/85 text-sm leading-relaxed">
                       Videollamadas y visitas a domicilio con psicólogos colegiados. Una alternativa completamente legítima — porque la salud mental merece la opción que mejor se adapte a ti.
