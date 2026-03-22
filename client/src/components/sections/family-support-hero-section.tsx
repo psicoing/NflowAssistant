@@ -84,23 +84,37 @@ export default function FamilySupportHeroSection() {
               </p>
             </div>
 
-            {/* CTA Button */}
-            <div className="flex justify-center mb-10">
-              <Button
+            {/* CTA Banner */}
+            <div className="w-full mb-10">
+              <button
                 onClick={() => setLocation("/prueba-gratis")}
-                className="group relative bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:via-teal-600 hover:to-emerald-700 text-white px-12 py-8 text-xl font-bold rounded-2xl shadow-[0_10px_40px_rgba(16,185,129,0.4)] hover:shadow-[0_15px_50px_rgba(16,185,129,0.6)] transition-all duration-500 transform hover:scale-110 active:scale-95 border-2 border-white/20"
-                style={{
-                  animation: 'colorShift 3s ease-in-out infinite'
-                }}
                 data-testid="button-prueba-nuxa-gratis"
+                className="group w-full relative overflow-hidden bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:via-teal-600 hover:to-emerald-700 text-white rounded-2xl shadow-[0_10px_40px_rgba(16,185,129,0.4)] hover:shadow-[0_15px_50px_rgba(16,185,129,0.6)] transition-all duration-500 active:scale-95 border-2 border-white/20 px-8 py-6 text-left"
+                style={{ animation: 'colorShift 3s ease-in-out infinite' }}
               >
-                <span className="absolute inset-0 rounded-2xl bg-gradient-to-t from-white/0 to-white/20 pointer-events-none"></span>
-                <span className="flex items-center gap-3">
-                  <Sparkles className="w-7 h-7 group-hover:scale-110 transition-transform duration-300" />
-                  <span>Prueba NUXA gratis</span>
-                  <span className="text-2xl group-hover:translate-x-1 transition-transform duration-300">→</span>
+                <span className="absolute inset-0 bg-gradient-to-t from-white/0 to-white/15 pointer-events-none rounded-2xl" />
+                <span className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-700" />
+                <span className="relative flex flex-col sm:flex-row sm:items-center gap-3">
+                  {/* Left: tagline */}
+                  <span className="flex-1">
+                    <span className="flex items-center gap-2 mb-1">
+                      <Sparkles className="w-5 h-5 text-white/80 flex-shrink-0" />
+                      <span className="text-white/70 text-xs font-bold tracking-widest uppercase">Prueba gratuita · Sin tarjeta</span>
+                    </span>
+                    <span className="block text-xl sm:text-2xl font-black text-white leading-tight">
+                      Prueba NUXA gratis
+                    </span>
+                    <span className="block text-sm text-white/85 font-medium mt-1 italic leading-snug">
+                      "Entrar en el chat de NUXA sin pagar es como probar un Lamborghini."
+                    </span>
+                  </span>
+                  {/* Right: arrow pill */}
+                  <span className="flex-shrink-0 inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 border border-white/30 text-white font-bold text-sm px-5 py-3 rounded-xl transition-colors">
+                    Probar ahora
+                    <span className="text-lg group-hover:translate-x-1 transition-transform duration-300">→</span>
+                  </span>
                 </span>
-              </Button>
+              </button>
             </div>
 
             {/* Features Grid */}
