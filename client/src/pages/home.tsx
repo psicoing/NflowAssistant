@@ -148,7 +148,16 @@ export default function Home() {
                       Ver tarifas
                       <ArrowRight className="w-4 h-4" />
                     </a>
-                    <span className="text-center text-white/60 text-xs font-medium">neuronmeg.online</span>
+                    <a
+                      href="https://neuronmeg.online"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={e => e.stopPropagation()}
+                      className="inline-flex items-center justify-center gap-1.5 bg-white/15 hover:bg-white/25 border border-white/30 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-colors"
+                    >
+                      🏛️ Nuestro Instituto
+                      <ExternalLink className="w-3 h-3 opacity-70" />
+                    </a>
                   </div>
                 </div>
               </div>
