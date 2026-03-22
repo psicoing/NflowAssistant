@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Sparkles, ArrowRight, Star } from "lucide-react";
+import { Sparkles, ArrowRight, Star, ExternalLink } from "lucide-react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/sections/hero-section";
