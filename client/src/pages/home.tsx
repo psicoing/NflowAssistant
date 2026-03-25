@@ -97,9 +97,9 @@ function AwarenessBanner({ onClose }: { onClose: () => void }) {
           onClick={() => setExpanded(e => !e)}
           className="w-full flex items-center gap-3 py-3.5 text-left group"
         >
-          <span className="text-xl flex-shrink-0">🧠</span>
+          <span className="text-xl flex-shrink-0">🚫</span>
           <p className="flex-1 text-white font-black text-sm sm:text-base leading-snug">
-            NUXA — Recupera el control de tu mente
+            No a las redes sociales para menores — Recupera el control de tu mente
           </p>
           <span className={`text-indigo-300 text-xs font-semibold flex-shrink-0 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}>
             ▼
@@ -117,10 +117,10 @@ function AwarenessBanner({ onClose }: { onClose: () => void }) {
         {expanded && (
           <div className="pb-5 space-y-2 border-t border-indigo-800/40 pt-3">
             <p className="text-indigo-200 text-sm leading-relaxed">
-              Desconecta del ruido constante de redes como Facebook, Instagram, X (Twitter) y otras plataformas que absorben tu tiempo y atención.
+              Las redes sociales como Facebook, Instagram, X (Twitter) y TikTok no están diseñadas para el bienestar de los menores. Su exposición temprana genera ansiedad, baja autoestima y dependencia digital.
             </p>
             <p className="text-indigo-200 text-sm leading-relaxed">
-              NUXA te ayuda a tomar decisiones con claridad, evitando impulsos y distracciones que afectan tu bienestar. Protege tu salud mental, reduce la dependencia digital y te guía hacia un estilo de vida más equilibrado.
+              NUXA apoya a familias y jóvenes a tomar decisiones con claridad, reducir la dependencia digital y desarrollar hábitos emocionales saludables. Protege la salud mental desde edades tempranas.
             </p>
             <p className="text-indigo-100 text-sm font-semibold italic">
               Vuelve a disfrutar de lo real: la naturaleza, el tiempo de calidad y las experiencias que de verdad importan.
