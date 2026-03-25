@@ -160,12 +160,13 @@ export default function Home() {
       <Header showBanner={false} />
       <main className="pt-16">
 
-        {/* Awareness banner — collapsible + dismissible */}
+        <NuxaRobotForestSection />
+
+        {/* Awareness banner — collapsible + dismissible, above NUXA hero card */}
         {awarenessBanner && (
           <AwarenessBanner onClose={closeAwarenessBanner} />
         )}
 
-        <NuxaRobotForestSection />
         <FamilySupportHeroSection />
 
         {/* NeuronMeg Banner */}
