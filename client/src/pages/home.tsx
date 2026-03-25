@@ -1,5 +1,6 @@
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { Sparkles, ArrowRight, Star, ExternalLink } from "lucide-react";
+import { Sparkles, ArrowRight, Star, ExternalLink, X } from "lucide-react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/sections/hero-section";
@@ -83,7 +84,19 @@ import {
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/components/StructuredData";
 
+const AWARENESS_BANNER_KEY = "nuxa-awareness-banner-dismissed";
+
 export default function Home() {
+  const [awarenessBanner, setAwarenessBanner] = useState(false);
+
+  useEffect(() => {
+    if (!localStorage.getItem(AWARENESS_BANNER_KEY)) setAwarenessBanner(true);
+  }, []);
+
+  const closeAwarenessBanner = () => {
+    setAwarenessBanner(false);
+    localStorage.setItem(AWARENESS_BANNER_KEY, "1");
+  };
 
   return (
     <div className="min-h-screen bg-nflow-dark">
@@ -100,6 +113,37 @@ export default function Home() {
       <StructuredData type="WebApplication" data={NFlowWebAppData} />
       <Header showBanner={false} />
       <main className="pt-16">
+
+        {/* Awareness banner — dismissible, above hero */}
+        {awarenessBanner && (
+          <div className="relative bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-b border-indigo-800/40">
+            <div className="max-w-5xl mx-auto px-5 py-5 flex items-start gap-4">
+              <span className="text-2xl flex-shrink-0 mt-0.5">🧠</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-white font-black text-base sm:text-lg leading-snug mb-1">
+                  NUXA — Recupera el control de tu mente
+                </p>
+                <p className="text-indigo-200 text-sm leading-relaxed mb-1">
+                  Desconecta del ruido constante de redes como Facebook, Instagram, X (Twitter) y otras plataformas que absorben tu tiempo y atención.
+                </p>
+                <p className="text-indigo-200 text-sm leading-relaxed mb-1">
+                  NUXA te ayuda a tomar decisiones con claridad, evitando impulsos y distracciones que afectan tu bienestar. Protege tu salud mental, reduce la dependencia digital y te guía hacia un estilo de vida más equilibrado.
+                </p>
+                <p className="text-indigo-100 text-sm font-semibold italic">
+                  Vuelve a disfrutar de lo real: la naturaleza, el tiempo de calidad y las experiencias que de verdad importan.
+                </p>
+              </div>
+              <button
+                onClick={closeAwarenessBanner}
+                aria-label="Cerrar"
+                className="flex-shrink-0 text-indigo-300 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10 mt-0.5"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        )}
+
         <NuxaRobotForestSection />
         <FamilySupportHeroSection />
 
