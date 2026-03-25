@@ -86,6 +86,52 @@ import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/compon
 
 const AWARENESS_BANNER_KEY = "nuxa-awareness-banner-dismissed";
 
+function AwarenessBanner({ onClose }: { onClose: () => void }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-b border-indigo-800/40">
+      <div className="max-w-5xl mx-auto px-5">
+        {/* Header row — always visible, clickable to expand */}
+        <button
+          onClick={() => setExpanded(e => !e)}
+          className="w-full flex items-center gap-3 py-3.5 text-left group"
+        >
+          <span className="text-xl flex-shrink-0">🧠</span>
+          <p className="flex-1 text-white font-black text-sm sm:text-base leading-snug">
+            NUXA — Recupera el control de tu mente
+          </p>
+          <span className={`text-indigo-300 text-xs font-semibold flex-shrink-0 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}>
+            ▼
+          </span>
+          <button
+            onClick={e => { e.stopPropagation(); onClose(); }}
+            aria-label="Cerrar"
+            className="flex-shrink-0 text-indigo-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </button>
+
+        {/* Expandable content */}
+        {expanded && (
+          <div className="pb-5 space-y-2 border-t border-indigo-800/40 pt-3">
+            <p className="text-indigo-200 text-sm leading-relaxed">
+              Desconecta del ruido constante de redes como Facebook, Instagram, X (Twitter) y otras plataformas que absorben tu tiempo y atención.
+            </p>
+            <p className="text-indigo-200 text-sm leading-relaxed">
+              NUXA te ayuda a tomar decisiones con claridad, evitando impulsos y distracciones que afectan tu bienestar. Protege tu salud mental, reduce la dependencia digital y te guía hacia un estilo de vida más equilibrado.
+            </p>
+            <p className="text-indigo-100 text-sm font-semibold italic">
+              Vuelve a disfrutar de lo real: la naturaleza, el tiempo de calidad y las experiencias que de verdad importan.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [awarenessBanner, setAwarenessBanner] = useState(false);
 
@@ -114,34 +160,9 @@ export default function Home() {
       <Header showBanner={false} />
       <main className="pt-16">
 
-        {/* Awareness banner — dismissible, above hero */}
+        {/* Awareness banner — collapsible + dismissible */}
         {awarenessBanner && (
-          <div className="relative bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-b border-indigo-800/40">
-            <div className="max-w-5xl mx-auto px-5 py-5 flex items-start gap-4">
-              <span className="text-2xl flex-shrink-0 mt-0.5">🧠</span>
-              <div className="flex-1 min-w-0">
-                <p className="text-white font-black text-base sm:text-lg leading-snug mb-1">
-                  NUXA — Recupera el control de tu mente
-                </p>
-                <p className="text-indigo-200 text-sm leading-relaxed mb-1">
-                  Desconecta del ruido constante de redes como Facebook, Instagram, X (Twitter) y otras plataformas que absorben tu tiempo y atención.
-                </p>
-                <p className="text-indigo-200 text-sm leading-relaxed mb-1">
-                  NUXA te ayuda a tomar decisiones con claridad, evitando impulsos y distracciones que afectan tu bienestar. Protege tu salud mental, reduce la dependencia digital y te guía hacia un estilo de vida más equilibrado.
-                </p>
-                <p className="text-indigo-100 text-sm font-semibold italic">
-                  Vuelve a disfrutar de lo real: la naturaleza, el tiempo de calidad y las experiencias que de verdad importan.
-                </p>
-              </div>
-              <button
-                onClick={closeAwarenessBanner}
-                aria-label="Cerrar"
-                className="flex-shrink-0 text-indigo-300 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10 mt-0.5"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
+          <AwarenessBanner onClose={closeAwarenessBanner} />
         )}
 
         <NuxaRobotForestSection />
