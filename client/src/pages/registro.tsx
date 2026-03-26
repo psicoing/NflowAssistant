@@ -1,10 +1,9 @@
-import { ArrowRight, Gift, Sparkles, User, Building2, Heart, Briefcase, GraduationCap, Building, Hospital, CheckCircle, ExternalLink, ShieldCheck, X, MessageCircle } from "lucide-react";
+import { ArrowRight, Gift, Sparkles, User, Building2, Heart, Briefcase, GraduationCap, Building, Hospital, CheckCircle, ExternalLink, MessageCircle, CreditCard } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/SEOHead";
 import { Link } from "wouter";
 import { useState } from "react";
@@ -27,9 +26,9 @@ const PLANES_MEDIANA = [
 
 export default function Registro() {
   // Individual plan form state
-  const [form, setForm] = useState({ nombre: "", apellidos: "", email: "", plan: "basico" });
+  const PLAN_TO_PACK: Record<string, string> = { basico: "pack10", pro: "pack20", anual: "pack100" };
+  const [form, setForm] = useState({ email: "", plan: "basico" });
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<{ skrillLink: string } | null>(null);
   const [error, setError] = useState("");
 
   // Empresa licitacion form state
@@ -41,22 +40,21 @@ export default function Registro() {
   // Mediana empresa form state
   const [mForm, setMForm] = useState({ empresa: "", nombre: "", apellidos: "", email: "", plan: "empresa_100" });
   const [mLoading, setMLoading] = useState(false);
-  const [mResult, setMResult] = useState<{ skrillLink: string } | null>(null);
+  const [mResult, setMResult] = useState(false);
   const [mError, setMError] = useState("");
-
-  const [skrillModalOpen, setSkrillModalOpen] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
-      const res = await apiRequest("POST", "/api/registro-individual", form);
+      const packType = PLAN_TO_PACK[form.plan] || "pack10";
+      const res = await apiRequest("POST", "/api/stripe/create-pack-session", { packType, email: form.email });
       const data = await res.json();
-      if (data.success) {
-        setResult({ skrillLink: data.skrillLink });
+      if (data.url) {
+        window.location.href = data.url;
       } else {
-        setError(data.message || "Error al procesar la solicitud");
+        setError(data.error || "Error al crear la sesión de pago");
       }
     } catch {
       setError("Error de conexión. Inténtalo de nuevo.");
@@ -92,7 +90,7 @@ export default function Registro() {
       const res = await apiRequest("POST", "/api/registro-empresa-media", mForm);
       const data = await res.json();
       if (data.success) {
-        setMResult({ skrillLink: data.skrillLink });
+        setMResult(true);
       } else {
         setMError(data.message || "Error al procesar la solicitud");
       }
@@ -483,68 +481,28 @@ export default function Registro() {
                   </div>
                 </div>
 
-                {result ? (
-                  <div className="text-center py-4">
-                    <CheckCircle className="w-14 h-14 text-emerald-500 mx-auto mb-3" />
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">¡Solicitud recibida!</h3>
-                    <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-4 mb-4 text-left">
-                      <p className="text-emerald-800 text-sm font-semibold mb-1">📧 Revisa tu correo en breve</p>
-                      <p className="text-emerald-700 text-xs leading-relaxed">
-                        Tu solicitud ha sido registrada. En las próximas <strong>24 horas</strong> recibirás por correo el enlace de pago y tus credenciales de acceso a NUXA.
-                      </p>
-                    </div>
-                    <p className="text-xs text-gray-400">
-                      ¿Ya tienes cuenta?{" "}
-                      <Link href="/login" className="text-purple-600 underline font-medium">Iniciar sesión</Link>
-                    </p>
-                  </div>
-                ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Plan selector */}
                     <div>
-                      <Label className="text-sm font-semibold text-gray-700 mb-2 block">Elige tu plan</Label>
+                      <Label className="text-sm font-semibold text-gray-700 mb-2 block">Elige tu pack de preguntas</Label>
                       <div className="grid grid-cols-3 gap-2">
                         {PLANES_INDIVIDUAL.map(p => (
                           <button
                             key={p.id}
                             type="button"
                             onClick={() => setForm(f => ({ ...f, plan: p.id }))}
-                            className={`border-2 rounded-xl p-2 text-center transition-all cursor-pointer ${
+                            className={`border-2 rounded-xl p-3 text-center transition-all cursor-pointer ${
                               form.plan === p.id
                                 ? "border-purple-500 bg-purple-100 shadow-sm"
                                 : "border-gray-200 bg-white hover:border-purple-300"
                             }`}
                           >
-                            <div className="font-semibold text-gray-900 text-[11px] leading-tight">{p.label}</div>
-                            <div className="text-purple-600 font-bold text-xs leading-tight mt-0.5">{p.price}</div>
+                            <div className="font-bold text-purple-700 text-base leading-tight">{p.price}</div>
+                            <div className="text-gray-600 text-[11px] leading-tight mt-0.5">{p.label}</div>
                           </button>
                         ))}
                       </div>
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 gap-3">
-                      <div>
-                        <Label htmlFor="nombre" className="text-sm font-medium text-gray-700">Nombre</Label>
-                        <Input
-                          id="nombre"
-                          placeholder="Tu nombre"
-                          value={form.nombre}
-                          onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))}
-                          required
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="apellidos" className="text-sm font-medium text-gray-700">Apellidos</Label>
-                        <Input
-                          id="apellidos"
-                          placeholder="Tus apellidos"
-                          value={form.apellidos}
-                          onChange={e => setForm(f => ({ ...f, apellidos: e.target.value }))}
-                          required
-                          className="mt-1"
-                        />
-                      </div>
+                      <p className="text-xs text-gray-400 mt-1.5 text-center">Pago único · Sin suscripción · Sin permanencia</p>
                     </div>
 
                     <div>
@@ -564,24 +522,27 @@ export default function Registro() {
                       <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
                     )}
 
-                    {/* En fase de construcción */}
-                    <div className="w-full border-2 border-dashed border-amber-300 bg-amber-50 rounded-xl px-5 py-4 text-center">
-                      <div className="flex items-center justify-center gap-2 mb-1">
-                        <span className="text-amber-500 text-lg">🚧</span>
-                        <span className="text-amber-800 font-bold text-sm">En fase de construcción</span>
-                        <span className="text-amber-500 text-lg">🚧</span>
-                      </div>
-                      <p className="text-amber-700 text-xs leading-relaxed">
-                        El pago individual estará disponible muy pronto. Mientras tanto, puedes{" "}
-                        <Link href="/prueba-gratis" className="text-amber-800 underline font-semibold">probar NUXA gratis</Link>
-                        {" "}o contactarnos para más información.
-                      </p>
-                    </div>
-                    <p className="text-xs text-gray-400 text-center">
+                    <Button
+                      type="submit"
+                      size="lg"
+                      disabled={loading}
+                      className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold shadow-lg"
+                    >
+                      {loading ? "Redirigiendo..." : (
+                        <>
+                          <CreditCard className="w-4 h-4 mr-2" />
+                          Pagar con Stripe — {PLANES_INDIVIDUAL.find(p => p.id === form.plan)?.price}
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </>
+                      )}
+                    </Button>
+
+                    <div className="flex items-center justify-center gap-4 text-xs text-gray-400">
+                      <span>🔒 Pago seguro con Stripe</span>
+                      <span>·</span>
                       <Link href="/login" className="text-purple-600 underline">Ya tengo cuenta</Link>
-                    </p>
+                    </div>
                   </form>
-                )}
               </CardContent>
             </Card>
 
@@ -695,27 +656,6 @@ export default function Registro() {
         <Footer />
       </div>
 
-      {/* Skrill legal info modal */}
-      <Dialog open={skrillModalOpen} onOpenChange={setSkrillModalOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-[#6B2D8B]">
-              <ShieldCheck className="w-5 h-5" />
-              Información legal de Skrill
-            </DialogTitle>
-          </DialogHeader>
-          <div className="bg-[#4a1a6e] rounded-xl p-5 mt-2">
-            <p className="text-white text-sm leading-relaxed">
-              Copyright 2024 Paysafe Holdings UK Limited. Todos los derechos reservados. Skrill® es una marca registrada de Paysafe Holdings UK Limited. Paysafe Payment Solutions Limited está registrada en Irlanda con el número de empresa 626665 y su domicilio social se encuentra en 70 Sir John Rogerson's Quay, Dublín 2, D02 R296, Irlanda, operando como Skrill, Skrill Money Transfer, Rapid Transfer y Skrill Quick Checkout. Paysafe Payment Solutions Limited está autorizada por el Banco Central de Irlanda (Registro: C184986) según los Reglamentos de las Comunidades Europeas (Dinero electrónico) de 2011 para la emisión de dinero electrónico e instrumentos de pago. Paysafe Payment Solutions Limited está autorizada como Proveedora de Servicios de Criptoactivos por el Banco Central de Irlanda.
-            </p>
-          </div>
-          <div className="flex justify-center mt-2">
-            <a href="https://www.skrill.com" target="_blank" rel="noopener noreferrer" className="text-xs text-[#6B2D8B] underline hover:text-[#5a2575]">
-              www.skrill.com
-            </a>
-          </div>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

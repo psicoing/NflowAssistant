@@ -1977,6 +1977,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Endpoint para compra de packs de preguntas (pago único)
+  app.post("/api/stripe/create-pack-session", async (req, res) => {
+    try {
+      const { packType, email } = req.body;
+      
+      const packConfig: Record<string, { amount: number; questions: number; name: string }> = {
+        'pack10':  { amount: 299,  questions: 10,  name: 'NUXA Pack 10 Preguntas'  },
+        'pack20':  { amount: 599,  questions: 20,  name: 'NUXA Pack 20 Preguntas'  },
+        'pack100': { amount: 3200, questions: 100, name: 'NUXA Pack 100 Preguntas' },
+      };
+      
+      const pack = packConfig[packType];
+      if (!pack) {
+        return res.status(400).json({ error: 'Pack type not valid' });
+      }
+      
+      const Stripe = (await import('stripe')).default;
+      const stripeKey = process.env.STRIPE_SECRET_KEY || process.env.TESTING_STRIPE_SECRET_KEY || '';
+      if (!stripeKey) {
+        return res.status(500).json({ error: 'Stripe configuration missing' });
+      }
+      
+      const stripe = new Stripe(stripeKey, { apiVersion: '2025-08-27.basil' });
+      
+      const userId = req.session.userId?.toString() || 'unknown';
+      
+      const session = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        customer_email: email || undefined,
+        line_items: [{
+          price_data: {
+            currency: 'eur',
+            unit_amount: pack.amount,
+            product_data: { name: pack.name },
+          },
+          quantity: 1,
+        }],
+        success_url: 'https://nuxa.life/stripe-return?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url: 'https://nuxa.life/registro',
+        metadata: {
+          type: 'prepaid_credits',
+          packType,
+          questions: pack.questions.toString(),
+          userId,
+        },
+      });
+      
+      res.json({ url: session.url });
+    } catch (error: any) {
+      console.error('Stripe pack session error:', error);
+      res.status(500).json({ error: 'Error creating checkout session' });
+    }
+  });
+
   app.get("/stripe-return", async (req, res) => {
     const Stripe = (await import('stripe')).default;
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
@@ -2088,8 +2142,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 // VALIDACIÓN CRÍTICA: Verificar que el monto pagado coincida con el pack
                 const packType = metadata.packType;
                 const expectedAmounts: Record<string, number> = {
-                  'pack15': 500,  // 5€ en centavos
-                  'pack35': 1000  // 10€ en centavos
+                  'pack10': 299,   // €2.99 en centavos
+                  'pack20': 599,   // €5.99 en centavos
+                  'pack100': 3200, // €32 en centavos
+                  'pack15': 500,   // legacy
+                  'pack35': 1000   // legacy
                 };
                 
                 const expectedAmount = expectedAmounts[packType];
@@ -2107,6 +2164,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 
                 // Verificar que las preguntas correspondan al pack
                 const expectedQuestions: Record<string, number> = {
+                  'pack10': 10,
+                  'pack20': 20,
+                  'pack100': 100,
                   'pack15': 15,
                   'pack35': 35
                 };
