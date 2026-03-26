@@ -172,6 +172,9 @@ export default function Home() {
         {/* Banners profesionales */}
         <div className="bg-white py-5 px-4">
           <div className="max-w-4xl mx-auto flex flex-col gap-4">
+            <p className="text-center text-gray-600 font-semibold text-base">
+              Si NUXA no cumple tus expectativas, escoge profesional
+            </p>
 
             {/* COPC Banner */}
             <div className="relative overflow-hidden rounded-3xl shadow-xl border border-teal-300 bg-gradient-to-br from-teal-600 via-teal-500 to-emerald-500 transition-all duration-500">
