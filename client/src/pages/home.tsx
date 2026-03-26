@@ -169,65 +169,56 @@ export default function Home() {
 
         <FamilySupportHeroSection />
 
-        {/* NeuronMeg Banner */}
+        {/* COPC Banner */}
         <div className="bg-white py-5 px-4">
           <div className="max-w-4xl mx-auto">
-            <a href="https://neuronmeg.online" target="_blank" rel="noopener noreferrer" className="block group">
-              <div className="relative overflow-hidden rounded-3xl shadow-xl border border-teal-300 bg-gradient-to-br from-teal-600 via-teal-500 to-emerald-500 hover:from-teal-700 hover:via-teal-600 hover:to-emerald-600 transition-all duration-500 cursor-pointer">
-                {/* Background decorative circles */}
-                <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none group-hover:scale-110 transition-transform duration-700" />
-                <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-emerald-300/20 rounded-full blur-2xl pointer-events-none" />
-                <div className="absolute top-1/2 right-1/4 w-24 h-24 bg-white/5 rounded-full blur-xl pointer-events-none" />
+            <div className="relative overflow-hidden rounded-3xl shadow-xl border border-teal-300 bg-gradient-to-br from-teal-600 via-teal-500 to-emerald-500 transition-all duration-500">
+              {/* Background decorative circles */}
+              <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-emerald-300/20 rounded-full blur-2xl pointer-events-none" />
+              <div className="absolute top-1/2 right-1/4 w-24 h-24 bg-white/5 rounded-full blur-xl pointer-events-none" />
 
-                <div className="relative px-7 py-7 flex flex-col sm:flex-row sm:items-center gap-5">
-                  {/* Icon */}
-                  <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
-                    <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
-                    </svg>
+              <div className="relative px-7 py-7 flex flex-col sm:flex-row sm:items-center gap-5">
+                {/* Icon */}
+                <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center shadow-lg">
+                  <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
+                  </svg>
+                </div>
+
+                {/* Text */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-2 flex-wrap">
+                    <span className="inline-flex items-center bg-white/20 border border-white/30 text-white text-xs font-bold px-2.5 py-0.5 rounded-full">
+                      📋 Directorio profesional
+                    </span>
                   </div>
-
-                  {/* Text */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2 flex-wrap">
-                      <span className="inline-flex items-center bg-white/20 border border-white/30 text-white text-xs font-bold px-2.5 py-0.5 rounded-full">
-                        🏥 Psicólogos colegiados
-                      </span>
+                  <div className="flex flex-col gap-1.5">
+                    <div>
+                      <span className="text-white font-bold text-sm">Para la ciudadanía: </span>
+                      <span className="text-white/85 text-sm leading-relaxed">Encuentra un/a psicólogo/a colegiado/a según tu necesidad, ubicación o especialidad.</span>
                     </div>
-                    <h3 className="text-xl sm:text-2xl font-black text-white leading-tight mb-1.5">
-                      ¿NUXA no es para ti? <span className="underline decoration-white/60 underline-offset-4">Solicita un profesional</span>
-                    </h3>
-                    <p className="text-white/85 text-sm leading-relaxed">
-                      Videollamadas y visitas a domicilio con psicólogos colegiados. Una alternativa completamente legítima — porque la salud mental merece la opción que mejor se adapte a ti.
-                    </p>
-                  </div>
-
-                  {/* CTA */}
-                  <div className="flex-shrink-0 flex flex-col gap-2">
-                    <a
-                      href="https://neuronmeg.online/plans"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={e => e.stopPropagation()}
-                      className="inline-flex items-center justify-center gap-2 bg-white text-teal-700 hover:bg-teal-50 font-bold text-sm px-6 py-3 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300"
-                    >
-                      Ver tarifas
-                      <ArrowRight className="w-4 h-4" />
-                    </a>
-                    <a
-                      href="https://neuronmeg.online"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={e => e.stopPropagation()}
-                      className="inline-flex items-center justify-center gap-1.5 bg-white/15 hover:bg-white/25 border border-white/30 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-colors"
-                    >
-                      🏛️ Nuestro Instituto
-                      <ExternalLink className="w-3 h-3 opacity-70" />
-                    </a>
+                    <div>
+                      <span className="text-white font-bold text-sm">Para profesionales: </span>
+                      <span className="text-white/85 text-sm leading-relaxed">Busca un/a profesional especializado/a para derivaciones o colaboraciones entre colegiados.</span>
+                    </div>
                   </div>
                 </div>
+
+                {/* CTA */}
+                <div className="flex-shrink-0">
+                  <a
+                    href="https://www.copc.cat/es/directori-professional"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 bg-white text-teal-700 hover:bg-teal-50 font-bold text-sm px-6 py-3 rounded-xl shadow-lg transition-all duration-300"
+                  >
+                    COPC
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
               </div>
-            </a>
+            </div>
           </div>
         </div>
 
