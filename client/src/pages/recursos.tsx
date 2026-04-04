@@ -2384,6 +2384,30 @@ export default function RecursosGratis() {
             </p>
           </div>
 
+          {/* Banner prueba gratis */}
+          <Link href="/prueba-gratis">
+            <div className="mb-8 group relative overflow-hidden rounded-2xl border-2 border-emerald-300 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer">
+              <div className="absolute -top-8 -right-8 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="relative px-6 py-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center shadow">
+                  <Sparkles className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-white font-black text-base sm:text-lg leading-snug mb-0.5">
+                    ¿Quieres ir más allá de los ejercicios?
+                  </p>
+                  <p className="text-emerald-100 text-sm leading-relaxed">
+                    Habla directamente con NUXA — 2 consultas gratis, sin tarjeta ni registro. La IA que te escucha de verdad.
+                  </p>
+                </div>
+                <div className="flex-shrink-0 flex items-center gap-2 bg-white text-emerald-700 font-bold text-sm px-5 py-2.5 rounded-xl shadow group-hover:bg-emerald-50 transition-colors whitespace-nowrap">
+                  Probar gratis
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                </div>
+              </div>
+            </div>
+          </Link>
+
           {/* Racha Diaria */}
           <Card className="mb-8 p-6 bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200">
             <div className="flex items-center justify-between">
