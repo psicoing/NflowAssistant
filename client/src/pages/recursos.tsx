@@ -190,7 +190,7 @@ const alertasClinicas = [
 
 export default function RecursosGratis() {
   const { toast } = useToast();
-  const [currentView, setCurrentView] = useState<'main' | 'emotional-log' | 'affirmation' | 'evaluation' | 'emotion-history' | 'breathing' | 'gratitude' | 'bad-day' | 'grounding' | 'bilateral' | 'iso-check' | 'emotion-wheel' | 'body-stress'>('main');
+  const [currentView, setCurrentView] = useState<'main' | 'emotional-log' | 'affirmation' | 'evaluation' | 'emotion-history' | 'breathing' | 'gratitude' | 'bad-day' | 'grounding' | 'bilateral' | 'iso-check' | 'emotion-wheel' | 'body-stress' | 'emotion-dashboard' | 'bienestar-test' | 'programa-7dias' | 'meditacion'>('main');
   const [wheelSelectedEmotion, setWheelSelectedEmotion] = useState<any>(null);
   const [wheelLayer, setWheelLayer] = useState<'core' | 'middle' | 'outer'>('core');
   const [selectedBodyZone, setSelectedBodyZone] = useState<string | null>(null);
@@ -217,6 +217,22 @@ export default function RecursosGratis() {
   // New features: grounding, bilateral, ISO check
   const [groundingStep, setGroundingStep] = useState(0);
   const [groundingInputs, setGroundingInputs] = useState<string[]>(['', '', '', '', '']);
+
+  // Dashboard emocional
+  const [dashboardLogs, setDashboardLogs] = useState<Array<{emotion: string; note: string; date: string}>>([]);
+
+  // Test de bienestar semanal
+  const [bienestarAnswers, setBienestarAnswers] = useState<number[]>([3, 3, 3, 3, 3]);
+  const [bienestarHistory, setBienestarHistory] = useState<Array<{date: string; score: number; label: string}>>([]);
+  const [bienestarSubmitted, setBienestarSubmitted] = useState(false);
+
+  // Programas de 7 días
+  const [selectedPrograma, setSelectedPrograma] = useState<'ansiedad' | 'sueno' | 'autoestima' | null>(null);
+  const [programaProgress, setProgramaProgress] = useState<Record<string, number[]>>({});
+
+  // Meditaciones guiadas
+  const [meditacionPlayingId, setMeditacionPlayingId] = useState<string | null>(null);
+  const [speechSynthRef] = useState<{ current: SpeechSynthesisUtterance | null }>({ current: null });
   const [bilateralActive, setBilateralActive] = useState(false);
   const [bilateralSide, setBilateralSide] = useState<'left' | 'right'>('left');
   const [bilateralSpeed, setBilateralSpeed] = useState<'slow' | 'medium' | 'fast'>('medium');
@@ -2302,6 +2318,500 @@ export default function RecursosGratis() {
     );
   }
 
+  // ─── DASHBOARD EMOCIONAL ────────────────────────────────────────────
+  if (currentView === 'emotion-dashboard') {
+    const logs: Array<{emotion: string; note: string; date: string}> =
+      JSON.parse(localStorage.getItem('nflow-emotion-logs') || '[]');
+    const emotions = [
+      { emoji: '😊', label: 'Feliz' }, { emoji: '😌', label: 'Tranquilo/a' },
+      { emoji: '😔', label: 'Triste' }, { emoji: '😰', label: 'Ansioso/a' },
+      { emoji: '😡', label: 'Enfadado/a' }, { emoji: '😴', label: 'Cansado/a' },
+      { emoji: '🤩', label: 'Emocionado/a' }, { emoji: '😶', label: 'Neutral' },
+    ];
+    const last14 = logs.slice(-14);
+    const countByEmotion: Record<string, number> = {};
+    last14.forEach(l => { countByEmotion[l.emotion] = (countByEmotion[l.emotion] || 0) + 1; });
+    const maxCount = Math.max(1, ...Object.values(countByEmotion));
+    const weekDays = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(); d.setDate(d.getDate() - (6 - i));
+      return d.toISOString().split('T')[0];
+    });
+    const dayLabels = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-2xl mx-auto">
+            <Button variant="ghost" onClick={() => setCurrentView('main')} className="mb-6">← Volver</Button>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">📊 Dashboard Emocional</h2>
+            <p className="text-gray-500 mb-8">Tu evolución de las últimas 2 semanas</p>
+
+            {logs.length === 0 ? (
+              <Card className="p-8 text-center">
+                <p className="text-gray-500 text-lg mb-2">Aún no tienes registros emocionales</p>
+                <p className="text-gray-400 text-sm mb-4">Empieza a registrar cómo te sientes cada día</p>
+                <Button onClick={() => setCurrentView('emotional-log')}>Hacer mi primer registro</Button>
+              </Card>
+            ) : (
+              <>
+                <Card className="p-6 mb-6">
+                  <h3 className="font-bold text-gray-800 mb-4">Últimos 7 días</h3>
+                  <div className="flex items-end gap-2 h-24">
+                    {weekDays.map((day, i) => {
+                      const dayLogs = logs.filter(l => l.date?.startsWith(day));
+                      return (
+                        <div key={day} className="flex-1 flex flex-col items-center gap-1">
+                          <div className="w-full bg-indigo-100 rounded-t-md relative" style={{ height: '80px' }}>
+                            {dayLogs.length > 0 && (
+                              <div
+                                className="absolute bottom-0 w-full bg-gradient-to-t from-indigo-500 to-indigo-400 rounded-t-md flex items-center justify-center text-sm"
+                                style={{ height: `${Math.min(100, dayLogs.length * 40)}%` }}
+                              >
+                                {dayLogs[dayLogs.length - 1]?.emotion}
+                              </div>
+                            )}
+                          </div>
+                          <span className="text-xs text-gray-400">{dayLabels[i]}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Card>
+
+                <Card className="p-6 mb-6">
+                  <h3 className="font-bold text-gray-800 mb-4">Distribución de emociones (últimas 2 semanas)</h3>
+                  <div className="space-y-3">
+                    {emotions.filter(e => countByEmotion[e.emoji] > 0).sort((a, b) => (countByEmotion[b.emoji] || 0) - (countByEmotion[a.emoji] || 0)).map(e => (
+                      <div key={e.emoji} className="flex items-center gap-3">
+                        <span className="text-xl w-7">{e.emoji}</span>
+                        <span className="text-sm text-gray-600 w-24">{e.label}</span>
+                        <div className="flex-1 bg-gray-100 rounded-full h-3">
+                          <div
+                            className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full transition-all"
+                            style={{ width: `${((countByEmotion[e.emoji] || 0) / maxCount) * 100}%` }}
+                          />
+                        </div>
+                        <span className="text-sm font-bold text-gray-700 w-4">{countByEmotion[e.emoji]}</span>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+
+                <Card className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-200">
+                  <h3 className="font-bold text-gray-800 mb-2">Total de registros</h3>
+                  <p className="text-4xl font-bold text-indigo-600">{logs.length}</p>
+                  <p className="text-gray-500 text-sm">días en los que has cuidado tu salud emocional 💜</p>
+                </Card>
+              </>
+            )}
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // ─── TEST DE BIENESTAR SEMANAL ───────────────────────────────────────
+  if (currentView === 'bienestar-test') {
+    const questions = [
+      '¿Cómo de bien has dormido esta semana?',
+      '¿Te has sentido con energía y vitalidad?',
+      '¿Has podido disfrutar de las cosas del día a día?',
+      '¿Te has sentido conectado/a con las personas que te importan?',
+      '¿Has podido manejar el estrés sin que te desbordara?',
+    ];
+    const labels = ['Muy mal', 'Mal', 'Regular', 'Bien', 'Muy bien'];
+    const totalScore = bienestarAnswers.reduce((a, b) => a + b, 0);
+    const getLabel = (s: number) => s <= 9 ? { label: 'Bajo', color: 'text-red-600', bg: 'bg-red-100', emoji: '😔' }
+      : s <= 14 ? { label: 'Moderado', color: 'text-amber-600', bg: 'bg-amber-100', emoji: '😐' }
+      : s <= 19 ? { label: 'Bueno', color: 'text-blue-600', bg: 'bg-blue-100', emoji: '😊' }
+      : { label: 'Excelente', color: 'text-emerald-600', bg: 'bg-emerald-100', emoji: '🌟' };
+    const result = getLabel(totalScore);
+
+    const handleBienestarSubmit = () => {
+      const today = new Date().toISOString().split('T')[0];
+      const entry = { date: today, score: totalScore, label: result.label };
+      const history = JSON.parse(localStorage.getItem('nuxa-bienestar-history') || '[]');
+      const filtered = history.filter((h: any) => h.date !== today);
+      filtered.push(entry);
+      const last8 = filtered.slice(-8);
+      localStorage.setItem('nuxa-bienestar-history', JSON.stringify(last8));
+      setBienestarHistory(last8);
+      setBienestarSubmitted(true);
+    };
+
+    const savedHistory: Array<{date: string; score: number; label: string}> =
+      JSON.parse(localStorage.getItem('nuxa-bienestar-history') || '[]');
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-xl mx-auto">
+            <Button variant="ghost" onClick={() => { setCurrentView('main'); setBienestarSubmitted(false); setBienestarAnswers([3,3,3,3,3]); }} className="mb-6">← Volver</Button>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">🧘 Test de Bienestar</h2>
+            <p className="text-gray-500 mb-8">5 preguntas para medir cómo estás esta semana</p>
+
+            {bienestarSubmitted ? (
+              <div className="space-y-6">
+                <Card className={`p-8 text-center border-2 ${result.bg}`}>
+                  <div className="text-6xl mb-3">{result.emoji}</div>
+                  <p className="text-gray-600 mb-1">Tu índice de bienestar esta semana</p>
+                  <p className={`text-5xl font-black mb-1 ${result.color}`}>{totalScore}<span className="text-xl font-normal">/25</span></p>
+                  <Badge className={`${result.bg} ${result.color} border-0 text-sm font-bold px-4 py-1`}>{result.label}</Badge>
+                </Card>
+
+                {savedHistory.length > 1 && (
+                  <Card className="p-6">
+                    <h3 className="font-bold text-gray-800 mb-4">Tu evolución</h3>
+                    <div className="flex items-end gap-2 h-20">
+                      {savedHistory.slice(-6).map((h, i) => (
+                        <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                          <div className="w-full bg-gray-100 rounded-t relative" style={{ height: '64px' }}>
+                            <div
+                              className="absolute bottom-0 w-full bg-gradient-to-t from-blue-500 to-blue-400 rounded-t"
+                              style={{ height: `${(h.score / 25) * 100}%` }}
+                            />
+                          </div>
+                          <span className="text-xs text-gray-400">{h.date.slice(5)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                )}
+
+                <Button className="w-full" variant="outline" onClick={() => { setBienestarSubmitted(false); setBienestarAnswers([3,3,3,3,3]); }}>
+                  Repetir test
+                </Button>
+              </div>
+            ) : (
+              <Card className="p-6 space-y-6">
+                {questions.map((q, i) => (
+                  <div key={i}>
+                    <p className="font-semibold text-gray-800 mb-3 text-sm">{i + 1}. {q}</p>
+                    <div className="flex gap-2">
+                      {[1, 2, 3, 4, 5].map(v => (
+                        <button
+                          key={v}
+                          onClick={() => setBienestarAnswers(a => a.map((x, j) => j === i ? v : x))}
+                          className={`flex-1 py-2 rounded-lg text-sm font-semibold border-2 transition-all ${bienestarAnswers[i] === v ? 'border-blue-500 bg-blue-100 text-blue-800' : 'border-gray-200 bg-white text-gray-500 hover:border-blue-300'}`}
+                        >
+                          {v}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-400 mt-1 px-1">
+                      <span>{labels[0]}</span><span>{labels[4]}</span>
+                    </div>
+                  </div>
+                ))}
+                <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={handleBienestarSubmit}>
+                  Ver mi resultado
+                </Button>
+              </Card>
+            )}
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // ─── PROGRAMAS DE 7 DÍAS ────────────────────────────────────────────
+  if (currentView === 'programa-7dias') {
+    const programas = {
+      ansiedad: {
+        title: 'Reducir la Ansiedad',
+        emoji: '😰',
+        color: 'from-blue-500 to-indigo-500',
+        bg: 'from-blue-50 to-indigo-50',
+        border: 'border-blue-200',
+        days: [
+          { title: 'Respira', desc: 'Técnica 4-7-8: inhala 4s, mantén 7s, exhala 8s. Hazlo 3 veces al día.', tool: 'breathing', badge: '🌬️ 5 min' },
+          { title: 'Identifica', desc: 'Usa la rueda de emociones para poner nombre exacto a lo que sientes.', tool: 'emotion-wheel', badge: '🎯 10 min' },
+          { title: 'Ancla', desc: 'Grounding 5-4-3-2-1: identifica 5 cosas que ves, 4 que tocas...', tool: 'grounding', badge: '🧩 8 min' },
+          { title: 'Registra', desc: 'Anota tu emoción principal de hoy. La escritura alivia la carga mental.', tool: 'emotional-log', badge: '📝 3 min' },
+          { title: 'Estimula', desc: 'Estimulación bilateral: mueve los ojos de izquierda a derecha siguiendo el punto.', tool: 'bilateral', badge: '👆 5 min' },
+          { title: 'Cuadra', desc: 'Respiración cuadrada: inhala 4s, mantén 4s, exhala 4s. Para el bucle mental.', tool: 'breathing', badge: '🌬️ 5 min' },
+          { title: 'Celebra', desc: 'Escribe 3 cosas por las que estás agradecido/a esta semana.', tool: 'gratitude', badge: '🙏 5 min' },
+        ],
+      },
+      sueno: {
+        title: 'Mejorar el Sueño',
+        emoji: '😴',
+        color: 'from-indigo-500 to-purple-500',
+        bg: 'from-indigo-50 to-purple-50',
+        border: 'border-indigo-200',
+        days: [
+          { title: 'Relajación nocturna', desc: 'Técnica 4-7-8 antes de dormir. Activa el sistema parasimpático.', tool: 'breathing', badge: '🌬️ 5 min' },
+          { title: 'Cierra el día', desc: 'Escribe 3 cosas buenas del día antes de dormir. Activa la mente positiva.', tool: 'gratitude', badge: '🙏 3 min' },
+          { title: 'Suelta tensión', desc: 'Mapa de estrés corporal: trabaja las zonas tensas antes de acostarte.', tool: 'body-stress', badge: '🧍 10 min' },
+          { title: 'Registro emocional', desc: 'Anota cómo has dormido y cómo te has sentido al despertar.', tool: 'emotional-log', badge: '📝 3 min' },
+          { title: 'Coherencia cardíaca', desc: 'Respiración coherente: inhala 5s, exhala 5s durante 5 minutos.', tool: 'breathing', badge: '🌬️ 5 min' },
+          { title: 'Libera el cuerpo', desc: 'Estimulación bilateral para soltar el estrés acumulado del día.', tool: 'bilateral', badge: '👆 5 min' },
+          { title: 'Evalúa tu semana', desc: 'Haz el test de bienestar y celebra haber dedicado 7 días a tu descanso.', tool: 'bienestar-test', badge: '🧘 5 min' },
+        ],
+      },
+      autoestima: {
+        title: 'Fortalecer la Autoestima',
+        emoji: '💪',
+        color: 'from-purple-500 to-pink-500',
+        bg: 'from-purple-50 to-pink-50',
+        border: 'border-purple-200',
+        days: [
+          { title: 'Reconócete', desc: 'Escribe 3 cualidades que aprecias de ti mismo/a. Sin filtros.', tool: 'gratitude', badge: '🙏 5 min' },
+          { title: 'Identifica tu voz interna', desc: 'Registra las emociones que sientes cuando te juzgas. ¿Qué emociones son?', tool: 'emotion-wheel', badge: '🎯 10 min' },
+          { title: 'Evalúa tu autoestima', desc: 'Test de autoestima para conocer tu punto de partida real.', tool: 'evaluation', badge: '📋 5 min' },
+          { title: 'Ancla en el presente', desc: 'Grounding para salir del bucle de pensamientos críticos sobre ti.', tool: 'grounding', badge: '🧩 8 min' },
+          { title: 'Afirmación del día', desc: 'Lee y repite la afirmación de hoy. Dila en voz alta frente al espejo.', tool: 'affirmation', badge: '✨ 2 min' },
+          { title: 'Registra un logro', desc: 'Anota algo que hayas hecho bien hoy, por pequeño que sea.', tool: 'emotional-log', badge: '📝 3 min' },
+          { title: 'Celebra la semana', desc: 'Escribe 3 cosas de ti mismo/a que esta semana han mejorado.', tool: 'gratitude', badge: '🙏 5 min' },
+        ],
+      },
+    } as const;
+
+    const savedProgress: Record<string, number[]> = JSON.parse(localStorage.getItem('nuxa-programas') || '{}');
+
+    const toggleDay = (prog: string, day: number) => {
+      const current = savedProgress[prog] || [];
+      const updated = current.includes(day) ? current.filter(d => d !== day) : [...current, day];
+      savedProgress[prog] = updated;
+      localStorage.setItem('nuxa-programas', JSON.stringify(savedProgress));
+      setProgramaProgress({ ...savedProgress });
+    };
+
+    if (selectedPrograma) {
+      const prog = programas[selectedPrograma];
+      const completed = savedProgress[selectedPrograma] || [];
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+          <Header />
+          <main className="pt-24 pb-12 px-4">
+            <div className="max-w-xl mx-auto">
+              <Button variant="ghost" onClick={() => setSelectedPrograma(null)} className="mb-6">← Programas</Button>
+              <div className={`rounded-2xl bg-gradient-to-br ${prog.bg} border ${prog.border} p-6 mb-8`}>
+                <div className="text-4xl mb-2">{prog.emoji}</div>
+                <h2 className="text-2xl font-bold text-gray-900">7 días para {prog.title}</h2>
+                <p className="text-gray-500 text-sm mt-1">{completed.length}/7 días completados</p>
+                <div className="flex gap-1 mt-3">
+                  {Array.from({length: 7}, (_, i) => (
+                    <div key={i} className={`flex-1 h-2 rounded-full ${completed.includes(i) ? `bg-gradient-to-r ${prog.color}` : 'bg-gray-200'}`} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {prog.days.map((day, i) => {
+                  const done = completed.includes(i);
+                  return (
+                    <Card key={i} className={`p-4 border-2 transition-all ${done ? `${prog.border} bg-white` : 'border-gray-100'}`}>
+                      <div className="flex items-start gap-3">
+                        <button
+                          onClick={() => toggleDay(selectedPrograma, i)}
+                          className={`mt-0.5 w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${done ? `bg-gradient-to-br ${prog.color} border-transparent` : 'border-gray-300'}`}
+                        >
+                          {done && <span className="text-white text-xs font-bold">✓</span>}
+                        </button>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <span className="text-xs font-bold text-gray-400 uppercase tracking-wide">Día {i + 1}</span>
+                            <Badge className="text-xs bg-gray-100 text-gray-600 border-0">{day.badge}</Badge>
+                          </div>
+                          <p className="font-bold text-gray-900 text-sm">{day.title}</p>
+                          <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{day.desc}</p>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setCurrentView(day.tool as any)}
+                          className="flex-shrink-0 text-xs"
+                        >
+                          Ir →
+                        </Button>
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
+
+              {completed.length === 7 && (
+                <Card className="mt-6 p-6 text-center bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200">
+                  <div className="text-4xl mb-2">🎉</div>
+                  <h3 className="font-bold text-gray-900">¡Programa completado!</h3>
+                  <p className="text-gray-500 text-sm">Has dedicado 7 días a cuidar tu salud mental. Eso importa.</p>
+                </Card>
+              )}
+            </div>
+          </main>
+          <Footer />
+        </div>
+      );
+    }
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-xl mx-auto">
+            <Button variant="ghost" onClick={() => setCurrentView('main')} className="mb-6">← Volver</Button>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">📅 Programas de 7 Días</h2>
+            <p className="text-gray-500 mb-8">Guías estructuradas para trabajar un objetivo concreto durante una semana</p>
+
+            <div className="space-y-4">
+              {(Object.entries(programas) as Array<[keyof typeof programas, typeof programas[keyof typeof programas]]>).map(([key, prog]) => {
+                const done = (savedProgress[key] || []).length;
+                return (
+                  <Card
+                    key={key}
+                    className={`p-6 cursor-pointer border-2 ${prog.border} hover:shadow-lg transition-all`}
+                    onClick={() => { setSelectedPrograma(key); setProgramaProgress({ ...savedProgress }); }}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${prog.color} flex items-center justify-center text-3xl shadow`}>
+                        {prog.emoji}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-bold text-gray-900">7 días para {prog.title}</p>
+                        <div className="flex gap-1 mt-2">
+                          {Array.from({length: 7}, (_, i) => (
+                            <div key={i} className={`flex-1 h-1.5 rounded-full ${(savedProgress[key] || []).includes(i) ? `bg-gradient-to-r ${prog.color}` : 'bg-gray-200'}`} />
+                          ))}
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1">{done}/7 días completados</p>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-gray-400" />
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // ─── MEDITACIONES GUIADAS ───────────────────────────────────────────
+  if (currentView === 'meditacion') {
+    const meditaciones = [
+      {
+        id: 'calma',
+        title: 'Calma en 5 minutos',
+        emoji: '🌊',
+        duracion: '5 min',
+        color: 'from-blue-500 to-cyan-500',
+        bg: 'from-blue-50 to-cyan-50',
+        border: 'border-blue-200',
+        texto: 'Cierra los ojos suavemente. Siente el peso de tu cuerpo sobre la silla o el suelo. Respira de forma natural, sin forzar. Inhala... y exhala... Con cada respiración, sientes cómo tu cuerpo se relaja un poco más. Nota tus pies en el suelo. Nota el contacto de tu ropa con tu piel. Estás aquí. Estás a salvo. Permite que tus pensamientos pasen como nubes en el cielo, sin aferrarte a ninguno. Solo respira. Inhala tranquilidad... exhala tensión. Eres suficiente. Estás bien. Poco a poco, cuando estés listo, abre los ojos con suavidad.',
+      },
+      {
+        id: 'sueno',
+        title: 'Preparación para dormir',
+        emoji: '🌙',
+        duracion: '8 min',
+        color: 'from-indigo-500 to-purple-500',
+        bg: 'from-indigo-50 to-purple-50',
+        border: 'border-indigo-200',
+        texto: 'Es de noche. El día ha terminado. Permítete soltar todo lo que pasó hoy. No hay nada que resolver ahora. Relaja los pies... las piernas... la barriga... Los hombros... el cuello... la mandíbula. Respira profundamente. Tu cama es tu lugar seguro. Nada puede hacerte daño aquí. Siente el calor de las sábanas. Deja que tu cuerpo se hunda en el colchón. Cada respiración te lleva más cerca del descanso. Inhala... exhala... Tu mente se tranquiliza. No hay nada urgente. Solo este momento, esta respiración, este descanso que mereces. Duerme.',
+      },
+      {
+        id: 'ansiedad',
+        title: 'Soltar la ansiedad',
+        emoji: '🍃',
+        duracion: '6 min',
+        color: 'from-green-500 to-emerald-500',
+        bg: 'from-green-50 to-emerald-50',
+        border: 'border-green-200',
+        texto: 'Noto que hay tensión en mi cuerpo. Está bien. No tengo que luchar contra ella. Solo voy a observarla. ¿Dónde la siento? ¿En el pecho? ¿En el estómago? Respiro hacia ese lugar. Inhalo contando hasta cuatro. Uno... dos... tres... cuatro. Mantengo el aire contando hasta siete. Exhalo contando hasta ocho. La tensión empieza a aflojarse. No todo tiene solución ahora mismo. No todo depende de mí. Puedo soltar el control. Inhalo calma, exhalo miedo. Soy capaz de estar con esta incomodidad. Pasará. Siempre pasa.',
+      },
+      {
+        id: 'autoestima',
+        title: 'Reconócete',
+        emoji: '💛',
+        duracion: '5 min',
+        color: 'from-amber-500 to-orange-500',
+        bg: 'from-amber-50 to-orange-50',
+        border: 'border-amber-200',
+        texto: 'Pon una mano en el pecho. Siente tu corazón. Está latiendo por ti, sin que tengas que pedírselo. Tu cuerpo trabaja para ti cada segundo. Mereces cuidado. Mereces amabilidad. Especialmente de ti mismo. Hoy has hecho lo que has podido. Con lo que tenías. Eso es suficiente. No tienes que ser perfecto. No tienes que tenerlo todo resuelto. Eres una persona válida, con fortalezas que a veces no ves. Respira. Repite en silencio: soy suficiente. Estoy haciendo lo mejor que puedo. Me merezco compasión.',
+      },
+    ];
+
+    const playMeditacion = (med: typeof meditaciones[0]) => {
+      if (meditacionPlayingId === med.id) {
+        window.speechSynthesis.cancel();
+        setMeditacionPlayingId(null);
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(med.texto);
+      utterance.lang = 'es-ES';
+      utterance.rate = 0.8;
+      utterance.pitch = 1.0;
+      utterance.volume = 1;
+      const voices = window.speechSynthesis.getVoices();
+      const spanish = voices.find(v => v.lang.startsWith('es'));
+      if (spanish) utterance.voice = spanish;
+      utterance.onend = () => setMeditacionPlayingId(null);
+      utterance.onerror = () => setMeditacionPlayingId(null);
+      speechSynthRef.current = utterance;
+      setMeditacionPlayingId(med.id);
+      window.speechSynthesis.speak(utterance);
+    };
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-xl mx-auto">
+            <Button variant="ghost" onClick={() => { window.speechSynthesis.cancel(); setMeditacionPlayingId(null); setCurrentView('main'); }} className="mb-6">← Volver</Button>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">🎧 Meditaciones Guiadas</h2>
+            <p className="text-gray-500 mb-2">Pulsa el botón para escuchar la meditación en voz alta</p>
+            <p className="text-xs text-gray-400 mb-8">Usa auriculares para una mejor experiencia · Voz del dispositivo</p>
+
+            <div className="space-y-4">
+              {meditaciones.map(med => {
+                const isPlaying = meditacionPlayingId === med.id;
+                return (
+                  <Card key={med.id} className={`p-5 border-2 ${med.border} bg-gradient-to-br ${med.bg} transition-all ${isPlaying ? 'shadow-lg' : ''}`}>
+                    <div className="flex items-center gap-4">
+                      <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${med.color} flex items-center justify-center text-3xl shadow flex-shrink-0`}>
+                        {isPlaying ? '🔊' : med.emoji}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-bold text-gray-900">{med.title}</p>
+                        <p className="text-xs text-gray-500">⏱ {med.duracion}</p>
+                        {isPlaying && (
+                          <div className="flex gap-0.5 mt-2">
+                            {[1,2,3,4,5].map(i => (
+                              <div key={i} className={`w-1 bg-gradient-to-t ${med.color} rounded-full animate-pulse`} style={{ height: `${8 + (i % 3) * 6}px`, animationDelay: `${i * 100}ms` }} />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <Button
+                        onClick={() => playMeditacion(med)}
+                        className={`flex-shrink-0 ${isPlaying ? 'bg-gray-700 hover:bg-gray-800' : `bg-gradient-to-br ${med.color} hover:opacity-90`} text-white border-0`}
+                      >
+                        {isPlaying ? '⏹ Parar' : '▶ Escuchar'}
+                      </Button>
+                    </div>
+                    {isPlaying && (
+                      <p className="text-xs text-gray-500 mt-3 leading-relaxed border-t border-gray-200/60 pt-3 italic">
+                        {med.texto.slice(0, 100)}...
+                      </p>
+                    )}
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <>
       <SEOHead
@@ -2565,6 +3075,50 @@ export default function RecursosGratis() {
               <ChevronRight className="w-8 h-8 text-gray-400 group-hover:text-red-500 transition-colors hidden md:block" />
             </div>
           </Card>
+
+          {/* Seguimiento y Programas */}
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Seguimiento y Programas</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <Card
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-indigo-50 to-blue-50 border-indigo-200 border-2"
+              onClick={() => setCurrentView('emotion-dashboard')}
+            >
+              <div className="text-3xl mb-3">📊</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Dashboard Emocional</h3>
+              <p className="text-gray-600 text-sm mb-3">Visualiza tu evolución emocional de las últimas 2 semanas con gráficos</p>
+              <Badge className="bg-indigo-100 text-indigo-700 border-indigo-200">📈 Tendencias</Badge>
+            </Card>
+
+            <Card
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-blue-50 to-sky-50 border-blue-200 border-2"
+              onClick={() => { setBienestarAnswers([3,3,3,3,3]); setBienestarSubmitted(false); setCurrentView('bienestar-test'); }}
+            >
+              <div className="text-3xl mb-3">🧘</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Test de Bienestar</h3>
+              <p className="text-gray-600 text-sm mb-3">5 preguntas para medir tu estado emocional esta semana y ver tu evolución</p>
+              <Badge className="bg-blue-100 text-blue-700 border-blue-200">📋 Semanal</Badge>
+            </Card>
+
+            <Card
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200 border-2"
+              onClick={() => { setSelectedPrograma(null); setCurrentView('programa-7dias'); }}
+            >
+              <div className="text-3xl mb-3">📅</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Programas de 7 Días</h3>
+              <p className="text-gray-600 text-sm mb-3">Guías estructuradas para ansiedad, sueño o autoestima. Un ejercicio por día.</p>
+              <Badge className="bg-purple-100 text-purple-700 border-purple-200">🗓️ 3 programas</Badge>
+            </Card>
+
+            <Card
+              className="p-6 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-cyan-50 to-teal-50 border-cyan-200 border-2"
+              onClick={() => { window.speechSynthesis?.cancel(); setMeditacionPlayingId(null); setCurrentView('meditacion'); }}
+            >
+              <div className="text-3xl mb-3">🎧</div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Meditaciones Guiadas</h3>
+              <p className="text-gray-600 text-sm mb-3">Escucha 4 meditaciones narradas en voz alta para calma, sueño y autoestima</p>
+              <Badge className="bg-cyan-100 text-cyan-700 border-cyan-200">🔊 Audio</Badge>
+            </Card>
+          </div>
 
           {/* Regulación y Emergencias */}
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Regulación y Emergencias</h2>
