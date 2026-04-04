@@ -160,6 +160,16 @@ export default function Home() {
       <Header showBanner={false} />
       <main className="pt-16">
 
+        {/* Barra de valor - recursos gratuitos */}
+        <div className="bg-gradient-to-r from-emerald-600 to-teal-600 py-2.5 px-4 text-center">
+          <p className="text-white text-sm font-semibold tracking-wide">
+            ✦ Más de 15 herramientas clínicas gratuitas &nbsp;·&nbsp; Sin registro &nbsp;·&nbsp; Sin publicidad &nbsp;·&nbsp;
+            <a href="/recursos" className="underline underline-offset-2 hover:text-emerald-100 transition-colors ml-1">
+              Explorar recursos →
+            </a>
+          </p>
+        </div>
+
         <NuxaRobotForestSection />
 
         {/* Awareness banner — collapsible + dismissible, above NUXA hero card */}
