@@ -190,7 +190,7 @@ const alertasClinicas = [
 
 export default function RecursosGratis() {
   const { toast } = useToast();
-  const [currentView, setCurrentView] = useState<'main' | 'emotional-log' | 'affirmation' | 'evaluation' | 'emotion-history' | 'breathing' | 'gratitude' | 'bad-day' | 'grounding' | 'bilateral' | 'iso-check' | 'emotion-wheel' | 'body-stress' | 'emotion-dashboard' | 'bienestar-test' | 'programa-7dias' | 'meditacion'>('main');
+  const [currentView, setCurrentView] = useState<'main' | 'emotional-log' | 'affirmation' | 'evaluation' | 'emotion-history' | 'breathing' | 'gratitude' | 'bad-day' | 'grounding' | 'bilateral' | 'iso-check' | 'emotion-wheel' | 'body-stress' | 'emotion-dashboard' | 'bienestar-test' | 'programa-7dias' | 'meditacion' | 'biblioteca' | 'fichas-situacion'>('main');
   const [wheelSelectedEmotion, setWheelSelectedEmotion] = useState<any>(null);
   const [wheelLayer, setWheelLayer] = useState<'core' | 'middle' | 'outer'>('core');
   const [selectedBodyZone, setSelectedBodyZone] = useState<string | null>(null);
@@ -233,6 +233,10 @@ export default function RecursosGratis() {
   // Meditaciones guiadas
   const [meditacionPlayingId, setMeditacionPlayingId] = useState<string | null>(null);
   const [speechSynthRef] = useState<{ current: SpeechSynthesisUtterance | null }>({ current: null });
+
+  // Biblioteca y Fichas
+  const [bibliotecaCategoria, setBibliotecaCategoria] = useState<string>('todas');
+  const [fichaSeleccionada, setFichaSeleccionada] = useState<string | null>(null);
   const [bilateralActive, setBilateralActive] = useState(false);
   const [bilateralSide, setBilateralSide] = useState<'left' | 'right'>('left');
   const [bilateralSpeed, setBilateralSpeed] = useState<'slow' | 'medium' | 'fast'>('medium');
@@ -2812,6 +2816,356 @@ export default function RecursosGratis() {
     );
   }
 
+  // ─── BIBLIOTECA DE AUTOAYUDA CONTRASTADA ────────────────────────────
+  if (currentView === 'biblioteca') {
+    const libros = [
+      // ANSIEDAD
+      { id: 'b1', cat: 'ansiedad', titulo: 'Sin miedo', autor: 'Rafael Santandreu', nivel: 'Divulgación', evidencia: '⭐⭐⭐⭐', para: 'Personas con ansiedad general y pensamientos catastrofistas', espera: 'Técnicas cognitivas prácticas basadas en la TREC de Albert Ellis. Muy accesible y directo.', noEsPara: 'Ansiedad severa o trastorno de pánico sin diagnóstico previo', emoji: '😌' },
+      { id: 'b2', cat: 'ansiedad', titulo: 'El cerebro ansioso', autor: 'Joseph LeDoux', nivel: 'Divulgación científica', evidencia: '⭐⭐⭐⭐⭐', para: 'Quien quiere entender la neurociencia del miedo', espera: 'Comprender por qué el cerebro genera ansiedad y cómo funciona la amígdala. Base teórica sólida.', noEsPara: 'Búsqueda de técnicas rápidas; es más conceptual que práctico', emoji: '🧠' },
+      { id: 'b3', cat: 'ansiedad', titulo: 'La trampa de la felicidad', autor: 'Russ Harris', nivel: 'Autoayuda con evidencia', evidencia: '⭐⭐⭐⭐⭐', para: 'Ansiedad, estrés crónico y lucha contra emociones difíciles', espera: 'Terapia de Aceptación y Compromiso (ACT). Aprenderás a relacionarte diferente con tus pensamientos.', noEsPara: 'Quien busca eliminar la ansiedad; ACT trabaja desde la aceptación', emoji: '🍃' },
+      // DEPRESIÓN
+      { id: 'b4', cat: 'depresion', titulo: 'Sentirse bien', autor: 'David D. Burns', nivel: 'Autoayuda clínica', evidencia: '⭐⭐⭐⭐⭐', para: 'Depresión leve-moderada, baja autoestima, perfeccionismo', espera: 'El clásico de la terapia cognitiva. Ejercicios prácticos para identificar y cambiar pensamientos distorsionados.', noEsPara: 'Depresión severa sin acompañamiento profesional simultáneo', emoji: '☀️' },
+      { id: 'b5', cat: 'depresion', titulo: 'El hombre en busca de sentido', autor: 'Viktor Frankl', nivel: 'Autobiografía y psicología', evidencia: '⭐⭐⭐⭐⭐', para: 'Depresión existencial, falta de propósito, pérdida de sentido vital', espera: 'Logoterapia: encontrar sentido incluso en el sufrimiento. Profundamente transformador.', noEsPara: 'Quien busca técnicas prácticas inmediatas', emoji: '🕯️' },
+      { id: 'b6', cat: 'depresion', titulo: 'Vencer la depresión', autor: 'Martin Seligman', nivel: 'Divulgación científica', evidencia: '⭐⭐⭐⭐', para: 'Depresión leve y prevención de recaídas', espera: 'Enfoque de psicología positiva. Técnicas para cultivar optimismo realista basado en evidencia.', noEsPara: 'Crisis depresiva aguda; orientado más a la prevención', emoji: '🌱' },
+      // RELACIONES
+      { id: 'b7', cat: 'relaciones', titulo: 'Amar o depender', autor: 'Walter Riso', nivel: 'Autoayuda', evidencia: '⭐⭐⭐⭐', para: 'Dependencia emocional, relaciones tóxicas, apego ansioso', espera: 'Diferencia entre amor sano y dependencia. Práctico y directo. Ayuda a identificar patrones dañinos.', noEsPara: 'Relaciones con violencia; en ese caso priorizar apoyo profesional urgente', emoji: '💔' },
+      { id: 'b8', cat: 'relaciones', titulo: 'Apego', autor: 'Amir Levine y Rachel Heller', nivel: 'Divulgación científica', evidencia: '⭐⭐⭐⭐⭐', para: 'Entender el propio estilo de apego (ansioso, evitativo, seguro)', espera: 'Traducción rigurosa de la teoría del apego de Bowlby a situaciones cotidianas de pareja.', noEsPara: 'Quien prefiere técnicas directas sin marco teórico previo', emoji: '🔗' },
+      { id: 'b9', cat: 'relaciones', titulo: 'Límites', autor: 'Henry Cloud y John Townsend', nivel: 'Autoayuda', evidencia: '⭐⭐⭐⭐', para: 'Dificultad para poner límites, complacencia, relaciones desequilibradas', espera: 'Cómo establecer límites sanos en todas las relaciones. Enfoque muy práctico con ejemplos reales.', noEsPara: 'Quien busca marco científico; tiene base más humanista-cristiana que clínica', emoji: '🚧' },
+      // DUELO
+      { id: 'b10', cat: 'duelo', titulo: 'Sobre la muerte y los moribundos', autor: 'Elisabeth Kübler-Ross', nivel: 'Clásico clínico', evidencia: '⭐⭐⭐⭐⭐', para: 'Duelo por pérdida de seres queridos, enfermedad terminal propia o ajena', espera: 'Las 5 fases del duelo. Marco fundamental para entender el proceso de pérdida.', noEsPara: 'Duelo patológico complicado que requiere intervención especializada', emoji: '🕊️' },
+      { id: 'b11', cat: 'duelo', titulo: 'Una pena en observación', autor: 'C.S. Lewis', nivel: 'Autobiografía', evidencia: '⭐⭐⭐⭐', para: 'Duelo reciente, especialmente pérdida de pareja', espera: 'Diario íntimo del autor tras la muerte de su esposa. Honesto, crudo y profundamente humano.', noEsPara: 'Quien busca técnicas; es un relato emocional, no un manual', emoji: '📔' },
+      // CRIANZA
+      { id: 'b12', cat: 'crianza', titulo: 'El cerebro del niño', autor: 'Daniel J. Siegel y Tina Payne Bryson', nivel: 'Divulgación científica', evidencia: '⭐⭐⭐⭐⭐', para: 'Padres y madres con hijos de 2 a 12 años', espera: 'Neurociencia aplicada a la crianza. Cómo hablar con el niño cuando tiene rabietas y cómo integrar emociones.', noEsPara: 'Adolescentes (hay otros libros más específicos para esa etapa)', emoji: '🧒' },
+      { id: 'b13', cat: 'crianza', titulo: 'Cómo hablar para que sus hijos le escuchen', autor: 'Adele Faber y Elaine Mazlish', nivel: 'Autoayuda clínica', evidencia: '⭐⭐⭐⭐⭐', para: 'Comunicación con hijos de cualquier edad', espera: 'Técnicas concretas de comunicación no violenta con niños. Con ejemplos y ejercicios prácticos.', noEsPara: 'Situaciones de trastorno de conducta severo que requieren intervención profesional', emoji: '🗣️' },
+      // BURNOUT / TRABAJO
+      { id: 'b14', cat: 'burnout', titulo: 'Cuando el cuerpo dice no', autor: 'Gabor Maté', nivel: 'Divulgación médica', evidencia: '⭐⭐⭐⭐⭐', para: 'Estrés crónico, enfermedades relacionadas con el estrés, personas muy exigentes consigo mismas', espera: 'La relación entre represión emocional y enfermedad física. Potente y transformador.', noEsPara: 'Quien busca soluciones rápidas; invita a una reflexión profunda', emoji: '😮‍💨' },
+      { id: 'b15', cat: 'burnout', titulo: 'Primero, rompe todas las reglas', autor: 'Marcus Buckingham', nivel: 'Gestión y bienestar laboral', evidencia: '⭐⭐⭐⭐', para: 'Burnout por desajuste vocacional, desenganche laboral', espera: 'Basado en investigación de Gallup. Cómo identificar fortalezas propias y rediseñar el trabajo desde ahí.', noEsPara: 'Burnout clínico severo; ese caso requiere baja laboral y apoyo terapéutico', emoji: '💼' },
+      // AUTOESTIMA / TRAUMA
+      { id: 'b16', cat: 'autoestima', titulo: 'Los seis pilares de la autoestima', autor: 'Nathaniel Branden', nivel: 'Clásico de psicología', evidencia: '⭐⭐⭐⭐⭐', para: 'Baja autoestima, autocrítica excesiva, dependencia de validación externa', espera: 'El tratado más completo sobre autoestima. Seis prácticas concretas con ejercicios de escritura.', noEsPara: 'Lectura rápida; es denso pero muy valioso si se trabaja despacio', emoji: '💛' },
+      { id: 'b17', cat: 'autoestima', titulo: 'Autocompasión', autor: 'Kristin Neff', nivel: 'Investigación + práctica', evidencia: '⭐⭐⭐⭐⭐', para: 'Autocrítica dura, perfeccionismo, vergüenza crónica', espera: 'La investigadora mundial más relevante en autocompasión. Combina ciencia y ejercicios prácticos de mindfulness.', noEsPara: 'Quien rechaza el concepto de autocompasión por confundirlo con debilidad', emoji: '🤍' },
+      { id: 'b18', cat: 'trauma', titulo: 'El cuerpo lleva la cuenta', autor: 'Bessel van der Kolk', nivel: 'Divulgación científica', evidencia: '⭐⭐⭐⭐⭐', para: 'Trauma (PTSD, trauma complejo, abuso, accidentes)', espera: 'El libro de referencia mundial sobre trauma. Explica cómo el trauma queda almacenado en el cuerpo y qué tratamientos funcionan.', noEsPara: 'Quien está en plena crisis postraumática sin apoyo profesional; puede activar recuerdos', emoji: '🩹' },
+    ];
+
+    const categorias = [
+      { id: 'todas', label: 'Todas', emoji: '📚' },
+      { id: 'ansiedad', label: 'Ansiedad', emoji: '😰' },
+      { id: 'depresion', label: 'Depresión', emoji: '☁️' },
+      { id: 'relaciones', label: 'Relaciones', emoji: '❤️' },
+      { id: 'duelo', label: 'Duelo', emoji: '🕊️' },
+      { id: 'crianza', label: 'Crianza', emoji: '🧒' },
+      { id: 'burnout', label: 'Burnout', emoji: '🔥' },
+      { id: 'autoestima', label: 'Autoestima', emoji: '💛' },
+      { id: 'trauma', label: 'Trauma', emoji: '🩹' },
+    ];
+
+    const filtrados = bibliotecaCategoria === 'todas' ? libros : libros.filter(l => l.cat === bibliotecaCategoria);
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-amber-50 to-orange-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-3xl mx-auto">
+            <Button variant="ghost" onClick={() => setCurrentView('main')} className="mb-6">← Volver</Button>
+            <h2 className="text-3xl font-bold text-gray-900 mb-1">📚 Biblioteca de Autoayuda</h2>
+            <p className="text-gray-500 mb-2">Solo libros con base clínica o científica contrastada. Seleccionados por una psicóloga.</p>
+            <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-6">⚠️ Ningún libro sustituye la psicoterapia. Son complementos, no tratamientos.</p>
+
+            {/* Filtros */}
+            <div className="flex flex-wrap gap-2 mb-8">
+              {categorias.map(c => (
+                <button
+                  key={c.id}
+                  onClick={() => setBibliotecaCategoria(c.id)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-semibold border-2 transition-all ${bibliotecaCategoria === c.id ? 'bg-amber-600 text-white border-amber-600' : 'bg-white text-gray-600 border-gray-200 hover:border-amber-400'}`}
+                >
+                  {c.emoji} {c.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Libros */}
+            <div className="space-y-4">
+              {filtrados.map(libro => (
+                <Card key={libro.id} className="p-5 border border-amber-100 hover:shadow-md transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-400 flex items-center justify-center text-2xl flex-shrink-0 shadow">
+                      {libro.emoji}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
+                        <h3 className="font-bold text-gray-900">{libro.titulo}</h3>
+                        <Badge className="bg-amber-100 text-amber-700 border-0 text-xs">{libro.nivel}</Badge>
+                        <span className="text-xs text-gray-400">{libro.evidencia}</span>
+                      </div>
+                      <p className="text-sm text-gray-500 mb-3">— {libro.autor}</p>
+                      <div className="grid sm:grid-cols-3 gap-3 text-xs">
+                        <div className="bg-emerald-50 rounded-lg p-2 border border-emerald-100">
+                          <p className="font-bold text-emerald-700 mb-0.5">✓ Para quién</p>
+                          <p className="text-gray-600 leading-relaxed">{libro.para}</p>
+                        </div>
+                        <div className="bg-blue-50 rounded-lg p-2 border border-blue-100">
+                          <p className="font-bold text-blue-700 mb-0.5">📖 Qué esperar</p>
+                          <p className="text-gray-600 leading-relaxed">{libro.espera}</p>
+                        </div>
+                        <div className="bg-red-50 rounded-lg p-2 border border-red-100">
+                          <p className="font-bold text-red-700 mb-0.5">✗ No es para ti si...</p>
+                          <p className="text-gray-600 leading-relaxed">{libro.noEsPara}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // ─── FICHAS DE SITUACIÓN DE VIDA ────────────────────────────────────
+  if (currentView === 'fichas-situacion') {
+    const fichas = [
+      {
+        id: 'separacion',
+        emoji: '💔',
+        titulo: 'Me acabo de separar o divorciar',
+        color: 'from-rose-500 to-pink-500',
+        bg: 'from-rose-50 to-pink-50',
+        border: 'border-rose-200',
+        quePasa: 'Una ruptura activa el mismo circuito cerebral que el dolor físico. Lo que sientes no es debilidad: es una respuesta neurológica real al duelo. El dolor de una ruptura puede durar entre 6 meses y 2 años en función de la intensidad del vínculo.',
+        esNormal: 'Sentir tristeza, rabia, alivio, vergüenza y nostalgia a la vez. Pensar en la persona constantemente. Idealizar la relación o demonizarla. No poder concentrarte. Cambios en el sueño y apetito.',
+        quePuedes: ['Permite el duelo sin cronometrarlo. No hay plazo correcto.', 'Mantén rutinas básicas: dormir, comer, salir a caminar.', 'Escribe lo que sientes en el diario de gratitud o registro emocional.', 'Habla con personas de confianza, pero no rumiéis juntos la historia.', 'Pon distancia digital: reduce el contacto con redes donde aparezca la otra persona.'],
+        noHagas: 'No tomes decisiones importantes (trabajo, casa, economía) en las primeras semanas. No uses el alcohol o el trabajo como anestesia. No retomes el contacto para "ver cómo está" cuando en realidad quieres que vuelva.',
+        cuandoProfesional: 'Cuando el dolor no remite después de varios meses, cuando interfiere gravemente con el trabajo o los hijos, o cuando aparecen pensamientos de hacerte daño.',
+        herramientas: ['emotional-log', 'gratitude', 'bienestar-test'],
+      },
+      {
+        id: 'hijo-ansiedad',
+        emoji: '👧',
+        titulo: 'Creo que mi hijo/a tiene ansiedad',
+        color: 'from-blue-500 to-indigo-500',
+        bg: 'from-blue-50 to-indigo-50',
+        border: 'border-blue-200',
+        quePasa: 'La ansiedad infantil es la condición de salud mental más frecuente en niños y adolescentes (afecta al 9-15% según la OMS). Muchas veces se expresa en forma de quejas físicas (dolor de barriga, cabeza), irritabilidad o evitación, no siempre como "miedo visible".',
+        esNormal: 'Que se resista a ir al colegio. Que tenga miedos específicos intensos. Que necesite mucha tranquilización. Que duerma mal o tenga pesadillas. Que se queje de molestias físicas sin causa médica.',
+        quePuedes: ['Valida primero, no minimices ("ya pasará" bloquea la comunicación).', 'Practica respiración guiada con él/ella; hazlo juntos.', 'Mantén rutinas predecibles: la incertidumbre amplifica la ansiedad.', 'Habla con el tutor del colegio para tener contexto escolar.', 'No evites por él/ella las situaciones que le dan miedo; acompáñale gradualmente.'],
+        noHagas: 'No digas "no hay nada que temer" ni "no seas exagerado". No sobreprotejas evitando todas las situaciones difíciles. No ignores los síntomas físicos sin consultar al pediatra primero.',
+        cuandoProfesional: 'Cuando la ansiedad dura más de 4 semanas, interfiere con el colegio o las amistades, o cuando el niño/a evita un número creciente de situaciones.',
+        herramientas: ['breathing', 'grounding', 'bad-day'],
+      },
+      {
+        id: 'duelo',
+        emoji: '🕊️',
+        titulo: 'He perdido a alguien importante',
+        color: 'from-slate-500 to-gray-600',
+        bg: 'from-slate-50 to-gray-50',
+        border: 'border-slate-200',
+        quePasa: 'El duelo no es un proceso lineal. Las 5 fases de Kübler-Ross (negación, ira, negociación, depresión, aceptación) no siguen un orden fijo y pueden repetirse. El duelo agudo suele remitir entre 6 y 18 meses, aunque el dolor puede reactivarse en fechas significativas para siempre.',
+        esNormal: 'Sentir que no puedes creerlo. Hablarle a la persona fallecida. Tener momentos buenos y sentirte culpable por ello. Que el dolor vaya y venga en oleadas. Que ciertos objetos, canciones o lugares lo reactiven intensamente.',
+        quePuedes: ['No te aisles aunque tengas ganas. La presencia importa más que las palabras.', 'Escribe cartas a quien has perdido: es un recurso terapéutico contrastado.', 'Permite el llanto; no es debilidad, es regulación emocional.', 'Come, duerme e intenta mantener alguna rutina de movimiento.', 'Busca un grupo de duelo si la red de apoyo es pequeña.'],
+        noHagas: 'No "superes" el duelo a un ritmo que no es el tuyo. No tomes decisiones importantes los primeros 6 meses. No uses la frase "ya está en un lugar mejor" si no lo sientes así.',
+        cuandoProfesional: 'Cuando a los 12 meses el duelo sigue igual de intenso (duelo complicado), cuando aparecen pensamientos de morir para reunirte con la persona, o cuando la vida diaria se ha paralizado.',
+        herramientas: ['gratitude', 'meditacion', 'emotional-log'],
+      },
+      {
+        id: 'burnout',
+        emoji: '🔥',
+        titulo: 'Me siento quemado/a en el trabajo',
+        color: 'from-orange-500 to-red-500',
+        bg: 'from-orange-50 to-red-50',
+        border: 'border-orange-200',
+        quePasa: 'El burnout es un síndrome reconocido por la OMS (CIE-11) caracterizado por agotamiento, cinismo hacia el trabajo y menor eficacia profesional. Se desarrolla de forma gradual y suele ser el resultado de meses o años de estrés crónico sin recuperación suficiente.',
+        esNormal: 'Levantarte ya cansado/a. Sentir que das más de lo que recibes. Desconectarte emocionalmente de clientes, pacientes o compañeros. No recordar por qué elegiste ese trabajo. Pequeños errores que antes no cometías.',
+        quePuedes: ['Pon límites horarios reales y defiéndelos (silencia notificaciones fuera de horario).', 'Identifica qué te queda de energía y empieza por protegerlo.', 'Haz el test ISO 45003 para evaluar el riesgo psicosocial en tu trabajo.', 'Habla con tu médico de cabecera; la baja laboral existe y es un derecho.', 'Recupera una actividad fuera del trabajo que no tenga nada que ver con él.'],
+        noHagas: 'No intentes "trabajar más para ponerte al día": eso profundiza el burnout. No ignores síntomas físicos como insomnio, cefaleas o palpitaciones. No esperes a tocar fondo para pedir ayuda.',
+        cuandoProfesional: 'Cuando los síntomas llevan más de 3 meses, cuando no puedes desconectar ni en vacaciones, o cuando tu trabajo afecta tu salud física.',
+        herramientas: ['iso-check', 'bienestar-test', 'breathing'],
+      },
+      {
+        id: 'pareja-depresion',
+        emoji: '🤝',
+        titulo: 'Mi pareja o familiar tiene depresión',
+        color: 'from-purple-500 to-violet-500',
+        bg: 'from-purple-50 to-violet-50',
+        border: 'border-purple-200',
+        quePasa: 'La depresión no es tristeza voluntaria ni flojera. Es una enfermedad con base neurobiológica que afecta la motivación, la energía, el pensamiento y la percepción de uno mismo. Quien la padece no "puede" simplemente animarse.',
+        esNormal: 'Que no responda a lo que antes le hacía feliz. Que se aísle o se muestre irritable. Que duerma demasiado o muy poco. Que piense que es una carga para los demás. Que tenga dificultad para tomar decisiones simples.',
+        quePuedes: ['Escucha sin intentar resolver ni dar consejos no pedidos.', 'Ofrece presencia concreta: "¿Puedo llevarte al médico?" en lugar de "dime si necesitas algo".', 'No desaparezcas aunque te rechace; la depresión aísla y quien la padece necesita saber que sigues ahí.', 'Cuida tu propia salud mental: cuidar a alguien con depresión agota.', 'Anima suavemente a buscar ayuda profesional, sin forzar ni ultimátums.'],
+        noHagas: 'No digas "anímate", "tienes mucho por lo que estar bien" o "estás mejor que otros". No le dejes solo/a si habla de hacerse daño. No asumas que ya mejorará solo.',
+        cuandoProfesional: 'Si menciona ideas de suicidio, autolesiones o plan concreto: actúa de inmediato (acompaña a urgencias o llama al 024).',
+        herramientas: ['emotional-log', 'bienestar-test', 'meditacion'],
+      },
+      {
+        id: 'trabajo-perdido',
+        emoji: '📉',
+        titulo: 'He perdido el trabajo',
+        color: 'from-teal-500 to-emerald-500',
+        bg: 'from-teal-50 to-emerald-50',
+        border: 'border-teal-200',
+        quePasa: 'La pérdida de empleo es uno de los eventos vitales más estresantes. Afecta no solo la economía sino la identidad, la rutina, las relaciones sociales y la autoestima. El duelo laboral es real y sigue fases similares al duelo por pérdida.',
+        esNormal: 'Sentir vergüenza aunque no hayas hecho nada malo. Perder la rutina y con ella la estructura del día. Que la incertidumbre económica amplifique la ansiedad. Que te cueste concentrarte en la búsqueda de empleo. Que la autoestima profesional caiga.',
+        quePuedes: ['Mantén una rutina aunque sea artificial: levántate a la misma hora, vístete.', 'Separa horas de búsqueda activa de empleo de horas de descanso real.', 'Registra cómo te sientes; no reprimas el proceso emocional.', 'Cuida los gastos fijos pero no te aísles por ahorro de energía social.', 'Reformula la situación: tiempo para revisar qué quieres hacer, no solo qué puedes hacer.'],
+        noHagas: 'No te encierres en casa. No compartes solo CVs en redes; trabaja también el contacto directo. No midas tu valor como persona por lo que produces.',
+        cuandoProfesional: 'Cuando la situación genera ansiedad o depresión que interfiere con la búsqueda, o cuando lleva más de 6 meses y el estado emocional se deteriora progresivamente.',
+        herramientas: ['bienestar-test', 'emotional-log', 'gratitude'],
+      },
+      {
+        id: 'pensamientos-asustadores',
+        emoji: '💭',
+        titulo: 'Tengo pensamientos que me asustan',
+        color: 'from-indigo-500 to-blue-600',
+        bg: 'from-indigo-50 to-blue-50',
+        border: 'border-indigo-200',
+        quePasa: 'Los pensamientos intrusivos (imágenes o ideas que aparecen sin quererlas) son más comunes de lo que se cree: el 90% de la población los tiene. El problema no es tener el pensamiento, sino la guerra que hacemos contra él. Cuanto más intentas no pensar en algo, más aparece (efecto supresión)..',
+        esNormal: 'Que el pensamiento aparezca sin haberlo llamado. Que te genere asco o miedo. Que intentes no tenerlo y eso lo amplifique. Que te preguntes "¿por qué pienso esto?" sintiéndote raro/a.',
+        quePuedes: ['No luches contra el pensamiento: obsérvalalo como una nube que pasa.', 'Practica técnicas de defusión cognitiva (ACT): "Noto que tengo el pensamiento de..."', 'Usa grounding 5-4-3-2-1 cuando el pensamiento se vuelva muy intenso.', 'Habla con alguien de confianza; el secreto les da más poder.', 'Diferencia entre pensamiento y acción: tener el pensamiento no dice nada de quién eres.'],
+        noHagas: 'No busques compulsivamente en internet si el pensamiento indica algo sobre ti: eso alimenta la ansiedad. No te quedes solo/a con pensamientos de hacerte daño.',
+        cuandoProfesional: 'Si los pensamientos incluyen planes de hacerte daño o hacérselo a otros, busca ayuda de inmediato. Si la intensidad o frecuencia interfiere con tu vida diaria, un psicólogo puede ayudarte con técnicas específicas.',
+        herramientas: ['grounding', 'breathing', 'bilateral'],
+      },
+      {
+        id: 'soledad',
+        emoji: '🫥',
+        titulo: 'Me siento solo/a aunque estoy con gente',
+        color: 'from-violet-500 to-purple-600',
+        bg: 'from-violet-50 to-purple-50',
+        border: 'border-violet-200',
+        quePasa: 'La soledad es una experiencia subjetiva que no depende del número de personas alrededor. Es la diferencia entre las conexiones que tienes y las que deseas. La soledad crónica tiene efectos comprobados en la salud física (comparables al tabaquismo) y es un predictor de depresión.',
+        esNormal: 'Sentirte incomprendido aunque estés rodeado de gente. Que las conversaciones te parezcan superficiales. Envidiar las relaciones que percibes en los demás. Que las redes sociales te hagan sentir más solo todavía.',
+        quePuedes: ['Distingue entre soledad y estar solo: la segunda puede ser elegida y nutritiva.', 'Busca conexión con calidad, no cantidad: una conversación real vale más que diez superficiales.', 'Apúntate a actividades grupales con propósito (voluntariado, deporte, talleres).', 'Trabaja el autorregistro emocional para entender cuándo la soledad es más intensa.', 'Practica la vulnerabilidad: abrirte un poco más con alguien de confianza.'],
+        noHagas: 'No uses las redes sociales como sustituto de conexión real: suelen empeorar la sensación. No esperes a que otros den el primer paso indefinidamente.',
+        cuandoProfesional: 'Cuando la soledad va acompañada de depresión, cuando lleva meses sin mejorar, o cuando impacta tu salud física (sueño, alimentación, sistema inmune).',
+        herramientas: ['emotion-wheel', 'emotional-log', 'meditacion'],
+      },
+      {
+        id: 'adolescente',
+        emoji: '🧑‍🎓',
+        titulo: 'Mi adolescente está raro/a últimamente',
+        color: 'from-green-500 to-teal-500',
+        bg: 'from-green-50 to-teal-50',
+        border: 'border-green-200',
+        quePasa: 'El cerebro adolescente está literalmente en obras: la corteza prefrontal (control de impulsos, planificación) no madura hasta los 25 años. La amígdala (emociones) está hiperactiva. Es neurológicamente normal que busquen riesgo, rechacen a los padres y vivan en extremos emocionales.',
+        esNormal: 'Que quieran pasar más tiempo con amigos que con la familia. Que cuestionen todo lo que dices. Que tengan cambios de humor bruscos. Que necesiten privacidad. Que pongan en duda su identidad, valores y orientación.',
+        quePuedes: ['Mantén la puerta abierta sin forzar: "Cuando quieras hablar, aquí estoy."', 'No hagas preguntas cerradas; comparte tú algo tuyo primero.', 'Separa el comportamiento de la persona: critica lo que hace, no quién es.', 'Interésate por su mundo: su música, sus juegos, sus creadores favoritos.', 'Pacta límites claros y razonados, no impuestos sin explicación.'],
+        noHagas: 'No minimices lo que le preocupa aunque te parezca pequeño. No compares con otros adolescentes o con cómo eras tú. No revises su móvil a escondidas si quieres que confíe en ti.',
+        cuandoProfesional: 'Cuando hay autolesiones, pérdida significativa de peso, consumo de sustancias, aislamiento extremo o menciones a no querer seguir viviendo.',
+        herramientas: ['breathing', 'emotional-log', 'bienestar-test'],
+      },
+    ];
+
+    const herramientasMap: Record<string, string> = {
+      'emotional-log': '📝 Registro emocional',
+      'breathing': '🌬️ Respiración guiada',
+      'grounding': '🧩 Grounding',
+      'bilateral': '👆 Est. Bilateral',
+      'gratitude': '🙏 Gratitud',
+      'meditacion': '🎧 Meditación',
+      'bienestar-test': '🧘 Test bienestar',
+      'iso-check': '📋 ISO 45003',
+      'bad-day': '🆘 Día malo',
+      'emotion-wheel': '🎯 Rueda emociones',
+    };
+
+    if (fichaSeleccionada) {
+      const ficha = fichas.find(f => f.id === fichaSeleccionada);
+      if (!ficha) return null;
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+          <Header />
+          <main className="pt-24 pb-12 px-4">
+            <div className="max-w-2xl mx-auto">
+              <Button variant="ghost" onClick={() => setFichaSeleccionada(null)} className="mb-6">← Todas las fichas</Button>
+
+              <div className={`rounded-2xl bg-gradient-to-br ${ficha.bg} border-2 ${ficha.border} p-6 mb-6`}>
+                <div className="text-4xl mb-2">{ficha.emoji}</div>
+                <h2 className="text-2xl font-bold text-gray-900">{ficha.titulo}</h2>
+              </div>
+
+              <div className="space-y-4">
+                <Card className="p-5 border border-blue-100">
+                  <h3 className="font-bold text-blue-800 mb-2">🔍 ¿Qué está pasando?</h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">{ficha.quePasa}</p>
+                </Card>
+
+                <Card className="p-5 border border-emerald-100 bg-emerald-50/50">
+                  <h3 className="font-bold text-emerald-800 mb-2">✅ Lo que sientes es normal</h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">{ficha.esNormal}</p>
+                </Card>
+
+                <Card className="p-5 border border-indigo-100">
+                  <h3 className="font-bold text-indigo-800 mb-3">💡 Qué puedes hacer ahora</h3>
+                  <ul className="space-y-2">
+                    {ficha.quePuedes.map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                        <span className="text-indigo-500 font-bold mt-0.5">→</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+
+                <Card className="p-5 border border-red-100 bg-red-50/50">
+                  <h3 className="font-bold text-red-800 mb-2">🚫 Qué NO hacer</h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">{ficha.noHagas}</p>
+                </Card>
+
+                <Card className="p-5 border border-amber-100 bg-amber-50/50">
+                  <h3 className="font-bold text-amber-800 mb-2">🏥 Cuándo buscar ayuda profesional</h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">{ficha.cuandoProfesional}</p>
+                </Card>
+
+                <Card className="p-5 border border-purple-100">
+                  <h3 className="font-bold text-purple-800 mb-3">🛠️ Herramientas de NUXA para esta situación</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {ficha.herramientas.map(h => (
+                      <Button key={h} size="sm" variant="outline" onClick={() => setCurrentView(h as any)} className="text-xs">
+                        {herramientasMap[h] || h}
+                      </Button>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+            </div>
+          </main>
+          <Footer />
+        </div>
+      );
+    }
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="max-w-3xl mx-auto">
+            <Button variant="ghost" onClick={() => setCurrentView('main')} className="mb-6">← Volver</Button>
+            <h2 className="text-3xl font-bold text-gray-900 mb-1">🗂️ Fichas de Situación de Vida</h2>
+            <p className="text-gray-500 mb-8">No por diagnóstico, sino por lo que te está pasando. Guías breves, honestas y con base clínica.</p>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {fichas.map(ficha => (
+                <Card
+                  key={ficha.id}
+                  className={`p-5 cursor-pointer border-2 ${ficha.border} bg-gradient-to-br ${ficha.bg} hover:shadow-lg transition-all group`}
+                  onClick={() => setFichaSeleccionada(ficha.id)}
+                >
+                  <div className="text-3xl mb-2">{ficha.emoji}</div>
+                  <p className="font-bold text-gray-900 text-sm leading-snug mb-3">{ficha.titulo}</p>
+                  <div className="flex items-center gap-1 text-xs text-gray-500 group-hover:text-gray-700 transition-colors">
+                    <span>Leer guía</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <>
       <SEOHead
@@ -3075,6 +3429,46 @@ export default function RecursosGratis() {
               <ChevronRight className="w-8 h-8 text-gray-400 group-hover:text-red-500 transition-colors hidden md:block" />
             </div>
           </Card>
+
+          {/* Guías y Biblioteca */}
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Guías y Biblioteca</h2>
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            <Card
+              className="p-8 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 group"
+              onClick={() => { setBibliotecaCategoria('todas'); setCurrentView('biblioteca'); }}
+            >
+              <div className="text-4xl mb-4">📚</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Biblioteca de Autoayuda</h3>
+              <p className="text-gray-600 mb-4">18 libros seleccionados por una psicóloga. Solo con base clínica o científica contrastada. Con ficha de para quién es cada uno.</p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {['Ansiedad', 'Depresión', 'Relaciones', 'Duelo', 'Crianza', 'Burnout', 'Trauma'].map(c => (
+                  <Badge key={c} className="bg-amber-100 text-amber-700 border-amber-200 text-xs">{c}</Badge>
+                ))}
+              </div>
+              <div className="flex items-center gap-2 text-amber-700 font-semibold text-sm group-hover:gap-3 transition-all">
+                <span>Explorar biblioteca</span>
+                <ArrowRight className="w-4 h-4" />
+              </div>
+            </Card>
+
+            <Card
+              className="p-8 hover:shadow-xl transition-all cursor-pointer bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 group"
+              onClick={() => { setFichaSeleccionada(null); setCurrentView('fichas-situacion'); }}
+            >
+              <div className="text-4xl mb-4">🗂️</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Fichas de Situación de Vida</h3>
+              <p className="text-gray-600 mb-4">No por diagnóstico, sino por lo que te está pasando. 9 guías honestas con base clínica: qué es normal, qué hacer, qué no hacer y cuándo pedir ayuda.</p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {['Separación', 'Hijo ansioso', 'Burnout', 'Duelo', 'Soledad', 'Adolescentes'].map(c => (
+                  <Badge key={c} className="bg-blue-100 text-blue-700 border-blue-200 text-xs">{c}</Badge>
+                ))}
+              </div>
+              <div className="flex items-center gap-2 text-blue-700 font-semibold text-sm group-hover:gap-3 transition-all">
+                <span>Ver todas las fichas</span>
+                <ArrowRight className="w-4 h-4" />
+              </div>
+            </Card>
+          </div>
 
           {/* Seguimiento y Programas */}
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Seguimiento y Programas</h2>
