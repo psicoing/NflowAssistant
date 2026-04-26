@@ -6,3 +6,15 @@ id = "zeK7roWH394mW4rpQEh9r"
 uri = "file://attached_assets/generated_images/nuxa_robot_superhero_empowerment.png"
 type = "image"
 title = "nuxa_ai_companion_glow"
+
+[[generated]]
+id = "wjmvuQSjMOtmzZ3ug7x-4"
+uri = "file://attached_assets/pwa_icon_option_A.png"
+type = "image"
+title = "pwa_person_chatting_A"
+
+[[generated]]
+id = "vVhSFJXpTncPB18tzU4fN"
+uri = "file://attached_assets/pwa_icon_option_B.png"
+type = "image"
+title = "pwa_person_chatting_B"
