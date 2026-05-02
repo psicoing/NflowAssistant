@@ -159,14 +159,14 @@ export default function Home() {
       <Header showBanner={false} />
       <main className="pt-16">
 
+        <NuxaRobotForestSection />
+
         {/* Barra de valor - recursos gratuitos */}
         <div className="bg-gradient-to-r from-emerald-600 to-teal-600 py-2.5 px-4 text-center">
           <p className="text-white text-sm font-semibold tracking-wide">
             ✦ Recursos emocionales gratuitos, sin pagar, ¡abiertos a todo el mundo!
           </p>
         </div>
-
-        <NuxaRobotForestSection />
 
         {/* Awareness banner — collapsible + dismissible, above NUXA hero card */}
         {awarenessBanner && (
