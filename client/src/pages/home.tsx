@@ -99,7 +99,7 @@ function AwarenessBanner({ onClose }: { onClose: () => void }) {
         >
           <span className="text-xl flex-shrink-0">🚫</span>
           <p className="flex-1 text-white font-black text-sm sm:text-base leading-snug">
-            No a las redes sociales para menores — Recupera el control de tu mente
+            Redes sociales, a partir de los 16 años
           </p>
           <span className={`text-indigo-300 text-xs font-semibold flex-shrink-0 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}>
             ▼
