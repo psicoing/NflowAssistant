@@ -97,7 +97,6 @@ function AwarenessBanner({ onClose }: { onClose: () => void }) {
           onClick={() => setExpanded(e => !e)}
           className="w-full flex items-center gap-3 py-3.5 text-left group"
         >
-          <span className="text-xl flex-shrink-0">🚫</span>
           <p className="flex-1 text-white font-black text-sm sm:text-base leading-snug text-center">
             Redes sociales, a partir de los 16 años
           </p>
