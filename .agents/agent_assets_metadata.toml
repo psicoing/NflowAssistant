@@ -18,3 +18,9 @@ id = "vVhSFJXpTncPB18tzU4fN"
 uri = "file://attached_assets/pwa_icon_option_B.png"
 type = "image"
 title = "pwa_person_chatting_B"
+
+[[generated]]
+id = "nHlvl3nFQA9WPIsbiN1zK"
+uri = "file://attached_assets/pwa_icon_boy.png"
+type = "image"
+title = "pwa_boy_chatting"
