@@ -176,7 +176,7 @@ export default function PruebaGratis() {
                 <div className="mt-4 pt-4 border-t border-white/10 flex items-start gap-2.5">
                   <Lock className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
                   <p className="text-xs text-slate-400">
-                    Tras las 2 consultas gratuitas, el acceso queda limitado. Podrás continuar con un plan de pago adaptado a tu perfil.
+                    Tras las 2 consultas gratuitas, el acceso queda limitado. NUXA está disponible para empresas y organizaciones que ofrecen el servicio a sus usuarios.
                   </p>
                 </div>
               </div>
