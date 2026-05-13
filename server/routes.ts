@@ -891,6 +891,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Individual plan pre-registration with Skrill payment link (saved to DB, no email)
   app.post("/api/registro-individual", async (req, res) => {
+    return res.status(503).json({ message: "El registro individual está temporalmente cerrado. Puedes probar NUXA gratis sin registrarte." });
     try {
       const { nombre, apellidos, email, plan } = req.body;
       if (!nombre || !apellidos || !email || !plan) {
@@ -1979,6 +1980,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Endpoint para compra de packs de preguntas (pago único)
   app.post("/api/stripe/create-pack-session", async (req, res) => {
+    return res.status(503).json({ message: "Los pagos individuales están temporalmente desactivados." });
     try {
       const { packType, email } = req.body;
       

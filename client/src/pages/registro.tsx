@@ -467,8 +467,19 @@ export default function Registro() {
               </CardContent>
             </Card>
 
-            {/* Planes individuales - mini formulario */}
-            <Card className="border-2 border-purple-200 shadow-xl overflow-hidden mb-8 relative">
+            {/* Planes individuales - temporalmente cerrado */}
+            <Card className="border-2 border-gray-200 shadow-xl overflow-hidden mb-8 relative opacity-75">
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-50 opacity-80 z-10" />
+              <div className="absolute inset-0 z-20 flex items-center justify-center">
+                <div className="bg-white border-2 border-amber-300 rounded-2xl px-8 py-5 text-center shadow-xl max-w-sm mx-4">
+                  <div className="text-3xl mb-2">🔒</div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-1">Temporalmente cerrado</h3>
+                  <p className="text-sm text-gray-600">Los planes individuales de pago no están disponibles en este momento. Puedes probar NUXA gratis sin registro.</p>
+                  <Link href="/prueba-gratis">
+                    <Button className="mt-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm">Probar gratis →</Button>
+                  </Link>
+                </div>
+              </div>
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-indigo-50 opacity-60" />
               <CardContent className="relative p-8">
                 <div className="flex items-center gap-3 mb-5">
