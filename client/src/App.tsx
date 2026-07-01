@@ -5,7 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { useAuth } from "@/hooks/useAuth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import SplashScreen, { hasSplashBeenShown } from "@/components/SplashScreen";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Chat from "@/pages/chat";
@@ -152,11 +153,16 @@ function AuthenticatedRouter() {
 function AppContent() {
   const [location] = useLocation();
   const { isAuthenticated } = useAuth();
-  
+  const [showSplash, setShowSplash] = useState(() => !hasSplashBeenShown());
+
   // Only show floating CTA on public pages and for non-authenticated users
   const showFloatingCTA = !isAuthenticated && 
     (location === "/" || location === "/ejemplos-chat" || location === "/precios" || 
      location === "/app-movil" || location === "/nosotros" || location === "/control-parental" || location === "/blog");
+
+  if (showSplash) {
+    return <SplashScreen onFinish={() => setShowSplash(false)} />;
+  }
 
   return (
     <div className="min-h-screen bg-nflow-dark text-white">
