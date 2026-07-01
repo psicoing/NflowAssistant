@@ -90,7 +90,18 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
   );
 }
 
+function isInPreviewWebview() {
+  try {
+    return window.self !== window.top;
+  } catch {
+    return true;
+  }
+}
+
 export function hasSplashBeenShown() {
+  if (isInPreviewWebview()) {
+    return false;
+  }
   try {
     return sessionStorage.getItem(SESSION_KEY) === "1";
   } catch {
