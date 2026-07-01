@@ -24,8 +24,35 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      #boot-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 9998;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at 50% 30%, #1e1b4b 0%, #0f172a 60%, #020617 100%);
+      }
+      #boot-splash img {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.35);
+      }
+      #boot-splash .boot-splash-logos {
+        display: flex;
+        gap: 12px;
+      }
+    </style>
   </head>
   <body>
+    <div id="boot-splash">
+      <div class="boot-splash-logos">
+        <img src="/favicon.png" alt="NUXA" />
+        <img src="/icon-boy.png" alt="NUXA" />
+      </div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
