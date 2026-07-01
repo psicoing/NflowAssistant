@@ -60,6 +60,13 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
       role="status"
       aria-live="polite"
     >
+      <div className="flex items-center gap-2.5 mb-6 text-3xl">
+        <span title="Unión Europea">🇪🇺</span>
+        <span title="Reino Unido">🇬🇧</span>
+        <span title="Estados Unidos">🇺🇸</span>
+        <span title="Canadá">🇨🇦</span>
+      </div>
+
       <div className="flex items-center gap-3 mb-8">
         <img src="/favicon.png" alt="NUXA" className="w-14 h-14 rounded-2xl shadow-lg shadow-indigo-500/30" />
         <img src="/icon-boy.png" alt="NUXA" className="w-14 h-14 rounded-2xl shadow-lg shadow-indigo-500/30" />
