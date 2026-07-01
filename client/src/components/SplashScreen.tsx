@@ -60,11 +60,22 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
       role="status"
       aria-live="polite"
     >
-      <div className="flex items-center gap-2.5 mb-6 text-3xl">
-        <span title="Unión Europea">🇪🇺</span>
-        <span title="Reino Unido">🇬🇧</span>
-        <span title="Estados Unidos">🇺🇸</span>
-        <span title="Canadá">🇨🇦</span>
+      <div className="flex items-center gap-2.5 mb-6">
+        {[
+          { code: "eu", label: "Unión Europea" },
+          { code: "gb", label: "Reino Unido" },
+          { code: "us", label: "Estados Unidos" },
+          { code: "ca", label: "Canadá" },
+        ].map((flag) => (
+          <img
+            key={flag.code}
+            src={`https://flagcdn.com/w40/${flag.code}.png`}
+            srcSet={`https://flagcdn.com/w80/${flag.code}.png 2x`}
+            alt={flag.label}
+            title={flag.label}
+            className="w-8 h-6 object-cover rounded-sm shadow-md ring-1 ring-white/20"
+          />
+        ))}
       </div>
 
       <div className="flex items-center gap-3 mb-8">
