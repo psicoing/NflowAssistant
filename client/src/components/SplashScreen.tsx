@@ -21,7 +21,7 @@ const SLIDES = [
   },
 ];
 
-const TOTAL_DURATION_MS = 8500;
+const TOTAL_DURATION_MS = 4200;
 const SLIDE_DURATION_MS = TOTAL_DURATION_MS / SLIDES.length;
 const SESSION_KEY = "nuxa-splash-shown";
 
