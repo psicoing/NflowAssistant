@@ -372,15 +372,15 @@ export default function Chat() {
         <Card className="max-w-md mx-4 bg-gray-800 border-gray-700">
           <CardContent className="p-8 text-center">
             <MessageCircle className="w-16 h-16 mx-auto mb-4 text-nflow-orange" />
-            <h2 className="text-2xl font-bold mb-2 text-white">Acceso para organizaciones</h2>
+            <h2 className="text-2xl font-bold mb-2 text-white">Chat Solo Para Suscriptores</h2>
             <p className="text-gray-300 mb-6">
-              NUXA está disponible a través de empresas e instituciones que ofrecen el servicio a sus usuarios. Contacta con tu organización para obtener acceso.
+              <strong>NUXA es una aplicación de pago.</strong> El chat con IA requiere suscripción activa. Sin excepción, sin pruebas gratuitas.
             </p>
             <Button 
-              onClick={() => setLocation("/registro")}
+              onClick={() => setLocation("/registro/planes")}
               className="w-full bg-nflow-orange hover:bg-orange-600 text-white"
             >
-              Solicitar acceso para mi organización
+              Ver Planes de Suscripción
             </Button>
           </CardContent>
         </Card>
@@ -863,41 +863,33 @@ export default function Chat() {
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-3">Has completado tu prueba gratuita</h2>
                 <p className="text-slate-400 text-base leading-relaxed mb-6">
-                  Has utilizado tus 2 consultas de prueba. Esperamos que haya sido útil.
+                  Has utilizado tus 2 consultas de prueba. Para seguir hablando con NUXA, elige el plan que mejor se adapta a ti.
                 </p>
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6 text-left">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <svg className="w-5 h-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-white font-semibold text-sm mb-1">NUXA para empresas y organizaciones</p>
-                      <p className="text-slate-400 text-xs leading-relaxed">
-                        NUXA está disponible a través de empresas, instituciones y organizaciones que ofrecen el servicio a sus usuarios, empleados o clientes.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="space-y-2 text-xs text-slate-400">
-                    {["Empresas que cuidan el bienestar de sus equipos", "Instituciones educativas y sanitarias", "Organizaciones que ofrecen apoyo emocional a sus usuarios"].map(item => (
-                      <div key={item} className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0" />
-                        <span>{item}</span>
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6 text-left space-y-3">
+                  {[
+                    { plan: "10 consultas", precio: "€2.99", desc: "Acceso básico puntual" },
+                    { plan: "20 consultas", precio: "€5.99", desc: "Uso regular con soporte continuo" },
+                    { plan: "100 consultas", precio: "€32/año", desc: "Mejor valor · Todo incluido" },
+                  ].map((item) => (
+                    <div key={item.plan} className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-white text-sm font-medium">{item.plan}</p>
+                        <p className="text-slate-500 text-xs">{item.desc}</p>
                       </div>
-                    ))}
-                  </div>
+                      <span className="text-indigo-300 font-semibold text-sm whitespace-nowrap">{item.precio}</span>
+                    </div>
+                  ))}
                 </div>
                 <a
-                  href="/registro"
+                  href="/registro/planes"
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-600 hover:to-violet-600 text-white font-semibold px-8 py-3.5 rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/25 w-full justify-center"
                 >
-                  Solicitar acceso para mi organización
+                  Ver planes y continuar
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </a>
-                <p className="text-slate-600 text-xs mt-4">Empresas · Instituciones · Organizaciones</p>
+                <p className="text-slate-600 text-xs mt-4">Sin permanencia · Cancela cuando quieras</p>
               </div>
             </div>
           )}
