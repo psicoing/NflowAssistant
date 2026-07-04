@@ -210,7 +210,13 @@ export default function Home() {
 
               {/* Organizaciones públicas */}
               <a href="/sector-publico" className="group flex flex-col items-start rounded-2xl border-2 border-sky-100 bg-sky-50 p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5">
-                <span className="text-3xl mb-3">🏛️</span>
+                <div className="flex items-center gap-1.5 mb-3 text-2xl">
+                  <span title="Ayuntamiento">🏛️</span>
+                  <span title="Hospital">🏥</span>
+                  <span title="Escuela">🏫</span>
+                  <span title="Universidad">🎓</span>
+                  <span title="Servicios sociales">🤝</span>
+                </div>
                 <h3 className="font-bold text-gray-900 text-lg mb-2">Organizaciones públicas</h3>
                 <p className="text-gray-600 text-sm leading-relaxed flex-1">Instituciones educativas, sanitarias y administraciones que quieren ofrecer apoyo psicológico accesible a sus usuarios o ciudadanos.</p>
                 <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold bg-gradient-to-r from-sky-500 to-blue-500 bg-clip-text text-transparent group-hover:gap-2.5 transition-all">
