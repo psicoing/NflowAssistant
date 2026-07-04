@@ -178,27 +178,12 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {/* Particulares */}
               <a href="/prueba-gratis" className="group flex flex-col items-start rounded-2xl border-2 border-indigo-100 bg-indigo-50 p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5">
-                <div className="flex items-end gap-1 mb-3">
-                  {/* Chico */}
-                  <svg width="28" height="36" viewBox="0 0 28 36" fill="none" className="text-indigo-400">
-                    <ellipse cx="14" cy="9" rx="6" ry="6" fill="currentColor"/>
-                    <path d="M4 35c0-5.523 4.477-10 10-10s10 4.477 10 10" fill="currentColor"/>
-                  </svg>
-                  {/* Chica — ligeramente más alta */}
-                  <svg width="28" height="40" viewBox="0 0 28 40" fill="none" className="text-violet-400">
-                    <ellipse cx="14" cy="9" rx="6" ry="6" fill="currentColor"/>
-                    <path d="M6 39c0-4.418 3.582-8 8-8s8 3.582 8 8" fill="currentColor"/>
-                    <path d="M8 22c1.5 3 10.5 3 12 0" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                  {/* Familia — dos adultos pequeños + niño */}
-                  <svg width="44" height="36" viewBox="0 0 44 36" fill="none" className="text-indigo-300">
-                    <ellipse cx="10" cy="7" rx="5" ry="5" fill="currentColor"/>
-                    <path d="M2 34c0-4.418 3.582-8 8-8s8 3.582 8 8" fill="currentColor"/>
-                    <ellipse cx="34" cy="7" rx="5" ry="5" fill="currentColor"/>
-                    <path d="M26 34c0-4.418 3.582-8 8-8s8 3.582 8 8" fill="currentColor"/>
-                    <ellipse cx="22" cy="13" rx="4" ry="4" fill="currentColor" opacity="0.7"/>
-                    <path d="M16 34c0-3.314 2.686-6 6-6s6 2.686 6 6" fill="currentColor" opacity="0.7"/>
-                  </svg>
+                <div className="flex items-center gap-1.5 mb-3 text-2xl">
+                  <span title="Chico">👦</span>
+                  <span title="Chica">👧</span>
+                  <span title="Hombre">👨</span>
+                  <span title="Mujer">👩</span>
+                  <span title="Familia">👨‍👩‍👧‍👦</span>
                 </div>
                 <h3 className="font-bold text-gray-900 text-lg mb-2">Particulares</h3>
                 <p className="text-gray-600 text-sm leading-relaxed flex-1">Cualquier persona que quiera apoyo emocional, gestionar el estrés o mejorar su bienestar mental. Prueba gratis, sin tarjeta.</p>
