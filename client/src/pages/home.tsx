@@ -194,7 +194,13 @@ export default function Home() {
 
               {/* Empresas */}
               <a href="/empresa-privada" className="group flex flex-col items-start rounded-2xl border-2 border-emerald-100 bg-emerald-50 p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5">
-                <span className="text-3xl mb-3">🏢</span>
+                <div className="flex items-center gap-1.5 mb-3 text-2xl">
+                  <span title="Autónomo">🧑‍💼</span>
+                  <span title="Pequeña empresa">🏪</span>
+                  <span title="Empresa mediana">🏬</span>
+                  <span title="Gran empresa">🏢</span>
+                  <span title="Corporación">🏙️</span>
+                </div>
                 <h3 className="font-bold text-gray-900 text-lg mb-2">Empresas</h3>
                 <p className="text-gray-600 text-sm leading-relaxed flex-1">Cuida el bienestar de tu equipo, reduce el absentismo y cumple con la norma ISO 45003 de riesgos psicosociales en el trabajo.</p>
                 <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent group-hover:gap-2.5 transition-all">
