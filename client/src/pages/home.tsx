@@ -168,6 +168,63 @@ export default function Home() {
           </p>
         </div>
 
+        {/* Sección "Para quién es NUXA" */}
+        <div className="bg-white py-12 px-4">
+          <div className="max-w-4xl mx-auto">
+            <p className="text-center text-gray-500 text-sm font-semibold uppercase tracking-widest mb-2">¿Para quién es NUXA?</p>
+            <h2 className="text-center text-2xl sm:text-3xl font-bold text-gray-900 mb-8">
+              Para cualquier persona, empresa u organización
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              {[
+                {
+                  icon: "👤",
+                  title: "Particulares",
+                  desc: "Cualquier persona que quiera apoyo emocional, gestionar el estrés o mejorar su bienestar mental. Prueba gratis, sin tarjeta.",
+                  cta: "Probar gratis",
+                  href: "/prueba-gratis",
+                  color: "from-indigo-500 to-violet-500",
+                  border: "border-indigo-100",
+                  bg: "bg-indigo-50",
+                },
+                {
+                  icon: "🏢",
+                  title: "Empresas",
+                  desc: "Cuida el bienestar de tu equipo, reduce el absentismo y cumple con la norma ISO 45003 de riesgos psicosociales en el trabajo.",
+                  cta: "Solución para empresas",
+                  href: "/empresa-privada",
+                  color: "from-emerald-500 to-teal-500",
+                  border: "border-emerald-100",
+                  bg: "bg-emerald-50",
+                },
+                {
+                  icon: "🏛️",
+                  title: "Organizaciones públicas",
+                  desc: "Instituciones educativas, sanitarias y administraciones que quieren ofrecer apoyo psicológico accesible a sus usuarios o ciudadanos.",
+                  cta: "Sector público",
+                  href: "/sector-publico",
+                  color: "from-sky-500 to-blue-500",
+                  border: "border-sky-100",
+                  bg: "bg-sky-50",
+                },
+              ].map((item) => (
+                <a
+                  key={item.title}
+                  href={item.href}
+                  className={`group flex flex-col items-start rounded-2xl border-2 ${item.border} ${item.bg} p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5`}
+                >
+                  <span className="text-3xl mb-3">{item.icon}</span>
+                  <h3 className="font-bold text-gray-900 text-lg mb-2">{item.title}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed flex-1">{item.desc}</p>
+                  <span className={`mt-4 inline-flex items-center gap-1.5 text-sm font-semibold bg-gradient-to-r ${item.color} bg-clip-text text-transparent group-hover:gap-2.5 transition-all`}>
+                    {item.cta} →
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* Awareness banner — collapsible + dismissible, above NUXA hero card */}
         {awarenessBanner && (
           <AwarenessBanner onClose={closeAwarenessBanner} />
