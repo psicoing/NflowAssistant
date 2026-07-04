@@ -179,10 +179,10 @@ export default function Home() {
               {/* Particulares */}
               <a href="/prueba-gratis" className="group flex flex-col items-start rounded-2xl border-2 border-indigo-100 bg-indigo-50 p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5">
                 <div className="flex items-center gap-1.5 mb-3 text-2xl">
-                  <span title="Chico">👦</span>
-                  <span title="Chica">👧</span>
-                  <span title="Hombre">👨</span>
-                  <span title="Mujer">👩</span>
+                  <span title="Adolescente chico">👦</span>
+                  <span title="Adolescente chica">👧</span>
+                  <span title="Hombre adulto">👨‍🦳</span>
+                  <span title="Mujer adulta">👩‍🦳</span>
                   <span title="Familia">👨‍👩‍👧‍👦</span>
                 </div>
                 <h3 className="font-bold text-gray-900 text-lg mb-2">Particulares</h3>
