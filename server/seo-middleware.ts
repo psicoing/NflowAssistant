@@ -162,7 +162,7 @@ function buildMetaHtml(meta: PageMeta, urlPath: string): string {
     <link rel="canonical" href="${canonical}">`;
 }
 
-export function registerSeoMiddleware(app: Express) {
+export function registerSeoMiddleware(app: Express, isProd: boolean) {
   app.use(async (req, res, next) => {
     const ua = req.headers["user-agent"] || "";
     if (!BOT_UA.test(ua)) return next();
@@ -187,7 +187,6 @@ export function registerSeoMiddleware(app: Express) {
     const metaHtml = buildMetaHtml(meta, routePath);
 
     try {
-      const isProd = process.env.NODE_ENV === "production";
       const htmlPath = isProd
         ? path.resolve(process.cwd(), "server", "public", "index.html")
         : path.resolve(process.cwd(), "client", "index.html");

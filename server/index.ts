@@ -78,14 +78,16 @@ app.use((req, res, next) => {
     throw err;
   });
 
+  const isProd = app.get("env") !== "development";
+
   // SEO middleware: inject route-specific meta for bots/crawlers
   // Must run BEFORE Vite/static middleware to intercept crawler requests
-  registerSeoMiddleware(app);
+  registerSeoMiddleware(app, isProd);
 
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
+  if (!isProd) {
     await setupVite(app, server);
   } else {
     serveStatic(app);
