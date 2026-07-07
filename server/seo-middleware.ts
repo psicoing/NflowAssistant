@@ -106,6 +106,36 @@ const PAGE_META: Record<string, PageMeta> = {
     description: "Aviso legal de NUXA. Información sobre el titular del sitio web y condiciones legales aplicables.",
     keywords: "aviso legal, información legal, titular web",
   },
+  "/registro": {
+    title: "Registro | NUXA – Salud Mental con IA",
+    description: "Selecciona tu tipo de organización para acceder a los planes NUXA adaptados a tus necesidades. Particulares, empresas, sector público.",
+    keywords: "registro, crear cuenta, acceder NUXA, planes, suscripción",
+  },
+  "/registro/planes": {
+    title: "Acceso a NUXA | Planes Individuales y Licencias Corporativas",
+    description: "Accede a NUXA con planes individuales desde €2,99/mes, packs de créditos prepagados o solicita una licencia corporativa para tu organización.",
+    keywords: "planes NUXA, precios, registro, suscripción, licencia corporativa",
+  },
+  "/login": {
+    title: "Iniciar Sesión | NUXA",
+    description: "Accede a tu cuenta de NUXA y continúa tus conversaciones con tu psicólogo de IA.",
+    keywords: "login, iniciar sesión, acceder, cuenta NUXA",
+  },
+  "/blog/1": {
+    title: "Cómo la IA puede ayudar a la salud mental de los adolescentes | Blog NUXA",
+    description: "Descubre cómo la inteligencia artificial está revolucionando el apoyo psicológico para jóvenes, ofreciendo herramientas accesibles, anónimas y disponibles 24/7.",
+    keywords: "IA salud mental adolescentes, psicología jóvenes, inteligencia artificial bienestar, ansiedad jóvenes",
+  },
+  "/blog/2": {
+    title: "5 beneficios de chatbots para la salud emocional en empresas | Blog NUXA",
+    description: "Las organizaciones líderes implementan chatbots de salud mental para mejorar el bienestar de sus empleados, reducir el absentismo y crear culturas más saludables.",
+    keywords: "chatbots salud emocional empresas, bienestar laboral, ROI salud mental, absentismo",
+  },
+  "/blog/3": {
+    title: "El futuro de la terapia: IA como complemento del psicólogo | Blog NUXA",
+    description: "La IA no reemplaza a los terapeutas humanos, sino que los potencia. Descubre cómo esta sinergia crea nuevos paradigmas en el tratamiento de la salud mental.",
+    keywords: "futuro terapia, IA psicólogo, innovación terapéutica, salud mental digital",
+  },
 };
 
 const DEFAULT_META: PageMeta = {
@@ -143,7 +173,17 @@ export function registerSeoMiddleware(app: Express) {
     }
 
     const routePath = req.path === "/" ? "/" : req.path.replace(/\/$/, "");
-    const meta = PAGE_META[routePath] || DEFAULT_META;
+
+    // Dynamic fallback for blog article routes not in the static map
+    let meta = PAGE_META[routePath];
+    if (!meta && routePath.startsWith("/blog/")) {
+      meta = {
+        title: "Artículo | Blog NUXA - IA y Salud Mental",
+        description: "Lee este artículo de blog de NUXA sobre inteligencia artificial y salud mental. Consejos, técnicas y tendencias en bienestar emocional.",
+        keywords: "blog salud mental, artículo psicología, IA bienestar, NUXA",
+      };
+    }
+    meta = meta || DEFAULT_META;
     const metaHtml = buildMetaHtml(meta, routePath);
 
     try {

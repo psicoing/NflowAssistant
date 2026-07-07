@@ -18,7 +18,7 @@ export function SEOHead({
   keywords,
   ogTitle,
   ogDescription,
-  ogImage = 'https://nflow.style/icon-512.png',
+  ogImage = 'https://nuxa.life/icon-512.png',
   ogUrl,
   twitterCard = 'summary_large_image',
   canonicalUrl,

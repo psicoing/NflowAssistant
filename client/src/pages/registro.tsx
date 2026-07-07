@@ -106,7 +106,7 @@ export default function Registro() {
       <SEOHead 
         title="Acceso a NUXA | Planes Individuales, Sorteo Gratuito y Licencias"
         description="Accede a NUXA con planes individuales desde €2.99/mes, participa en el sorteo mensual gratuito o solicita una licencia corporativa."
-        canonicalUrl="/registro"
+        canonicalUrl="https://nuxa.life/registro/planes"
       />
       
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">

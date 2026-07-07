@@ -1,4 +1,18 @@
 User-agent: *
 Allow: /
 
+# Bloquear rutas privadas de usuarios y administración
+Disallow: /chat
+Disallow: /admin/dashboard
+Disallow: /partners/dashboard
+Disallow: /api/
+
+# Permitir explícitamente rutas públicas importantes
+Allow: /blog/
+Allow: /recursos
+Allow: /recursos-gratuitos
+Allow: /precios
+Allow: /empresa-privada
+Allow: /sector-publico
+
 Sitemap: https://nuxa.life/sitemap.xml

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, User, Clock, Share2, BookOpen, Heart, Eye, Bot, Building2, Sparkles, TrendingUp } from "lucide-react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import { SEOHead } from "@/components/SEOHead";
 import chatbotBenefitsImage from "@assets/generated_images/Business_chatbot_wellness_newspaper_e38ea534.png";
 
 const blogPosts = [
@@ -147,7 +148,42 @@ export default function BlogPage() {
       );
     }
     
+    const articleJsonLd = {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": post.title,
+      "description": post.excerpt,
+      "image": post.image,
+      "author": { "@type": "Person", "name": post.author },
+      "publisher": {
+        "@type": "Organization",
+        "name": "NUXA",
+        "logo": { "@type": "ImageObject", "url": "https://nuxa.life/icon-512.png" }
+      },
+      "datePublished": post.date,
+      "dateModified": post.date,
+      "mainEntityOfPage": { "@type": "WebPage", "@id": `https://nuxa.life/blog/${post.id}` },
+      "keywords": post.tags.join(", "),
+      "articleSection": post.category,
+      "url": `https://nuxa.life/blog/${post.id}`
+    };
+
     return (
+      <>
+        <SEOHead
+          title={`${post.title} | Blog NUXA`}
+          description={post.excerpt}
+          keywords={post.tags.join(", ")}
+          ogTitle={post.title}
+          ogDescription={post.excerpt}
+          ogImage={post.image}
+          ogUrl={`https://nuxa.life/blog/${post.id}`}
+          canonicalUrl={`https://nuxa.life/blog/${post.id}`}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        />
       <div className="min-h-screen bg-gray-50">
         <Header showBanner={false} />
         <main className="pt-20">
@@ -243,11 +279,20 @@ export default function BlogPage() {
         </main>
         <Footer />
       </div>
+      </>
     );
   }
   
   // Lista de todos los artículos
   return (
+    <>
+      <SEOHead
+        title="Blog NUXA | Artículos sobre IA y Salud Mental"
+        description="Artículos especializados sobre inteligencia artificial y salud mental, bienestar emocional, innovación terapéutica y las últimas tendencias en psicología digital."
+        keywords="blog salud mental, artículos psicología, IA salud mental, bienestar emocional, tendencias psicología"
+        ogUrl="https://nuxa.life/blog"
+        canonicalUrl="https://nuxa.life/blog"
+      />
     <div className="min-h-screen bg-gray-50">
       <Header showBanner={false} />
       <main className="pt-20">
@@ -366,5 +411,6 @@ export default function BlogPage() {
       </main>
       <Footer />
     </div>
+    </>
   );
 }

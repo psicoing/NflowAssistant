@@ -76,7 +76,7 @@ export default function RegistroSeleccion() {
       <SEOHead
         title="Registro | NUXA – Salud Mental con IA"
         description="Selecciona tu tipo de organización para acceder a los planes NUXA adaptados a tus necesidades."
-        canonicalUrl="/registro"
+        canonicalUrl="https://nuxa.life/registro"
       />
 
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 py-16 px-4">
