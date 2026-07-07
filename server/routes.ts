@@ -1,6 +1,8 @@
 import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
+import fs from "fs";
+import path from "path";
 import { storage } from "./storage";
 import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS } from "./emailService";
 import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog, conversations, messages } from "@shared/schema";
@@ -3024,6 +3026,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Error generando audio" });
     }
   });
+
 
   const httpServer = createServer(app);
   return httpServer;

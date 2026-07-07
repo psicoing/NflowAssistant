@@ -1,0 +1,46 @@
+Resumen de las mejoras necesarias (ordenadas por prioridad)
+🔴 Prioridad alta
+Mejorar el SEO del blog
+Añadir metadatos específicos (título, descripción, Open Graph, etc.) para el listado del blog y cada artículo.
+Añadir datos estructurados (Article o BlogPosting) para que Google y las IA identifiquen correctamente cada artículo.
+Actualizar el sitemap
+Cambiar todas las URL de nflow.style por nuxa.life.
+Incluir todas las páginas públicas actuales.
+Añadir las URLs individuales de los artículos del blog.
+Metadatos en todas las páginas públicas
+Cada página debe tener su propio:
+Title
+Meta description
+Canonical
+Open Graph
+Twitter Cards
+Corregir la canonical de /registro/planes
+Debe apuntar a sí misma y no a /registro.
+Mejorar el renderizado para buscadores
+Actualmente los metadatos aparecen solo después de cargar React.
+Deben estar presentes en el HTML inicial (SSR, prerender o similar).
+Hacer la SPA más amigable para SEO
+Los buscadores deberían recibir HTML ya renderizado, no solo el "cascarón" de la aplicación.
+Mejorar la navegación
+Algunas rutas públicas están ocultas tras botones o enlaces externos.
+Deben ser accesibles mediante enlaces HTML normales.
+🟠 Prioridad media
+Crear un robots.txt
+Permitir el rastreo.
+Indicar la ubicación del sitemap.
+Corregir un enlace roto
+El botón principal de "Control parental" apunta a una página inexistente.
+🟢 Prioridad baja
+Crear un llms.txt
+Facilita el trabajo de buscadores basados en IA como GPTBot, Claude o Perplexity.
+En pocas palabras
+
+Las mejoras se agrupan en cinco grandes bloques:
+
+✅ SEO del blog.
+✅ Metadatos de todas las páginas.
+✅ Mejorar el rastreo (sitemap, robots.txt y llms.txt).
+✅ Corregir enlaces y navegación interna.
+✅ Mejorar el renderizado de la SPA para que Google y las IA puedan indexarla correctamente desde el primer HTML.
+
+De todos los problemas detectados, los más críticos son el renderizado SEO de la SPA, los metadatos de las páginas, el sitemap desactualizado y el SEO específico del blog, ya que son los que más afectan a la indexación y al posicionamiento en buscadores.

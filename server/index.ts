@@ -3,6 +3,7 @@ import session from "express-session";
 import MemoryStore from "memorystore";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { registerSeoMiddleware } from "./seo-middleware";
 
 const app = express();
 
@@ -76,6 +77,10 @@ app.use((req, res, next) => {
     res.status(status).json({ message });
     throw err;
   });
+
+  // SEO middleware: inject route-specific meta for bots/crawlers
+  // Must run BEFORE Vite/static middleware to intercept crawler requests
+  registerSeoMiddleware(app);
 
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
