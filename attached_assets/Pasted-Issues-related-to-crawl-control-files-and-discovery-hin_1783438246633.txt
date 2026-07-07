@@ -1,0 +1,32 @@
+Issues related to crawl-control files and discovery hints, including robots.txt, llms.txt, and sitemap accuracy.
+
+SEO issues to fix:
+
+[Low] llms.txt is missing and AI crawlers receive the SPA shell instead The site does not publish an llms.txt file, so AI crawlers have no simple machine-readable guide to the product, key sections, or preferred URLs. When they request that file today, they receive the app HTML shell instead of a clean text document.
+There is no llms.txt in client/public/, and there is no dedicated server route for it. Because the app is served through catch-all handlers in server/vite.ts, any missing static file request falls through to index.html: the development handler returns transformed HTML with status 200, and the production handler serves index.html after express.static() misses the file. That means /llms.txt is currently not a text asset at all from a crawler's point of view.
+
+This does not hurt traditional Google indexing directly, so the severity is low. It is still a real GEO gap for a public-facing product and content site, because GPTBot-, Claude-, and Perplexity-style fetchers rely on static responses and benefit from a short site map that explains what the product is and which URLs matter most.
+
+Fix this by adding client/public/llms.txt with the canonical site name and host, a one-line description of NUXA, and links to the most important public pages such as /, /precios, /recursos, /blog, /partners, /partners-comerciales, /nosotros, /quienes-somos, and the legal pages. Keep it as plain text so it is served directly rather than through the SPA router. Files: client/public/llms.txt
+
+[Medium] robots.txt is missing and falls through to the SPA HTML shell The site does not publish a real robots.txt file, so crawlers asking for crawl rules get the app page HTML instead of a plain-text policy. That removes the standard place to declare crawl access and the sitemap location for search engines and AI bots.
+client/public/ contains public assets such as sitemap.xml, manifest.json, icons, and Google verification files, but it does not contain robots.txt. There is also no server route that serves one. In development, server/vite.ts uses a catch-all app.use("*", ...) handler that always returns client/index.html with HTTP 200 after Vite middleware runs. In production, serveStatic() in the same file serves static assets and then falls through every missing path to index.html. As a result, /robots.txt resolves to HTML instead of a valid text file whenever the file is absent.
+
+This is a crawl-governance gap rather than a full indexing block, but it still matters: Googlebot, Bingbot, GPTBot, ClaudeBot, Perplexity-related crawlers, and social fetchers lose the normal place to read crawl directives and the Sitemap: hint. It also makes the app look misconfigured because a standards-based crawler request receives the SPA shell.
+
+Fix this by adding a real plain-text file at client/public/robots.txt so Vite copies it into the built public directory. At minimum, publish an allow-all policy and the sitemap URL, for example:
+
+User-agent: *
+Allow: /
+Sitemap: https://nuxa.life/sitemap.xml
+
+If there are any paths you intentionally want excluded, declare them explicitly in this file instead of relying on the SPA fallback. Files: client/public/robots.txt
+
+[High] sitemap.xml still points to nflow.style and omits many current public routes The published sitemap is outdated: it sends crawlers to nflow.style and leaves out many of the public pages the app currently exposes. Because search engines treat the sitemap as a trusted crawl source, this can send bots to the wrong host and slow discovery of important landing pages.
+Every <loc> entry in client/public/sitemap.xml uses https://nflow.style/..., including the home page, pricing, resources, partners, and legal URLs. That conflicts with the current host signals elsewhere in the codebase, such as the https://nuxa.life Organization URL exported from client/src/components/StructuredData.tsx. The sitemap is also incomplete relative to the public route set in client/src/App.tsx. Public routes such as /ejemplos-chat, /novedades, /prueba-gratis, /blog, /partners-comerciales, /quienes-somos, /control-parental, /empresa-privada, /sector-publico, /control-shell, /recursos-gratuitos, /competencia-nuxa, and /sorteo-recursos are not listed at all. The article route pattern /blog/:id also has no article URLs in the XML.
+
+This is a high-impact crawlability problem for a JavaScript-heavy SPA. Sitemaps help bots prioritize discovery when route content is not available as server-rendered HTML. An outdated host plus missing URLs means search engines can waste crawl attention on the wrong domain and may take longer to find or revisit the actual acquisition pages you want indexed.
+
+Fix client/public/sitemap.xml so every <loc> uses the canonical https://nuxa.life host and the file includes the current public route inventory from client/src/App.tsx. If blog article pages are meant to rank individually, include their real detail URLs too. The safest long-term fix is to generate the sitemap from the route source during build so future route additions and domain changes cannot drift out of sync. Files: client/public/sitemap.xml, client/src/App.tsx
+
+N.B. Strongly presume the user wants this task to focus on improving the SEO of the application — metadata, crawlability, indexing, content quality, and structured data — not on introducing new flows or features. Only add new functionality if the issue genuinely cannot be addressed any other way.

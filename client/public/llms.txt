@@ -1,0 +1,34 @@
+# NUXA
+
+> NUXA es una aplicación de salud mental e inteligencia artificial disponible para particulares, empresas y organizaciones públicas. Ofrece apoyo emocional continuo, gestión del estrés, bienestar laboral y cumplimiento de la norma ISO 45003.
+
+## Sitio web
+https://nuxa.life
+
+## Páginas principales
+
+- [Inicio](https://nuxa.life/) — Presentación de NUXA y acceso a la prueba gratuita
+- [Prueba gratis](https://nuxa.life/prueba-gratis) — 2 consultas gratuitas sin tarjeta ni registro
+- [Precios](https://nuxa.life/precios) — Planes para particulares, empresas y organizaciones
+- [Recursos gratuitos](https://nuxa.life/recursos) — Herramientas de bienestar emocional sin pago
+- [Blog](https://nuxa.life/blog) — Artículos sobre salud mental y bienestar
+- [Empresas privadas](https://nuxa.life/empresa-privada) — Solución de bienestar laboral ISO 45003
+- [Sector público](https://nuxa.life/sector-publico) — NUXA para instituciones y administraciones
+- [Partners](https://nuxa.life/partners) — Programa de colaboradores y referidos
+- [Quiénes somos](https://nuxa.life/quienes-somos) — Equipo y misión de NUXA
+- [Nosotros](https://nuxa.life/nosotros) — Valores y enfoque clínico
+- [App móvil](https://nuxa.life/app-movil) — Descarga la aplicación móvil
+
+## Legal
+
+- [Términos y condiciones](https://nuxa.life/legal/terminos)
+- [Política de privacidad](https://nuxa.life/legal/privacidad)
+- [Política de cookies](https://nuxa.life/legal/cookies)
+- [Aviso legal](https://nuxa.life/legal/aviso-legal)
+
+## Tecnología
+
+- IA basada en GPT-4o con respuestas contextuales y persistentes
+- Disponible en español, inglés y francés
+- Cumple con RGPD y normativa europea de protección de datos
+- Compatible con ISO 45003 (riesgos psicosociales en el trabajo)
