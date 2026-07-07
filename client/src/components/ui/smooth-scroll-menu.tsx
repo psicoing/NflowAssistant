@@ -77,14 +77,14 @@ const menuItems = [
     name: "Plan y Suscripción",
     sectionId: "precios",
     icon: DollarSign,
-    externalUrl: "https://jobda.org/partners"
+    isPage: true
   },
   {
-    id: "alquiler-nuxa",
+    id: "programa-partners",
     name: "Gestión licencias",
-    sectionId: "alquiler-nuxa",
+    sectionId: "programa-partners",
     icon: Users,
-    externalUrl: "https://jobda.org/partners"
+    isPage: true
   },
   {
     id: "app-movil",
@@ -102,9 +102,9 @@ const menuItems = [
   {
     id: "contacto-licitacion",
     name: "Contacto Licitación",
-    sectionId: "contacto-licitacion",
+    sectionId: "programa-partners",
     icon: Phone,
-    externalUrl: "https://jobda.org/partners"
+    isPage: true
   }
 ];
 

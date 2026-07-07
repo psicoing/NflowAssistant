@@ -56,6 +56,7 @@ import ControlShell from "@/pages/control-shell";
 import CompetenciaNuxa from "@/pages/competencia-nuxa";
 import RecursosIntro from "@/pages/recursos-intro";
 import SorteoRecursos from "@/pages/sorteo-recursos";
+import ProgramaPartners from "@/pages/programa-partners";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -65,7 +66,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos", "/programa-partners"];
     // Allow magic link access routes
     if (location.startsWith("/acceso/")) {
       return;
@@ -144,6 +145,7 @@ function AuthenticatedRouter() {
       <Route path="/recursos-gratuitos" component={RecursosIntro} />
       <Route path="/competencia-nuxa" component={CompetenciaNuxa} />
       <Route path="/sorteo-recursos" component={SorteoRecursos} />
+      <Route path="/programa-partners" component={ProgramaPartners} />
       <Route path="/acceso/:token" component={AccesoMagico} />
       <Route component={NotFound} />
     </Switch>
