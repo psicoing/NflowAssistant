@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { Check, Shield, Star, Gem, Users, Building, FileSpreadsheet, Lock, UserCheck, Eye, Globe, Briefcase, FileText } from "lucide-react";
+import { Check, Shield, Star, Gem, Users, Building, FileSpreadsheet, Lock, UserCheck, Eye, Globe, Briefcase, FileText, ArrowRight } from "lucide-react";
 import PurchaseCreditsModal from "@/components/modals/purchase-credits-modal";
 import { useState } from "react";
 
@@ -339,6 +339,16 @@ export default function PreciosSection() {
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Solución escalable para organizaciones. Precio transparente sin costes ocultos.
             </p>
+            <a
+              href="https://jobda.org/nuxa-licencias"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 mt-4 text-blue-600 font-medium hover:underline"
+              data-testid="link-nuxa-licencias"
+            >
+              Más información sobre licencias NUXA para instituciones
+              <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
 
           {/* Pricing Formula */}
