@@ -432,7 +432,7 @@ export default function PreciosSection() {
               <div className="flex-1 text-center md:text-left">
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Gestión Masiva con CSV</h3>
                 <p className="text-gray-600">
-                  Envíanos un archivo CSV con los datos de los usuarios. Generamos automáticamente un archivo de respuesta con <strong>códigos privados de acceso individuales</strong> para cada persona. Sin fricciones técnicas ni administrativas.
+                  Desde tu propio panel de administración, sube un archivo CSV con los datos de tus usuarios y el sistema genera automáticamente <strong>códigos privados de acceso individuales</strong> para cada persona. Gestión 100% autónoma, sin fricciones técnicas ni administrativas.
                 </p>
               </div>
             </div>
