@@ -71,6 +71,16 @@ export default function FamilySupportHeroSection() {
                 <p className="text-[10px] text-blue-800/70 dark:text-blue-400/70 mt-1">
                   (antes NUXA se llamaba NFLOW)
                 </p>
+                <div className="mt-3">
+                  <Link href="/precios">
+                    <span
+                      className="inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm transition-colors cursor-pointer"
+                      data-testid="badge-tarifas"
+                    >
+                      Tarifas
+                    </span>
+                  </Link>
+                </div>
               </div>
             </div>
 
