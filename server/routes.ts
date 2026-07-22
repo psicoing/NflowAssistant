@@ -1072,12 +1072,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     try {
       const userId = parseInt(req.params.userId);
-      const { subscriptionStatus, subscriptionPlan, monthlyQuestionLimit, role } = req.body;
+      const { subscriptionStatus, subscriptionPlan, monthlyQuestionLimit, role, newPassword } = req.body;
       const updateData: any = {};
       if (subscriptionStatus !== undefined) updateData.subscriptionStatus = subscriptionStatus;
       if (subscriptionPlan !== undefined) updateData.subscriptionPlan = subscriptionPlan;
       if (monthlyQuestionLimit !== undefined) updateData.monthlyQuestionLimit = parseInt(monthlyQuestionLimit);
       if (role !== undefined) updateData.role = role;
+      if (newPassword !== undefined) updateData.password = await bcrypt.hash(newPassword, 10);
 
       const [updated] = await db.update(users).set(updateData).where(eq(users.id, userId)).returning();
       if (!updated) return res.status(404).json({ message: "Usuario no encontrado" });
