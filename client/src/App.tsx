@@ -57,7 +57,6 @@ import CompetenciaNuxa from "@/pages/competencia-nuxa";
 import RecursosIntro from "@/pages/recursos-intro";
 import SorteoRecursos from "@/pages/sorteo-recursos";
 import ProgramaPartners from "@/pages/programa-partners";
-import SponsorBar from "@/components/SponsorBar";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -169,7 +168,6 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-nflow-dark text-white">
-      <SponsorBar />
       <Toaster />
       <AuthenticatedRouter />
       <PWAInstallPrompt />

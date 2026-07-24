@@ -36,7 +36,7 @@ export default function Header({ showBanner = false }: HeaderProps) {
 
   return (
     <header 
-      className={`fixed ${showBanner ? 'top-[44px]' : 'top-7'} w-full z-50 transition-all duration-300 ${
+      className={`fixed ${showBanner ? 'top-16' : 'top-0'} w-full z-50 transition-all duration-300 ${
         isScrolled ? "bg-nflow-dark/95 backdrop-blur-md" : "bg-nflow-dark/90"
       } border-b border-gray-800`}
     >
