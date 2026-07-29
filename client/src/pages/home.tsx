@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
+import { useLanguage } from "@/hooks/useLanguage";
 import { Sparkles, ArrowRight, Star, ExternalLink, X } from "lucide-react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
@@ -132,6 +133,7 @@ function AwarenessBanner({ onClose }: { onClose: () => void }) {
 }
 
 export default function Home() {
+  const { t } = useLanguage();
   const [awarenessBanner, setAwarenessBanner] = useState(false);
 
   useEffect(() => {
@@ -232,11 +234,11 @@ export default function Home() {
                 className="btn-orange-glow inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-xl px-12 py-5 rounded-2xl transition-colors duration-200"
               >
                 <span className="text-2xl">🚀</span>
-                Comenzar gratis
+                {t('home.cta.button')}
                 <span className="text-2xl">→</span>
               </a>
             </div>
-            <p className="text-center text-gray-400 text-sm mt-3">Sin tarjeta · Sin registro · 3 consultas gratis</p>
+            <p className="text-center text-gray-400 text-sm mt-3">{t('home.cta.subtitle')}</p>
 
           </div>
         </div>
