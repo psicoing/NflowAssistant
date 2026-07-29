@@ -224,6 +224,20 @@ export default function Home() {
                 </span>
               </a>
             </div>
+
+            {/* CTA principal — botón naranja pulsante */}
+            <div className="mt-10 flex justify-center">
+              <a
+                href="/prueba-gratis"
+                className="btn-orange-glow inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-xl px-12 py-5 rounded-2xl transition-colors duration-200"
+              >
+                <span className="text-2xl">🚀</span>
+                Comenzar gratis
+                <span className="text-2xl">→</span>
+              </a>
+            </div>
+            <p className="text-center text-gray-400 text-sm mt-3">Sin tarjeta · Sin registro · 3 consultas gratis</p>
+
           </div>
         </div>
 
