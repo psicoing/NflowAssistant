@@ -8,6 +8,7 @@ interface SEOHeadProps {
   ogDescription?: string;
   ogImage?: string;
   ogUrl?: string;
+  ogType?: 'website' | 'article';
   twitterCard?: 'summary' | 'summary_large_image';
   canonicalUrl?: string;
 }
@@ -20,6 +21,7 @@ export function SEOHead({
   ogDescription,
   ogImage = 'https://nuxa.life/icon-512.png',
   ogUrl,
+  ogType = 'website',
   twitterCard = 'summary_large_image',
   canonicalUrl,
 }: SEOHeadProps) {
@@ -51,7 +53,7 @@ export function SEOHead({
     updateMetaTag('og:title', ogTitle || title, true);
     updateMetaTag('og:description', ogDescription || description, true);
     updateMetaTag('og:image', ogImage, true);
-    updateMetaTag('og:type', 'website', true);
+    updateMetaTag('og:type', ogType, true);
     if (ogUrl) {
       updateMetaTag('og:url', ogUrl, true);
     }
@@ -74,7 +76,7 @@ export function SEOHead({
       
       linkElement.setAttribute('href', canonicalUrl);
     }
-  }, [title, description, keywords, ogTitle, ogDescription, ogImage, ogUrl, twitterCard, canonicalUrl]);
+  }, [title, description, keywords, ogTitle, ogDescription, ogImage, ogUrl, ogType, twitterCard, canonicalUrl]);
 
   return null;
 }

@@ -11,6 +11,7 @@ const blogPosts = [
     id: 1,
     title: "Cómo la IA puede ayudar a la salud mental de los adolescentes",
     excerpt: "Descubre cómo la inteligencia artificial está revolucionando el apoyo psicológico para jóvenes, ofreciendo herramientas accesibles, anónimas y disponibles 24/7 para combatir la ansiedad, depresión y otros desafíos emocionales.",
+    dateIso: "2025-08-23",
     fullContent: `
       <div class="prose prose-lg max-w-none">
         <h2 class="text-3xl font-bold mb-6 text-gray-900">La Revolución de la IA en la Salud Mental Juvenil</h2>
@@ -51,6 +52,7 @@ const blogPosts = [
     icon: Bot,
     color: "bg-gradient-to-r from-blue-500 to-purple-600",
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    absoluteImageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     readTime: "8 min",
     tags: ["IA", "Adolescentes", "Salud Mental", "Innovación"],
     views: "2,847",
@@ -83,12 +85,14 @@ const blogPosts = [
         </div>
       </div>
     `,
+    dateIso: "2025-08-22",
     date: "22 Agosto 2025",
     author: "Lic. Roberto Silva",
     category: "Empresas & Bienestar",
     icon: Building2,
     color: "bg-gradient-to-r from-green-500 to-teal-600",
     image: chatbotBenefitsImage,
+    absoluteImageUrl: "https://nuxa.life/icon-512.png",
     readTime: "6 min",
     tags: ["Empresas", "Chatbots", "ROI", "Bienestar Laboral"],
     views: "1,923",
@@ -111,12 +115,14 @@ const blogPosts = [
         </div>
       </div>
     `,
+    dateIso: "2025-08-21",
     date: "21 Agosto 2025",
     author: "Dr. Miguel Herrera",
     category: "Innovación Terapéutica",
     icon: Sparkles,
     color: "bg-gradient-to-r from-purple-500 to-pink-600",
     image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    absoluteImageUrl: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     readTime: "7 min",
     tags: ["Terapia", "IA", "Psicólogos", "Innovación"],
     views: "3,156",
@@ -153,15 +159,15 @@ export default function BlogPage() {
       "@type": "BlogPosting",
       "headline": post.title,
       "description": post.excerpt,
-      "image": post.image,
+      "image": post.absoluteImageUrl,
       "author": { "@type": "Person", "name": post.author },
       "publisher": {
         "@type": "Organization",
         "name": "NUXA",
         "logo": { "@type": "ImageObject", "url": "https://nuxa.life/icon-512.png" }
       },
-      "datePublished": post.date,
-      "dateModified": post.date,
+      "datePublished": post.dateIso,
+      "dateModified": post.dateIso,
       "mainEntityOfPage": { "@type": "WebPage", "@id": `https://nuxa.life/blog/${post.id}` },
       "keywords": post.tags.join(", "),
       "articleSection": post.category,
@@ -176,7 +182,8 @@ export default function BlogPage() {
           keywords={post.tags.join(", ")}
           ogTitle={post.title}
           ogDescription={post.excerpt}
-          ogImage={post.image}
+          ogImage={post.absoluteImageUrl}
+          ogType="article"
           ogUrl={`https://nuxa.life/blog/${post.id}`}
           canonicalUrl={`https://nuxa.life/blog/${post.id}`}
         />
