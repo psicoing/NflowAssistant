@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Gift, Heart, Brain, Sparkles, TrendingUp, ChevronRight } from "lucide-react";
+import { Link } from "wouter";
 
 export default function FreeResourcesCardSection() {
   return (
@@ -57,15 +58,16 @@ export default function FreeResourcesCardSection() {
                 </div>
               </div>
 
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold text-lg px-8 self-start group"
-                onClick={() => window.location.href = "/recursos-gratuitos"}
-                data-testid="button-go-to-free-resources"
-              >
-                Explorar Recursos Gratis
-                <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link href="/recursos-gratuitos">
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold text-lg px-8 self-start group"
+                  data-testid="button-go-to-free-resources"
+                >
+                  Explorar Recursos Gratis
+                  <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
             </div>
 
             {/* Right Side - Visual */}

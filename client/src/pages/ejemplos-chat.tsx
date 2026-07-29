@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown, ChevronUp, Bot, User, MessageCircle, MessageSquare, Brain, Heart, Users, Sparkles, Shield, Clock, Zap, ArrowRight } from "lucide-react";
@@ -948,6 +949,13 @@ export default function EjemplosChat() {
   };
 
   return (
+    <>
+      <SEOHead
+        title="Ejemplos de Conversación con NUXA | Psicólogo IA"
+        description="Descubre cómo NUXA responde en situaciones reales. Ejemplos de conversaciones sobre ansiedad, estrés laboral, relaciones personales y más."
+        canonicalUrl="https://nuxa.life/ejemplos-chat"
+        ogUrl="https://nuxa.life/ejemplos-chat"
+      />
     <div className="min-h-screen bg-nflow-dark">
       <Header />
       
@@ -1337,5 +1345,6 @@ export default function EjemplosChat() {
 
       <Footer />
     </div>
+    </>
   );
 }

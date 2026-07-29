@@ -1,5 +1,6 @@
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,13 @@ import { Link } from "wouter";
 
 export default function AppMovil() {
   return (
+    <>
+      <SEOHead
+        title="App Móvil NUXA | Psicólogo IA en tu Bolsillo"
+        description="Descarga la app de NUXA para iOS y Android. Tu psicólogo IA siempre contigo, disponible 24/7 desde cualquier lugar."
+        canonicalUrl="https://nuxa.life/app-movil"
+        ogUrl="https://nuxa.life/app-movil"
+      />
     <div className="min-h-screen bg-nflow-dark">
       <Header />
       
@@ -462,5 +470,6 @@ export default function AppMovil() {
 
       <Footer />
     </div>
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Smartphone, Heart, Brain, Shield, Clock } from "lucide-react";
+import { Link } from "wouter";
 import nflowImage from "@assets/generated_images/NFLOW_mental_health_app_05faf5ea.png";
 
 export default function NFlowShowcaseSection() {
@@ -68,13 +69,14 @@ export default function NFlowShowcaseSection() {
 
             {/* CTA */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                onClick={() => window.location.href = '/login'}
-                className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold px-8 py-4 rounded-full text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-              >
-                <Smartphone className="w-5 h-5 mr-2" />
-                Comenzar Ahora
-              </Button>
+              <Link href="/login">
+                <Button
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold px-8 py-4 rounded-full text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                >
+                  <Smartphone className="w-5 h-5 mr-2" />
+                  Comenzar Ahora
+                </Button>
+              </Link>
               <Button 
                 variant="outline"
                 className="border-2 border-blue-300 text-white hover:bg-blue-300 hover:text-blue-900 font-semibold px-8 py-4 rounded-full text-lg transition-all duration-300"

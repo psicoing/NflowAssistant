@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -26,6 +27,13 @@ import {
 
 export default function NosotrosPage() {
   return (
+    <>
+      <SEOHead
+        title="Sobre NUXA | Quiénes Somos y Nuestra Misión"
+        description="Conoce el equipo y la misión de NUXA: democratizar el acceso a la salud mental con inteligencia artificial empática y responsable."
+        canonicalUrl="https://nuxa.life/nosotros"
+        ogUrl="https://nuxa.life/nosotros"
+      />
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900">
       {/* Header Navigation */}
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b">
@@ -367,5 +375,6 @@ export default function NosotrosPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

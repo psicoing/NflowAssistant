@@ -1,5 +1,6 @@
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { 
@@ -18,6 +19,13 @@ import {
 
 export default function Novedades() {
   return (
+    <>
+      <SEOHead
+        title="Novedades NUXA | Últimas Actualizaciones y Noticias"
+        description="Descubre las últimas novedades, actualizaciones y noticias de NUXA. Mantente al día con las mejoras y nuevas funcionalidades."
+        canonicalUrl="https://nuxa.life/novedades"
+        ogUrl="https://nuxa.life/novedades"
+      />
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
       <Header />
       
@@ -233,5 +241,6 @@ export default function Novedades() {
       
       <Footer />
     </div>
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect } from "react";
@@ -27,6 +28,13 @@ export default function ControlParentalPage() {
     window.scrollTo(0, 0);
   }, []);
   return (
+    <>
+      <SEOHead
+        title="Control Parental NUXA | Supervisión Profesional para Jóvenes"
+        description="NUXA ofrece controles parentales y supervisión profesional para el uso seguro de la IA en salud mental juvenil. Protege a tus hijos con apoyo emocional responsable."
+        canonicalUrl="https://nuxa.life/control-parental"
+        ogUrl="https://nuxa.life/control-parental"
+      />
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-emerald-50 to-teal-50 dark:from-gray-900 dark:to-blue-900">
       {/* Header Navigation */}
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b">
@@ -506,7 +514,7 @@ export default function ControlParentalPage() {
                   Empezar Ahora - Control Parental
                 </Button>
               </Link>
-              <Link href="/contacto">
+              <Link href="/registro/planes">
                 <Button 
                   variant="outline"
                   size="lg" 
@@ -548,5 +556,6 @@ export default function ControlParentalPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

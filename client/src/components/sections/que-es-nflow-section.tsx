@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, Clock, Shield, Euro, Heart, Building2, UserCheck, ArrowRight } from "lucide-react";
+import { Link } from "wouter";
 
 export default function QueEsNflowSection() {
   return (
@@ -168,17 +169,16 @@ export default function QueEsNflowSection() {
           </div>
 
           {/* CTA */}
-          <Button 
-            size="lg" 
-            className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white w-full max-w-md px-6 sm:px-12 py-4 sm:py-6 text-base sm:text-xl font-semibold rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
-            onClick={() => {
-              window.location.href = "/login";
-            }}
-            data-testid="button-bienestar-cta"
-          >
-            Comienza tu bienestar hoy mismo
-            <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 ml-2" />
-          </Button>
+          <Link href="/login">
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white w-full max-w-md px-6 sm:px-12 py-4 sm:py-6 text-base sm:text-xl font-semibold rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
+              data-testid="button-bienestar-cta"
+            >
+              Comienza tu bienestar hoy mismo
+              <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 ml-2" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

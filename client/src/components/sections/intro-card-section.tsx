@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 import { CheckCircle, Brain, Clock, Users, Sparkles, Shield, Heart, Target, Star, Code, Zap, MessageSquare } from "lucide-react";
 import techDevicesImage from "@assets/generated_images/Modern_tech_devices_mental_health_acb51148.png";
 import robotHumanImage from "@assets/generated_images/Human_and_AI_robot_collaboration_1312c395.png";
@@ -164,12 +165,13 @@ export default function IntroCardSection() {
                 ))}
                 <span className="ml-2 text-gray-600 text-sm">(+1,000 usuarios satisfechos)</span>
               </div>
-              <Button 
-                onClick={() => window.location.href = '/login'}
-                className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white font-semibold px-12 py-4 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-              >
-                Empezar Ahora
-              </Button>
+              <Link href="/login">
+                <Button
+                  className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white font-semibold px-12 py-4 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                >
+                  Empezar Ahora
+                </Button>
+              </Link>
             </div>
 
           </div>

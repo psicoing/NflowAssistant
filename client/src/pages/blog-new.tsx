@@ -275,10 +275,10 @@ export default function BlogPage() {
                 <h3 className="text-2xl font-bold mb-4">¿Te interesó este artículo?</h3>
                 <p className="text-lg mb-6">Únete a NUXA y experimenta el futuro de la salud mental digital.</p>
                 <Button 
-                  onClick={() => window.location.href = '/login'}
                   className="bg-white text-orange-600 hover:bg-gray-100 font-bold px-8 py-3 rounded-xl"
+                  asChild
                 >
-                  Comenzar Ahora
+                  <a href="/login">Comenzar Ahora</a>
                 </Button>
               </div>
             </div>
@@ -407,11 +407,13 @@ export default function BlogPage() {
               salud mental y las últimas innovaciones en bienestar digital.
             </p>
             <Button 
-              onClick={() => window.location.href = '/login'}
               className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              asChild
             >
-              Únete a NUXA
-              <Sparkles className="w-5 h-5 ml-2" />
+              <a href="/login">
+                Únete a NUXA
+                <Sparkles className="w-5 h-5 ml-2 inline" />
+              </a>
             </Button>
           </div>
         </div>
