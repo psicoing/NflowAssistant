@@ -38,7 +38,6 @@ import FamilySupportHeroSection from "@/components/sections/family-support-hero-
 import NflowToNuxaTransitionSection from "@/components/sections/nflow-to-nuxa-transition-section";
 import NuxaPurposeSection from "@/components/sections/nuxa-purpose-section";
 import NuxaBrandEvolutionSection from "@/components/sections/nuxa-brand-evolution-section";
-import RotatingAnnouncementsSection from "@/components/sections/rotating-announcements-section";
 import NuxaPhonesShowcaseSection from "@/components/sections/nuxa-phones-showcase-section";
 import { 
   NuxaRobotForestSection,
@@ -243,9 +242,6 @@ export default function Home() {
 
           </div>
         </div>
-
-        {/* Banner rotatorio de novedades y anuncios */}
-        <RotatingAnnouncementsSection />
 
         {/* Awareness banner — collapsible + dismissible, above NUXA hero card */}
         {awarenessBanner && (
