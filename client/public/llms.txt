@@ -1,75 +1,45 @@
-# NUXA
+# NUXA — Tu Psicólogo IA disponible 24/7
 
-> NUXA es una aplicación de salud mental e inteligencia artificial disponible para particulares, empresas y organizaciones públicas. Ofrece apoyo emocional continuo, gestión del estrés, bienestar laboral y cumplimiento de la norma ISO 45003. No sustituye a un psicólogo, sino que complementa el apoyo emocional disponible 24/7.
+NUXA is a Spanish-language AI mental health platform providing confidential emotional support,
+psychological assistance, and wellness resources for individuals, families, and organisations.
+It is compliant with ISO 45003 (psychosocial risk management) and operates at https://nuxa.life.
 
-## Sitio web
-https://nuxa.life
+## Key pages
 
-## Descripción del servicio
+- Home: https://nuxa.life/
+- Free trial (no card required): https://nuxa.life/prueba-gratis
+- Pricing plans: https://nuxa.life/precios
+- Free resources: https://nuxa.life/recursos-gratuitos
+- Blog (AI & mental health): https://nuxa.life/blog
+- Chat examples: https://nuxa.life/ejemplos-chat
+- Mobile app: https://nuxa.life/app-movil
+- News & updates: https://nuxa.life/novedades
 
-NUXA proporciona:
-- Conversaciones confidenciales con IA basada en GPT-4o para gestión emocional y apoyo psicológico
-- Apoyo a personas con ansiedad, estrés, problemas de autoestima, dificultades relacionales y más
-- Soluciones corporativas que cumplen la norma ISO 45003 para el bienestar psicosocial en el trabajo
-- Herramientas gratuitas de autorregulación emocional (respiración, grounding, diario de gratitud)
-- Soporte multilingüe: español, inglés y francés
+## Audience sections
 
-## Modelo de precios
+- For individuals: https://nuxa.life/
+- For private companies (ISO 45003): https://nuxa.life/empresa-privada
+- For public sector & institutions: https://nuxa.life/sector-publico
+- Parental controls: https://nuxa.life/control-parental
 
-- Prueba gratuita: 2 consultas sin tarjeta ni registro
-- Planes personales: desde €2,99/mes (10 preguntas/mes) hasta €32/año (100 preguntas/mes)
-- Créditos prepagados: €5 (15 preguntas) o €10 (35 preguntas), sin caducidad
-- Planes empresariales: desde €149,50/mes para organizaciones con múltiples usuarios
-- Licencias corporativas a medida para administraciones públicas y grandes empresas
+## Partners
 
-## Páginas principales
+- Partner programme: https://nuxa.life/programa-partners
+- Commercial partners: https://nuxa.life/partners-comerciales
+- Partner portal: https://nuxa.life/partners
 
-- [Inicio](https://nuxa.life/) — Presentación de NUXA y acceso a la prueba gratuita
-- [Prueba gratis](https://nuxa.life/prueba-gratis) — 2 consultas gratuitas sin tarjeta ni registro
-- [Precios](https://nuxa.life/precios) — Planes para particulares, empresas y organizaciones con comparativa completa
-- [Recursos gratuitos](https://nuxa.life/recursos) — Herramientas de bienestar emocional sin pago ni registro
-- [Recursos gratuitos (alt)](https://nuxa.life/recursos-gratuitos) — Acceso alternativo a los recursos de bienestar
-- [Blog](https://nuxa.life/blog) — Artículos especializados sobre IA y salud mental
-- [Empresas privadas](https://nuxa.life/empresa-privada) — Solución de bienestar laboral e ISO 45003
-- [Sector público](https://nuxa.life/sector-publico) — NUXA para hospitales, escuelas, ayuntamientos e instituciones
-- [Partners](https://nuxa.life/partners) — Programa de colaboradores y referidos con comisiones
-- [Partners comerciales](https://nuxa.life/partners-comerciales) — Distribución B2B de licencias NUXA
-- [Quiénes somos](https://nuxa.life/quienes-somos) — Equipo y misión de NUXA
-- [Nosotros](https://nuxa.life/nosotros) — Valores y enfoque clínico
-- [App móvil](https://nuxa.life/app-movil) — Descarga la aplicación para iOS y Android
-- [Control parental](https://nuxa.life/control-parental) — Guía para el uso de NUXA por menores
-- [Ejemplos de chat](https://nuxa.life/ejemplos-chat) — Conversaciones reales con NUXA
+## About
 
-## Artículos del Blog
-
-- [Cómo la IA puede ayudar a la salud mental de los adolescentes](https://nuxa.life/blog/1) — IA, adolescentes, salud mental juvenil, 8 min lectura
-- [5 beneficios de usar chatbots para la salud emocional en empresas](https://nuxa.life/blog/2) — Empresas, chatbots, ROI, bienestar laboral, 6 min lectura
-- [El futuro de la terapia: IA como complemento del psicólogo](https://nuxa.life/blog/3) — IA, terapia, innovación terapéutica, 7 min lectura
-
-## Registro y acceso
-
-- [Registro](https://nuxa.life/registro) — Selección de tipo de usuario (particular, empresa, sector público)
-- [Planes de pago](https://nuxa.life/registro/planes) — Comparativa y compra de planes individuales y corporativos
-- [Iniciar sesión](https://nuxa.life/login) — Acceso para usuarios registrados
+- About NUXA: https://nuxa.life/nosotros
+- Who we are: https://nuxa.life/quienes-somos
 
 ## Legal
 
-- [Términos y condiciones](https://nuxa.life/legal/terminos)
-- [Política de privacidad](https://nuxa.life/legal/privacidad)
-- [Política de cookies](https://nuxa.life/legal/cookies)
-- [Aviso legal](https://nuxa.life/legal/aviso-legal)
+- Terms of service: https://nuxa.life/legal/terminos
+- Privacy policy: https://nuxa.life/legal/privacidad
+- Cookie policy: https://nuxa.life/legal/cookies
+- Legal notice: https://nuxa.life/legal/aviso-legal
 
-## Tecnología y cumplimiento
+## Sitemap
 
-- Motor de IA: GPT-4o con memoria contextual y respuestas persistentes
-- Disponible en español, inglés y francés
-- Cumplimiento RGPD y normativa europea de protección de datos
-- Compatible con ISO 45003 (gestión de riesgos psicosociales en el trabajo)
-- Infraestructura en la nube con PostgreSQL (Neon serverless)
-- PWA disponible para instalación en móvil y escritorio
-
-## Acerca de
-
-NUXA no es un servicio de emergencias. En caso de crisis grave o riesgo vital, contactar con servicios de emergencias (112) o la línea de atención a la conducta suicida (024).
-
-NUXA ha recibido el respaldo informativo del Departament de Salut. El servicio cumple con los estándares clínicos recomendados para herramientas digitales de apoyo psicológico.
+https://nuxa.life/sitemap.xml
