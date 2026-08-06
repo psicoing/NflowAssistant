@@ -4,6 +4,7 @@ import { ArrowLeft, Calendar, User, Clock, Share2, BookOpen, Heart, Eye, Bot, Bu
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { SEOHead } from "@/components/SEOHead";
+import { StructuredData } from "@/components/StructuredData";
 import chatbotBenefitsImage from "@assets/generated_images/Business_chatbot_wellness_newspaper_e38ea534.png";
 
 const blogPosts = [
@@ -154,24 +155,22 @@ export default function BlogPage() {
       );
     }
     
-    const articleJsonLd = {
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      "headline": post.title,
-      "description": post.excerpt,
-      "image": post.absoluteImageUrl,
-      "author": { "@type": "Person", "name": post.author },
-      "publisher": {
+    const articleSchemaData = {
+      headline: post.title,
+      description: post.excerpt,
+      image: post.absoluteImageUrl,
+      author: { "@type": "Person", name: post.author },
+      publisher: {
         "@type": "Organization",
-        "name": "NUXA",
-        "logo": { "@type": "ImageObject", "url": "https://nuxa.life/icon-512.png" }
+        name: "NUXA",
+        logo: { "@type": "ImageObject", url: "https://nuxa.life/icon-512.png" }
       },
-      "datePublished": post.dateIso,
-      "dateModified": post.dateIso,
-      "mainEntityOfPage": { "@type": "WebPage", "@id": `https://nuxa.life/blog/${post.id}` },
-      "keywords": post.tags.join(", "),
-      "articleSection": post.category,
-      "url": `https://nuxa.life/blog/${post.id}`
+      datePublished: post.dateIso,
+      dateModified: post.dateIso,
+      mainEntityOfPage: { "@type": "WebPage", "@id": `https://nuxa.life/blog/${post.id}` },
+      keywords: post.tags.join(", "),
+      articleSection: post.category,
+      url: `https://nuxa.life/blog/${post.id}`
     };
 
     return (
@@ -187,10 +186,7 @@ export default function BlogPage() {
           ogUrl={`https://nuxa.life/blog/${post.id}`}
           canonicalUrl={`https://nuxa.life/blog/${post.id}`}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-        />
+        <StructuredData type="BlogPosting" data={articleSchemaData} />
       <div className="min-h-screen bg-gray-50">
         <Header showBanner={false} />
         <main className="pt-20">
@@ -291,6 +287,22 @@ export default function BlogPage() {
   }
   
   // Lista de todos los artículos
+  const collectionPageData = {
+    name: "Blog NUXA — Artículos sobre IA y Salud Mental",
+    description: "Artículos especializados sobre inteligencia artificial y salud mental, bienestar emocional, innovación terapéutica y las últimas tendencias en psicología digital.",
+    url: "https://nuxa.life/blog",
+    publisher: { "@type": "Organization", name: "NUXA", url: "https://nuxa.life" },
+    hasPart: blogPosts.map(p => ({
+      "@type": "BlogPosting",
+      headline: p.title,
+      url: `https://nuxa.life/blog/${p.id}`,
+      datePublished: p.dateIso,
+      author: { "@type": "Person", name: p.author },
+      description: p.excerpt,
+      image: p.absoluteImageUrl,
+    }))
+  };
+
   return (
     <>
       <SEOHead
@@ -300,6 +312,7 @@ export default function BlogPage() {
         ogUrl="https://nuxa.life/blog"
         canonicalUrl="https://nuxa.life/blog"
       />
+      <StructuredData type="CollectionPage" data={collectionPageData} />
     <div className="min-h-screen bg-gray-50">
       <Header showBanner={false} />
       <main className="pt-20">

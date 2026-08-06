@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 interface StructuredDataProps {
-  type: 'Organization' | 'WebApplication' | 'WebSite' | 'Product' | 'FAQPage';
+  type: 'Organization' | 'WebApplication' | 'WebSite' | 'Product' | 'FAQPage' | 'BlogPosting' | 'Article' | 'CollectionPage';
   data: Record<string, any>;
 }
 
