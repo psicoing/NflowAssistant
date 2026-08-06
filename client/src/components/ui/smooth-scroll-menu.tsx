@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign, Star, User, Building2, Landmark, Shield, Trophy, Scale } from "lucide-react";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 
+// Items with href navigate to a real page (crawlable <a>).
+// Items with externalUrl open in a new tab.
+// Items with sectionId only scroll within the home page.
 const menuItems = [
   {
     id: "inicio",
@@ -14,51 +17,44 @@ const menuItems = [
   {
     id: "ejemplos-chat",
     name: "Chatea con Nuxa",
-    sectionId: "ejemplos-chat",
+    href: "/ejemplos-chat",
     icon: MessageCircle,
-    isPage: true
   },
   {
     id: "recursos-gratuitos",
     name: "Recursos Gratis",
-    sectionId: "recursos-gratuitos",
+    href: "/recursos-gratuitos",
     icon: BookOpen,
-    isPage: true
   },
   {
     id: "quienes-somos",
     name: "Nuestro Software",
-    sectionId: "quienes-somos",
+    href: "/quienes-somos",
     icon: User,
-    isPage: true
   },
   {
     id: "empresa-privada",
     name: "Empresa Privada",
-    sectionId: "empresa-privada",
+    href: "/empresa-privada",
     icon: Building2,
-    isPage: true
   },
   {
     id: "sector-publico",
     name: "Sector Público",
-    sectionId: "sector-publico",
+    href: "/sector-publico",
     icon: Landmark,
-    isPage: true
   },
   {
     id: "competencia-nuxa",
     name: "Competencia NUXA",
-    sectionId: "competencia-nuxa",
+    href: "/competencia-nuxa",
     icon: Trophy,
-    isPage: true
   },
   {
     id: "control-shell",
     name: "Control Shell",
-    sectionId: "control-shell",
+    href: "/control-shell",
     icon: Shield,
-    isPage: true
   },
   {
     id: "testimonios",
@@ -69,44 +65,42 @@ const menuItems = [
   {
     id: "blog",
     name: "Blog",
-    sectionId: "blog",
-    icon: BookOpen
+    href: "/blog",
+    icon: BookOpen,
   },
   {
     id: "precios",
     name: "Plan y Suscripción",
-    sectionId: "precios",
+    href: "/precios",
     icon: DollarSign,
-    isPage: true
   },
   {
     id: "programa-partners",
     name: "Gestión licencias",
-    sectionId: "programa-partners",
+    href: "/programa-partners",
     icon: Users,
-    isPage: true
   },
   {
     id: "app-movil",
     name: "Aplicación Móvil",
-    sectionId: "app-movil",
-    icon: Smartphone
+    href: "/app-movil",
+    icon: Smartphone,
   },
   {
     id: "marco-legal",
     name: "Marco Legal",
-    sectionId: "marco-legal",
+    externalUrl: "https://jobda.org/investors",
     icon: Scale,
-    externalUrl: "https://jobda.org/investors"
   },
   {
     id: "contacto-licitacion",
     name: "Contacto Licitación",
-    sectionId: "programa-partners",
+    href: "/programa-partners",
     icon: Phone,
-    isPage: true
   }
 ];
+
+const itemClass = "w-full flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200";
 
 export default function SmoothScrollMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -118,42 +112,25 @@ export default function SmoothScrollMenu() {
     return () => window.removeEventListener("openNuxaMenu", handleOpenMenu);
   }, []);
 
-  const scrollToSection = (sectionId: string, isPage?: boolean, externalUrl?: string) => {
+  const scrollToSection = (sectionId: string) => {
     setIsOpen(false);
-    
-    // If it's an external URL, navigate to it
-    if (externalUrl) {
-      window.open(externalUrl, "_blank");
-      return;
-    }
-    
+
     if (sectionId === "top") {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
-    // If it's a separate page, navigate directly
-    if (isPage || sectionId === "ejemplos-chat") {
-      window.location.href = `/${sectionId}`;
-      return;
-    }
-
-    // Add small delay to ensure menu closes first
     setTimeout(() => {
-      // If not on home page, navigate to home first then scroll
       if (location !== "/") {
         window.location.href = `/#${sectionId}`;
         return;
       }
-
-      // Smooth scroll to section
       const element = document.getElementById(sectionId);
       if (element) {
-        const offset = 100; // Account for fixed header
-        const elementPosition = element.offsetTop - offset;
-        window.scrollTo({ top: elementPosition, behavior: "smooth" });
+        const offset = 100;
+        window.scrollTo({ top: element.offsetTop - offset, behavior: "smooth" });
       }
-    }, 300); // Small delay to allow menu animation to complete
+    }, 300);
   };
 
   return (
@@ -163,22 +140,56 @@ export default function SmoothScrollMenu() {
           <Menu className="w-6 h-6" />
         </Button>
       </SheetTrigger>
-      
+
       <SheetContent side="right" className="bg-nflow-dark border-gray-800 w-80">
         <div className="py-6 h-full overflow-y-auto">
           <div className="flex items-center space-x-2 mb-8">
             <img src="/favicon.png" alt="NUXA" className="w-8 h-8 rounded-lg" />
             <span className="text-xl font-bold text-white">NUXA</span>
           </div>
-          
+
           <nav className="space-y-2">
             {menuItems.map((item) => {
               const IconComponent = item.icon;
+
+              // Real internal page link — crawlable <a> via wouter Link
+              if ((item as any).href) {
+                return (
+                  <Link
+                    key={item.id}
+                    href={(item as any).href}
+                    onClick={() => setIsOpen(false)}
+                    className={itemClass}
+                  >
+                    <IconComponent className="w-5 h-5" />
+                    <span>{item.name}</span>
+                  </Link>
+                );
+              }
+
+              // External link — opens in new tab
+              if ((item as any).externalUrl) {
+                return (
+                  <a
+                    key={item.id}
+                    href={(item as any).externalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsOpen(false)}
+                    className={itemClass}
+                  >
+                    <IconComponent className="w-5 h-5" />
+                    <span>{item.name}</span>
+                  </a>
+                );
+              }
+
+              // Section scroll (Inicio, Opiniones)
               return (
                 <button
                   key={item.id}
-                  onClick={() => scrollToSection(item.sectionId, (item as any).isPage, (item as any).externalUrl)}
-                  className="w-full flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200"
+                  onClick={() => scrollToSection((item as any).sectionId)}
+                  className={itemClass}
                 >
                   <IconComponent className="w-5 h-5" />
                   <span>{item.name}</span>
@@ -190,24 +201,20 @@ export default function SmoothScrollMenu() {
           <div className="mt-8 pt-8 border-t border-gray-700">
             <div className="text-xs text-gray-400 mb-4">Enlaces rápidos</div>
             <div className="space-y-2">
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                  window.location.href = "/login";
-                }}
-                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-3 rounded-xl font-medium hover:from-orange-600 hover:to-red-500 transition-all duration-300"
+              <a
+                href="/prueba-gratis"
+                onClick={() => setIsOpen(false)}
+                className="block w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-3 rounded-xl font-medium hover:from-orange-600 hover:to-red-500 transition-all duration-300 text-center"
               >
                 Comenzar Ahora
-              </button>
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                  window.location.href = "/login";
-                }}
-                className="w-full border border-gray-600 text-gray-300 px-4 py-3 rounded-xl font-medium hover:bg-white/10 hover:text-white transition-all duration-300"
+              </a>
+              <a
+                href="/login"
+                onClick={() => setIsOpen(false)}
+                className="block w-full border border-gray-600 text-gray-300 px-4 py-3 rounded-xl font-medium hover:bg-white/10 hover:text-white transition-all duration-300 text-center"
               >
                 Iniciar Sesión
-              </button>
+              </a>
             </div>
           </div>
         </div>

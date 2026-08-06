@@ -66,36 +66,24 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-3 text-sm">Servicios</h4>
             <ul className="space-y-1.5">
               <li>
-                <button 
-                  onClick={() => window.dispatchEvent(new CustomEvent('openNuxaMenu'))}
-                  className="text-gray-400 hover:text-white transition-colors text-left text-sm"
-                >
+                <Link href="/ejemplos-chat" className="text-gray-400 hover:text-white transition-colors text-sm">
                   Chat de Apoyo
-                </button>
+                </Link>
               </li>
               <li>
-                <button 
-                  onClick={() => window.dispatchEvent(new CustomEvent('openNuxaMenu'))}
-                  className="text-gray-400 hover:text-white transition-colors text-left text-sm"
-                >
+                <Link href="/recursos-gratuitos" className="text-gray-400 hover:text-white transition-colors text-sm">
                   Recursos
-                </button>
+                </Link>
               </li>
               <li>
-                <button 
-                  onClick={() => window.dispatchEvent(new CustomEvent('openNuxaMenu'))}
-                  className="text-gray-400 hover:text-white transition-colors text-left text-sm"
-                >
-                  Consejos
-                </button>
+                <Link href="/blog" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  Blog y Consejos
+                </Link>
               </li>
               <li>
-                <button 
-                  onClick={() => window.dispatchEvent(new CustomEvent('openNuxaMenu'))}
-                  className="text-gray-400 hover:text-white transition-colors text-left text-sm"
-                >
+                <Link href="/precios" className="text-gray-400 hover:text-white transition-colors text-sm">
                   Planes Premium
-                </button>
+                </Link>
               </li>
             </ul>
           </div>
@@ -105,34 +93,19 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-3 text-sm">Legal</h4>
             <ul className="space-y-1.5">
               <li>
-                <a 
-                  href="https://jobda.org/legal" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition-colors text-sm"
-                >
+                <Link href="/legal/aviso-legal" className="text-gray-400 hover:text-white transition-colors text-sm">
                   Aviso legal
-                </a>
+                </Link>
               </li>
               <li>
-                <a 
-                  href="https://jobda.org/privacy" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition-colors text-sm"
-                >
+                <Link href="/legal/privacidad" className="text-gray-400 hover:text-white transition-colors text-sm">
                   Política de privacidad
-                </a>
+                </Link>
               </li>
               <li>
-                <a 
-                  href="https://jobda.org/cookies" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition-colors text-sm"
-                >
+                <Link href="/legal/cookies" className="text-gray-400 hover:text-white transition-colors text-sm">
                   Política de cookies
-                </a>
+                </Link>
               </li>
               <li>
                 <button 
