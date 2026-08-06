@@ -4,8 +4,9 @@ import { createServer, type Server } from "http";
 import fs from "fs";
 import path from "path";
 import { storage } from "./storage";
-import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS } from "./emailService";
+import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS, sendLeadWelcomeEmail, generateUnsubscribeToken } from "./emailService";
 import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog, conversations, messages } from "@shared/schema";
+import { emailLeads } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
 import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
 import bcrypt from "bcrypt";
@@ -787,6 +788,84 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Sorteo - participate in monthly raffle
+  // ---------------------------------------------------------------------------
+  // Email Leads — captura de email en páginas públicas
+  // ---------------------------------------------------------------------------
+  app.post("/api/leads", async (req, res) => {
+    try {
+      const { email, source, consent } = req.body;
+      if (!email || typeof email !== "string" || !email.includes("@")) {
+        return res.status(400).json({ message: "Email válido requerido" });
+      }
+      if (!consent) {
+        return res.status(400).json({ message: "Se requiere consentimiento" });
+      }
+
+      const normalizedEmail = email.toLowerCase().trim();
+
+      // Si ya existe, respondemos OK sin duplicar
+      const existing = await storage.getEmailLeadByEmail(normalizedEmail);
+      if (existing) {
+        return res.json({ message: "Ya estabas suscrito. ¡Gracias!", alreadyExists: true });
+      }
+
+      const unsubscribeToken = generateUnsubscribeToken();
+      const lead = await storage.createEmailLead({
+        email: normalizedEmail,
+        source: source || "recursos-gratuitos",
+        consentMarketing: true,
+        unsubscribeToken,
+      });
+
+      // Enviar email de bienvenida en segundo plano (no bloquear la respuesta)
+      sendLeadWelcomeEmail({ email: normalizedEmail, unsubscribeToken }).catch(console.error);
+
+      res.json({ message: "¡Suscripción confirmada! Revisa tu email.", lead });
+    } catch (error) {
+      console.error("Error creating email lead:", error);
+      res.status(500).json({ message: "Error al registrar la suscripción" });
+    }
+  });
+
+  // Baja de suscripción — enlace en cada email
+  app.get("/api/leads/unsubscribe", async (req, res) => {
+    const { token } = req.query;
+    if (!token || typeof token !== "string") {
+      return res.status(400).send("Token inválido");
+    }
+
+    try {
+      const lead = await storage.unsubscribeEmailLead(token);
+      if (!lead) {
+        return res.status(404).send(`<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Baja - NUXA</title></head>
+<body style="font-family:sans-serif;text-align:center;padding:60px 20px;background:#0f172a;color:#e2e8f0;">
+  <p style="font-size:48px">🔍</p>
+  <h1 style="color:#fff">Enlace no encontrado</h1>
+  <p style="color:#94a3b8">Este enlace de baja no es válido o ya fue procesado.</p>
+  <a href="https://nuxa.life" style="color:#10b981">Volver a NUXA</a>
+</body></html>`);
+      }
+
+      res.send(`<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Baja confirmada - NUXA</title></head>
+<body style="font-family:sans-serif;text-align:center;padding:60px 20px;background:#0f172a;color:#e2e8f0;">
+  <p style="font-size:48px">✅</p>
+  <h1 style="color:#fff">Baja confirmada</h1>
+  <p style="color:#94a3b8;max-width:400px;margin:0 auto 24px;">
+    Has sido dado de baja correctamente. No recibirás más comunicaciones de NUXA en <strong style="color:#e2e8f0">${lead.email}</strong>.
+  </p>
+  <p style="color:#64748b;font-size:13px">Si cambias de opinión, puedes volver a suscribirte en nuestra web.</p>
+  <a href="https://nuxa.life" style="display:inline-block;margin-top:24px;color:#10b981;text-decoration:none;border:1px solid #10b981;padding:10px 24px;border-radius:8px;">
+    Volver a nuxa.life
+  </a>
+</body></html>`);
+    } catch (error) {
+      console.error("Error unsubscribing lead:", error);
+      res.status(500).send("Error al procesar la baja");
+    }
+  });
+
   app.post("/api/sorteo", async (req, res) => {
     try {
       const { email, source } = req.body;

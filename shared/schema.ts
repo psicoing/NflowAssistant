@@ -300,3 +300,20 @@ export const empresaRegistrations = pgTable("empresa_registrations", {
 export const insertEmpresaRegistrationSchema = createInsertSchema(empresaRegistrations).omit({ id: true, createdAt: true });
 export type InsertEmpresaRegistration = z.infer<typeof insertEmpresaRegistrationSchema>;
 export type EmpresaRegistration = typeof empresaRegistrations.$inferSelect;
+
+// ---------------------------------------------------------------------------
+// Email Leads — captura de email en páginas públicas (recursos, etc.)
+// ---------------------------------------------------------------------------
+export const emailLeads = pgTable("email_leads", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  source: text("source").notNull().default("recursos-gratuitos"),
+  consentMarketing: boolean("consent_marketing").notNull().default(true),
+  unsubscribeToken: text("unsubscribe_token").notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  unsubscribedAt: timestamp("unsubscribed_at"),
+});
+
+export const insertEmailLeadSchema = createInsertSchema(emailLeads).omit({ id: true, createdAt: true, unsubscribedAt: true });
+export type InsertEmailLead = z.infer<typeof insertEmailLeadSchema>;
+export type EmailLead = typeof emailLeads.$inferSelect;

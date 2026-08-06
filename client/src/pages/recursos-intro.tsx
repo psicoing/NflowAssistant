@@ -2,6 +2,7 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { EmailCaptureGate } from "@/components/ui/email-capture-gate";
 import { 
   Heart, Brain, Sun, Shield, Briefcase, ArrowRight, Sparkles, 
   Wind, Hand, Eye, Activity, Smile, Calendar, BookOpen, 
@@ -95,6 +96,7 @@ export default function RecursosIntro() {
 
   return (
     <div className="min-h-screen bg-nflow-dark">
+      <EmailCaptureGate source="recursos-gratuitos" />
       <SEOHead
         title="Recursos Gratuitos de Salud Mental - NUXA"
         description="Herramientas gratuitas de salud mental: respiración guiada, registro emocional, evaluaciones profesionales, diario de gratitud y más. Sin registro, sin coste."

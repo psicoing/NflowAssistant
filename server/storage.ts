@@ -1,5 +1,5 @@
 import { 
-  users, conversations, messages, resources, stripeTransactions, shopifyTransactions, partners, partnerReferrals, books, sorteoEntries, individualRegistrations, empresaRegistrations,
+  users, conversations, messages, resources, stripeTransactions, shopifyTransactions, partners, partnerReferrals, books, sorteoEntries, individualRegistrations, empresaRegistrations, emailLeads,
   type User, type InsertUser, 
   type Conversation, type InsertConversation,
   type Message, type InsertMessage,
@@ -11,7 +11,8 @@ import {
   type Book,
   type SorteoEntry, type InsertSorteoEntry,
   type IndividualRegistration, type InsertIndividualRegistration,
-  type EmpresaRegistration, type InsertEmpresaRegistration
+  type EmpresaRegistration, type InsertEmpresaRegistration,
+  type EmailLead, type InsertEmailLead
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql } from "drizzle-orm";
@@ -111,6 +112,12 @@ export interface IStorage {
   getAllIndividualRegistrations(): Promise<IndividualRegistration[]>;
   createEmpresaRegistration(data: InsertEmpresaRegistration): Promise<EmpresaRegistration>;
   getAllEmpresaRegistrations(): Promise<EmpresaRegistration[]>;
+
+  // Email Leads
+  createEmailLead(data: InsertEmailLead): Promise<EmailLead>;
+  getEmailLeadByEmail(email: string): Promise<EmailLead | undefined>;
+  getEmailLeadByUnsubscribeToken(token: string): Promise<EmailLead | undefined>;
+  unsubscribeEmailLead(token: string): Promise<EmailLead | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -666,6 +673,33 @@ export class DatabaseStorage implements IStorage {
 
   async getAllEmpresaRegistrations(): Promise<EmpresaRegistration[]> {
     return await db.select().from(empresaRegistrations).orderBy(empresaRegistrations.createdAt);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Email Leads
+  // ---------------------------------------------------------------------------
+  async createEmailLead(data: InsertEmailLead): Promise<EmailLead> {
+    const [lead] = await db.insert(emailLeads).values(data).returning();
+    return lead;
+  }
+
+  async getEmailLeadByEmail(email: string): Promise<EmailLead | undefined> {
+    const [lead] = await db.select().from(emailLeads).where(eq(emailLeads.email, email));
+    return lead || undefined;
+  }
+
+  async getEmailLeadByUnsubscribeToken(token: string): Promise<EmailLead | undefined> {
+    const [lead] = await db.select().from(emailLeads).where(eq(emailLeads.unsubscribeToken, token));
+    return lead || undefined;
+  }
+
+  async unsubscribeEmailLead(token: string): Promise<EmailLead | undefined> {
+    const [updated] = await db
+      .update(emailLeads)
+      .set({ unsubscribedAt: new Date() })
+      .where(eq(emailLeads.unsubscribeToken, token))
+      .returning();
+    return updated || undefined;
   }
 }
 

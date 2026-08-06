@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import sgMail from '@sendgrid/mail';
 import twilio from 'twilio';
+import crypto from 'crypto';
 
 // -------------------------------------------------------
 // Resend client (owner notifications)
@@ -423,4 +424,89 @@ export async function sendOwnerSMS(params: {
     console.error("sendOwnerSMS error:", err);
     return false;
   }
+}
+
+// ---------------------------------------------------------------------------
+// Lead welcome email — sent to new email subscribers from public pages
+// Uses SendGrid (domain-verified, works with any recipient)
+// ---------------------------------------------------------------------------
+export async function sendLeadWelcomeEmail(params: {
+  email: string;
+  unsubscribeToken: string;
+}): Promise<boolean> {
+  try {
+    const { client, fromEmail } = await getUncachableSendGridClient();
+    const unsubscribeUrl = `https://nuxa.life/api/leads/unsubscribe?token=${params.unsubscribeToken}`;
+
+    const html = `<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;background:#f0f4ff;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:32px 16px;">
+    <tr><td align="center">
+      <table width="520" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <tr><td style="background:linear-gradient(135deg,#10b981,#0d9488);padding:32px;text-align:center;">
+          <p style="margin:0 0 8px;font-size:36px;">🧠</p>
+          <p style="margin:0;font-size:24px;font-weight:700;color:#fff;">¡Bienvenido/a a NUXA!</p>
+          <p style="margin:8px 0 0;color:#a7f3d0;font-size:15px;">Tu psicólogo IA está aquí para ti</p>
+        </td></tr>
+        <tr><td style="padding:32px;">
+          <p style="margin:0 0 20px;color:#374151;font-size:15px;line-height:1.7;">
+            Gracias por suscribirte. A partir de ahora recibirás de NUXA:
+          </p>
+          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+            <tr><td style="padding:10px 0;border-bottom:1px solid #e5e7eb;">
+              <p style="margin:0;color:#1f2937;font-size:14px;">🔔 <strong>Recordatorios mensuales</strong> de bienestar emocional</p>
+            </td></tr>
+            <tr><td style="padding:10px 0;border-bottom:1px solid #e5e7eb;">
+              <p style="margin:0;color:#1f2937;font-size:14px;">🎁 <strong>Recursos nuevos</strong> antes que nadie</p>
+            </td></tr>
+            <tr><td style="padding:10px 0;">
+              <p style="margin:0;color:#1f2937;font-size:14px;">💬 <strong>Novedades</strong> de la plataforma NUXA</p>
+            </td></tr>
+          </table>
+          <div style="text-align:center;margin-bottom:24px;">
+            <a href="https://nuxa.life/prueba-gratis"
+               style="display:inline-block;background:linear-gradient(135deg,#10b981,#0d9488);color:#fff;text-decoration:none;padding:14px 32px;border-radius:12px;font-weight:700;font-size:15px;">
+              Explorar NUXA gratis &rarr;
+            </a>
+          </div>
+          <p style="margin:0;color:#6b7280;font-size:13px;line-height:1.6;">
+            Recuerda que NUXA es tu espacio de apoyo emocional 24/7. Estamos aqui siempre que lo necesites.
+          </p>
+        </td></tr>
+        <tr><td style="padding:20px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
+          <p style="margin:0;font-size:11px;color:#9ca3af;">
+            NUXA &middot; Empordajobs SL &middot; B02701100<br>
+            <a href="${unsubscribeUrl}" style="color:#9ca3af;text-decoration:underline;">
+              Darme de baja de las comunicaciones
+            </a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+    const msg = {
+      to: params.email,
+      from: { email: fromEmail, name: "NUXA" },
+      subject: "Bienvenido/a a NUXA - Tu psicólogo IA te espera",
+      text: `Gracias por suscribirte a NUXA.\n\nA partir de ahora recibirás recordatorios mensuales de bienestar, recursos nuevos y novedades de la plataforma.\n\nExplora NUXA gratis: https://nuxa.life/prueba-gratis\n\n---\nPara darte de baja: ${unsubscribeUrl}`,
+      html,
+    };
+
+    await client.send(msg);
+    console.log(`✅ Lead welcome email sent to ${params.email}`);
+    return true;
+  } catch (err) {
+    console.error("sendLeadWelcomeEmail exception:", err);
+    return false;
+  }
+}
+
+// Generate a secure random unsubscribe token
+export function generateUnsubscribeToken(): string {
+  return crypto.randomBytes(32).toString("hex");
 }
