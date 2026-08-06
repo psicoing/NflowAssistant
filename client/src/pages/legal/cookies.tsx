@@ -3,9 +3,17 @@ import { ArrowLeft, Cookie, Settings, BarChart3, Target } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { SEOHead } from "@/components/SEOHead";
 
 export default function PoliticaCookies() {
   return (
+    <>
+      <SEOHead
+        title="Política de Cookies | NUXA"
+        description="Información sobre el uso de cookies en NUXA: tipos, finalidad y cómo gestionar tus preferencias de privacidad según la normativa europea."
+        canonicalUrl="https://nuxa.life/legal/cookies"
+        ogUrl="https://nuxa.life/legal/cookies"
+      />
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
@@ -340,5 +348,6 @@ export default function PoliticaCookies() {
         </Card>
       </div>
     </div>
+    </>
   );
 }

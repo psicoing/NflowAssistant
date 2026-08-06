@@ -66,7 +66,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos", "/programa-partners"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos", "/programa-partners", "/recompensas"];
     // Allow magic link access routes
     if (location.startsWith("/acceso/")) {
       return;

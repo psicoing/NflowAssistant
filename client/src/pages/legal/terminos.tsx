@@ -2,9 +2,17 @@ import { Link } from "wouter";
 import { ArrowLeft, Shield, FileText, Building2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { SEOHead } from "@/components/SEOHead";
 
 export default function TerminosCondiciones() {
   return (
+    <>
+      <SEOHead
+        title="Términos y Condiciones de Uso | NUXA"
+        description="Términos y condiciones de uso de NUXA, plataforma de psicología IA. Conoce tus derechos, obligaciones y las condiciones que rigen el uso del servicio."
+        canonicalUrl="https://nuxa.life/legal/terminos"
+        ogUrl="https://nuxa.life/legal/terminos"
+      />
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
@@ -192,5 +200,6 @@ export default function TerminosCondiciones() {
         </Card>
       </div>
     </div>
+    </>
   );
 }

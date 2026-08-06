@@ -3,9 +3,17 @@ import { ArrowLeft, Shield, Lock, Eye, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { SEOHead } from "@/components/SEOHead";
 
 export default function PoliticaPrivacidad() {
   return (
+    <>
+      <SEOHead
+        title="Política de Privacidad | NUXA"
+        description="Política de privacidad de NUXA. Cómo recogemos, usamos y protegemos tus datos personales conforme al RGPD y la LOPD española."
+        canonicalUrl="https://nuxa.life/legal/privacidad"
+        ogUrl="https://nuxa.life/legal/privacidad"
+      />
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
@@ -352,5 +360,6 @@ export default function PoliticaPrivacidad() {
         </Card>
       </div>
     </div>
+    </>
   );
 }

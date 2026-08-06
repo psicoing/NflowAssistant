@@ -1,5 +1,6 @@
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -104,6 +105,13 @@ export default function Recompensas() {
   const progreso = (puntosActuales / 1000) * 100;
 
   return (
+    <>
+      <SEOHead
+        title="Recompensas NUXA | Programa de Puntos y Beneficios"
+        description="Acumula puntos con NUXA, desbloquea beneficios exclusivos y sube de nivel. Programa de fidelización para usuarios comprometidos con su bienestar mental."
+        canonicalUrl="https://nuxa.life/recompensas"
+        ogUrl="https://nuxa.life/recompensas"
+      />
     <div className="min-h-screen bg-nflow-dark">
       <Header />
       
@@ -272,5 +280,6 @@ export default function Recompensas() {
 
       <Footer />
     </div>
+    </>
   );
 }

@@ -2,9 +2,17 @@ import { Link } from "wouter";
 import { ArrowLeft, Scale, Building2, Globe, Shield } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { SEOHead } from "@/components/SEOHead";
 
 export default function AvisoLegal() {
   return (
+    <>
+      <SEOHead
+        title="Aviso Legal | NUXA"
+        description="Aviso legal de NUXA (Empordajobs SL, B02701100). Información sobre el responsable del sitio web, condiciones de uso y normativa aplicable en España."
+        canonicalUrl="https://nuxa.life/legal/aviso-legal"
+        ogUrl="https://nuxa.life/legal/aviso-legal"
+      />
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
@@ -318,5 +326,6 @@ export default function AvisoLegal() {
         </Card>
       </div>
     </div>
+    </>
   );
 }

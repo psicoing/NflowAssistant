@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, TrendingUp, Heart, Star, ArrowLeft, Sparkles } from "lucide-react";
 import { Link } from "wouter";
+import { SEOHead } from "@/components/SEOHead";
 
 export default function PartnersComerciales() {
   const partners = [
@@ -18,6 +19,13 @@ export default function PartnersComerciales() {
   ];
 
   return (
+    <>
+      <SEOHead
+        title="Partners Comerciales NUXA | Equipo de Socios Fundadores"
+        description="Conoce al equipo de partners comerciales de NUXA, especialistas en salud mental digital, ISO 45003 y bienestar laboral. Líderes en psicología IA en España."
+        canonicalUrl="https://nuxa.life/partners-comerciales"
+        ogUrl="https://nuxa.life/partners-comerciales"
+      />
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
       {/* Header with Back Button */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10 shadow-sm">
@@ -192,5 +200,6 @@ export default function PartnersComerciales() {
         </div>
       </div>
     </div>
+    </>
   );
 }
