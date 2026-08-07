@@ -12,4 +12,11 @@ if (!process.env.DATABASE_URL) {
 }
 
 export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+// Neon serverless connections are terminated periodically by the server.
+// Without this handler the 'error' event would be unhandled and crash the process.
+pool.on("error", (err) => {
+  console.error("[db] Idle pool client error (connection dropped by server):", err.message);
+});
+
 export const db = drizzle({ client: pool, schema });

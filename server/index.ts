@@ -5,6 +5,14 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { registerSeoMiddleware } from "./seo-middleware";
 
+// Prevent transient DB/network errors from crashing the process
+process.on("uncaughtException", (err: Error) => {
+  console.error("[process] Uncaught exception (kept alive):", err.message);
+});
+process.on("unhandledRejection", (reason: unknown) => {
+  console.error("[process] Unhandled rejection (kept alive):", reason);
+});
+
 const app = express();
 
 // Apply express.json() conditionally - exclude Stripe webhook route
