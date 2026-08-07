@@ -24,6 +24,11 @@ export default defineConfig({
     },
   },
   root: path.resolve(import.meta.dirname, "client"),
+  server: {
+    hmr: {
+      overlay: false,
+    },
+  },
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,

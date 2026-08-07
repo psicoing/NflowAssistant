@@ -17,14 +17,18 @@ export default function PWAInstallPrompt() {
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
-    // Check if app is already installed
-    if (window.navigator && 'getInstalledRelatedApps' in window.navigator) {
-      // @ts-ignore
-      window.navigator.getInstalledRelatedApps().then((relatedApps: any[]) => {
-        if (relatedApps.length > 0) {
-          setIsInstalled(true);
-        }
-      });
+    // Check if app is already installed (only in top-level browsing context)
+    if (window.navigator && 'getInstalledRelatedApps' in window.navigator && window.self === window.top) {
+      try {
+        // @ts-ignore
+        window.navigator.getInstalledRelatedApps().then((relatedApps: any[]) => {
+          if (relatedApps.length > 0) {
+            setIsInstalled(true);
+          }
+        }).catch(() => {/* silently ignore */});
+      } catch {
+        // Not supported in this context
+      }
     }
 
     // Listen for the beforeinstallprompt event
