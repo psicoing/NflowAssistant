@@ -170,68 +170,82 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Sección "Para quién es NUXA" */}
-        <div className="bg-white py-12 px-4">
-          <div className="max-w-4xl mx-auto">
-            <p className="text-center text-gray-500 text-sm font-semibold uppercase tracking-widest mb-2">¿Para quién es NUXA?</p>
-            <h2 className="text-center text-2xl sm:text-3xl font-bold text-gray-900 mb-8">
-              Para cualquier persona, empresa u organización
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        {/* Sección "Para quién es NUXA" — futurista */}
+        <div className="relative bg-gradient-to-br from-slate-900 via-emerald-950 to-teal-950 py-16 px-4 overflow-hidden">
+          {/* Partículas de fondo */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/4 left-1/6 w-2 h-2 bg-teal-400 rounded-full animate-ping opacity-50" />
+            <div className="absolute top-2/3 right-1/5 w-1.5 h-1.5 bg-emerald-400 rounded-full animate-ping delay-700 opacity-40" />
+            <div className="absolute bottom-1/4 left-1/2 w-1 h-1 bg-cyan-400 rounded-full animate-ping delay-1500 opacity-50" />
+            <div className="absolute top-1/2 right-1/3 w-1 h-1 bg-teal-300 rounded-full animate-ping delay-2000 opacity-30" />
+            <div className="absolute -top-20 -left-20 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
+            <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl" />
+          </div>
+
+          <div className="relative z-10 max-w-4xl mx-auto">
+            {/* Cabecera */}
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 border border-white/20 mb-4">
+                <div className="w-2 h-2 bg-teal-400 rounded-full mr-2 animate-pulse" />
+                <span className="text-xs text-teal-300 font-semibold uppercase tracking-widest">¿Para quién es NUXA?</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white leading-tight">
+                Para cualquier{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-400">
+                  persona, empresa
+                </span>{" "}
+                u organización
+              </h2>
+            </div>
+
+            {/* Tarjetas */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Particulares */}
-              <a href="/prueba-gratis" className="group flex flex-col items-start rounded-2xl border-2 border-indigo-100 bg-indigo-50 p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5">
-                <div className="flex items-center gap-1.5 mb-3 text-2xl">
-                  <span title="Joven (18+)">👱‍♂️</span>
-                  <span title="Joven (18+)">👱‍♀️</span>
-                  <span title="Hombre adulto">👨‍🦳</span>
-                  <span title="Mujer adulta">👩‍🦳</span>
-                  <span title="Familia">👨‍👩‍👧‍👦</span>
+              <a href="/prueba-gratis" className="group relative flex flex-col items-start rounded-2xl border border-indigo-400/20 bg-white/5 backdrop-blur-sm p-6 hover:bg-white/10 hover:border-indigo-400/40 hover:-translate-y-1 transition-all duration-300">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-500/5 to-violet-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative flex items-center gap-1.5 mb-3 text-2xl">
+                  <span>👱‍♂️</span><span>👱‍♀️</span><span>👨‍🦳</span><span>👩‍🦳</span><span>👨‍👩‍👧‍👦</span>
                 </div>
-                <h3 className="font-bold text-gray-900 text-lg mb-2">Particulares</h3>
-                <p className="text-gray-600 text-sm leading-relaxed flex-1">Cualquier persona que quiera apoyo emocional, gestionar el estrés o mejorar su bienestar mental. Prueba gratis, sin tarjeta.</p>
-                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent group-hover:gap-2.5 transition-all">
+                <h3 className="relative font-bold text-white text-lg mb-2">Particulares</h3>
+                <p className="relative text-slate-300 text-sm leading-relaxed flex-1">Cualquier persona que quiera apoyo emocional, gestionar el estrés o mejorar su bienestar mental. Prueba gratis, sin tarjeta.</p>
+                <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400 group-hover:gap-2.5 transition-all duration-200">
                   Probar gratis →
                 </span>
               </a>
 
               {/* Empresas */}
-              <a href="/empresa-privada" className="group flex flex-col items-start rounded-2xl border-2 border-emerald-100 bg-emerald-50 p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5">
-                <div className="flex items-center gap-1.5 mb-3 text-2xl">
-                  <span title="Autónomo">🧑‍💼</span>
-                  <span title="Pequeña empresa">🏪</span>
-                  <span title="Empresa mediana">🏬</span>
-                  <span title="Gran empresa">🏢</span>
-                  <span title="Corporación">🏙️</span>
+              <a href="/empresa-privada" className="group relative flex flex-col items-start rounded-2xl border border-emerald-400/20 bg-white/5 backdrop-blur-sm p-6 hover:bg-white/10 hover:border-emerald-400/40 hover:-translate-y-1 transition-all duration-300">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative flex items-center gap-1.5 mb-3 text-2xl">
+                  <span>🧑‍💼</span><span>🏪</span><span>🏬</span><span>🏢</span><span>🏙️</span>
                 </div>
-                <h3 className="font-bold text-gray-900 text-lg mb-2">Empresas</h3>
-                <p className="text-gray-600 text-sm leading-relaxed flex-1">Cuida el bienestar de tu equipo, reduce el absentismo y cumple con la norma ISO 45003 de riesgos psicosociales en el trabajo.</p>
-                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent group-hover:gap-2.5 transition-all">
+                <h3 className="relative font-bold text-white text-lg mb-2">Empresas</h3>
+                <p className="relative text-slate-300 text-sm leading-relaxed flex-1">Cuida el bienestar de tu equipo, reduce el absentismo y cumple con la norma ISO 45003 de riesgos psicosociales en el trabajo.</p>
+                <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400 group-hover:gap-2.5 transition-all duration-200">
                   Solución para empresas →
                 </span>
               </a>
 
               {/* Organizaciones públicas */}
-              <a href="/sector-publico" className="group flex flex-col items-start rounded-2xl border-2 border-sky-100 bg-sky-50 p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5">
-                <div className="flex items-center gap-1.5 mb-3 text-2xl">
-                  <span title="Ayuntamiento">🏛️</span>
-                  <span title="Hospital">🏥</span>
-                  <span title="Escuela">🏫</span>
-                  <span title="Universidad">🎓</span>
-                  <span title="Servicios sociales">🤝</span>
+              <a href="/sector-publico" className="group relative flex flex-col items-start rounded-2xl border border-sky-400/20 bg-white/5 backdrop-blur-sm p-6 hover:bg-white/10 hover:border-sky-400/40 hover:-translate-y-1 transition-all duration-300">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-sky-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative flex items-center gap-1.5 mb-3 text-2xl">
+                  <span>🏛️</span><span>🏥</span><span>🏫</span><span>🎓</span><span>🤝</span>
                 </div>
-                <h3 className="font-bold text-gray-900 text-lg mb-2">Organizaciones públicas</h3>
-                <p className="text-gray-600 text-sm leading-relaxed flex-1">Instituciones educativas, sanitarias y administraciones que quieren ofrecer apoyo psicológico accesible a sus usuarios o ciudadanos.</p>
-                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold bg-gradient-to-r from-sky-500 to-blue-500 bg-clip-text text-transparent group-hover:gap-2.5 transition-all">
+                <h3 className="relative font-bold text-white text-lg mb-2">Organizaciones públicas</h3>
+                <p className="relative text-slate-300 text-sm leading-relaxed flex-1">Instituciones educativas, sanitarias y administraciones que quieren ofrecer apoyo psicológico accesible a sus usuarios o ciudadanos.</p>
+                <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-400 group-hover:gap-2.5 transition-all duration-200">
                   Sector público →
                 </span>
               </a>
             </div>
 
-            {/* CTA principal — botones naranja pulsante */}
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            {/* CTA principal */}
+            <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
                 href="/prueba-gratis"
-                className="btn-orange-glow inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-xl px-12 py-5 rounded-2xl transition-colors duration-200"
+                className="btn-orange-glow inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-xl px-12 py-5 rounded-2xl transition-all duration-200 shadow-lg shadow-orange-500/30"
               >
                 <span className="text-2xl">🚀</span>
                 {t('home.cta.button')}
@@ -239,15 +253,14 @@ export default function Home() {
               </a>
               <a
                 href="/recursos-gratuitos"
-                className="btn-orange-glow inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-xl px-12 py-5 rounded-2xl transition-colors duration-200"
+                className="btn-orange-glow inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-xl px-12 py-5 rounded-2xl transition-all duration-200 shadow-lg shadow-orange-500/30"
               >
                 <span className="text-2xl">🎁</span>
                 Recursos gratis
                 <span className="text-2xl">→</span>
               </a>
             </div>
-            <p className="text-center text-gray-400 text-sm mt-3">{t('home.cta.subtitle')}</p>
-
+            <p className="text-center text-slate-400 text-sm mt-3">{t('home.cta.subtitle')}</p>
           </div>
         </div>
 
