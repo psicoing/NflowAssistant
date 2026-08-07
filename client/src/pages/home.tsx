@@ -93,19 +93,17 @@ function AwarenessBanner({ onClose }: { onClose: () => void }) {
   return (
     <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-b border-indigo-800/40">
       <div className="max-w-5xl mx-auto px-5">
-        {/* Header row — always visible */}
-        <div className="flex items-center gap-3 py-3.5">
-          <button
-            onClick={() => setExpanded(e => !e)}
-            className="flex-1 flex items-center gap-3 text-left group"
-          >
-            <p className="flex-1 text-white font-black text-sm sm:text-base leading-snug text-center">
-              Redes sociales, a partir de los 16 años
-            </p>
-            <span className={`text-indigo-300 text-xs font-semibold flex-shrink-0 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}>
-              ▼
-            </span>
-          </button>
+        {/* Header row — always visible, clickable to expand */}
+        <button
+          onClick={() => setExpanded(e => !e)}
+          className="w-full flex items-center gap-3 py-3.5 text-left group"
+        >
+          <p className="flex-1 text-white font-black text-sm sm:text-base leading-snug text-center">
+            Redes sociales, a partir de los 16 años
+          </p>
+          <span className={`text-indigo-300 text-xs font-semibold flex-shrink-0 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}>
+            ▼
+          </span>
           <button
             onClick={e => { e.stopPropagation(); onClose(); }}
             aria-label="Cerrar"
@@ -113,7 +111,7 @@ function AwarenessBanner({ onClose }: { onClose: () => void }) {
           >
             <X className="w-4 h-4" />
           </button>
-        </div>
+        </button>
 
         {/* Expandable content */}
         {expanded && (
@@ -179,7 +177,7 @@ export default function Home() {
             <h2 className="text-center text-2xl sm:text-3xl font-bold text-gray-900 mb-8">
               Para cualquier persona, empresa u organización
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {/* Particulares */}
               <a href="/prueba-gratis" className="group flex flex-col items-start rounded-2xl border-2 border-indigo-100 bg-indigo-50 p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5">
                 <div className="flex items-center gap-1.5 mb-3 text-2xl">
@@ -227,91 +225,6 @@ export default function Home() {
                   Sector público →
                 </span>
               </a>
-
-              {/* Recursos Gratuitos — 4ª tarjeta */}
-              <a href="/recursos-gratuitos" className="group relative flex flex-col items-start rounded-2xl border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5 overflow-hidden">
-                {/* Badge "Gratis" */}
-                <span className="absolute top-3 right-3 bg-amber-400 text-amber-900 text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full">
-                  100% gratis
-                </span>
-                <div className="flex items-center gap-1.5 mb-3 text-2xl">
-                  <span title="Regalo">🎁</span>
-                  <span title="Cerebro">🧠</span>
-                  <span title="Meditación">🧘‍♀️</span>
-                  <span title="Corazón">💚</span>
-                </div>
-                <h3 className="font-bold text-gray-900 text-lg mb-2">Recursos gratuitos</h3>
-                <p className="text-gray-600 text-sm leading-relaxed flex-1">Respiración guiada, registro emocional, ejercicios de grounding, diario de gratitud y más. Sin registro, sin tarjeta, para todos.</p>
-                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent group-hover:gap-2.5 transition-all">
-                  Explorar recursos →
-                </span>
-              </a>
-            </div>
-
-            {/* Banner: gratis vs premium — separador visual entre tarjetas y CTA */}
-            <div className="mt-8 rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-              <div className="grid grid-cols-1 md:grid-cols-2">
-                {/* Columna izquierda — Gratuito */}
-                <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 md:p-7 border-b md:border-b-0 md:border-r border-emerald-100">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-2xl">🎁</span>
-                    <div>
-                      <p className="font-bold text-gray-900 text-base leading-tight">NUXA regala mucho</p>
-                      <p className="text-emerald-600 text-xs font-semibold uppercase tracking-wide">Completamente gratuito · Sin tarjeta</p>
-                    </div>
-                  </div>
-                  <ul className="space-y-2">
-                    {[
-                      "Respiración guiada y técnicas de relajación",
-                      "Registro emocional diario",
-                      "Evaluaciones de ansiedad y autoestima",
-                      "Diario de gratitud y afirmaciones",
-                      "Ejercicios de grounding 5-4-3-2-1",
-                      "3 consultas con el psicólogo IA",
-                    ].map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm text-gray-700">
-                        <span className="text-emerald-500 font-bold mt-0.5 flex-shrink-0">✓</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <a href="/recursos-gratuitos" className="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-emerald-700 hover:text-emerald-900 transition-colors">
-                    Ver todos los recursos gratuitos →
-                  </a>
-                </div>
-
-                {/* Columna derecha — Premium */}
-                <div className="bg-gradient-to-br from-indigo-50 to-violet-50 p-6 md:p-7">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-2xl">⭐</span>
-                    <div>
-                      <p className="font-bold text-gray-900 text-base leading-tight">NUXA Premium</p>
-                      <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide">La misma calidad · Sin límites</p>
-                    </div>
-                  </div>
-                  <ul className="space-y-2">
-                    {[
-                      "Conversaciones ilimitadas con el psicólogo IA",
-                      "Historial y seguimiento a largo plazo",
-                      "Planes personalizados de bienestar",
-                      "Acceso prioritario a funciones nuevas",
-                      "Apoyo para empresas e instituciones",
-                      "Desde 2,99 € · Sin permanencia",
-                    ].map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm text-gray-700">
-                        <span className="text-indigo-500 font-bold mt-0.5 flex-shrink-0">✓</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <a href="/precios" className="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-indigo-700 hover:text-indigo-900 transition-colors">
-                    Ver planes y precios →
-                  </a>
-                </div>
-              </div>
-              <div className="bg-gray-50 border-t border-gray-100 px-6 py-3 text-center">
-                <p className="text-xs text-gray-500">Tanto los recursos gratuitos como los de pago están creados con el mismo rigor y calidad. NUXA cree que el bienestar mental debe ser accesible para todos.</p>
-              </div>
             </div>
 
             {/* CTA principal — botón naranja pulsante */}
