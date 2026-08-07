@@ -686,7 +686,10 @@ export function injectRouteMetadata(html: string, url: string): string {
       `</div>`,
       `<script>var _s=document.getElementById('nuxa-seo-content');_s&&_s.parentNode.removeChild(_s);</script>`,
     ].join("\n  ");
-    result = result.replace("<body>", `<body>\n  ${seoBlock}`);
+    // Use a regex to match only the real HTML <body> tag (which appears on its
+    // own line with optional whitespace). This avoids matching '<body>' that
+    // appears inside JavaScript string literals in Vite/Replit injected scripts.
+    result = result.replace(/\n(\s*<body>)/, `\n$1\n  ${seoBlock}`);
   }
 
   return result;
