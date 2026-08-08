@@ -114,7 +114,7 @@ const routeMetadata: Record<string, RouteMeta> = {
           <li>Totalmente confidencial y seguro</li>
           <li>Para individuos, familias y empresas</li>
           <li>Tecnología de IA avanzada con enfoque empático</li>
-          <li>Planes desde €2.99/mes · 3 consultas gratuitas sin registro</li>
+          <li>Planes desde €2.99/mes · 5 consultas gratuitas sin registro</li>
         </ul>
         <p><a href="/prueba-gratis">Prueba NUXA gratis</a> · <a href="/precios">Ver planes y precios</a> · <a href="/ejemplos-chat">Ver ejemplos de conversación</a></p>
       </main>`,
@@ -301,13 +301,13 @@ const routeMetadata: Record<string, RouteMeta> = {
   "/prueba-gratis": {
     title: "Prueba NUXA Gratis | 3 Consultas Sin Registro",
     description:
-      "Prueba NUXA gratis sin registro. Habla con nuestro psicólogo IA ahora mismo. 3 consultas gratuitas para descubrir el poder del apoyo emocional digital.",
+      "Prueba NUXA gratis sin registro. Habla con nuestro psicólogo IA ahora mismo. 5 consultas gratuitas para descubrir el poder del apoyo emocional digital.",
     canonical: `${SITE_URL}/prueba-gratis`,
     jsonLd: orgSchema,
     bodyHtml: `
       <main>
         <h1>Prueba NUXA Gratis — 3 Consultas Sin Registro</h1>
-        <p>Accede al psicólogo IA de NUXA sin necesidad de crear una cuenta. Tienes 3 consultas gratuitas para descubrir cómo la IA puede apoyar tu bienestar emocional.</p>
+        <p>Accede al psicólogo IA de NUXA sin necesidad de crear una cuenta. Tienes 5 consultas gratuitas para descubrir cómo la IA puede apoyar tu bienestar emocional.</p>
         <ul>
           <li>Sin tarjeta de crédito</li>
           <li>Sin registro obligatorio</li>

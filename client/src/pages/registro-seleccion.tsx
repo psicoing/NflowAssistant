@@ -100,10 +100,10 @@ export default function RegistroSeleccion() {
                   </span>
                 </div>
                 <p className="text-emerald-700 text-sm leading-relaxed mb-2">
-                  Accede ahora con 2 consultas sin coste ni tarjeta de crédito. Habla con NUXA y decide después si quieres continuar con un plan.
+                  Accede ahora con 5 consultas sin coste ni tarjeta de crédito. Habla con NUXA y decide después si quieres continuar con un plan.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  {["2 preguntas gratis", "Sin tarjeta de crédito", "Acceso inmediato"].map((item) => (
+                  {["5 preguntas gratis", "Sin tarjeta de crédito", "Acceso inmediato"].map((item) => (
                     <span key={item} className="inline-flex items-center gap-1 text-xs text-emerald-700 font-medium">
                       <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
                       {item}

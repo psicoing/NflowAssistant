@@ -191,7 +191,7 @@ export const translations = {
 
     // Home CTA button
     'home.cta.button': 'Comenzar gratis',
-    'home.cta.subtitle': 'Sin tarjeta · Sin registro · 3 consultas gratis',
+    'home.cta.subtitle': 'Sin tarjeta · Sin registro · 5 consultas gratis',
 
     // Emergency
     'emergency.title': 'Números de Emergencia',
@@ -565,7 +565,7 @@ export const translations = {
 
     // Home CTA button
     'home.cta.button': 'Commencer gratuitement',
-    'home.cta.subtitle': 'Sans carte · Sans inscription · 3 consultations gratuites',
+    'home.cta.subtitle': 'Sans carte · Sans inscription · 5 consultations gratuites',
 
     // Emergency
     'emergency.title': 'Numéros d\'Urgence',
@@ -591,7 +591,7 @@ export const translations = {
     'nav.home': 'Casa',
     'hero.cta': 'Inizia Chat',
     'home.cta.button': 'Inizia gratis',
-    'home.cta.subtitle': 'Senza carta · Senza registrazione · 3 consulenze gratuite',
+    'home.cta.subtitle': 'Senza carta · Senza registrazione · 5 consulenze gratuite',
     'chat.welcome.title': 'Benvenuto in NUXA Chat',
     'chat.conversations.new': 'Nuovo',
     'chat.filters.all': 'Tutti',
@@ -603,7 +603,7 @@ export const translations = {
     'nav.home': 'Início',
     'hero.cta': 'Iniciar Chat',
     'home.cta.button': 'Começar grátis',
-    'home.cta.subtitle': 'Sem cartão · Sem registo · 3 consultas grátis',
+    'home.cta.subtitle': 'Sem cartão · Sem registo · 5 consultas grátis',
     'chat.welcome.title': 'Bem-vindo ao NUXA Chat',
     'chat.conversations.new': 'Novo',
     'chat.filters.all': 'Todos',
@@ -615,7 +615,7 @@ export const translations = {
     'nav.home': 'Inici',
     'hero.cta': 'Començar Chat',
     'home.cta.button': 'Començar gratis',
-    'home.cta.subtitle': 'Sense targeta · Sense registre · 3 consultes gratuïtes',
+    'home.cta.subtitle': 'Sense targeta · Sense registre · 5 consultes gratuïtes',
     'chat.welcome.title': 'Benvingut a NUXA Chat',
     'chat.conversations.new': 'Nou',
     'chat.filters.all': 'Tots',
@@ -639,7 +639,7 @@ export const translations = {
     'nav.home': 'Inicio',
     'hero.cta': 'Comezar Chat',
     'home.cta.button': 'Comezar gratis',
-    'home.cta.subtitle': 'Sen tarxeta · Sen rexistro · 3 consultas gratis',
+    'home.cta.subtitle': 'Sen tarxeta · Sen rexistro · 5 consultas gratis',
     'chat.welcome.title': 'Benvido a NUXA Chat',
     'chat.conversations.new': 'Novo',
     'chat.filters.all': 'Todos',

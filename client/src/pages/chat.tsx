@@ -863,7 +863,7 @@ export default function Chat() {
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-3">Has completado tu prueba gratuita</h2>
                 <p className="text-slate-400 text-base leading-relaxed mb-6">
-                  Has utilizado tus 2 consultas de prueba. Para seguir hablando con NUXA, elige el plan que mejor se adapta a ti.
+                  Has utilizado tus 5 consultas de prueba. Para seguir hablando con NUXA, elige el plan que mejor se adapta a ti.
                 </p>
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6 text-left space-y-3">
                   {[

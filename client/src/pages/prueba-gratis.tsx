@@ -73,8 +73,8 @@ export default function PruebaGratis() {
   return (
     <>
       <SEOHead
-        title="Prueba NUXA gratis – 2 consultas sin coste"
-        description="Accede a una prueba gratuita de NUXA con 2 preguntas al asistente de salud mental con IA. Sin tarjeta de crédito."
+        title="Prueba NUXA gratis – 5 consultas sin coste"
+        description="Accede a una prueba gratuita de NUXA con 5 preguntas al asistente de salud mental con IA. Sin tarjeta de crédito."
         canonicalUrl="/prueba-gratis"
       />
 
@@ -154,7 +154,7 @@ export default function PruebaGratis() {
                   Prueba NUXA gratis
                 </h1>
                 <p className="text-slate-400 text-base leading-relaxed">
-                  Crea tu cuenta en segundos y realiza tus primeras 2 consultas sin coste.
+                  Crea tu cuenta en segundos y realiza tus primeras 5 consultas sin coste.
                 </p>
               </div>
 
@@ -163,7 +163,7 @@ export default function PruebaGratis() {
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Incluye en la prueba</p>
                 <ul className="space-y-2.5">
                   {[
-                    "2 consultas gratuitas al asistente IA",
+                    "5 consultas gratuitas al asistente IA",
                     "Respuestas en más de 150 idiomas",
                     "Acceso inmediato, sin tarjeta de crédito",
                   ].map((item) => (
@@ -176,7 +176,7 @@ export default function PruebaGratis() {
                 <div className="mt-4 pt-4 border-t border-white/10 flex items-start gap-2.5">
                   <Lock className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
                   <p className="text-xs text-slate-400">
-                    Tras las 2 consultas gratuitas, el acceso queda limitado. Podrás continuar con un plan de pago adaptado a tu perfil.
+                    Tras las 5 consultas gratuitas, el acceso queda limitado. Podrás continuar con un plan de pago adaptado a tu perfil.
                   </p>
                 </div>
               </div>

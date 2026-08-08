@@ -4,7 +4,7 @@ import { createServer, type Server } from "http";
 import fs from "fs";
 import path from "path";
 import { storage } from "./storage";
-import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS, sendLeadWelcomeEmail, generateUnsubscribeToken } from "./emailService";
+import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS, sendLeadWelcomeEmail, generateUnsubscribeToken, sendTrialExhaustedEmail } from "./emailService";
 import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog, conversations, messages } from "@shared/schema";
 import { emailLeads } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
@@ -655,6 +655,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Increment question count after successful message processing
       await storage.incrementQuestionCount(userId);
 
+      // Fire-and-forget: email when trial user uses their last free question
+      if (limitCheck.remaining === 0) {
+        const trialUser = await storage.getUser(userId);
+        if (trialUser?.email && trialUser.subscriptionStatus === "trial") {
+          sendTrialExhaustedEmail({ email: trialUser.email, username: trialUser.username }).catch(() => {});
+        }
+      }
+
       // Save AI response
       const aiMessage = await storage.createMessage({
         conversationId,
@@ -953,7 +961,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         email,
         subscriptionPlan: "trial",
         subscriptionStatus: "trial",
-        monthlyQuestionLimit: 2,
+        monthlyQuestionLimit: 5,
         hasCompletedPayment: false,
       });
       req.session.userId = newUser.id;

@@ -3261,7 +3261,7 @@ export default function RecursosGratis() {
                     ¿Quieres ir más allá de los ejercicios?
                   </p>
                   <p className="text-emerald-100 text-sm leading-relaxed">
-                    Habla directamente con NUXA — 2 consultas gratis, sin tarjeta ni registro. La IA que te escucha de verdad.
+                    Habla directamente con NUXA — 5 consultas gratis, sin tarjeta ni registro. La IA que te escucha de verdad.
                   </p>
                 </div>
                 <div className="flex-shrink-0 flex items-center gap-2 bg-white text-emerald-700 font-bold text-sm px-5 py-2.5 rounded-xl shadow group-hover:bg-emerald-50 transition-colors whitespace-nowrap">

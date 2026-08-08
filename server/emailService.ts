@@ -427,6 +427,86 @@ export async function sendOwnerSMS(params: {
 }
 
 // ---------------------------------------------------------------------------
+// Trial exhausted email — sent when a trial user uses their last free question
+// ---------------------------------------------------------------------------
+export async function sendTrialExhaustedEmail(params: {
+  email: string;
+  username: string;
+}): Promise<boolean> {
+  try {
+    const { client, fromEmail } = await getUncachableSendGridClient();
+
+    const html = `<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;background:#f0f4ff;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:32px 16px;">
+    <tr><td align="center">
+      <table width="520" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <tr><td style="background:linear-gradient(135deg,#f97316,#ef4444);padding:32px;text-align:center;">
+          <p style="margin:0 0 8px;font-size:36px;">🧠</p>
+          <p style="margin:0;font-size:24px;font-weight:700;color:#fff;">Has completado tu prueba gratuita</p>
+          <p style="margin:8px 0 0;color:#fde68a;font-size:15px;">Tu experiencia con NUXA no tiene por qué terminar aquí</p>
+        </td></tr>
+        <tr><td style="padding:32px;">
+          <p style="margin:0 0 20px;color:#374151;font-size:15px;line-height:1.7;">
+            Hola <strong>${params.username}</strong>,<br><br>
+            Has utilizado tus 5 consultas gratuitas con NUXA. Esperamos que hayas podido sentir el apoyo que ofrece.
+          </p>
+          <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:16px 20px;margin-bottom:24px;">
+            <p style="margin:0;color:#92400e;font-size:14px;line-height:1.7;">
+              Con un plan de pago, tienes <strong>acceso ilimitado</strong> a NUXA — sin esperas, sin interrupciones, disponible 24/7.
+            </p>
+          </div>
+          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+            <tr><td style="padding:10px 0;border-bottom:1px solid #e5e7eb;">
+              <p style="margin:0;color:#1f2937;font-size:14px;">💬 <strong>Plan desde €2.99/mes</strong> — sin permanencia, cancela cuando quieras</p>
+            </td></tr>
+            <tr><td style="padding:10px 0;border-bottom:1px solid #e5e7eb;">
+              <p style="margin:0;color:#1f2937;font-size:14px;">🔒 <strong>Totalmente confidencial</strong> — tus conversaciones solo son tuyas</p>
+            </td></tr>
+            <tr><td style="padding:10px 0;">
+              <p style="margin:0;color:#1f2937;font-size:14px;">🕐 <strong>Disponible 24/7</strong> — cuando más lo necesites</p>
+            </td></tr>
+          </table>
+          <div style="text-align:center;margin-bottom:24px;">
+            <a href="https://nuxa.life/registro/planes"
+               style="display:inline-block;background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;text-decoration:none;padding:14px 32px;border-radius:12px;font-weight:700;font-size:15px;">
+              Continuar con NUXA &rarr;
+            </a>
+          </div>
+          <p style="margin:0;color:#6b7280;font-size:13px;line-height:1.6;text-align:center;">
+            También puedes explorar nuestros <a href="https://nuxa.life/recursos-gratuitos" style="color:#f97316;text-decoration:none;">recursos gratuitos</a> sin límite.
+          </p>
+        </td></tr>
+        <tr><td style="padding:20px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
+          <p style="margin:0;font-size:11px;color:#9ca3af;">
+            NUXA &middot; Empordajobs SL &middot; B02701100<br>
+            Este email se envía una sola vez al finalizar tu prueba gratuita.
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+    const msg = {
+      to: params.email,
+      from: { email: fromEmail, name: "NUXA" },
+      subject: "Tu prueba gratuita ha terminado — continúa con NUXA desde €2.99/mes",
+      text: `Hola ${params.username},\n\nHas utilizado tus 5 consultas gratuitas con NUXA.\n\nContinúa con un plan desde €2.99/mes, sin permanencia: https://nuxa.life/registro/planes\n\nO explora recursos gratuitos: https://nuxa.life/recursos-gratuitos`,
+      html,
+    };
+
+    await client.send(msg);
+    return true;
+  } catch (err) {
+    console.error("sendTrialExhaustedEmail exception:", err);
+    return false;
+  }
+}
+
 // Lead welcome email — sent to new email subscribers from public pages
 // Uses SendGrid (domain-verified, works with any recipient)
 // ---------------------------------------------------------------------------
