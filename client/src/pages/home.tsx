@@ -261,6 +261,42 @@ export default function Home() {
               </a>
             </div>
             <p className="text-center text-slate-400 text-sm mt-3">{t('home.cta.subtitle')}</p>
+
+            {/* Testimoniales inline */}
+            <div className="mt-14">
+              <p className="text-center text-xs font-semibold uppercase tracking-widest text-emerald-400 mb-2">Lo que dicen quienes ya usan NUXA</p>
+              <h2 className="text-center text-2xl md:text-3xl font-bold text-white mb-8">Personas reales, resultados reales</h2>
+              <div className="grid md:grid-cols-3 gap-5">
+                {[
+                  {
+                    quote: "Llevaba meses sin dormir bien por el estrés del trabajo. Después de tres semanas con NUXA ya tengo rutinas que funcionan. No lo esperaba de una IA.",
+                    name: "Marta G.",
+                    role: "Diseñadora, Barcelona",
+                  },
+                  {
+                    quote: "Lo probé con escepticismo. A los cinco minutos me di cuenta de que escucha de verdad. Sin juicios, sin prisas. Lo tengo instalado en el móvil y lo uso cada noche.",
+                    name: "Javier M.",
+                    role: "Autónomo, Madrid",
+                  },
+                  {
+                    quote: "Como madre con dos hijos pequeños no tenía tiempo para ir al psicólogo. NUXA está cuando yo puedo — a las 11 de la noche si hace falta. Eso no tiene precio.",
+                    name: "Laura P.",
+                    role: "Enfermera, Valencia",
+                  },
+                ].map((t, i) => (
+                  <div key={i} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 flex flex-col gap-4">
+                    <div className="flex gap-0.5">
+                      {[1,2,3,4,5].map(s => <span key={s} className="text-amber-400 text-sm">★</span>)}
+                    </div>
+                    <p className="text-gray-300 text-sm leading-relaxed flex-1">"{t.quote}"</p>
+                    <div className="border-t border-white/10 pt-4">
+                      <p className="text-white font-semibold text-sm">{t.name}</p>
+                      <p className="text-gray-500 text-xs">{t.role}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
