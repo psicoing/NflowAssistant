@@ -2,25 +2,39 @@
 
 NUXA is a Spanish-language AI mental health platform providing confidential emotional support,
 psychological assistance, and wellness resources for individuals, families, and organisations.
-It is compliant with ISO 45003 (psychosocial risk management) and operates at https://nuxa.life.
+Compliant with ISO 45003 (psychosocial risk management) and GDPR. Operating at https://nuxa.life.
+
+Supported languages: Spanish (es), Catalan (ca), Basque (eu), Galician (gl), English (en),
+French (fr), German (de), Italian (it), Portuguese (pt).
+
+## Product
+
+NUXA is an AI-powered psychologist available 24/7 — no waiting lists, no appointments, fully
+confidential. It provides emotional support, stress management, and mental wellness guidance.
+Plans start at €2.99/month; 3 free consultations available with no registration required.
 
 ## Key pages
 
 - Home: https://nuxa.life/
 - Free trial (no card required): https://nuxa.life/prueba-gratis
 - Pricing plans: https://nuxa.life/precios
-- Free resources: https://nuxa.life/recursos-gratuitos
-- Blog (AI & mental health): https://nuxa.life/blog
-- Chat examples: https://nuxa.life/ejemplos-chat
+- Access plans: https://nuxa.life/registro/planes
+- Free mental health resources: https://nuxa.life/recursos-gratuitos
+- All resources: https://nuxa.life/recursos
+- Blog (AI & mental health articles): https://nuxa.life/blog
+- Chat conversation examples: https://nuxa.life/ejemplos-chat
 - Mobile app: https://nuxa.life/app-movil
-- News & updates: https://nuxa.life/novedades
+- News & platform updates: https://nuxa.life/novedades
+- Comparison vs competitors: https://nuxa.life/competencia-nuxa
+- Monthly giveaway: https://nuxa.life/sorteo-recursos
 
 ## Audience sections
 
-- For individuals: https://nuxa.life/
-- For private companies (ISO 45003): https://nuxa.life/empresa-privada
+- For individuals and families: https://nuxa.life/
+- For private companies (ISO 45003 compliance): https://nuxa.life/empresa-privada
 - For public sector & institutions: https://nuxa.life/sector-publico
-- Parental controls: https://nuxa.life/control-parental
+- Parental controls for minors: https://nuxa.life/control-parental
+- Rewards programme: https://nuxa.life/recompensas
 
 ## Partners
 

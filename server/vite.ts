@@ -74,6 +74,7 @@ function blogPostingSchema(opts: {
   url: string;
   datePublished: string;
   image?: string;
+  author?: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -84,7 +85,9 @@ function blogPostingSchema(opts: {
     datePublished: opts.datePublished,
     dateModified: opts.datePublished,
     image: opts.image ?? OG_IMAGE_DEFAULT,
-    author: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+    author: opts.author
+      ? { "@type": "Person", name: opts.author }
+      : { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
     publisher: {
       "@type": "Organization",
       name: SITE_NAME,
@@ -176,7 +179,8 @@ const routeMetadata: Record<string, RouteMeta> = {
       description:
         "Descubre cómo la inteligencia artificial está revolucionando el apoyo psicológico para jóvenes, con herramientas accesibles, anónimas y disponibles 24/7.",
       url: `${SITE_URL}/blog/1`,
-      datePublished: "2024-03-15",
+      datePublished: "2025-08-23",
+      author: "Dr. Ana Martínez",
       image:
         "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     }),
@@ -194,13 +198,15 @@ const routeMetadata: Record<string, RouteMeta> = {
       "Las organizaciones líderes implementan chatbots especializados en salud mental para mejorar el bienestar de sus empleados y reducir el absentismo.",
     canonical: `${SITE_URL}/blog/2`,
     ogType: "article",
+    ogImage: "https://nuxa.life/icon-512.png",
     jsonLd: blogPostingSchema({
       headline:
         "5 beneficios de usar chatbots para la salud emocional en empresas",
       description:
         "Las organizaciones líderes implementan chatbots especializados en salud mental para mejorar el bienestar de sus empleados y reducir el absentismo.",
       url: `${SITE_URL}/blog/2`,
-      datePublished: "2024-04-02",
+      datePublished: "2025-08-22",
+      author: "Lic. Roberto Silva",
     }),
     bodyHtml: `
       <article>
@@ -229,7 +235,8 @@ const routeMetadata: Record<string, RouteMeta> = {
       description:
         "La IA no reemplaza a los terapeutas humanos, sino que los potencia. Descubre cómo esta sinergia crea nuevos paradigmas en salud mental.",
       url: `${SITE_URL}/blog/3`,
-      datePublished: "2024-05-10",
+      datePublished: "2025-08-21",
+      author: "Dr. Miguel Herrera",
       image:
         "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     }),

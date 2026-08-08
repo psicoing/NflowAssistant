@@ -1,18 +1,40 @@
 User-agent: *
 Allow: /
 
-# Bloquear rutas privadas de usuarios y administración
+# Rutas privadas — no indexar
 Disallow: /chat
-Disallow: /admin/dashboard
+Disallow: /chat/
+Disallow: /admin/
 Disallow: /partners/dashboard
+Disallow: /partners/login
+Disallow: /partners/register
 Disallow: /api/
+Disallow: /payment-redirect
+Disallow: /stripe-return
+Disallow: /activar-stripe
+Disallow: /stripe-manual
+Disallow: /activar
+Disallow: /activar-cuenta
+Disallow: /activacion-exitosa
+Disallow: /acceso/
+Disallow: /download-csv
+Disallow: /control-shell
 
-# Permitir explícitamente rutas públicas importantes
+# Rutas públicas importantes — garantizar indexación
 Allow: /blog/
 Allow: /recursos
 Allow: /recursos-gratuitos
 Allow: /precios
 Allow: /empresa-privada
 Allow: /sector-publico
+Allow: /programa-partners
+Allow: /nosotros
+Allow: /quienes-somos
+Allow: /app-movil
+Allow: /control-parental
+Allow: /ejemplos-chat
+Allow: /novedades
+Allow: /competencia-nuxa
+Allow: /legal/
 
 Sitemap: https://nuxa.life/sitemap.xml

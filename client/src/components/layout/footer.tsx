@@ -25,7 +25,7 @@ export default function Footer() {
               <a 
                 href="https://www.linkedin.com/in/empordajobs/"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
                 className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-teal-500 transition-colors"
                 aria-label="LinkedIn"
               >
@@ -34,7 +34,7 @@ export default function Footer() {
               <a 
                 href="https://jobda.org/"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
                 className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-teal-500 transition-colors"
                 aria-label="Jobda"
               >
@@ -43,7 +43,7 @@ export default function Footer() {
               <a 
                 href="https://appia.jobda.es/"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
                 className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-teal-500 transition-colors"
                 aria-label="Appia"
               >
@@ -52,7 +52,7 @@ export default function Footer() {
               <a 
                 href="https://neuronmeg.net/"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
                 className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-teal-500 transition-colors"
                 aria-label="Neuronmeg"
               >
