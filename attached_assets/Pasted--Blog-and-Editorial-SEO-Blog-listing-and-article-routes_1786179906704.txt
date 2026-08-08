@@ -1,0 +1,77 @@
+
+Blog and Editorial SEO
+
+Blog listing and article routes never publish blog-specific metadata
+High
+Unresolved
+The blog home and every blog article still present themselves like the generic site instead of distinct editorial pages. That prevents individual posts from ranking for their own topics and makes shared article links show the wrong title and summary.
+
+
+Blog articles do not publish article-specific structured data
+Medium
+Unresolved
+The blog articles show clear author, date, image, and headline information to readers, but they do not label that information in a machine-readable article format for search engines and AI crawlers. That makes it harder for those systems to recognize each page as a standalone article and extract the right editorial facts.
+
+
+Crawl Files and Bot Governance
+
+sitemap.xml still points to nflow.style and omits many current public routes
+High
+Unresolved
+The published sitemap is outdated: it sends crawlers to nflow.style and leaves out many of the public pages the app currently exposes. Because search engines treat the sitemap as a trusted crawl source, this can send bots to the wrong host and slow discovery of important landing pages.
+
+
+robots.txt is missing and falls through to the SPA HTML shell
+Medium
+Unresolved
+The site does not publish a real robots.txt file, so crawlers asking for crawl rules get the app page HTML instead of a plain-text policy. That removes the standard place to declare crawl access and the sitemap location for search engines and AI bots.
+
+
+llms.txt is missing and AI crawlers receive the SPA shell instead
+Low
+Unresolved
+The site does not publish an llms.txt file, so AI crawlers have no simple machine-readable guide to the product, key sections, or preferred URLs. When they request that file today, they receive the app HTML shell instead of a clean text document.
+
+
+Internal Linking and Navigation
+
+Shared navigation hides public routes behind buttons and off-site links
+High
+Unresolved
+The main menu and footer do not publish many important pages as normal links that search engines can follow. Several public pages are buried behind JavaScript buttons, and the footer sends legal authority to another domain instead of strengthening NUXA's own pages.
+
+
+Control parental CTA links to a missing contact route
+Medium
+Unresolved
+One of the main buttons on the control parental page sends visitors to a page that does not exist. That creates a dead end on an important landing page and turns a key internal link into a wasted crawl path.
+
+
+Public Route Metadata
+
+The /registro/planes page canonicals to /registro instead of itself
+High
+Unresolved
+The page that explains NUXA access plans tells search engines that a different URL is the preferred version. That can stop the plans page itself from ranking even though it contains distinct pricing and acquisition content.
+
+
+Several public landing and legal pages never set their own metadata
+High
+Unresolved
+Several public pages still look like the home page or the previously visited page in search results and link previews because they never set their own title, description, or canonical URL. That makes important landing, legal, and acquisition pages less relevant to the queries they are trying to rank for.
+
+
+SPA Rendering and Bot Visibility
+
+Public routes are served as a client-rendered SPA shell instead of crawlable HTML
+High
+Unresolved
+Important public pages are returned as the same nearly empty app shell, so AI search engines and social crawlers cannot read the real page content in the first response. Google can eventually render the app, but that extra rendering step slows and weakens indexing for marketing, resource, pricing, blog, and legal pages.
+
+
+Route metadata and structured data are emitted only after React hydration
+High
+Unresolved
+Important search and sharing tags are not present in the first HTML response for public routes. As a result, social platforms and AI crawlers never receive route-specific Open Graph, Twitter, canonical, or JSON-LD signals, and Google only sees them after a second rendering step.
+
+Check how well search engines and AI crawlers can find and understand your project, and implement proposed fixes with Agent. The rating is based on your published app's Lighthouse metrics.
