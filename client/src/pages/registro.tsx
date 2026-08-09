@@ -249,7 +249,7 @@ export default function Registro() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-0.5">
-                      <h2 className="text-xl font-bold text-gray-900">Planes para empresas y organizaciones</h2>
+                      <h2 className="text-xl font-bold text-gray-900">Empresas públicas y estatales</h2>
                       <div className="inline-flex items-center gap-1 bg-emerald-500 text-white font-bold text-xs px-2.5 py-1 rounded-full animate-pulse">
                         <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
                         ACTIVO
