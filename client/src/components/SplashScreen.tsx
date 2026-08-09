@@ -23,7 +23,7 @@ const SLIDES = [
 
 const TOTAL_DURATION_MS = 8000;
 const SLIDE_DURATION_MS = TOTAL_DURATION_MS / SLIDES.length;
-const SESSION_KEY = "nuxa-splash-shown";
+const STORAGE_KEY = "nuxa-splash-shown";
 
 export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -39,7 +39,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
     }, TOTAL_DURATION_MS - 400);
 
     const finishTimeout = setTimeout(() => {
-      sessionStorage.setItem(SESSION_KEY, "1");
+      try { localStorage.setItem(STORAGE_KEY, "1"); } catch {}
       onFinish();
     }, TOTAL_DURATION_MS);
 
@@ -121,7 +121,7 @@ export function hasSplashBeenShown() {
     return false;
   }
   try {
-    return sessionStorage.getItem(SESSION_KEY) === "1";
+    return localStorage.getItem(STORAGE_KEY) === "1";
   } catch {
     return false;
   }
