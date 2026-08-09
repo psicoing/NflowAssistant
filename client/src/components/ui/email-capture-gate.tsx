@@ -138,7 +138,6 @@ export function EmailCaptureGate({ source = "recursos-gratuitos" }: EmailCapture
                     className="sr-only"
                   />
                   <div
-                    onClick={() => setConsent(!consent)}
                     className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                       consent
                         ? "bg-emerald-500 border-emerald-500"
