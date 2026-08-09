@@ -124,6 +124,85 @@ export default function Registro() {
               </p>
             </div>
 
+            {/* Planes individuales */}
+            <Card className="border-2 border-gray-200 shadow-xl overflow-hidden mb-8 relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-indigo-50 opacity-60" />
+              <CardContent className="relative p-8">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow">
+                    <User className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900">Planes individuales para personas</h2>
+                    <p className="text-sm text-gray-500">Pago por uso · Sin suscripción · Sin permanencia</p>
+                  </div>
+                </div>
+
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Plan selector */}
+                    <div>
+                      <Label className="text-sm font-semibold text-gray-700 mb-2 block">Elige tu pack de preguntas</Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {PLANES_INDIVIDUAL.map(p => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => setForm(f => ({ ...f, plan: p.id }))}
+                            className={`border-2 rounded-xl p-3 text-center transition-all cursor-pointer ${
+                              form.plan === p.id
+                                ? "border-purple-500 bg-purple-100 shadow-sm"
+                                : "border-gray-200 bg-white hover:border-purple-300"
+                            }`}
+                          >
+                            <div className="font-bold text-purple-700 text-base leading-tight">{p.price}</div>
+                            <div className="text-gray-600 text-[11px] leading-tight mt-0.5">{p.label}</div>
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-xs text-gray-400 mt-1.5 text-center">Pago único · Sin suscripción · Sin permanencia</p>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="email" className="text-sm font-medium text-gray-700">Correo electrónico</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="tu@correo.com"
+                        value={form.email}
+                        onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                        required
+                        className="mt-1"
+                      />
+                    </div>
+
+                    {error && (
+                      <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
+                    )}
+
+                    <Button
+                      type="submit"
+                      size="lg"
+                      disabled={loading}
+                      className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold shadow-lg"
+                    >
+                      {loading ? "Redirigiendo..." : (
+                        <>
+                          <CreditCard className="w-4 h-4 mr-2" />
+                          Pagar con Stripe — {PLANES_INDIVIDUAL.find(p => p.id === form.plan)?.price}
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </>
+                      )}
+                    </Button>
+
+                    <div className="flex items-center justify-center gap-4 text-xs text-gray-400">
+                      <span>🔒 Pago seguro con Stripe</span>
+                      <span>·</span>
+                      <Link href="/login" className="text-purple-600 underline">Ya tengo cuenta</Link>
+                    </div>
+                  </form>
+              </CardContent>
+            </Card>
+
             {/* FREE TRIAL banner */}
             <Link href="/prueba-gratis">
               <div className="w-full mb-8 group relative overflow-hidden rounded-2xl border-2 border-emerald-300 bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 hover:from-emerald-100 hover:to-teal-100 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 cursor-pointer">
@@ -464,85 +543,6 @@ export default function Registro() {
                     </p>
                   </form>
                 )}
-              </CardContent>
-            </Card>
-
-            {/* Planes individuales */}
-            <Card className="border-2 border-gray-200 shadow-xl overflow-hidden mb-8 relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-indigo-50 opacity-60" />
-              <CardContent className="relative p-8">
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow">
-                    <User className="w-7 h-7 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-gray-900">Planes individuales para personas</h2>
-                    <p className="text-sm text-gray-500">Pago por uso · Sin suscripción · Sin permanencia</p>
-                  </div>
-                </div>
-
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    {/* Plan selector */}
-                    <div>
-                      <Label className="text-sm font-semibold text-gray-700 mb-2 block">Elige tu pack de preguntas</Label>
-                      <div className="grid grid-cols-3 gap-2">
-                        {PLANES_INDIVIDUAL.map(p => (
-                          <button
-                            key={p.id}
-                            type="button"
-                            onClick={() => setForm(f => ({ ...f, plan: p.id }))}
-                            className={`border-2 rounded-xl p-3 text-center transition-all cursor-pointer ${
-                              form.plan === p.id
-                                ? "border-purple-500 bg-purple-100 shadow-sm"
-                                : "border-gray-200 bg-white hover:border-purple-300"
-                            }`}
-                          >
-                            <div className="font-bold text-purple-700 text-base leading-tight">{p.price}</div>
-                            <div className="text-gray-600 text-[11px] leading-tight mt-0.5">{p.label}</div>
-                          </button>
-                        ))}
-                      </div>
-                      <p className="text-xs text-gray-400 mt-1.5 text-center">Pago único · Sin suscripción · Sin permanencia</p>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="email" className="text-sm font-medium text-gray-700">Correo electrónico</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="tu@correo.com"
-                        value={form.email}
-                        onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                        required
-                        className="mt-1"
-                      />
-                    </div>
-
-                    {error && (
-                      <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
-                    )}
-
-                    <Button
-                      type="submit"
-                      size="lg"
-                      disabled={loading}
-                      className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold shadow-lg"
-                    >
-                      {loading ? "Redirigiendo..." : (
-                        <>
-                          <CreditCard className="w-4 h-4 mr-2" />
-                          Pagar con Stripe — {PLANES_INDIVIDUAL.find(p => p.id === form.plan)?.price}
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </>
-                      )}
-                    </Button>
-
-                    <div className="flex items-center justify-center gap-4 text-xs text-gray-400">
-                      <span>🔒 Pago seguro con Stripe</span>
-                      <span>·</span>
-                      <Link href="/login" className="text-purple-600 underline">Ya tengo cuenta</Link>
-                    </div>
-                  </form>
               </CardContent>
             </Card>
 
