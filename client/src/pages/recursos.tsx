@@ -4691,7 +4691,7 @@ export default function RecursosGratis() {
                   </div>
                   
                   <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                    <a href="https://jobda.org/partners" target="_blank" rel="noopener noreferrer">
+                    <a href="/registro/planes">
                       <Button 
                         size="lg" 
                         className="w-full sm:w-auto bg-white text-emerald-700 hover:bg-gray-100 font-bold text-lg px-8 py-6 shadow-xl"
