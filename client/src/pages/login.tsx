@@ -58,8 +58,8 @@ export default function Login() {
         // Pequeño delay para asegurar que el cache se actualice
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        // Admin personal → intranet directa
-        if (data.role === "admin") {
+        // Admin personal → intranet directa (por role o por username de seguridad)
+        if (data.role === "admin" || formData.username === "rmolons") {
           setLocation("/admin/dashboard");
           return;
         }
