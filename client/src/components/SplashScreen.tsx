@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SLIDES = [
   {
@@ -28,6 +28,8 @@ const STORAGE_KEY = "nuxa-splash-shown";
 export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [fadingOut, setFadingOut] = useState(false);
+  const onFinishRef = useRef(onFinish);
+  useEffect(() => { onFinishRef.current = onFinish; });
 
   useEffect(() => {
     const slideInterval = setInterval(() => {
@@ -40,7 +42,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
 
     const finishTimeout = setTimeout(() => {
       try { localStorage.setItem(STORAGE_KEY, "1"); } catch {}
-      onFinish();
+      onFinishRef.current();
     }, TOTAL_DURATION_MS);
 
     return () => {
@@ -48,7 +50,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
       clearTimeout(fadeTimeout);
       clearTimeout(finishTimeout);
     };
-  }, [onFinish]);
+  }, []); // empty deps — timers start once and are never reset
 
   const slide = SLIDES[activeSlide];
 
@@ -117,9 +119,6 @@ function isInPreviewWebview() {
 }
 
 export function hasSplashBeenShown() {
-  if (isInPreviewWebview()) {
-    return false;
-  }
   try {
     return localStorage.getItem(STORAGE_KEY) === "1";
   } catch {

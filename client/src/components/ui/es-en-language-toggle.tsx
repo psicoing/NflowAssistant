@@ -8,26 +8,23 @@ export default function EsEnLanguageToggle() {
   const [showAutoDetect, setShowAutoDetect] = useState(false);
 
   useEffect(() => {
+    // Only detect once per session — skip if already detected or failed
+    if ((window as any).__nuxaLocationDetected) return;
+    (window as any).__nuxaLocationDetected = true;
+
     const detectLocation = async () => {
       try {
-        console.log('🌍 Detecting location...');
         const response = await fetch('https://ipapi.co/json/');
         const data = await response.json();
-        console.log('🌍 Location data:', data);
         if (data.country_code) {
           const country = data.country_code.toUpperCase();
-          console.log('🌍 Country detected:', country);
           setUserCountry(country);
           setShowAutoDetect(true);
-          
-          // Auto-hide after 8 seconds
           setTimeout(() => setShowAutoDetect(false), 8000);
         }
-      } catch (error) {
-        console.log('🌍 Could not detect location:', error);
-      }
+      } catch {}
     };
-    
+
     detectLocation();
   }, []);
 
