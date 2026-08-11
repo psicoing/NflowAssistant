@@ -4,14 +4,14 @@ import { createServer, type Server } from "http";
 import fs from "fs";
 import path from "path";
 import { storage } from "./storage";
-import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS, sendLeadWelcomeEmail, generateUnsubscribeToken, sendTrialExhaustedEmail } from "./emailService";
+import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS, sendLeadWelcomeEmail, generateUnsubscribeToken, sendTrialExhaustedEmail, sendReactivationEmail } from "./emailService";
 import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog, conversations, messages } from "@shared/schema";
 import { emailLeads } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
 import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
-import { db } from "./db";
+import { db, pool } from "./db";
 import { eq, and, desc, gte, count } from "drizzle-orm";
 import "./types"; // Import session types
 import multer from "multer";
@@ -1097,6 +1097,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/admin/auth", adminLoginHandler);
 
   // Admin stats
+  // ===== CAMPAÑA DE REACTIVACIÓN =====
+
+  // Preview: count eligible trial users
+  app.get("/api/admin/reactivation-preview", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const users = await storage.getAllUsers();
+      const eligible = users.filter(u =>
+        u.subscriptionStatus === "trial" &&
+        u.email &&
+        !u.email.includes("test") &&
+        !u.email.includes("example") &&
+        !(u as any).marketingOptedOut
+      );
+      res.json({ count: eligible.length });
+    } catch (e) {
+      res.status(500).json({ message: "Error" });
+    }
+  });
+
+  // Send reactivation emails to all eligible trial users
+  app.post("/api/admin/send-reactivation", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const users = await storage.getAllUsers();
+      const eligible = users.filter(u =>
+        u.subscriptionStatus === "trial" &&
+        u.email &&
+        !u.email.includes("test") &&
+        !u.email.includes("example") &&
+        !(u as any).marketingOptedOut
+      );
+
+      let sent = 0, failed = 0, skipped = 0;
+      for (const user of eligible) {
+        if (!user.email) { skipped++; continue; }
+        const ok = await sendReactivationEmail({
+          email: user.email,
+          username: user.username || user.email.split("@")[0],
+          userId: user.id,
+        });
+        if (ok) sent++; else failed++;
+        // Small delay to avoid rate limits
+        await new Promise(r => setTimeout(r, 120));
+      }
+
+      console.log(`Reactivation campaign: sent=${sent} failed=${failed} skipped=${skipped}`);
+      res.json({ sent, failed, skipped });
+    } catch (e) {
+      console.error("send-reactivation error:", e);
+      res.status(500).json({ message: "Error sending campaign" });
+    }
+  });
+
+  // Unsubscribe from reactivation emails (one-click)
+  app.get("/api/unsubscribe-reactivation", async (req, res) => {
+    try {
+      const uid = req.query.uid as string;
+      if (!uid) return res.status(400).send("Token inválido");
+      const userId = parseInt(Buffer.from(uid, "base64url").toString(), 10);
+      if (isNaN(userId)) return res.status(400).send("Token inválido");
+      await pool.query("UPDATE users SET marketing_opted_out = true WHERE id = $1", [userId]);
+      res.send(`<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Baja confirmada – NUXA</title>
+<style>body{margin:0;font-family:'Segoe UI',sans-serif;background:#f0fdf4;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+.box{background:#fff;border-radius:20px;padding:48px 40px;max-width:400px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);}
+h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;line-height:1.6;}a{color:#10b981;}</style></head>
+<body><div class="box"><p style="font-size:36px;margin:0 0 16px">✅</p>
+<h1>Baja confirmada</h1><p>No volverás a recibir comunicaciones de NUXA.<br>Si algún día quieres volver, siempre puedes visitarnos en <a href="https://nuxa.life">nuxa.life</a>.</p></div></body></html>`);
+    } catch (e) {
+      res.status(500).send("Error al procesar la baja");
+    }
+  });
+
   app.get("/api/admin/stats", async (req, res) => {
     if (!req.session.isAdmin) {
       return res.status(401).json({ message: "No autorizado" });

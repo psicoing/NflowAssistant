@@ -590,3 +590,84 @@ export async function sendLeadWelcomeEmail(params: {
 export function generateUnsubscribeToken(): string {
   return crypto.randomBytes(32).toString("hex");
 }
+
+// ---------------------------------------------------------------------------
+// Reactivation email — sent manually from admin dashboard to trial users
+// ---------------------------------------------------------------------------
+export async function sendReactivationEmail(params: {
+  email: string;
+  username: string;
+  userId: number;
+}): Promise<boolean> {
+  try {
+    const { client, fromEmail } = await getUncachableSendGridClient();
+    const uid = Buffer.from(params.userId.toString()).toString("base64url");
+    const unsubscribeUrl = `https://nuxa.life/api/unsubscribe-reactivation?uid=${uid}`;
+
+    const html = `<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;background:#f0f4ff;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:32px 16px;">
+    <tr><td align="center">
+      <table width="520" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <tr><td style="background:linear-gradient(135deg,#10b981,#0d9488);padding:32px;text-align:center;">
+          <p style="margin:0 0 8px;font-size:36px;">🧠</p>
+          <p style="margin:0;font-size:24px;font-weight:700;color:#fff;">¿Cómo estás?</p>
+          <p style="margin:8px 0 0;color:#a7f3d0;font-size:15px;">Tu espacio en NUXA te espera</p>
+        </td></tr>
+        <tr><td style="padding:32px;">
+          <p style="margin:0 0 16px;color:#374151;font-size:15px;line-height:1.7;">
+            Hola <strong>${params.username}</strong>,
+          </p>
+          <p style="margin:0 0 20px;color:#374151;font-size:15px;line-height:1.7;">
+            Hace un tiempo probaste NUXA y nos gustaría saber cómo estás.
+          </p>
+          <p style="margin:0 0 20px;color:#374151;font-size:15px;line-height:1.7;">
+            Si entonces no fue el momento, no pasa nada — pero si alguna vez necesitas un espacio donde hablar <strong>sin juicios y sin prisas</strong>, aquí seguimos.
+          </p>
+          <div style="background:#ecfdf5;border-left:4px solid #10b981;border-radius:8px;padding:16px 20px;margin-bottom:24px;">
+            <p style="margin:0;color:#065f46;font-size:14px;line-height:1.7;">
+              Además, ahora tienes <strong>5 consultas gratuitas</strong> esperándote.
+            </p>
+          </div>
+          <div style="text-align:center;margin-bottom:24px;">
+            <a href="https://nuxa.life/prueba-gratis"
+               style="display:inline-block;background:linear-gradient(135deg,#10b981,#0d9488);color:#fff;text-decoration:none;padding:14px 32px;border-radius:12px;font-weight:700;font-size:15px;">
+              Volver a NUXA &rarr;
+            </a>
+          </div>
+          <p style="margin:0;color:#6b7280;font-size:13px;line-height:1.6;text-align:center;">
+            Sin compromisos. Sin tarjeta de crédito. Solo cuando lo necesites.
+          </p>
+        </td></tr>
+        <tr><td style="padding:20px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
+          <p style="margin:0;font-size:11px;color:#9ca3af;">
+            NUXA &middot; Empordajobs SL &middot; B02701100<br>
+            Este mensaje se envía una sola vez. &nbsp;
+            <a href="${unsubscribeUrl}" style="color:#9ca3af;text-decoration:underline;">
+              No quiero recibir más mensajes de NUXA
+            </a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+    const msg = {
+      to: params.email,
+      from: { email: fromEmail, name: "NUXA" },
+      subject: "¿Cómo estás? Tu espacio en NUXA te espera 🧠",
+      text: `Hola ${params.username},\n\nHace un tiempo probaste NUXA. Si alguna vez necesitas un espacio donde hablar sin juicios, aquí seguimos.\n\nAhora tienes 5 consultas gratuitas esperándote:\nhttps://nuxa.life/prueba-gratis\n\n---\nPara no recibir más mensajes: ${unsubscribeUrl}`,
+      html,
+    };
+
+    await client.send(msg);
+    return true;
+  } catch (err) {
+    console.error("sendReactivationEmail error:", err);
+    return false;
+  }
+}

@@ -76,6 +76,9 @@ export default function AdminDashboard() {
   const [resources, setResources] = useState<any[]>([]);
   const [books, setBooks] = useState<any[]>([]);
   const [contentLoading, setContentLoading] = useState(false);
+  const [campaignStatus, setCampaignStatus] = useState<"idle"|"loading"|"confirm"|"sending"|"done"|"error">("idle");
+  const [campaignResult, setCampaignResult] = useState<{sent:number; failed:number; skipped:number} | null>(null);
+  const [trialCount, setTrialCount] = useState<number | null>(null);
 
   useEffect(() => {
     checkAuthAndFetchStats();
@@ -408,6 +411,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="subscriptions" className="data-[state=active]:bg-orange-600">Suscripciones</TabsTrigger>
             <TabsTrigger value="revenue" className="data-[state=active]:bg-orange-600">Ingresos</TabsTrigger>
             <TabsTrigger value="content" className="data-[state=active]:bg-orange-600">Contenido</TabsTrigger>
+            <TabsTrigger value="campana" className="data-[state=active]:bg-orange-600">📧 Campaña</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview">
@@ -1067,6 +1071,126 @@ export default function AdminDashboard() {
               )}
             </div>
           </TabsContent>
+
+          {/* ── CAMPAÑA DE REACTIVACIÓN ── */}
+          <TabsContent value="campana">
+            <div className="max-w-2xl mx-auto space-y-6">
+              <Card className="bg-gray-800/50 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    📧 Campaña de reactivación
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Email único y no invasivo para usuarios que probaron NUXA pero no convirtieron.
+                    Incluye enlace de baja con un clic.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Preview del email */}
+                  <div className="bg-gray-900 rounded-xl p-5 border border-gray-700 space-y-3 text-sm">
+                    <p className="text-gray-400 text-xs uppercase tracking-widest font-semibold">Vista previa del email</p>
+                    <p className="text-white font-semibold">Asunto: ¿Cómo estás? Tu espacio en NUXA te espera 🧠</p>
+                    <div className="border-t border-gray-700 pt-3 text-gray-300 leading-relaxed space-y-2">
+                      <p>Hola <span className="text-emerald-400">[nombre]</span>,</p>
+                      <p>Hace un tiempo probaste NUXA. Si alguna vez necesitas un espacio donde hablar <strong>sin juicios y sin prisas</strong>, aquí seguimos.</p>
+                      <p>Además, ahora tienes <strong className="text-emerald-400">5 consultas gratuitas</strong> esperándote.</p>
+                      <p className="text-center mt-2">
+                        <span className="bg-emerald-600 text-white px-4 py-1.5 rounded-lg text-sm font-semibold">Volver a NUXA →</span>
+                      </p>
+                    </div>
+                    <p className="text-gray-600 text-xs border-t border-gray-700 pt-2">
+                      Pie: enlace de baja con un clic · Solo se envía una vez
+                    </p>
+                  </div>
+
+                  {/* Destinatarios */}
+                  <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
+                    <p className="text-amber-300 font-semibold text-sm mb-1">¿A quién se envía?</p>
+                    <ul className="text-gray-300 text-sm space-y-1">
+                      <li>✅ Usuarios con estado <strong>trial</strong> que tienen email</li>
+                      <li>✅ Que NO hayan marcado baja de comunicaciones</li>
+                      <li>❌ No se envía a usuarios premium, admin ni sin email</li>
+                    </ul>
+                  </div>
+
+                  {/* Resultado */}
+                  {campaignResult && (
+                    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4">
+                      <p className="text-emerald-300 font-semibold text-sm mb-1">✅ Campaña enviada</p>
+                      <p className="text-gray-300 text-sm">Enviados: <strong>{campaignResult.sent}</strong> · Fallidos: <strong>{campaignResult.failed}</strong> · Omitidos (sin email/baja): <strong>{campaignResult.skipped}</strong></p>
+                    </div>
+                  )}
+
+                  {campaignStatus === "error" && (
+                    <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
+                      <p className="text-red-300 text-sm">❌ Error al enviar la campaña. Revisa los logs.</p>
+                    </div>
+                  )}
+
+                  {/* Botones */}
+                  {campaignStatus === "idle" || campaignStatus === "loading" ? (
+                    <button
+                      disabled={campaignStatus === "loading"}
+                      onClick={async () => {
+                        setCampaignStatus("loading");
+                        try {
+                          const r = await fetch("/api/admin/reactivation-preview");
+                          const d = await r.json();
+                          setTrialCount(d.count);
+                          setCampaignStatus("confirm");
+                        } catch { setCampaignStatus("idle"); }
+                      }}
+                      className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-all"
+                    >
+                      {campaignStatus === "loading" ? "Calculando destinatarios..." : "Preparar campaña →"}
+                    </button>
+                  ) : campaignStatus === "confirm" ? (
+                    <div className="space-y-3">
+                      <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 text-center">
+                        <p className="text-white font-bold text-lg">{trialCount} usuarios</p>
+                        <p className="text-gray-400 text-sm">recibirán el email de reactivación</p>
+                      </div>
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => setCampaignStatus("idle")}
+                          className="flex-1 border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={async () => {
+                            setCampaignStatus("sending");
+                            try {
+                              const r = await fetch("/api/admin/send-reactivation", { method: "POST" });
+                              const d = await r.json();
+                              setCampaignResult(d);
+                              setCampaignStatus("done");
+                            } catch { setCampaignStatus("error"); }
+                          }}
+                          className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition-all"
+                        >
+                          ✉️ Enviar ahora a {trialCount} usuarios
+                        </button>
+                      </div>
+                    </div>
+                  ) : campaignStatus === "sending" ? (
+                    <div className="text-center py-4">
+                      <div className="animate-spin w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full mx-auto mb-3" />
+                      <p className="text-gray-300">Enviando emails... no cierres esta ventana</p>
+                    </div>
+                  ) : campaignStatus === "done" ? (
+                    <button
+                      onClick={() => { setCampaignStatus("idle"); setCampaignResult(null); }}
+                      className="w-full border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all"
+                    >
+                      Nueva campaña
+                    </button>
+                  ) : null}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
         </Tabs>
       </div>
 
