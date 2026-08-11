@@ -104,12 +104,20 @@ const itemClass = "w-full flex items-center space-x-3 px-4 py-3 text-gray-300 ho
 
 export default function SmoothScrollMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [location] = useLocation();
 
   useEffect(() => {
     const handleOpenMenu = () => setIsOpen(true);
     window.addEventListener("openNuxaMenu", handleOpenMenu);
     return () => window.removeEventListener("openNuxaMenu", handleOpenMenu);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/admin/check")
+      .then(r => r.json())
+      .then(d => setIsAdmin(!!d.isAdmin))
+      .catch(() => {});
   }, []);
 
   const scrollToSection = (sectionId: string) => {
@@ -218,8 +226,8 @@ export default function SmoothScrollMenu() {
             </div>
           </div>
 
-          {/* Zona interna de gestión */}
-          <div className="mt-6 pt-6 border-t border-red-900/40">
+          {/* Zona interna de gestión — solo visible para admin */}
+          {isAdmin && <div className="mt-6 pt-6 border-t border-red-900/40">
             <div className="bg-red-950/40 border border-red-800/50 rounded-xl p-3 mb-3">
               <div className="flex items-center gap-2 mb-1">
                 <Lock className="w-3 h-3 text-red-400 shrink-0" />
@@ -235,7 +243,7 @@ export default function SmoothScrollMenu() {
               <Lock className="w-4 h-4 shrink-0" />
               <span className="text-sm font-medium">Panel de Administración</span>
             </a>
-          </div>
+          </div>}
         </div>
       </SheetContent>
     </Sheet>

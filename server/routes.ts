@@ -1097,6 +1097,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/admin/auth", adminLoginHandler);
 
   // Admin stats
+  // Check admin session status (public, returns boolean)
+  app.get("/api/admin/check", (req, res) => {
+    res.json({ isAdmin: !!req.session.isAdmin });
+  });
+
   // ===== INSTITUCIONES =====
 
   // List all institutions
