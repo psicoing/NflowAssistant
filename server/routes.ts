@@ -290,6 +290,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         success: true,
         userId: user.id,
+        role: user.role || "user",
         userType: user.userType || "individual",
         hasCompletedPayment: user.hasCompletedPayment,
         subscriptionStatus: user.subscriptionStatus,

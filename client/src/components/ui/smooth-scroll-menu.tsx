@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign, Star, User, Building2, Landmark, Shield, Trophy, Scale, Lock } from "lucide-react";
+import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign, Star, User, Building2, Landmark, Shield, Trophy, Scale } from "lucide-react";
 import { Link, useLocation } from "wouter";
-import { useAuth } from "@/hooks/useAuth";
 
 // Items with href navigate to a real page (crawlable <a>).
 // Items with externalUrl open in a new tab.
@@ -106,8 +105,6 @@ const itemClass = "w-full flex items-center space-x-3 px-4 py-3 text-gray-300 ho
 export default function SmoothScrollMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [location] = useLocation();
-  const { user } = useAuth();
-  const isAdmin = user?.role === "admin";
 
   useEffect(() => {
     const handleOpenMenu = () => setIsOpen(true);
@@ -221,24 +218,6 @@ export default function SmoothScrollMenu() {
             </div>
           </div>
 
-          {/* Zona interna de gestión — solo visible para admin */}
-          {isAdmin && <div className="mt-6 pt-6 border-t border-red-900/40">
-            <div className="bg-red-950/40 border border-red-800/50 rounded-xl p-3 mb-3">
-              <div className="flex items-center gap-2 mb-1">
-                <Lock className="w-3 h-3 text-red-400 shrink-0" />
-                <span className="text-red-400 text-xs font-semibold uppercase tracking-wider">Zona interna NUXA</span>
-              </div>
-              <p className="text-gray-500 text-xs leading-snug">Acceso restringido al equipo de gestión</p>
-            </div>
-            <a
-              href="/admin/login"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-3 w-full px-4 py-3 text-red-400 hover:text-red-300 hover:bg-red-950/40 border border-red-900/40 hover:border-red-800/60 rounded-xl transition-all duration-200"
-            >
-              <Lock className="w-4 h-4 shrink-0" />
-              <span className="text-sm font-medium">Panel de Administración</span>
-            </a>
-          </div>}
         </div>
       </SheetContent>
     </Sheet>

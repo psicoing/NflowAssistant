@@ -55,12 +55,15 @@ export default function Login() {
         await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
         await queryClient.invalidateQueries({ queryKey: ["/api/subscription-status"] });
         
-        // Debug login response
-        console.log("Login response data:", JSON.stringify(data, null, 2));
-        
         // Pequeño delay para asegurar que el cache se actualice
         await new Promise(resolve => setTimeout(resolve, 100));
-        
+
+        // Admin personal → intranet directa
+        if (data.role === "admin") {
+          setLocation("/admin/dashboard");
+          return;
+        }
+
         // Redirigir según estado de suscripción
         if (data.hasCompletedPayment && data.subscriptionStatus === 'active' && data.hasActiveSubscription) {
           console.log("Usuario con suscripción activa, redirigiendo al chat");
