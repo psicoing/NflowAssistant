@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign, Star, User, Building2, Landmark, Shield, Trophy, Scale, Lock } from "lucide-react";
 import { Link, useLocation } from "wouter";
+import { useAuth } from "@/hooks/useAuth";
 
 // Items with href navigate to a real page (crawlable <a>).
 // Items with externalUrl open in a new tab.
@@ -104,20 +105,14 @@ const itemClass = "w-full flex items-center space-x-3 px-4 py-3 text-gray-300 ho
 
 export default function SmoothScrollMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
   const [location] = useLocation();
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
 
   useEffect(() => {
     const handleOpenMenu = () => setIsOpen(true);
     window.addEventListener("openNuxaMenu", handleOpenMenu);
     return () => window.removeEventListener("openNuxaMenu", handleOpenMenu);
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/admin/check")
-      .then(r => r.json())
-      .then(d => setIsAdmin(!!d.isAdmin))
-      .catch(() => {});
   }, []);
 
   const scrollToSection = (sectionId: string) => {

@@ -276,6 +276,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Set session for authenticated user
       req.session.userId = user.id;
 
+      // If the user has admin role, also set admin session
+      if (user.role === "admin") {
+        req.session.isAdmin = true;
+      }
+
       // Update last login
       await storage.updateUserLogin(user.id);
 
@@ -325,6 +330,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         id: user.id,
         username: user.username,
         email: user.email,
+        role: user.role || "user",
         userType: user.userType || "individual",
         subscriptionStatus: user.subscriptionStatus,
         subscriptionPlan: user.subscriptionPlan,
