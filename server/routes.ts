@@ -4,7 +4,7 @@ import { createServer, type Server } from "http";
 import fs from "fs";
 import path from "path";
 import { storage } from "./storage";
-import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS, sendLeadWelcomeEmail, generateUnsubscribeToken, sendTrialExhaustedEmail, sendReactivationEmail } from "./emailService";
+import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS, sendLeadWelcomeEmail, generateUnsubscribeToken, sendTrialExhaustedEmail, sendReactivationEmail, sendInstitutionEmail } from "./emailService";
 import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog, conversations, messages } from "@shared/schema";
 import { emailLeads } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
@@ -1097,6 +1097,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/admin/auth", adminLoginHandler);
 
   // Admin stats
+  // ===== INSTITUCIONES =====
+
+  // List all institutions
+  app.get("/api/admin/institutions", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const r = await pool.query("SELECT * FROM institution_contacts ORDER BY region, email");
+      res.json(r.rows);
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  // Add institution
+  app.post("/api/admin/institutions", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { email, region, name } = req.body;
+    if (!email || !email.includes("@")) return res.status(400).json({ message: "Email inválido" });
+    try {
+      const r = await pool.query(
+        "INSERT INTO institution_contacts (email, region, name) VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING RETURNING *",
+        [email.toLowerCase().trim(), region || null, name || null]
+      );
+      if (r.rows.length === 0) return res.status(409).json({ message: "Email ya existe" });
+      res.json(r.rows[0]);
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  // Delete institution
+  app.delete("/api/admin/institutions/:id", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      await pool.query("DELETE FROM institution_contacts WHERE id = $1", [parseInt(req.params.id)]);
+      res.json({ ok: true });
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  // Send institution campaign
+  app.post("/api/admin/send-institution-campaign", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { subject, body } = req.body;
+    if (!subject || !body) return res.status(400).json({ message: "Subject y body requeridos" });
+    try {
+      const r = await pool.query("SELECT * FROM institution_contacts WHERE opted_out = false ORDER BY id");
+      const contacts = r.rows;
+      let sent = 0, failed = 0;
+      for (const contact of contacts) {
+        const ok = await sendInstitutionEmail({ email: contact.email, subject, body, institutionId: contact.id });
+        if (ok) sent++; else failed++;
+        await new Promise(resolve => setTimeout(resolve, 150));
+      }
+      console.log(`Institution campaign: sent=${sent} failed=${failed}`);
+      res.json({ sent, failed });
+    } catch (e) {
+      console.error("send-institution-campaign error:", e);
+      res.status(500).json({ message: "Error" });
+    }
+  });
+
+  // Unsubscribe institution (one-click)
+  app.get("/api/unsubscribe-institution", async (req, res) => {
+    try {
+      const uid = req.query.uid as string;
+      if (!uid) return res.status(400).send("Token inválido");
+      const id = parseInt(Buffer.from(uid, "base64url").toString(), 10);
+      if (isNaN(id)) return res.status(400).send("Token inválido");
+      await pool.query("UPDATE institution_contacts SET opted_out = true, opted_out_at = NOW() WHERE id = $1", [id]);
+      res.send(`<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Baja confirmada – NUXA</title>
+<style>body{margin:0;font-family:'Segoe UI',sans-serif;background:#eff6ff;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+.box{background:#fff;border-radius:20px;padding:48px 40px;max-width:400px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);}
+h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;line-height:1.6;}a{color:#3b82f6;}</style></head>
+<body><div class="box"><p style="font-size:36px;margin:0 0 16px">✅</p>
+<h1>Baja registrada</h1><p>Su organización no volverá a recibir comunicaciones de NUXA.<br>Si en el futuro desea conocer nuestros servicios, puede contactarnos en <a href="https://nuxa.life">nuxa.life</a>.</p></div></body></html>`);
+    } catch (e) { res.status(500).send("Error"); }
+  });
+
   // ===== CAMPAÑA DE REACTIVACIÓN =====
 
   // Preview: count eligible trial users

@@ -80,6 +80,26 @@ export default function AdminDashboard() {
   const [campaignResult, setCampaignResult] = useState<{sent:number; failed:number; skipped:number} | null>(null);
   const [trialCount, setTrialCount] = useState<number | null>(null);
 
+  // Instituciones
+  const [institutions, setInstitutions] = useState<any[]>([]);
+  const [instLoading, setInstLoading] = useState(false);
+  const [instNewEmail, setInstNewEmail] = useState("");
+  const [instNewRegion, setInstNewRegion] = useState("");
+  const [instSubject, setInstSubject] = useState("NUXA — Apoyo emocional profesional para sus equipos de salud");
+  const [instBody, setInstBody] = useState(`Estimados/as,\n\nNos ponemos en contacto para presentarles NUXA (nuxa.life), una plataforma de apoyo emocional profesional diseñada específicamente para entornos de alta exigencia como el sanitario.\n\nNUXA ofrece:\n• Acompañamiento emocional disponible 24/7\n• Cumplimiento con ISO 45003 (gestión del riesgo psicosocial)\n• Sin listas de espera ni burocracia\n• Informes agregados y anónimos para los equipos de RRHH\n\nActualmente colaboramos con instituciones de salud pública en varias comunidades autónomas y nos gustaría explorar cómo podemos ayudar a su organización.\n\n¿Podríamos concertar una llamada de 20 minutos para conocer sus necesidades?\n\nQuedamos a su disposición.\n\nUn saludo,\nEquipo NUXA\nhttps://nuxa.life`);
+  const [instStatus, setInstStatus] = useState<"idle"|"confirm"|"sending"|"done"|"error">("idle");
+  const [instResult, setInstResult] = useState<{sent:number; failed:number} | null>(null);
+
+  const fetchInstitutions = async () => {
+    setInstLoading(true);
+    try {
+      const r = await fetch("/api/admin/institutions");
+      const d = await r.json();
+      setInstitutions(d);
+    } catch {}
+    setInstLoading(false);
+  };
+
   useEffect(() => {
     checkAuthAndFetchStats();
   }, []);
@@ -412,6 +432,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="revenue" className="data-[state=active]:bg-orange-600">Ingresos</TabsTrigger>
             <TabsTrigger value="content" className="data-[state=active]:bg-orange-600">Contenido</TabsTrigger>
             <TabsTrigger value="campana" className="data-[state=active]:bg-orange-600">📧 Campaña</TabsTrigger>
+            <TabsTrigger value="instituciones" className="data-[state=active]:bg-orange-600" onClick={fetchInstitutions}>🏛️ Instituciones</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview">
@@ -1069,6 +1090,181 @@ export default function AdminDashboard() {
                   </Card>
                 </div>
               )}
+            </div>
+          </TabsContent>
+
+          {/* ── INSTITUCIONES ── */}
+          <TabsContent value="instituciones">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+              {/* Panel izquierdo: lista de contactos */}
+              <Card className="bg-gray-800/50 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">🏛️ Contactos institucionales</CardTitle>
+                  <CardDescription className="text-gray-400">
+                    {institutions.filter(i => !i.opted_out).length} activos · {institutions.filter(i => i.opted_out).length} dados de baja
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Añadir nuevo */}
+                  <div className="flex gap-2">
+                    <input
+                      type="email"
+                      placeholder="email@institucion.es"
+                      value={instNewEmail}
+                      onChange={e => setInstNewEmail(e.target.value)}
+                      className="flex-1 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Región"
+                      value={instNewRegion}
+                      onChange={e => setInstNewRegion(e.target.value)}
+                      className="w-28 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                    />
+                    <button
+                      onClick={async () => {
+                        if (!instNewEmail.includes("@")) return;
+                        const r = await fetch("/api/admin/institutions", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ email: instNewEmail, region: instNewRegion }),
+                        });
+                        if (r.ok) { setInstNewEmail(""); setInstNewRegion(""); fetchInstitutions(); }
+                      }}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-all"
+                    >
+                      + Añadir
+                    </button>
+                  </div>
+
+                  {/* Lista */}
+                  <div className="max-h-[420px] overflow-y-auto space-y-1 pr-1">
+                    {instLoading ? (
+                      <p className="text-gray-400 text-sm text-center py-4">Cargando...</p>
+                    ) : institutions.length === 0 ? (
+                      <p className="text-gray-400 text-sm text-center py-4">No hay contactos</p>
+                    ) : institutions.map(inst => (
+                      <div key={inst.id} className={`flex items-center justify-between px-3 py-2 rounded-lg ${inst.opted_out ? "opacity-40" : "bg-gray-700/50"}`}>
+                        <div className="min-w-0">
+                          <p className="text-white text-sm truncate">{inst.email}</p>
+                          {inst.region && <p className="text-gray-400 text-xs">{inst.region}</p>}
+                        </div>
+                        <div className="flex items-center gap-2 ml-2 shrink-0">
+                          {inst.opted_out && <span className="text-xs text-red-400">baja</span>}
+                          <button
+                            onClick={async () => {
+                              await fetch(`/api/admin/institutions/${inst.id}`, { method: "DELETE" });
+                              fetchInstitutions();
+                            }}
+                            className="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded hover:bg-red-500/20 transition-all"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Panel derecho: composer + envío */}
+              <Card className="bg-gray-800/50 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">✉️ Redactar campaña</CardTitle>
+                  <CardDescription className="text-gray-400">El email se enviará a todos los contactos activos (sin baja)</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="text-gray-300 text-sm font-medium block mb-1">Asunto</label>
+                    <input
+                      type="text"
+                      value={instSubject}
+                      onChange={e => setInstSubject(e.target.value)}
+                      className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-gray-300 text-sm font-medium block mb-1">Cuerpo del mensaje</label>
+                    <textarea
+                      rows={12}
+                      value={instBody}
+                      onChange={e => setInstBody(e.target.value)}
+                      className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 resize-y font-mono"
+                    />
+                  </div>
+
+                  {instResult && (
+                    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3">
+                      <p className="text-emerald-300 text-sm">✅ Enviados: <strong>{instResult.sent}</strong> · Fallidos: <strong>{instResult.failed}</strong></p>
+                    </div>
+                  )}
+                  {instStatus === "error" && (
+                    <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3">
+                      <p className="text-red-300 text-sm">❌ Error al enviar. Revisa los logs.</p>
+                    </div>
+                  )}
+
+                  {instStatus === "idle" && (
+                    <button
+                      onClick={() => setInstStatus("confirm")}
+                      disabled={!instSubject.trim() || !instBody.trim()}
+                      className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-40 text-white font-semibold py-3 rounded-xl transition-all"
+                    >
+                      Preparar envío → ({institutions.filter(i => !i.opted_out).length} destinatarios)
+                    </button>
+                  )}
+
+                  {instStatus === "confirm" && (
+                    <div className="space-y-3">
+                      <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center">
+                        <p className="text-amber-300 text-sm font-semibold">¿Confirmas el envío?</p>
+                        <p className="text-gray-400 text-xs mt-1">Se enviarán <strong className="text-white">{institutions.filter(i => !i.opted_out).length} emails</strong> a instituciones públicas</p>
+                      </div>
+                      <div className="flex gap-3">
+                        <button onClick={() => setInstStatus("idle")} className="flex-1 border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm">
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={async () => {
+                            setInstStatus("sending");
+                            try {
+                              const r = await fetch("/api/admin/send-institution-campaign", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ subject: instSubject, body: instBody }),
+                              });
+                              const d = await r.json();
+                              setInstResult(d);
+                              setInstStatus("done");
+                            } catch { setInstStatus("error"); }
+                          }}
+                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition-all text-sm"
+                        >
+                          ✉️ Enviar ahora
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {instStatus === "sending" && (
+                    <div className="text-center py-3">
+                      <div className="animate-spin w-7 h-7 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-2" />
+                      <p className="text-gray-300 text-sm">Enviando... no cierres esta ventana</p>
+                    </div>
+                  )}
+
+                  {instStatus === "done" && (
+                    <button
+                      onClick={() => { setInstStatus("idle"); setInstResult(null); }}
+                      className="w-full border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm"
+                    >
+                      Nueva campaña
+                    </button>
+                  )}
+                </CardContent>
+              </Card>
+
             </div>
           </TabsContent>
 
