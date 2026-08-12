@@ -10,17 +10,25 @@ import { pool } from "./db";
 async function ensureAdminUser() {
   try {
     const hash = await bcrypt.hash("mln328RMR+", 10);
-    await pool.query(`
-      INSERT INTO users (username, email, password, role, subscription_status, profile_completed)
-      VALUES ('rmolons', 'rmportbou@gmail.com', $1, 'admin', 'active', true)
-      ON CONFLICT (email) DO UPDATE
-        SET username = 'rmolons',
-            password  = $1,
-            role      = 'admin',
-            subscription_status = 'active',
-            profile_completed   = true
-    `, [hash]);
-    log("Admin user rmolons ensured");
+    const existing = await pool.query(
+      `SELECT id FROM users WHERE email = 'rmportbou@gmail.com' LIMIT 1`
+    );
+    if (existing.rows.length > 0) {
+      await pool.query(
+        `UPDATE users SET username = 'rmolons', password = $1, role = 'admin',
+         subscription_status = 'active', profile_completed = true
+         WHERE email = 'rmportbou@gmail.com'`,
+        [hash]
+      );
+      log("Admin user rmolons updated");
+    } else {
+      await pool.query(
+        `INSERT INTO users (username, email, password, role, subscription_status, profile_completed)
+         VALUES ('rmolons', 'rmportbou@gmail.com', $1, 'admin', 'active', true)`,
+        [hash]
+      );
+      log("Admin user rmolons created");
+    }
   } catch (err: any) {
     console.error("ensureAdminUser error:", err.message);
   }
