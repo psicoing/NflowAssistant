@@ -157,7 +157,7 @@ export async function sendOwnerNotification(params: {
 </html>`;
 
     const { error } = await resend.emails.send({
-      from: 'NUXA <onboarding@resend.dev>',
+      from: 'NUXA <hola@nuxa.life>',
       to: OWNER_EMAIL,
       subject: `[NUXA] Nueva solicitud – ${params.nombre} ${params.apellidos} (${plan})`,
       html,
@@ -254,7 +254,7 @@ export async function sendSkrillRegistrationEmail(params: SkrillRegistrationEmai
 </html>`;
 
     const { error } = await resend.emails.send({
-      from: "NUXA <onboarding@resend.dev>",
+      from: "NUXA <hola@nuxa.life>",
       to: params.to,
       subject: `Tu enlace de pago para ${planInfo.label}`,
       text: `Hola ${params.nombre},\n\nPara activar tu ${planInfo.label} (€${planInfo.amount}), usa este enlace de Skrill:\n${params.skrillLink}\n\nNUXA by Empordajobs SL`,
@@ -353,7 +353,7 @@ export async function sendMagicLinkEmail(params: MagicLinkEmailParams): Promise<
 </html>`;
 
     const { error } = await resend.emails.send({
-      from: "NUXA <onboarding@resend.dev>",
+      from: "NUXA <hola@nuxa.life>",
       to: params.to,
       subject,
       text: `¡${params.isNewUser ? 'Bienvenido' : 'Gracias por tu compra'}, ${params.customerName}!\n\nProducto: ${params.productName}\n\nAccede a NUXA:\n${params.magicLink}\n\nEste enlace es válido por 7 días.\n\nNUXA by Empordajobs SL`,
@@ -490,7 +490,7 @@ export async function sendTrialExhaustedEmail(params: {
 </html>`;
 
     const { error: trialErr } = await resend.emails.send({
-      from: "NUXA <onboarding@resend.dev>",
+      from: "NUXA <hola@nuxa.life>",
       to: params.email,
       subject: "Tu prueba gratuita ha terminado — continúa con NUXA desde €2.99/mes",
       text: `Hola ${params.username},\n\nHas utilizado tus 5 consultas gratuitas con NUXA.\n\nContinúa con un plan desde €2.99/mes, sin permanencia: https://nuxa.life/registro/planes\n\nO explora recursos gratuitos: https://nuxa.life/recursos-gratuitos`,
@@ -566,7 +566,7 @@ export async function sendLeadWelcomeEmail(params: {
 </html>`;
 
     const { error: leadErr } = await resend.emails.send({
-      from: "NUXA <onboarding@resend.dev>",
+      from: "NUXA <hola@nuxa.life>",
       to: params.email,
       subject: "Bienvenido/a a NUXA - Tu psicólogo IA te espera",
       text: `Gracias por suscribirte a NUXA.\n\nA partir de ahora recibirás recordatorios mensuales de bienestar, recursos nuevos y novedades de la plataforma.\n\nExplora NUXA gratis: https://nuxa.life/prueba-gratis\n\n---\nPara darte de baja: ${unsubscribeUrl}`,
@@ -637,7 +637,7 @@ export async function sendInstitutionEmail(params: {
 </html>`;
 
     const { error } = await resend.emails.send({
-      from: "NUXA <onboarding@resend.dev>",
+      from: "NUXA <hola@nuxa.life>",
       to: params.email,
       subject: params.subject,
       text: `${params.body}\n\n---\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
@@ -721,7 +721,7 @@ export async function sendReactivationEmail(params: {
 </html>`;
 
     const { error: reactErr } = await resend.emails.send({
-      from: "NUXA <onboarding@resend.dev>",
+      from: "NUXA <hola@nuxa.life>",
       to: params.email,
       subject: "¿Cómo estás? Tu espacio en NUXA te espera 🧠",
       text: `Hola ${params.username},\n\nHace un tiempo probaste NUXA. Si alguna vez necesitas un espacio donde hablar sin juicios, aquí seguimos.\n\nAhora tienes 5 consultas gratuitas esperándote:\nhttps://nuxa.life/prueba-gratis\n\n---\nPara no recibir más mensajes: ${unsubscribeUrl}`,
