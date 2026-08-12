@@ -130,9 +130,9 @@ export function NuxaRobotForestSection() {
   return (
     <section className="relative w-full overflow-hidden">
       <div className="relative w-full">
-        {/* Sofa / armchair scene */}
+        {/* Person chatting on sofa — original image */}
         <img
-          src={sofaCredentialScene}
+          src={personChattingCozy}
           alt="Persona usando NUXA en un ambiente cálido y acogedor"
           className="w-full h-auto object-cover md:max-h-[45vh]"
           data-testid="img-nuxa-hero-cozy"
