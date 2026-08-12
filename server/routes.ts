@@ -1256,6 +1256,22 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     }
   });
 
+  // Skrill registrations (individual + empresa)
+  app.get("/api/admin/skrill-registrations", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const individual = await storage.getAllIndividualRegistrations();
+      const empresa = await storage.getAllEmpresaRegistrations();
+      res.json({
+        individual: individual.map(r => ({ ...r, tipo: "individual" })),
+        empresa: empresa.map(r => ({ ...r, tipo: "empresa" })),
+      });
+    } catch (e) {
+      res.status(500).json({ message: "Error" });
+    }
+  });
+
+
   app.get("/api/admin/stats", async (req, res) => {
     if (!req.session.isAdmin) {
       return res.status(401).json({ message: "No autorizado" });

@@ -424,16 +424,19 @@ export default function AdminDashboard() {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="bg-gray-800/50 border-gray-700">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-orange-600">Resumen</TabsTrigger>
-            <TabsTrigger value="users" className="data-[state=active]:bg-orange-600">Usuarios</TabsTrigger>
-            <TabsTrigger value="partners" className="data-[state=active]:bg-orange-600">Partners</TabsTrigger>
-            <TabsTrigger value="subscriptions" className="data-[state=active]:bg-orange-600">Suscripciones</TabsTrigger>
-            <TabsTrigger value="revenue" className="data-[state=active]:bg-orange-600">Ingresos</TabsTrigger>
-            <TabsTrigger value="content" className="data-[state=active]:bg-orange-600">Contenido</TabsTrigger>
-            <TabsTrigger value="campana" className="data-[state=active]:bg-orange-600">📧 Campaña</TabsTrigger>
-            <TabsTrigger value="instituciones" className="data-[state=active]:bg-orange-600" onClick={fetchInstitutions}>🏛️ Instituciones</TabsTrigger>
-          </TabsList>
+          {/* Scrollable tab bar for mobile */}
+          <div className="overflow-x-auto pb-1 -mx-4 px-4" style={{ WebkitOverflowScrolling: "touch" }}>
+            <TabsList className="bg-gray-800/50 border-gray-700 inline-flex w-max min-w-full gap-0.5">
+              <TabsTrigger value="overview"      className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Resumen</TabsTrigger>
+              <TabsTrigger value="users"         className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Usuarios</TabsTrigger>
+              <TabsTrigger value="partners"      className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Partners</TabsTrigger>
+              <TabsTrigger value="subscriptions" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Suscripciones</TabsTrigger>
+              <TabsTrigger value="revenue"       className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Ingresos</TabsTrigger>
+              <TabsTrigger value="content"       className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Contenido</TabsTrigger>
+              <TabsTrigger value="campana"       className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">📧 Campaña</TabsTrigger>
+              <TabsTrigger value="instituciones" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={fetchInstitutions}>🏛️ Instituciones</TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="overview">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
