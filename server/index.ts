@@ -34,6 +34,73 @@ async function ensureAdminUser() {
   }
 }
 
+async function ensureInstitutionContacts() {
+  try {
+    await pool.query(`
+      INSERT INTO institution_contacts (email, region) VALUES
+      ('alertas.productossanitarios@larioja.org','La Rioja'),
+      ('asistencia.transfronteriza@sespa.princast.es','Asturias'),
+      ('asistenciatransfronteriza@listas.carm.es','Murcia'),
+      ('astransfronteriza@salud-juntaex.es','Extremadura'),
+      ('atencioalciutada@catsalut.cat','Cataluña'),
+      ('atencionusuario@cantabria.es','Cantabria'),
+      ('atencionusuarios@sescam.jccm.es','Castilla-La Mancha'),
+      ('atenciousuari@ibsalut.es','Baleares'),
+      ('ayudadigital.sspa@juntadeandalucia.es','Andalucía'),
+      ('buzgen.dg@scsalud.es','Cantabria'),
+      ('buzgen.dt.ceuta@ingesa.sanidad.gob.es','Ceuta'),
+      ('cluster@innovacionsanitaria.com','Nacional'),
+      ('consejosalud@navarra.es','Navarra'),
+      ('deteprec@navarra.es','Navarra'),
+      ('dgerencia@salud.aragon.es','Aragón'),
+      ('direcciongeneralsalud@navarra.es','Navarra'),
+      ('direcciongerencia.ses@salud-juntaex.es','Extremadura'),
+      ('dpd.cpidssa@juntadeandalucia.es','Andalucía'),
+      ('dpd@ibsalut.es','Baleares'),
+      ('dpd@ticsalutsocial.cat','Cataluña'),
+      ('fomento.innovacion@navarra.es','Navarra'),
+      ('gabinete.salud@navarra.es','Navarra'),
+      ('gerensns@navarra.es','Navarra'),
+      ('iau@riojasalud.es','La Rioja'),
+      ('info@clustersaude.com','Galicia'),
+      ('informacion.sector2@salud.aragon.es','Aragón'),
+      ('innovacion.acis@sergas.es','Galicia'),
+      ('innovacion.chuac@sergas.es','Galicia'),
+      ('innovacion.iacs@aragon.es','Aragón'),
+      ('investigacion.salud@navarra.es','Navarra'),
+      ('investinnova.sanidad@jcyl.es','Castilla y León'),
+      ('isp.promocion@navarra.es','Navarra'),
+      ('ispdirec@navarra.es','Navarra'),
+      ('ispepidem@navarra.es','Navarra'),
+      ('ispwebge@navarra.es','Navarra'),
+      ('ocatt@catsalut.cat','Cataluña'),
+      ('oddus.cs@gobiernodecanarias.org','Canarias'),
+      ('otri.iacs@aragon.es','Aragón'),
+      ('plan.docente.salud@navarra.es','Navarra'),
+      ('prestaciones.dt.melilla@ingesa.sanidad.gob.es','Melilla'),
+      ('programa.ulceras.fora@sergas.es','Galicia'),
+      ('protecciondatos.iacs@aragon.es','Aragón'),
+      ('sacylinnova@jcyl.es','Castilla y León'),
+      ('salud.responde@navarra.es','Navarra'),
+      ('saludresponde@juntadeandalucia.es','Andalucía'),
+      ('sanidadinforma@salud.madrid.org','Madrid'),
+      ('sanidadtransfronterizacv@gva.es','Comunidad Valenciana'),
+      ('sapu.emergentziak@osakidetza.eus','País Vasco'),
+      ('sau.tic@gencat.cat','Cataluña'),
+      ('secretaria.consejero.salud@navarra.es','Navarra'),
+      ('sg.scs@gobiernodecanarias.org','Canarias'),
+      ('soportec@navarra.es','Navarra'),
+      ('sugerencias.emergentziak@osakidetza.eus','País Vasco'),
+      ('sxs.planificacion.sanitaria@sergas.es','Galicia'),
+      ('usuariosaragonsalud@aragon.es','Aragón')
+      ON CONFLICT (email) DO NOTHING
+    `);
+    log("Institution contacts seeded");
+  } catch (err: any) {
+    console.error("ensureInstitutionContacts error:", err.message);
+  }
+}
+
 // Prevent transient DB/network errors from crashing the process
 process.on("uncaughtException", (err: Error) => {
   console.error("[process] Uncaught exception (kept alive):", err.message);
@@ -106,6 +173,7 @@ app.use((req, res, next) => {
 
 (async () => {
   await ensureAdminUser();
+  await ensureInstitutionContacts();
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
