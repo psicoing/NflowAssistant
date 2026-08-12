@@ -601,7 +601,7 @@ export async function sendInstitutionEmail(params: {
   institutionId: number;
 }): Promise<boolean> {
   try {
-    const { client, fromEmail } = await getUncachableSendGridClient();
+    const resend = getResendClient();
     const uid = Buffer.from(params.institutionId.toString()).toString("base64url");
     const unsubscribeUrl = `https://nuxa.life/api/unsubscribe-institution?uid=${uid}`;
 
@@ -641,15 +641,18 @@ export async function sendInstitutionEmail(params: {
 </body>
 </html>`;
 
-    const msg = {
+    const { error } = await resend.emails.send({
+      from: "NUXA <onboarding@resend.dev>",
       to: params.email,
-      from: { email: fromEmail, name: "NUXA" },
       subject: params.subject,
       text: `${params.body}\n\n---\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
       html,
-    };
+    });
 
-    await client.send(msg);
+    if (error) {
+      console.error("sendInstitutionEmail Resend error:", error);
+      return false;
+    }
     return true;
   } catch (err) {
     console.error("sendInstitutionEmail error:", err);

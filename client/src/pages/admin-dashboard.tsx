@@ -85,6 +85,8 @@ export default function AdminDashboard() {
   const [instLoading, setInstLoading] = useState(false);
   const [instNewEmail, setInstNewEmail] = useState("");
   const [instNewRegion, setInstNewRegion] = useState("");
+  const [instAddError, setInstAddError] = useState<string | null>(null);
+  const [instAdding, setInstAdding] = useState(false);
   const [instSubject, setInstSubject] = useState("NUXA — Apoyo emocional profesional para sus equipos de salud");
   const [instBody, setInstBody] = useState(`Estimados/as,\n\nNos ponemos en contacto para presentarles NUXA (nuxa.life), una plataforma de apoyo emocional profesional diseñada específicamente para entornos de alta exigencia como el sanitario.\n\nNUXA ofrece:\n• Acompañamiento emocional disponible 24/7\n• Cumplimiento con ISO 45003 (gestión del riesgo psicosocial)\n• Sin listas de espera ni burocracia\n• Informes agregados y anónimos para los equipos de RRHH\n\nActualmente colaboramos con instituciones de salud pública en varias comunidades autónomas y nos gustaría explorar cómo podemos ayudar a su organización.\n\n¿Podríamos concertar una llamada de 20 minutos para conocer sus necesidades?\n\nQuedamos a su disposición.\n\nUn saludo,\nEquipo NUXA\nhttps://nuxa.life`);
   const [instStatus, setInstStatus] = useState<"idle"|"confirm"|"sending"|"done"|"error">("idle");
@@ -1126,20 +1128,34 @@ export default function AdminDashboard() {
                       className="w-28 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
                     />
                     <button
+                      disabled={instAdding}
                       onClick={async () => {
-                        if (!instNewEmail.includes("@")) return;
-                        const r = await fetch("/api/admin/institutions", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({ email: instNewEmail, region: instNewRegion }),
-                        });
-                        if (r.ok) { setInstNewEmail(""); setInstNewRegion(""); fetchInstitutions(); }
+                        setInstAddError(null);
+                        if (!instNewEmail.includes("@")) { setInstAddError("Email inválido"); return; }
+                        setInstAdding(true);
+                        try {
+                          const r = await fetch("/api/admin/institutions", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ email: instNewEmail, region: instNewRegion }),
+                          });
+                          if (r.ok) {
+                            setInstNewEmail(""); setInstNewRegion(""); setInstAddError(null); fetchInstitutions();
+                          } else {
+                            const data = await r.json().catch(() => ({}));
+                            setInstAddError(data.message || `Error ${r.status}`);
+                          }
+                        } catch { setInstAddError("Sin conexión"); }
+                        finally { setInstAdding(false); }
                       }}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-all"
+                      className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap"
                     >
-                      + Añadir
+                      {instAdding ? "…" : "+ Añadir"}
                     </button>
                   </div>
+                  {instAddError && (
+                    <p className="text-red-400 text-xs mt-1 px-1">{instAddError}</p>
+                  )}
 
                   {/* Lista */}
                   <div className="max-h-[420px] overflow-y-auto space-y-1 pr-1">
