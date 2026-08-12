@@ -1,9 +1,30 @@
 import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
 import MemoryStore from "memorystore";
+import bcrypt from "bcrypt";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { registerSeoMiddleware } from "./seo-middleware";
+import { pool } from "./db";
+
+async function ensureAdminUser() {
+  try {
+    const hash = await bcrypt.hash("mln328RMR+", 10);
+    await pool.query(`
+      INSERT INTO users (username, email, password, role, subscription_status, profile_completed)
+      VALUES ('rmolons', 'rmportbou@gmail.com', $1, 'admin', 'active', true)
+      ON CONFLICT (email) DO UPDATE
+        SET username = 'rmolons',
+            password  = $1,
+            role      = 'admin',
+            subscription_status = 'active',
+            profile_completed   = true
+    `, [hash]);
+    log("Admin user rmolons ensured");
+  } catch (err: any) {
+    console.error("ensureAdminUser error:", err.message);
+  }
+}
 
 // Prevent transient DB/network errors from crashing the process
 process.on("uncaughtException", (err: Error) => {
@@ -76,6 +97,7 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  await ensureAdminUser();
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
