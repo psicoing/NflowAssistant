@@ -57,129 +57,112 @@ import nuxaRobotShowcase from "@assets/generated_images/nuxa_robot_interactive_s
 import nuxaRobotContact from "@assets/generated_images/nuxa_robot_contact_support_desk.png";
 import nuxaRobotBooks from "@assets/generated_images/nuxa_robot_books_recommendations.png";
 
-/** Official psychology credential seal — never translate, always English */
+/**
+ * PsychologySeal — official round credential badge, always English, never translated.
+ *
+ * Design: ivory paper + navy ink, like a real embossed notary seal.
+ * ONE ring of arc text top + bottom. Large Ψ. Credentials as straight lines below.
+ */
 function PsychologySeal() {
-  const cx = 130, cy = 130; // centre of 260×260 viewBox
+  // 190 × 190 viewBox, centre (95, 95)
+  const C = 95;
+  const R = 92;   // outer radius of seal
+  const Rt = 84;  // radius for arc text paths
+  const Ri = 68;  // inner decorative ring
 
-  // ── radii ──────────────────────────────────────────────
-  const rFill   = 126; // filled background
-  const rBorder = 126; // outermost stroke
-  const rBand   = 118; // inner edge of outer text band
-  const rText1  = 122; // arc for outer text  (between rBorder & rBand)
-  const rBand2  = 100; // inner edge of separator band
-  const rText2  =  92; // arc for inner text
-  const rInner  =  80; // inner content circle
-
-  // ── arc helpers ─────────────────────────────────────────
-  // TOP  : left → right through the top  (sweep=1, clockwise)
-  // BOTTOM: right → left through the bottom (sweep=1, clockwise) → text appears L→R at bottom
-  const arc = (r: number, top: boolean) => top
-    ? `M ${cx - r},${cy} A ${r},${r} 0 0,1 ${cx + r},${cy}`
-    : `M ${cx + r},${cy} A ${r},${r} 0 0,1 ${cx - r},${cy}`;
-
-  // ── tick marks around the outer band ────────────────────
-  const ticks = Array.from({ length: 36 }, (_, i) => {
-    const a = (i * 10 - 90) * (Math.PI / 180);
-    const r1 = rBand + 1, r2 = rBorder - 1;
-    return { x1: cx + r1 * Math.cos(a), y1: cy + r1 * Math.sin(a),
-             x2: cx + r2 * Math.cos(a), y2: cy + r2 * Math.sin(a) };
-  });
+  // Arc for top text (sweep clockwise L→R over the top)
+  const topPath = `M ${C - Rt},${C} A ${Rt},${Rt} 0 0,1 ${C + Rt},${C}`;
+  // Arc for bottom text (sweep clockwise R→L under the bottom → text reads L→R)
+  const botPath = `M ${C + Rt},${C} A ${Rt},${Rt} 0 0,1 ${C - Rt},${C}`;
 
   return (
-    <svg width="260" height="260" viewBox="0 0 260 260"
-         aria-label="Official NUXA Psychology Credential Seal">
+    <svg
+      width="190" height="190" viewBox="0 0 190 190"
+      aria-label="NUXA Licensed Psychologist Credential Seal"
+      style={{ display: "block" }}
+    >
       <defs>
-        {/* paths for curved text */}
-        <path id="t1-top" d={arc(rText1, true)} />
-        <path id="t1-bot" d={arc(rText1, false)} />
-        <path id="t2-top" d={arc(rText2, true)} />
-        <path id="t2-bot" d={arc(rText2, false)} />
+        <path id="arc-t" d={topPath} />
+        <path id="arc-b" d={botPath} />
 
-        {/* deep-navy radial bg */}
-        <radialGradient id="bg" cx="50%" cy="38%" r="65%">
-          <stop offset="0%"  stopColor="#1b3567" />
-          <stop offset="100%" stopColor="#091530" />
+        {/* ivory paper background */}
+        <radialGradient id="paper" cx="42%" cy="38%" r="70%">
+          <stop offset="0%"  stopColor="#fdfaf3" />
+          <stop offset="100%" stopColor="#f0e8d0" />
         </radialGradient>
-        {/* gold gradient for rings */}
-        <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%"   stopColor="#d4aa30" />
-          <stop offset="45%"  stopColor="#f8e47a" />
-          <stop offset="100%" stopColor="#b8860b" />
+
+        {/* navy ink gradient for rings */}
+        <linearGradient id="ink" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stopColor="#162a5c" />
+          <stop offset="100%" stopColor="#0d1e45" />
         </linearGradient>
+
+        {/* subtle drop shadow */}
+        <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+          <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#000" floodOpacity="0.35" />
+        </filter>
       </defs>
 
-      {/* ── background ───────────────────────────────── */}
-      <circle cx={cx} cy={cy} r={rFill} fill="url(#bg)" />
+      {/* ── ivory background ── */}
+      <circle cx={C} cy={C} r={R} fill="url(#paper)" filter="url(#shadow)" />
 
-      {/* ── outer double border ───────────────────────── */}
-      <circle cx={cx} cy={cy} r={rBorder}   fill="none" stroke="url(#gold)" strokeWidth="3.5" />
-      <circle cx={cx} cy={cy} r={rBorder-6} fill="none" stroke="url(#gold)" strokeWidth="0.8" opacity="0.5" />
+      {/* ── outer navy border (thick) ── */}
+      <circle cx={C} cy={C} r={R}   fill="none" stroke="#1a3060" strokeWidth="5" />
+      {/* ── thin line just inside border ── */}
+      <circle cx={C} cy={C} r={R - 7} fill="none" stroke="#1a3060" strokeWidth="0.8" />
 
-      {/* ── 36 tiny tick marks between outer rings ────── */}
-      {ticks.map((t, i) => (
-        <line key={i} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
-              stroke="#d4aa30" strokeWidth="0.8" opacity="0.6" />
-      ))}
+      {/* ── inner circle separating text band from content ── */}
+      <circle cx={C} cy={C} r={Ri} fill="none" stroke="#1a3060" strokeWidth="1.2" />
 
-      {/* ── separator ring between outer & inner text ── */}
-      <circle cx={cx} cy={cy} r={rBand2} fill="none" stroke="url(#gold)" strokeWidth="1" />
-
-      {/* ── inner content ring ────────────────────────── */}
-      <circle cx={cx} cy={cy} r={rInner} fill="none" stroke="url(#gold)" strokeWidth="1.5" />
-      <circle cx={cx} cy={cy} r={rInner-5} fill="none" stroke="url(#gold)" strokeWidth="0.5" opacity="0.4" />
-
-      {/* ── 4 gold stars at compass points ───────────── */}
-      {[0, 90, 180, 270].map(deg => {
-        const a = (deg - 90) * (Math.PI / 180);
-        return (
-          <text key={deg} x={cx + rBorder * Math.cos(a)} y={cy + rBorder * Math.sin(a) + 4}
-                textAnchor="middle" fontSize="9" fill="#f8e47a" fontFamily="serif">✦</text>
-        );
-      })}
-
-      {/* ══ OUTER TOP: short, wide-spaced ════════════════
-          "LICENSED  PSYCHOLOGIST"  — 21 chars, plenty of room */}
-      <text fontSize="10" fill="#f8e47a" fontFamily="Georgia, serif"
-            letterSpacing="3.5" textAnchor="middle" fontWeight="bold">
-        <textPath href="#t1-top" startOffset="50%">LICENSED PSYCHOLOGIST</textPath>
+      {/* ══ TOP ARC: "LICENSED PSYCHOLOGIST" ══
+          Short phrase — generous letter-spacing so it breathes */}
+      <text
+        fontFamily="'Georgia', 'Times New Roman', serif"
+        fontSize="9.5"
+        fontWeight="bold"
+        fill="#1a3060"
+        letterSpacing="3"
+        textAnchor="middle"
+      >
+        <textPath href="#arc-t" startOffset="50%">LICENSED PSYCHOLOGIST</textPath>
       </text>
 
-      {/* ══ OUTER BOTTOM: "COL. 7851 · COPC · SPAIN" ════ */}
-      <text fontSize="9.5" fill="#f8e47a" fontFamily="Georgia, serif"
-            letterSpacing="2.8" textAnchor="middle">
-        <textPath href="#t1-bot" startOffset="50%">COL. 7851 · COPC · SPAIN</textPath>
+      {/* ══ BOTTOM ARC: "COL. 7851  ·  COPC  ·  SPAIN" ══ */}
+      <text
+        fontFamily="'Georgia', 'Times New Roman', serif"
+        fontSize="8.5"
+        fill="#1a3060"
+        letterSpacing="2.2"
+        textAnchor="middle"
+      >
+        <textPath href="#arc-b" startOffset="50%">COL. 7851  ·  COPC  ·  SPAIN</textPath>
       </text>
 
-      {/* ══ INNER TOP: secondary credential ══════════════ */}
-      <text fontSize="8" fill="#b8d0f0" fontFamily="Georgia, serif"
-            letterSpacing="1.5" textAnchor="middle">
-        <textPath href="#t2-top" startOffset="50%">GRUPO JOBDA SL · B027001100</textPath>
+      {/* ══ LARGE Ψ — hero element ══ */}
+      <text
+        x={C} y={C + 10}
+        textAnchor="middle"
+        fontFamily="'Georgia', 'Times New Roman', serif"
+        fontWeight="bold"
+        fontSize="52"
+        fill="#1a3060"
+      >Ψ</text>
+
+      {/* ── thin rule below Ψ ── */}
+      <line x1={C - 26} y1={C + 20} x2={C + 26} y2={C + 20}
+            stroke="#1a3060" strokeWidth="0.8" />
+
+      {/* ── credential lines inside the inner circle ── */}
+      <text x={C} y={C + 32} textAnchor="middle"
+            fontFamily="Georgia, serif" fontSize="6" fill="#1a3060" letterSpacing="0.8">
+        GRUPO JOBDA SL · B027001100
       </text>
-
-      {/* ══ INNER BOTTOM: medicines ═══════════════════════ */}
-      <text fontSize="8" fill="#b8d0f0" fontFamily="Georgia, serif"
-            letterSpacing="1.2" textAnchor="middle">
-        <textPath href="#t2-bot" startOffset="50%">MEDICINES AGENCY TMT · A1</textPath>
+      <text x={C} y={C + 42} textAnchor="middle"
+            fontFamily="Georgia, serif" fontSize="5.5" fill="#4a6090" letterSpacing="0.6">
+        MEDICINES AGENCY TMT · A1
       </text>
-
-      {/* ══ LARGE Ψ — dominant centre element ════════════ */}
-      <text x={cx} y={cy + 20} textAnchor="middle"
-            fontSize="68" fill="#f8e47a" opacity="0.15"
-            fontFamily="Georgia, 'Times New Roman', serif" fontWeight="bold">Ψ</text>
-      <text x={cx} y={cy + 20} textAnchor="middle"
-            fontSize="68" fill="none" stroke="#f8e47a" strokeWidth="0.8" opacity="0.4"
-            fontFamily="Georgia, 'Times New Roman', serif" fontWeight="bold">Ψ</text>
-      <text x={cx} y={cy + 20} textAnchor="middle"
-            fontSize="68" fill="#f8e47a"
-            fontFamily="Georgia, 'Times New Roman', serif" fontWeight="bold">Ψ</text>
-
-      {/* thin rule above health licence */}
-      <line x1={cx - 32} y1={cy + 28} x2={cx + 32} y2={cy + 28}
-            stroke="#d4aa30" strokeWidth="0.8" opacity="0.7" />
-
-      {/* health licence — straight text below Ψ */}
-      <text x={cx} y={cy + 40} textAnchor="middle"
-            fontSize="6.5" fill="#c9a84c" fontFamily="Georgia, serif" letterSpacing="1">
+      <text x={C} y={C + 51} textAnchor="middle"
+            fontFamily="Georgia, serif" fontSize="5.5" fill="#4a6090" letterSpacing="0.6">
         HEALTH LIC. E-179287705
       </text>
     </svg>
