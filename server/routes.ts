@@ -1109,6 +1109,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ isAdmin: !!req.session.isAdmin });
   });
 
+  // ===== EMAIL DOMAIN STATUS =====
+  app.get("/api/admin/resend-domain-status", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const apiKey = process.env.RESEND_API_KEY;
+      if (!apiKey) return res.json({ verified: false, status: "no_key" });
+      const r = await fetch("https://api.resend.com/domains", {
+        headers: { Authorization: `Bearer ${apiKey}` },
+      });
+      const data = await r.json() as any;
+      const domains: any[] = data?.data ?? [];
+      const nuxa = domains.find((d: any) =>
+        d.name === "nuxa.life" || d.name?.endsWith(".nuxa.life")
+      );
+      if (!nuxa) return res.json({ verified: false, status: "not_added" });
+      res.json({ verified: nuxa.status === "verified", status: nuxa.status, name: nuxa.name });
+    } catch (e) {
+      res.json({ verified: false, status: "error" });
+    }
+  });
+
   // ===== INSTITUCIONES =====
 
   // List all institutions

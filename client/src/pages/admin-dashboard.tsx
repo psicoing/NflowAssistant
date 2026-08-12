@@ -83,6 +83,12 @@ export default function AdminDashboard() {
   // Instituciones
   const [institutions, setInstitutions] = useState<any[]>([]);
   const [instLoading, setInstLoading] = useState(false);
+  const [resendDomain, setResendDomain] = useState<{verified:boolean;status:string;name?:string}|null>(null);
+  const checkResendDomain = async () => {
+    const r = await fetch("/api/admin/resend-domain-status");
+    if (r.ok) setResendDomain(await r.json());
+  };
+
   const [instNewEmail, setInstNewEmail] = useState("");
   const [instNewRegion, setInstNewRegion] = useState("");
   const [instAddError, setInstAddError] = useState<string | null>(null);
@@ -435,8 +441,8 @@ export default function AdminDashboard() {
               <TabsTrigger value="subscriptions" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Suscripciones</TabsTrigger>
               <TabsTrigger value="revenue"       className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Ingresos</TabsTrigger>
               <TabsTrigger value="content"       className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Contenido</TabsTrigger>
-              <TabsTrigger value="campana"       className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">📧 Campaña</TabsTrigger>
-              <TabsTrigger value="instituciones" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={fetchInstitutions}>🏛️ Instituciones</TabsTrigger>
+              <TabsTrigger value="campana"       className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={checkResendDomain}>📧 Campaña</TabsTrigger>
+              <TabsTrigger value="instituciones" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchInstitutions(); checkResendDomain(); }}>🏛️ Instituciones</TabsTrigger>
             </TabsList>
           </div>
 
@@ -1224,6 +1230,23 @@ export default function AdminDashboard() {
                     </div>
                   )}
 
+                  {/* Estado dominio Resend */}
+                  {resendDomain && !resendDomain.verified && (
+                    <div className="bg-red-500/10 border border-red-500/40 rounded-xl p-3 flex items-start gap-2">
+                      <span className="text-lg">⚠️</span>
+                      <div>
+                        <p className="text-red-300 text-sm font-semibold">Dominio no verificado en Resend</p>
+                        <p className="text-gray-400 text-xs mt-0.5">Estado: <strong className="text-white">{resendDomain.status === "not_added" ? "no añadido" : resendDomain.status}</strong>. Los emails fallarán hasta que Resend verifique <code className="text-orange-300">nuxa.life</code>. El DNS puede tardar hasta 2h.</p>
+                        <button onClick={checkResendDomain} className="mt-2 text-xs text-blue-400 hover:text-blue-300 underline">🔄 Comprobar de nuevo</button>
+                      </div>
+                    </div>
+                  )}
+                  {resendDomain?.verified && (
+                    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3">
+                      <p className="text-emerald-300 text-sm">✅ Dominio <strong>nuxa.life</strong> verificado en Resend — los emails están listos para enviarse</p>
+                    </div>
+                  )}
+
                   {instStatus === "idle" && (
                     <button
                       onClick={() => setInstStatus("confirm")}
@@ -1327,6 +1350,23 @@ export default function AdminDashboard() {
                       <li>❌ No se envía a usuarios premium, admin ni sin email</li>
                     </ul>
                   </div>
+
+                  {/* Estado dominio Resend */}
+                  {resendDomain && !resendDomain.verified && (
+                    <div className="bg-red-500/10 border border-red-500/40 rounded-xl p-3 flex items-start gap-2">
+                      <span className="text-lg">⚠️</span>
+                      <div>
+                        <p className="text-red-300 text-sm font-semibold">Dominio no verificado en Resend</p>
+                        <p className="text-gray-400 text-xs mt-0.5">Estado: <strong className="text-white">{resendDomain.status === "not_added" ? "no añadido" : resendDomain.status}</strong>. Los emails fallarán hasta que Resend verifique <code className="text-orange-300">nuxa.life</code>.</p>
+                        <button onClick={checkResendDomain} className="mt-2 text-xs text-blue-400 hover:text-blue-300 underline">🔄 Comprobar de nuevo</button>
+                      </div>
+                    </div>
+                  )}
+                  {resendDomain?.verified && (
+                    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3">
+                      <p className="text-emerald-300 text-sm">✅ Dominio <strong>nuxa.life</strong> verificado — emails listos</p>
+                    </div>
+                  )}
 
                   {/* Resultado */}
                   {campaignResult && (
