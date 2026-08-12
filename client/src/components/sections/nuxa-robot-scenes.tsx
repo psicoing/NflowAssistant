@@ -59,69 +59,129 @@ import nuxaRobotBooks from "@assets/generated_images/nuxa_robot_books_recommenda
 
 /** Official psychology credential seal — never translate, always English */
 function PsychologySeal() {
-  const R = 76;       // outer radius
-  const r = 66;       // text-arc radius
-  const ri = 58;      // inner ring radius
-  const cx = 90; const cy = 90;
-  const size = cx * 2;
+  // viewBox 200×200, centre (100,100)
+  const cx = 100; const cy = 100;
 
-  // SVG arc helpers
-  const topArc    = `M ${cx - r},${cy} A ${r},${r} 0 0,1 ${cx + r},${cy}`;
-  const bottomArc = `M ${cx - r},${cy} A ${r},${r} 0 0,0 ${cx + r},${cy}`;
-  const midTopArc    = `M ${cx - ri + 6},${cy} A ${ri - 6},${ri - 6} 0 0,1 ${cx + ri - 6},${cy}`;
-  const midBotArc    = `M ${cx - ri + 6},${cy} A ${ri - 6},${ri - 6} 0 0,0 ${cx + ri - 6},${cy}`;
+  // Radii
+  const rOuter   = 94;   // outermost filled circle
+  const rRing1   = 94;   // gold outer ring
+  const rRing2   = 82;   // second gold ring
+  const rText1   = 88;   // outer text arc
+  const rRing3   = 66;   // third ring (inner boundary)
+  const rText2   = 72;   // inner text arc
+  const rDots    = 78;   // dots row between rings
+
+  // Arc paths — key: for bottom arcs, sweep RIGHT→LEFT so text reads L→R
+  // Top arc (L→R through top):    M left,cy  arc-clockwise      right,cy
+  // Bottom arc (R→L through bot): M right,cy arc-clockwise      left,cy  → text appears bottom L→R
+  const outerTopArc = `M ${cx - rText1},${cy} A ${rText1},${rText1} 0 0,1 ${cx + rText1},${cy}`;
+  const outerBotArc = `M ${cx + rText1},${cy} A ${rText1},${rText1} 0 0,1 ${cx - rText1},${cy}`;
+  const innerTopArc = `M ${cx - rText2},${cy} A ${rText2},${rText2} 0 0,1 ${cx + rText2},${cy}`;
+  const innerBotArc = `M ${cx + rText2},${cy} A ${rText2},${rText2} 0 0,1 ${cx - rText2},${cy}`;
+
+  // 12 decorative dots equally spaced between the two inner rings
+  const dots = Array.from({ length: 24 }, (_, i) => {
+    const angle = (i * 360) / 24 - 90;
+    const rad = (angle * Math.PI) / 180;
+    return { x: cx + rDots * Math.cos(rad), y: cy + rDots * Math.sin(rad) };
+  });
 
   return (
     <svg
-      width={size}
-      height={size}
-      viewBox={`0 0 ${size} ${size}`}
+      width="200"
+      height="200"
+      viewBox="0 0 200 200"
       aria-label="Official NUXA Psychology Credential Seal"
-      className="drop-shadow-2xl"
     >
-      {/* Outer fill */}
-      <circle cx={cx} cy={cy} r={R} fill="#1a2e5a" />
-      {/* Outer ring */}
-      <circle cx={cx} cy={cy} r={R} fill="none" stroke="#c9a84c" strokeWidth="2.5" />
-      {/* Inner ring */}
-      <circle cx={cx} cy={cy} r={ri} fill="none" stroke="#c9a84c" strokeWidth="1.5" />
-
-      {/* Arc paths for text (hidden) */}
       <defs>
-        <path id="seal-top"    d={topArc} />
-        <path id="seal-bottom" d={bottomArc} />
-        <path id="seal-mid-t"  d={midTopArc} />
-        <path id="seal-mid-b"  d={midBotArc} />
+        <path id="sp-outer-top" d={outerTopArc} />
+        <path id="sp-outer-bot" d={outerBotArc} />
+        <path id="sp-inner-top" d={innerTopArc} />
+        <path id="sp-inner-bot" d={innerBotArc} />
+
+        {/* Gold radial gradient for richness */}
+        <radialGradient id="sealBg" cx="50%" cy="40%" r="60%">
+          <stop offset="0%"   stopColor="#1e3a72" />
+          <stop offset="100%" stopColor="#0d1e45" />
+        </radialGradient>
+        <linearGradient id="goldRing" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stopColor="#e8c84a" />
+          <stop offset="50%"  stopColor="#f5d97a" />
+          <stop offset="100%" stopColor="#c9a84c" />
+        </linearGradient>
       </defs>
 
-      {/* Top text: PSYCHOLOGIST · COL. 7851 COPC */}
-      <text fontSize="9.5" fill="#f5d97a" fontFamily="Georgia, serif" letterSpacing="1.8" textAnchor="middle">
-        <textPath href="#seal-top" startOffset="50%">PSYCHOLOGIST · COL. 7851 COPC</textPath>
+      {/* Background fill */}
+      <circle cx={cx} cy={cy} r={rOuter} fill="url(#sealBg)" />
+
+      {/* Outer gold ring */}
+      <circle cx={cx} cy={cy} r={rRing1} fill="none" stroke="url(#goldRing)" strokeWidth="2.5" />
+      {/* Second ring */}
+      <circle cx={cx} cy={cy} r={rRing2} fill="none" stroke="url(#goldRing)" strokeWidth="1.2" />
+      {/* Inner ring */}
+      <circle cx={cx} cy={cy} r={rRing3} fill="none" stroke="url(#goldRing)" strokeWidth="1.2" />
+
+      {/* 24 tiny decorative dots between rings 2 and 3 */}
+      {dots.map((d, i) => (
+        <circle key={i} cx={d.x} cy={d.y} r="1.1" fill="#c9a84c" opacity="0.7" />
+      ))}
+
+      {/* 4 compass stars at 0°/90°/180°/270° on the outer ring */}
+      {[0, 90, 180, 270].map(deg => {
+        const rad = ((deg - 90) * Math.PI) / 180;
+        return (
+          <text key={deg}
+            x={cx + rRing1 * Math.cos(rad)}
+            y={cy + rRing1 * Math.sin(rad) + 3.5}
+            textAnchor="middle" fontSize="7" fill="#f5d97a" fontFamily="serif"
+          >✦</text>
+        );
+      })}
+
+      {/* ── OUTER TOP: LICENSED PSYCHOLOGIST · COL. 7851 COPC ── */}
+      <text fontSize="8.8" fill="#f5d97a" fontFamily="Georgia, serif"
+            letterSpacing="1.5" textAnchor="middle">
+        <textPath href="#sp-outer-top" startOffset="50%">
+          LICENSED PSYCHOLOGIST · COL. 7851 COPC
+        </textPath>
       </text>
 
-      {/* Bottom text: SPAIN · B027001100 */}
-      <text fontSize="9" fill="#f5d97a" fontFamily="Georgia, serif" letterSpacing="1.6" textAnchor="middle">
-        <textPath href="#seal-bottom" startOffset="50%">SPAIN · GRUPO JOBDA SL · B027001100</textPath>
+      {/* ── OUTER BOTTOM: GRUPO JOBDA SL · B027001100 · SPAIN ── */}
+      <text fontSize="8.5" fill="#f5d97a" fontFamily="Georgia, serif"
+            letterSpacing="1.3" textAnchor="middle">
+        <textPath href="#sp-outer-bot" startOffset="50%">
+          GRUPO JOBDA SL · B027001100 · SPAIN
+        </textPath>
       </text>
 
-      {/* Inner top: HEALTH LIC. E-179287705 */}
-      <text fontSize="7.5" fill="#c9a84c" fontFamily="Georgia, serif" letterSpacing="1" textAnchor="middle">
-        <textPath href="#seal-mid-t" startOffset="50%">HEALTH LIC. E-179287705 · TMT A1</textPath>
+      {/* ── INNER TOP: HEALTH LICENCE E-179287705 ── */}
+      <text fontSize="7" fill="#c9d4e8" fontFamily="Georgia, serif"
+            letterSpacing="0.9" textAnchor="middle">
+        <textPath href="#sp-inner-top" startOffset="50%">
+          HEALTH LICENCE E-179287705
+        </textPath>
       </text>
 
-      {/* Ψ (psi) — psychology symbol — center */}
-      <text
-        x={cx} y={cy + 16}
-        textAnchor="middle"
-        fontSize="44"
-        fill="#f5d97a"
-        fontFamily="Georgia, 'Times New Roman', serif"
-        fontWeight="bold"
-      >Ψ</text>
+      {/* ── INNER BOTTOM: MEDICINES AGENCY TMT · A1 ── */}
+      <text fontSize="7" fill="#c9d4e8" fontFamily="Georgia, serif"
+            letterSpacing="0.9" textAnchor="middle">
+        <textPath href="#sp-inner-bot" startOffset="50%">
+          MEDICINES AGENCY TMT · A1
+        </textPath>
+      </text>
 
-      {/* Small stars as decorative separators */}
-      <text x={cx - 46} y={cy + 3} fontSize="7" fill="#c9a84c" textAnchor="middle">✦</text>
-      <text x={cx + 46} y={cy + 3} fontSize="7" fill="#c9a84c" textAnchor="middle">✦</text>
+      {/* ── Ψ centre — the psi (psychology) symbol ── */}
+      <text x={cx} y={cy + 14} textAnchor="middle"
+            fontSize="48" fill="#f5d97a"
+            fontFamily="Georgia, 'Times New Roman', serif"
+            fontWeight="bold">Ψ</text>
+
+      {/* Small "SPAIN" label below Ψ  */}
+      <text x={cx} y={cy + 30} textAnchor="middle"
+            fontSize="7" fill="#c9a84c"
+            fontFamily="Georgia, serif" letterSpacing="3">
+        · SPAIN ·
+      </text>
     </svg>
   );
 }
