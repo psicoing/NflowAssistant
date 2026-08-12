@@ -190,7 +190,7 @@ interface SkrillRegistrationEmailParams {
 
 export async function sendSkrillRegistrationEmail(params: SkrillRegistrationEmailParams): Promise<boolean> {
   try {
-    const { client, fromEmail } = await getUncachableSendGridClient();
+    const resend = getResendClient();
     const planInfo = PLAN_DETAILS[params.plan] ?? PLAN_DETAILS["basico"];
 
     const htmlContent = `<!DOCTYPE html>
@@ -253,15 +253,14 @@ export async function sendSkrillRegistrationEmail(params: SkrillRegistrationEmai
 </body>
 </html>`;
 
-    const msg = {
+    const { error } = await resend.emails.send({
+      from: "NUXA <onboarding@resend.dev>",
       to: params.to,
-      from: { email: fromEmail, name: "NUXA" },
       subject: `Tu enlace de pago para ${planInfo.label}`,
       text: `Hola ${params.nombre},\n\nPara activar tu ${planInfo.label} (€${planInfo.amount}), usa este enlace de Skrill:\n${params.skrillLink}\n\nNUXA by Empordajobs SL`,
       html: htmlContent,
-    };
-
-    await client.send(msg);
+    });
+    if (error) { console.error("❌ sendSkrillRegistrationEmail Resend error:", error); return false; }
     console.log(`✅ Skrill registration email sent to: ${params.to}`);
     return true;
   } catch (error) {
@@ -284,7 +283,7 @@ interface MagicLinkEmailParams {
 
 export async function sendMagicLinkEmail(params: MagicLinkEmailParams): Promise<boolean> {
   try {
-    const { client, fromEmail } = await getUncachableSendGridClient();
+    const resend = getResendClient();
 
     const subject = params.isNewUser
       ? '¡Bienvenido a NUXA! Tu acceso está listo'
@@ -353,15 +352,14 @@ export async function sendMagicLinkEmail(params: MagicLinkEmailParams): Promise<
 </body>
 </html>`;
 
-    const msg = {
+    const { error } = await resend.emails.send({
+      from: "NUXA <onboarding@resend.dev>",
       to: params.to,
-      from: { email: fromEmail, name: 'NUXA' },
       subject,
       text: `¡${params.isNewUser ? 'Bienvenido' : 'Gracias por tu compra'}, ${params.customerName}!\n\nProducto: ${params.productName}\n\nAccede a NUXA:\n${params.magicLink}\n\nEste enlace es válido por 7 días.\n\nNUXA by Empordajobs SL`,
       html: htmlContent,
-    };
-
-    await client.send(msg);
+    });
+    if (error) { console.error('❌ sendMagicLinkEmail Resend error:', error); return false; }
     console.log(`✅ Magic link email sent to: ${params.to}`);
     return true;
   } catch (error) {
@@ -434,7 +432,7 @@ export async function sendTrialExhaustedEmail(params: {
   username: string;
 }): Promise<boolean> {
   try {
-    const { client, fromEmail } = await getUncachableSendGridClient();
+    const resend = getResendClient();
 
     const html = `<!DOCTYPE html>
 <html lang="es">
@@ -491,15 +489,14 @@ export async function sendTrialExhaustedEmail(params: {
 </body>
 </html>`;
 
-    const msg = {
+    const { error: trialErr } = await resend.emails.send({
+      from: "NUXA <onboarding@resend.dev>",
       to: params.email,
-      from: { email: fromEmail, name: "NUXA" },
       subject: "Tu prueba gratuita ha terminado — continúa con NUXA desde €2.99/mes",
       text: `Hola ${params.username},\n\nHas utilizado tus 5 consultas gratuitas con NUXA.\n\nContinúa con un plan desde €2.99/mes, sin permanencia: https://nuxa.life/registro/planes\n\nO explora recursos gratuitos: https://nuxa.life/recursos-gratuitos`,
       html,
-    };
-
-    await client.send(msg);
+    });
+    if (trialErr) { console.error("sendTrialExhaustedEmail Resend error:", trialErr); return false; }
     return true;
   } catch (err) {
     console.error("sendTrialExhaustedEmail exception:", err);
@@ -508,14 +505,13 @@ export async function sendTrialExhaustedEmail(params: {
 }
 
 // Lead welcome email — sent to new email subscribers from public pages
-// Uses SendGrid (domain-verified, works with any recipient)
 // ---------------------------------------------------------------------------
 export async function sendLeadWelcomeEmail(params: {
   email: string;
   unsubscribeToken: string;
 }): Promise<boolean> {
   try {
-    const { client, fromEmail } = await getUncachableSendGridClient();
+    const resend = getResendClient();
     const unsubscribeUrl = `https://nuxa.life/api/leads/unsubscribe?token=${params.unsubscribeToken}`;
 
     const html = `<!DOCTYPE html>
@@ -569,15 +565,14 @@ export async function sendLeadWelcomeEmail(params: {
 </body>
 </html>`;
 
-    const msg = {
+    const { error: leadErr } = await resend.emails.send({
+      from: "NUXA <onboarding@resend.dev>",
       to: params.email,
-      from: { email: fromEmail, name: "NUXA" },
       subject: "Bienvenido/a a NUXA - Tu psicólogo IA te espera",
       text: `Gracias por suscribirte a NUXA.\n\nA partir de ahora recibirás recordatorios mensuales de bienestar, recursos nuevos y novedades de la plataforma.\n\nExplora NUXA gratis: https://nuxa.life/prueba-gratis\n\n---\nPara darte de baja: ${unsubscribeUrl}`,
       html,
-    };
-
-    await client.send(msg);
+    });
+    if (leadErr) { console.error("sendLeadWelcomeEmail Resend error:", leadErr); return false; }
     console.log(`✅ Lead welcome email sent to ${params.email}`);
     return true;
   } catch (err) {
@@ -669,7 +664,7 @@ export async function sendReactivationEmail(params: {
   userId: number;
 }): Promise<boolean> {
   try {
-    const { client, fromEmail } = await getUncachableSendGridClient();
+    const resend = getResendClient();
     const uid = Buffer.from(params.userId.toString()).toString("base64url");
     const unsubscribeUrl = `https://nuxa.life/api/unsubscribe-reactivation?uid=${uid}`;
 
@@ -725,15 +720,14 @@ export async function sendReactivationEmail(params: {
 </body>
 </html>`;
 
-    const msg = {
+    const { error: reactErr } = await resend.emails.send({
+      from: "NUXA <onboarding@resend.dev>",
       to: params.email,
-      from: { email: fromEmail, name: "NUXA" },
       subject: "¿Cómo estás? Tu espacio en NUXA te espera 🧠",
       text: `Hola ${params.username},\n\nHace un tiempo probaste NUXA. Si alguna vez necesitas un espacio donde hablar sin juicios, aquí seguimos.\n\nAhora tienes 5 consultas gratuitas esperándote:\nhttps://nuxa.life/prueba-gratis\n\n---\nPara no recibir más mensajes: ${unsubscribeUrl}`,
       html,
-    };
-
-    await client.send(msg);
+    });
+    if (reactErr) { console.error("sendReactivationEmail Resend error:", reactErr); return false; }
     return true;
   } catch (err) {
     console.error("sendReactivationEmail error:", err);
