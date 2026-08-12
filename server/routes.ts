@@ -1173,17 +1173,100 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const r = await pool.query("SELECT * FROM institution_contacts WHERE opted_out = false ORDER BY id");
       const contacts = r.rows;
+
+      // Create campaign history record first
+      const campaignRow = await pool.query(
+        "INSERT INTO institution_campaign_history (subject, sent_count, failed_count) VALUES ($1, 0, 0) RETURNING id",
+        [subject]
+      );
+      const campaignId: number = campaignRow.rows[0].id;
+
       let sent = 0, failed = 0;
       for (const contact of contacts) {
-        const ok = await sendInstitutionEmail({ email: contact.email, subject, body, institutionId: contact.id });
-        if (ok) sent++; else failed++;
+        const result = await sendInstitutionEmail({ email: contact.email, subject, body, institutionId: contact.id, campaignId });
+        if (result.ok) {
+          sent++;
+          // Store tracking record with Resend message ID
+          await pool.query(
+            "INSERT INTO institution_email_tracking (campaign_id, contact_email, resend_message_id) VALUES ($1, $2, $3)",
+            [campaignId, contact.email, result.messageId || null]
+          ).catch(() => {});
+        } else {
+          failed++;
+        }
         await new Promise(resolve => setTimeout(resolve, 150));
       }
-      console.log(`Institution campaign: sent=${sent} failed=${failed}`);
-      res.json({ sent, failed });
+
+      // Update final counts
+      await pool.query(
+        "UPDATE institution_campaign_history SET sent_count = $1, failed_count = $2 WHERE id = $3",
+        [sent, failed, campaignId]
+      );
+
+      console.log(`Institution campaign #${campaignId}: sent=${sent} failed=${failed}`);
+      res.json({ sent, failed, campaignId });
     } catch (e) {
       console.error("send-institution-campaign error:", e);
       res.status(500).json({ message: "Error" });
+    }
+  });
+
+  // Campaign history
+  app.get("/api/admin/institution-campaign-history", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const r = await pool.query(
+        "SELECT * FROM institution_campaign_history ORDER BY sent_at DESC LIMIT 20"
+      );
+      res.json(r.rows);
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  // Import institutions from CSV
+  app.post("/api/admin/institutions/import-csv", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { rows } = req.body as { rows: { email: string; name?: string; region?: string }[] };
+    if (!Array.isArray(rows) || rows.length === 0) return res.status(400).json({ message: "Sin filas" });
+    let imported = 0, skipped = 0;
+    for (const row of rows) {
+      if (!row.email || !row.email.includes("@")) { skipped++; continue; }
+      try {
+        const r = await pool.query(
+          "INSERT INTO institution_contacts (email, name, region) VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING RETURNING id",
+          [row.email.toLowerCase().trim(), row.name || null, row.region || null]
+        );
+        if (r.rows.length > 0) imported++; else skipped++;
+      } catch { skipped++; }
+    }
+    res.json({ imported, skipped });
+  });
+
+  // Resend webhook — open/click tracking (public, no admin check)
+  app.post("/api/webhooks/resend", async (req, res) => {
+    try {
+      const event = req.body;
+      if (event?.type === "email.opened" && event?.data?.tags) {
+        const campaignTag = event.data.tags.find((t: any) => t.name === "campaign_id");
+        if (campaignTag?.value) {
+          const campaignId = parseInt(campaignTag.value, 10);
+          const email = event.data?.to?.[0] || null;
+          if (!isNaN(campaignId)) {
+            await pool.query(
+              "UPDATE institution_campaign_history SET opens = opens + 1 WHERE id = $1",
+              [campaignId]
+            );
+            if (email) {
+              await pool.query(
+                "UPDATE institution_email_tracking SET opened_at = NOW() WHERE campaign_id = $1 AND contact_email = $2 AND opened_at IS NULL",
+                [campaignId, email]
+              ).catch(() => {});
+            }
+          }
+        }
+      }
+      res.json({ ok: true });
+    } catch (e) {
+      res.json({ ok: true }); // Always return 200 to Resend
     }
   });
 

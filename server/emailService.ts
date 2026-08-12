@@ -594,7 +594,8 @@ export async function sendInstitutionEmail(params: {
   subject: string;
   body: string;
   institutionId: number;
-}): Promise<boolean> {
+  campaignId?: number;
+}): Promise<{ ok: boolean; messageId?: string }> {
   try {
     const resend = getResendClient();
     const uid = Buffer.from(params.institutionId.toString()).toString("base64url");
@@ -636,22 +637,27 @@ export async function sendInstitutionEmail(params: {
 </body>
 </html>`;
 
-    const { error } = await resend.emails.send({
+    const tags = params.campaignId
+      ? [{ name: "campaign_id", value: String(params.campaignId) }]
+      : undefined;
+
+    const { data, error } = await resend.emails.send({
       from: "NUXA <hola@nuxa.life>",
       to: params.email,
       subject: params.subject,
       text: `${params.body}\n\n---\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
       html,
+      ...(tags ? { tags } : {}),
     });
 
     if (error) {
       console.error("sendInstitutionEmail Resend error:", error);
-      return false;
+      return { ok: false };
     }
-    return true;
+    return { ok: true, messageId: data?.id };
   } catch (err) {
     console.error("sendInstitutionEmail error:", err);
-    return false;
+    return { ok: false };
   }
 }
 

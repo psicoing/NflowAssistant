@@ -90,9 +90,30 @@ export default function AdminDashboard() {
   };
 
   const [instNewEmail, setInstNewEmail] = useState("");
+  const [instNewName, setInstNewName] = useState("");
   const [instNewRegion, setInstNewRegion] = useState("");
   const [instAddError, setInstAddError] = useState<string | null>(null);
   const [instAdding, setInstAdding] = useState(false);
+
+  // Filters
+  const [instSearch, setInstSearch] = useState("");
+  const [instRegionFilter, setInstRegionFilter] = useState("all");
+  const [instStatusFilter, setInstStatusFilter] = useState<"all"|"active"|"baja">("all");
+
+  // Delete confirmation
+  const [instDeleteConfirmId, setInstDeleteConfirmId] = useState<number | null>(null);
+
+  // CSV import
+  const [instCsvImporting, setInstCsvImporting] = useState(false);
+  const [instCsvResult, setInstCsvResult] = useState<{imported:number; skipped:number}|null>(null);
+
+  // Campaign history
+  const [instCampaignHistory, setInstCampaignHistory] = useState<any[]>([]);
+  const [instHistoryLoading, setInstHistoryLoading] = useState(false);
+
+  // Preview modal
+  const [instPreviewOpen, setInstPreviewOpen] = useState(false);
+
   const [instSubject, setInstSubject] = useState("NUXA — Apoyo emocional profesional para sus equipos de salud");
   const [instBody, setInstBody] = useState(`Estimados/as,\n\nNos ponemos en contacto para presentarles NUXA (nuxa.life), una plataforma de apoyo emocional profesional diseñada específicamente para entornos de alta exigencia como el sanitario.\n\nNUXA ofrece:\n• Acompañamiento emocional disponible 24/7\n• Cumplimiento con ISO 45003 (gestión del riesgo psicosocial)\n• Sin listas de espera ni burocracia\n• Informes agregados y anónimos para los equipos de RRHH\n\nActualmente colaboramos con instituciones de salud pública en varias comunidades autónomas y nos gustaría explorar cómo podemos ayudar a su organización.\n\n¿Podríamos concertar una llamada de 20 minutos para conocer sus necesidades?\n\nQuedamos a su disposición.\n\nUn saludo,\nEquipo NUXA\nhttps://nuxa.life`);
   const [instStatus, setInstStatus] = useState<"idle"|"confirm"|"sending"|"done"|"error">("idle");
@@ -106,6 +127,15 @@ export default function AdminDashboard() {
       setInstitutions(d);
     } catch {}
     setInstLoading(false);
+  };
+
+  const fetchInstCampaignHistory = async () => {
+    setInstHistoryLoading(true);
+    try {
+      const r = await fetch("/api/admin/institution-campaign-history");
+      if (r.ok) setInstCampaignHistory(await r.json());
+    } catch {}
+    setInstHistoryLoading(false);
   };
 
   useEffect(() => {
@@ -442,7 +472,7 @@ export default function AdminDashboard() {
               <TabsTrigger value="revenue"       className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Ingresos</TabsTrigger>
               <TabsTrigger value="content"       className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Contenido</TabsTrigger>
               <TabsTrigger value="campana"       className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={checkResendDomain}>📧 Campaña</TabsTrigger>
-              <TabsTrigger value="instituciones" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchInstitutions(); checkResendDomain(); }}>🏛️ Instituciones</TabsTrigger>
+              <TabsTrigger value="instituciones" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchInstitutions(); checkResendDomain(); fetchInstCampaignHistory(); }}>🏛️ Instituciones</TabsTrigger>
             </TabsList>
           </div>
 
@@ -1106,203 +1136,416 @@ export default function AdminDashboard() {
 
           {/* ── INSTITUCIONES ── */}
           <TabsContent value="instituciones">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="space-y-6">
 
-              {/* Panel izquierdo: lista de contactos */}
-              <Card className="bg-gray-800/50 border-gray-700">
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">🏛️ Contactos institucionales</CardTitle>
-                  <CardDescription className="text-gray-400">
-                    {institutions.filter(i => !i.opted_out).length} activos · {institutions.filter(i => i.opted_out).length} dados de baja
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* Añadir nuevo */}
-                  <div className="flex gap-2">
-                    <input
-                      type="email"
-                      placeholder="email@institucion.es"
-                      value={instNewEmail}
-                      onChange={e => setInstNewEmail(e.target.value)}
-                      className="flex-1 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Región"
-                      value={instNewRegion}
-                      onChange={e => setInstNewRegion(e.target.value)}
-                      className="w-28 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
-                    />
-                    <button
-                      disabled={instAdding}
-                      onClick={async () => {
-                        setInstAddError(null);
-                        if (!instNewEmail.includes("@")) { setInstAddError("Email inválido"); return; }
-                        setInstAdding(true);
-                        try {
-                          const r = await fetch("/api/admin/institutions", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ email: instNewEmail, region: instNewRegion }),
-                          });
-                          if (r.ok) {
-                            setInstNewEmail(""); setInstNewRegion(""); setInstAddError(null); fetchInstitutions();
-                          } else {
-                            const data = await r.json().catch(() => ({}));
-                            setInstAddError(data.message || `Error ${r.status}`);
-                          }
-                        } catch { setInstAddError("Sin conexión"); }
-                        finally { setInstAdding(false); }
-                      }}
-                      className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap"
-                    >
-                      {instAdding ? "…" : "+ Añadir"}
-                    </button>
+              {/* Delete confirmation dialog */}
+              {instDeleteConfirmId !== null && (
+                <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+                  <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
+                    <p className="text-white font-semibold text-center">¿Eliminar este contacto?</p>
+                    <p className="text-gray-400 text-sm text-center">Esta acción no se puede deshacer.</p>
+                    <div className="flex gap-3">
+                      <button onClick={() => setInstDeleteConfirmId(null)} className="flex-1 border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm">Cancelar</button>
+                      <button
+                        onClick={async () => {
+                          await fetch(`/api/admin/institutions/${instDeleteConfirmId}`, { method: "DELETE" });
+                          setInstDeleteConfirmId(null);
+                          fetchInstitutions();
+                        }}
+                        className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl transition-all text-sm"
+                      >Eliminar</button>
+                    </div>
                   </div>
-                  {instAddError && (
-                    <p className="text-red-400 text-xs mt-1 px-1">{instAddError}</p>
-                  )}
+                </div>
+              )}
 
-                  {/* Lista */}
-                  <div className="max-h-[420px] overflow-y-auto space-y-1 pr-1">
-                    {instLoading ? (
-                      <p className="text-gray-400 text-sm text-center py-4">Cargando...</p>
-                    ) : institutions.length === 0 ? (
-                      <p className="text-gray-400 text-sm text-center py-4">No hay contactos</p>
-                    ) : institutions.map(inst => (
-                      <div key={inst.id} className={`flex items-center justify-between px-3 py-2 rounded-lg ${inst.opted_out ? "opacity-40" : "bg-gray-700/50"}`}>
-                        <div className="min-w-0">
-                          <p className="text-white text-sm truncate">{inst.email}</p>
-                          {inst.region && <p className="text-gray-400 text-xs">{inst.region}</p>}
+              {/* Email preview modal */}
+              {instPreviewOpen && (
+                <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+                  <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 max-w-2xl w-full space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex items-center justify-between">
+                      <p className="text-white font-semibold">Vista previa del email</p>
+                      <button onClick={() => setInstPreviewOpen(false)} className="text-gray-400 hover:text-white text-xl">✕</button>
+                    </div>
+                    <div className="bg-gray-700 rounded-lg p-3">
+                      <p className="text-gray-400 text-xs mb-1">Asunto</p>
+                      <p className="text-white text-sm font-medium">{instSubject}</p>
+                    </div>
+                    <div className="bg-white rounded-xl overflow-hidden">
+                      <div style={{background:"linear-gradient(135deg,#1e40af,#3b82f6)",padding:"24px",textAlign:"center"}}>
+                        <p style={{margin:"0 0 4px",fontSize:"24px"}}>🧠</p>
+                        <p style={{margin:0,fontSize:"18px",fontWeight:700,color:"#fff"}}>NUXA</p>
+                        <p style={{margin:"4px 0 0",color:"#bfdbfe",fontSize:"12px"}}>Apoyo emocional profesional · ISO 45003</p>
+                      </div>
+                      <div style={{padding:"24px",fontFamily:"'Segoe UI',Arial,sans-serif"}}>
+                        {instBody.split("\n").filter(l => l.trim()).map((line, i) => (
+                          <p key={i} style={{margin:"0 0 12px",color:"#374151",fontSize:"14px",lineHeight:1.6}}>{line}</p>
+                        ))}
+                      </div>
+                      <div style={{padding:"16px 24px",background:"#f9fafb",borderTop:"1px solid #e5e7eb",textAlign:"center"}}>
+                        <p style={{margin:0,fontSize:"11px",color:"#9ca3af"}}>NUXA · Empordajobs SL · B02701100 · nuxa.life</p>
+                      </div>
+                    </div>
+                    <button onClick={() => setInstPreviewOpen(false)} className="w-full border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm">Cerrar</button>
+                  </div>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                {/* Panel izquierdo: lista de contactos */}
+                <Card className="bg-gray-800/50 border-gray-700">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">🏛️ Contactos institucionales</CardTitle>
+                    <CardDescription className="text-gray-400">
+                      {institutions.filter(i => !i.opted_out).length} activos · {institutions.filter(i => i.opted_out).length} dados de baja · {institutions.length} total
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {/* Añadir nuevo */}
+                    <div className="space-y-2">
+                      <div className="flex gap-2">
+                        <input
+                          type="email"
+                          placeholder="email@institucion.es"
+                          value={instNewEmail}
+                          onChange={e => setInstNewEmail(e.target.value)}
+                          className="flex-1 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Nombre"
+                          value={instNewName}
+                          onChange={e => setInstNewName(e.target.value)}
+                          className="w-32 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Región"
+                          value={instNewRegion}
+                          onChange={e => setInstNewRegion(e.target.value)}
+                          className="flex-1 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                        />
+                        <button
+                          disabled={instAdding}
+                          onClick={async () => {
+                            setInstAddError(null);
+                            if (!instNewEmail.includes("@")) { setInstAddError("Email inválido"); return; }
+                            setInstAdding(true);
+                            try {
+                              const r = await fetch("/api/admin/institutions", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ email: instNewEmail, name: instNewName, region: instNewRegion }),
+                              });
+                              if (r.ok) {
+                                setInstNewEmail(""); setInstNewName(""); setInstNewRegion(""); setInstAddError(null); fetchInstitutions();
+                              } else {
+                                const data = await r.json().catch(() => ({}));
+                                setInstAddError(data.message || `Error ${r.status}`);
+                              }
+                            } catch { setInstAddError("Sin conexión"); }
+                            finally { setInstAdding(false); }
+                          }}
+                          className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap"
+                        >
+                          {instAdding ? "…" : "+ Añadir"}
+                        </button>
+                      </div>
+                    </div>
+                    {instAddError && <p className="text-red-400 text-xs px-1">{instAddError}</p>}
+
+                    {/* CSV import */}
+                    <div className="flex items-center gap-2">
+                      <label className="flex-1 cursor-pointer bg-gray-700/50 hover:bg-gray-700 border border-dashed border-gray-600 hover:border-blue-500 rounded-lg px-3 py-2 text-sm text-gray-400 hover:text-gray-200 transition-all text-center">
+                        {instCsvImporting ? "Importando…" : "📥 Importar CSV (email, nombre, región)"}
+                        <input type="file" accept=".csv,.txt" className="hidden" onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          setInstCsvImporting(true);
+                          setInstCsvResult(null);
+                          try {
+                            const text = await file.text();
+                            const lines = text.split("\n").filter(l => l.trim());
+                            const rows = lines.map(line => {
+                              const parts = line.split(/[,;]/).map(p => p.trim().replace(/^["']|["']$/g, ""));
+                              return { email: parts[0] || "", name: parts[1] || "", region: parts[2] || "" };
+                            }).filter(r => r.email.includes("@"));
+                            const r = await fetch("/api/admin/institutions/import-csv", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ rows }),
+                            });
+                            if (r.ok) {
+                              const d = await r.json();
+                              setInstCsvResult(d);
+                              fetchInstitutions();
+                            }
+                          } catch { setInstCsvResult({ imported: 0, skipped: -1 }); }
+                          finally { setInstCsvImporting(false); e.target.value = ""; }
+                        }} />
+                      </label>
+                    </div>
+                    {instCsvResult && (
+                      <p className="text-xs px-1">
+                        {instCsvResult.skipped === -1
+                          ? <span className="text-red-400">❌ Error al importar</span>
+                          : <span className="text-emerald-400">✅ {instCsvResult.imported} importados · {instCsvResult.skipped} omitidos</span>}
+                      </p>
+                    )}
+
+                    {/* Search & filters */}
+                    <div className="flex gap-2 flex-wrap">
+                      <input
+                        type="text"
+                        placeholder="🔍 Buscar email o nombre..."
+                        value={instSearch}
+                        onChange={e => setInstSearch(e.target.value)}
+                        className="flex-1 min-w-0 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-1.5 text-xs placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                      />
+                      <select
+                        value={instStatusFilter}
+                        onChange={e => setInstStatusFilter(e.target.value as any)}
+                        className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none"
+                      >
+                        <option value="all">Todos</option>
+                        <option value="active">Activos</option>
+                        <option value="baja">Bajas</option>
+                      </select>
+                      {[...new Set(institutions.map(i => i.region).filter(Boolean))].length > 0 && (
+                        <select
+                          value={instRegionFilter}
+                          onChange={e => setInstRegionFilter(e.target.value)}
+                          className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none"
+                        >
+                          <option value="all">Todas las regiones</option>
+                          {[...new Set(institutions.map(i => i.region).filter(Boolean))].sort().map(r => (
+                            <option key={r} value={r}>{r}</option>
+                          ))}
+                        </select>
+                      )}
+                    </div>
+
+                    {/* Lista */}
+                    <div className="max-h-[400px] overflow-y-auto space-y-1 pr-1">
+                      {instLoading ? (
+                        <p className="text-gray-400 text-sm text-center py-4">Cargando...</p>
+                      ) : (() => {
+                        const filtered = institutions.filter(inst => {
+                          const matchSearch = !instSearch || inst.email.toLowerCase().includes(instSearch.toLowerCase()) || (inst.name || "").toLowerCase().includes(instSearch.toLowerCase());
+                          const matchStatus = instStatusFilter === "all" || (instStatusFilter === "active" && !inst.opted_out) || (instStatusFilter === "baja" && inst.opted_out);
+                          const matchRegion = instRegionFilter === "all" || inst.region === instRegionFilter;
+                          return matchSearch && matchStatus && matchRegion;
+                        });
+                        if (filtered.length === 0) return <p className="text-gray-400 text-sm text-center py-4">Sin resultados</p>;
+                        return filtered.map(inst => (
+                          <div key={inst.id} className={`flex items-center justify-between px-3 py-2 rounded-lg ${inst.opted_out ? "opacity-50 bg-gray-700/20" : "bg-gray-700/50"}`}>
+                            <div className="min-w-0 flex-1">
+                              {inst.name && <p className="text-white text-xs font-semibold truncate">{inst.name}</p>}
+                              <p className="text-gray-300 text-xs truncate">{inst.email}</p>
+                              <div className="flex gap-2 mt-0.5">
+                                {inst.region && <span className="text-gray-500 text-xs">{inst.region}</span>}
+                                {inst.created_at && <span className="text-gray-600 text-xs">Alta: {new Date(inst.created_at).toLocaleDateString("es-ES")}</span>}
+                                {inst.opted_out && inst.opted_out_at && <span className="text-red-400 text-xs">Baja: {new Date(inst.opted_out_at).toLocaleDateString("es-ES")}</span>}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 ml-2 shrink-0">
+                              {inst.opted_out && <span className="text-xs text-red-400 bg-red-500/10 px-1.5 py-0.5 rounded">baja</span>}
+                              <button
+                                onClick={() => setInstDeleteConfirmId(inst.id)}
+                                className="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded hover:bg-red-500/20 transition-all"
+                                title="Eliminar contacto"
+                              >✕</button>
+                            </div>
+                          </div>
+                        ));
+                      })()}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Panel derecho: composer + envío */}
+                <Card className="bg-gray-800/50 border-gray-700">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">✉️ Redactar campaña</CardTitle>
+                    <CardDescription className="text-gray-400">El email se enviará a todos los contactos activos (sin baja)</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <label className="text-gray-300 text-sm font-medium block mb-1">Asunto</label>
+                      <input
+                        type="text"
+                        value={instSubject}
+                        onChange={e => setInstSubject(e.target.value)}
+                        className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-gray-300 text-sm font-medium block mb-1">Cuerpo del mensaje</label>
+                      <textarea
+                        rows={10}
+                        value={instBody}
+                        onChange={e => setInstBody(e.target.value)}
+                        className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 resize-y font-mono"
+                      />
+                    </div>
+
+                    {/* Preview button */}
+                    <button
+                      onClick={() => setInstPreviewOpen(true)}
+                      disabled={!instSubject.trim() || !instBody.trim()}
+                      className="w-full border border-gray-600 text-gray-300 hover:bg-gray-700 disabled:opacity-40 py-2 rounded-xl font-medium transition-all text-sm"
+                    >
+                      👁️ Vista previa del email
+                    </button>
+
+                    {instResult && (
+                      <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3">
+                        <p className="text-emerald-300 text-sm">✅ Enviados: <strong>{instResult.sent}</strong> · Fallidos: <strong>{instResult.failed}</strong></p>
+                      </div>
+                    )}
+                    {instStatus === "error" && (
+                      <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3">
+                        <p className="text-red-300 text-sm">❌ Error al enviar. Revisa los logs.</p>
+                      </div>
+                    )}
+
+                    {/* Estado dominio Resend */}
+                    {resendDomain && !resendDomain.verified && (
+                      <div className="bg-red-500/10 border border-red-500/40 rounded-xl p-3 flex items-start gap-2">
+                        <span className="text-lg">⚠️</span>
+                        <div>
+                          <p className="text-red-300 text-sm font-semibold">Dominio no verificado en Resend</p>
+                          <p className="text-gray-400 text-xs mt-0.5">Estado: <strong className="text-white">{resendDomain.status === "not_added" ? "no añadido" : resendDomain.status}</strong>. Los emails fallarán hasta que Resend verifique <code className="text-orange-300">nuxa.life</code>.</p>
+                          <button onClick={checkResendDomain} className="mt-2 text-xs text-blue-400 hover:text-blue-300 underline">🔄 Comprobar de nuevo</button>
                         </div>
-                        <div className="flex items-center gap-2 ml-2 shrink-0">
-                          {inst.opted_out && <span className="text-xs text-red-400">baja</span>}
+                      </div>
+                    )}
+                    {resendDomain?.verified && (
+                      <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3">
+                        <p className="text-emerald-300 text-sm">✅ Dominio <strong>nuxa.life</strong> verificado en Resend</p>
+                      </div>
+                    )}
+
+                    {instStatus === "idle" && (
+                      <button
+                        onClick={() => setInstStatus("confirm")}
+                        disabled={!instSubject.trim() || !instBody.trim() || (resendDomain !== null && !resendDomain.verified)}
+                        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-40 text-white font-semibold py-3 rounded-xl transition-all"
+                      >
+                        Preparar envío → ({institutions.filter(i => !i.opted_out).length} destinatarios)
+                      </button>
+                    )}
+
+                    {instStatus === "confirm" && (
+                      <div className="space-y-3">
+                        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center">
+                          <p className="text-amber-300 text-sm font-semibold">¿Confirmas el envío?</p>
+                          <p className="text-gray-400 text-xs mt-1">Se enviarán <strong className="text-white">{institutions.filter(i => !i.opted_out).length} emails</strong> a instituciones públicas</p>
+                        </div>
+                        <div className="flex gap-3">
+                          <button onClick={() => setInstStatus("idle")} className="flex-1 border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm">
+                            Cancelar
+                          </button>
                           <button
                             onClick={async () => {
-                              await fetch(`/api/admin/institutions/${inst.id}`, { method: "DELETE" });
-                              fetchInstitutions();
+                              setInstStatus("sending");
+                              try {
+                                const r = await fetch("/api/admin/send-institution-campaign", {
+                                  method: "POST",
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify({ subject: instSubject, body: instBody }),
+                                });
+                                const d = await r.json();
+                                setInstResult(d);
+                                setInstStatus("done");
+                                fetchInstCampaignHistory();
+                              } catch { setInstStatus("error"); }
                             }}
-                            className="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded hover:bg-red-500/20 transition-all"
+                            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition-all text-sm"
                           >
-                            ✕
+                            ✉️ Enviar ahora
                           </button>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                    )}
 
-              {/* Panel derecho: composer + envío */}
+                    {instStatus === "sending" && (
+                      <div className="text-center py-3">
+                        <div className="animate-spin w-7 h-7 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-2" />
+                        <p className="text-gray-300 text-sm">Enviando... no cierres esta ventana</p>
+                      </div>
+                    )}
+
+                    {instStatus === "done" && (
+                      <button
+                        onClick={() => { setInstStatus("idle"); setInstResult(null); }}
+                        className="w-full border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm"
+                      >
+                        Nueva campaña
+                      </button>
+                    )}
+                  </CardContent>
+                </Card>
+
+              </div>
+
+              {/* Historial de campañas */}
               <Card className="bg-gray-800/50 border-gray-700">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">✉️ Redactar campaña</CardTitle>
-                  <CardDescription className="text-gray-400">El email se enviará a todos los contactos activos (sin baja)</CardDescription>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-white flex items-center gap-2">📊 Historial de campañas</CardTitle>
+                      <CardDescription className="text-gray-400">Últimos 20 envíos. Las aperturas se registran vía webhook de Resend.</CardDescription>
+                    </div>
+                    <button onClick={fetchInstCampaignHistory} className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1">
+                      <RefreshCw className="w-3 h-3" /> Actualizar
+                    </button>
+                  </div>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <label className="text-gray-300 text-sm font-medium block mb-1">Asunto</label>
-                    <input
-                      type="text"
-                      value={instSubject}
-                      onChange={e => setInstSubject(e.target.value)}
-                      className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-gray-300 text-sm font-medium block mb-1">Cuerpo del mensaje</label>
-                    <textarea
-                      rows={12}
-                      value={instBody}
-                      onChange={e => setInstBody(e.target.value)}
-                      className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 resize-y font-mono"
-                    />
-                  </div>
-
-                  {instResult && (
-                    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3">
-                      <p className="text-emerald-300 text-sm">✅ Enviados: <strong>{instResult.sent}</strong> · Fallidos: <strong>{instResult.failed}</strong></p>
+                <CardContent>
+                  {instHistoryLoading ? (
+                    <p className="text-gray-400 text-sm text-center py-4">Cargando...</p>
+                  ) : instCampaignHistory.length === 0 ? (
+                    <p className="text-gray-400 text-sm text-center py-4">Aún no se ha enviado ninguna campaña</p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="text-gray-400 text-xs border-b border-gray-700">
+                            <th className="text-left pb-2 pr-4">Fecha</th>
+                            <th className="text-left pb-2 pr-4">Asunto</th>
+                            <th className="text-center pb-2 pr-4">Enviados</th>
+                            <th className="text-center pb-2 pr-4">Fallidos</th>
+                            <th className="text-center pb-2">Aperturas</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-700/50">
+                          {instCampaignHistory.map((c: any) => (
+                            <tr key={c.id} className="text-gray-300 hover:bg-gray-700/20 transition-all">
+                              <td className="py-2 pr-4 text-xs text-gray-400 whitespace-nowrap">
+                                {new Date(c.sent_at).toLocaleDateString("es-ES", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                              </td>
+                              <td className="py-2 pr-4 max-w-[200px] truncate text-xs" title={c.subject}>{c.subject}</td>
+                              <td className="py-2 pr-4 text-center">
+                                <span className="text-emerald-400 font-semibold">{c.sent_count}</span>
+                              </td>
+                              <td className="py-2 pr-4 text-center">
+                                <span className={c.failed_count > 0 ? "text-red-400 font-semibold" : "text-gray-500"}>{c.failed_count}</span>
+                              </td>
+                              <td className="py-2 text-center">
+                                <span className="text-blue-400 font-semibold">{c.opens}</span>
+                                {c.sent_count > 0 && (
+                                  <span className="text-gray-500 text-xs ml-1">({Math.round((c.opens / c.sent_count) * 100)}%)</span>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
-                  )}
-                  {instStatus === "error" && (
-                    <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3">
-                      <p className="text-red-300 text-sm">❌ Error al enviar. Revisa los logs.</p>
-                    </div>
-                  )}
-
-                  {/* Estado dominio Resend */}
-                  {resendDomain && !resendDomain.verified && (
-                    <div className="bg-red-500/10 border border-red-500/40 rounded-xl p-3 flex items-start gap-2">
-                      <span className="text-lg">⚠️</span>
-                      <div>
-                        <p className="text-red-300 text-sm font-semibold">Dominio no verificado en Resend</p>
-                        <p className="text-gray-400 text-xs mt-0.5">Estado: <strong className="text-white">{resendDomain.status === "not_added" ? "no añadido" : resendDomain.status}</strong>. Los emails fallarán hasta que Resend verifique <code className="text-orange-300">nuxa.life</code>. El DNS puede tardar hasta 2h.</p>
-                        <button onClick={checkResendDomain} className="mt-2 text-xs text-blue-400 hover:text-blue-300 underline">🔄 Comprobar de nuevo</button>
-                      </div>
-                    </div>
-                  )}
-                  {resendDomain?.verified && (
-                    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3">
-                      <p className="text-emerald-300 text-sm">✅ Dominio <strong>nuxa.life</strong> verificado en Resend — los emails están listos para enviarse</p>
-                    </div>
-                  )}
-
-                  {instStatus === "idle" && (
-                    <button
-                      onClick={() => setInstStatus("confirm")}
-                      disabled={!instSubject.trim() || !instBody.trim()}
-                      className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-40 text-white font-semibold py-3 rounded-xl transition-all"
-                    >
-                      Preparar envío → ({institutions.filter(i => !i.opted_out).length} destinatarios)
-                    </button>
-                  )}
-
-                  {instStatus === "confirm" && (
-                    <div className="space-y-3">
-                      <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center">
-                        <p className="text-amber-300 text-sm font-semibold">¿Confirmas el envío?</p>
-                        <p className="text-gray-400 text-xs mt-1">Se enviarán <strong className="text-white">{institutions.filter(i => !i.opted_out).length} emails</strong> a instituciones públicas</p>
-                      </div>
-                      <div className="flex gap-3">
-                        <button onClick={() => setInstStatus("idle")} className="flex-1 border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm">
-                          Cancelar
-                        </button>
-                        <button
-                          onClick={async () => {
-                            setInstStatus("sending");
-                            try {
-                              const r = await fetch("/api/admin/send-institution-campaign", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ subject: instSubject, body: instBody }),
-                              });
-                              const d = await r.json();
-                              setInstResult(d);
-                              setInstStatus("done");
-                            } catch { setInstStatus("error"); }
-                          }}
-                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition-all text-sm"
-                        >
-                          ✉️ Enviar ahora
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {instStatus === "sending" && (
-                    <div className="text-center py-3">
-                      <div className="animate-spin w-7 h-7 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-2" />
-                      <p className="text-gray-300 text-sm">Enviando... no cierres esta ventana</p>
-                    </div>
-                  )}
-
-                  {instStatus === "done" && (
-                    <button
-                      onClick={() => { setInstStatus("idle"); setInstResult(null); }}
-                      className="w-full border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm"
-                    >
-                      Nueva campaña
-                    </button>
                   )}
                 </CardContent>
               </Card>
