@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Sparkles, ArrowRight, Star, ExternalLink, X } from "lucide-react";
 import Header from "@/components/layout/header";
+import CredentialsSealBar from "@/components/layout/credentials-seal-bar";
 import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/sections/hero-section";
 import PaidAppNotice from "@/components/sections/paid-app-notice";
@@ -161,8 +162,9 @@ export default function Home() {
       />
       <StructuredData type="Organization" data={NFlowOrganizationData} />
       <StructuredData type="WebApplication" data={NFlowWebAppData} />
-      <Header showBanner={false} />
-      <main className="pt-16">
+      <CredentialsSealBar />
+      <Header showBanner={false} sealOffset={true} />
+      <main className="pt-[6.25rem]">
 
         <NuxaRobotForestSection />
 

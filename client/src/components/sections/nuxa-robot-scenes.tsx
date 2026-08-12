@@ -1,5 +1,6 @@
 import nuxaRobotForest from "@assets/generated_images/nuxa_robot_in_forest_setting.png";
 import personChattingCozy from "@assets/generated_images/person_chatting_on_sofa_cozy.png";
+import sofaCredentialScene from "@assets/image_1786548543331.png";
 import nuxaRobotBeach from "@assets/generated_images/nuxa_robot_on_sunset_beach.png";
 import nuxaRobotZen from "@assets/generated_images/nuxa_robot_in_zen_garden.png";
 import nuxaRobotMountain from "@assets/generated_images/nuxa_robot_on_mountain_top.png";
@@ -56,16 +57,96 @@ import nuxaRobotShowcase from "@assets/generated_images/nuxa_robot_interactive_s
 import nuxaRobotContact from "@assets/generated_images/nuxa_robot_contact_support_desk.png";
 import nuxaRobotBooks from "@assets/generated_images/nuxa_robot_books_recommendations.png";
 
+/** Official psychology credential seal — never translate, always English */
+function PsychologySeal() {
+  const R = 76;       // outer radius
+  const r = 66;       // text-arc radius
+  const ri = 58;      // inner ring radius
+  const cx = 90; const cy = 90;
+  const size = cx * 2;
+
+  // SVG arc helpers
+  const topArc    = `M ${cx - r},${cy} A ${r},${r} 0 0,1 ${cx + r},${cy}`;
+  const bottomArc = `M ${cx - r},${cy} A ${r},${r} 0 0,0 ${cx + r},${cy}`;
+  const midTopArc    = `M ${cx - ri + 6},${cy} A ${ri - 6},${ri - 6} 0 0,1 ${cx + ri - 6},${cy}`;
+  const midBotArc    = `M ${cx - ri + 6},${cy} A ${ri - 6},${ri - 6} 0 0,0 ${cx + ri - 6},${cy}`;
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      aria-label="Official NUXA Psychology Credential Seal"
+      className="drop-shadow-2xl"
+    >
+      {/* Outer fill */}
+      <circle cx={cx} cy={cy} r={R} fill="#1a2e5a" />
+      {/* Outer ring */}
+      <circle cx={cx} cy={cy} r={R} fill="none" stroke="#c9a84c" strokeWidth="2.5" />
+      {/* Inner ring */}
+      <circle cx={cx} cy={cy} r={ri} fill="none" stroke="#c9a84c" strokeWidth="1.5" />
+
+      {/* Arc paths for text (hidden) */}
+      <defs>
+        <path id="seal-top"    d={topArc} />
+        <path id="seal-bottom" d={bottomArc} />
+        <path id="seal-mid-t"  d={midTopArc} />
+        <path id="seal-mid-b"  d={midBotArc} />
+      </defs>
+
+      {/* Top text: PSYCHOLOGIST · COL. 7851 COPC */}
+      <text fontSize="9.5" fill="#f5d97a" fontFamily="Georgia, serif" letterSpacing="1.8" textAnchor="middle">
+        <textPath href="#seal-top" startOffset="50%">PSYCHOLOGIST · COL. 7851 COPC</textPath>
+      </text>
+
+      {/* Bottom text: SPAIN · B027001100 */}
+      <text fontSize="9" fill="#f5d97a" fontFamily="Georgia, serif" letterSpacing="1.6" textAnchor="middle">
+        <textPath href="#seal-bottom" startOffset="50%">SPAIN · GRUPO JOBDA SL · B027001100</textPath>
+      </text>
+
+      {/* Inner top: HEALTH LIC. E-179287705 */}
+      <text fontSize="7.5" fill="#c9a84c" fontFamily="Georgia, serif" letterSpacing="1" textAnchor="middle">
+        <textPath href="#seal-mid-t" startOffset="50%">HEALTH LIC. E-179287705 · TMT A1</textPath>
+      </text>
+
+      {/* Ψ (psi) — psychology symbol — center */}
+      <text
+        x={cx} y={cy + 16}
+        textAnchor="middle"
+        fontSize="44"
+        fill="#f5d97a"
+        fontFamily="Georgia, 'Times New Roman', serif"
+        fontWeight="bold"
+      >Ψ</text>
+
+      {/* Small stars as decorative separators */}
+      <text x={cx - 46} y={cy + 3} fontSize="7" fill="#c9a84c" textAnchor="middle">✦</text>
+      <text x={cx + 46} y={cy + 3} fontSize="7" fill="#c9a84c" textAnchor="middle">✦</text>
+    </svg>
+  );
+}
+
 export function NuxaRobotForestSection() {
   return (
     <section className="relative w-full overflow-hidden">
       <div className="relative w-full">
-        <img 
-          src={personChattingCozy} 
-          alt="Persona usando NUXA en un ambiente cálido y acogedor" 
+        {/* Sofa / armchair scene */}
+        <img
+          src={sofaCredentialScene}
+          alt="Persona usando NUXA en un ambiente cálido y acogedor"
           className="w-full h-auto object-cover md:max-h-[45vh]"
           data-testid="img-nuxa-hero-cozy"
         />
+
+        {/* Round credential seal — overlaid on the left (armchair area) */}
+        <div
+          translate="no"
+          lang="en"
+          className="absolute left-[5%] sm:left-[8%] top-1/2 -translate-y-1/2 w-[110px] sm:w-[140px] md:w-[160px] select-none pointer-events-none"
+          style={{ filter: "drop-shadow(0 4px 24px rgba(0,0,0,0.55))" }}
+        >
+          <PsychologySeal />
+        </div>
       </div>
     </section>
   );
