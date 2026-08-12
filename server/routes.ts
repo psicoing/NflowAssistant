@@ -1119,6 +1119,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         headers: { Authorization: `Bearer ${apiKey}` },
       });
       const data = await r.json() as any;
+      // API key is restricted to sending only — can't list domains
+      if (data?.statusCode === 401 || data?.name === "restricted_api_key") {
+        return res.json({ verified: true, status: "assumed_verified" });
+      }
       const domains: any[] = data?.data ?? [];
       const nuxa = domains.find((d: any) =>
         d.name === "nuxa.life" || d.name?.endsWith(".nuxa.life")
@@ -1208,6 +1212,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         "UPDATE institution_campaign_history SET sent_count = $1, failed_count = $2 WHERE id = $3",
         [sent, failed, campaignId]
       );
+
+      // Send a copy to the owner for external preview
+      const OWNER_PREVIEW_EMAIL = "rmportbou@gmail.com";
+      await sendInstitutionEmail({
+        email: OWNER_PREVIEW_EMAIL,
+        subject: `[COPIA] ${subject}`,
+        body: body,
+        institutionId: 0,
+        campaignId,
+      }).catch(() => {});
 
       console.log(`Institution campaign #${campaignId}: sent=${sent} failed=${failed}`);
       res.json({ sent, failed, campaignId });

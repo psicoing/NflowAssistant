@@ -11,14 +11,14 @@ async function ensureAdminUser() {
   try {
     const hash = await bcrypt.hash("mln328RMR+", 10);
     const existing = await pool.query(
-      `SELECT id FROM users WHERE email = 'rmportbou@gmail.com' LIMIT 1`
+      `SELECT id FROM users WHERE email = 'rmportbou@gmail.com' OR username = 'rmolons' LIMIT 1`
     );
     if (existing.rows.length > 0) {
       await pool.query(
-        `UPDATE users SET username = 'rmolons', password = $1, role = 'admin',
-         subscription_status = 'active', profile_completed = true
-         WHERE email = 'rmportbou@gmail.com'`,
-        [hash]
+        `UPDATE users SET username = 'rmolons', email = 'rmportbou@gmail.com', password = $1,
+         role = 'admin', subscription_status = 'active', profile_completed = true
+         WHERE id = $2`,
+        [hash, existing.rows[0].id]
       );
       log("Admin user rmolons updated");
     } else {
@@ -31,6 +31,31 @@ async function ensureAdminUser() {
     }
   } catch (err: any) {
     console.error("ensureAdminUser error:", err.message);
+  }
+}
+
+async function ensureInstitutionTables() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS institution_campaign_history (
+        id SERIAL PRIMARY KEY,
+        sent_at TIMESTAMPTZ DEFAULT NOW(),
+        subject TEXT NOT NULL,
+        sent_count INT DEFAULT 0,
+        failed_count INT DEFAULT 0,
+        opens INT DEFAULT 0
+      );
+      CREATE TABLE IF NOT EXISTS institution_email_tracking (
+        id SERIAL PRIMARY KEY,
+        campaign_id INT REFERENCES institution_campaign_history(id) ON DELETE CASCADE,
+        contact_email TEXT NOT NULL,
+        resend_message_id TEXT,
+        opened_at TIMESTAMPTZ
+      );
+    `);
+    log("Institution tables ensured");
+  } catch (err: any) {
+    console.error("ensureInstitutionTables error:", err.message);
   }
 }
 
@@ -173,6 +198,7 @@ app.use((req, res, next) => {
 
 (async () => {
   await ensureAdminUser();
+  await ensureInstitutionTables();
   await ensureInstitutionContacts();
   const server = await registerRoutes(app);
 
