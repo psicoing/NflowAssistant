@@ -1,25 +1,31 @@
+import PsychologySeal from "@/components/ui/psychology-seal";
+
 /**
  * Credentials Seal Bar
  * Fixed top bar — official NUXA credentials, always in English, never translated.
- * translate="no" + lang="en" prevents any browser/Google Translate from changing the text.
+ * Seal on the left, credential items scrolling to the right.
  */
 export default function CredentialsSealBar() {
   return (
     <div
       translate="no"
       lang="en"
-      className="fixed top-0 left-0 right-0 z-[70] h-9 flex items-center overflow-hidden bg-white border-b border-gray-200 shadow-sm"
+      className="fixed top-0 left-0 right-0 z-[70] h-14 flex items-center overflow-hidden bg-white border-b border-gray-200 shadow-sm"
     >
-      <div className="w-full flex items-center justify-center gap-4 sm:gap-7 px-4 overflow-x-auto scrollbar-none">
+      {/* ── Round seal on the left ── */}
+      <div className="flex-shrink-0 flex items-center justify-center h-full px-2 border-r border-gray-100">
+        <PsychologySeal size={52} />
+      </div>
 
-        <Cred icon="🏢" label="Grupo JOBDA SL" value="B027001100" />
+      {/* ── Credential items scrolling right ── */}
+      <div className="flex-1 flex items-center gap-4 sm:gap-7 px-4 overflow-x-auto scrollbar-none min-w-0">
+        <Cred icon="🏢" label="Jobda Group SL" value="B027001100" />
         <Sep />
-        <Cred icon="🧠" label="Psychologist" value="Col. 7851 COPC · Spain" />
+        <Cred icon="🧠" label="Psychologist" value="Col. 7851 COPC · EU" />
         <Sep />
-        <Cred icon="🏥" label="Health Licence" value="E-179287705" />
+        <Cred icon="🏥" label="Health License" value="E-179287705" />
         <Sep />
         <Cred icon="💊" label="Medicines Agency" value="TMT · A1" />
-
       </div>
     </div>
   );

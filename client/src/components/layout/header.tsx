@@ -7,7 +7,7 @@ import EsEnLanguageToggle from "@/components/ui/es-en-language-toggle";
 
 interface HeaderProps {
   showBanner?: boolean;
-  sealOffset?: boolean; // shift down h-9 (36px) for the credentials seal bar
+  sealOffset?: boolean; // shift down h-14 (56px) for the credentials seal bar
 }
 
 export default function Header({ showBanner = false, sealOffset = false }: HeaderProps) {
@@ -37,7 +37,7 @@ export default function Header({ showBanner = false, sealOffset = false }: Heade
 
   return (
     <header 
-      className={`fixed ${showBanner ? (sealOffset ? 'top-[6.25rem]' : 'top-16') : (sealOffset ? 'top-9' : 'top-0')} w-full z-50 transition-all duration-300 ${
+      className={`fixed ${showBanner ? 'top-16' : 'top-0'} w-full z-50 transition-all duration-300 ${
         isScrolled ? "bg-nflow-dark/95 backdrop-blur-md" : "bg-nflow-dark/90"
       } border-b border-gray-800`}
     >
