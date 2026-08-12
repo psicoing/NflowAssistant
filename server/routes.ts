@@ -1175,60 +1175,157 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (e) { res.status(500).json({ message: "Error" }); }
   });
 
+  // ---- Internal helper: execute a campaign send ----
+  async function executeCampaignSend(campaignId: number, subject: string, body: string, contacts: any[], subjectB?: string) {
+    let sent = 0, failed = 0;
+    const half = subjectB ? Math.ceil(contacts.length / 2) : contacts.length;
+    for (let i = 0; i < contacts.length; i++) {
+      const contact = contacts[i];
+      const variant = (subjectB && i >= half) ? "b" : "a";
+      const usedSubject = variant === "b" && subjectB ? subjectB : subject;
+      const result = await sendInstitutionEmail({ email: contact.email, subject: usedSubject, body, institutionId: contact.id, campaignId });
+      if (result.ok) {
+        sent++;
+        await pool.query(
+          "INSERT INTO institution_email_tracking (campaign_id, contact_email, resend_message_id, subject_variant) VALUES ($1,$2,$3,$4)",
+          [campaignId, contact.email, result.messageId || null, variant]
+        ).catch(() => {});
+      } else {
+        failed++;
+      }
+      await new Promise(resolve => setTimeout(resolve, 150));
+    }
+    // Owner copy
+    await sendInstitutionEmail({ email: "rmportbou@gmail.com", subject: `[COPIA] ${subject}`, body, institutionId: 0, campaignId }).catch(() => {});
+    await pool.query(
+      "UPDATE institution_campaign_history SET sent_count=$1, failed_count=$2, status='sent', sent_at=NOW() WHERE id=$3",
+      [sent, failed, campaignId]
+    );
+    console.log(`Campaign #${campaignId}: sent=${sent} failed=${failed}`);
+  }
+
   // Send institution campaign
   app.post("/api/admin/send-institution-campaign", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
-    const { subject, body } = req.body;
+    const { subject, body, regions, scheduledAt, subjectB } = req.body;
     if (!subject || !body) return res.status(400).json({ message: "Subject y body requeridos" });
     try {
-      const r = await pool.query("SELECT * FROM institution_contacts WHERE opted_out = false ORDER BY id");
+      let query = "SELECT * FROM institution_contacts WHERE opted_out = false";
+      const params: any[] = [];
+      if (Array.isArray(regions) && regions.length > 0) {
+        query += ` AND region = ANY($1)`;
+        params.push(regions);
+      }
+      query += " ORDER BY id";
+      const r = await pool.query(query, params);
       const contacts = r.rows;
 
-      // Create campaign history record first
+      const regionsStr = (Array.isArray(regions) && regions.length > 0) ? regions.join(", ") : null;
+      const scheduledDate = scheduledAt ? new Date(scheduledAt) : null;
+      const isScheduled = scheduledDate && scheduledDate > new Date();
+
       const campaignRow = await pool.query(
-        "INSERT INTO institution_campaign_history (subject, sent_count, failed_count) VALUES ($1, 0, 0) RETURNING id",
-        [subject]
+        `INSERT INTO institution_campaign_history
+         (subject, subject_b, body, sent_count, failed_count, regions_filter, scheduled_at, status)
+         VALUES ($1,$2,$3,0,0,$4,$5,$6) RETURNING id`,
+        [subject, subjectB || null, body, regionsStr, scheduledDate, isScheduled ? "scheduled" : "sent"]
       );
       const campaignId: number = campaignRow.rows[0].id;
 
-      let sent = 0, failed = 0;
-      for (const contact of contacts) {
-        const result = await sendInstitutionEmail({ email: contact.email, subject, body, institutionId: contact.id, campaignId });
-        if (result.ok) {
-          sent++;
-          // Store tracking record with Resend message ID
-          await pool.query(
-            "INSERT INTO institution_email_tracking (campaign_id, contact_email, resend_message_id) VALUES ($1, $2, $3)",
-            [campaignId, contact.email, result.messageId || null]
-          ).catch(() => {});
-        } else {
-          failed++;
-        }
-        await new Promise(resolve => setTimeout(resolve, 150));
+      if (isScheduled) {
+        const delay = scheduledDate!.getTime() - Date.now();
+        setTimeout(() => executeCampaignSend(campaignId, subject, body, contacts, subjectB || undefined), delay);
+        res.json({ scheduled: true, campaignId, scheduledAt: scheduledDate, recipients: contacts.length });
+      } else {
+        res.json({ sending: true, campaignId, recipients: contacts.length });
+        // Send async after responding
+        setImmediate(() => executeCampaignSend(campaignId, subject, body, contacts, subjectB || undefined));
       }
-
-      // Update final counts
-      await pool.query(
-        "UPDATE institution_campaign_history SET sent_count = $1, failed_count = $2 WHERE id = $3",
-        [sent, failed, campaignId]
-      );
-
-      // Send a copy to the owner for external preview
-      const OWNER_PREVIEW_EMAIL = "rmportbou@gmail.com";
-      await sendInstitutionEmail({
-        email: OWNER_PREVIEW_EMAIL,
-        subject: `[COPIA] ${subject}`,
-        body: body,
-        institutionId: 0,
-        campaignId,
-      }).catch(() => {});
-
-      console.log(`Institution campaign #${campaignId}: sent=${sent} failed=${failed}`);
-      res.json({ sent, failed, campaignId });
     } catch (e) {
       console.error("send-institution-campaign error:", e);
       res.status(500).json({ message: "Error" });
     }
+  });
+
+  // Update institution contact (type, region, name)
+  app.patch("/api/admin/institutions/:id", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { contact_type, region, name } = req.body;
+    try {
+      const r = await pool.query(
+        "UPDATE institution_contacts SET contact_type=COALESCE($1,contact_type), region=COALESCE($2,region), name=COALESCE($3,name) WHERE id=$4 RETURNING *",
+        [contact_type ?? null, region ?? null, name ?? null, parseInt(req.params.id)]
+      );
+      res.json(r.rows[0]);
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  // Contact send history
+  app.get("/api/admin/institutions/:id/history", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const contact = await pool.query("SELECT email FROM institution_contacts WHERE id=$1", [parseInt(req.params.id)]);
+      if (contact.rows.length === 0) return res.status(404).json({ message: "No encontrado" });
+      const email = contact.rows[0].email;
+      const r = await pool.query(`
+        SELECT iet.subject_variant, iet.opened_at, iet.resend_message_id,
+               ich.subject, ich.sent_at, ich.id AS campaign_id
+        FROM institution_email_tracking iet
+        JOIN institution_campaign_history ich ON iet.campaign_id = ich.id
+        WHERE iet.contact_email = $1
+        ORDER BY ich.sent_at DESC
+      `, [email]);
+      res.json(r.rows);
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  // Export institutions CSV
+  app.get("/api/admin/institutions/export-csv", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const r = await pool.query("SELECT email, name, region, contact_type, opted_out, created_at FROM institution_contacts ORDER BY region, email");
+      const lines = ["email,nombre,región,tipo,estado,alta"];
+      for (const row of r.rows) {
+        lines.push([
+          row.email, row.name || "", row.region || "", row.contact_type || "",
+          row.opted_out ? "baja" : "activo",
+          row.created_at ? new Date(row.created_at).toISOString().split("T")[0] : ""
+        ].map(v => `"${v}"`).join(","));
+      }
+      res.setHeader("Content-Type", "text/csv; charset=utf-8");
+      res.setHeader("Content-Disposition", `attachment; filename="instituciones-nuxa-${new Date().toISOString().split("T")[0]}.csv"`);
+      res.send("\uFEFF" + lines.join("\n")); // BOM for Excel
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  // Templates CRUD
+  app.get("/api/admin/institution-templates", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const r = await pool.query("SELECT * FROM institution_email_templates ORDER BY created_at DESC");
+      res.json(r.rows);
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.post("/api/admin/institution-templates", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { name, subject, body } = req.body;
+    if (!name || !subject || !body) return res.status(400).json({ message: "Faltan campos" });
+    try {
+      const r = await pool.query(
+        "INSERT INTO institution_email_templates (name, subject, body) VALUES ($1,$2,$3) RETURNING *",
+        [name, subject, body]
+      );
+      res.json(r.rows[0]);
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.delete("/api/admin/institution-templates/:id", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      await pool.query("DELETE FROM institution_email_templates WHERE id=$1", [parseInt(req.params.id)]);
+      res.json({ ok: true });
+    } catch (e) { res.status(500).json({ message: "Error" }); }
   });
 
   // Campaign history

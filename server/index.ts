@@ -46,20 +46,43 @@ async function ensureInstitutionTables() {
         subject TEXT NOT NULL,
         sent_count INT DEFAULT 0,
         failed_count INT DEFAULT 0,
-        opens INT DEFAULT 0
+        opens INT DEFAULT 0,
+        regions_filter TEXT,
+        scheduled_at TIMESTAMPTZ,
+        status TEXT DEFAULT 'sent',
+        subject_b TEXT,
+        body TEXT
       );
       CREATE TABLE IF NOT EXISTS institution_email_tracking (
         id SERIAL PRIMARY KEY,
         campaign_id INT REFERENCES institution_campaign_history(id) ON DELETE CASCADE,
         contact_email TEXT NOT NULL,
         resend_message_id TEXT,
-        opened_at TIMESTAMPTZ
+        opened_at TIMESTAMPTZ,
+        subject_variant TEXT DEFAULT 'a'
       );
+      CREATE TABLE IF NOT EXISTS institution_email_templates (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        subject TEXT NOT NULL,
+        body TEXT NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+    // Add columns to existing tables if missing (idempotent)
+    await pool.query(`
+      ALTER TABLE institution_contacts ADD COLUMN IF NOT EXISTS contact_type TEXT;
+      ALTER TABLE institution_campaign_history ADD COLUMN IF NOT EXISTS regions_filter TEXT;
+      ALTER TABLE institution_campaign_history ADD COLUMN IF NOT EXISTS scheduled_at TIMESTAMPTZ;
+      ALTER TABLE institution_campaign_history ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'sent';
+      ALTER TABLE institution_campaign_history ADD COLUMN IF NOT EXISTS subject_b TEXT;
+      ALTER TABLE institution_campaign_history ADD COLUMN IF NOT EXISTS body TEXT;
+      ALTER TABLE institution_email_tracking ADD COLUMN IF NOT EXISTS subject_variant TEXT DEFAULT 'a';
     `);
     // Seed retroactive campaign entry if history is empty
     await pool.query(`
-      INSERT INTO institution_campaign_history (sent_at, subject, sent_count, failed_count, opens)
-      SELECT '2026-08-12 13:34:00+00', 'NUXA — Apoyo emocional profesional para sus equipos de salud', 55, 0, 0
+      INSERT INTO institution_campaign_history (sent_at, subject, sent_count, failed_count, opens, status)
+      SELECT '2026-08-12 13:34:00+00', 'NUXA — Apoyo emocional profesional para sus equipos de salud', 55, 0, 0, 'sent'
       WHERE NOT EXISTS (SELECT 1 FROM institution_campaign_history)
     `);
     log("Institution tables ensured");
