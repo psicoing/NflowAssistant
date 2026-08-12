@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import PsychologySeal from "@/components/ui/psychology-seal";
 
 const SLIDES = [
   {
@@ -80,9 +81,15 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         ))}
       </div>
 
-      <div className="flex items-center gap-3 mb-8">
-        <img src="/favicon.png" alt="NUXA" className="w-14 h-14 rounded-2xl shadow-lg shadow-indigo-500/30" />
-        <img src="/icon-boy.png" alt="NUXA" className="w-14 h-14 rounded-2xl shadow-lg shadow-indigo-500/30" />
+      <div className="flex items-center gap-6 mb-8">
+        <div className="flex items-center gap-3">
+          <img src="/favicon.png" alt="NUXA" className="w-14 h-14 rounded-2xl shadow-lg shadow-indigo-500/30" />
+          <img src="/icon-boy.png" alt="NUXA" className="w-14 h-14 rounded-2xl shadow-lg shadow-indigo-500/30" />
+        </div>
+        {/* Official credential seal */}
+        <div translate="no" lang="en" className="opacity-90">
+          <PsychologySeal size={90} />
+        </div>
       </div>
 
       <div key={activeSlide} className="text-center px-6 max-w-md animate-in fade-in duration-500">
