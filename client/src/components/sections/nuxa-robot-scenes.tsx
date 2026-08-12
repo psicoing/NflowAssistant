@@ -60,22 +60,27 @@ import nuxaRobotBooks from "@assets/generated_images/nuxa_robot_books_recommenda
 /**
  * PsychologySeal — official round credential badge, always English, never translated.
  *
- * Design: exact reproduction of the reference stamp image.
- * Ivory paper + navy ink. Two concentric rings. ✦ ornaments at 9 & 3 o'clock.
- * Large Ψ + diamond separator + credential lines with horizontal rules.
+ * Design: faithful reproduction of the reference stamp.
+ * Rings: thick outer + thin companion just inside + very thin inner content ring.
+ * ✦ ornaments at 9 & 3 o'clock on inner ring.
+ * All credential text fits inside the inner ring with proper spacing.
  */
 function PsychologySeal() {
   // 220 × 220 viewBox, centre (110, 110)
   const C = 110;
-  const Ro = 106;  // background circle radius
-  const Rb = 103;  // thick outer border radius
-  const Rt = 95;   // arc text path radius
-  const Rg = 80;   // thin gap ring just inside text band
-  const Ri = 76;   // inner content ring
+
+  // Ring geometry (all radii from centre)
+  const Ro  = 106;  // background fill
+  const R1  = 103;  // outer thick border  (strokeWidth 5.5)
+  const R2  = 97;   // thin companion ring just inside thick border (strokeWidth 1)
+  const Rt  = 90;   // arc text path lives between R2 and R3
+  const R3  = 78;   // inner content ring  (strokeWidth 0.8 — very thin)
+
+  // inner ring bottom = C + R3 = 188  → all content must stay below C − R3 = 32 and above 188
 
   // Top arc: left → right through top (clockwise, sweep=1)
   const topPath = `M ${C - Rt},${C} A ${Rt},${Rt} 0 0,1 ${C + Rt},${C}`;
-  // Bottom arc: right → left through bottom (clockwise, sweep=1) → text reads L→R
+  // Bottom arc: right → left through bottom (clockwise) → text reads L→R
   const botPath = `M ${C + Rt},${C} A ${Rt},${Rt} 0 0,1 ${C - Rt},${C}`;
 
   const navy = "#1a3060";
@@ -90,13 +95,11 @@ function PsychologySeal() {
         <path id="seal-arc-t" d={topPath} />
         <path id="seal-arc-b" d={botPath} />
 
-        {/* ivory / linen paper background */}
         <radialGradient id="seal-paper" cx="40%" cy="36%" r="72%">
           <stop offset="0%"   stopColor="#fdfaf4" />
           <stop offset="100%" stopColor="#ede4cc" />
         </radialGradient>
 
-        {/* drop shadow for depth on the photo */}
         <filter id="seal-shadow" x="-10%" y="-10%" width="120%" height="120%">
           <feDropShadow dx="0" dy="3" stdDeviation="5" floodColor="#000" floodOpacity="0.45" />
         </filter>
@@ -105,29 +108,25 @@ function PsychologySeal() {
       {/* ── ivory background ── */}
       <circle cx={C} cy={C} r={Ro} fill="url(#seal-paper)" filter="url(#seal-shadow)" />
 
-      {/* ── outer thick border ── */}
-      <circle cx={C} cy={C} r={Rb} fill="none" stroke={navy} strokeWidth="5.5" />
+      {/* ── outer THICK border ── */}
+      <circle cx={C} cy={C} r={R1} fill="none" stroke={navy} strokeWidth="5.5" />
 
-      {/* ── thin ring just inside the text band ── */}
-      <circle cx={C} cy={C} r={Rg} fill="none" stroke={navy} strokeWidth="1" />
+      {/* ── thin companion ring just inside the thick border ── */}
+      <circle cx={C} cy={C} r={R2} fill="none" stroke={navy} strokeWidth="1" />
 
-      {/* ── inner content ring ── */}
-      <circle cx={C} cy={C} r={Ri} fill="none" stroke={navy} strokeWidth="1.4" />
+      {/* ── inner content ring — very thin ── */}
+      <circle cx={C} cy={C} r={R3} fill="none" stroke={navy} strokeWidth="0.8" />
 
-      {/* ── ✦ four-pointed star ornaments at 9 o'clock and 3 o'clock ── */}
-      <text x={C - Ri} y={C + 4.5} textAnchor="middle"
-            fontFamily="Georgia, serif" fontSize="13" fill={navy}>✦</text>
-      <text x={C + Ri} y={C + 4.5} textAnchor="middle"
-            fontFamily="Georgia, serif" fontSize="13" fill={navy}>✦</text>
+      {/* ── ✦ four-pointed star ornaments at 9 & 3 o'clock on inner ring ── */}
+      <text x={C - R3} y={C + 4} textAnchor="middle"
+            fontFamily="Georgia, serif" fontSize="12" fill={navy}>✦</text>
+      <text x={C + R3} y={C + 4} textAnchor="middle"
+            fontFamily="Georgia, serif" fontSize="12" fill={navy}>✦</text>
 
       {/* ══ TOP ARC: "LICENSED PSYCHOLOGIST" ══ */}
       <text
         fontFamily="'Georgia', 'Times New Roman', serif"
-        fontSize="10.5"
-        fontWeight="bold"
-        fill={navy}
-        letterSpacing="3.8"
-        textAnchor="middle"
+        fontSize="10.5" fontWeight="bold" fill={navy} letterSpacing="3.8" textAnchor="middle"
       >
         <textPath href="#seal-arc-t" startOffset="50%">LICENSED PSYCHOLOGIST</textPath>
       </text>
@@ -135,67 +134,62 @@ function PsychologySeal() {
       {/* ══ BOTTOM ARC: "COL. 7851 · COPC · UE" ══ */}
       <text
         fontFamily="'Georgia', 'Times New Roman', serif"
-        fontSize="10"
-        fontWeight="bold"
-        fill={navy}
-        letterSpacing="3"
-        textAnchor="middle"
+        fontSize="10" fontWeight="bold" fill={navy} letterSpacing="3" textAnchor="middle"
       >
         <textPath href="#seal-arc-b" startOffset="50%">COL. 7851 · COPC · UE</textPath>
       </text>
 
-      {/* ══ LARGE Ψ — hero symbol ══ */}
+      {/* ══ LARGE Ψ — hero symbol ══
+          baseline at y=97 → cap top ≈ 60, well inside inner ring top (32) */}
       <text
-        x={C} y={C - 2}
+        x={C} y={97}
         textAnchor="middle"
         fontFamily="'Georgia', 'Times New Roman', serif"
-        fontWeight="bold"
-        fontSize="56"
-        fill={navy}
+        fontWeight="bold" fontSize="52" fill={navy}
       >Ψ</text>
 
-      {/* ── small ◆ diamond separator below Ψ ── */}
-      <text x={C} y={C + 18} textAnchor="middle"
+      {/* ── ◆ diamond separator below Ψ ── */}
+      <text x={C} y={114} textAnchor="middle"
             fontFamily="Georgia, serif" fontSize="7" fill={navy}>◆</text>
 
-      {/* ── top horizontal rule ── */}
-      <line x1={C - 30} y1={C + 26} x2={C + 30} y2={C + 26}
+      {/* ── top rule — sits 4px below diamond ── */}
+      <line x1={C - 28} y1={121} x2={C + 28} y2={121}
             stroke={navy} strokeWidth="0.9" />
 
-      {/* ── GRUPO JOBDA SL ── */}
-      <text x={C} y={C + 38} textAnchor="middle"
+      {/* ── GRUPO JOBDA SL  (baseline 132) ── */}
+      <text x={C} y={132} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
             fontSize="7.5" fontWeight="bold" fill={navy} letterSpacing="1.2">
         GRUPO JOBDA SL
       </text>
 
-      {/* ── B027001100 ── */}
-      <text x={C} y={C + 49} textAnchor="middle"
+      {/* ── B027001100  (baseline 143) ── */}
+      <text x={C} y={143} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
             fontSize="7" fill={navy} letterSpacing="0.8">
         B027001100
       </text>
 
-      {/* ── mid horizontal rule ── */}
-      <line x1={C - 24} y1={C + 55} x2={C + 24} y2={C + 55}
-            stroke={navy} strokeWidth="0.7" />
+      {/* ── mid separator rule  (y=150, 7px below baseline) ── */}
+      <line x1={C - 22} y1={150} x2={C + 22} y2={150}
+            stroke={navy} strokeWidth="0.6" />
 
-      {/* ── MEDICINES AGENCY TMT · A1 ── */}
-      <text x={C} y={C + 64} textAnchor="middle"
+      {/* ── MEDICINES AGENCY TMT · A1  (baseline 160) ── */}
+      <text x={C} y={160} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
             fontSize="6.5" fill={navy} letterSpacing="0.5">
         MEDICINES AGENCY TMT · A1
       </text>
 
-      {/* ── HEALTH LICENCE ── */}
-      <text x={C} y={C + 74} textAnchor="middle"
+      {/* ── HEALTH LICENCE  (baseline 170) ── */}
+      <text x={C} y={170} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
             fontSize="7" fontWeight="bold" fill={navy} letterSpacing="1">
         HEALTH LICENCE
       </text>
 
-      {/* ── E-179287705 ── */}
-      <text x={C} y={C + 84} textAnchor="middle"
+      {/* ── E-179287705  (baseline 180) — inner ring bottom = 188 ── */}
+      <text x={C} y={180} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
             fontSize="6.5" fill={navy} letterSpacing="0.6">
         E-179287705
