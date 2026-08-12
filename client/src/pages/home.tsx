@@ -104,13 +104,16 @@ function AwarenessBanner({ onClose }: { onClose: () => void }) {
           <span className={`text-indigo-300 text-xs font-semibold flex-shrink-0 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}>
             ▼
           </span>
-          <button
+          <span
+            role="button"
+            tabIndex={0}
             onClick={e => { e.stopPropagation(); onClose(); }}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); onClose(); } }}
             aria-label="Cerrar"
-            className="flex-shrink-0 text-indigo-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10"
+            className="flex-shrink-0 text-indigo-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10 cursor-pointer"
           >
             <X className="w-4 h-4" />
-          </button>
+          </span>
         </button>
 
         {/* Expandable content */}

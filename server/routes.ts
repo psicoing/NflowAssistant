@@ -1148,7 +1148,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ORDER BY ic.region, ic.email
       `);
       res.json(r.rows);
-    } catch (e) { res.status(500).json({ message: "Error" }); }
+    } catch (e: any) { console.error("institutions endpoint error:", e?.message); res.status(500).json({ message: "Error" }); }
   });
 
   // Add institution

@@ -11,7 +11,10 @@ async function ensureAdminUser() {
   try {
     const hash = await bcrypt.hash("mln328RMR+", 10);
     const existing = await pool.query(
-      `SELECT id FROM users WHERE email = 'rmportbou@gmail.com' OR username = 'rmolons' LIMIT 1`
+      `SELECT id FROM users WHERE username = 'rmolons'
+       UNION
+       SELECT id FROM users WHERE email = 'rmportbou@gmail.com' AND username != 'rmolons'
+       LIMIT 1`
     );
     if (existing.rows.length > 0) {
       await pool.query(
@@ -52,6 +55,12 @@ async function ensureInstitutionTables() {
         resend_message_id TEXT,
         opened_at TIMESTAMPTZ
       );
+    `);
+    // Seed retroactive campaign entry if history is empty
+    await pool.query(`
+      INSERT INTO institution_campaign_history (sent_at, subject, sent_count, failed_count, opens)
+      SELECT '2026-08-12 13:34:00+00', 'NUXA — Apoyo emocional profesional para sus equipos de salud', 55, 0, 0
+      WHERE NOT EXISTS (SELECT 1 FROM institution_campaign_history)
     `);
     log("Institution tables ensured");
   } catch (err: any) {

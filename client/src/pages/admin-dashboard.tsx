@@ -124,7 +124,7 @@ export default function AdminDashboard() {
     try {
       const r = await fetch("/api/admin/institutions");
       const d = await r.json();
-      setInstitutions(d);
+      setInstitutions(Array.isArray(d) ? d : []);
     } catch {}
     setInstLoading(false);
   };
