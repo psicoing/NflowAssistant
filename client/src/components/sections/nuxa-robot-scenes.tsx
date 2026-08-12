@@ -136,7 +136,7 @@ function PsychologySeal() {
         fontFamily="'Georgia', 'Times New Roman', serif"
         fontSize="10" fontWeight="bold" fill={navy} letterSpacing="3" textAnchor="middle"
       >
-        <textPath href="#seal-arc-b" startOffset="50%">COL. 7851 · COPC · UE</textPath>
+        <textPath href="#seal-arc-b" startOffset="50%">COL. 7851 · COPC · EU</textPath>
       </text>
 
       {/* ══ LARGE Ψ — hero symbol ══
@@ -156,11 +156,11 @@ function PsychologySeal() {
       <line x1={C - 28} y1={121} x2={C + 28} y2={121}
             stroke={navy} strokeWidth="0.9" />
 
-      {/* ── GRUPO JOBDA SL  (baseline 132) ── */}
+      {/* ── JOBDA GROUP SL  (baseline 132) ── */}
       <text x={C} y={132} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
             fontSize="7.5" fontWeight="bold" fill={navy} letterSpacing="1.2">
-        GRUPO JOBDA SL
+        JOBDA GROUP SL
       </text>
 
       {/* ── B027001100  (baseline 143) ── */}
