@@ -1136,7 +1136,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/admin/institutions", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
     try {
-      const r = await pool.query("SELECT * FROM institution_contacts ORDER BY region, email");
+      const r = await pool.query(`
+        SELECT ic.*, COUNT(iet.id)::int AS campaigns_sent
+        FROM institution_contacts ic
+        LEFT JOIN institution_email_tracking iet ON iet.contact_email = ic.email
+        GROUP BY ic.id
+        ORDER BY ic.region, ic.email
+      `);
       res.json(r.rows);
     } catch (e) { res.status(500).json({ message: "Error" }); }
   });

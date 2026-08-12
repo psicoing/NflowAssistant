@@ -1349,6 +1349,7 @@ export default function AdminDashboard() {
                                 {inst.region && <span className="text-gray-500 text-xs">{inst.region}</span>}
                                 {inst.created_at && <span className="text-gray-600 text-xs">Alta: {new Date(inst.created_at).toLocaleDateString("es-ES")}</span>}
                                 {inst.opted_out && inst.opted_out_at && <span className="text-red-400 text-xs">Baja: {new Date(inst.opted_out_at).toLocaleDateString("es-ES")}</span>}
+                                {inst.campaigns_sent > 0 && <span className="text-blue-400 text-xs bg-blue-500/10 px-1.5 py-0.5 rounded">📧 {inst.campaigns_sent} envío{inst.campaigns_sent > 1 ? "s" : ""}</span>}
                               </div>
                             </div>
                             <div className="flex items-center gap-2 ml-2 shrink-0">
