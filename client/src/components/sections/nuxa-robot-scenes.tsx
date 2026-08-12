@@ -60,110 +60,145 @@ import nuxaRobotBooks from "@assets/generated_images/nuxa_robot_books_recommenda
 /**
  * PsychologySeal — official round credential badge, always English, never translated.
  *
- * Design: ivory paper + navy ink, like a real embossed notary seal.
- * ONE ring of arc text top + bottom. Large Ψ. Credentials as straight lines below.
+ * Design: exact reproduction of the reference stamp image.
+ * Ivory paper + navy ink. Two concentric rings. ✦ ornaments at 9 & 3 o'clock.
+ * Large Ψ + diamond separator + credential lines with horizontal rules.
  */
 function PsychologySeal() {
-  // 190 × 190 viewBox, centre (95, 95)
-  const C = 95;
-  const R = 92;   // outer radius of seal
-  const Rt = 84;  // radius for arc text paths
-  const Ri = 68;  // inner decorative ring
+  // 220 × 220 viewBox, centre (110, 110)
+  const C = 110;
+  const Ro = 106;  // background circle radius
+  const Rb = 103;  // thick outer border radius
+  const Rt = 95;   // arc text path radius
+  const Rg = 80;   // thin gap ring just inside text band
+  const Ri = 76;   // inner content ring
 
-  // Arc for top text (sweep clockwise L→R over the top)
+  // Top arc: left → right through top (clockwise, sweep=1)
   const topPath = `M ${C - Rt},${C} A ${Rt},${Rt} 0 0,1 ${C + Rt},${C}`;
-  // Arc for bottom text (sweep clockwise R→L under the bottom → text reads L→R)
+  // Bottom arc: right → left through bottom (clockwise, sweep=1) → text reads L→R
   const botPath = `M ${C + Rt},${C} A ${Rt},${Rt} 0 0,1 ${C - Rt},${C}`;
+
+  const navy = "#1a3060";
 
   return (
     <svg
-      width="190" height="190" viewBox="0 0 190 190"
+      width="220" height="220" viewBox="0 0 220 220"
       aria-label="NUXA Licensed Psychologist Credential Seal"
       style={{ display: "block" }}
     >
       <defs>
-        <path id="arc-t" d={topPath} />
-        <path id="arc-b" d={botPath} />
+        <path id="seal-arc-t" d={topPath} />
+        <path id="seal-arc-b" d={botPath} />
 
-        {/* ivory paper background */}
-        <radialGradient id="paper" cx="42%" cy="38%" r="70%">
-          <stop offset="0%"  stopColor="#fdfaf3" />
-          <stop offset="100%" stopColor="#f0e8d0" />
+        {/* ivory / linen paper background */}
+        <radialGradient id="seal-paper" cx="40%" cy="36%" r="72%">
+          <stop offset="0%"   stopColor="#fdfaf4" />
+          <stop offset="100%" stopColor="#ede4cc" />
         </radialGradient>
 
-        {/* navy ink gradient for rings */}
-        <linearGradient id="ink" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%"   stopColor="#162a5c" />
-          <stop offset="100%" stopColor="#0d1e45" />
-        </linearGradient>
-
-        {/* subtle drop shadow */}
-        <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
-          <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#000" floodOpacity="0.35" />
+        {/* drop shadow for depth on the photo */}
+        <filter id="seal-shadow" x="-10%" y="-10%" width="120%" height="120%">
+          <feDropShadow dx="0" dy="3" stdDeviation="5" floodColor="#000" floodOpacity="0.45" />
         </filter>
       </defs>
 
       {/* ── ivory background ── */}
-      <circle cx={C} cy={C} r={R} fill="url(#paper)" filter="url(#shadow)" />
+      <circle cx={C} cy={C} r={Ro} fill="url(#seal-paper)" filter="url(#seal-shadow)" />
 
-      {/* ── outer navy border (thick) ── */}
-      <circle cx={C} cy={C} r={R}   fill="none" stroke="#1a3060" strokeWidth="5" />
-      {/* ── thin line just inside border ── */}
-      <circle cx={C} cy={C} r={R - 7} fill="none" stroke="#1a3060" strokeWidth="0.8" />
+      {/* ── outer thick border ── */}
+      <circle cx={C} cy={C} r={Rb} fill="none" stroke={navy} strokeWidth="5.5" />
 
-      {/* ── inner circle separating text band from content ── */}
-      <circle cx={C} cy={C} r={Ri} fill="none" stroke="#1a3060" strokeWidth="1.2" />
+      {/* ── thin ring just inside the text band ── */}
+      <circle cx={C} cy={C} r={Rg} fill="none" stroke={navy} strokeWidth="1" />
 
-      {/* ══ TOP ARC: "LICENSED PSYCHOLOGIST" ══
-          Short phrase — generous letter-spacing so it breathes */}
+      {/* ── inner content ring ── */}
+      <circle cx={C} cy={C} r={Ri} fill="none" stroke={navy} strokeWidth="1.4" />
+
+      {/* ── ✦ four-pointed star ornaments at 9 o'clock and 3 o'clock ── */}
+      <text x={C - Ri} y={C + 4.5} textAnchor="middle"
+            fontFamily="Georgia, serif" fontSize="13" fill={navy}>✦</text>
+      <text x={C + Ri} y={C + 4.5} textAnchor="middle"
+            fontFamily="Georgia, serif" fontSize="13" fill={navy}>✦</text>
+
+      {/* ══ TOP ARC: "LICENSED PSYCHOLOGIST" ══ */}
       <text
         fontFamily="'Georgia', 'Times New Roman', serif"
-        fontSize="9.5"
+        fontSize="10.5"
         fontWeight="bold"
-        fill="#1a3060"
+        fill={navy}
+        letterSpacing="3.8"
+        textAnchor="middle"
+      >
+        <textPath href="#seal-arc-t" startOffset="50%">LICENSED PSYCHOLOGIST</textPath>
+      </text>
+
+      {/* ══ BOTTOM ARC: "COL. 7851 · COPC · UE" ══ */}
+      <text
+        fontFamily="'Georgia', 'Times New Roman', serif"
+        fontSize="10"
+        fontWeight="bold"
+        fill={navy}
         letterSpacing="3"
         textAnchor="middle"
       >
-        <textPath href="#arc-t" startOffset="50%">LICENSED PSYCHOLOGIST</textPath>
+        <textPath href="#seal-arc-b" startOffset="50%">COL. 7851 · COPC · UE</textPath>
       </text>
 
-      {/* ══ BOTTOM ARC: "COL. 7851  ·  COPC  ·  SPAIN" ══ */}
+      {/* ══ LARGE Ψ — hero symbol ══ */}
       <text
-        fontFamily="'Georgia', 'Times New Roman', serif"
-        fontSize="8.5"
-        fill="#1a3060"
-        letterSpacing="2.2"
-        textAnchor="middle"
-      >
-        <textPath href="#arc-b" startOffset="50%">COL. 7851  ·  COPC  ·  SPAIN</textPath>
-      </text>
-
-      {/* ══ LARGE Ψ — hero element ══ */}
-      <text
-        x={C} y={C + 10}
+        x={C} y={C - 2}
         textAnchor="middle"
         fontFamily="'Georgia', 'Times New Roman', serif"
         fontWeight="bold"
-        fontSize="52"
-        fill="#1a3060"
+        fontSize="56"
+        fill={navy}
       >Ψ</text>
 
-      {/* ── thin rule below Ψ ── */}
-      <line x1={C - 26} y1={C + 20} x2={C + 26} y2={C + 20}
-            stroke="#1a3060" strokeWidth="0.8" />
+      {/* ── small ◆ diamond separator below Ψ ── */}
+      <text x={C} y={C + 18} textAnchor="middle"
+            fontFamily="Georgia, serif" fontSize="7" fill={navy}>◆</text>
 
-      {/* ── credential lines inside the inner circle ── */}
-      <text x={C} y={C + 32} textAnchor="middle"
-            fontFamily="Georgia, serif" fontSize="6" fill="#1a3060" letterSpacing="0.8">
-        GRUPO JOBDA SL · B027001100
+      {/* ── top horizontal rule ── */}
+      <line x1={C - 30} y1={C + 26} x2={C + 30} y2={C + 26}
+            stroke={navy} strokeWidth="0.9" />
+
+      {/* ── GRUPO JOBDA SL ── */}
+      <text x={C} y={C + 38} textAnchor="middle"
+            fontFamily="'Georgia', 'Times New Roman', serif"
+            fontSize="7.5" fontWeight="bold" fill={navy} letterSpacing="1.2">
+        GRUPO JOBDA SL
       </text>
-      <text x={C} y={C + 42} textAnchor="middle"
-            fontFamily="Georgia, serif" fontSize="5.5" fill="#4a6090" letterSpacing="0.6">
+
+      {/* ── B027001100 ── */}
+      <text x={C} y={C + 49} textAnchor="middle"
+            fontFamily="'Georgia', 'Times New Roman', serif"
+            fontSize="7" fill={navy} letterSpacing="0.8">
+        B027001100
+      </text>
+
+      {/* ── mid horizontal rule ── */}
+      <line x1={C - 24} y1={C + 55} x2={C + 24} y2={C + 55}
+            stroke={navy} strokeWidth="0.7" />
+
+      {/* ── MEDICINES AGENCY TMT · A1 ── */}
+      <text x={C} y={C + 64} textAnchor="middle"
+            fontFamily="'Georgia', 'Times New Roman', serif"
+            fontSize="6.5" fill={navy} letterSpacing="0.5">
         MEDICINES AGENCY TMT · A1
       </text>
-      <text x={C} y={C + 51} textAnchor="middle"
-            fontFamily="Georgia, serif" fontSize="5.5" fill="#4a6090" letterSpacing="0.6">
-        HEALTH LIC. E-179287705
+
+      {/* ── HEALTH LICENCE ── */}
+      <text x={C} y={C + 74} textAnchor="middle"
+            fontFamily="'Georgia', 'Times New Roman', serif"
+            fontSize="7" fontWeight="bold" fill={navy} letterSpacing="1">
+        HEALTH LICENCE
+      </text>
+
+      {/* ── E-179287705 ── */}
+      <text x={C} y={C + 84} textAnchor="middle"
+            fontFamily="'Georgia', 'Times New Roman', serif"
+            fontSize="6.5" fill={navy} letterSpacing="0.6">
+        E-179287705
       </text>
     </svg>
   );
