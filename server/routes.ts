@@ -1623,6 +1623,31 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     } catch (e) { res.status(500).send("Error"); }
   });
 
+  // ===== TEST BIENESTAR & CALCULADORA BURNOUT =====
+
+  app.post("/api/test-bienestar/submit", async (req, res) => {
+    const { email, phq9Score, gad7Score } = req.body;
+    try {
+      await pool.query(
+        "INSERT INTO wellness_test_leads (email, phq9_score, gad7_score) VALUES ($1, $2, $3)",
+        [email || null, phq9Score ?? null, gad7Score ?? null]
+      );
+    } catch {}
+    res.json({ ok: true });
+  });
+
+  app.post("/api/calculadora-burnout/lead", async (req, res) => {
+    const { email, empleados, salario, sector, totalCoste } = req.body;
+    if (!email || !email.includes("@")) return res.status(400).json({ message: "Email inválido" });
+    try {
+      await pool.query(
+        "INSERT INTO burnout_calculator_leads (email, empleados, salario, sector, total_coste) VALUES ($1,$2,$3,$4,$5)",
+        [email, empleados || null, salario || null, sector || null, totalCoste || null]
+      );
+    } catch {}
+    res.json({ ok: true });
+  });
+
   // ===== GRANDES EMPRESAS =====
 
   app.get("/api/admin/empresas", async (req, res) => {

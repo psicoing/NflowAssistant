@@ -134,6 +134,47 @@ export default function RecursosIntro() {
           </div>
         </section>
 
+        {/* ── HERRAMIENTAS GRATUITAS ── */}
+        <section className="py-12 bg-gradient-to-b from-gray-950 to-gray-900">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-white mb-2">🛠️ Herramientas gratuitas</h2>
+              <p className="text-gray-400">Sin registro. Sin tarjeta. Úsalas ahora mismo.</p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-5">
+              <a href="/test-bienestar"
+                className="group bg-gradient-to-br from-blue-600/20 to-blue-900/20 border border-blue-500/30 hover:border-blue-400/60 rounded-3xl p-7 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/10 block">
+                <div className="text-4xl mb-4">🧠</div>
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">Test de Bienestar Emocional</h3>
+                <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                  16 preguntas basadas en PHQ-9 y GAD-7. Recibe tu informe personalizado de estado de ánimo y ansiedad en 5 minutos.
+                </p>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <span className="text-xs bg-blue-500/20 text-blue-300 border border-blue-500/30 px-3 py-1 rounded-full">16 preguntas</span>
+                  <span className="text-xs bg-blue-500/20 text-blue-300 border border-blue-500/30 px-3 py-1 rounded-full">5 minutos</span>
+                  <span className="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full">✓ Gratis</span>
+                </div>
+                <p className="text-blue-400 text-sm font-semibold mt-4 group-hover:translate-x-1 transition-transform inline-block">Empezar el test →</p>
+              </a>
+
+              <a href="/calculadora-burnout"
+                className="group bg-gradient-to-br from-red-600/15 to-slate-900/50 border border-red-500/25 hover:border-red-400/50 rounded-3xl p-7 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-red-500/10 block">
+                <div className="text-4xl mb-4">💸</div>
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-red-300 transition-colors">Calculadora de Burnout</h3>
+                <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                  Calcula el coste real del burnout en tu empresa: absentismo, presentismo y rotación. Datos para convencer a dirección.
+                </p>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <span className="text-xs bg-red-500/20 text-red-300 border border-red-500/30 px-3 py-1 rounded-full">Para empresas</span>
+                  <span className="text-xs bg-red-500/20 text-red-300 border border-red-500/30 px-3 py-1 rounded-full">10 sectores</span>
+                  <span className="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full">✓ Gratis</span>
+                </div>
+                <p className="text-red-400 text-sm font-semibold mt-4 group-hover:translate-x-1 transition-transform inline-block">Calcular ahora →</p>
+              </a>
+            </div>
+          </div>
+        </section>
+
         <section className="py-16 bg-gradient-to-b from-gray-900 to-gray-800">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">

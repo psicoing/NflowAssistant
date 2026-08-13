@@ -37,6 +37,32 @@ async function ensureAdminUser() {
   }
 }
 
+async function ensureLeadTables() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS wellness_test_leads (
+        id SERIAL PRIMARY KEY,
+        email TEXT,
+        phq9_score INT,
+        gad7_score INT,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+      CREATE TABLE IF NOT EXISTS burnout_calculator_leads (
+        id SERIAL PRIMARY KEY,
+        email TEXT NOT NULL,
+        empleados INT,
+        salario INT,
+        sector TEXT,
+        total_coste NUMERIC,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+    log("Lead tables ensured");
+  } catch (err: any) {
+    console.error("ensureLeadTables error:", err.message);
+  }
+}
+
 async function ensureEmpresasTables() {
   try {
     await pool.query(`
@@ -389,6 +415,7 @@ app.use((req, res, next) => {
   await ensureMutuaContacts();
   await ensureEmpresasTables();
   await ensureEmpresasContacts();
+  await ensureLeadTables();
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
