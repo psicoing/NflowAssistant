@@ -37,6 +37,88 @@ async function ensureAdminUser() {
   }
 }
 
+async function ensureEmpresasTables() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS empresa_contacts (
+        id SERIAL PRIMARY KEY,
+        email TEXT UNIQUE NOT NULL,
+        name TEXT,
+        company TEXT,
+        opted_out BOOLEAN DEFAULT false,
+        opted_out_at TIMESTAMPTZ,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        contact_type TEXT DEFAULT 'empresa'
+      );
+      CREATE TABLE IF NOT EXISTS empresa_campaign_history (
+        id SERIAL PRIMARY KEY,
+        sent_at TIMESTAMPTZ DEFAULT NOW(),
+        subject TEXT NOT NULL,
+        sent_count INT DEFAULT 0,
+        failed_count INT DEFAULT 0,
+        opens INT DEFAULT 0,
+        companies_filter TEXT,
+        scheduled_at TIMESTAMPTZ,
+        status TEXT DEFAULT 'sent',
+        subject_b TEXT,
+        body TEXT
+      );
+      CREATE TABLE IF NOT EXISTS empresa_email_tracking (
+        id SERIAL PRIMARY KEY,
+        campaign_id INT REFERENCES empresa_campaign_history(id) ON DELETE CASCADE,
+        contact_email TEXT NOT NULL,
+        resend_message_id TEXT,
+        opened_at TIMESTAMPTZ,
+        subject_variant TEXT DEFAULT 'a'
+      );
+      CREATE TABLE IF NOT EXISTS empresa_email_templates (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        subject TEXT NOT NULL,
+        body TEXT NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+    log("Empresa tables ensured");
+  } catch (err: any) {
+    console.error("ensureEmpresasTables error:", err.message);
+  }
+}
+
+async function ensureEmpresasContacts() {
+  try {
+    await pool.query(`
+      INSERT INTO empresa_contacts (email, company, contact_type) VALUES
+      ('empresas@elcorteingles.es',            'El Corte Inglés',   'empresa'),
+      ('comunicacionelcorteingles@elcorteingles.es', 'El Corte Inglés', 'empresa'),
+      ('clientes@hipercor.es',                 'El Corte Inglés',   'empresa'),
+      ('mfraga.re@repsol.com',                 'Repsol',            'empresa'),
+      ('uguerra.re@repsol.com',                'Repsol',            'empresa'),
+      ('meextremeram.re@repsol.com',           'Repsol',            'empresa'),
+      ('nvilloria.re@repsol.com',              'Repsol',            'empresa'),
+      ('prensa@repsol.com',                    'Repsol',            'empresa'),
+      ('partnerships@telefonica.com',          'Telefónica',        'empresa'),
+      ('TefPublicPolicy@telefonica.com',       'Telefónica',        'empresa'),
+      ('contacto@fundaciontelefonica.com',     'Telefónica',        'empresa'),
+      ('comunica@bbva.com',                    'BBVA',              'empresa'),
+      ('prensa@caixabank.com',                 'CaixaBank',         'empresa'),
+      ('sostenibilidad@endesa.es',             'Endesa',            'empresa'),
+      ('patrocinios@endesa.es',                'Endesa',            'empresa'),
+      ('prensa@naturgy.com',                   'Naturgy',           'empresa'),
+      ('prensa@acciona.com',                   'Acciona',           'empresa'),
+      ('pablo.melero@airbus.com',              'Airbus',            'empresa'),
+      ('cristina.garcia-aliste@airbus.com',    'Airbus',            'empresa'),
+      ('rocio.caparros@airbus.com',            'Airbus',            'empresa'),
+      ('comunicacion@correos.com',             'Correos',           'empresa'),
+      ('gabinetedeprensa@aena.es',             'AENA',              'empresa')
+      ON CONFLICT (email) DO NOTHING
+    `);
+    log("Empresa contacts seeded");
+  } catch (err: any) {
+    console.error("ensureEmpresasContacts error:", err.message);
+  }
+}
+
 async function ensureMutuaTables() {
   try {
     await pool.query(`
@@ -305,6 +387,8 @@ app.use((req, res, next) => {
   await ensureInstitutionContacts();
   await ensureMutuaTables();
   await ensureMutuaContacts();
+  await ensureEmpresasTables();
+  await ensureEmpresasContacts();
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

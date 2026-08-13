@@ -143,6 +143,37 @@ export default function AdminDashboard() {
   // Type filter
   const [instTypeFilter, setInstTypeFilter] = useState("all");
 
+  // ── Grandes Empresas ────────────────────────────────────────────────────
+  const [empresas, setEmpresas] = useState<any[]>([]);
+  const [empresaLoading, setEmpresaLoading] = useState(false);
+  const [empresaNewEmail, setEmpresaNewEmail] = useState("");
+  const [empresaNewName, setEmpresaNewName] = useState("");
+  const [empresaNewCompany, setEmpresaNewCompany] = useState("");
+  const [empresaAddError, setEmpresaAddError] = useState<string | null>(null);
+  const [empresaAdding, setEmpresaAdding] = useState(false);
+  const [empresaSearch, setEmpresaSearch] = useState("");
+  const [empresaCompanyFilter, setEmpresaCompanyFilter] = useState("all");
+  const [empresaStatusFilter, setEmpresaStatusFilter] = useState<"all"|"active"|"baja">("all");
+  const [empresaDeleteConfirmId, setEmpresaDeleteConfirmId] = useState<number | null>(null);
+  const [empresaCsvImporting, setEmpresaCsvImporting] = useState(false);
+  const [empresaCsvResult, setEmpresaCsvResult] = useState<{imported:number;skipped:number}|null>(null);
+  const [empresaCampaignHistory, setEmpresaCampaignHistory] = useState<any[]>([]);
+  const [empresaHistoryLoading, setEmpresaHistoryLoading] = useState(false);
+  const [empresaSubject, setEmpresaSubject] = useState("NUXA — Bienestar emocional para los equipos de su empresa");
+  const [empresaBody, setEmpresaBody] = useState(`Estimados/as,\n\nNos dirigimos a ustedes para presentarles NUXA (nuxa.life), una plataforma de apoyo emocional profesional diseñada para las grandes organizaciones.\n\nNUXA permite a las empresas:\n• Ofrecer acompañamiento emocional 24/7 a toda la plantilla\n• Reducir el absentismo por ansiedad, estrés y burnout\n• Cumplir con la normativa ISO 45003 de riesgo psicosocial\n• Acceder a informes agregados y anónimos para RRHH\n\nNos gustaría explorar cómo NUXA puede integrarse en su estrategia de bienestar corporativo.\n\n¿Podríamos agendar una llamada de 20 minutos?\n\nQuedamos a su disposición.\n\nEquipo NUXA\nhttps://nuxa.life`);
+  const [empresaStatus, setEmpresaStatus] = useState<"idle"|"confirm"|"sending"|"done"|"error">("idle");
+  const [empresaResult, setEmpresaResult] = useState<{sent?:number;failed?:number;scheduled?:boolean;scheduledAt?:string;recipients?:number}|null>(null);
+  const [empresaTemplates, setEmpresaTemplates] = useState<any[]>([]);
+  const [empresaShowTemplates, setEmpresaShowTemplates] = useState(false);
+  const [empresaSavingTemplate, setEmpresaSavingTemplate] = useState(false);
+  const [empresaCampaignCompanies, setEmpresaCampaignCompanies] = useState<string[]>([]);
+  const [empresaScheduledAt, setEmpresaScheduledAt] = useState("");
+  const [empresaAbTest, setEmpresaAbTest] = useState(false);
+  const [empresaSubjectB, setEmpresaSubjectB] = useState("");
+  const [empresaSelectedContact, setEmpresaSelectedContact] = useState<any|null>(null);
+  const [empresaContactHistory, setEmpresaContactHistory] = useState<any[]>([]);
+  const [empresaContactHistoryLoading, setEmpresaContactHistoryLoading] = useState(false);
+
   // ── Mutuas ──────────────────────────────────────────────────────────────
   const [mutuas, setMutuas] = useState<any[]>([]);
   const [mutuaLoading, setMutuaLoading] = useState(false);
@@ -235,6 +266,27 @@ export default function AdminDashboard() {
     setMutuaContactHistoryLoading(false);
   };
   const exportMutuaCSV = () => window.open("/api/admin/mutuas/export-csv", "_blank");
+
+  const fetchEmpresas = async () => {
+    setEmpresaLoading(true);
+    try { const r = await fetch("/api/admin/empresas"); const d = await r.json(); setEmpresas(Array.isArray(d) ? d : []); } catch {}
+    setEmpresaLoading(false);
+  };
+  const fetchEmpresaCampaignHistory = async () => {
+    setEmpresaHistoryLoading(true);
+    try { const r = await fetch("/api/admin/empresa-campaign-history"); if (r.ok) setEmpresaCampaignHistory(await r.json()); } catch {}
+    setEmpresaHistoryLoading(false);
+  };
+  const fetchEmpresaTemplates = async () => {
+    try { const r = await fetch("/api/admin/empresa-templates"); if (r.ok) setEmpresaTemplates(await r.json()); } catch {}
+  };
+  const fetchEmpresaContactHistory = async (id: number) => {
+    setEmpresaContactHistoryLoading(true);
+    try { const r = await fetch(`/api/admin/empresas/${id}/history`); if (r.ok) setEmpresaContactHistory(await r.json()); else setEmpresaContactHistory([]); }
+    catch { setEmpresaContactHistory([]); }
+    setEmpresaContactHistoryLoading(false);
+  };
+  const exportEmpresaCSV = () => window.open("/api/admin/empresas/export-csv", "_blank");
 
   useEffect(() => {
     checkAuthAndFetchStats();
@@ -572,6 +624,7 @@ export default function AdminDashboard() {
               <TabsTrigger value="campana"       className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={checkResendDomain}>📧 Campaña</TabsTrigger>
               <TabsTrigger value="instituciones" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchInstitutions(); checkResendDomain(); fetchInstCampaignHistory(); }}>🏛️ Instituciones</TabsTrigger>
               <TabsTrigger value="mutuas" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchMutuas(); checkResendDomain(); fetchMutuaCampaignHistory(); }}>🤝 Mutuas</TabsTrigger>
+              <TabsTrigger value="empresas" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchEmpresas(); checkResendDomain(); fetchEmpresaCampaignHistory(); }}>🏢 Empresas</TabsTrigger>
             </TabsList>
           </div>
 
@@ -2121,6 +2174,395 @@ export default function AdminDashboard() {
                                 {c.subject_b && <p className="truncate text-purple-400" title={c.subject_b}>B: {c.subject_b}</p>}
                               </td>
                               <td className="py-2 pr-3 text-xs text-gray-500">{c.regions_filter || "Todas"}</td>
+                              <td className="py-2 pr-3 text-center"><span className="text-emerald-400 font-semibold">{c.sent_count}</span></td>
+                              <td className="py-2 pr-3 text-center"><span className={c.failed_count > 0 ? "text-red-400 font-semibold" : "text-gray-500"}>{c.failed_count}</span></td>
+                              <td className="py-2 pr-3 text-center">
+                                <span className="text-blue-400 font-semibold">{c.opens}</span>
+                                {c.sent_count > 0 && <span className="text-gray-500 text-xs ml-1">({Math.round((c.opens / c.sent_count) * 100)}%)</span>}
+                              </td>
+                              <td className="py-2 text-center">
+                                <span className={`text-xs px-2 py-0.5 rounded-full ${c.status === "scheduled" ? "bg-amber-500/20 text-amber-300" : "bg-emerald-500/20 text-emerald-300"}`}>
+                                  {c.status === "scheduled" ? "⏰ Programado" : "✓ Enviado"}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+            </div>
+          </TabsContent>
+
+          {/* ── GRANDES EMPRESAS ── */}
+          <TabsContent value="empresas">
+            <div className="space-y-6">
+
+              {mutuaDeleteConfirmId === null && empresaDeleteConfirmId !== null && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+                  <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 max-w-sm w-full mx-4 space-y-4">
+                    <p className="text-white font-semibold text-center">¿Eliminar este contacto?</p>
+                    <div className="flex gap-3">
+                      <button onClick={() => setEmpresaDeleteConfirmId(null)} className="flex-1 border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl text-sm transition-all">Cancelar</button>
+                      <button onClick={async () => { await fetch(`/api/admin/empresas/${empresaDeleteConfirmId}`, { method: "DELETE" }); setEmpresaDeleteConfirmId(null); fetchEmpresas(); }}
+                        className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-all">Eliminar</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {empresaSelectedContact && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+                  <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 max-w-md w-full space-y-4 max-h-[80vh] overflow-y-auto">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-white font-semibold">{empresaSelectedContact.email}</h3>
+                      <button onClick={() => setEmpresaSelectedContact(null)} className="text-gray-400 hover:text-white text-lg">✕</button>
+                    </div>
+                    <div className="text-sm text-gray-400 space-y-1">
+                      {empresaSelectedContact.company && <p>🏢 {empresaSelectedContact.company}</p>}
+                      {empresaSelectedContact.opted_out && <p className="text-red-400">⛔ Baja registrada</p>}
+                    </div>
+                    <div>
+                      <p className="text-gray-300 text-xs font-semibold mb-2">Historial de envíos</p>
+                      {empresaContactHistoryLoading ? <p className="text-gray-400 text-xs">Cargando...</p>
+                        : empresaContactHistory.length === 0 ? <p className="text-gray-500 text-xs">Sin envíos registrados</p>
+                        : empresaContactHistory.map((h: any, i: number) => (
+                          <div key={i} className="bg-gray-700/50 rounded-lg px-3 py-2 mb-1 text-xs">
+                            <p className="text-gray-200 truncate">{h.subject}</p>
+                            <p className="text-gray-500">{new Date(h.sent_at).toLocaleString("es-ES")} · {h.opened_at ? <span className="text-emerald-400">Abierto ✓</span> : "Sin abrir"}</p>
+                          </div>
+                        ))
+                      }
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                {/* ── CONTACTOS ── */}
+                <Card className="bg-gray-800/50 border-gray-700">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className="text-white flex items-center gap-2">🏢 Contactos grandes empresas</CardTitle>
+                        <CardDescription className="text-gray-400">
+                          {empresas.filter(e => !e.opted_out).length} activos · {empresas.filter(e => e.opted_out).length} bajas · {empresas.length} total
+                        </CardDescription>
+                      </div>
+                      <button onClick={exportEmpresaCSV} title="Exportar CSV" className="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1 border border-emerald-500/30 px-2.5 py-1 rounded-lg hover:bg-emerald-500/10 transition-all">⬇ CSV</button>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex gap-2">
+                        <input type="email" placeholder="email@empresa.com" value={empresaNewEmail} onChange={e => setEmpresaNewEmail(e.target.value)}
+                          className="flex-1 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+                        <input type="text" placeholder="Nombre" value={empresaNewName} onChange={e => setEmpresaNewName(e.target.value)}
+                          className="w-28 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+                      </div>
+                      <div className="flex gap-2">
+                        <input type="text" placeholder="Empresa" value={empresaNewCompany} onChange={e => setEmpresaNewCompany(e.target.value)}
+                          className="flex-1 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+                        <button disabled={empresaAdding} onClick={async () => {
+                          setEmpresaAddError(null);
+                          if (!empresaNewEmail.includes("@")) { setEmpresaAddError("Email inválido"); return; }
+                          setEmpresaAdding(true);
+                          try {
+                            const r = await fetch("/api/admin/empresas", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: empresaNewEmail, name: empresaNewName, company: empresaNewCompany }) });
+                            if (r.ok) { setEmpresaNewEmail(""); setEmpresaNewName(""); setEmpresaNewCompany(""); fetchEmpresas(); }
+                            else { const d = await r.json().catch(() => ({})); setEmpresaAddError(d.message || `Error ${r.status}`); }
+                          } catch { setEmpresaAddError("Sin conexión"); } finally { setEmpresaAdding(false); }
+                        }} className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap">
+                          {empresaAdding ? "…" : "+ Añadir"}
+                        </button>
+                      </div>
+                    </div>
+                    {empresaAddError && <p className="text-red-400 text-xs px-1">{empresaAddError}</p>}
+
+                    <label className="block cursor-pointer bg-gray-700/50 hover:bg-gray-700 border border-dashed border-gray-600 hover:border-blue-500 rounded-lg px-3 py-2 text-sm text-gray-400 hover:text-gray-200 transition-all text-center">
+                      {empresaCsvImporting ? "Importando…" : "📥 Importar CSV (email, nombre, empresa)"}
+                      <input type="file" accept=".csv,.txt" className="hidden" onChange={async (e) => {
+                        const file = e.target.files?.[0]; if (!file) return;
+                        setEmpresaCsvImporting(true); setEmpresaCsvResult(null);
+                        try {
+                          const text = await file.text();
+                          const rows = text.split("\n").filter(l => l.trim()).map(line => {
+                            const p = line.split(/[,;]/).map(p => p.trim().replace(/^["']|["']$/g, ""));
+                            return { email: p[0] || "", name: p[1] || "", company: p[2] || "" };
+                          }).filter(r => r.email.includes("@"));
+                          const r = await fetch("/api/admin/empresas/import-csv", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ rows }) });
+                          if (r.ok) { setEmpresaCsvResult(await r.json()); fetchEmpresas(); }
+                        } catch { setEmpresaCsvResult({ imported: 0, skipped: -1 }); }
+                        finally { setEmpresaCsvImporting(false); e.target.value = ""; }
+                      }} />
+                    </label>
+                    {empresaCsvResult && (
+                      <p className="text-xs px-1">{empresaCsvResult.skipped === -1 ? <span className="text-red-400">❌ Error al importar</span> : <span className="text-emerald-400">✅ {empresaCsvResult.imported} importados · {empresaCsvResult.skipped} omitidos</span>}</p>
+                    )}
+
+                    <div className="flex gap-2 flex-wrap">
+                      <input type="text" placeholder="🔍 Buscar..." value={empresaSearch} onChange={e => setEmpresaSearch(e.target.value)}
+                        className="flex-1 min-w-[120px] bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-1.5 text-xs placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+                      <select value={empresaStatusFilter} onChange={e => setEmpresaStatusFilter(e.target.value as any)}
+                        className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none">
+                        <option value="all">Todos</option>
+                        <option value="active">Activos</option>
+                        <option value="baja">Bajas</option>
+                      </select>
+                      <select value={empresaCompanyFilter} onChange={e => setEmpresaCompanyFilter(e.target.value)}
+                        className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none">
+                        <option value="all">Todas las empresas</option>
+                        {Array.from(new Set(empresas.map(e => e.company).filter(Boolean))).sort().map(c => <option key={c} value={c}>{c}</option>)}
+                      </select>
+                    </div>
+
+                    <div className="max-h-[400px] overflow-y-auto space-y-1 pr-1">
+                      {empresaLoading ? (
+                        <p className="text-gray-400 text-sm text-center py-4">Cargando...</p>
+                      ) : (() => {
+                        const filtered = empresas.filter(e => {
+                          const matchSearch = !empresaSearch || e.email.toLowerCase().includes(empresaSearch.toLowerCase()) || (e.name || "").toLowerCase().includes(empresaSearch.toLowerCase()) || (e.company || "").toLowerCase().includes(empresaSearch.toLowerCase());
+                          const matchStatus = empresaStatusFilter === "all" || (empresaStatusFilter === "active" && !e.opted_out) || (empresaStatusFilter === "baja" && e.opted_out);
+                          const matchCompany = empresaCompanyFilter === "all" || e.company === empresaCompanyFilter;
+                          return matchSearch && matchStatus && matchCompany;
+                        });
+                        if (filtered.length === 0) return <p className="text-gray-400 text-sm text-center py-4">Sin resultados</p>;
+                        return filtered.map(e => (
+                          <div key={e.id}
+                            onClick={() => { setEmpresaSelectedContact(e); setEmpresaContactHistory([]); fetchEmpresaContactHistory(e.id); }}
+                            className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all ${e.opted_out ? "opacity-50 bg-gray-700/20 hover:bg-gray-700/30" : "bg-gray-700/50 hover:bg-gray-700"}`}>
+                            <div className="min-w-0 flex-1">
+                              {e.name && <p className="text-white text-xs font-semibold truncate">{e.name}</p>}
+                              <p className="text-gray-300 text-xs truncate">{e.email}</p>
+                              <div className="flex gap-1.5 mt-0.5 flex-wrap">
+                                {e.company && <span className="text-gray-500 text-xs">{e.company}</span>}
+                                {e.campaigns_sent > 0 && <span className="text-blue-400 text-xs bg-blue-500/10 px-1.5 rounded">📧 {e.campaigns_sent}</span>}
+                                {e.opted_out && <span className="text-red-400 text-xs">baja</span>}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-1 ml-2 shrink-0" onClick={ev => ev.stopPropagation()}>
+                              <button onClick={() => setEmpresaDeleteConfirmId(e.id)} className="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded hover:bg-red-500/20 transition-all">✕</button>
+                            </div>
+                          </div>
+                        ));
+                      })()}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* ── COMPOSER ── */}
+                <Card className="bg-gray-800/50 border-gray-700">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">✉️ Redactar campaña</CardTitle>
+                    <CardDescription className="text-gray-400">
+                      {empresaCampaignCompanies.length > 0
+                        ? `Empresas: ${empresaCampaignCompanies.join(", ")} · ${empresas.filter(e => !e.opted_out && empresaCampaignCompanies.includes(e.company)).length} destinatarios`
+                        : `Todas las activas · ${empresas.filter(e => !e.opted_out).length} destinatarios`}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex gap-2">
+                      <button onClick={async () => { await fetchEmpresaTemplates(); setEmpresaShowTemplates(!empresaShowTemplates); }}
+                        className="flex-1 border border-gray-600 text-gray-300 hover:bg-gray-700 py-1.5 rounded-lg text-xs font-medium transition-all">
+                        📋 {empresaShowTemplates ? "Ocultar plantillas" : `Mis plantillas (${empresaTemplates.length})`}
+                      </button>
+                      <button onClick={async () => {
+                        const name = prompt("Nombre de la plantilla:") || "";
+                        if (!name || !empresaSubject || !empresaBody) return;
+                        setEmpresaSavingTemplate(true);
+                        await fetch("/api/admin/empresa-templates", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, subject: empresaSubject, body: empresaBody }) });
+                        setEmpresaSavingTemplate(false); fetchEmpresaTemplates();
+                      }} disabled={empresaSavingTemplate || !empresaSubject.trim() || !empresaBody.trim()}
+                        className="border border-blue-500/40 text-blue-300 hover:bg-blue-500/10 disabled:opacity-40 py-1.5 px-3 rounded-lg text-xs font-medium transition-all whitespace-nowrap">
+                        {empresaSavingTemplate ? "…" : "💾 Guardar"}
+                      </button>
+                    </div>
+                    {empresaShowTemplates && empresaTemplates.length > 0 && (
+                      <div className="bg-gray-700/50 rounded-xl p-2 space-y-1 max-h-36 overflow-y-auto">
+                        {empresaTemplates.map(t => (
+                          <div key={t.id} className="flex items-center gap-2">
+                            <button onClick={() => { setEmpresaSubject(t.subject); setEmpresaBody(t.body); setEmpresaShowTemplates(false); }}
+                              className="flex-1 text-left text-xs text-gray-200 hover:text-white bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-lg transition-all truncate">{t.name}</button>
+                            <button onClick={async () => { await fetch(`/api/admin/empresa-templates/${t.id}`, { method: "DELETE" }); fetchEmpresaTemplates(); }}
+                              className="text-red-400 hover:text-red-300 text-xs px-1.5 py-1 rounded hover:bg-red-500/20">✕</button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {empresaShowTemplates && empresaTemplates.length === 0 && (
+                      <p className="text-gray-500 text-xs text-center py-2">Aún no hay plantillas guardadas</p>
+                    )}
+
+                    <div>
+                      <label className="text-gray-300 text-xs font-medium block mb-1">{empresaAbTest ? "Asunto A (50%)" : "Asunto"}</label>
+                      <input type="text" value={empresaSubject} onChange={e => setEmpresaSubject(e.target.value)}
+                        className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500" />
+                    </div>
+
+                    <div>
+                      <button onClick={() => setEmpresaAbTest(!empresaAbTest)}
+                        className={`text-xs px-3 py-1 rounded-lg border transition-all ${empresaAbTest ? "border-purple-500/50 text-purple-300 bg-purple-500/10" : "border-gray-600 text-gray-400 hover:text-gray-300 hover:bg-gray-700"}`}>
+                        🔀 {empresaAbTest ? "A/B activo — click para desactivar" : "Activar A/B testing (2 asuntos)"}
+                      </button>
+                      {empresaAbTest && (
+                        <div className="mt-2">
+                          <label className="text-gray-300 text-xs font-medium block mb-1">Asunto B (50% restante)</label>
+                          <input type="text" value={empresaSubjectB} onChange={e => setEmpresaSubjectB(e.target.value)}
+                            placeholder="Asunto alternativo..." className="w-full bg-gray-700 border border-purple-500/40 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500" />
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="text-gray-300 text-xs font-medium block mb-1">Cuerpo del mensaje</label>
+                      <textarea rows={8} value={empresaBody} onChange={e => setEmpresaBody(e.target.value)}
+                        className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 resize-y font-mono" />
+                    </div>
+
+                    <div>
+                      <label className="text-gray-300 text-xs font-medium block mb-1">Enviar solo a estas empresas <span className="text-gray-500">(vacío = todas)</span></label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {Array.from(new Set(empresas.filter(e => !e.opted_out).map(e => e.company).filter(Boolean))).sort().map(company => (
+                          <button key={company} onClick={() => setEmpresaCampaignCompanies(prev => prev.includes(company) ? prev.filter(c => c !== company) : [...prev, company])}
+                            className={`text-xs px-2.5 py-1 rounded-full border transition-all ${empresaCampaignCompanies.includes(company) ? "bg-blue-600 border-blue-500 text-white" : "border-gray-600 text-gray-400 hover:text-white hover:border-gray-400"}`}>
+                            {company}
+                          </button>
+                        ))}
+                        {empresaCampaignCompanies.length > 0 && (
+                          <button onClick={() => setEmpresaCampaignCompanies([])} className="text-xs px-2.5 py-1 rounded-full border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-all">✕ Limpiar</button>
+                        )}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-gray-300 text-xs font-medium block mb-1">Programar envío <span className="text-gray-500">(opcional)</span></label>
+                      <input type="datetime-local" value={empresaScheduledAt} onChange={e => setEmpresaScheduledAt(e.target.value)}
+                        className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500" />
+                    </div>
+
+                    {empresaResult && (
+                      <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3">
+                        {empresaResult.scheduled
+                          ? <p className="text-emerald-300 text-sm">🕐 Programado para {empresaResult.scheduledAt ? new Date(empresaResult.scheduledAt).toLocaleString("es-ES") : ""} · {empresaResult.recipients} destinatarios</p>
+                          : <p className="text-emerald-300 text-sm">✅ Enviado a <strong>{empresaResult.recipients}</strong> destinatarios</p>}
+                      </div>
+                    )}
+                    {empresaStatus === "error" && (
+                      <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3">
+                        <p className="text-red-300 text-sm">❌ Error al enviar. Revisa los logs.</p>
+                      </div>
+                    )}
+
+                    {empresaStatus === "idle" && (
+                      <button onClick={() => setEmpresaStatus("confirm")} disabled={!empresaSubject.trim() || !empresaBody.trim()}
+                        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-40 text-white font-semibold py-3 rounded-xl transition-all">
+                        {empresaScheduledAt ? "🕐 Programar envío" : "Preparar envío"} →
+                        ({empresaCampaignCompanies.length > 0
+                          ? empresas.filter(e => !e.opted_out && empresaCampaignCompanies.includes(e.company)).length
+                          : empresas.filter(e => !e.opted_out).length} destinatarios)
+                      </button>
+                    )}
+
+                    {empresaStatus === "confirm" && (
+                      <div className="space-y-3">
+                        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center">
+                          <p className="text-amber-300 text-sm font-semibold">¿Confirmas {empresaScheduledAt ? "la programación" : "el envío"}?</p>
+                          <p className="text-gray-400 text-xs mt-1">
+                            {empresaCampaignCompanies.length > 0 ? `Empresas: ${empresaCampaignCompanies.join(", ")} · ` : "Todas las activas · "}
+                            <strong className="text-white">
+                              {empresaCampaignCompanies.length > 0
+                                ? empresas.filter(e => !e.opted_out && empresaCampaignCompanies.includes(e.company)).length
+                                : empresas.filter(e => !e.opted_out).length} destinatarios
+                            </strong>
+                            {empresaAbTest && empresaSubjectB && " · A/B testing activo"}
+                          </p>
+                        </div>
+                        <div className="flex gap-3">
+                          <button onClick={() => setEmpresaStatus("idle")} className="flex-1 border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm">Cancelar</button>
+                          <button onClick={async () => {
+                            setEmpresaStatus("sending");
+                            try {
+                              const r = await fetch("/api/admin/send-empresa-campaign", {
+                                method: "POST", headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                  subject: empresaSubject, body: empresaBody,
+                                  companies: empresaCampaignCompanies.length > 0 ? empresaCampaignCompanies : undefined,
+                                  scheduledAt: empresaScheduledAt || undefined,
+                                  subjectB: empresaAbTest && empresaSubjectB ? empresaSubjectB : undefined,
+                                }),
+                              });
+                              const d = await r.json();
+                              setEmpresaResult(d); setEmpresaStatus("done"); fetchEmpresaCampaignHistory();
+                            } catch { setEmpresaStatus("error"); }
+                          }} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition-all text-sm">
+                            {empresaScheduledAt ? "🕐 Programar" : "✉️ Enviar ahora"}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {empresaStatus === "sending" && (
+                      <div className="text-center py-3">
+                        <div className="animate-spin w-7 h-7 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-2" />
+                        <p className="text-gray-300 text-sm">Preparando envío...</p>
+                      </div>
+                    )}
+
+                    {empresaStatus === "done" && (
+                      <button onClick={() => { setEmpresaStatus("idle"); setEmpresaResult(null); setEmpresaCampaignCompanies([]); setEmpresaScheduledAt(""); setEmpresaAbTest(false); setEmpresaSubjectB(""); }}
+                        className="w-full border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm">Nueva campaña</button>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* ── HISTORIAL ── */}
+              <Card className="bg-gray-800/50 border-gray-700">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-white flex items-center gap-2">📊 Historial de campañas</CardTitle>
+                      <CardDescription className="text-gray-400">Aperturas registradas vía webhook en tiempo real.</CardDescription>
+                    </div>
+                    <button onClick={fetchEmpresaCampaignHistory} className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1">
+                      <RefreshCw className="w-3 h-3" /> Actualizar
+                    </button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {empresaHistoryLoading ? (
+                    <p className="text-gray-400 text-sm text-center py-4">Cargando...</p>
+                  ) : empresaCampaignHistory.length === 0 ? (
+                    <p className="text-gray-400 text-sm text-center py-4">Aún no se ha enviado ninguna campaña</p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="text-gray-400 text-xs border-b border-gray-700">
+                            <th className="text-left pb-2 pr-3">Fecha</th>
+                            <th className="text-left pb-2 pr-3">Asunto</th>
+                            <th className="text-left pb-2 pr-3">Empresas</th>
+                            <th className="text-center pb-2 pr-3">Enviados</th>
+                            <th className="text-center pb-2 pr-3">Fallidos</th>
+                            <th className="text-center pb-2 pr-3">Aperturas</th>
+                            <th className="text-center pb-2">Estado</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-700/50">
+                          {empresaCampaignHistory.map((c: any) => (
+                            <tr key={c.id} className="text-gray-300 hover:bg-gray-700/20 transition-all">
+                              <td className="py-2 pr-3 text-xs text-gray-400 whitespace-nowrap">
+                                {new Date(c.sent_at).toLocaleDateString("es-ES", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                              </td>
+                              <td className="py-2 pr-3 max-w-[160px] text-xs">
+                                <p className="truncate" title={c.subject}>{c.subject}</p>
+                                {c.subject_b && <p className="truncate text-purple-400" title={c.subject_b}>B: {c.subject_b}</p>}
+                              </td>
+                              <td className="py-2 pr-3 text-xs text-gray-500">{c.companies_filter || "Todas"}</td>
                               <td className="py-2 pr-3 text-center"><span className="text-emerald-400 font-semibold">{c.sent_count}</span></td>
                               <td className="py-2 pr-3 text-center"><span className={c.failed_count > 0 ? "text-red-400 font-semibold" : "text-gray-500"}>{c.failed_count}</span></td>
                               <td className="py-2 pr-3 text-center">

@@ -4,7 +4,7 @@ import { createServer, type Server } from "http";
 import fs from "fs";
 import path from "path";
 import { storage } from "./storage";
-import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS, sendLeadWelcomeEmail, generateUnsubscribeToken, sendTrialExhaustedEmail, sendReactivationEmail, sendInstitutionEmail, sendMutuaEmail } from "./emailService";
+import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS, sendLeadWelcomeEmail, generateUnsubscribeToken, sendTrialExhaustedEmail, sendReactivationEmail, sendInstitutionEmail, sendMutuaEmail, sendEmpresaEmail } from "./emailService";
 import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog, conversations, messages } from "@shared/schema";
 import { emailLeads } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
@@ -1605,6 +1605,196 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
 <body><div class="box"><p style="font-size:36px;margin:0 0 16px">✅</p>
 <h1>Baja registrada</h1><p>Su mutua no volverá a recibir comunicaciones de NUXA.<br>Si en el futuro desea conocer nuestros servicios, puede contactarnos en <a href="https://nuxa.life">nuxa.life</a>.</p></div></body></html>`);
     } catch (e) { res.status(500).send("Error"); }
+  });
+
+  // ===== GRANDES EMPRESAS =====
+
+  app.get("/api/admin/empresas", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const r = await pool.query(`
+        SELECT ec.*, COUNT(eet.id)::int AS campaigns_sent
+        FROM empresa_contacts ec
+        LEFT JOIN empresa_email_tracking eet ON eet.contact_email = ec.email
+        GROUP BY ec.id ORDER BY ec.company, ec.email
+      `);
+      res.json(r.rows);
+    } catch { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.post("/api/admin/empresas", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { email, company, name } = req.body;
+    if (!email || !email.includes("@")) return res.status(400).json({ message: "Email inválido" });
+    try {
+      const r = await pool.query(
+        "INSERT INTO empresa_contacts (email, company, name) VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING RETURNING *",
+        [email.toLowerCase().trim(), company || null, name || null]
+      );
+      if (r.rows.length === 0) return res.status(409).json({ message: "Email ya existe" });
+      res.json(r.rows[0]);
+    } catch { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.delete("/api/admin/empresas/:id", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      await pool.query("DELETE FROM empresa_contacts WHERE id = $1", [parseInt(req.params.id)]);
+      res.json({ ok: true });
+    } catch { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.get("/api/admin/empresas/:id/history", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const contact = await pool.query("SELECT email FROM empresa_contacts WHERE id=$1", [parseInt(req.params.id)]);
+      if (contact.rows.length === 0) return res.status(404).json({ message: "No encontrado" });
+      const r = await pool.query(`
+        SELECT eet.subject_variant, eet.opened_at, eet.resend_message_id,
+               ech.subject, ech.sent_at, ech.id AS campaign_id
+        FROM empresa_email_tracking eet
+        JOIN empresa_campaign_history ech ON eet.campaign_id = ech.id
+        WHERE eet.contact_email = $1 ORDER BY ech.sent_at DESC
+      `, [contact.rows[0].email]);
+      res.json(r.rows);
+    } catch { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.get("/api/admin/empresas/export-csv", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const r = await pool.query("SELECT email, name, company, opted_out, created_at FROM empresa_contacts ORDER BY company, email");
+      const lines = ["email,nombre,empresa,estado,alta"];
+      for (const row of r.rows) {
+        lines.push([row.email, row.name || "", row.company || "",
+          row.opted_out ? "baja" : "activo",
+          row.created_at ? new Date(row.created_at).toISOString().split("T")[0] : ""
+        ].map(v => `"${v}"`).join(","));
+      }
+      res.setHeader("Content-Type", "text/csv; charset=utf-8");
+      res.setHeader("Content-Disposition", `attachment; filename="empresas-nuxa-${new Date().toISOString().split("T")[0]}.csv"`);
+      res.send("\uFEFF" + lines.join("\n"));
+    } catch { res.status(500).json({ message: "Error" }); }
+  });
+
+  async function executeEmpresaCampaignSend(campaignId: number, subject: string, body: string, contacts: any[], subjectB?: string) {
+    let sent = 0, failed = 0;
+    const half = subjectB ? Math.ceil(contacts.length / 2) : contacts.length;
+    for (let i = 0; i < contacts.length; i++) {
+      const contact = contacts[i];
+      const variant = (subjectB && i >= half) ? "b" : "a";
+      const usedSubject = variant === "b" && subjectB ? subjectB : subject;
+      const result = await sendEmpresaEmail({ email: contact.email, subject: usedSubject, body, empresaId: contact.id, campaignId });
+      if (result.ok) {
+        sent++;
+        await pool.query(
+          "INSERT INTO empresa_email_tracking (campaign_id, contact_email, resend_message_id, subject_variant) VALUES ($1,$2,$3,$4)",
+          [campaignId, contact.email, result.messageId || null, variant]
+        ).catch(() => {});
+      } else { failed++; }
+      await new Promise(resolve => setTimeout(resolve, 150));
+    }
+    await sendEmpresaEmail({ email: "rmportbou@gmail.com", subject: `[COPIA] ${subject}`, body, empresaId: 0, campaignId }).catch(() => {});
+    await pool.query(
+      "UPDATE empresa_campaign_history SET sent_count=$1, failed_count=$2, status='sent', sent_at=NOW() WHERE id=$3",
+      [sent, failed, campaignId]
+    );
+    console.log(`Empresa campaign #${campaignId}: sent=${sent} failed=${failed}`);
+  }
+
+  app.post("/api/admin/send-empresa-campaign", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { subject, body, companies, scheduledAt, subjectB } = req.body;
+    if (!subject || !body) return res.status(400).json({ message: "Subject y body requeridos" });
+    try {
+      let query = "SELECT * FROM empresa_contacts WHERE opted_out = false";
+      const params: any[] = [];
+      if (Array.isArray(companies) && companies.length > 0) { query += ` AND company = ANY($1)`; params.push(companies); }
+      query += " ORDER BY id";
+      const r = await pool.query(query, params);
+      const contacts = r.rows;
+      const companiesStr = (Array.isArray(companies) && companies.length > 0) ? companies.join(", ") : null;
+      const scheduledDate = scheduledAt ? new Date(scheduledAt) : null;
+      const isScheduled = scheduledDate && scheduledDate > new Date();
+      const campaignRow = await pool.query(
+        `INSERT INTO empresa_campaign_history (subject, subject_b, body, sent_count, failed_count, companies_filter, scheduled_at, status)
+         VALUES ($1,$2,$3,0,0,$4,$5,$6) RETURNING id`,
+        [subject, subjectB || null, body, companiesStr, scheduledDate, isScheduled ? "scheduled" : "sent"]
+      );
+      const campaignId: number = campaignRow.rows[0].id;
+      if (isScheduled) {
+        const delay = scheduledDate!.getTime() - Date.now();
+        setTimeout(() => executeEmpresaCampaignSend(campaignId, subject, body, contacts, subjectB || undefined), delay);
+        res.json({ scheduled: true, campaignId, scheduledAt: scheduledDate, recipients: contacts.length });
+      } else {
+        res.json({ sending: true, campaignId, recipients: contacts.length });
+        setImmediate(() => executeEmpresaCampaignSend(campaignId, subject, body, contacts, subjectB || undefined));
+      }
+    } catch (e) { console.error("send-empresa-campaign error:", e); res.status(500).json({ message: "Error" }); }
+  });
+
+  app.post("/api/admin/empresas/import-csv", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { rows } = req.body as { rows: { email: string; name?: string; company?: string }[] };
+    if (!Array.isArray(rows) || rows.length === 0) return res.status(400).json({ message: "Sin filas" });
+    let imported = 0, skipped = 0;
+    for (const row of rows) {
+      if (!row.email || !row.email.includes("@")) { skipped++; continue; }
+      try {
+        const r = await pool.query(
+          "INSERT INTO empresa_contacts (email, name, company) VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING RETURNING id",
+          [row.email.toLowerCase().trim(), row.name || null, row.company || null]
+        );
+        if (r.rows.length > 0) imported++; else skipped++;
+      } catch { skipped++; }
+    }
+    res.json({ imported, skipped });
+  });
+
+  app.get("/api/admin/empresa-templates", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try { const r = await pool.query("SELECT * FROM empresa_email_templates ORDER BY created_at DESC"); res.json(r.rows); }
+    catch { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.post("/api/admin/empresa-templates", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { name, subject, body } = req.body;
+    if (!name || !subject || !body) return res.status(400).json({ message: "Faltan campos" });
+    try {
+      const r = await pool.query("INSERT INTO empresa_email_templates (name, subject, body) VALUES ($1,$2,$3) RETURNING *", [name, subject, body]);
+      res.json(r.rows[0]);
+    } catch { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.delete("/api/admin/empresa-templates/:id", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try { await pool.query("DELETE FROM empresa_email_templates WHERE id=$1", [parseInt(req.params.id)]); res.json({ ok: true }); }
+    catch { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.get("/api/admin/empresa-campaign-history", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const r = await pool.query("SELECT * FROM empresa_campaign_history ORDER BY sent_at DESC LIMIT 20");
+      res.json(r.rows);
+    } catch { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.get("/api/unsubscribe-empresa", async (req, res) => {
+    try {
+      const uid = req.query.uid as string;
+      if (!uid) return res.status(400).send("Token inválido");
+      const id = parseInt(Buffer.from(uid, "base64url").toString(), 10);
+      if (isNaN(id)) return res.status(400).send("Token inválido");
+      await pool.query("UPDATE empresa_contacts SET opted_out = true, opted_out_at = NOW() WHERE id = $1", [id]);
+      res.send(`<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Baja confirmada – NUXA</title>
+<style>body{margin:0;font-family:'Segoe UI',sans-serif;background:#eff6ff;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+.box{background:#fff;border-radius:20px;padding:48px 40px;max-width:400px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);}
+h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;line-height:1.6;}a{color:#3b82f6;}</style></head>
+<body><div class="box"><p style="font-size:36px;margin:0 0 16px">✅</p>
+<h1>Baja registrada</h1><p>Su empresa no volverá a recibir comunicaciones de NUXA.<br>Si en el futuro desea conocer nuestros servicios, puede contactarnos en <a href="https://nuxa.life">nuxa.life</a>.</p></div></body></html>`);
+    } catch { res.status(500).send("Error"); }
   });
 
   // ===== CAMPAÑA DE REACTIVACIÓN =====

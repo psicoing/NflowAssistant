@@ -736,6 +736,80 @@ export async function sendMutuaEmail(params: {
 }
 
 // ---------------------------------------------------------------------------
+// Grandes Empresas campaign email
+// ---------------------------------------------------------------------------
+export async function sendEmpresaEmail(params: {
+  email: string;
+  subject: string;
+  body: string;
+  empresaId: number;
+  campaignId?: number;
+}): Promise<{ ok: boolean; messageId?: string }> {
+  try {
+    const resend = getResendClient();
+    const uid = Buffer.from(params.empresaId.toString()).toString("base64url");
+    const unsubscribeUrl = `https://nuxa.life/api/unsubscribe-empresa?uid=${uid}`;
+
+    const bodyHtml = params.body
+      .split("\n")
+      .filter(l => l.trim())
+      .map(l => `<p style="margin:0 0 14px;color:#374151;font-size:15px;line-height:1.7;">${l}</p>`)
+      .join("");
+
+    const html = `<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;background:#f0f4ff;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:32px 16px;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <tr><td style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:32px;text-align:center;">
+          <p style="margin:0 0 6px;font-size:28px;">🧠</p>
+          <p style="margin:0;font-size:22px;font-weight:700;color:#fff;">NUXA</p>
+          <p style="margin:6px 0 0;color:#bfdbfe;font-size:14px;">Apoyo emocional profesional · ISO 45003</p>
+        </td></tr>
+        <tr><td style="padding:32px;">
+          ${bodyHtml}
+        </td></tr>
+        <tr><td style="padding:20px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
+          <p style="margin:0;font-size:11px;color:#9ca3af;">
+            NUXA &middot; Empordajobs SL &middot; B02701100 &middot; nuxa.life<br>
+            <a href="${unsubscribeUrl}" style="color:#9ca3af;text-decoration:underline;">
+              No deseo recibir más comunicaciones de NUXA
+            </a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+    const tags = params.campaignId
+      ? [{ name: "campaign_id", value: `e${params.campaignId}` }]
+      : undefined;
+
+    const { data, error } = await resend.emails.send({
+      from: "NUXA <hola@nuxa.life>",
+      to: params.email,
+      subject: params.subject,
+      text: `${params.body}\n\n---\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
+      html,
+      ...(tags ? { tags } : {}),
+    });
+
+    if (error) {
+      console.error("sendEmpresaEmail Resend error:", error);
+      return { ok: false };
+    }
+    return { ok: true, messageId: data?.id };
+  } catch (err) {
+    console.error("sendEmpresaEmail error:", err);
+    return { ok: false };
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Reactivation email — sent manually from admin dashboard to trial users
 // ---------------------------------------------------------------------------
 export async function sendReactivationEmail(params: {
