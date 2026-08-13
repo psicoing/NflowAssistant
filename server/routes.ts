@@ -1365,17 +1365,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (event?.type === "email.opened" && event?.data?.tags) {
         const campaignTag = event.data.tags.find((t: any) => t.name === "campaign_id");
         if (campaignTag?.value) {
-          const campaignId = parseInt(campaignTag.value, 10);
+          const raw: string = campaignTag.value;
           const email = event.data?.to?.[0] || null;
-          if (!isNaN(campaignId)) {
+          let historyTable: string;
+          let trackingTable: string;
+          let numericId: number;
+          if (raw.startsWith("m")) {
+            historyTable = "mutua_campaign_history";
+            trackingTable = "mutua_email_tracking";
+            numericId = parseInt(raw.slice(1), 10);
+          } else if (raw.startsWith("e")) {
+            historyTable = "empresa_campaign_history";
+            trackingTable = "empresa_email_tracking";
+            numericId = parseInt(raw.slice(1), 10);
+          } else {
+            historyTable = "institution_campaign_history";
+            trackingTable = "institution_email_tracking";
+            numericId = parseInt(raw, 10);
+          }
+          if (!isNaN(numericId)) {
             await pool.query(
-              "UPDATE institution_campaign_history SET opens = opens + 1 WHERE id = $1",
-              [campaignId]
+              `UPDATE ${historyTable} SET opens = opens + 1 WHERE id = $1`,
+              [numericId]
             );
             if (email) {
               await pool.query(
-                "UPDATE institution_email_tracking SET opened_at = NOW() WHERE campaign_id = $1 AND contact_email = $2 AND opened_at IS NULL",
-                [campaignId, email]
+                `UPDATE ${trackingTable} SET opened_at = NOW() WHERE campaign_id = $1 AND contact_email = $2 AND opened_at IS NULL`,
+                [numericId, email]
               ).catch(() => {});
             }
           }
