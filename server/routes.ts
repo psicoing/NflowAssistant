@@ -1,6 +1,20 @@
 import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
+
+// Simple in-memory rate limiter for checkout endpoints
+const checkoutRateLimit = new Map<string, { count: number; resetAt: number }>();
+function isRateLimited(ip: string, maxPerHour = 5): boolean {
+  const now = Date.now();
+  const entry = checkoutRateLimit.get(ip);
+  if (!entry || now > entry.resetAt) {
+    checkoutRateLimit.set(ip, { count: 1, resetAt: now + 60 * 60 * 1000 });
+    return false;
+  }
+  if (entry.count >= maxPerHour) return true;
+  entry.count++;
+  return false;
+}
 import fs from "fs";
 import path from "path";
 import { storage } from "./storage";
@@ -2792,6 +2806,11 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
 
   // Stripe checkout session - simplificado para máxima compatibilidad
   app.post("/api/stripe/create-checkout-session", async (req, res) => {
+    const ip = req.ip || req.socket.remoteAddress || 'unknown';
+    if (isRateLimited(ip)) {
+      console.warn(`⚠️ Rate limit hit on create-checkout-session from IP: ${ip}`);
+      return res.status(429).json({ error: 'Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.' });
+    }
     try {
       const { referralCode, plan = 'basic' } = req.body;
       console.log(`Creating Stripe checkout session - plan: ${plan}`);
@@ -2899,6 +2918,11 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
 
   // Endpoint para compra de packs de preguntas (pago único)
   app.post("/api/stripe/create-pack-session", async (req, res) => {
+    const ip = req.ip || req.socket.remoteAddress || 'unknown';
+    if (isRateLimited(ip)) {
+      console.warn(`⚠️ Rate limit hit on create-pack-session from IP: ${ip}`);
+      return res.status(429).json({ error: 'Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.' });
+    }
     try {
       const { packType, email } = req.body;
       
