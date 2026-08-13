@@ -75,31 +75,8 @@ export default function StripeReturn() {
             throw new Error('Failed to activate subscription');
           }
         } else {
-          // Auto-activate for successful payments (Stripe webhook should handle this)
-          const response = await fetch('/api/stripe/auto-activate', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-          });
-
-          if (response.ok) {
-            setStatus('success');
-            setMessage('Tu cuenta NUXA ha sido activada exitosamente. Ya puedes acceder al chat de apoyo psicológico.');
-            
-            toast({
-              title: "¡Cuenta Activada!",
-              description: "Tu suscripción está activa. Redirigiendo al login...",
-              duration: 5000,
-            });
-
-            setTimeout(() => {
-              window.location.href = '/login';
-            }, 3000);
-          } else {
-            throw new Error('Auto-activation failed');
-          }
+          // No session_id in URL — payment cannot be verified
+          throw new Error('No session_id found in URL');
         }
 
       } catch (error) {

@@ -3028,7 +3028,6 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       }
       
       console.log("Event type:", event.type);
-      console.log("Full event data:", JSON.stringify(event, null, 2));
       
       // Múltiples eventos de Stripe que indican pago exitoso
       if (event.type === 'checkout.session.completed' || 
@@ -3404,17 +3403,47 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
         });
       }
 
-      // Update user subscription status
-      await storage.updateUserSubscription(userId, {
-        status: "active",
-        plan: "basic",
-        subscriptionId: sessionId || ("stripe_" + Date.now()),
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+      if (!sessionId) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Session ID requerido" 
+        });
+      }
+
+      // Verify payment with Stripe before activating
+      const Stripe = (await import('stripe')).default;
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+        apiVersion: '2025-08-27.basil',
       });
 
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+      if (session.payment_status !== 'paid') {
+        console.warn(`⚠️ capture-subscription: session ${sessionId} not paid (status: ${session.payment_status})`);
+        return res.status(402).json({ 
+          success: false, 
+          message: "El pago no ha sido confirmado por Stripe" 
+        });
+      }
+
+      // Read plan and expiry from session metadata
+      const plan = session.metadata?.plan || 'basic';
+      const expiresAt = plan === 'premium'
+        ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+        : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
+      await storage.updateUserSubscription(userId, {
+        status: "active",
+        plan,
+        subscriptionId: sessionId,
+        expiresAt
+      });
+
+      console.log(`✅ capture-subscription: user ${userId} activated on plan ${plan}`);
       res.json({ 
         success: true, 
-        message: "Suscripción activada exitosamente" 
+        message: "Suscripción activada exitosamente",
+        plan
       });
     } catch (error) {
       console.error("Stripe capture error:", error);
@@ -3425,7 +3454,7 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     }
   });
 
-  // Stripe auto-activation (for users with successful payments)
+  // Stripe auto-activation — only confirms already-active subscriptions, never grants new ones
   app.post("/api/stripe/auto-activate", async (req, res) => {
     try {
       const userId = req.session.userId;
@@ -3437,7 +3466,7 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
         });
       }
 
-      // Check if user already has active subscription
+      // Only return success if the user already has an active subscription
       const user = await storage.getUser(userId);
       if (user?.subscriptionStatus === 'active') {
         return res.json({ 
@@ -3446,23 +3475,16 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
         });
       }
 
-      // Auto-activate subscription
-      await storage.updateUserSubscription(userId, {
-        status: "active",
-        plan: "basic",
-        subscriptionId: "stripe_auto_" + Date.now(),
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
-      });
-
-      res.json({ 
-        success: true, 
-        message: "Suscripción activada automáticamente" 
+      // No active subscription — require a verified Stripe session
+      return res.status(402).json({ 
+        success: false, 
+        message: "No se encontró una suscripción activa. Completa el pago para activar tu cuenta." 
       });
     } catch (error) {
       console.error("Stripe auto-activation error:", error);
       res.status(500).json({ 
         success: false, 
-        message: "Error en activación automática" 
+        message: "Error en verificación de suscripción" 
       });
     }
   });
