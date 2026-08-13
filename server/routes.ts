@@ -4,7 +4,7 @@ import { createServer, type Server } from "http";
 import fs from "fs";
 import path from "path";
 import { storage } from "./storage";
-import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS, sendLeadWelcomeEmail, generateUnsubscribeToken, sendTrialExhaustedEmail, sendReactivationEmail, sendInstitutionEmail } from "./emailService";
+import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS, sendLeadWelcomeEmail, generateUnsubscribeToken, sendTrialExhaustedEmail, sendReactivationEmail, sendInstitutionEmail, sendMutuaEmail } from "./emailService";
 import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog, conversations, messages } from "@shared/schema";
 import { emailLeads } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
@@ -1401,6 +1401,209 @@ export async function registerRoutes(app: Express): Promise<Server> {
 h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;line-height:1.6;}a{color:#3b82f6;}</style></head>
 <body><div class="box"><p style="font-size:36px;margin:0 0 16px">✅</p>
 <h1>Baja registrada</h1><p>Su organización no volverá a recibir comunicaciones de NUXA.<br>Si en el futuro desea conocer nuestros servicios, puede contactarnos en <a href="https://nuxa.life">nuxa.life</a>.</p></div></body></html>`);
+    } catch (e) { res.status(500).send("Error"); }
+  });
+
+  // ===== MUTUAS =====
+
+  app.get("/api/admin/mutuas", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const r = await pool.query(`
+        SELECT mc.*, COUNT(met.id)::int AS campaigns_sent
+        FROM mutua_contacts mc
+        LEFT JOIN mutua_email_tracking met ON met.contact_email = mc.email
+        GROUP BY mc.id ORDER BY mc.region, mc.email
+      `);
+      res.json(r.rows);
+    } catch (e: any) { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.post("/api/admin/mutuas", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { email, region, name } = req.body;
+    if (!email || !email.includes("@")) return res.status(400).json({ message: "Email inválido" });
+    try {
+      const r = await pool.query(
+        "INSERT INTO mutua_contacts (email, region, name) VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING RETURNING *",
+        [email.toLowerCase().trim(), region || null, name || null]
+      );
+      if (r.rows.length === 0) return res.status(409).json({ message: "Email ya existe" });
+      res.json(r.rows[0]);
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.delete("/api/admin/mutuas/:id", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      await pool.query("DELETE FROM mutua_contacts WHERE id = $1", [parseInt(req.params.id)]);
+      res.json({ ok: true });
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.patch("/api/admin/mutuas/:id", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { contact_type, region, name } = req.body;
+    try {
+      const r = await pool.query(
+        "UPDATE mutua_contacts SET contact_type=COALESCE($1,contact_type), region=COALESCE($2,region), name=COALESCE($3,name) WHERE id=$4 RETURNING *",
+        [contact_type ?? null, region ?? null, name ?? null, parseInt(req.params.id)]
+      );
+      res.json(r.rows[0]);
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.get("/api/admin/mutuas/:id/history", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const contact = await pool.query("SELECT email FROM mutua_contacts WHERE id=$1", [parseInt(req.params.id)]);
+      if (contact.rows.length === 0) return res.status(404).json({ message: "No encontrado" });
+      const email = contact.rows[0].email;
+      const r = await pool.query(`
+        SELECT met.subject_variant, met.opened_at, met.resend_message_id,
+               mch.subject, mch.sent_at, mch.id AS campaign_id
+        FROM mutua_email_tracking met
+        JOIN mutua_campaign_history mch ON met.campaign_id = mch.id
+        WHERE met.contact_email = $1 ORDER BY mch.sent_at DESC
+      `, [email]);
+      res.json(r.rows);
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.get("/api/admin/mutuas/export-csv", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const r = await pool.query("SELECT email, name, region, contact_type, opted_out, created_at FROM mutua_contacts ORDER BY region, email");
+      const lines = ["email,nombre,mutua,tipo,estado,alta"];
+      for (const row of r.rows) {
+        lines.push([row.email, row.name || "", row.region || "", row.contact_type || "",
+          row.opted_out ? "baja" : "activo",
+          row.created_at ? new Date(row.created_at).toISOString().split("T")[0] : ""
+        ].map(v => `"${v}"`).join(","));
+      }
+      res.setHeader("Content-Type", "text/csv; charset=utf-8");
+      res.setHeader("Content-Disposition", `attachment; filename="mutuas-nuxa-${new Date().toISOString().split("T")[0]}.csv"`);
+      res.send("\uFEFF" + lines.join("\n"));
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  async function executeMutuaCampaignSend(campaignId: number, subject: string, body: string, contacts: any[], subjectB?: string) {
+    let sent = 0, failed = 0;
+    const half = subjectB ? Math.ceil(contacts.length / 2) : contacts.length;
+    for (let i = 0; i < contacts.length; i++) {
+      const contact = contacts[i];
+      const variant = (subjectB && i >= half) ? "b" : "a";
+      const usedSubject = variant === "b" && subjectB ? subjectB : subject;
+      const result = await sendMutuaEmail({ email: contact.email, subject: usedSubject, body, mutuaId: contact.id, campaignId });
+      if (result.ok) {
+        sent++;
+        await pool.query(
+          "INSERT INTO mutua_email_tracking (campaign_id, contact_email, resend_message_id, subject_variant) VALUES ($1,$2,$3,$4)",
+          [campaignId, contact.email, result.messageId || null, variant]
+        ).catch(() => {});
+      } else { failed++; }
+      await new Promise(resolve => setTimeout(resolve, 150));
+    }
+    await sendMutuaEmail({ email: "rmportbou@gmail.com", subject: `[COPIA] ${subject}`, body, mutuaId: 0, campaignId }).catch(() => {});
+    await pool.query(
+      "UPDATE mutua_campaign_history SET sent_count=$1, failed_count=$2, status='sent', sent_at=NOW() WHERE id=$3",
+      [sent, failed, campaignId]
+    );
+    console.log(`Mutua campaign #${campaignId}: sent=${sent} failed=${failed}`);
+  }
+
+  app.post("/api/admin/send-mutua-campaign", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { subject, body, regions, scheduledAt, subjectB } = req.body;
+    if (!subject || !body) return res.status(400).json({ message: "Subject y body requeridos" });
+    try {
+      let query = "SELECT * FROM mutua_contacts WHERE opted_out = false";
+      const params: any[] = [];
+      if (Array.isArray(regions) && regions.length > 0) { query += ` AND region = ANY($1)`; params.push(regions); }
+      query += " ORDER BY id";
+      const r = await pool.query(query, params);
+      const contacts = r.rows;
+      const regionsStr = (Array.isArray(regions) && regions.length > 0) ? regions.join(", ") : null;
+      const scheduledDate = scheduledAt ? new Date(scheduledAt) : null;
+      const isScheduled = scheduledDate && scheduledDate > new Date();
+      const campaignRow = await pool.query(
+        `INSERT INTO mutua_campaign_history (subject, subject_b, body, sent_count, failed_count, regions_filter, scheduled_at, status)
+         VALUES ($1,$2,$3,0,0,$4,$5,$6) RETURNING id`,
+        [subject, subjectB || null, body, regionsStr, scheduledDate, isScheduled ? "scheduled" : "sent"]
+      );
+      const campaignId: number = campaignRow.rows[0].id;
+      if (isScheduled) {
+        const delay = scheduledDate!.getTime() - Date.now();
+        setTimeout(() => executeMutuaCampaignSend(campaignId, subject, body, contacts, subjectB || undefined), delay);
+        res.json({ scheduled: true, campaignId, scheduledAt: scheduledDate, recipients: contacts.length });
+      } else {
+        res.json({ sending: true, campaignId, recipients: contacts.length });
+        setImmediate(() => executeMutuaCampaignSend(campaignId, subject, body, contacts, subjectB || undefined));
+      }
+    } catch (e) { console.error("send-mutua-campaign error:", e); res.status(500).json({ message: "Error" }); }
+  });
+
+  app.post("/api/admin/mutuas/import-csv", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { rows } = req.body as { rows: { email: string; name?: string; region?: string }[] };
+    if (!Array.isArray(rows) || rows.length === 0) return res.status(400).json({ message: "Sin filas" });
+    let imported = 0, skipped = 0;
+    for (const row of rows) {
+      if (!row.email || !row.email.includes("@")) { skipped++; continue; }
+      try {
+        const r = await pool.query(
+          "INSERT INTO mutua_contacts (email, name, region) VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING RETURNING id",
+          [row.email.toLowerCase().trim(), row.name || null, row.region || null]
+        );
+        if (r.rows.length > 0) imported++; else skipped++;
+      } catch { skipped++; }
+    }
+    res.json({ imported, skipped });
+  });
+
+  app.get("/api/admin/mutua-templates", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try { const r = await pool.query("SELECT * FROM mutua_email_templates ORDER BY created_at DESC"); res.json(r.rows); }
+    catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.post("/api/admin/mutua-templates", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { name, subject, body } = req.body;
+    if (!name || !subject || !body) return res.status(400).json({ message: "Faltan campos" });
+    try {
+      const r = await pool.query("INSERT INTO mutua_email_templates (name, subject, body) VALUES ($1,$2,$3) RETURNING *", [name, subject, body]);
+      res.json(r.rows[0]);
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.delete("/api/admin/mutua-templates/:id", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try { await pool.query("DELETE FROM mutua_email_templates WHERE id=$1", [parseInt(req.params.id)]); res.json({ ok: true }); }
+    catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.get("/api/admin/mutua-campaign-history", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const r = await pool.query("SELECT * FROM mutua_campaign_history ORDER BY sent_at DESC LIMIT 20");
+      res.json(r.rows);
+    } catch (e) { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.get("/api/unsubscribe-mutua", async (req, res) => {
+    try {
+      const uid = req.query.uid as string;
+      if (!uid) return res.status(400).send("Token inválido");
+      const id = parseInt(Buffer.from(uid, "base64url").toString(), 10);
+      if (isNaN(id)) return res.status(400).send("Token inválido");
+      await pool.query("UPDATE mutua_contacts SET opted_out = true, opted_out_at = NOW() WHERE id = $1", [id]);
+      res.send(`<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Baja confirmada – NUXA</title>
+<style>body{margin:0;font-family:'Segoe UI',sans-serif;background:#eff6ff;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+.box{background:#fff;border-radius:20px;padding:48px 40px;max-width:400px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);}
+h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;line-height:1.6;}a{color:#3b82f6;}</style></head>
+<body><div class="box"><p style="font-size:36px;margin:0 0 16px">✅</p>
+<h1>Baja registrada</h1><p>Su mutua no volverá a recibir comunicaciones de NUXA.<br>Si en el futuro desea conocer nuestros servicios, puede contactarnos en <a href="https://nuxa.life">nuxa.life</a>.</p></div></body></html>`);
     } catch (e) { res.status(500).send("Error"); }
   });
 

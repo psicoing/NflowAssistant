@@ -143,6 +143,40 @@ export default function AdminDashboard() {
   // Type filter
   const [instTypeFilter, setInstTypeFilter] = useState("all");
 
+  // ── Mutuas ──────────────────────────────────────────────────────────────
+  const [mutuas, setMutuas] = useState<any[]>([]);
+  const [mutuaLoading, setMutuaLoading] = useState(false);
+  const [mutuaNewEmail, setMutuaNewEmail] = useState("");
+  const [mutuaNewName, setMutuaNewName] = useState("");
+  const [mutuaNewRegion, setMutuaNewRegion] = useState("");
+  const [mutuaAddError, setMutuaAddError] = useState<string | null>(null);
+  const [mutuaAdding, setMutuaAdding] = useState(false);
+  const [mutuaSearch, setMutuaSearch] = useState("");
+  const [mutuaRegionFilter, setMutuaRegionFilter] = useState("all");
+  const [mutuaStatusFilter, setMutuaStatusFilter] = useState<"all"|"active"|"baja">("all");
+  const [mutuaTypeFilter, setMutuaTypeFilter] = useState("all");
+  const [mutuaDeleteConfirmId, setMutuaDeleteConfirmId] = useState<number | null>(null);
+  const [mutuaCsvImporting, setMutuaCsvImporting] = useState(false);
+  const [mutuaCsvResult, setMutuaCsvResult] = useState<{imported:number;skipped:number}|null>(null);
+  const [mutuaCampaignHistory, setMutuaCampaignHistory] = useState<any[]>([]);
+  const [mutuaHistoryLoading, setMutuaHistoryLoading] = useState(false);
+  const [mutuaPreviewOpen, setMutuaPreviewOpen] = useState(false);
+  const [mutuaSubject, setMutuaSubject] = useState("NUXA — Bienestar emocional para los equipos de su mutua");
+  const [mutuaBody, setMutuaBody] = useState(`Estimados/as,\n\nNos dirigimos a ustedes para presentarles NUXA (nuxa.life), una plataforma de apoyo emocional profesional diseñada para reducir el absentismo laboral por causas psicosociales.\n\nNUXA ofrece a las mutuas y sus empresas colaboradoras:\n• Acompañamiento emocional 24/7 para trabajadores\n• Reducción del absentismo por ansiedad, estrés y burnout\n• Cumplimiento ISO 45003 (gestión del riesgo psicosocial)\n• Informes agregados y anónimos para seguimiento\n\nNos gustaría explorar una colaboración que beneficie a las empresas mutualistas de su cartera.\n\n¿Podríamos concertar una llamada de 20 minutos?\n\nQuedamos a su disposición.\n\nEquipo NUXA\nhttps://nuxa.life`);
+  const [mutuaStatus, setMutuaStatus] = useState<"idle"|"confirm"|"sending"|"done"|"error">("idle");
+  const [mutuaResult, setMutuaResult] = useState<{sent?:number;failed?:number;scheduled?:boolean;scheduledAt?:string;recipients?:number}|null>(null);
+  const [mutuaTemplates, setMutuaTemplates] = useState<any[]>([]);
+  const [mutuaShowTemplates, setMutuaShowTemplates] = useState(false);
+  const [mutuaSaveTemplateName, setMutuaSaveTemplateName] = useState("");
+  const [mutuaSavingTemplate, setMutuaSavingTemplate] = useState(false);
+  const [mutuaCampaignRegions, setMutuaCampaignRegions] = useState<string[]>([]);
+  const [mutuaScheduledAt, setMutuaScheduledAt] = useState("");
+  const [mutuaAbTest, setMutuaAbTest] = useState(false);
+  const [mutuaSubjectB, setMutuaSubjectB] = useState("");
+  const [mutuaSelectedContact, setMutuaSelectedContact] = useState<any|null>(null);
+  const [mutuaContactHistory, setMutuaContactHistory] = useState<any[]>([]);
+  const [mutuaContactHistoryLoading, setMutuaContactHistoryLoading] = useState(false);
+
   const fetchInstitutions = async () => {
     setInstLoading(true);
     try {
@@ -180,6 +214,27 @@ export default function AdminDashboard() {
   };
 
   const exportInstCSV = () => window.open("/api/admin/institutions/export-csv", "_blank");
+
+  const fetchMutuas = async () => {
+    setMutuaLoading(true);
+    try { const r = await fetch("/api/admin/mutuas"); const d = await r.json(); setMutuas(Array.isArray(d) ? d : []); } catch {}
+    setMutuaLoading(false);
+  };
+  const fetchMutuaCampaignHistory = async () => {
+    setMutuaHistoryLoading(true);
+    try { const r = await fetch("/api/admin/mutua-campaign-history"); if (r.ok) setMutuaCampaignHistory(await r.json()); } catch {}
+    setMutuaHistoryLoading(false);
+  };
+  const fetchMutuaTemplates = async () => {
+    try { const r = await fetch("/api/admin/mutua-templates"); if (r.ok) setMutuaTemplates(await r.json()); } catch {}
+  };
+  const fetchMutuaContactHistory = async (id: number) => {
+    setMutuaContactHistoryLoading(true);
+    try { const r = await fetch(`/api/admin/mutuas/${id}/history`); if (r.ok) setMutuaContactHistory(await r.json()); else setMutuaContactHistory([]); }
+    catch { setMutuaContactHistory([]); }
+    setMutuaContactHistoryLoading(false);
+  };
+  const exportMutuaCSV = () => window.open("/api/admin/mutuas/export-csv", "_blank");
 
   useEffect(() => {
     checkAuthAndFetchStats();
@@ -516,6 +571,7 @@ export default function AdminDashboard() {
               <TabsTrigger value="content"       className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Contenido</TabsTrigger>
               <TabsTrigger value="campana"       className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={checkResendDomain}>📧 Campaña</TabsTrigger>
               <TabsTrigger value="instituciones" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchInstitutions(); checkResendDomain(); fetchInstCampaignHistory(); }}>🏛️ Instituciones</TabsTrigger>
+              <TabsTrigger value="mutuas" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchMutuas(); checkResendDomain(); fetchMutuaCampaignHistory(); }}>🤝 Mutuas</TabsTrigger>
             </TabsList>
           </div>
 
@@ -1655,6 +1711,407 @@ export default function AdminDashboard() {
                         </thead>
                         <tbody className="divide-y divide-gray-700/50">
                           {instCampaignHistory.map((c: any) => (
+                            <tr key={c.id} className="text-gray-300 hover:bg-gray-700/20 transition-all">
+                              <td className="py-2 pr-3 text-xs text-gray-400 whitespace-nowrap">
+                                {new Date(c.sent_at).toLocaleDateString("es-ES", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                              </td>
+                              <td className="py-2 pr-3 max-w-[160px] text-xs">
+                                <p className="truncate" title={c.subject}>{c.subject}</p>
+                                {c.subject_b && <p className="truncate text-purple-400" title={c.subject_b}>B: {c.subject_b}</p>}
+                              </td>
+                              <td className="py-2 pr-3 text-xs text-gray-500">{c.regions_filter || "Todas"}</td>
+                              <td className="py-2 pr-3 text-center"><span className="text-emerald-400 font-semibold">{c.sent_count}</span></td>
+                              <td className="py-2 pr-3 text-center"><span className={c.failed_count > 0 ? "text-red-400 font-semibold" : "text-gray-500"}>{c.failed_count}</span></td>
+                              <td className="py-2 pr-3 text-center">
+                                <span className="text-blue-400 font-semibold">{c.opens}</span>
+                                {c.sent_count > 0 && <span className="text-gray-500 text-xs ml-1">({Math.round((c.opens / c.sent_count) * 100)}%)</span>}
+                              </td>
+                              <td className="py-2 text-center">
+                                <span className={`text-xs px-2 py-0.5 rounded-full ${c.status === "scheduled" ? "bg-amber-500/20 text-amber-300" : "bg-emerald-500/20 text-emerald-300"}`}>
+                                  {c.status === "scheduled" ? "⏰ Programado" : "✓ Enviado"}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+            </div>
+          </TabsContent>
+
+          {/* ── MUTUAS ── */}
+          <TabsContent value="mutuas">
+            <div className="space-y-6">
+
+              {/* Delete confirm */}
+              {mutuaDeleteConfirmId !== null && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+                  <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 max-w-sm w-full mx-4 space-y-4">
+                    <p className="text-white font-semibold text-center">¿Eliminar este contacto?</p>
+                    <div className="flex gap-3">
+                      <button onClick={() => setMutuaDeleteConfirmId(null)} className="flex-1 border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl text-sm transition-all">Cancelar</button>
+                      <button onClick={async () => { await fetch(`/api/admin/mutuas/${mutuaDeleteConfirmId}`, { method: "DELETE" }); setMutuaDeleteConfirmId(null); fetchMutuas(); }}
+                        className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-all">Eliminar</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Contact detail modal */}
+              {mutuaSelectedContact && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+                  <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 max-w-md w-full space-y-4 max-h-[80vh] overflow-y-auto">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-white font-semibold">{mutuaSelectedContact.email}</h3>
+                      <button onClick={() => setMutuaSelectedContact(null)} className="text-gray-400 hover:text-white text-lg">✕</button>
+                    </div>
+                    <div className="text-sm text-gray-400 space-y-1">
+                      {mutuaSelectedContact.region && <p>🏢 {mutuaSelectedContact.region}</p>}
+                      {mutuaSelectedContact.opted_out && <p className="text-red-400">⛔ Baja registrada</p>}
+                    </div>
+                    <div>
+                      <p className="text-gray-300 text-xs font-semibold mb-2">Historial de envíos</p>
+                      {mutuaContactHistoryLoading ? <p className="text-gray-400 text-xs">Cargando...</p>
+                        : mutuaContactHistory.length === 0 ? <p className="text-gray-500 text-xs">Sin envíos registrados</p>
+                        : mutuaContactHistory.map((h: any, i: number) => (
+                          <div key={i} className="bg-gray-700/50 rounded-lg px-3 py-2 mb-1 text-xs">
+                            <p className="text-gray-200 truncate">{h.subject}</p>
+                            <p className="text-gray-500">{new Date(h.sent_at).toLocaleString("es-ES")} · {h.opened_at ? <span className="text-emerald-400">Abierto ✓</span> : "Sin abrir"}</p>
+                          </div>
+                        ))
+                      }
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                {/* ── PANEL IZQUIERDO: contactos ── */}
+                <Card className="bg-gray-800/50 border-gray-700">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className="text-white flex items-center gap-2">🤝 Contactos mutuas</CardTitle>
+                        <CardDescription className="text-gray-400">
+                          {mutuas.filter(m => !m.opted_out).length} activos · {mutuas.filter(m => m.opted_out).length} bajas · {mutuas.length} total
+                        </CardDescription>
+                      </div>
+                      <button onClick={exportMutuaCSV} title="Exportar CSV" className="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1 border border-emerald-500/30 px-2.5 py-1 rounded-lg hover:bg-emerald-500/10 transition-all">⬇ CSV</button>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {/* Añadir nuevo */}
+                    <div className="space-y-2">
+                      <div className="flex gap-2">
+                        <input type="email" placeholder="email@mutua.es" value={mutuaNewEmail} onChange={e => setMutuaNewEmail(e.target.value)}
+                          className="flex-1 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+                        <input type="text" placeholder="Nombre" value={mutuaNewName} onChange={e => setMutuaNewName(e.target.value)}
+                          className="w-28 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+                      </div>
+                      <div className="flex gap-2">
+                        <input type="text" placeholder="Mutua" value={mutuaNewRegion} onChange={e => setMutuaNewRegion(e.target.value)}
+                          className="flex-1 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+                        <button disabled={mutuaAdding} onClick={async () => {
+                          setMutuaAddError(null);
+                          if (!mutuaNewEmail.includes("@")) { setMutuaAddError("Email inválido"); return; }
+                          setMutuaAdding(true);
+                          try {
+                            const r = await fetch("/api/admin/mutuas", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: mutuaNewEmail, name: mutuaNewName, region: mutuaNewRegion }) });
+                            if (r.ok) { setMutuaNewEmail(""); setMutuaNewName(""); setMutuaNewRegion(""); fetchMutuas(); }
+                            else { const d = await r.json().catch(() => ({})); setMutuaAddError(d.message || `Error ${r.status}`); }
+                          } catch { setMutuaAddError("Sin conexión"); } finally { setMutuaAdding(false); }
+                        }} className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap">
+                          {mutuaAdding ? "…" : "+ Añadir"}
+                        </button>
+                      </div>
+                    </div>
+                    {mutuaAddError && <p className="text-red-400 text-xs px-1">{mutuaAddError}</p>}
+
+                    {/* CSV import */}
+                    <label className="block cursor-pointer bg-gray-700/50 hover:bg-gray-700 border border-dashed border-gray-600 hover:border-blue-500 rounded-lg px-3 py-2 text-sm text-gray-400 hover:text-gray-200 transition-all text-center">
+                      {mutuaCsvImporting ? "Importando…" : "📥 Importar CSV (email, nombre, mutua)"}
+                      <input type="file" accept=".csv,.txt" className="hidden" onChange={async (e) => {
+                        const file = e.target.files?.[0]; if (!file) return;
+                        setMutuaCsvImporting(true); setMutuaCsvResult(null);
+                        try {
+                          const text = await file.text();
+                          const rows = text.split("\n").filter(l => l.trim()).map(line => {
+                            const p = line.split(/[,;]/).map(p => p.trim().replace(/^["']|["']$/g, ""));
+                            return { email: p[0] || "", name: p[1] || "", region: p[2] || "" };
+                          }).filter(r => r.email.includes("@"));
+                          const r = await fetch("/api/admin/mutuas/import-csv", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ rows }) });
+                          if (r.ok) { setMutuaCsvResult(await r.json()); fetchMutuas(); }
+                        } catch { setMutuaCsvResult({ imported: 0, skipped: -1 }); }
+                        finally { setMutuaCsvImporting(false); e.target.value = ""; }
+                      }} />
+                    </label>
+                    {mutuaCsvResult && (
+                      <p className="text-xs px-1">{mutuaCsvResult.skipped === -1 ? <span className="text-red-400">❌ Error al importar</span> : <span className="text-emerald-400">✅ {mutuaCsvResult.imported} importados · {mutuaCsvResult.skipped} omitidos</span>}</p>
+                    )}
+
+                    {/* Search & filters */}
+                    <div className="flex gap-2 flex-wrap">
+                      <input type="text" placeholder="🔍 Buscar..." value={mutuaSearch} onChange={e => setMutuaSearch(e.target.value)}
+                        className="flex-1 min-w-[120px] bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-1.5 text-xs placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+                      <select value={mutuaStatusFilter} onChange={e => setMutuaStatusFilter(e.target.value as any)}
+                        className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none">
+                        <option value="all">Todos</option>
+                        <option value="active">Activos</option>
+                        <option value="baja">Bajas</option>
+                      </select>
+                      <select value={mutuaRegionFilter} onChange={e => setMutuaRegionFilter(e.target.value)}
+                        className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none">
+                        <option value="all">Todas las mutuas</option>
+                        {Array.from(new Set(mutuas.map(m => m.region).filter(Boolean))).sort().map(r => <option key={r} value={r}>{r}</option>)}
+                      </select>
+                    </div>
+
+                    {/* Lista */}
+                    <div className="max-h-[400px] overflow-y-auto space-y-1 pr-1">
+                      {mutuaLoading ? (
+                        <p className="text-gray-400 text-sm text-center py-4">Cargando...</p>
+                      ) : (() => {
+                        const filtered = mutuas.filter(m => {
+                          const matchSearch = !mutuaSearch || m.email.toLowerCase().includes(mutuaSearch.toLowerCase()) || (m.name || "").toLowerCase().includes(mutuaSearch.toLowerCase());
+                          const matchStatus = mutuaStatusFilter === "all" || (mutuaStatusFilter === "active" && !m.opted_out) || (mutuaStatusFilter === "baja" && m.opted_out);
+                          const matchRegion = mutuaRegionFilter === "all" || m.region === mutuaRegionFilter;
+                          return matchSearch && matchStatus && matchRegion;
+                        });
+                        if (filtered.length === 0) return <p className="text-gray-400 text-sm text-center py-4">Sin resultados</p>;
+                        return filtered.map(m => (
+                          <div key={m.id}
+                            onClick={() => { setMutuaSelectedContact(m); setMutuaContactHistory([]); fetchMutuaContactHistory(m.id); }}
+                            className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all ${m.opted_out ? "opacity-50 bg-gray-700/20 hover:bg-gray-700/30" : "bg-gray-700/50 hover:bg-gray-700"}`}>
+                            <div className="min-w-0 flex-1">
+                              {m.name && <p className="text-white text-xs font-semibold truncate">{m.name}</p>}
+                              <p className="text-gray-300 text-xs truncate">{m.email}</p>
+                              <div className="flex gap-1.5 mt-0.5 flex-wrap">
+                                {m.region && <span className="text-gray-500 text-xs">{m.region}</span>}
+                                {m.campaigns_sent > 0 && <span className="text-blue-400 text-xs bg-blue-500/10 px-1.5 rounded">📧 {m.campaigns_sent}</span>}
+                                {m.opted_out && <span className="text-red-400 text-xs">baja</span>}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-1 ml-2 shrink-0" onClick={e => e.stopPropagation()}>
+                              <button onClick={() => setMutuaDeleteConfirmId(m.id)} className="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded hover:bg-red-500/20 transition-all">✕</button>
+                            </div>
+                          </div>
+                        ));
+                      })()}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* ── PANEL DERECHO: composer ── */}
+                <Card className="bg-gray-800/50 border-gray-700">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">✉️ Redactar campaña</CardTitle>
+                    <CardDescription className="text-gray-400">
+                      {mutuaCampaignRegions.length > 0
+                        ? `Mutuas: ${mutuaCampaignRegions.join(", ")} · ${mutuas.filter(m => !m.opted_out && mutuaCampaignRegions.includes(m.region)).length} destinatarios`
+                        : `Todas las activas · ${mutuas.filter(m => !m.opted_out).length} destinatarios`}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {/* Templates */}
+                    <div className="flex gap-2">
+                      <button onClick={async () => { await fetchMutuaTemplates(); setMutuaShowTemplates(!mutuaShowTemplates); }}
+                        className="flex-1 border border-gray-600 text-gray-300 hover:bg-gray-700 py-1.5 rounded-lg text-xs font-medium transition-all">
+                        📋 {mutuaShowTemplates ? "Ocultar plantillas" : `Mis plantillas (${mutuaTemplates.length})`}
+                      </button>
+                      <button onClick={async () => {
+                        const name = mutuaSaveTemplateName || prompt("Nombre de la plantilla:") || "";
+                        if (!name || !mutuaSubject || !mutuaBody) return;
+                        setMutuaSavingTemplate(true);
+                        await fetch("/api/admin/mutua-templates", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, subject: mutuaSubject, body: mutuaBody }) });
+                        setMutuaSavingTemplate(false); setMutuaSaveTemplateName(""); fetchMutuaTemplates();
+                      }} disabled={mutuaSavingTemplate || !mutuaSubject.trim() || !mutuaBody.trim()}
+                        className="border border-blue-500/40 text-blue-300 hover:bg-blue-500/10 disabled:opacity-40 py-1.5 px-3 rounded-lg text-xs font-medium transition-all whitespace-nowrap">
+                        {mutuaSavingTemplate ? "…" : "💾 Guardar"}
+                      </button>
+                    </div>
+                    {mutuaShowTemplates && mutuaTemplates.length > 0 && (
+                      <div className="bg-gray-700/50 rounded-xl p-2 space-y-1 max-h-36 overflow-y-auto">
+                        {mutuaTemplates.map(t => (
+                          <div key={t.id} className="flex items-center gap-2">
+                            <button onClick={() => { setMutuaSubject(t.subject); setMutuaBody(t.body); setMutuaShowTemplates(false); }}
+                              className="flex-1 text-left text-xs text-gray-200 hover:text-white bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-lg transition-all truncate">{t.name}</button>
+                            <button onClick={async () => { await fetch(`/api/admin/mutua-templates/${t.id}`, { method: "DELETE" }); fetchMutuaTemplates(); }}
+                              className="text-red-400 hover:text-red-300 text-xs px-1.5 py-1 rounded hover:bg-red-500/20">✕</button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {mutuaShowTemplates && mutuaTemplates.length === 0 && (
+                      <p className="text-gray-500 text-xs text-center py-2">Aún no hay plantillas guardadas</p>
+                    )}
+
+                    {/* Asunto */}
+                    <div>
+                      <label className="text-gray-300 text-xs font-medium block mb-1">{mutuaAbTest ? "Asunto A (50% destinatarios)" : "Asunto"}</label>
+                      <input type="text" value={mutuaSubject} onChange={e => setMutuaSubject(e.target.value)}
+                        className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500" />
+                    </div>
+
+                    {/* A/B toggle */}
+                    <div>
+                      <button onClick={() => setMutuaAbTest(!mutuaAbTest)}
+                        className={`text-xs px-3 py-1 rounded-lg border transition-all ${mutuaAbTest ? "border-purple-500/50 text-purple-300 bg-purple-500/10" : "border-gray-600 text-gray-400 hover:text-gray-300 hover:bg-gray-700"}`}>
+                        🔀 {mutuaAbTest ? "A/B activo — click para desactivar" : "Activar A/B testing (2 asuntos)"}
+                      </button>
+                      {mutuaAbTest && (
+                        <div className="mt-2">
+                          <label className="text-gray-300 text-xs font-medium block mb-1">Asunto B (50% restante)</label>
+                          <input type="text" value={mutuaSubjectB} onChange={e => setMutuaSubjectB(e.target.value)}
+                            placeholder="Asunto alternativo..." className="w-full bg-gray-700 border border-purple-500/40 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Cuerpo */}
+                    <div>
+                      <label className="text-gray-300 text-xs font-medium block mb-1">Cuerpo del mensaje</label>
+                      <textarea rows={8} value={mutuaBody} onChange={e => setMutuaBody(e.target.value)}
+                        className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 resize-y font-mono" />
+                    </div>
+
+                    {/* Filtro por mutua */}
+                    <div>
+                      <label className="text-gray-300 text-xs font-medium block mb-1">Enviar solo a estas mutuas <span className="text-gray-500">(vacío = todas)</span></label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {Array.from(new Set(mutuas.filter(m => !m.opted_out).map(m => m.region).filter(Boolean))).sort().map(region => (
+                          <button key={region} onClick={() => setMutuaCampaignRegions(prev => prev.includes(region) ? prev.filter(r => r !== region) : [...prev, region])}
+                            className={`text-xs px-2.5 py-1 rounded-full border transition-all ${mutuaCampaignRegions.includes(region) ? "bg-blue-600 border-blue-500 text-white" : "border-gray-600 text-gray-400 hover:text-white hover:border-gray-400"}`}>
+                            {region}
+                          </button>
+                        ))}
+                        {mutuaCampaignRegions.length > 0 && (
+                          <button onClick={() => setMutuaCampaignRegions([])} className="text-xs px-2.5 py-1 rounded-full border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-all">✕ Limpiar</button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Programar */}
+                    <div>
+                      <label className="text-gray-300 text-xs font-medium block mb-1">Programar envío <span className="text-gray-500">(opcional)</span></label>
+                      <input type="datetime-local" value={mutuaScheduledAt} onChange={e => setMutuaScheduledAt(e.target.value)}
+                        className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500" />
+                    </div>
+
+                    {mutuaResult && (
+                      <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3">
+                        {mutuaResult.scheduled
+                          ? <p className="text-emerald-300 text-sm">🕐 Programado para {mutuaResult.scheduledAt ? new Date(mutuaResult.scheduledAt).toLocaleString("es-ES") : ""} · {mutuaResult.recipients} destinatarios</p>
+                          : <p className="text-emerald-300 text-sm">✅ Enviado a <strong>{mutuaResult.recipients}</strong> destinatarios</p>}
+                      </div>
+                    )}
+                    {mutuaStatus === "error" && (
+                      <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3">
+                        <p className="text-red-300 text-sm">❌ Error al enviar. Revisa los logs.</p>
+                      </div>
+                    )}
+
+                    {mutuaStatus === "idle" && (
+                      <button onClick={() => setMutuaStatus("confirm")} disabled={!mutuaSubject.trim() || !mutuaBody.trim()}
+                        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-40 text-white font-semibold py-3 rounded-xl transition-all">
+                        {mutuaScheduledAt ? "🕐 Programar envío" : "Preparar envío"} →
+                        ({mutuaCampaignRegions.length > 0
+                          ? mutuas.filter(m => !m.opted_out && mutuaCampaignRegions.includes(m.region)).length
+                          : mutuas.filter(m => !m.opted_out).length} destinatarios)
+                      </button>
+                    )}
+
+                    {mutuaStatus === "confirm" && (
+                      <div className="space-y-3">
+                        <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center">
+                          <p className="text-amber-300 text-sm font-semibold">¿Confirmas {mutuaScheduledAt ? "la programación" : "el envío"}?</p>
+                          <p className="text-gray-400 text-xs mt-1">
+                            {mutuaCampaignRegions.length > 0 ? `Mutuas: ${mutuaCampaignRegions.join(", ")} · ` : "Todas las activas · "}
+                            <strong className="text-white">
+                              {mutuaCampaignRegions.length > 0
+                                ? mutuas.filter(m => !m.opted_out && mutuaCampaignRegions.includes(m.region)).length
+                                : mutuas.filter(m => !m.opted_out).length} destinatarios
+                            </strong>
+                            {mutuaAbTest && mutuaSubjectB && " · A/B testing activo"}
+                          </p>
+                        </div>
+                        <div className="flex gap-3">
+                          <button onClick={() => setMutuaStatus("idle")} className="flex-1 border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm">Cancelar</button>
+                          <button onClick={async () => {
+                            setMutuaStatus("sending");
+                            try {
+                              const r = await fetch("/api/admin/send-mutua-campaign", {
+                                method: "POST", headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                  subject: mutuaSubject, body: mutuaBody,
+                                  regions: mutuaCampaignRegions.length > 0 ? mutuaCampaignRegions : undefined,
+                                  scheduledAt: mutuaScheduledAt || undefined,
+                                  subjectB: mutuaAbTest && mutuaSubjectB ? mutuaSubjectB : undefined,
+                                }),
+                              });
+                              const d = await r.json();
+                              setMutuaResult(d); setMutuaStatus("done"); fetchMutuaCampaignHistory();
+                            } catch { setMutuaStatus("error"); }
+                          }} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition-all text-sm">
+                            {mutuaScheduledAt ? "🕐 Programar" : "✉️ Enviar ahora"}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {mutuaStatus === "sending" && (
+                      <div className="text-center py-3">
+                        <div className="animate-spin w-7 h-7 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-2" />
+                        <p className="text-gray-300 text-sm">Preparando envío...</p>
+                      </div>
+                    )}
+
+                    {mutuaStatus === "done" && (
+                      <button onClick={() => { setMutuaStatus("idle"); setMutuaResult(null); setMutuaCampaignRegions([]); setMutuaScheduledAt(""); setMutuaAbTest(false); setMutuaSubjectB(""); }}
+                        className="w-full border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm">Nueva campaña</button>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* ── HISTORIAL ── */}
+              <Card className="bg-gray-800/50 border-gray-700">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-white flex items-center gap-2">📊 Historial de campañas</CardTitle>
+                      <CardDescription className="text-gray-400">Aperturas registradas vía webhook en tiempo real.</CardDescription>
+                    </div>
+                    <button onClick={fetchMutuaCampaignHistory} className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1">
+                      <RefreshCw className="w-3 h-3" /> Actualizar
+                    </button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {mutuaHistoryLoading ? (
+                    <p className="text-gray-400 text-sm text-center py-4">Cargando...</p>
+                  ) : mutuaCampaignHistory.length === 0 ? (
+                    <p className="text-gray-400 text-sm text-center py-4">Aún no se ha enviado ninguna campaña</p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="text-gray-400 text-xs border-b border-gray-700">
+                            <th className="text-left pb-2 pr-3">Fecha</th>
+                            <th className="text-left pb-2 pr-3">Asunto</th>
+                            <th className="text-left pb-2 pr-3">Mutuas</th>
+                            <th className="text-center pb-2 pr-3">Enviados</th>
+                            <th className="text-center pb-2 pr-3">Fallidos</th>
+                            <th className="text-center pb-2 pr-3">Aperturas</th>
+                            <th className="text-center pb-2">Estado</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-700/50">
+                          {mutuaCampaignHistory.map((c: any) => (
                             <tr key={c.id} className="text-gray-300 hover:bg-gray-700/20 transition-all">
                               <td className="py-2 pr-3 text-xs text-gray-400 whitespace-nowrap">
                                 {new Date(c.sent_at).toLocaleDateString("es-ES", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}

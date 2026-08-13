@@ -37,6 +37,77 @@ async function ensureAdminUser() {
   }
 }
 
+async function ensureMutuaTables() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS mutua_contacts (
+        id SERIAL PRIMARY KEY,
+        email TEXT UNIQUE NOT NULL,
+        name TEXT,
+        region TEXT,
+        opted_out BOOLEAN DEFAULT false,
+        opted_out_at TIMESTAMPTZ,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        contact_type TEXT DEFAULT 'mutua'
+      );
+      CREATE TABLE IF NOT EXISTS mutua_campaign_history (
+        id SERIAL PRIMARY KEY,
+        sent_at TIMESTAMPTZ DEFAULT NOW(),
+        subject TEXT NOT NULL,
+        sent_count INT DEFAULT 0,
+        failed_count INT DEFAULT 0,
+        opens INT DEFAULT 0,
+        regions_filter TEXT,
+        scheduled_at TIMESTAMPTZ,
+        status TEXT DEFAULT 'sent',
+        subject_b TEXT,
+        body TEXT
+      );
+      CREATE TABLE IF NOT EXISTS mutua_email_tracking (
+        id SERIAL PRIMARY KEY,
+        campaign_id INT REFERENCES mutua_campaign_history(id) ON DELETE CASCADE,
+        contact_email TEXT NOT NULL,
+        resend_message_id TEXT,
+        opened_at TIMESTAMPTZ,
+        subject_variant TEXT DEFAULT 'a'
+      );
+      CREATE TABLE IF NOT EXISTS mutua_email_templates (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        subject TEXT NOT NULL,
+        body TEXT NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+    log("Mutua tables ensured");
+  } catch (err: any) {
+    console.error("ensureMutuaTables error:", err.message);
+  }
+}
+
+async function ensureMutuaContacts() {
+  try {
+    await pool.query(`
+      INSERT INTO mutua_contacts (email, name, region, contact_type) VALUES
+      ('asepeyo@asepeyo.es',               '', 'Asepeyo',               'mutua'),
+      ('colaboradores@asepeyo.es',          '', 'Asepeyo',               'mutua'),
+      ('prensa@asepeyo.es',                 '', 'Asepeyo',               'mutua'),
+      ('atencionalcliente@ibermutua.es',    '', 'Ibermutua',             'mutua'),
+      ('emutua@fraternidad.com',            '', 'Fraternidad-Muprespa',  'mutua'),
+      ('info@mutuauniversal.net',           '', 'Mutua Universal',       'mutua'),
+      ('w.ivern@mutuabalear.es',            '', 'Mutua Balear',          'mutua'),
+      ('pamengual@mutuabalear.es',          '', 'Mutua Balear',          'mutua'),
+      ('pfonolla@mutuabalear.es',           '', 'Mutua Balear',          'mutua'),
+      ('comunicacion@mutuanavarra.es',      '', 'Mutua Navarra',         'mutua'),
+      ('mutualista@mutua-intercomarcal.com','', 'Mutua Intercomarcal',   'mutua')
+      ON CONFLICT (email) DO NOTHING
+    `);
+    log("Mutua contacts seeded");
+  } catch (err: any) {
+    console.error("ensureMutuaContacts error:", err.message);
+  }
+}
+
 async function ensureInstitutionTables() {
   try {
     await pool.query(`
@@ -232,6 +303,8 @@ app.use((req, res, next) => {
   await ensureAdminUser();
   await ensureInstitutionTables();
   await ensureInstitutionContacts();
+  await ensureMutuaTables();
+  await ensureMutuaContacts();
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
