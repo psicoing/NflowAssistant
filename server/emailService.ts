@@ -623,12 +623,16 @@ export async function sendInstitutionEmail(params: {
         <tr><td style="padding:32px;">
           ${bodyHtml}
         </td></tr>
-        <tr><td style="padding:20px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
-          <p style="margin:0;font-size:11px;color:#9ca3af;">
-            NUXA &middot; Empordajobs SL &middot; B02701100 &middot; nuxa.life<br>
-            <a href="${unsubscribeUrl}" style="color:#9ca3af;text-decoration:underline;">
-              No deseo recibir más comunicaciones de NUXA
-            </a>
+        <tr><td style="padding:24px 32px;background:#fff1f2;border-top:2px solid #fca5a5;text-align:center;">
+          <p style="margin:0 0 10px;font-size:11px;color:#9ca3af;">
+            NUXA &middot; Empordajobs SL &middot; B02701100 &middot; nuxa.life
+          </p>
+          <a href="${unsubscribeUrl}"
+            style="display:inline-block;padding:10px 24px;background:#dc2626;color:#ffffff;font-size:13px;font-weight:700;border-radius:8px;text-decoration:none;letter-spacing:0.3px;">
+            🚫 Darme de baja — no quiero recibir más emails
+          </a>
+          <p style="margin:10px 0 0;font-size:10px;color:#9ca3af;">
+            Un clic y tu dirección quedará excluida de todas nuestras comunicaciones.
           </p>
         </td></tr>
       </table>
@@ -697,12 +701,16 @@ export async function sendMutuaEmail(params: {
         <tr><td style="padding:32px;">
           ${bodyHtml}
         </td></tr>
-        <tr><td style="padding:20px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
-          <p style="margin:0;font-size:11px;color:#9ca3af;">
-            NUXA &middot; Empordajobs SL &middot; B02701100 &middot; nuxa.life<br>
-            <a href="${unsubscribeUrl}" style="color:#9ca3af;text-decoration:underline;">
-              No deseo recibir más comunicaciones de NUXA
-            </a>
+        <tr><td style="padding:24px 32px;background:#fff1f2;border-top:2px solid #fca5a5;text-align:center;">
+          <p style="margin:0 0 10px;font-size:11px;color:#9ca3af;">
+            NUXA &middot; Empordajobs SL &middot; B02701100 &middot; nuxa.life
+          </p>
+          <a href="${unsubscribeUrl}"
+            style="display:inline-block;padding:10px 24px;background:#dc2626;color:#ffffff;font-size:13px;font-weight:700;border-radius:8px;text-decoration:none;letter-spacing:0.3px;">
+            🚫 Darme de baja — no quiero recibir más emails
+          </a>
+          <p style="margin:10px 0 0;font-size:10px;color:#9ca3af;">
+            Un clic y tu dirección quedará excluida de todas nuestras comunicaciones.
           </p>
         </td></tr>
       </table>
@@ -771,12 +779,16 @@ export async function sendEmpresaEmail(params: {
         <tr><td style="padding:32px;">
           ${bodyHtml}
         </td></tr>
-        <tr><td style="padding:20px 32px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;">
-          <p style="margin:0;font-size:11px;color:#9ca3af;">
-            NUXA &middot; Empordajobs SL &middot; B02701100 &middot; nuxa.life<br>
-            <a href="${unsubscribeUrl}" style="color:#9ca3af;text-decoration:underline;">
-              No deseo recibir más comunicaciones de NUXA
-            </a>
+        <tr><td style="padding:24px 32px;background:#fff1f2;border-top:2px solid #fca5a5;text-align:center;">
+          <p style="margin:0 0 10px;font-size:11px;color:#9ca3af;">
+            NUXA &middot; Empordajobs SL &middot; B02701100 &middot; nuxa.life
+          </p>
+          <a href="${unsubscribeUrl}"
+            style="display:inline-block;padding:10px 24px;background:#dc2626;color:#ffffff;font-size:13px;font-weight:700;border-radius:8px;text-decoration:none;letter-spacing:0.3px;">
+            🚫 Darme de baja — no quiero recibir más emails
+          </a>
+          <p style="margin:10px 0 0;font-size:10px;color:#9ca3af;">
+            Un clic y tu dirección quedará excluida de todas nuestras comunicaciones.
           </p>
         </td></tr>
       </table>
