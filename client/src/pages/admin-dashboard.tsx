@@ -303,6 +303,24 @@ export default function AdminDashboard() {
     if (activeTab === "content") {
       if (resources.length === 0 && books.length === 0) fetchContent();
     }
+    if (activeTab === "instituciones") {
+      fetchInstitutions();
+      checkResendDomain();
+      fetchInstCampaignHistory();
+      fetchInstTemplates();
+    }
+    if (activeTab === "mutuas") {
+      fetchMutuas();
+      checkResendDomain();
+      fetchMutuaCampaignHistory();
+      fetchMutuaTemplates();
+    }
+    if (activeTab === "empresas") {
+      fetchEmpresas();
+      checkResendDomain();
+      fetchEmpresaCampaignHistory();
+      fetchEmpresaTemplates();
+    }
   }, [activeTab]);
 
   const fetchAdminUsers = async () => {
