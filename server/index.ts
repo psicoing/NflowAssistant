@@ -136,7 +136,25 @@ async function ensureEmpresasContacts() {
       ('cristina.garcia-aliste@airbus.com',    'Airbus',            'empresa'),
       ('rocio.caparros@airbus.com',            'Airbus',            'empresa'),
       ('comunicacion@correos.com',             'Correos',           'empresa'),
-      ('gabinetedeprensa@aena.es',             'AENA',              'empresa')
+      ('gabinetedeprensa@aena.es',             'AENA',              'empresa'),
+      ('carmen_munoz_martin@carrefour.com',    'Carrefour',         'empresa'),
+      ('paloma_moreno_reyes@carrefour.com',    'Carrefour',         'empresa'),
+      ('alejandro_martin_requena@carrefour.com','Carrefour',        'empresa'),
+      ('comunicacionexterna@carrefour.com',    'Carrefour',         'empresa'),
+      ('maria.quintin@carrefour.com',          'Carrefour',         'empresa'),
+      ('maria.cid@carrefour.com',              'Carrefour',         'empresa'),
+      ('comunicacioncorporativa@iberdrola.es', 'Iberdrola',         'empresa'),
+      ('carlos.deluis@seat.es',                'SEAT',              'empresa'),
+      ('pablo.cofan@seat.es',                  'SEAT',              'empresa'),
+      ('investorrelations@moeveglobal.com',    'Moeve Global',      'empresa'),
+      ('atencionproveedores@moeveglobal.com',  'Moeve Global',      'empresa'),
+      ('suppliers@moeveglobal.com',            'Moeve Global',      'empresa'),
+      ('desarrollo.proveedores@moeveglobal.com','Moeve Global',     'empresa'),
+      ('medios@moeveglobal.com',               'Moeve Global',      'empresa'),
+      ('accionistas@santander.com',            'Santander',         'empresa'),
+      ('comunicacion@gruposantander.com',      'Santander',         'empresa'),
+      ('web@ferrovial.com',                    'Ferrovial',         'empresa'),
+      ('ir@ferrovial.com',                     'Ferrovial',         'empresa')
       ON CONFLICT (email) DO NOTHING
     `);
     log("Empresa contacts seeded");
