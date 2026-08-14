@@ -56,10 +56,9 @@ export default function PsychologySeal({ size = 220 }: { size?: number }) {
       <text x={C} y={132} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="7.5" fontWeight="bold" fill={navy} letterSpacing="1.2">JOBDA GROUP SL</text>
       <text x={C} y={143} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="7" fill={navy} letterSpacing="0.8">B027001100</text>
       <line x1={C - 22} y1={150} x2={C + 22} y2={150} stroke={navy} strokeWidth="0.6" />
-      <text x={C} y={160} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="7.5" fontWeight="bold" fill={navy} letterSpacing="1.5">NUXA.LIFE</text>
-      <text x={C} y={170} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="6" fill={navy} letterSpacing="0.8">MEDICAL SOFTWARE</text>
-      <text x={C} y={179} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="5.5" fill={navy} letterSpacing="0.4">AEMPS · MDR (EU) 2017/745</text>
-      <text x={C} y={188} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="4.8" fill={navy} letterSpacing="0.2">REGULATORY CLASSIFICATION IN PROCESS</text>
+      <text x={C} y={160} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="7" fontWeight="bold" fill={navy} letterSpacing="1">MEDICAL SOFTWARE</text>
+      <text x={C} y={171} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="6" fill={navy} letterSpacing="0.5">AEMPS · MDR (EU) 2017/745</text>
+      <text x={C} y={182} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="5" fill={navy} letterSpacing="0.2">REGULATORY CLASSIFICATION IN PROCESS</text>
     </svg>
   );
 }

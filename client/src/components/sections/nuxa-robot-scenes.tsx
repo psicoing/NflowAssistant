@@ -174,31 +174,24 @@ function PsychologySeal() {
       <line x1={C - 22} y1={150} x2={C + 22} y2={150}
             stroke={navy} strokeWidth="0.6" />
 
-      {/* ── NUXA.LIFE  (baseline 160) ── */}
+      {/* ── MEDICAL SOFTWARE  (baseline 160) ── */}
       <text x={C} y={160} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="7.5" fontWeight="bold" fill={navy} letterSpacing="1.5">
-        NUXA.LIFE
-      </text>
-
-      {/* ── MEDICAL SOFTWARE  (baseline 170) ── */}
-      <text x={C} y={170} textAnchor="middle"
-            fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="6" fill={navy} letterSpacing="0.8">
+            fontSize="7" fontWeight="bold" fill={navy} letterSpacing="1">
         MEDICAL SOFTWARE
       </text>
 
-      {/* ── AEMPS · MDR (EU) 2017/745  (baseline 179) ── */}
-      <text x={C} y={179} textAnchor="middle"
+      {/* ── AEMPS · MDR (EU) 2017/745  (baseline 171) ── */}
+      <text x={C} y={171} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="5.5" fill={navy} letterSpacing="0.4">
+            fontSize="6" fill={navy} letterSpacing="0.5">
         AEMPS · MDR (EU) 2017/745
       </text>
 
-      {/* ── REGULATORY CLASSIFICATION IN PROCESS  (baseline 188) ── */}
-      <text x={C} y={188} textAnchor="middle"
+      {/* ── REGULATORY CLASSIFICATION IN PROCESS  (baseline 182) ── */}
+      <text x={C} y={182} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="4.8" fill={navy} letterSpacing="0.2">
+            fontSize="5" fill={navy} letterSpacing="0.2">
         REGULATORY CLASSIFICATION IN PROCESS
       </text>
     </svg>
