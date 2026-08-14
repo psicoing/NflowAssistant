@@ -174,25 +174,32 @@ function PsychologySeal() {
       <line x1={C - 22} y1={150} x2={C + 22} y2={150}
             stroke={navy} strokeWidth="0.6" />
 
-      {/* ── MEDICINES AGENCY TMT · A1  (baseline 160) ── */}
+      {/* ── NUXA.LIFE  (baseline 160) ── */}
       <text x={C} y={160} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="6.5" fill={navy} letterSpacing="0.5">
-        MEDICINES AGENCY TMT · A1
+            fontSize="7.5" fontWeight="bold" fill={navy} letterSpacing="1.5">
+        NUXA.LIFE
       </text>
 
-      {/* ── HEALTH LICENCE  (baseline 170) ── */}
+      {/* ── MEDICAL SOFTWARE  (baseline 170) ── */}
       <text x={C} y={170} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="7" fontWeight="bold" fill={navy} letterSpacing="1">
-        HEALTH LICENCE
+            fontSize="6" fill={navy} letterSpacing="0.8">
+        MEDICAL SOFTWARE
       </text>
 
-      {/* ── E-179287705  (baseline 180) — inner ring bottom = 188 ── */}
-      <text x={C} y={180} textAnchor="middle"
+      {/* ── AEMPS · MDR (EU) 2017/745  (baseline 179) ── */}
+      <text x={C} y={179} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="6.5" fill={navy} letterSpacing="0.6">
-        E-179287705
+            fontSize="5.5" fill={navy} letterSpacing="0.4">
+        AEMPS · MDR (EU) 2017/745
+      </text>
+
+      {/* ── REGULATORY CLASSIFICATION IN PROCESS  (baseline 188) ── */}
+      <text x={C} y={188} textAnchor="middle"
+            fontFamily="'Georgia', 'Times New Roman', serif"
+            fontSize="4.8" fill={navy} letterSpacing="0.2">
+        REGULATORY CLASSIFICATION IN PROCESS
       </text>
     </svg>
   );
