@@ -8,7 +8,7 @@ export default function PsychologySeal({ size = 220 }: { size?: number }) {
   const Ro  = 106;
   const R1  = 103;
   const R2  = 97;
-  const Rt  = 95;
+  const Rt  = 90;
   const R3  = 78;
 
   const topPath = `M ${C - Rt},${C} A ${Rt},${Rt} 0 0,1 ${C + Rt},${C}`;
@@ -42,7 +42,7 @@ export default function PsychologySeal({ size = 220 }: { size?: number }) {
       <text x={C - R3} y={C + 4} textAnchor="middle" fontFamily="Georgia, serif" fontSize="12" fill={navy}>✦</text>
       <text x={C + R3} y={C + 4} textAnchor="middle" fontFamily="Georgia, serif" fontSize="12" fill={navy}>✦</text>
 
-      <text fontFamily="'Georgia','Times New Roman',serif" fontSize="10.5" fontWeight="bold" fill={navy} letterSpacing="2" textAnchor="middle">
+      <text fontFamily="'Georgia','Times New Roman',serif" fontSize="10.5" fontWeight="bold" fill={navy} letterSpacing="3.8" textAnchor="middle">
         <textPath href="#seal-arc-t" startOffset="50%">LICENSED PSYCHOLOGIST</textPath>
       </text>
       <text fontFamily="'Georgia','Times New Roman',serif" fontSize="10" fontWeight="bold" fill={navy} letterSpacing="3" textAnchor="middle">
@@ -56,10 +56,10 @@ export default function PsychologySeal({ size = 220 }: { size?: number }) {
       <text x={C} y={132} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="7.5" fontWeight="bold" fill={navy} letterSpacing="1.2">JOBDA GROUP SL</text>
       <text x={C} y={143} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="7" fill={navy} letterSpacing="0.8">B027001100</text>
       <line x1={C - 26} y1={148} x2={C + 26} y2={148} stroke={navy} strokeWidth="0.6" />
-      <text x={C} y={157} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="7.5" fontWeight="bold" fill={navy} letterSpacing="1">MEDICAL SOFTWARE</text>
-      <text x={C} y={167} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="6.5" fill={navy} letterSpacing="0.5">AEMPS · MDR (EU) 2017/745</text>
-      <text x={C} y={176} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="5.2" fill={navy} letterSpacing="0.3">REGULATORY CLASSIFICATION</text>
-      <text x={C} y={185} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="5.5" fontWeight="bold" fill={navy} letterSpacing="1.8">IN PROCESS</text>
+      <text x={C} y={152} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="7.5" fontWeight="bold" fill={navy} letterSpacing="0.5">MEDICAL SOFTWARE</text>
+      <text x={C} y={162} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="6.5" fill={navy} letterSpacing="0.2">AEMPS · MDR (EU) 2017/745</text>
+      <text x={C} y={171} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="5.2" fill={navy} letterSpacing="0.1">REGULATORY CLASSIFICATION</text>
+      <text x={C} y={180} textAnchor="middle" fontFamily="'Georgia','Times New Roman',serif" fontSize="5.5" fontWeight="bold" fill={navy} letterSpacing="1">IN PROCESS</text>
     </svg>
   );
 }

@@ -73,7 +73,7 @@ function PsychologySeal() {
   const Ro  = 106;  // background fill
   const R1  = 103;  // outer thick border  (strokeWidth 5.5)
   const R2  = 97;   // thin companion ring just inside thick border (strokeWidth 1)
-  const Rt  = 95;   // arc text path lives between R2 and R3
+  const Rt  = 90;   // arc text path lives between R2 and R3
   const R3  = 78;   // inner content ring  (strokeWidth 0.8 — very thin)
 
   // inner ring bottom = C + R3 = 188  → all content must stay below C − R3 = 32 and above 188
@@ -126,7 +126,7 @@ function PsychologySeal() {
       {/* ══ TOP ARC: "LICENSED PSYCHOLOGIST" ══ */}
       <text
         fontFamily="'Georgia', 'Times New Roman', serif"
-        fontSize="10.5" fontWeight="bold" fill={navy} letterSpacing="2" textAnchor="middle"
+        fontSize="10.5" fontWeight="bold" fill={navy} letterSpacing="3.8" textAnchor="middle"
       >
         <textPath href="#seal-arc-t" startOffset="50%">LICENSED PSYCHOLOGIST</textPath>
       </text>
@@ -174,31 +174,31 @@ function PsychologySeal() {
       <line x1={C - 26} y1={148} x2={C + 26} y2={148}
             stroke={navy} strokeWidth="0.6" />
 
-      {/* ── MEDICAL SOFTWARE  (baseline 157) ── */}
-      <text x={C} y={157} textAnchor="middle"
+      {/* ── MEDICAL SOFTWARE  (baseline 152) ── */}
+      <text x={C} y={152} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="7.5" fontWeight="bold" fill={navy} letterSpacing="1">
+            fontSize="7.5" fontWeight="bold" fill={navy} letterSpacing="0.5">
         MEDICAL SOFTWARE
       </text>
 
-      {/* ── AEMPS · MDR (EU) 2017/745  (baseline 167) ── */}
-      <text x={C} y={167} textAnchor="middle"
+      {/* ── AEMPS · MDR (EU) 2017/745  (baseline 162) ── */}
+      <text x={C} y={162} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="6.5" fill={navy} letterSpacing="0.5">
+            fontSize="6.5" fill={navy} letterSpacing="0.2">
         AEMPS · MDR (EU) 2017/745
       </text>
 
-      {/* ── REGULATORY CLASSIFICATION  (baseline 176, ~86px available) ── */}
-      <text x={C} y={176} textAnchor="middle"
+      {/* ── REGULATORY CLASSIFICATION  (baseline 171) ── */}
+      <text x={C} y={171} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="5.2" fill={navy} letterSpacing="0.3">
+            fontSize="5.2" fill={navy} letterSpacing="0.1">
         REGULATORY CLASSIFICATION
       </text>
 
-      {/* ── IN PROCESS  (baseline 185, ~43px available — spaced to fill) ── */}
-      <text x={C} y={185} textAnchor="middle"
+      {/* ── IN PROCESS  (baseline 180) ── */}
+      <text x={C} y={180} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="5.5" fontWeight="bold" fill={navy} letterSpacing="1.8">
+            fontSize="5.5" fontWeight="bold" fill={navy} letterSpacing="1">
         IN PROCESS
       </text>
     </svg>
