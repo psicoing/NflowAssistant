@@ -2358,6 +2358,7 @@ export default function AdminDashboard() {
                               <p className="text-gray-300 text-xs truncate">{e.email}</p>
                               <div className="flex gap-1.5 mt-0.5 flex-wrap">
                                 {e.company && <span className="text-gray-500 text-xs">{e.company}</span>}
+                                {e.language === 'en_fr' && <span className="text-yellow-300 text-xs bg-yellow-500/15 px-1.5 rounded font-semibold">EN·FR</span>}
                                 {e.campaigns_sent > 0 && <span className="text-blue-400 text-xs bg-blue-500/10 px-1.5 rounded">📧 {e.campaigns_sent}</span>}
                                 {e.opted_out && <span className="text-red-400 text-xs">baja</span>}
                               </div>

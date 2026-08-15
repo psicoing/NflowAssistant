@@ -105,6 +105,10 @@ async function ensureEmpresasTables() {
         created_at TIMESTAMPTZ DEFAULT NOW()
       );
     `);
+    // Add language column if the table already existed without it
+    await pool.query(`
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS language TEXT;
+    `);
     log("Empresa tables ensured");
   } catch (err: any) {
     console.error("ensureEmpresasTables error:", err.message);
@@ -154,8 +158,25 @@ async function ensureEmpresasContacts() {
       ('accionistas@santander.com',            'Santander',         'empresa'),
       ('comunicacion@gruposantander.com',      'Santander',         'empresa'),
       ('web@ferrovial.com',                    'Ferrovial',         'empresa'),
-      ('ir@ferrovial.com',                     'Ferrovial',         'empresa')
+      ('ir@ferrovial.com',                     'Ferrovial',         'empresa'),
+      ('press@nvidia.com',                              'NVIDIA',   'empresa'),
+      ('industry-analyst-relations@nvidia.com',         'NVIDIA',   'empresa'),
+      ('enterprise-pr@nvidia.com',                      'NVIDIA',   'empresa'),
+      ('consumer-pr@nvidia.com',                        'NVIDIA',   'empresa'),
+      ('embedded-pr@nvidia.com',                        'NVIDIA',   'empresa'),
+      ('auto-pr@nvidia.com',                            'NVIDIA',   'empresa'),
+      ('emea-pr@nvidia.com',                            'NVIDIA',   'empresa'),
+      ('latam-pr@nvidia.com',                           'NVIDIA',   'empresa'),
+      ('ir@nvidia.com',                                 'NVIDIA',   'empresa'),
+      ('info@nvidia.com',                               'NVIDIA',   'empresa'),
+      ('press@walmart.com',                             'Walmart',  'empresa'),
+      ('ir@walmart.com',                                'Walmart',  'empresa')
       ON CONFLICT (email) DO NOTHING
+    `);
+    // Mark international contacts as bilingual EN·FR
+    await pool.query(`
+      UPDATE empresa_contacts SET language = 'en_fr'
+      WHERE company IN ('NVIDIA', 'Walmart') AND (language IS NULL OR language != 'en_fr')
     `);
     log("Empresa contacts seeded");
   } catch (err: any) {
