@@ -214,7 +214,7 @@ export function NuxaRobotForestSection() {
         <div
           translate="no"
           lang="en"
-          className="absolute left-[5%] sm:left-[8%] top-1/2 -translate-y-1/2 w-[110px] sm:w-[140px] md:w-[160px] select-none pointer-events-none"
+          className="absolute left-[5%] sm:left-[8%] top-1/2 -translate-y-1/2 w-[74px] sm:w-[93px] md:w-[107px] select-none pointer-events-none"
           style={{ filter: "drop-shadow(0 4px 24px rgba(0,0,0,0.55))" }}
         >
           <PsychologySeal />
