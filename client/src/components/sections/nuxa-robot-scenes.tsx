@@ -152,8 +152,8 @@ function PsychologySeal() {
       <text x={C} y={114} textAnchor="middle"
             fontFamily="Georgia, serif" fontSize="7" fill={navy}>◆</text>
 
-      {/* ── top rule — sits 4px below diamond ── */}
-      <line x1={C - 28} y1={121} x2={C + 28} y2={121}
+      {/* ── top rule ── */}
+      <line x1={C - 35} y1={121} x2={C + 35} y2={121}
             stroke={navy} strokeWidth="0.9" />
 
       {/* ── JOBDA GROUP SL  (baseline 132) ── */}
@@ -170,29 +170,36 @@ function PsychologySeal() {
         B027001100
       </text>
 
-      {/* ── mid separator rule  (y=150, 7px below baseline) ── */}
-      <line x1={C - 22} y1={150} x2={C + 22} y2={150}
+      {/* ── mid separator rule  (y=148) ── */}
+      <line x1={C - 26} y1={148} x2={C + 26} y2={148}
             stroke={navy} strokeWidth="0.6" />
 
-      {/* ── MEDICAL SOFTWARE  (baseline 160) ── */}
-      <text x={C} y={160} textAnchor="middle"
+      {/* ── MEDICAL SOFTWARE  (baseline 157) ── */}
+      <text x={C} y={157} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="7" fontWeight="bold" fill={navy} letterSpacing="1">
+            fontSize="7.5" fontWeight="bold" fill={navy} letterSpacing="1">
         MEDICAL SOFTWARE
       </text>
 
-      {/* ── AEMPS · MDR (EU) 2017/745  (baseline 171) ── */}
-      <text x={C} y={171} textAnchor="middle"
+      {/* ── AEMPS · MDR (EU) 2017/745  (baseline 167) ── */}
+      <text x={C} y={167} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="6" fill={navy} letterSpacing="0.5">
+            fontSize="6.5" fill={navy} letterSpacing="0.5">
         AEMPS · MDR (EU) 2017/745
       </text>
 
-      {/* ── REGULATORY CLASSIFICATION IN PROCESS  (baseline 182) ── */}
-      <text x={C} y={182} textAnchor="middle"
+      {/* ── REGULATORY CLASSIFICATION  (baseline 176, ~86px available) ── */}
+      <text x={C} y={176} textAnchor="middle"
             fontFamily="'Georgia', 'Times New Roman', serif"
-            fontSize="5" fill={navy} letterSpacing="0.2">
-        REGULATORY CLASSIFICATION IN PROCESS
+            fontSize="5.2" fill={navy} letterSpacing="0.3">
+        REGULATORY CLASSIFICATION
+      </text>
+
+      {/* ── IN PROCESS  (baseline 185, ~43px available — spaced to fill) ── */}
+      <text x={C} y={185} textAnchor="middle"
+            fontFamily="'Georgia', 'Times New Roman', serif"
+            fontSize="5.5" fontWeight="bold" fill={navy} letterSpacing="1.8">
+        IN PROCESS
       </text>
     </svg>
   );
