@@ -73,7 +73,7 @@ function PsychologySeal() {
   const Ro  = 106;  // background fill
   const R1  = 103;  // outer thick border  (strokeWidth 5.5)
   const R2  = 97;   // thin companion ring just inside thick border (strokeWidth 1)
-  const Rt  = 90;   // arc text path lives between R2 and R3
+  const Rt  = 95;   // arc text path lives between R2 and R3
   const R3  = 78;   // inner content ring  (strokeWidth 0.8 — very thin)
 
   // inner ring bottom = C + R3 = 188  → all content must stay below C − R3 = 32 and above 188
@@ -126,7 +126,7 @@ function PsychologySeal() {
       {/* ══ TOP ARC: "LICENSED PSYCHOLOGIST" ══ */}
       <text
         fontFamily="'Georgia', 'Times New Roman', serif"
-        fontSize="10.5" fontWeight="bold" fill={navy} letterSpacing="3.8" textAnchor="middle"
+        fontSize="10.5" fontWeight="bold" fill={navy} letterSpacing="2" textAnchor="middle"
       >
         <textPath href="#seal-arc-t" startOffset="50%">LICENSED PSYCHOLOGIST</textPath>
       </text>

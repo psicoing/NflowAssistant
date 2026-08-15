@@ -8,7 +8,7 @@ export default function PsychologySeal({ size = 220 }: { size?: number }) {
   const Ro  = 106;
   const R1  = 103;
   const R2  = 97;
-  const Rt  = 90;
+  const Rt  = 95;
   const R3  = 78;
 
   const topPath = `M ${C - Rt},${C} A ${Rt},${Rt} 0 0,1 ${C + Rt},${C}`;
@@ -42,7 +42,7 @@ export default function PsychologySeal({ size = 220 }: { size?: number }) {
       <text x={C - R3} y={C + 4} textAnchor="middle" fontFamily="Georgia, serif" fontSize="12" fill={navy}>✦</text>
       <text x={C + R3} y={C + 4} textAnchor="middle" fontFamily="Georgia, serif" fontSize="12" fill={navy}>✦</text>
 
-      <text fontFamily="'Georgia','Times New Roman',serif" fontSize="10.5" fontWeight="bold" fill={navy} letterSpacing="3.8" textAnchor="middle">
+      <text fontFamily="'Georgia','Times New Roman',serif" fontSize="10.5" fontWeight="bold" fill={navy} letterSpacing="2" textAnchor="middle">
         <textPath href="#seal-arc-t" startOffset="50%">LICENSED PSYCHOLOGIST</textPath>
       </text>
       <text fontFamily="'Georgia','Times New Roman',serif" fontSize="10" fontWeight="bold" fill={navy} letterSpacing="3" textAnchor="middle">
