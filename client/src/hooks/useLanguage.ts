@@ -200,6 +200,62 @@ export const translations = {
     'emergency.hope': 'Teléfono de la Esperanza',
     'emergency.suicide': 'Prevención del Suicidio',
     'emergency.close': 'Cerrar',
+
+    // Hero (pocket version)
+    'hero.pocket.title': 'Un psicólogo en tu bolsillo',
+    'hero.pocket.subtitle': 'Asistente de salud mental con inteligencia artificial para adolescentes, familias y entorno laboral',
+    'hero.cta.try': 'Prueba NUXA gratis',
+
+    // Features Section
+    'features.chat.title': 'Asistente de Salud Mental',
+    'features.chat.description': 'Un chatbot inteligente y empático que proporciona apoyo psicológico personalizado para momentos de todas las edades. Basado en las últimas investigaciones en psicología y tecnología de IA.',
+    'features.chat.hello': '¡Hola! Soy tu asistente de NUXA. ¿Cómo te sientes hoy?',
+    'features.chat.anxious': 'Me siento algo ansioso...',
+    'features.chat.feature1': 'Respuestas basadas en evidencia científica',
+    'features.chat.feature2': 'Disponible 24/7 para momentos de necesidad',
+    'features.chat.feature3': 'Adaptado a diferentes etapas de la vida',
+    'features.resources.title': 'Recursos de Salud Mental',
+    'features.resources.description': 'Una biblioteca completa de contenidos y herramientas psicológicas cuidadosamente seleccionadas para apoyar el bienestar emocional y el crecimiento personal en cualquier etapa de la vida.',
+    'features.resources.library': 'Biblioteca de contenido',
+    'features.resources.feature1': 'Artículos y guías basados en evidencia científica',
+    'features.resources.feature2': 'Ejercicios prácticos para diferentes necesidades',
+    'features.resources.feature3': 'Recursos para padres, adolescentes',
+    'features.resources.feature4': 'Actualizaciones regulares con contenido',
+    'features.cta': '¡Comenzar Ahora!',
+
+    // Footer
+    'footer.tagline': 'Transformando el acceso a la salud mental a través de la tecnología, proporcionando orientación en psicología accesible y efectiva para todos.',
+    'footer.services': 'Servicios',
+    'footer.chat': 'Chat de Apoyo',
+    'footer.resources': 'Recursos',
+    'footer.blog': 'Blog y Consejos',
+    'footer.pricing': 'Planes Premium',
+    'footer.legal': 'Legal',
+    'footer.legal.notice': 'Aviso legal',
+    'footer.legal.privacy': 'Política de privacidad',
+    'footer.legal.cookies': 'Política de cookies',
+    'footer.legal.cookiePrefs': 'Preferencias de cookies',
+    'footer.rights': 'Todos los derechos reservados',
+
+    // Testimonials
+    'testimonials.availability': 'Disponibilidad',
+    'testimonials.satisfaction': 'Satisfacción Usuario',
+    'testimonials.join': 'Únete a personas satisfechas',
+    'testimonials.based': 'Basado en testimonios reales de usuarios que han experimentado mejoras significativas en su bienestar mental con NUXA.',
+    'testimonials.opening': '📅 Inauguración: 1 de septiembre 2025',
+    'testimonials.indicators': 'Indicadores reales y transparentes del uso de la plataforma',
+
+    // Login
+    'login.title': 'Iniciar Sesión',
+    'login.subtitle': 'Ingresa tus credenciales para acceder',
+    'login.username': 'Usuario',
+    'login.username.placeholder': 'Ingresa tu usuario',
+    'login.password': 'Contraseña',
+    'login.password.placeholder': 'Ingresa tu contraseña',
+    'login.submit': 'Iniciar Sesión',
+    'login.loading': 'Iniciando sesión...',
+    'login.access': '¿Cómo puedo obtener acceso a NUXA?',
+    'login.back': '← Volver al inicio',
   },
   
   en: {
@@ -386,6 +442,62 @@ export const translations = {
     'emergency.hope': 'Telephone of Hope',
     'emergency.suicide': 'Suicide Prevention',
     'emergency.close': 'Close',
+
+    // Hero (pocket version)
+    'hero.pocket.title': 'A psychologist in your pocket',
+    'hero.pocket.subtitle': 'AI mental health assistant for teenagers, families and the workplace',
+    'hero.cta.try': 'Try NUXA for free',
+
+    // Features Section
+    'features.chat.title': 'Mental Health Assistant',
+    'features.chat.description': 'An intelligent and empathetic chatbot that provides personalised psychological support for all ages. Based on the latest research in psychology and AI technology.',
+    'features.chat.hello': 'Hello! I\'m your NUXA assistant. How are you feeling today?',
+    'features.chat.anxious': 'I feel a bit anxious...',
+    'features.chat.feature1': 'Evidence-based responses',
+    'features.chat.feature2': 'Available 24/7 when you need it',
+    'features.chat.feature3': 'Adapted to different life stages',
+    'features.resources.title': 'Mental Health Resources',
+    'features.resources.description': 'A comprehensive library of carefully selected psychological content and tools to support emotional wellbeing and personal growth at any life stage.',
+    'features.resources.library': 'Content Library',
+    'features.resources.feature1': 'Evidence-based articles and guides',
+    'features.resources.feature2': 'Practical exercises for different needs',
+    'features.resources.feature3': 'Resources for parents and teenagers',
+    'features.resources.feature4': 'Regular content updates',
+    'features.cta': 'Get Started Now!',
+
+    // Footer
+    'footer.tagline': 'Transforming access to mental health through technology, providing accessible and effective psychological guidance for everyone.',
+    'footer.services': 'Services',
+    'footer.chat': 'Support Chat',
+    'footer.resources': 'Resources',
+    'footer.blog': 'Blog & Tips',
+    'footer.pricing': 'Premium Plans',
+    'footer.legal': 'Legal',
+    'footer.legal.notice': 'Legal Notice',
+    'footer.legal.privacy': 'Privacy Policy',
+    'footer.legal.cookies': 'Cookie Policy',
+    'footer.legal.cookiePrefs': 'Cookie Preferences',
+    'footer.rights': 'All rights reserved',
+
+    // Testimonials
+    'testimonials.availability': 'Availability',
+    'testimonials.satisfaction': 'User Satisfaction',
+    'testimonials.join': 'Join satisfied users',
+    'testimonials.based': 'Based on real testimonials from users who have experienced significant improvements in their mental wellbeing with NUXA.',
+    'testimonials.opening': '📅 Opening: September 1, 2025',
+    'testimonials.indicators': 'Real and transparent platform usage indicators',
+
+    // Login
+    'login.title': 'Login',
+    'login.subtitle': 'Enter your credentials to access',
+    'login.username': 'Username',
+    'login.username.placeholder': 'Enter your username',
+    'login.password': 'Password',
+    'login.password.placeholder': 'Enter your password',
+    'login.submit': 'Login',
+    'login.loading': 'Logging in...',
+    'login.access': 'How can I get access to NUXA?',
+    'login.back': '← Back to home',
   },
   
   // French translations
@@ -574,6 +686,62 @@ export const translations = {
     'emergency.hope': 'SOS Amitié',
     'emergency.suicide': 'Prévention Suicide',
     'emergency.close': 'Fermer',
+
+    // Hero (pocket version)
+    'hero.pocket.title': 'Un psychologue dans votre poche',
+    'hero.pocket.subtitle': 'Assistant IA en santé mentale pour les adolescents, les familles et le milieu professionnel',
+    'hero.cta.try': 'Essayez NUXA gratuitement',
+
+    // Features Section
+    'features.chat.title': 'Assistant en Santé Mentale',
+    'features.chat.description': 'Un chatbot intelligent et empathique qui offre un soutien psychologique personnalisé pour tous les âges. Basé sur les dernières recherches en psychologie et technologie IA.',
+    'features.chat.hello': 'Bonjour ! Je suis votre assistant NUXA. Comment vous sentez-vous aujourd\'hui ?',
+    'features.chat.anxious': 'Je me sens un peu anxieux...',
+    'features.chat.feature1': 'Réponses fondées sur des preuves scientifiques',
+    'features.chat.feature2': 'Disponible 24h/24 en cas de besoin',
+    'features.chat.feature3': 'Adapté à différentes étapes de la vie',
+    'features.resources.title': 'Ressources en Santé Mentale',
+    'features.resources.description': 'Une bibliothèque complète de contenus et d\'outils psychologiques soigneusement sélectionnés pour soutenir le bien-être émotionnel et la croissance personnelle à tout moment de la vie.',
+    'features.resources.library': 'Bibliothèque de contenus',
+    'features.resources.feature1': 'Articles et guides fondés sur des preuves scientifiques',
+    'features.resources.feature2': 'Exercices pratiques pour différents besoins',
+    'features.resources.feature3': 'Ressources pour parents et adolescents',
+    'features.resources.feature4': 'Mises à jour régulières du contenu',
+    'features.cta': 'Commencer Maintenant !',
+
+    // Footer
+    'footer.tagline': 'Transformer l\'accès à la santé mentale par la technologie, en offrant une orientation psychologique accessible et efficace pour tous.',
+    'footer.services': 'Services',
+    'footer.chat': 'Chat de Soutien',
+    'footer.resources': 'Ressources',
+    'footer.blog': 'Blog et Conseils',
+    'footer.pricing': 'Abonnements Premium',
+    'footer.legal': 'Légal',
+    'footer.legal.notice': 'Mentions légales',
+    'footer.legal.privacy': 'Politique de confidentialité',
+    'footer.legal.cookies': 'Politique de cookies',
+    'footer.legal.cookiePrefs': 'Préférences de cookies',
+    'footer.rights': 'Tous droits réservés',
+
+    // Testimonials
+    'testimonials.availability': 'Disponibilité',
+    'testimonials.satisfaction': 'Satisfaction Utilisateur',
+    'testimonials.join': 'Rejoignez des utilisateurs satisfaits',
+    'testimonials.based': 'Basé sur de vrais témoignages d\'utilisateurs qui ont constaté des améliorations significatives de leur bien-être mental avec NUXA.',
+    'testimonials.opening': '📅 Inauguration : 1er septembre 2025',
+    'testimonials.indicators': 'Indicateurs réels et transparents de l\'utilisation de la plateforme',
+
+    // Login
+    'login.title': 'Connexion',
+    'login.subtitle': 'Entrez vos identifiants pour accéder',
+    'login.username': 'Nom d\'utilisateur',
+    'login.username.placeholder': 'Entrez votre nom d\'utilisateur',
+    'login.password': 'Mot de passe',
+    'login.password.placeholder': 'Entrez votre mot de passe',
+    'login.submit': 'Se connecter',
+    'login.loading': 'Connexion en cours...',
+    'login.access': 'Comment puis-je accéder à NUXA ?',
+    'login.back': '← Retour à l\'accueil',
   },
   de: {
     'nav.home': 'Startseite',

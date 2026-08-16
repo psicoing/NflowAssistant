@@ -1,7 +1,9 @@
 import { Link } from "wouter";
 import { Brain, Linkedin } from "lucide-react";
+import { useLanguageContext } from "@/components/LanguageProvider";
 
 export default function Footer() {
+  const { t } = useLanguageContext();
   return (
     <footer className="bg-nflow-dark border-t border-gray-800 py-12 px-4">
       <div className="max-w-7xl mx-auto">
@@ -17,10 +19,7 @@ export default function Footer() {
                 versión beta 1-04
               </span>
             </div>
-            <p className="text-gray-400 mb-6 max-w-md text-xs">
-              Transformando el acceso a la salud mental a través de la tecnología, 
-              proporcionando orientación en psicología accesible y efectiva para todos.
-            </p>
+            <p className="text-gray-400 mb-6 max-w-md text-xs">{t('footer.tagline')}</p>
             <div className="flex space-x-3">
               <a 
                 href="https://www.linkedin.com/in/empordajobs/"
@@ -63,26 +62,26 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="text-white font-semibold mb-3 text-sm">Servicios</h4>
+            <h4 className="text-white font-semibold mb-3 text-sm">{t('footer.services')}</h4>
             <ul className="space-y-1.5">
               <li>
                 <Link href="/ejemplos-chat" className="text-gray-400 hover:text-white transition-colors text-sm">
-                  Chat de Apoyo
+                  {t('footer.chat')}
                 </Link>
               </li>
               <li>
                 <Link href="/recursos-gratuitos" className="text-gray-400 hover:text-white transition-colors text-sm">
-                  Recursos
+                  {t('footer.resources')}
                 </Link>
               </li>
               <li>
                 <Link href="/blog" className="text-gray-400 hover:text-white transition-colors text-sm">
-                  Blog y Consejos
+                  {t('footer.blog')}
                 </Link>
               </li>
               <li>
                 <Link href="/precios" className="text-gray-400 hover:text-white transition-colors text-sm">
-                  Planes Premium
+                  {t('footer.pricing')}
                 </Link>
               </li>
             </ul>
@@ -90,21 +89,21 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className="text-white font-semibold mb-3 text-sm">Legal</h4>
+            <h4 className="text-white font-semibold mb-3 text-sm">{t('footer.legal')}</h4>
             <ul className="space-y-1.5">
               <li>
                 <Link href="/legal/aviso-legal" className="text-gray-400 hover:text-white transition-colors text-sm">
-                  Aviso legal
+                  {t('footer.legal.notice')}
                 </Link>
               </li>
               <li>
                 <Link href="/legal/privacidad" className="text-gray-400 hover:text-white transition-colors text-sm">
-                  Política de privacidad
+                  {t('footer.legal.privacy')}
                 </Link>
               </li>
               <li>
                 <Link href="/legal/cookies" className="text-gray-400 hover:text-white transition-colors text-sm">
-                  Política de cookies
+                  {t('footer.legal.cookies')}
                 </Link>
               </li>
               <li>
@@ -115,7 +114,7 @@ export default function Footer() {
                   }}
                   className="text-gray-400 hover:text-white transition-colors text-left text-sm"
                 >
-                  Preferencias de cookies
+                  {t('footer.legal.cookiePrefs')}
                 </button>
               </li>
             </ul>
@@ -126,7 +125,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-6 pt-4">
           <div className="flex flex-wrap items-center gap-2 text-xs">
             <span className="text-white font-semibold text-sm">GRUPO JOBDA</span>
-            <span className="text-gray-500">Empordajobs SL • B02701100 • Portbou, España • © 2025 Todos los derechos reservados • empordajobs@gmail.com • +34 660 45 21 36</span>
+            <span className="text-gray-500">Empordajobs SL • B02701100 • Portbou, España • © 2025 {t('footer.rights')} • empordajobs@gmail.com • +34 660 45 21 36</span>
           </div>
         </div>
       </div>

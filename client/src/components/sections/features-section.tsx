@@ -1,9 +1,11 @@
 import { MessageCircle, Book, CheckCircle, Bot, User, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
+import { useLanguageContext } from "@/components/LanguageProvider";
 
 export default function FeaturesSection() {
   const [, setLocation] = useLocation();
+  const { t } = useLanguageContext();
   return (
     <section className="py-20 px-4 bg-nflow-light text-gray-800">
       <div className="max-w-7xl mx-auto">
@@ -14,14 +16,10 @@ export default function FeaturesSection() {
               <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
                 <MessageCircle className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-800">Asistente de Salud Mental</h3>
+              <h3 className="text-2xl font-bold text-gray-800">{t('features.chat.title')}</h3>
             </div>
 
-            <p className="text-gray-600 mb-6">
-              Un chatbot inteligente y empático que proporciona apoyo psicológico personalizado 
-              para momentos de todas las edades. Basado en las últimas investigaciones en psicología 
-              y tecnología de IA.
-            </p>
+            <p className="text-gray-600 mb-6">{t('features.chat.description')}</p>
 
             {/* Chat Preview */}
             <div className="bg-gray-50 rounded-2xl p-4 mb-6">
@@ -30,12 +28,12 @@ export default function FeaturesSection() {
                   <Bot className="w-4 h-4 text-white" />
                 </div>
                 <div className="bg-blue-600 text-white p-3 rounded-2xl rounded-tl-none max-w-xs">
-                  <p className="text-sm">¡Hola! Soy tu asistente de NUXA. ¿Cómo te sientes hoy?</p>
+                  <p className="text-sm">{t('features.chat.hello')}</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3 justify-end">
                 <div className="bg-gray-300 text-gray-800 p-3 rounded-2xl rounded-tr-none max-w-xs">
-                  <p className="text-sm">Me siento algo ansioso...</p>
+                  <p className="text-sm">{t('features.chat.anxious')}</p>
                 </div>
                 <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
                   <User className="w-4 h-4 text-white" />
@@ -46,15 +44,15 @@ export default function FeaturesSection() {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <CheckCircle className="w-5 h-5 text-blue-600" />
-                <span className="text-sm text-gray-600">Respuestas basadas en evidencia científica</span>
+                <span className="text-sm text-gray-600">{t('features.chat.feature1')}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <CheckCircle className="w-5 h-5 text-blue-600" />
-                <span className="text-sm text-gray-600">Disponible 24/7 para momentos de necesidad</span>
+                <span className="text-sm text-gray-600">{t('features.chat.feature2')}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <CheckCircle className="w-5 h-5 text-blue-600" />
-                <span className="text-sm text-gray-600">Adaptado a diferentes etapas de la vida</span>
+                <span className="text-sm text-gray-600">{t('features.chat.feature3')}</span>
               </div>
             </div>
           </div>
@@ -65,14 +63,10 @@ export default function FeaturesSection() {
               <div className="w-12 h-12 bg-nflow-orange rounded-xl flex items-center justify-center">
                 <Book className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-800">Recursos de Salud Mental</h3>
+              <h3 className="text-2xl font-bold text-gray-800">{t('features.resources.title')}</h3>
             </div>
 
-            <p className="text-gray-600 mb-6">
-              Una biblioteca completa de contenidos y herramientas psicológicas cuidadosamente 
-              seleccionadas para apoyar el bienestar emocional y el crecimiento personal en 
-              cualquier etapa de la vida.
-            </p>
+            <p className="text-gray-600 mb-6">{t('features.resources.description')}</p>
 
             {/* Resources Preview */}
             <div className="space-y-3 mb-6">
@@ -80,7 +74,7 @@ export default function FeaturesSection() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-semibold mb-1">NUXA - Recursos</h4>
-                    <p className="text-sm opacity-90">Biblioteca de contenido</p>
+                    <p className="text-sm opacity-90">{t('features.resources.library')}</p>
                   </div>
                   <ArrowRight className="w-5 h-5" />
                 </div>
@@ -90,19 +84,19 @@ export default function FeaturesSection() {
             <div className="grid grid-cols-2 gap-3 mb-6">
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-4 h-4 text-nflow-orange" />
-                <span className="text-sm text-gray-600">Artículos y guías basados en evidencia científica</span>
+                <span className="text-sm text-gray-600">{t('features.resources.feature1')}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-4 h-4 text-nflow-orange" />
-                <span className="text-sm text-gray-600">Ejercicios prácticos para diferentes necesidades</span>
+                <span className="text-sm text-gray-600">{t('features.resources.feature2')}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-4 h-4 text-nflow-orange" />
-                <span className="text-sm text-gray-600">Recursos para padres, adolescentes</span>
+                <span className="text-sm text-gray-600">{t('features.resources.feature3')}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-4 h-4 text-nflow-orange" />
-                <span className="text-sm text-gray-600">Actualizaciones regulares con contenido</span>
+                <span className="text-sm text-gray-600">{t('features.resources.feature4')}</span>
               </div>
             </div>
             
@@ -113,7 +107,7 @@ export default function FeaturesSection() {
                 className="bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl animate-bounce hover:animate-none"
               >
                 <ArrowRight className="w-5 h-5 mr-2" />
-                ¡Comenzar Ahora!
+                {t('features.cta')}
               </Button>
             </div>
           </div>

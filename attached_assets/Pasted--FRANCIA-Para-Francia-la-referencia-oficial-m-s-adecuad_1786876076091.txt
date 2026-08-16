@@ -1,0 +1,101 @@
+🇫🇷 FRANCIA
+
+Para Francia, la referencia oficial más adecuada es el Annuaire Santé del sistema sanitario francés. Permite buscar profesionales sanitarios y comprobar su registro. Para NUXA, lo presentaría como el equivalente oficial para localizar un profesional de salud. Annuaire Santé — France
+
+También es importante Mon soutien psy, dispositivo oficial que permite acceder a psicólogos asociados al programa y recibir atención psicológica. Mon soutien psy — Assurance Maladie
+
+Para NUXA quedaría:
+
+Si NUXA no cumple tus expectativas, busca un profesional.
+
+📋 Directorio profesional
+
+Para la ciudadanía: encuentra un profesional de salud mental y consulta las opciones disponibles según tus necesidades.
+
+Para profesionales: localiza profesionales para derivaciones y colaboración.
+
+🇫🇷 Recursos oficiales:
+
+Annuaire Santé
+Mon soutien psy
+🇬🇧 REINO UNIDO
+
+Aquí tenemos una opción oficial todavía más clara: NHS Talking Therapies. El NHS permite a las personas buscar servicios de terapia psicológica y, en muchos casos, autoderivarse sin pasar primero por el GP.
+
+Además, el NHS recomienda comprobar que un terapeuta privado esté registrado en una organización profesional acreditada por la Professional Standards Authority (PSA).
+
+Y para psicólogos específicamente, el Health and Care Professions Council (HCPC) mantiene el registro oficial de profesionales regulados.
+
+HCPC — Check the Register
+
+Para NUXA:
+
+If NUXA does not meet your needs, find a professional.
+
+📋 Professional Directory
+
+For the public: find a qualified and registered mental-health professional according to your needs and location.
+
+For professionals: find other professionals for referrals, specialist support and collaboration.
+
+🇬🇧 Official resources:
+
+NHS Talking Therapies
+HCPC Register
+NHS Mental Health Services
+
+El NHS confirma además que las terapias pueden prestarse presencialmente, por teléfono o mediante vídeo, y que existen servicios digitales dentro del propio sistema.
+
+💡 Esto mejora bastante NUXA
+
+Yo pondría en la aplicación un botón internacional:
+
+🇪🇸 España → Directorio profesional
+🇫🇷 France → Annuaire Santé / Mon soutien psy
+🇬🇧 UK → NHS Talking Therapies / HCPC
+
+Así NUXA no intenta sustituir al sistema sanitario de cada país: acompaña al usuario y, cuando necesita atención profesional, le conduce hacia recursos oficiales.
+
+Eso es mucho más sólido desde el punto de vista institucional.
+
+falta usa
+
+Sí, faltaba Estados Unidos, y aquí tenemos dos recursos especialmente buenos para NUXA:
+
+🇺🇸 Estados Unidos
+
+📋 Professional Directory — APA Psychologist Locator
+
+La American Psychological Association (APA) dispone de un buscador específico de psicólogos. Permite buscar por ciudad/estado o código postal, especialidad y nombre del profesional. Además, la propia APA indica que los profesionales incluidos deben ser miembros APA con licencia válida para la práctica clínica.
+
+APA Psychologist Locator
+
+Para la ciudadanía: encuentra un/a psicólogo/a con licencia según ubicación, especialidad o necesidades.
+
+Para profesionales: permite localizar psicólogos para derivaciones y colaboración profesional.
+
+🏥 Recurso sanitario oficial: SAMHSA
+
+Además, Estados Unidos tiene un recurso gubernamental muy potente: FindTreatment.gov, gestionado por SAMHSA (Substance Abuse and Mental Health Services Administration). Permite encontrar centros y servicios de tratamiento de salud mental en EE. UU. y sus territorios.
+
+SAMHSA — FindTreatment.gov
+
+Para NUXA, yo pondría los dos, porque cumplen funciones diferentes:
+
+If NUXA does not meet your needs, find a professional.
+
+📋 Professional Directory
+Find a licensed psychologist through the APA Psychologist Locator, or find mental-health treatment services through SAMHSA FindTreatment.gov.
+
+Así quedaría el sistema internacional de NUXA
+País	Recurso
+🇪🇸 España	Directorio profesional / Colegio Oficial
+🇫🇷 Francia	Annuaire Santé + Mon soutien psy
+🇬🇧 Reino Unido	NHS Talking Therapies + HCPC
+🇺🇸 Estados Unidos	APA Psychologist Locator + SAMHSA FindTreatment.gov
+
+Esto es bastante potente porque NUXA puede decir, en esencia:
+
+“Estoy aquí para ayudarte, pero si necesitas un profesional, también te ayudo a encontrarlo.”
+
+Y además lo hacemos con recursos oficiales o profesionales reconocidos en cada país, en lugar de crear un directorio propio que tendría que mantenerse y validarse continuamente.

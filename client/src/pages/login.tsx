@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { LogIn, User, ShieldAlert } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
+import { useLanguageContext } from "@/components/LanguageProvider";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -19,6 +20,7 @@ export default function Login() {
   });
   const [error, setError] = useState("");
   const { toast } = useToast();
+  const { t } = useLanguageContext();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -156,7 +158,7 @@ export default function Login() {
             <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <LogIn className="w-8 h-8 text-white" />
             </div>
-            <CardTitle className="text-2xl text-white">Iniciar Sesión</CardTitle>
+            <CardTitle className="text-2xl text-white">{t('login.title')}</CardTitle>
             <CardDescription className="text-gray-400">
               Accede a tu cuenta de NUXA
             </CardDescription>
@@ -199,13 +201,13 @@ export default function Login() {
 
               <div className="space-y-2">
                 <Label htmlFor="username" className="text-gray-200">
-                  Usuario
+                  {t('login.username')}
                 </Label>
                 <Input
                   id="username"
                   name="username"
                   type="text"
-                  placeholder="Ingresa tu usuario"
+                  placeholder={t('login.username.placeholder')}
                   value={formData.username}
                   onChange={handleChange}
                   required
@@ -215,13 +217,13 @@ export default function Login() {
 
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-gray-200">
-                  Contraseña
+                  {t('login.password')}
                 </Label>
                 <Input
                   id="password"
                   name="password"
                   type="password"
-                  placeholder="Ingresa tu contraseña"
+                  placeholder={t('login.password.placeholder')}
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -236,7 +238,7 @@ export default function Login() {
                 disabled={isLoading}
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold"
               >
-                {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
+                {isLoading ? t('login.loading') : t('login.submit')}
               </Button>
 
               <div className="text-center text-gray-400">
@@ -245,7 +247,7 @@ export default function Login() {
                   onClick={() => setLocation("/registro")}
                   className="text-orange-400 hover:text-orange-300 hover:underline flex items-center justify-center gap-1 mx-auto"
                 >
-                  <span>❓</span> ¿Cómo puedo obtener acceso a NUXA?
+                  <span>❓</span> {t('login.access')}
                 </button>
               </div>
 
@@ -254,7 +256,7 @@ export default function Login() {
                 onClick={() => setLocation("/")}
                 className="text-gray-400 hover:text-white transition-colors"
               >
-                ← Volver al inicio
+                {t('login.back')}
               </button>
             </CardFooter>
           </form>

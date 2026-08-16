@@ -87,6 +87,134 @@ import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/compon
 
 const AWARENESS_BANNER_KEY = "nuxa-awareness-banner-dismissed";
 
+// ── Professional Directory Data ──────────────────────────────────────────────
+type CountryCtx = 'es' | 'fr' | 'uk' | 'us';
+
+interface DirResource { label: string; url: string; desc: string; }
+interface DirConfig {
+  badge: string;
+  publicText: string;
+  proText: string;
+  btnLabel: string;
+  directUrl?: string;   // for ES: direct link, no modal
+  resources?: DirResource[]; // for FR/UK/US: opens modal
+  flag: string;
+}
+
+const DIR_DATA: Record<CountryCtx, DirConfig> = {
+  es: {
+    flag: '🇪🇸',
+    badge: '📋 Directorio profesional',
+    publicText: 'Encuentra un/a psicólogo/a colegiado/a según tu necesidad, ubicación o especialidad.',
+    proText: 'Busca un/a profesional especializado/a para derivaciones o colaboraciones entre colegiados.',
+    btnLabel: 'COPC',
+    directUrl: 'https://www.copc.cat/es/directori-professional',
+  },
+  fr: {
+    flag: '🇫🇷',
+    badge: '📋 Répertoire professionnel',
+    publicText: 'Trouvez un professionnel de santé mentale et consultez les options disponibles selon vos besoins.',
+    proText: 'Localisez des professionnels pour des orientations et une collaboration entre professionnels.',
+    btnLabel: 'Annuaire Santé',
+    resources: [
+      { label: 'Annuaire Santé', url: 'https://www.annuaire-sante.ameli.fr/', desc: 'Trouver un professionnel de santé en France' },
+      { label: 'Mon soutien psy', url: 'https://www.ameli.fr/assure/sante/themes/sante-mentale/mon-soutien-psy', desc: 'Séances de soutien psychologique remboursées par l\'Assurance Maladie' },
+    ],
+  },
+  uk: {
+    flag: '🇬🇧',
+    badge: '📋 Professional Directory',
+    publicText: 'Find a qualified and registered mental-health professional according to your needs and location.',
+    proText: 'Find other professionals for referrals, specialist support and collaboration.',
+    btnLabel: 'NHS / HCPC',
+    resources: [
+      { label: 'NHS Talking Therapies', url: 'https://www.nhs.uk/mental-health/talking-therapies-medicine-treatments/talking-therapies-and-counselling/nhs-talking-therapies/', desc: 'Self-refer to free NHS talking therapy services' },
+      { label: 'HCPC Register', url: 'https://www.hcpc-uk.org/check-the-register/', desc: 'Check a therapist is registered with the HCPC' },
+      { label: 'NHS Mental Health Services', url: 'https://www.nhs.uk/mental-health/', desc: 'NHS mental health services and support' },
+    ],
+  },
+  us: {
+    flag: '🇺🇸',
+    badge: '📋 Professional Directory',
+    publicText: 'Find a licensed psychologist by city, state or ZIP code through the APA Psychologist Locator.',
+    proText: 'Find mental-health treatment services through SAMHSA FindTreatment.gov.',
+    btnLabel: 'APA / SAMHSA',
+    resources: [
+      { label: 'APA Psychologist Locator', url: 'https://locator.apa.org/', desc: 'Find a licensed psychologist by location and specialty' },
+      { label: 'SAMHSA FindTreatment.gov', url: 'https://findtreatment.gov/', desc: 'Government portal for mental-health treatment services' },
+    ],
+  },
+};
+
+// ── Professional Directory Modal ─────────────────────────────────────────────
+function ProfessionalDirModal({ cfg, onClose }: { cfg: DirConfig; onClose: () => void }) {
+  return (
+    <div
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="bg-gradient-to-br from-teal-600 via-teal-500 to-emerald-500 px-6 py-5 flex items-start justify-between gap-4">
+          <div>
+            <span className="inline-flex items-center bg-white/20 border border-white/30 text-white text-xs font-bold px-2.5 py-0.5 rounded-full mb-2">
+              {cfg.badge}
+            </span>
+            <div className="flex flex-col gap-1.5">
+              <div>
+                <span className="text-white font-bold text-sm">
+                  {cfg.flag === '🇫🇷' ? 'Pour le public : ' : cfg.flag === '🇬🇧' ? 'For the public: ' : 'For the public: '}
+                </span>
+                <span className="text-white/90 text-sm leading-relaxed">{cfg.publicText}</span>
+              </div>
+              <div>
+                <span className="text-white font-bold text-sm">
+                  {cfg.flag === '🇫🇷' ? 'Pour les professionnels : ' : 'For professionals: '}
+                </span>
+                <span className="text-white/90 text-sm leading-relaxed">{cfg.proText}</span>
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="flex-shrink-0 text-white/70 hover:text-white transition-colors"
+            aria-label="Cerrar"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Resources */}
+        <div className="px-6 py-5">
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
+            {cfg.flag} Recursos oficiales
+          </p>
+          <div className="flex flex-col gap-3">
+            {cfg.resources?.map(r => (
+              <a
+                key={r.url}
+                href={r.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between gap-3 bg-teal-50 hover:bg-teal-100 border border-teal-200 rounded-2xl px-4 py-3 transition-colors group"
+              >
+                <div className="min-w-0">
+                  <p className="text-teal-800 font-bold text-sm group-hover:text-teal-900">{r.label}</p>
+                  <p className="text-teal-600 text-xs leading-snug mt-0.5">{r.desc}</p>
+                </div>
+                <ExternalLink className="w-4 h-4 text-teal-500 flex-shrink-0" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function AwarenessBanner({ onClose }: { onClose: () => void }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -138,9 +266,19 @@ function AwarenessBanner({ onClose }: { onClose: () => void }) {
 export default function Home() {
   const { t } = useLanguage();
   const [awarenessBanner, setAwarenessBanner] = useState(false);
+  const [countryCtx, setCountryCtx] = useState<CountryCtx>('es');
+  const [dirModalOpen, setDirModalOpen] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem(AWARENESS_BANNER_KEY)) setAwarenessBanner(true);
+  }, []);
+
+  useEffect(() => {
+    const lang = navigator.language.toLowerCase();
+    if (lang.startsWith('fr')) setCountryCtx('fr');
+    else if (lang === 'en-gb' || lang.startsWith('en-gb')) setCountryCtx('uk');
+    else if (lang.startsWith('en')) setCountryCtx('us');
+    else setCountryCtx('es');
   }, []);
 
   const closeAwarenessBanner = () => {
@@ -317,48 +455,74 @@ export default function Home() {
               Si NUXA no cumple tus expectativas, escoge profesional
             </p>
 
-            {/* COPC Banner */}
-            <div className="relative overflow-hidden rounded-3xl shadow-xl border border-teal-300 bg-gradient-to-br from-teal-600 via-teal-500 to-emerald-500 transition-all duration-500">
-              <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-emerald-300/20 rounded-full blur-2xl pointer-events-none" />
-              <div className="absolute top-1/2 right-1/4 w-24 h-24 bg-white/5 rounded-full blur-xl pointer-events-none" />
+            {/* Professional Directory Banner — adapts by country */}
+            {(() => {
+              const cfg = DIR_DATA[countryCtx];
+              return (
+                <>
+                  <div className="relative overflow-hidden rounded-3xl shadow-xl border border-teal-300 bg-gradient-to-br from-teal-600 via-teal-500 to-emerald-500 transition-all duration-500">
+                    <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+                    <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-emerald-300/20 rounded-full blur-2xl pointer-events-none" />
+                    <div className="absolute top-1/2 right-1/4 w-24 h-24 bg-white/5 rounded-full blur-xl pointer-events-none" />
 
-              <div className="relative px-7 py-7 flex flex-col sm:flex-row sm:items-center gap-5">
-                <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center shadow-lg">
-                  <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
-                  </svg>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    <span className="inline-flex items-center bg-white/20 border border-white/30 text-white text-xs font-bold px-2.5 py-0.5 rounded-full">
-                      📋 Directorio profesional
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <div>
-                      <span className="text-white font-bold text-sm">Para la ciudadanía: </span>
-                      <span className="text-white/85 text-sm leading-relaxed">Encuentra un/a psicólogo/a colegiado/a según tu necesidad, ubicación o especialidad.</span>
+                    <div className="relative px-7 py-7 flex flex-col sm:flex-row sm:items-center gap-5">
+                      <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-white/20 border border-white/30 flex items-center justify-center shadow-lg">
+                        <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
+                        </svg>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                          <span className="inline-flex items-center bg-white/20 border border-white/30 text-white text-xs font-bold px-2.5 py-0.5 rounded-full">
+                            {cfg.badge}
+                          </span>
+                          <span className="text-white/60 text-lg select-none">{cfg.flag}</span>
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <div>
+                            <span className="text-white font-bold text-sm">
+                              {countryCtx === 'es' ? 'Para la ciudadanía: ' : countryCtx === 'fr' ? 'Pour le public : ' : 'For the public: '}
+                            </span>
+                            <span className="text-white/85 text-sm leading-relaxed">{cfg.publicText}</span>
+                          </div>
+                          <div>
+                            <span className="text-white font-bold text-sm">
+                              {countryCtx === 'es' ? 'Para profesionales: ' : countryCtx === 'fr' ? 'Pour les professionnels : ' : 'For professionals: '}
+                            </span>
+                            <span className="text-white/85 text-sm leading-relaxed">{cfg.proText}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex-shrink-0">
+                        {cfg.directUrl ? (
+                          <a
+                            href={cfg.directUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center gap-2 bg-white text-teal-700 hover:bg-teal-50 font-bold text-sm px-6 py-3 rounded-xl shadow-lg transition-all duration-300"
+                          >
+                            {cfg.btnLabel}
+                            <ExternalLink className="w-4 h-4" />
+                          </a>
+                        ) : (
+                          <button
+                            onClick={() => setDirModalOpen(true)}
+                            className="inline-flex items-center justify-center gap-2 bg-white text-teal-700 hover:bg-teal-50 font-bold text-sm px-6 py-3 rounded-xl shadow-lg transition-all duration-300"
+                          >
+                            {cfg.btnLabel}
+                            <ExternalLink className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-white font-bold text-sm">Para profesionales: </span>
-                      <span className="text-white/85 text-sm leading-relaxed">Busca un/a profesional especializado/a para derivaciones o colaboraciones entre colegiados.</span>
-                    </div>
                   </div>
-                </div>
-                <div className="flex-shrink-0">
-                  <a
-                    href="https://www.copc.cat/es/directori-professional"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-white text-teal-700 hover:bg-teal-50 font-bold text-sm px-6 py-3 rounded-xl shadow-lg transition-all duration-300"
-                  >
-                    COPC
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                </div>
-              </div>
-            </div>
+
+                  {dirModalOpen && (
+                    <ProfessionalDirModal cfg={cfg} onClose={() => setDirModalOpen(false)} />
+                  )}
+                </>
+              );
+            })()}
 
             {/* NeuronMeg Banner */}
             <a href="https://neuronmeg.online" target="_blank" rel="noopener noreferrer" className="block">

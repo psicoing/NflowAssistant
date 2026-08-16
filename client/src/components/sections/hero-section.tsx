@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Info, Brain, User, Heart } from "lucide-react";
 import { useLocation } from "wouter";
+import { useLanguageContext } from "@/components/LanguageProvider";
 import nflowPackageImage from "@assets/image_1749802552043.png";
 import nflowFamilyImage from "@assets/image_1749802597786.png";
 
 export default function HeroSection() {
   const [, setLocation] = useLocation();
+  const { t } = useLanguageContext();
 
   const handleStartRegistration = () => {
     setLocation("/prueba-gratis");
@@ -39,13 +41,13 @@ export default function HeroSection() {
         {/* Main Heading */}
         <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
           <span className="bg-gradient-to-r from-nflow-orange to-nflow-orange-light bg-clip-text text-transparent">
-            Un psicólogo en tu bolsillo
+            {t('hero.pocket.title')}
           </span>
         </h1>
 
         {/* Subtitle */}
         <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
-          Asistente de salud mental con inteligencia artificial para adolescentes, familias y entorno laboral
+          {t('hero.pocket.subtitle')}
         </p>
 
         {/* CTA Button */}
@@ -55,7 +57,7 @@ export default function HeroSection() {
             className="bg-gradient-to-r from-nflow-orange to-orange-600 hover:from-orange-600 hover:to-red-500 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 transform hover:scale-110 shadow-2xl animate-pulse hover:animate-none border-2 border-orange-400 hover:border-red-400"
           >
             <MessageCircle className="w-6 h-6 mr-3" />
-            Prueba NUXA gratis
+            {t('hero.cta.try')}
           </Button>
         </div>
 

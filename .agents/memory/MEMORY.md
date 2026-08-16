@@ -1,0 +1,1 @@
+- [i18n translation approach](i18n-translation-approach.md) — how EN/FR translation is wired in NUXA; what's done and what remains.

@@ -1,6 +1,7 @@
 import { Star, Quote, Calendar, MapPin, MessageCircle, HelpCircle, Clock, ThumbsUp } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
+import { useLanguageContext } from "@/components/LanguageProvider";
 
 const testimonials = [
   {
@@ -67,6 +68,7 @@ const testimonials = [
 
 // Component to display dynamic statistics
 function DynamicStatsDisplay() {
+  const { t } = useLanguageContext();
   const { data: stats, isLoading, error } = useQuery({
     queryKey: ['/api/public-stats'],
     refetchInterval: 30000, // Refresh every 30 seconds
@@ -94,7 +96,7 @@ function DynamicStatsDisplay() {
           <Clock className="w-6 h-6 text-nflow-orange" />
         </div>
         <div className="text-3xl font-bold text-nflow-orange mb-2 drop-shadow-lg">24/7</div>
-        <div className="text-gray-200 font-semibold text-lg">Disponibilidad</div>
+        <div className="text-gray-200 font-semibold text-lg">{t('testimonials.availability')}</div>
       </div>
       
       <div className="flex flex-col items-center">
@@ -108,13 +110,14 @@ function DynamicStatsDisplay() {
             `${displayStats.averageSatisfaction}/5`
           )}
         </div>
-        <div className="text-gray-200 font-semibold text-lg">Satisfacción Usuario</div>
+        <div className="text-gray-200 font-semibold text-lg">{t('testimonials.satisfaction')}</div>
       </div>
     </div>
   );
 }
 
 export default function TestimonialsSection() {
+  const { t } = useLanguageContext();
   return (
     <section id="testimonials" className="py-20 px-4 bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="max-w-7xl mx-auto">
@@ -179,19 +182,18 @@ export default function TestimonialsSection() {
           
           <div className="mt-8 pt-8 border-t border-gray-600">
             <h3 className="text-3xl font-bold text-white mb-4 drop-shadow-lg">
-              Únete a personas satisfechas
+              {t('testimonials.join')}
             </h3>
             <p className="text-gray-200 text-lg mb-6 max-w-2xl mx-auto font-medium">
-              Basado en testimonios reales de usuarios que han experimentado 
-              mejoras significativas en su bienestar mental con NUXA.
+              {t('testimonials.based')}
             </p>
             
             <div className="bg-gradient-to-r from-nflow-orange/20 to-nflow-blue/20 rounded-lg p-4 border border-nflow-orange/40 max-w-2xl mx-auto">
               <p className="text-white font-bold text-center text-base mb-2">
-                📅 Inauguración: 1 de septiembre 2025
+                {t('testimonials.opening')}
               </p>
               <p className="text-gray-200 text-center text-sm">
-                Indicadores reales y transparentes del uso de la plataforma
+                {t('testimonials.indicators')}
               </p>
             </div>
           </div>
