@@ -200,6 +200,110 @@ async function ensureEmpresasContacts() {
   }
 }
 
+async function ensureEmpresaTemplates() {
+  try {
+    const appleSubject = `NUXA.LIFE — An idea Steve Jobs would have understood / Une idée que Steve Jobs aurait comprise`;
+    const appleBody = `To Apple and the Apple team,
+
+I am writing to you from Spain to introduce NUXA.LIFE, a digital emotional-support platform built around a simple idea:
+
+Technology can be much closer to people when they need it most.
+
+I am convinced that Steve Jobs would have immediately understood the concept behind NUXA.
+
+Jobs did not see technology simply as devices. He saw it as a way to transform the relationship between people and technology, making products useful, accessible, intuitive and beautifully simple.
+
+That is precisely where NUXA begins.
+
+NUXA is a digital platform providing 24/7 emotional support, guidance and mental-health resources, accessible from a smartphone, tablet or computer. It is designed to complement—not replace—psychologists and healthcare professionals.
+
+But there is something more important.
+
+NUXA should not remain just another application.
+
+It could become an emotional-support layer integrated into the digital ecosystem people already use every day: smartphones, computers, tablets and other connected devices.
+
+That is where I believe Apple could understand the potential of NUXA better than almost anyone else.
+
+I am not writing simply to present another app.
+
+I am writing to ask a bigger question:
+
+What if technology could not only connect people, inform them and entertain them, but also provide immediate emotional support when they need it?
+
+Technology already knows how to communicate with us.
+
+Perhaps the next step is for technology to learn how to accompany us.
+
+NUXA is already available:
+🌐 https://nuxa.life/
+
+It can be tested and experienced directly.
+
+If Steve Jobs were designing the next chapter in the relationship between people and technology today, I sincerely believe that an idea like NUXA would deserve a place on the table.
+
+That is why I decided to write to you.
+
+NUXA.LIFE
+Technology that stays close to people.
+
+────────────────────────────────────────
+
+À Apple et à l'équipe Apple,
+
+Je vous écris depuis l'Espagne pour vous présenter NUXA.LIFE, une plateforme numérique de soutien émotionnel construite autour d'une idée simple :
+
+La technologie peut être bien plus proche des personnes lorsqu'elles en ont le plus besoin.
+
+Je suis convaincu que Steve Jobs aurait immédiatement compris le concept derrière NUXA.
+
+Jobs ne voyait pas la technologie simplement comme des appareils. Il la voyait comme un moyen de transformer la relation entre les personnes et la technologie, en rendant les produits utiles, accessibles, intuitifs et d'une simplicité élégante.
+
+C'est précisément là que NUXA commence.
+
+NUXA est une plateforme numérique offrant un soutien émotionnel, des conseils et des ressources en santé mentale disponibles 24h/24 et 7j/7, accessibles depuis un smartphone, une tablette ou un ordinateur. Elle est conçue pour compléter — et non remplacer — les psychologues et les professionnels de santé.
+
+Mais il y a quelque chose de plus important.
+
+NUXA ne devrait pas rester simplement une application parmi d'autres.
+
+Elle pourrait devenir une couche de soutien émotionnel intégrée dans l'écosystème numérique que les personnes utilisent déjà chaque jour : smartphones, ordinateurs, tablettes et autres appareils connectés.
+
+C'est là que je crois qu'Apple pourrait comprendre le potentiel de NUXA mieux que presque n'importe qui d'autre.
+
+Je n'écris pas simplement pour présenter une nouvelle application.
+
+J'écris pour poser une question plus grande :
+
+Et si la technologie pouvait non seulement connecter les personnes, les informer et les divertir, mais aussi leur offrir un soutien émotionnel immédiat lorsqu'elles en ont besoin ?
+
+La technologie sait déjà comment communiquer avec nous.
+
+La prochaine étape serait peut-être que la technologie apprenne à nous accompagner.
+
+NUXA est déjà disponible :
+🌐 https://nuxa.life/
+
+Elle peut être testée et expérimentée directement.
+
+Si Steve Jobs concevait aujourd'hui le prochain chapitre de la relation entre les personnes et la technologie, je crois sincèrement qu'une idée comme NUXA mériterait une place à la table.
+
+C'est pourquoi j'ai décidé de vous écrire.
+
+NUXA.LIFE
+La technologie qui reste proche des personnes.`;
+
+    await pool.query(`
+      INSERT INTO empresa_email_templates (name, subject, body)
+      SELECT $1, $2, $3
+      WHERE NOT EXISTS (SELECT 1 FROM empresa_email_templates WHERE name = $1)
+    `, ["🍎 Apple — NUXA.LIFE (EN·FR)", appleSubject, appleBody]);
+    log("Empresa templates seeded");
+  } catch (err: any) {
+    console.error("ensureEmpresaTemplates error:", err.message);
+  }
+}
+
 async function ensureMutuaTables() {
   try {
     await pool.query(`
@@ -470,6 +574,7 @@ app.use((req, res, next) => {
   await ensureMutuaContacts();
   await ensureEmpresasTables();
   await ensureEmpresasContacts();
+  await ensureEmpresaTemplates();
   await ensureLeadTables();
   const server = await registerRoutes(app);
 
