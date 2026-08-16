@@ -265,7 +265,17 @@ async function ensureEmpresasContacts() {
       ('MR@sanofi.com',                                  'Sanofi',        'empresa'),
       ('IR@sanofi.com',                                  'Sanofi',        'empresa'),
       ('epargne-retraite-entreprises@gestion-cardif.fr', 'BNP Cardif',    'empresa'),
-      ('Paris.CMCS@BNPParibas.com',                      'BNP Paribas',   'empresa')
+      ('Paris.CMCS@BNPParibas.com',                      'BNP Paribas',   'empresa'),
+      -- Spanish companies
+      ('comunicacionelcorteingles@elcorteingles.es',     'El Corte Inglés',   'empresa'),
+      ('coordinador.gestionatc@elcorteingles.es',        'El Corte Inglés',   'empresa'),
+      ('atracciondetalento@repsol.com',                  'Repsol',            'empresa'),
+      ('informacion@iberdrola.com',                      'Iberdrola',         'empresa'),
+      ('comunicacioncorporativa@iberdrola.es',           'Iberdrola',         'empresa'),
+      ('careers@avangrid.com',                           'Avangrid',          'empresa'),
+      ('careers@scottishpower.com',                      'ScottishPower',     'empresa'),
+      ('comunicacion@gruposantander.com',                'Grupo Santander',   'empresa'),
+      ('investor@gruposantander.com',                    'Grupo Santander',   'empresa')
       ON CONFLICT (email) DO NOTHING
     `);
     // Mark international EN·FR contacts
@@ -279,6 +289,12 @@ async function ensureEmpresasContacts() {
       UPDATE empresa_contacts SET language = 'fr'
       WHERE company IN ('AXA', 'Airbus', 'Veolia', 'Engie', 'Orange', 'Sanofi', 'BNP Cardif', 'BNP Paribas')
         AND (language IS NULL OR language != 'fr')
+    `);
+    // Mark Spanish companies as ES
+    await pool.query(`
+      UPDATE empresa_contacts SET language = 'es'
+      WHERE company IN ('El Corte Inglés', 'Repsol', 'Iberdrola', 'Avangrid', 'ScottishPower', 'Grupo Santander')
+        AND (language IS NULL OR language != 'es')
     `);
     log("Empresa contacts seeded");
   } catch (err: any) {
