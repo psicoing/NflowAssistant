@@ -249,14 +249,32 @@ async function ensureEmpresasContacts() {
       ('andrew.reid@aviva.com',                         'Aviva',         'empresa'),
       ('ben.moss@aviva.com',                            'Aviva',         'empresa'),
       ('catherine.comben@aviva.com',                    'Aviva',         'empresa'),
-      ('sarah.poulter@aviva.com',                       'Aviva',         'empresa')
+      ('sarah.poulter@aviva.com',                       'Aviva',         'empresa'),
+      -- French companies
+      ('helicia.chalon@axa.fr',                         'AXA',           'empresa'),
+      ('antoine.demiere@axa.fr',                        'AXA',           'empresa'),
+      ('emploi.handicap@airbus.com',                    'Airbus',        'empresa'),
+      ('anne.galabert@airbus.com',                      'Airbus',        'empresa'),
+      ('anita.lelievre@veolia.com',                     'Veolia',        'empresa'),
+      ('els.bruyneel@engie.com',                        'Engie',         'empresa'),
+      ('nathalie.chevrier@orange.com',                  'Orange',        'empresa'),
+      ('caroline.cellier@orange.com',                   'Orange',        'empresa'),
+      ('ariane.chan@orange.com',                         'Orange',        'empresa'),
+      ('mpaule.freitas@orange.com',                     'Orange',        'empresa'),
+      ('tom.wright@orange.com',                          'Orange',        'empresa')
       ON CONFLICT (email) DO NOTHING
     `);
-    // Mark international contacts as bilingual EN·FR
+    // Mark international EN·FR contacts
     await pool.query(`
       UPDATE empresa_contacts SET language = 'en_fr'
       WHERE company IN ('NVIDIA', 'Walmart', 'Shopify', 'Magna', 'RBC', 'Computershare', 'Enbridge', 'Apple', 'Bupa', 'EE', 'BT', 'Rolls-Royce', 'Unilever', 'Vodafone', 'HSBC', 'Lloyds', 'NatWest', 'GSK', 'Aviva')
         AND (language IS NULL OR language != 'en_fr')
+    `);
+    // Mark French companies as FR
+    await pool.query(`
+      UPDATE empresa_contacts SET language = 'fr'
+      WHERE company IN ('AXA', 'Airbus', 'Veolia', 'Engie', 'Orange')
+        AND (language IS NULL OR language != 'fr')
     `);
     log("Empresa contacts seeded");
   } catch (err: any) {
