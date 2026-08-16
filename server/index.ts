@@ -261,7 +261,11 @@ async function ensureEmpresasContacts() {
       ('caroline.cellier@orange.com',                   'Orange',        'empresa'),
       ('ariane.chan@orange.com',                         'Orange',        'empresa'),
       ('mpaule.freitas@orange.com',                     'Orange',        'empresa'),
-      ('tom.wright@orange.com',                          'Orange',        'empresa')
+      ('tom.wright@orange.com',                          'Orange',        'empresa'),
+      ('MR@sanofi.com',                                  'Sanofi',        'empresa'),
+      ('IR@sanofi.com',                                  'Sanofi',        'empresa'),
+      ('epargne-retraite-entreprises@gestion-cardif.fr', 'BNP Cardif',    'empresa'),
+      ('Paris.CMCS@BNPParibas.com',                      'BNP Paribas',   'empresa')
       ON CONFLICT (email) DO NOTHING
     `);
     // Mark international EN·FR contacts
@@ -273,7 +277,7 @@ async function ensureEmpresasContacts() {
     // Mark French companies as FR
     await pool.query(`
       UPDATE empresa_contacts SET language = 'fr'
-      WHERE company IN ('AXA', 'Airbus', 'Veolia', 'Engie', 'Orange')
+      WHERE company IN ('AXA', 'Airbus', 'Veolia', 'Engie', 'Orange', 'Sanofi', 'BNP Cardif', 'BNP Paribas')
         AND (language IS NULL OR language != 'fr')
     `);
     log("Empresa contacts seeded");
