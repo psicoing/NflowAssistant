@@ -202,13 +202,60 @@ async function ensureEmpresasContacts() {
       ('sandra.freeman@rolls-royce.com',                'Rolls-Royce', 'empresa'),
       ('claire.thomas@rolls-royce.com',                 'Rolls-Royce', 'empresa'),
       ('marie.moore@rolls-royce.com',                   'Rolls-Royce', 'empresa'),
-      ('heritage.trust@rolls-royce.com',                'Rolls-Royce', 'empresa')
+      ('heritage.trust@rolls-royce.com',                'Rolls-Royce',   'empresa'),
+      ('Press-Office.London@Unilever.com',              'Unilever',      'empresa'),
+      ('GroupMedia@vodafone.com',                       'Vodafone',      'empresa'),
+      ('ukmediarelations@vodafone.com',                 'Vodafone',      'empresa'),
+      ('media@vodafonethree.com',                       'Vodafone',      'empresa'),
+      ('UKPressOffice@hsbc.co.uk',                      'HSBC',          'empresa'),
+      ('katie.cohen@hsbc.com',                          'HSBC',          'empresa'),
+      ('leila.taleb@hsbc.com',                          'HSBC',          'empresa'),
+      ('emily.craig@hsbc.com',                          'HSBC',          'empresa'),
+      ('robert.cox@hsbc.com',                           'HSBC',          'empresa'),
+      ('hannah.langston@hsbc.com',                      'HSBC',          'empresa'),
+      ('neil1.fleming@hsbc.com',                        'HSBC',          'empresa'),
+      ('pressoffice@hsbc.com',                          'HSBC',          'empresa'),
+      ('mediarelationsteam@lloydsbanking.com',          'Lloyds',        'empresa'),
+      ('investor.relations@lloydsbanking.com',          'Lloyds',        'empresa'),
+      ('debtinvestorrelations@lloydsbanking.com',       'Lloyds',        'empresa'),
+      ('careers@lloydsbanking.com',                     'Lloyds',        'empresa'),
+      ('James.Abbott@natwest.com',                      'NatWest',       'empresa'),
+      ('Claire.French@natwest.com',                     'NatWest',       'empresa'),
+      ('Alexandra.Dee@natwest.com',                     'NatWest',       'empresa'),
+      ('Seema.Hakim@natwest.com',                       'NatWest',       'empresa'),
+      ('Mike.Johnston@natwest.com',                     'NatWest',       'empresa'),
+      ('Michelle.slade@natwest.com',                    'NatWest',       'empresa'),
+      ('stephanie.melrose@natwest.com',                 'NatWest',       'empresa'),
+      ('Jennifer.Russell@natwest.com',                  'NatWest',       'empresa'),
+      ('Natasha.virtue@natwest.com',                    'NatWest',       'empresa'),
+      ('Jonathan.Rennie@natwest.com',                   'NatWest',       'empresa'),
+      ('victoria.whittal-williams@natwest.com',         'NatWest',       'empresa'),
+      ('Chelsea.konadu@natwest.com',                    'NatWest',       'empresa'),
+      ('David.Nieberg@natwest.com',                     'NatWest',       'empresa'),
+      ('elliot.roy@natwest.com',                        'NatWest',       'empresa'),
+      ('Jessica.Barker@natwest.com',                    'NatWest',       'empresa'),
+      ('eurig.thomas@natwest.com',                      'NatWest',       'empresa'),
+      ('corporate.media@gsk.com',                       'GSK',           'empresa'),
+      ('es-ci@gsk.com',                                 'GSK',           'empresa'),
+      ('Kathleen.x.quinn@gsk.com',                      'GSK',           'empresa'),
+      ('Alison.m.hunt@gsk.com',                         'GSK',           'empresa'),
+      ('Sydney.a.dodson-nease@gsk.com',                 'GSK',           'empresa'),
+      ('Kate.I.kanaby@gsk.com',                         'GSK',           'empresa'),
+      ('fiona.murphy-alexander@aviva.com',              'Aviva',         'empresa'),
+      ('melissa.loughran@aviva.com',                    'Aviva',         'empresa'),
+      ('maddie.simpson@aviva.com',                      'Aviva',         'empresa'),
+      ('philippa.terry@aviva.com',                      'Aviva',         'empresa'),
+      ('sarah.swailes@aviva.com',                       'Aviva',         'empresa'),
+      ('andrew.reid@aviva.com',                         'Aviva',         'empresa'),
+      ('ben.moss@aviva.com',                            'Aviva',         'empresa'),
+      ('catherine.comben@aviva.com',                    'Aviva',         'empresa'),
+      ('sarah.poulter@aviva.com',                       'Aviva',         'empresa')
       ON CONFLICT (email) DO NOTHING
     `);
     // Mark international contacts as bilingual EN·FR
     await pool.query(`
       UPDATE empresa_contacts SET language = 'en_fr'
-      WHERE company IN ('NVIDIA', 'Walmart', 'Shopify', 'Magna', 'RBC', 'Computershare', 'Enbridge', 'Apple', 'Bupa', 'EE', 'BT', 'Rolls-Royce')
+      WHERE company IN ('NVIDIA', 'Walmart', 'Shopify', 'Magna', 'RBC', 'Computershare', 'Enbridge', 'Apple', 'Bupa', 'EE', 'BT', 'Rolls-Royce', 'Unilever', 'Vodafone', 'HSBC', 'Lloyds', 'NatWest', 'GSK', 'Aviva')
         AND (language IS NULL OR language != 'en_fr')
     `);
     log("Empresa contacts seeded");
