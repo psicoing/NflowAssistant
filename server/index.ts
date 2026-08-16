@@ -468,6 +468,53 @@ https://nuxa.life/`;
   }
 }
 
+async function ensureInstitutionTemplates() {
+  try {
+    const catSubject = `NUXA.life — Nota Informativa: Plataforma de suport emocional digital per a la ciutadania`;
+    const catBody = `<div style="font-family:Arial,sans-serif;max-width:680px;margin:0 auto;color:#222;line-height:1.6;">
+  <h1 style="text-align:center;font-size:22px;margin-bottom:4px;">Departament de Salut – Nota Informativa</h1>
+  <h2 style="font-size:16px;font-weight:normal;text-align:center;margin-top:4px;margin-bottom:24px;color:#444;">Presentació de la Plataforma NUXA.life</h2>
+
+  <p>El Departament de Salut informa de la posada en marxa de <strong>NUXA.life</strong>, una eina digital innovadora orientada a la promoció de la salut mental i el benestar emocional de la ciutadania.</p>
+
+  <h3 style="margin-top:24px;"><em>Què és NUXA.life?</em></h3>
+  <p>NUXA.life és una plataforma digital de suport emocional disponible les 24 hores del dia, els 7 dies de la setmana. Ofereix acompanyament personalitzat a través d'un xat intel·ligent adaptat a diferents perfils d'usuari: adolescents, adults, famílies i entorns empresarials. La plataforma complementa, sense substituir, la tasca dels professionals de la salut mental.</p>
+
+  <h3 style="margin-top:24px;"><em>Com funciona?</em></h3>
+  <p>
+    – <strong>Xat interactiu:</strong> l'usuari pot dialogar amb un assistent especialitzat que adapta el seu llenguatge i respostes segons el perfil seleccionat (adolescent, adult, família o empresa).<br><br>
+    – <strong>Recursos psicoeducatius:</strong> la plataforma ofereix pautes concretes de regulació emocional, estratègies d'estudi, eines per a la gestió de l'estrès i orientació per a la presa de decisions.<br><br>
+    – <strong>Accés flexible:</strong> disponible en línia, 24 hores al dia, amb subscripció mensual reduïda (2,99 €) per garantir l'accessibilitat a tota la població.<br><br>
+    – <strong>Confidencialitat i seguretat:</strong> totes les interaccions són privades i respecten els estàndards de protecció de dades i ètica professional.
+  </p>
+
+  <h3 style="margin-top:24px;"><em>Beneficis per a la ciutadania</em></h3>
+  <p>
+    1. <strong>Prevenció:</strong> ajuda a detectar i gestionar de forma primerenca situacions d'estrès, ansietat, baixa autoestima o conflictes escolars/familiars.<br>
+    2. <strong>Accessibilitat:</strong> garanteix suport immediat a persones que no poden accedir fàcilment a serveis presencials.<br>
+    3. <strong>Complementarietat:</strong> no substitueix la tasca dels professionals de la salut mental, sinó que actua com a recurs complementari i d'acompanyament.<br>
+    4. <strong>Promoció del benestar:</strong> fomenta hàbits saludables, autoconeixement i resiliència, especialment en la població jove.<br>
+    5. <strong>Impacte social:</strong> NUXA.life és també una eina pensada per a entorns laborals i escolars, contribuint a millorar el clima emocional i prevenir l'estrès crònic.
+  </p>
+
+  <h3 style="margin-top:24px;"><em>Compromís amb la salut pública</em></h3>
+  <p>Amb NUXA.life, el Departament de Salut reafirma el seu compromís amb la innovació digital en salut mental i la necessitat d'oferir solucions properes, accessibles i adaptades a les noves realitats socials.</p>
+
+  <p style="margin-top:28px;color:#555;">🌐 <a href="https://nuxa.life" style="color:#00897b;">https://nuxa.life</a></p>
+</div>`;
+
+    await pool.query(`
+      INSERT INTO institution_email_templates (name, subject, body)
+      SELECT $1, $2, $3
+      WHERE NOT EXISTS (SELECT 1 FROM institution_email_templates WHERE name = $1)
+    `, ["🏥 Catalunya — Nota Informativa NUXA.life (CA)", catSubject, catBody]);
+
+    log("Institution templates seeded");
+  } catch (err: any) {
+    console.error("ensureInstitutionTemplates error:", err.message);
+  }
+}
+
 async function ensureMutuaTables() {
   try {
     await pool.query(`
@@ -766,6 +813,7 @@ app.use((req, res, next) => {
   await ensureAdminUser();
   await ensureInstitutionTables();
   await ensureInstitutionContacts();
+  await ensureInstitutionTemplates();
   await ensureMutuaTables();
   await ensureMutuaContacts();
   await ensureEmpresasTables();
