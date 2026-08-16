@@ -749,6 +749,31 @@ async function ensureInstitutionContacts() {
       ('fundacio@i2cat.net','Cataluña')
       ON CONFLICT (email) DO NOTHING
     `);
+    // Subcarpetes Catalunya per naturalesa
+    await pool.query(`
+      UPDATE institution_contacts SET contact_type = 'CAT · ICS / Xarxa Pública'
+      WHERE region = 'Cataluña' AND email SIMILAR TO '%(\.ics@gencat\.cat|@gencat\.cat)%'
+        AND email NOT IN ('direcciogerencia@gencat.cat','gestio.recerca.idi@gencat.cat','gerencia.idi@gencat.cat',
+                          'comunicacio.germanstrias@gencat.cat','germanstrias@gencat.cat')
+        AND (contact_type IS NULL OR contact_type NOT LIKE 'CAT ·%')
+    `);
+    await pool.query(`
+      UPDATE institution_contacts SET contact_type = 'CAT · Hospitals i Centres'
+      WHERE region = 'Cataluña' AND email SIMILAR TO '%(vallhebron\.cat|vhebron\.net|bellvitgehospital\.cat|clinic\.cat|tauli\.cat|guttmann\.com|germanstrias)%'
+        AND (contact_type IS NULL OR contact_type NOT LIKE 'CAT ·%')
+    `);
+    await pool.query(`
+      UPDATE institution_contacts SET contact_type = 'CAT · Tecnologia i Innovació'
+      WHERE region = 'Cataluña' AND email SIMILAR TO '%(ticsalutsocial\.cat|@aoc\.cat|@i2cat\.net)%'
+        AND (contact_type IS NULL OR contact_type NOT LIKE 'CAT ·%')
+    `);
+    await pool.query(`
+      UPDATE institution_contacts SET contact_type = 'CAT · Generalitat / CatSalut'
+      WHERE region = 'Cataluña'
+        AND email IN ('direcciogerencia@gencat.cat','gestio.recerca.idi@gencat.cat','gerencia.idi@gencat.cat',
+                      'atencioalciutada@catsalut.cat','ocatt@catsalut.cat','dpd@ticsalutsocial.cat','sau.tic@gencat.cat')
+        AND (contact_type IS NULL OR contact_type NOT LIKE 'CAT ·%')
+    `);
     log("Institution contacts seeded");
   } catch (err: any) {
     console.error("ensureInstitutionContacts error:", err.message);
