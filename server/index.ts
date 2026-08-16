@@ -180,13 +180,18 @@ async function ensureEmpresasContacts() {
       ('invesrel@rbc.com',                              'RBC',      'empresa'),
       ('service@computershare.com',                     'Computershare', 'empresa'),
       ('careers@enbridge.com',                          'Enbridge', 'empresa'),
-      ('patrick.murray@enbridge.com',                   'Enbridge', 'empresa')
+      ('patrick.murray@enbridge.com',                   'Enbridge', 'empresa'),
+      ('heather_norton@apple.com',                      'Apple',    'empresa'),
+      ('gbossio@apple.com',                             'Apple',    'empresa'),
+      ('media.help@apple.com',                          'Apple',    'empresa'),
+      ('media.es@apple.com',                            'Apple',    'empresa'),
+      ('smartinprat@apple.com',                         'Apple',    'empresa')
       ON CONFLICT (email) DO NOTHING
     `);
     // Mark international contacts as bilingual EN·FR
     await pool.query(`
       UPDATE empresa_contacts SET language = 'en_fr'
-      WHERE company IN ('NVIDIA', 'Walmart', 'Shopify', 'Magna', 'RBC', 'Computershare', 'Enbridge')
+      WHERE company IN ('NVIDIA', 'Walmart', 'Shopify', 'Magna', 'RBC', 'Computershare', 'Enbridge', 'Apple')
         AND (language IS NULL OR language != 'en_fr')
     `);
     log("Empresa contacts seeded");
