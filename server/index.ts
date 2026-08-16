@@ -315,6 +315,60 @@ La technologie qui reste proche des personnes.`;
       SELECT $1, $2, $3
       WHERE NOT EXISTS (SELECT 1 FROM empresa_email_templates WHERE name = $1)
     `, ["🍎 Apple — NUXA.LIFE (EN·FR)", appleSubject, appleBody]);
+
+    const intlSubject = `NUXA.LIFE — Emotional wellbeing for your organisation / Bien-être émotionnel pour votre organisation`;
+    const intlBody = `Dear team,
+
+We are writing to you from Spain to introduce NUXA.LIFE, a professional digital platform for emotional support and mental wellbeing.
+
+NUXA provides organisations with:
+• 24/7 emotional support and mental-health guidance for every employee
+• Reduction of absenteeism caused by stress, anxiety and burnout
+• Compliance with ISO 45003 psychosocial risk management standards
+• Aggregated, anonymised reports for HR teams
+
+We believe NUXA could make a real difference for your people.
+
+We would welcome the opportunity to arrange a brief 20-minute call to explore how NUXA could fit into your wellbeing strategy.
+
+NUXA is already available and can be experienced directly:
+🌐 https://nuxa.life/
+
+We remain at your disposal.
+
+The NUXA Team
+https://nuxa.life/
+
+────────────────────────────────────────
+
+Chère équipe,
+
+Nous vous écrivons depuis l'Espagne pour vous présenter NUXA.LIFE, une plateforme numérique professionnelle de soutien émotionnel et de bien-être mental.
+
+NUXA offre aux organisations :
+• Un soutien émotionnel et des ressources en santé mentale disponibles 24h/24 et 7j/7 pour chaque collaborateur
+• Une réduction de l'absentéisme causé par le stress, l'anxiété et le burnout
+• La conformité à la norme ISO 45003 de gestion des risques psychosociaux
+• Des rapports agrégés et anonymisés pour les équipes RH
+
+Nous pensons que NUXA pourrait faire une vraie différence pour vos équipes.
+
+Nous serions ravis de convenir d'un bref appel de 20 minutes pour explorer comment NUXA pourrait s'intégrer dans votre stratégie de bien-être.
+
+NUXA est déjà disponible et peut être expérimentée directement :
+🌐 https://nuxa.life/
+
+Nous restons à votre disposition.
+
+L'équipe NUXA
+https://nuxa.life/`;
+
+    await pool.query(`
+      INSERT INTO empresa_email_templates (name, subject, body)
+      SELECT $1, $2, $3
+      WHERE NOT EXISTS (SELECT 1 FROM empresa_email_templates WHERE name = $1)
+    `, ["🌍 Internacional — Presentación NUXA (EN·FR)", intlSubject, intlBody]);
+
     log("Empresa templates seeded");
   } catch (err: any) {
     console.error("ensureEmpresaTemplates error:", err.message);
