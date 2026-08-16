@@ -730,7 +730,12 @@ async function ensureInstitutionContacts() {
       ('comunicacio@tauli.cat','Cataluña'),
       ('admissions@guttmann.com','Cataluña'),
       ('barcelona@guttmann.com','Cataluña'),
-      ('bbhi@guttmann.com','Cataluña')
+      ('bbhi@guttmann.com','Cataluña'),
+      ('calvarez@ticsalutsocial.cat','Cataluña'),
+      ('gestio.recerca.idi@gencat.cat','Cataluña'),
+      ('innovacio@aoc.cat','Cataluña'),
+      ('josep.martrat@i2cat.net','Cataluña'),
+      ('arnau.sala@i2cat.net','Cataluña')
       ON CONFLICT (email) DO NOTHING
     `);
     log("Institution contacts seeded");
