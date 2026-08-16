@@ -127,6 +127,7 @@ export default function AdminDashboard() {
 
   // Campaign region filter
   const [instCampaignRegions, setInstCampaignRegions] = useState<string[]>([]);
+  const [instCampaignSubgroups, setInstCampaignSubgroups] = useState<string[]>([]);
 
   // Schedule
   const [instScheduledAt, setInstScheduledAt] = useState("");
@@ -1558,9 +1559,16 @@ export default function AdminDashboard() {
                   <CardHeader>
                     <CardTitle className="text-white flex items-center gap-2">✉️ Redactar campaña</CardTitle>
                     <CardDescription className="text-gray-400">
-                      {instCampaignRegions.length > 0
-                        ? `Regiones: ${instCampaignRegions.join(", ")} · ${institutions.filter(i => !i.opted_out && instCampaignRegions.includes(i.region)).length} destinatarios`
-                        : `Todos los activos · ${institutions.filter(i => !i.opted_out).length} destinatarios`}
+                      {(() => {
+                        const filtered = institutions.filter(i => !i.opted_out
+                          && (instCampaignRegions.length === 0 || instCampaignRegions.includes(i.region))
+                          && (instCampaignSubgroups.length === 0 || instCampaignSubgroups.includes(i.contact_type)));
+                        const parts = [
+                          instCampaignRegions.length > 0 ? instCampaignRegions.join(", ") : null,
+                          instCampaignSubgroups.length > 0 ? instCampaignSubgroups.join(", ") : null,
+                        ].filter(Boolean);
+                        return parts.length > 0 ? `${parts.join(" · ")} · ${filtered.length} destinatarios` : `Todos los activos · ${filtered.length} destinatarios`;
+                      })()}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
@@ -1644,6 +1652,24 @@ export default function AdminDashboard() {
                       </div>
                     </div>
 
+                    {/* Filtro por subcarpeta (contact_type) */}
+                    {Array.from(new Set(institutions.filter(i => !i.opted_out && i.contact_type && i.contact_type.startsWith("CAT ·")).map(i => i.contact_type))).sort().length > 0 && (
+                      <div>
+                        <label className="text-gray-300 text-xs font-medium block mb-1">Subcarpeta de Catalunya <span className="text-gray-500">(vacío = todas)</span></label>
+                        <div className="flex flex-wrap gap-1.5">
+                          {Array.from(new Set(institutions.filter(i => !i.opted_out && i.contact_type).map(i => i.contact_type))).sort().map(ct => (
+                            <button key={ct} onClick={() => setInstCampaignSubgroups(prev => prev.includes(ct) ? prev.filter(s => s !== ct) : [...prev, ct])}
+                              className={`text-xs px-2.5 py-1 rounded-full border transition-all ${instCampaignSubgroups.includes(ct) ? "bg-purple-600 border-purple-500 text-white" : "border-gray-600 text-gray-400 hover:text-white hover:border-gray-400"}`}>
+                              {ct}
+                            </button>
+                          ))}
+                          {instCampaignSubgroups.length > 0 && (
+                            <button onClick={() => setInstCampaignSubgroups([])} className="text-xs px-2.5 py-1 rounded-full border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-all">✕ Limpiar</button>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Programar envío */}
                     <div>
                       <label className="text-gray-300 text-xs font-medium block mb-1">Programar envío <span className="text-gray-500">(opcional)</span></label>
@@ -1681,9 +1707,10 @@ export default function AdminDashboard() {
                       <button onClick={() => setInstStatus("confirm")} disabled={!instSubject.trim() || !instBody.trim()}
                         className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-40 text-white font-semibold py-3 rounded-xl transition-all">
                         {instScheduledAt ? "🕐 Programar envío" : "Preparar envío"} →
-                        ({instCampaignRegions.length > 0
-                          ? institutions.filter(i => !i.opted_out && instCampaignRegions.includes(i.region)).length
-                          : institutions.filter(i => !i.opted_out).length} destinatarios)
+                        ({institutions.filter(i => !i.opted_out
+                          && (instCampaignRegions.length === 0 || instCampaignRegions.includes(i.region))
+                          && (instCampaignSubgroups.length === 0 || instCampaignSubgroups.includes(i.contact_type))
+                        ).length} destinatarios)
                       </button>
                     )}
 
@@ -1692,13 +1719,15 @@ export default function AdminDashboard() {
                         <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center">
                           <p className="text-amber-300 text-sm font-semibold">¿Confirmas {instScheduledAt ? "la programación" : "el envío"}?</p>
                           <p className="text-gray-400 text-xs mt-1">
-                            {instCampaignRegions.length > 0
-                              ? `Regiones: ${instCampaignRegions.join(", ")} · `
-                              : "Todos los activos · "}
+                            {[
+                              instCampaignRegions.length > 0 ? instCampaignRegions.join(", ") : null,
+                              instCampaignSubgroups.length > 0 ? instCampaignSubgroups.join(", ") : null,
+                            ].filter(Boolean).join(" · ") || "Todos los activos"}{" · "}
                             <strong className="text-white">
-                              {instCampaignRegions.length > 0
-                                ? institutions.filter(i => !i.opted_out && instCampaignRegions.includes(i.region)).length
-                                : institutions.filter(i => !i.opted_out).length} destinatarios
+                              {institutions.filter(i => !i.opted_out
+                                && (instCampaignRegions.length === 0 || instCampaignRegions.includes(i.region))
+                                && (instCampaignSubgroups.length === 0 || instCampaignSubgroups.includes(i.contact_type))
+                              ).length} destinatarios
                             </strong>
                             {instAbTest && instSubjectB && " · A/B testing activo"}
                             {instScheduledAt && ` · ${new Date(instScheduledAt).toLocaleString("es-ES")}`}
@@ -1714,6 +1743,7 @@ export default function AdminDashboard() {
                                 body: JSON.stringify({
                                   subject: instSubject, body: instBody,
                                   regions: instCampaignRegions.length > 0 ? instCampaignRegions : undefined,
+                                  subgroups: instCampaignSubgroups.length > 0 ? instCampaignSubgroups : undefined,
                                   scheduledAt: instScheduledAt || undefined,
                                   subjectB: instAbTest && instSubjectB ? instSubjectB : undefined,
                                 }),
@@ -1738,7 +1768,7 @@ export default function AdminDashboard() {
                     )}
 
                     {instStatus === "done" && (
-                      <button onClick={() => { setInstStatus("idle"); setInstResult(null); setInstCampaignRegions([]); setInstScheduledAt(""); setInstAbTest(false); setInstSubjectB(""); }}
+                      <button onClick={() => { setInstStatus("idle"); setInstResult(null); setInstCampaignRegions([]); setInstCampaignSubgroups([]); setInstScheduledAt(""); setInstAbTest(false); setInstSubjectB(""); }}
                         className="w-full border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm">
                         Nueva campaña
                       </button>

@@ -1221,20 +1221,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Send institution campaign
   app.post("/api/admin/send-institution-campaign", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
-    const { subject, body, regions, scheduledAt, subjectB } = req.body;
+    const { subject, body, regions, subgroups, scheduledAt, subjectB } = req.body;
     if (!subject || !body) return res.status(400).json({ message: "Subject y body requeridos" });
     try {
       let query = "SELECT * FROM institution_contacts WHERE opted_out = false";
       const params: any[] = [];
       if (Array.isArray(regions) && regions.length > 0) {
-        query += ` AND region = ANY($1)`;
+        query += ` AND region = ANY($${params.length + 1})`;
         params.push(regions);
+      }
+      if (Array.isArray(subgroups) && subgroups.length > 0) {
+        query += ` AND contact_type = ANY($${params.length + 1})`;
+        params.push(subgroups);
       }
       query += " ORDER BY id";
       const r = await pool.query(query, params);
       const contacts = r.rows;
 
-      const regionsStr = (Array.isArray(regions) && regions.length > 0) ? regions.join(", ") : null;
+      const regionsStr = [
+        ...(Array.isArray(regions) && regions.length > 0 ? [regions.join(", ")] : []),
+        ...(Array.isArray(subgroups) && subgroups.length > 0 ? [subgroups.join(", ")] : []),
+      ].join(" · ") || null;
       const scheduledDate = scheduledAt ? new Date(scheduledAt) : null;
       const isScheduled = scheduledDate && scheduledDate > new Date();
 
