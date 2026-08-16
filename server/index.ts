@@ -185,13 +185,30 @@ async function ensureEmpresasContacts() {
       ('gbossio@apple.com',                             'Apple',    'empresa'),
       ('media.help@apple.com',                          'Apple',    'empresa'),
       ('media.es@apple.com',                            'Apple',    'empresa'),
-      ('smartinprat@apple.com',                         'Apple',    'empresa')
+      ('smartinprat@apple.com',                         'Apple',       'empresa'),
+      ('external.relations@bupa.com',                   'Bupa',        'empresa'),
+      ('bupapressoffice@bupa.com',                      'Bupa',        'empresa'),
+      ('duncan.west@bupa.com',                          'Bupa',        'empresa'),
+      ('ir@bupa.com',                                   'Bupa',        'empresa'),
+      ('phyllisia.mccarthy@ee.co.uk',                   'EE',          'empresa'),
+      ('alex.buckley@bt.com',                           'BT',          'empresa'),
+      ('aleksander.straunik@bt.com',                    'BT',          'empresa'),
+      ('jackie.bates@bt.com',                           'BT',          'empresa'),
+      ('giles.barron@bt.com',                           'BT',          'empresa'),
+      ('roxana.iliescu@bt.com',                         'BT',          'empresa'),
+      ('dan.hooper@rolls-royce.com',                    'Rolls-Royce', 'empresa'),
+      ('eu.affairs@rolls-royce.com',                    'Rolls-Royce', 'empresa'),
+      ('jon.skelson@rolls-royce.com',                   'Rolls-Royce', 'empresa'),
+      ('sandra.freeman@rolls-royce.com',                'Rolls-Royce', 'empresa'),
+      ('claire.thomas@rolls-royce.com',                 'Rolls-Royce', 'empresa'),
+      ('marie.moore@rolls-royce.com',                   'Rolls-Royce', 'empresa'),
+      ('heritage.trust@rolls-royce.com',                'Rolls-Royce', 'empresa')
       ON CONFLICT (email) DO NOTHING
     `);
     // Mark international contacts as bilingual EN·FR
     await pool.query(`
       UPDATE empresa_contacts SET language = 'en_fr'
-      WHERE company IN ('NVIDIA', 'Walmart', 'Shopify', 'Magna', 'RBC', 'Computershare', 'Enbridge', 'Apple')
+      WHERE company IN ('NVIDIA', 'Walmart', 'Shopify', 'Magna', 'RBC', 'Computershare', 'Enbridge', 'Apple', 'Bupa', 'EE', 'BT', 'Rolls-Royce')
         AND (language IS NULL OR language != 'en_fr')
     `);
     log("Empresa contacts seeded");
