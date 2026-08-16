@@ -735,7 +735,18 @@ async function ensureInstitutionContacts() {
       ('gestio.recerca.idi@gencat.cat','Cataluña'),
       ('innovacio@aoc.cat','Cataluña'),
       ('josep.martrat@i2cat.net','Cataluña'),
-      ('arnau.sala@i2cat.net','Cataluña')
+      ('arnau.sala@i2cat.net','Cataluña'),
+      ('secretaria@ticsalutsocial.cat','Cataluña'),
+      ('comunicacio@ticsalutsocial.cat','Cataluña'),
+      ('info@ticsalutsocial.cat','Cataluña'),
+      ('gerencia.idi@gencat.cat','Cataluña'),
+      ('dinamitzacio@aoc.cat','Cataluña'),
+      ('jim.ahtes@i2cat.net','Cataluña'),
+      ('manel.medina@i2cat.net','Cataluña'),
+      ('marc.guerrero@i2cat.net','Cataluña'),
+      ('alex.romaguera@i2cat.net','Cataluña'),
+      ('ignasi.oliva@i2cat.net','Cataluña'),
+      ('fundacio@i2cat.net','Cataluña')
       ON CONFLICT (email) DO NOTHING
     `);
     log("Institution contacts seeded");
