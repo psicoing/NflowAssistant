@@ -165,7 +165,7 @@ export default function Bienvenida() {
         {/* Mini banner — Por qué no somos ChatGPT */}
         <div className="max-w-5xl mx-auto w-full px-4 pb-10">
           <button
-            onClick={() => setLocation("/#comparativa")}
+            onClick={() => { window.location.href = "/#comparativa"; }}
             className="w-full group flex items-center justify-center gap-3 border border-white/10 bg-white/5 hover:bg-white/10 rounded-2xl px-6 py-3 transition-all duration-200"
           >
             <span className="text-slate-400 text-xs tracking-wide">

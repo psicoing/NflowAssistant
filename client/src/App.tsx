@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
-import SplashScreen, { hasSplashBeenShown } from "@/components/SplashScreen";
+import SplashScreen, { hasSplashBeenShown, markSplashShown } from "@/components/SplashScreen";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Chat from "@/pages/chat";
@@ -160,11 +160,20 @@ function AuthenticatedRouter() {
 
 function AppContent() {
   const [location] = useLocation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const standaloneTools = ["/test-bienestar", "/calculadora-burnout"];
   const isStandaloneTool = standaloneTools.includes(location);
   const [, setLocation] = useLocation();
-  const [showSplash, setShowSplash] = useState(() => !hasSplashBeenShown() && !isStandaloneTool);
+  // Siempre mostramos el splash salvo que sea una tool standalone
+  const [showSplash, setShowSplash] = useState(() => !isStandaloneTool);
+
+  // Usuarios autenticados que ya vieron el splash → saltarlo directamente
+  useEffect(() => {
+    if (isLoading) return;
+    if (isAuthenticated && hasSplashBeenShown()) {
+      setShowSplash(false);
+    }
+  }, [isLoading, isAuthenticated]);
 
   // Only show floating CTA on public pages and for non-authenticated users
   const showFloatingCTA = !isAuthenticated && 
@@ -172,7 +181,11 @@ function AppContent() {
      location === "/app-movil" || location === "/nosotros" || location === "/control-parental" || location === "/blog");
 
   if (showSplash && !isStandaloneTool) {
-    return <SplashScreen onFinish={() => { setShowSplash(false); setLocation("/bienvenida"); }} />;
+    return <SplashScreen onFinish={() => {
+      if (isAuthenticated) markSplashShown(); // usuarios con cuenta → recordar que ya lo vieron
+      setShowSplash(false);
+      setLocation("/bienvenida");
+    }} />;
   }
 
   return (

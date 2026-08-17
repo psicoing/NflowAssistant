@@ -123,6 +123,16 @@ function isInPreviewWebview() {
   }
 }
 
+const STORAGE_KEY = "nuxa-splash-v2";
+
 export function hasSplashBeenShown() {
-  return false; // dev: siempre mostrar el splash
+  try {
+    return localStorage.getItem(STORAGE_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+export function markSplashShown() {
+  try { localStorage.setItem(STORAGE_KEY, "1"); } catch {}
 }
