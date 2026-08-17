@@ -24,7 +24,7 @@ const SLIDES = [
 
 const TOTAL_DURATION_MS = 8000;
 const SLIDE_DURATION_MS = TOTAL_DURATION_MS / SLIDES.length;
-const STORAGE_KEY = "nuxa-splash-shown";
+const STORAGE_KEY = "nuxa-splash-v2";
 
 export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
   const [activeSlide, setActiveSlide] = useState(0);
