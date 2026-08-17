@@ -101,18 +101,10 @@ export default function Bienvenida() {
           {/* Emotion tags — trilingüe */}
           <div className="flex flex-wrap justify-center gap-1.5 max-w-5xl mx-auto mb-8">
             {[
-              { es: "estrés emocional",       en: "emotional stress",        fr: "stress émotionnel" },
-              { es: "ansiedad diaria",         en: "daily anxiety",           fr: "anxiété quotidienne" },
-              { es: "ansiedad laboral",        en: "work anxiety",            fr: "anxiété au travail" },
-              { es: "estrés en el trabajo",    en: "workplace stress",        fr: "stress professionnel" },
-              { es: "pensamientos repetitivos",en: "repetitive thoughts",     fr: "pensées répétitives" },
-              { es: "bloqueo emocional",       en: "emotional block",         fr: "blocage émotionnel" },
-              { es: "problemas familiares",    en: "family issues",           fr: "problèmes familiaux" },
-              { es: "sentirse desbordado",     en: "feeling overwhelmed",     fr: "se sentir débordé" },
-              { es: "cansancio mental",        en: "mental fatigue",          fr: "fatigue mentale" },
-              { es: "dificultad para dormir",  en: "sleep difficulties",      fr: "difficultés à dormir" },
-              { es: "preocupación constante",  en: "constant worry",          fr: "inquiétude constante" },
-              { es: "soledad emocional",       en: "emotional loneliness",    fr: "solitude émotionnelle" },
+              { es: "estrés emocional",   en: "emotional stress",   fr: "stress émotionnel" },
+              { es: "ansiedad diaria",      en: "daily anxiety",      fr: "anxiété quotidienne" },
+              { es: "bloqueo emocional",    en: "emotional block",    fr: "blocage émotionnel" },
+              { es: "cansancio mental",     en: "mental fatigue",     fr: "fatigue mentale" },
             ].map((tag) => (
               <span
                 key={tag.es}
