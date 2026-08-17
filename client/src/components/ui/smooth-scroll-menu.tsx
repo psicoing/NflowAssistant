@@ -128,20 +128,20 @@ export default function SmoothScrollMenu() {
 
         {/* Footer fijo con CTAs */}
         <div className="shrink-0 px-4 py-4 border-t border-gray-800 space-y-2">
-          <a
+          <Link
             href="/prueba-gratis"
             onClick={() => setIsOpen(false)}
             className="block w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-red-500 active:opacity-90 transition-all duration-200 text-center text-sm"
           >
             Comenzar Ahora
-          </a>
-          <a
+          </Link>
+          <Link
             href="/login"
             onClick={() => setIsOpen(false)}
             className="block w-full border border-gray-600 text-gray-300 px-4 py-2.5 rounded-xl font-medium hover:bg-white/10 hover:text-white active:bg-white/20 transition-all duration-200 text-center text-sm"
           >
             Iniciar Sesión
-          </a>
+          </Link>
         </div>
       </SheetContent>
     </Sheet>

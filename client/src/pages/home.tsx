@@ -356,7 +356,7 @@ export default function Home() {
               </Link>
 
               {/* Empresas */}
-              <a href="/empresa-privada" className="group relative flex flex-col items-start rounded-2xl border border-emerald-400/20 bg-white/5 backdrop-blur-sm p-6 hover:bg-white/10 hover:border-emerald-400/40 hover:-translate-y-1 transition-all duration-300">
+              <Link href="/empresa-privada" className="group relative flex flex-col items-start rounded-2xl border border-emerald-400/20 bg-white/5 backdrop-blur-sm p-6 hover:bg-white/10 hover:border-emerald-400/40 hover:-translate-y-1 transition-all duration-300">
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative flex items-center gap-1.5 mb-3 text-2xl">
                   <span>🧑‍💼</span><span>🏪</span><span>🏬</span><span>🏢</span><span>🏙️</span>
@@ -366,10 +366,10 @@ export default function Home() {
                 <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400 group-hover:gap-2.5 transition-all duration-200">
                   Solución para empresas →
                 </span>
-              </a>
+              </Link>
 
               {/* Organizaciones públicas */}
-              <a href="/sector-publico" className="group relative flex flex-col items-start rounded-2xl border border-sky-400/20 bg-white/5 backdrop-blur-sm p-6 hover:bg-white/10 hover:border-sky-400/40 hover:-translate-y-1 transition-all duration-300">
+              <Link href="/sector-publico" className="group relative flex flex-col items-start rounded-2xl border border-sky-400/20 bg-white/5 backdrop-blur-sm p-6 hover:bg-white/10 hover:border-sky-400/40 hover:-translate-y-1 transition-all duration-300">
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-sky-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative flex items-center gap-1.5 mb-3 text-2xl">
                   <span>🏛️</span><span>🏥</span><span>🏫</span><span>🎓</span><span>🤝</span>
@@ -379,7 +379,7 @@ export default function Home() {
                 <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-400 group-hover:gap-2.5 transition-all duration-200">
                   Sector público →
                 </span>
-              </a>
+              </Link>
             </div>
 
             {/* CTA principal */}
@@ -664,7 +664,7 @@ export default function Home() {
               <p className="text-gray-400">Úsalas ahora mismo.</p>
             </div>
             <div className="grid md:grid-cols-2 gap-5">
-              <a href="/test-bienestar"
+              <Link href="/test-bienestar"
                 className="group bg-gradient-to-br from-blue-600/20 to-blue-900/20 border border-blue-500/30 hover:border-blue-400/60 rounded-3xl p-7 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/10 block">
                 <div className="text-4xl mb-4">🧠</div>
                 <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">Test de Bienestar Emocional</h3>
@@ -677,9 +677,9 @@ export default function Home() {
                   <span className="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full">✓ Gratis</span>
                 </div>
                 <p className="text-blue-400 text-sm font-semibold group-hover:translate-x-1 transition-transform inline-block">Empezar el test →</p>
-              </a>
+              </Link>
 
-              <a href="/calculadora-burnout"
+              <Link href="/calculadora-burnout"
                 className="group bg-gradient-to-br from-red-600/15 to-slate-900/50 border border-red-500/25 hover:border-red-400/50 rounded-3xl p-7 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-red-500/10 block">
                 <div className="text-4xl mb-4">💸</div>
                 <h3 className="text-xl font-bold text-white mb-2 group-hover:text-red-300 transition-colors">Calculadora de Burnout</h3>
@@ -692,7 +692,7 @@ export default function Home() {
                   <span className="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full">✓ Gratis</span>
                 </div>
                 <p className="text-red-400 text-sm font-semibold group-hover:translate-x-1 transition-transform inline-block">Calcular ahora →</p>
-              </a>
+              </Link>
             </div>
           </div>
         </section>
