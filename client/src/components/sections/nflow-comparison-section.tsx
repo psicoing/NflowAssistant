@@ -1,4 +1,5 @@
 import { Check } from 'lucide-react';
+import { Link } from 'wouter';
 
 export default function NFlowComparisonSection() {
   const comparisons = [

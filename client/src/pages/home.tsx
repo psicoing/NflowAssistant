@@ -343,7 +343,7 @@ export default function Home() {
             {/* Tarjetas */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Particulares */}
-              <a href="/prueba-gratis" className="group relative flex flex-col items-start rounded-2xl border border-indigo-400/20 bg-white/5 backdrop-blur-sm p-6 hover:bg-white/10 hover:border-indigo-400/40 hover:-translate-y-1 transition-all duration-300">
+              <Link href="/prueba-gratis" className="group relative flex flex-col items-start rounded-2xl border border-indigo-400/20 bg-white/5 backdrop-blur-sm p-6 hover:bg-white/10 hover:border-indigo-400/40 hover:-translate-y-1 transition-all duration-300">
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-500/5 to-violet-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="relative flex items-center gap-1.5 mb-3 text-2xl">
                   <span>👱‍♂️</span><span>👱‍♀️</span><span>👨‍🦳</span><span>👩‍🦳</span><span>👨‍👩‍👧‍👦</span>
@@ -353,7 +353,7 @@ export default function Home() {
                 <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400 group-hover:gap-2.5 transition-all duration-200">
                   Probar gratis →
                 </span>
-              </a>
+              </Link>
 
               {/* Empresas */}
               <a href="/empresa-privada" className="group relative flex flex-col items-start rounded-2xl border border-emerald-400/20 bg-white/5 backdrop-blur-sm p-6 hover:bg-white/10 hover:border-emerald-400/40 hover:-translate-y-1 transition-all duration-300">
@@ -384,22 +384,22 @@ export default function Home() {
 
             {/* CTA principal */}
             <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
+              <Link
                 href="/prueba-gratis"
                 className="btn-orange-glow inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-xl px-12 py-5 rounded-2xl transition-all duration-200 shadow-lg shadow-orange-500/30"
               >
                 <span className="text-2xl">🚀</span>
                 {t('home.cta.button')}
                 <span className="text-2xl">→</span>
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/recursos-gratuitos"
                 className="btn-orange-glow inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-xl px-12 py-5 rounded-2xl transition-all duration-200 shadow-lg shadow-orange-500/30"
               >
                 <span className="text-2xl">🎁</span>
                 Recursos gratis
                 <span className="text-2xl">→</span>
-              </a>
+              </Link>
             </div>
             <p className="text-center text-slate-400 text-sm mt-3">{t('home.cta.subtitle')}</p>
 

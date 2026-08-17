@@ -3186,9 +3186,9 @@ export default function RecursosGratis() {
             <p className="text-white text-sm font-medium text-center sm:text-left">
               💡 <strong>Esto es gratis.</strong> Accede a todo — protocolos clínicos, urgencias, recursos locales — por <strong>2,99 €/mes</strong>. Lo que ChatGPT no te da.
             </p>
-            <a href="/registro" className="flex-shrink-0 bg-white text-purple-700 font-semibold text-sm px-5 py-2 rounded-full hover:bg-gray-100 transition-colors shadow">
+            <Link href="/registro" className="flex-shrink-0 bg-white text-purple-700 font-semibold text-sm px-5 py-2 rounded-full hover:bg-gray-100 transition-colors shadow">
               Probar ahora →
-            </a>
+            </Link>
           </div>
 
           {/* NUXA Racing Banner - Top */}
@@ -4701,7 +4701,7 @@ export default function RecursosGratis() {
                   </div>
                   
                   <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                    <a href="/registro/planes">
+                    <Link href="/registro/planes">
                       <Button 
                         size="lg" 
                         className="w-full sm:w-auto bg-white text-emerald-700 hover:bg-gray-100 font-bold text-lg px-8 py-6 shadow-xl"
@@ -4710,7 +4710,7 @@ export default function RecursosGratis() {
                         Escoge tu plan
                         <ArrowRight className="w-5 h-5 ml-2" />
                       </Button>
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 
@@ -4770,12 +4770,12 @@ export default function RecursosGratis() {
             Sin permanencia, desde <strong className="text-white">2,99 €/mes</strong>.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/registro" className="bg-white text-blue-700 font-bold px-8 py-3 rounded-full hover:bg-blue-50 transition-colors shadow-lg">
+            <Link href="/registro" className="bg-white text-blue-700 font-bold px-8 py-3 rounded-full hover:bg-blue-50 transition-colors shadow-lg">
               Empezar ahora
-            </a>
-            <a href="/#comparativa" className="border border-white/40 text-white font-medium px-8 py-3 rounded-full hover:bg-white/10 transition-colors">
+            </Link>
+            <Link href="/#comparativa" className="border border-white/40 text-white font-medium px-8 py-3 rounded-full hover:bg-white/10 transition-colors">
               Ver comparativa completa
-            </a>
+            </Link>
           </div>
         </div>
       </div>
