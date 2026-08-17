@@ -97,7 +97,7 @@ export default function Bienvenida() {
         {/* Hero */}
         <div className="text-center px-4 pt-10 pb-8">
           {/* NUXA brand title */}
-          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight mb-2">
+          <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight mb-2">
             NUXA
           </h1>
           <p className="text-sm md:text-base text-indigo-300 tracking-widest uppercase mb-4">
