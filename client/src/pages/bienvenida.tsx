@@ -1,7 +1,6 @@
 import { useLocation } from "wouter";
 import { ArrowRight, Sparkles, BookOpen, LogIn } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
-import { useAuth } from "@/hooks/useAuth";
 
 const PATHS = [
   {
@@ -104,10 +103,7 @@ const WHY_NOT = [
 
 export default function Bienvenida() {
   const [, setLocation] = useLocation();
-  const { isAuthenticated } = useAuth();
-
-  // Resolve destination for each path at render time
-  const destinations = ["/prueba-gratis", "/recursos", isAuthenticated ? "/chat" : "/login"];
+  const destinations = ["/prueba-gratis", "/recursos", "/"];
 
   return (
     <>
@@ -135,16 +131,35 @@ export default function Bienvenida() {
 
         {/* Hero */}
         <div className="text-center px-4 pt-10 pb-8">
-          <p className="text-indigo-300 text-xs font-semibold uppercase tracking-widest mb-3">
-            ES · EN · FR
-          </p>
-          <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-3">
-            ¿Por dónde quieres empezar?
+          {/* NUXA brand title */}
+          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight mb-3">
+            NUXA
           </h1>
-          <p className="text-slate-400 text-base md:text-lg max-w-xl mx-auto">
-            <span className="text-slate-300">Where would you like to begin?</span>
+          <p className="text-lg md:text-2xl font-medium text-indigo-200 mb-6">
+            Hola, ¿me cuentas qué te preocupa?
+          </p>
+
+          {/* Emotion tags */}
+          <div className="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto mb-8">
+            {[
+              "estrés emocional", "ansiedad diaria", "ansiedad laboral",
+              "estrés en el trabajo", "pensamientos repetitivos", "bloqueo emocional",
+              "problemas familiares", "sentirse desbordado", "cansancio mental",
+              "dificultad para dormir", "preocupación constante", "soledad emocional"
+            ].map((tag) => (
+              <span
+                key={tag}
+                className="text-xs text-indigo-300 border border-indigo-500/30 bg-indigo-500/10 rounded-full px-3 py-1"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <p className="text-slate-500 text-sm">
+            <span className="text-slate-400">Where would you like to begin?</span>
             {" · "}
-            <span className="text-slate-500">Par où souhaitez-vous commencer ?</span>
+            <span className="text-slate-600">Par où souhaitez-vous commencer ?</span>
           </p>
         </div>
 
