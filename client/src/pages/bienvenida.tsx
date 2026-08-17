@@ -75,7 +75,7 @@ export default function Bienvenida() {
         canonicalUrl="https://nuxa.life/bienvenida"
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 flex flex-col">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 flex flex-col overflow-x-hidden">
 
         {/* Top bar */}
         <div className="flex items-center justify-between px-6 pt-6 pb-2">
