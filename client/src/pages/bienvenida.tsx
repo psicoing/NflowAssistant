@@ -139,19 +139,31 @@ export default function Bienvenida() {
             Hola, ¿me cuentas qué te preocupa?
           </p>
 
-          {/* Emotion tags */}
-          <div className="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto mb-8">
+          {/* Emotion tags — trilingüe */}
+          <div className="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto mb-8">
             {[
-              "estrés emocional", "ansiedad diaria", "ansiedad laboral",
-              "estrés en el trabajo", "pensamientos repetitivos", "bloqueo emocional",
-              "problemas familiares", "sentirse desbordado", "cansancio mental",
-              "dificultad para dormir", "preocupación constante", "soledad emocional"
+              { es: "estrés emocional",       en: "emotional stress",        fr: "stress émotionnel" },
+              { es: "ansiedad diaria",         en: "daily anxiety",           fr: "anxiété quotidienne" },
+              { es: "ansiedad laboral",        en: "work anxiety",            fr: "anxiété au travail" },
+              { es: "estrés en el trabajo",    en: "workplace stress",        fr: "stress professionnel" },
+              { es: "pensamientos repetitivos",en: "repetitive thoughts",     fr: "pensées répétitives" },
+              { es: "bloqueo emocional",       en: "emotional block",         fr: "blocage émotionnel" },
+              { es: "problemas familiares",    en: "family issues",           fr: "problèmes familiaux" },
+              { es: "sentirse desbordado",     en: "feeling overwhelmed",     fr: "se sentir débordé" },
+              { es: "cansancio mental",        en: "mental fatigue",          fr: "fatigue mentale" },
+              { es: "dificultad para dormir",  en: "sleep difficulties",      fr: "difficultés à dormir" },
+              { es: "preocupación constante",  en: "constant worry",          fr: "inquiétude constante" },
+              { es: "soledad emocional",       en: "emotional loneliness",    fr: "solitude émotionnelle" },
             ].map((tag) => (
               <span
-                key={tag}
-                className="text-xs text-indigo-300 border border-indigo-500/30 bg-indigo-500/10 rounded-full px-3 py-1"
+                key={tag.es}
+                className="text-xs text-indigo-300 border border-indigo-500/30 bg-indigo-500/10 rounded-full px-3 py-1.5 leading-tight"
               >
-                {tag}
+                <span className="text-indigo-200 font-medium">{tag.es}</span>
+                <span className="text-indigo-500 mx-1">·</span>
+                <span className="text-indigo-400">{tag.en}</span>
+                <span className="text-indigo-600 mx-1">·</span>
+                <span className="text-indigo-500">{tag.fr}</span>
               </span>
             ))}
           </div>
