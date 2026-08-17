@@ -105,26 +105,6 @@ export default function Bienvenida() {
             <span className="text-indigo-400">bien-être émotionnel</span>
           </p>
 
-          {/* Emotion tags — trilingüe */}
-          <div className="flex flex-wrap justify-center gap-1.5 max-w-5xl mx-auto mb-8">
-            {[
-              { es: "estrés emocional",   en: "emotional stress",   fr: "stress émotionnel" },
-              { es: "ansiedad diaria",      en: "daily anxiety",      fr: "anxiété quotidienne" },
-              { es: "bloqueo emocional",    en: "emotional block",    fr: "blocage émotionnel" },
-              { es: "cansancio mental",     en: "mental fatigue",     fr: "fatigue mentale" },
-            ].map((tag) => (
-              <span
-                key={tag.es}
-                className="text-[11px] text-indigo-300 border border-indigo-500/30 bg-indigo-500/10 rounded-full px-2.5 py-1 leading-tight whitespace-nowrap"
-              >
-                <span className="text-indigo-200 font-medium">{tag.es}</span>
-                <span className="text-indigo-600 mx-1">·</span>
-                <span className="text-indigo-400">{tag.en}</span>
-                <span className="text-indigo-700 mx-1">·</span>
-                <span className="text-indigo-500">{tag.fr}</span>
-              </span>
-            ))}
-          </div>
 
           <p className="text-slate-500 text-sm">
             <span className="text-slate-400">Where would you like to begin?</span>
