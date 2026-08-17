@@ -1,6 +1,7 @@
 import { useLocation } from "wouter";
 import { ArrowRight, Sparkles, BookOpen, LogIn } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
+import { useAuth } from "@/hooks/useAuth";
 
 const PATHS = [
   {
@@ -103,6 +104,10 @@ const WHY_NOT = [
 
 export default function Bienvenida() {
   const [, setLocation] = useLocation();
+  const { isAuthenticated } = useAuth();
+
+  // Resolve destination for each path at render time
+  const destinations = ["/prueba-gratis", "/recursos", isAuthenticated ? "/chat" : "/login"];
 
   return (
     <>
@@ -145,12 +150,12 @@ export default function Bienvenida() {
 
         {/* Three paths */}
         <div className="max-w-5xl mx-auto w-full px-4 pb-12 grid grid-cols-1 md:grid-cols-3 gap-5">
-          {PATHS.map((path) => {
+          {PATHS.map((path, idx) => {
             const Icon = path.icon;
             return (
               <button
                 key={path.href}
-                onClick={() => setLocation(path.href)}
+                onClick={() => setLocation(destinations[idx])}
                 className={`group text-left bg-white/5 backdrop-blur-sm border ${path.border} rounded-3xl p-7 shadow-xl ${path.glow} hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col gap-5`}
               >
                 {/* Icon */}
