@@ -62,44 +62,6 @@ const PATHS = [
   },
 ];
 
-const WHY_NOT = [
-  {
-    icon: "🗂️",
-    es: { t: "Más organizado", s: "Bloques temáticos estructurados" },
-    en: { t: "More organised", s: "Structured thematic blocks" },
-    fr: { t: "Plus organisé", s: "Blocs thématiques structurés" },
-  },
-  {
-    icon: "📋",
-    es: { t: "Seguridad clínica", s: "Cita DSM-5-TR y CIE-11" },
-    en: { t: "Clinical safety", s: "References DSM-5-TR & ICD-11" },
-    fr: { t: "Sécurité clinique", s: "Réf. DSM-5-TR et CIM-11" },
-  },
-  {
-    icon: "🚨",
-    es: { t: "Protocolos de crisis", s: "Teléfonos reales (024, 112…)" },
-    en: { t: "Crisis protocols", s: "Real emergency numbers (112…)" },
-    fr: { t: "Protocoles de crise", s: "Numéros réels (15, 112…)" },
-  },
-  {
-    icon: "📚",
-    es: { t: "Psicoeducación real", s: "Mitos, verdades y diagnóstico" },
-    en: { t: "Real psychoeducation", s: "Myths, facts & diagnosis" },
-    fr: { t: "Psychoéducation réelle", s: "Mythes, faits et diagnostic" },
-  },
-  {
-    icon: "📍",
-    es: { t: "Recursos locales", s: "Adaptados a tu ciudad" },
-    en: { t: "Local resources", s: "Tailored to your city" },
-    fr: { t: "Ressources locales", s: "Adaptées à votre ville" },
-  },
-  {
-    icon: "🛡️",
-    es: { t: "Derivación responsable", s: "Siempre visible y clara" },
-    en: { t: "Responsible referral", s: "Always visible and clear" },
-    fr: { t: "Orientation responsable", s: "Toujours visible et claire" },
-  },
-];
 
 export default function Bienvenida() {
   const [, setLocation] = useLocation();
@@ -218,42 +180,21 @@ export default function Bienvenida() {
           })}
         </div>
 
-        {/* Divider */}
-        <div className="max-w-5xl mx-auto w-full px-4 mb-8">
-          <div className="border-t border-white/10 relative">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-950 px-4">
-              <p className="text-slate-500 text-xs text-center">
-                Por qué no somos ChatGPT · Why we're not ChatGPT · Pourquoi nous ne sommes pas ChatGPT
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Why not ChatGPT — 6 blocks */}
-        <div className="max-w-5xl mx-auto w-full px-4 pb-16 grid grid-cols-2 md:grid-cols-3 gap-4">
-          {WHY_NOT.map((item, i) => (
-            <div
-              key={i}
-              className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-2"
-            >
-              <span className="text-2xl">{item.icon}</span>
-              <div className="space-y-1">
-                <p className="text-white font-bold text-sm">{item.es.t}</p>
-                <p className="text-slate-400 text-xs leading-tight">{item.es.s}</p>
-              </div>
-              <div className="border-t border-white/10 pt-2 space-y-1">
-                <p className="text-slate-300 font-semibold text-xs">{item.en.t} <span className="text-slate-600">·</span> <span className="text-slate-400 font-normal">{item.fr.t}</span></p>
-                <p className="text-slate-600 text-[11px] leading-tight">{item.en.s}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Footer note */}
-        <div className="text-center pb-8 px-4">
-          <p className="text-slate-600 text-xs">
-            NUXA · Salud mental profesional · Professional mental health · Santé mentale professionnelle
-          </p>
+        {/* Mini banner — Por qué no somos ChatGPT */}
+        <div className="max-w-5xl mx-auto w-full px-4 pb-10">
+          <button
+            onClick={() => setLocation("/#comparativa")}
+            className="w-full group flex items-center justify-center gap-3 border border-white/10 bg-white/5 hover:bg-white/10 rounded-2xl px-6 py-3 transition-all duration-200"
+          >
+            <span className="text-slate-400 text-xs tracking-wide">
+              <span className="text-slate-200 font-medium">Por qué no somos ChatGPT</span>
+              <span className="mx-2 text-slate-600">·</span>
+              <span>Why we're not ChatGPT</span>
+              <span className="mx-2 text-slate-600">·</span>
+              <span className="text-slate-500">Pourquoi nous ne sommes pas ChatGPT</span>
+            </span>
+            <span className="text-slate-500 group-hover:text-slate-300 transition-colors text-xs">→</span>
+          </button>
         </div>
 
       </div>
