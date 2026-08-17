@@ -707,7 +707,9 @@ export default function Home() {
         <FamilyImageSection />
         
         <NuxaRobotComparisonSection />
-        <NFlowComparisonSection />
+        <div id="comparativa">
+          <NFlowComparisonSection />
+        </div>
         
         <NuxaRobotYouthEmpowermentSection />
         <YouthMentalHealthSection />
