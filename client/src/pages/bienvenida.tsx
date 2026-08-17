@@ -170,7 +170,8 @@ export default function Bienvenida() {
               setTimeout(() => {
                 const el = document.getElementById("comparativa");
                 if (el) {
-                  el.scrollIntoView({ behavior: "smooth", block: "start" });
+                  const y = el.getBoundingClientRect().top + window.scrollY + 180;
+                  window.scrollTo({ top: y, behavior: "smooth" });
                 }
               }, 600);
             }}
