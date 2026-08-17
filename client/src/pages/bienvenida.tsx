@@ -168,8 +168,11 @@ export default function Bienvenida() {
             onClick={() => {
               setLocation("/");
               setTimeout(() => {
-                document.getElementById("comparativa")?.scrollIntoView({ behavior: "smooth" });
-              }, 150);
+                const el = document.getElementById("comparativa");
+                if (el) {
+                  el.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+              }, 600);
             }}
             className="w-full group flex items-center justify-center gap-3 border border-white/10 bg-white/5 hover:bg-white/10 rounded-2xl px-6 py-3 transition-all duration-200"
           >
