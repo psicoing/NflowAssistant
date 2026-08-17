@@ -1,28 +1,63 @@
 import { useState, useEffect, useRef } from "react";
-import { X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { X, Sparkles, Building2, ArrowRight } from "lucide-react";
 import { useLocation } from "wouter";
 import { useLanguage } from "@/hooks/useLanguage";
 
 const popupContent = {
   es: {
-    title: "¿Te vas sin hablar de lo que te preocupa?",
-    description: "NUXA te escucha 24/7, sin juicios, en tu idioma.",
-    highlight: "La experiencia es tan real que pensarás que hablas con un psicólogo sabio.",
-    price: "Pide a tu empresa o administración que active NUXA para vosotros",
-    noCommitment: "Gratis si tu organización lo ofrece · También disponible a través de profesionales autorizados",
-    cta: "Más información para organizaciones",
-    dismiss: "No gracias, prefiero seguir solo/a"
+    eyebrow: "Antes de irte…",
+    title: "Tu bienestar no puede esperar",
+    subtitle: "NUXA te acompaña cuando más lo necesitas. Sin juicios, sin esperas, en tu idioma.",
+    optionA: {
+      badge: "Para ti, ahora mismo",
+      heading: "Empieza en 2 minutos",
+      detail: "Desde 2,99 €/mes · Sin permanencia · Cancela cuando quieras",
+      cta: "Crear mi cuenta →",
+    },
+    optionB: {
+      badge: "Para tu empresa u organización",
+      heading: "Actívalo para todo tu equipo",
+      detail: "Gratis si tu organización lo ofrece · También via profesionales autorizados",
+      cta: "Más info para organizaciones",
+    },
+    dismiss: "Ahora no, gracias",
   },
   en: {
-    title: "Leaving without talking about what worries you?",
-    description: "NUXA listens 24/7, without judgment, in your language.",
-    highlight: "The experience is so real you'll think you're talking to a wise psychologist.",
-    price: "Ask your company or administration to activate NUXA for your team",
-    noCommitment: "Free if your organization offers it · Also available through authorized professionals",
-    cta: "More info for organizations",
-    dismiss: "No thanks, I prefer to go it alone"
-  }
+    eyebrow: "Before you go…",
+    title: "Your wellbeing can't wait",
+    subtitle: "NUXA is with you when you need it most. No judgment, no waiting, in your language.",
+    optionA: {
+      badge: "Just for you, right now",
+      heading: "Start in 2 minutes",
+      detail: "From €2.99/month · No commitment · Cancel anytime",
+      cta: "Create my account →",
+    },
+    optionB: {
+      badge: "For your company or organisation",
+      heading: "Activate it for your whole team",
+      detail: "Free if your organisation offers it · Also via authorised professionals",
+      cta: "More info for organisations",
+    },
+    dismiss: "Not now, thanks",
+  },
+  fr: {
+    eyebrow: "Avant de partir…",
+    title: "Votre bien-être ne peut pas attendre",
+    subtitle: "NUXA vous accompagne quand vous en avez le plus besoin. Sans jugement, sans attente.",
+    optionA: {
+      badge: "Pour vous, dès maintenant",
+      heading: "Commencez en 2 minutes",
+      detail: "À partir de 2,99 €/mois · Sans engagement · Résiliez quand vous voulez",
+      cta: "Créer mon compte →",
+    },
+    optionB: {
+      badge: "Pour votre entreprise ou organisation",
+      heading: "Activez-le pour toute votre équipe",
+      detail: "Gratuit si votre organisation le propose · Aussi via des professionnels agréés",
+      cta: "Plus d'infos pour les organisations",
+    },
+    dismiss: "Pas maintenant, merci",
+  },
 };
 
 export default function ExitIntentPopup() {
@@ -31,9 +66,9 @@ export default function ExitIntentPopup() {
   const [, setLocation] = useLocation();
   const { currentLanguage } = useLanguage();
   const lastScrollY = useRef(0);
-  const scrollVelocity = useRef(0);
-  
-  const content = currentLanguage === 'en' ? popupContent.en : popupContent.es;
+
+  const lang = currentLanguage === "en" ? "en" : currentLanguage === "fr" ? "fr" : "es";
+  const content = popupContent[lang];
 
   const showPopup = () => {
     if (!hasShown && !sessionStorage.getItem("exitPopupShown")) {
@@ -45,52 +80,34 @@ export default function ExitIntentPopup() {
 
   useEffect(() => {
     const alreadyShown = sessionStorage.getItem("exitPopupShown");
-    if (alreadyShown) {
-      setHasShown(true);
-      return;
-    }
+    if (alreadyShown) { setHasShown(true); return; }
 
-    let timeoutId: NodeJS.Timeout;
     let isActive = false;
-    
-    // Desktop: Mouse leave detection
+    const timeoutId = setTimeout(() => { isActive = true; }, 8000);
+
     const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0) {
-        showPopup();
-      }
+      if (e.clientY <= 0 && isActive) showPopup();
     };
 
-    // Mobile: Fast scroll up detection
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const velocity = lastScrollY.current - currentScrollY;
-      
-      // Detect fast scroll up (velocity > 50px) near top of page
-      if (velocity > 50 && currentScrollY < 100 && isActive) {
-        showPopup();
-      }
-      
+      if (velocity > 50 && currentScrollY < 100 && isActive) showPopup();
       lastScrollY.current = currentScrollY;
-      scrollVelocity.current = velocity;
     };
 
-    // Mobile: Tab/app switch detection
     const handleVisibilityChange = () => {
       if (document.visibilityState === "hidden" && isActive) {
-        // Store that we should show popup when they return
         sessionStorage.setItem("showPopupOnReturn", "true");
       } else if (document.visibilityState === "visible") {
-        const shouldShow = sessionStorage.getItem("showPopupOnReturn");
-        if (shouldShow && isActive) {
+        if (sessionStorage.getItem("showPopupOnReturn") && isActive) {
           sessionStorage.removeItem("showPopupOnReturn");
           showPopup();
         }
       }
     };
 
-    // Activate after delay
-    timeoutId = setTimeout(() => {
-      isActive = true;
+    setTimeout(() => {
       document.addEventListener("mouseleave", handleMouseLeave);
       window.addEventListener("scroll", handleScroll, { passive: true });
       document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -104,11 +121,14 @@ export default function ExitIntentPopup() {
     };
   }, [hasShown]);
 
-  const handleClose = () => {
+  const handleClose = () => setIsVisible(false);
+
+  const handleIndividual = () => {
     setIsVisible(false);
+    setLocation("/registro");
   };
 
-  const handleCTA = () => {
+  const handleOrg = () => {
     setIsVisible(false);
     window.open("https://jobda.org/partners", "_blank");
   };
@@ -116,56 +136,84 @@ export default function ExitIntentPopup() {
   if (!isVisible) return null;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       onClick={handleClose}
     >
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
-      
-      <div 
-        className="relative bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-8 max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-300"
+      <div className="absolute inset-0 bg-black/75 backdrop-blur-sm" />
+
+      <div
+        className="relative bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 border border-white/10 rounded-3xl p-7 max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-300"
         onClick={(e) => e.stopPropagation()}
       >
-        <button 
+        {/* Close */}
+        <button
           onClick={handleClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+          className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
           data-testid="button-close-exit-popup"
         >
-          <X className="w-6 h-6" />
+          <X className="w-5 h-5" />
         </button>
 
-        <div className="text-center">
-          <div className="text-5xl mb-4">💚</div>
-          
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <p className="text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-2">
+            {content.eyebrow}
+          </p>
+          <h2 className="text-2xl font-bold text-white leading-snug mb-2">
             {content.title}
           </h2>
-          
-          <p className="text-gray-300 text-base mb-6">
-            {content.description}
-            <span className="text-emerald-400 font-semibold"> {content.highlight}</span>
+          <p className="text-gray-400 text-sm">
+            {content.subtitle}
           </p>
+        </div>
 
-          <div className="bg-emerald-500/20 border border-emerald-500/30 rounded-xl p-4 mb-6">
-            <p className="text-emerald-400 font-bold text-lg">
-              {content.price}
-            </p>
-            <p className="text-gray-400 text-sm">
-              {content.noCommitment}
-            </p>
+        {/* Option A — Individual */}
+        <button
+          onClick={handleIndividual}
+          data-testid="button-exit-popup-cta"
+          className="w-full text-left bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 border border-emerald-500/40 rounded-2xl p-4 mb-3 group transition-all duration-200"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-emerald-400 text-[11px] font-semibold uppercase tracking-wide">
+                  {content.optionA.badge}
+                </span>
+              </div>
+              <p className="text-white font-bold text-base">{content.optionA.heading}</p>
+              <p className="text-gray-400 text-xs mt-0.5">{content.optionA.detail}</p>
+            </div>
+            <ArrowRight className="w-5 h-5 text-emerald-400 group-hover:translate-x-1 transition-transform flex-shrink-0 ml-3" />
           </div>
+        </button>
 
-          <Button
-            onClick={handleCTA}
-            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-6 text-lg font-bold rounded-xl shadow-xl transition-all duration-300 transform hover:scale-105"
-            data-testid="button-exit-popup-cta"
-          >
-            {content.cta}
-          </Button>
+        {/* Option B — Organisation */}
+        <button
+          onClick={handleOrg}
+          className="w-full text-left bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl p-4 mb-5 group transition-all duration-200"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <Building2 className="w-3.5 h-3.5 text-blue-400" />
+                <span className="text-blue-400 text-[11px] font-semibold uppercase tracking-wide">
+                  {content.optionB.badge}
+                </span>
+              </div>
+              <p className="text-white font-bold text-base">{content.optionB.heading}</p>
+              <p className="text-gray-400 text-xs mt-0.5">{content.optionB.detail}</p>
+            </div>
+            <ArrowRight className="w-5 h-5 text-blue-400 group-hover:translate-x-1 transition-transform flex-shrink-0 ml-3" />
+          </div>
+        </button>
 
-          <button 
+        {/* Dismiss */}
+        <div className="text-center">
+          <button
             onClick={handleClose}
-            className="mt-4 text-gray-500 text-sm hover:text-gray-400 transition-colors"
+            className="text-gray-600 text-xs hover:text-gray-400 transition-colors"
             data-testid="button-exit-popup-dismiss"
           >
             {content.dismiss}
