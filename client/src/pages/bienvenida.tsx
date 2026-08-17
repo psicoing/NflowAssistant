@@ -137,7 +137,7 @@ export default function Bienvenida() {
           </h1>
 
           {/* Emotion tags — trilingüe */}
-          <div className="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto mb-8">
+          <div className="flex flex-wrap justify-center gap-1.5 max-w-5xl mx-auto mb-8">
             {[
               { es: "estrés emocional",       en: "emotional stress",        fr: "stress émotionnel" },
               { es: "ansiedad diaria",         en: "daily anxiety",           fr: "anxiété quotidienne" },
@@ -154,12 +154,12 @@ export default function Bienvenida() {
             ].map((tag) => (
               <span
                 key={tag.es}
-                className="text-xs text-indigo-300 border border-indigo-500/30 bg-indigo-500/10 rounded-full px-3 py-1.5 leading-tight"
+                className="text-[11px] text-indigo-300 border border-indigo-500/30 bg-indigo-500/10 rounded-full px-2.5 py-1 leading-tight whitespace-nowrap"
               >
                 <span className="text-indigo-200 font-medium">{tag.es}</span>
-                <span className="text-indigo-500 mx-1">·</span>
-                <span className="text-indigo-400">{tag.en}</span>
                 <span className="text-indigo-600 mx-1">·</span>
+                <span className="text-indigo-400">{tag.en}</span>
+                <span className="text-indigo-700 mx-1">·</span>
                 <span className="text-indigo-500">{tag.fr}</span>
               </span>
             ))}
