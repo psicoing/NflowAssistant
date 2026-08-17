@@ -80,7 +80,10 @@ export default function Bienvenida() {
         {/* Top bar */}
         <div className="flex items-center justify-between px-6 pt-6 pb-2">
           <div className="flex items-center gap-3">
-            <img src="/favicon.png" alt="NUXA" className="w-9 h-9 rounded-xl shadow-lg" />
+            <div className="flex -space-x-2">
+              <img src="/favicon.png" alt="NUXA chica" className="w-9 h-9 rounded-xl shadow-lg ring-2 ring-slate-950" />
+              <img src="/icon-boy.png" alt="NUXA chico" className="w-9 h-9 rounded-xl shadow-lg ring-2 ring-slate-950" />
+            </div>
             <span className="text-white font-bold text-xl tracking-tight">NUXA</span>
           </div>
           <button
