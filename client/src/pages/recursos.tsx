@@ -3181,6 +3181,16 @@ export default function RecursosGratis() {
       <main className="pt-24 pb-12 px-4">
         <div className="max-w-6xl mx-auto">
           
+          {/* Banner persistente ChatGPT vs NUXA */}
+          <div className="mb-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl px-5 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
+            <p className="text-white text-sm font-medium text-center sm:text-left">
+              💡 <strong>Esto es gratis.</strong> Accede a todo — protocolos clínicos, urgencias, recursos locales — por <strong>2,99 €/mes</strong>. Lo que ChatGPT no te da.
+            </p>
+            <a href="/registro" className="flex-shrink-0 bg-white text-purple-700 font-semibold text-sm px-5 py-2 rounded-full hover:bg-gray-100 transition-colors shadow">
+              Probar ahora →
+            </a>
+          </div>
+
           {/* NUXA Racing Banner - Top */}
           <div className="mb-10 overflow-hidden rounded-3xl shadow-2xl">
             {/* Mobile: Stack layout */}
@@ -4747,6 +4757,28 @@ export default function RecursosGratis() {
           </Card>
         </div>
       </main>
+
+      {/* Teaser final antes de salir */}
+      <div className="bg-gradient-to-r from-gray-900 to-blue-900 py-10 px-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-white/60 text-sm uppercase tracking-widest mb-2">Esto es solo una muestra</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+            NUXA hace lo que ChatGPT no puede
+          </h2>
+          <p className="text-white/80 mb-6 text-base max-w-xl mx-auto">
+            Estructura clínica, protocolos de urgencia, recursos locales y acompañamiento real.
+            Sin permanencia, desde <strong className="text-white">2,99 €/mes</strong>.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/registro" className="bg-white text-blue-700 font-bold px-8 py-3 rounded-full hover:bg-blue-50 transition-colors shadow-lg">
+              Empezar ahora
+            </a>
+            <a href="/#comparativa" className="border border-white/40 text-white font-medium px-8 py-3 rounded-full hover:bg-white/10 transition-colors">
+              Ver comparativa completa
+            </a>
+          </div>
+        </div>
+      </div>
 
       <Footer />
     </div>

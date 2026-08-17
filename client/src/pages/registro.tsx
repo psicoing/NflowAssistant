@@ -124,6 +124,35 @@ export default function Registro() {
               </p>
             </div>
 
+            {/* Bloque comparativa ChatGPT vs NUXA */}
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-5 mb-8 text-white">
+              <p className="text-center text-sm font-semibold uppercase tracking-widest opacity-80 mb-3">
+                Lo que ChatGPT no puede hacer por ti
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {[
+                  { icon: "🗂️", label: "Más organizado", sub: "Respuestas en bloques temáticos claros" },
+                  { icon: "📋", label: "Más seguro", sub: "Cita DSM-5-TR y CIE-11" },
+                  { icon: "🚨", label: "Crisis cubierta", sub: "Protocolos de urgencia con teléfonos reales" },
+                  { icon: "📚", label: "Más completo", sub: "Psicoeducación y mitos y verdades" },
+                  { icon: "📍", label: "Recursos locales", sub: "Adaptados a tu ciudad y comunidad" },
+                  { icon: "🛡️", label: "Más responsable", sub: "Derivación profesional siempre visible" },
+                ].map((item, i) => (
+                  <div key={i} className="bg-white/10 rounded-xl p-3 flex items-start gap-2">
+                    <span className="text-xl">{item.icon}</span>
+                    <div>
+                      <p className="font-semibold text-sm">{item.label}</p>
+                      <p className="text-white/70 text-xs leading-tight">{item.sub}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="text-center text-white/70 text-xs mt-3">
+                Sin permanencia · Cancela cuando quieras ·{" "}
+                <a href="/#comparativa" className="underline hover:text-white">Ver comparativa completa</a>
+              </p>
+            </div>
+
             {/* Planes individuales */}
             <Card className="border-2 border-gray-200 shadow-xl overflow-hidden mb-8 relative">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-indigo-50 opacity-60" />

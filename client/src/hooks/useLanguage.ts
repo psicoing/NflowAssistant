@@ -40,9 +40,13 @@ export const translations = {
     'age.title': '⚠️ Aviso Importante: Edad Mínima',
     'age.description': 'Este servicio está diseñado para personas de 18 a 95 años. Los menores de edad deben usar la plataforma bajo supervisión y con consentimiento de sus padres o tutores.',
     'age.emergency': 'En caso de emergencia, contacta inmediatamente con los servicios de emergencia (112 en España).',
-    'ageWarning.title': '⚠️ Aviso Importante: Edad Mínima',
-    'ageWarning.subtitle': 'Este servicio está diseñado para personas de 18 a 95 años. Los menores de edad deben usar la plataforma bajo supervisión y con consentimiento de sus padres o tutores.',
+    'ageWarning.title': '⚠️ Aviso Importante: Edad de Uso',
+    'ageWarning.subtitle': 'Diseñado para mayores de 18 años. Los menores pueden acceder a cualquier edad acompañados de padre o tutor, que deberá estar presente en todo momento.',
     'ageWarning.years': 'años',
+    'ageWarning.adult': '+18 años',
+    'ageWarning.adultLabel': 'Acceso libre',
+    'ageWarning.minor': 'Cualquier edad',
+    'ageWarning.minorLabel': 'Con padre o tutor',
     
     // Services
     'services.title': 'Cuatro Soluciones Especializadas',
@@ -283,9 +287,13 @@ export const translations = {
     'age.title': '⚠️ Important Notice: Minimum Age',
     'age.description': 'This service is designed for people aged 18 to 95. Minors must use the platform under supervision and with consent from their parents or guardians.',
     'age.emergency': 'In case of emergency, immediately contact emergency services (112 in Spain).',
-    'ageWarning.title': '⚠️ Important Notice: Minimum Age',
-    'ageWarning.subtitle': 'This service is designed for people aged 18 to 95. Minors must use the platform under supervision and with consent from their parents or guardians.',
+    'ageWarning.title': '⚠️ Important Notice: Age of Use',
+    'ageWarning.subtitle': 'Designed for adults 18 and over. Minors may access at any age accompanied by a parent or guardian, who must be present at all times.',
     'ageWarning.years': 'years old',
+    'ageWarning.adult': '18+',
+    'ageWarning.adultLabel': 'Free access',
+    'ageWarning.minor': 'Any age',
+    'ageWarning.minorLabel': 'With parent/guardian',
     
     // Services
     'services.title': 'Four Specialized Solutions',
@@ -526,9 +534,13 @@ export const translations = {
     'age.title': '⚠️ Avis Important : Âge Minimum',
     'age.description': 'Ce service est conçu pour les personnes de 18 à 95 ans. Les mineurs doivent utiliser la plateforme sous surveillance et avec le consentement de leurs parents ou tuteurs.',
     'age.emergency': 'En cas d\'urgence, contactez immédiatement les services d\'urgence (112 en France).',
-    'ageWarning.title': '⚠️ Avis Important : Âge Minimum',
-    'ageWarning.subtitle': 'Ce service est conçu pour les personnes de 18 à 95 ans. Les mineurs doivent utiliser la plateforme sous surveillance et avec le consentement de leurs parents ou tuteurs.',
+    'ageWarning.title': '⚠️ Avis Important : Âge d\'utilisation',
+    'ageWarning.subtitle': 'Conçu pour les personnes de 18 ans et plus. Les mineurs peuvent accéder à tout âge accompagnés d\'un parent ou tuteur, qui doit être présent à tout moment.',
     'ageWarning.years': 'ans',
+    'ageWarning.adult': '+18 ans',
+    'ageWarning.adultLabel': 'Accès libre',
+    'ageWarning.minor': 'Tout âge',
+    'ageWarning.minorLabel': 'Avec parent/tuteur',
     
     // Services
     'services.title': 'Quatre Solutions Spécialisées',
