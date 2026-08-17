@@ -164,15 +164,13 @@ function AppContent() {
   const standaloneTools = ["/test-bienestar", "/calculadora-burnout"];
   const isStandaloneTool = standaloneTools.includes(location);
   const [, setLocation] = useLocation();
-  // Siempre mostramos el splash salvo que sea una tool standalone
-  const [showSplash, setShowSplash] = useState(() => !isStandaloneTool);
+  // Mostrar splash solo si no se ha visto ya en esta sesión/cuenta
+  const [showSplash, setShowSplash] = useState(() => !hasSplashBeenShown() && !isStandaloneTool);
 
-  // Usuarios autenticados que ya vieron el splash → saltarlo directamente
+  // Si auth carga y el usuario ya vio el splash → saltarlo
   useEffect(() => {
     if (isLoading) return;
-    if (isAuthenticated && hasSplashBeenShown()) {
-      setShowSplash(false);
-    }
+    if (hasSplashBeenShown()) setShowSplash(false);
   }, [isLoading, isAuthenticated]);
 
   // Only show floating CTA on public pages and for non-authenticated users
@@ -182,7 +180,7 @@ function AppContent() {
 
   if (showSplash && !isStandaloneTool) {
     return <SplashScreen onFinish={() => {
-      if (isAuthenticated) markSplashShown(); // usuarios con cuenta → recordar que ya lo vieron
+      markSplashShown(isAuthenticated); // sessionStorage siempre; localStorage si tiene cuenta
       setShowSplash(false);
       setLocation("/bienvenida");
     }} />;

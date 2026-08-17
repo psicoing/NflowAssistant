@@ -123,16 +123,24 @@ function isInPreviewWebview() {
   }
 }
 
-const STORAGE_KEY = "nuxa-splash-v2";
+const LS_KEY = "nuxa-splash-v2";      // localStorage — usuarios con cuenta
+const SS_KEY = "nuxa-splash-session";  // sessionStorage — esta pestaña
 
 export function hasSplashBeenShown() {
   try {
-    return localStorage.getItem(STORAGE_KEY) === "1";
+    // Si ya se mostró en esta sesión de pestaña → no volver a mostrar
+    if (sessionStorage.getItem(SS_KEY) === "1") return true;
+    // Si el usuario tiene cuenta y ya lo vio → no volver a mostrar
+    if (localStorage.getItem(LS_KEY) === "1") return true;
+    return false;
   } catch {
     return false;
   }
 }
 
-export function markSplashShown() {
-  try { localStorage.setItem(STORAGE_KEY, "1"); } catch {}
+export function markSplashShown(isAuthenticated = false) {
+  try {
+    sessionStorage.setItem(SS_KEY, "1"); // siempre: evita re-splash por recarga
+    if (isAuthenticated) localStorage.setItem(LS_KEY, "1"); // permanente solo si tiene cuenta
+  } catch {}
 }
