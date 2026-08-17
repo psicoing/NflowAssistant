@@ -94,9 +94,16 @@ export default function Bienvenida() {
         {/* Hero */}
         <div className="text-center px-4 pt-10 pb-8">
           {/* NUXA brand title */}
-          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight mb-3">
+          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight mb-2">
             NUXA
           </h1>
+          <p className="text-sm md:text-base text-indigo-300 tracking-widest uppercase mb-4">
+            <span className="text-indigo-200 font-medium">bienestar emocional</span>
+            <span className="mx-2 text-indigo-600">·</span>
+            <span>emotional wellbeing</span>
+            <span className="mx-2 text-indigo-600">·</span>
+            <span className="text-indigo-400">bien-être émotionnel</span>
+          </p>
 
           {/* Emotion tags — trilingüe */}
           <div className="flex flex-wrap justify-center gap-1.5 max-w-5xl mx-auto mb-8">
