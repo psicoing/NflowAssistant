@@ -124,38 +124,38 @@ export default function Bienvenida() {
               <button
                 key={path.href}
                 onClick={() => setLocation(destinations[idx])}
-                className={`group text-left bg-white/5 backdrop-blur-sm border ${path.border} rounded-3xl p-7 shadow-xl ${path.glow} hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col gap-5`}
+                className={`group text-left bg-white/5 backdrop-blur-sm border ${path.border} rounded-2xl p-4 shadow-xl ${path.glow} hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col gap-3`}
               >
-                {/* Icon */}
-                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${path.color} flex items-center justify-center shadow-lg`}>
-                  <Icon className="w-6 h-6 text-white" />
+                {/* Icon + arrow row */}
+                <div className="flex items-center justify-between">
+                  <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${path.color} flex items-center justify-center shadow-lg`}>
+                    <Icon className="w-4 h-4 text-white" />
+                  </div>
+                  <div className={`w-7 h-7 rounded-full bg-gradient-to-br ${path.color} flex items-center justify-center shadow group-hover:scale-110 transition-transform`}>
+                    <ArrowRight className="w-3.5 h-3.5 text-white" />
+                  </div>
                 </div>
 
                 {/* Trilingüe content */}
-                <div className="flex-1 space-y-4">
+                <div className="flex-1 space-y-2">
                   {/* ES */}
                   <div>
-                    <span className="inline-block text-[10px] font-bold tracking-widest text-indigo-400 bg-indigo-500/10 border border-indigo-400/20 rounded-full px-2 py-0.5 mb-1.5">ES</span>
-                    <p className="text-white font-bold text-lg leading-snug">{path.es.label}</p>
-                    <p className="text-slate-400 text-sm">{path.es.sub}</p>
+                    <span className="inline-block text-[9px] font-bold tracking-widest text-indigo-400 bg-indigo-500/10 border border-indigo-400/20 rounded-full px-1.5 py-px mb-1">ES</span>
+                    <p className="text-white font-bold text-sm leading-snug">{path.es.label}</p>
+                    <p className="text-slate-400 text-xs leading-snug">{path.es.sub}</p>
                   </div>
                   {/* EN */}
                   <div>
-                    <span className="inline-block text-[10px] font-bold tracking-widest text-blue-400 bg-blue-500/10 border border-blue-400/20 rounded-full px-2 py-0.5 mb-1.5">EN</span>
-                    <p className="text-slate-200 font-semibold text-base leading-snug">{path.en.label}</p>
-                    <p className="text-slate-500 text-sm">{path.en.sub}</p>
+                    <span className="inline-block text-[9px] font-bold tracking-widest text-blue-400 bg-blue-500/10 border border-blue-400/20 rounded-full px-1.5 py-px mb-1">EN</span>
+                    <p className="text-slate-200 font-semibold text-sm leading-snug">{path.en.label}</p>
+                    <p className="text-slate-500 text-xs leading-snug">{path.en.sub}</p>
                   </div>
                   {/* FR */}
                   <div>
-                    <span className="inline-block text-[10px] font-bold tracking-widest text-violet-400 bg-violet-500/10 border border-violet-400/20 rounded-full px-2 py-0.5 mb-1.5">FR</span>
-                    <p className="text-slate-300 font-semibold text-base leading-snug">{path.fr.label}</p>
-                    <p className="text-slate-500 text-sm">{path.fr.sub}</p>
+                    <span className="inline-block text-[9px] font-bold tracking-widest text-violet-400 bg-violet-500/10 border border-violet-400/20 rounded-full px-1.5 py-px mb-1">FR</span>
+                    <p className="text-slate-300 font-semibold text-sm leading-snug">{path.fr.label}</p>
+                    <p className="text-slate-500 text-xs leading-snug">{path.fr.sub}</p>
                   </div>
-                </div>
-
-                {/* Arrow */}
-                <div className={`self-end w-9 h-9 rounded-full bg-gradient-to-br ${path.color} flex items-center justify-center shadow group-hover:scale-110 transition-transform`}>
-                  <ArrowRight className="w-4 h-4 text-white" />
                 </div>
               </button>
             );
