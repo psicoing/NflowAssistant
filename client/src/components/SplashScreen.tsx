@@ -42,7 +42,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
     }, TOTAL_DURATION_MS - 400);
 
     const finishTimeout = setTimeout(() => {
-      try { localStorage.setItem(STORAGE_KEY, "1"); } catch {}
+      // dev: no guardamos para poder ver el splash en cada recarga
       onFinishRef.current();
     }, TOTAL_DURATION_MS);
 
@@ -126,9 +126,5 @@ function isInPreviewWebview() {
 }
 
 export function hasSplashBeenShown() {
-  try {
-    return localStorage.getItem(STORAGE_KEY) === "1";
-  } catch {
-    return false;
-  }
+  return false; // dev: siempre mostrar el splash
 }
