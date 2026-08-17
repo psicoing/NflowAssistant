@@ -135,9 +135,6 @@ export default function Bienvenida() {
           <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight mb-3">
             NUXA
           </h1>
-          <p className="text-lg md:text-2xl font-medium text-indigo-200 mb-6">
-            Hola, ¿me cuentas qué te preocupa?
-          </p>
 
           {/* Emotion tags — trilingüe */}
           <div className="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto mb-8">
