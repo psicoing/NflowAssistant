@@ -59,6 +59,7 @@ import CalculadoraBurnout from "@/pages/calculadora-burnout";
 import RecursosIntro from "@/pages/recursos-intro";
 import SorteoRecursos from "@/pages/sorteo-recursos";
 import ProgramaPartners from "@/pages/programa-partners";
+import Bienvenida from "@/pages/bienvenida";
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -68,7 +69,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos", "/test-bienestar", "/calculadora-burnout", "/programa-partners", "/recompensas"];
+    const publicRoutes = ["/", "/bienvenida", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos", "/test-bienestar", "/calculadora-burnout", "/programa-partners", "/recompensas"];
     // Allow magic link access routes
     if (location.startsWith("/acceso/")) {
       return;
@@ -105,6 +106,7 @@ function AuthenticatedRouter() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/bienvenida" component={Bienvenida} />
       <Route path="/ejemplos-chat" component={EjemplosChat} />
       <Route path="/novedades" component={Novedades} />
       <Route path="/recursos" component={RecursosGratis} />
@@ -161,6 +163,7 @@ function AppContent() {
   const { isAuthenticated } = useAuth();
   const standaloneTools = ["/test-bienestar", "/calculadora-burnout"];
   const isStandaloneTool = standaloneTools.includes(location);
+  const [, setLocation] = useLocation();
   const [showSplash, setShowSplash] = useState(() => !hasSplashBeenShown() && !isStandaloneTool);
 
   // Only show floating CTA on public pages and for non-authenticated users
@@ -169,7 +172,7 @@ function AppContent() {
      location === "/app-movil" || location === "/nosotros" || location === "/control-parental" || location === "/blog");
 
   if (showSplash && !isStandaloneTool) {
-    return <SplashScreen onFinish={() => setShowSplash(false)} />;
+    return <SplashScreen onFinish={() => { setShowSplash(false); setLocation("/bienvenida"); }} />;
   }
 
   return (
