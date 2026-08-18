@@ -27,7 +27,7 @@ const PATHS = [
     color: "from-blue-500 to-indigo-500",
     border: "border-blue-500/30 hover:border-blue-400/60",
     glow: "hover:shadow-blue-500/20",
-    href: "/recursos",
+    href: "/recursos-gratuitos",
     es: {
       label: "Recursos gratis",
       sub: "Guías, técnicas y protocolos clínicos reales",
@@ -65,7 +65,7 @@ const PATHS = [
 
 export default function Bienvenida() {
   const [, setLocation] = useLocation();
-  const destinations = ["/prueba-gratis", "/recursos", "/"];
+  const destinations = ["/prueba-gratis", "/recursos-gratuitos", "/"];
 
   return (
     <>
