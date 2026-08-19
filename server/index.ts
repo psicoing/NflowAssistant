@@ -278,7 +278,12 @@ async function ensureEmpresasContacts() {
       ('investor@gruposantander.com',                    'Grupo Santander',   'empresa'),
       ('comunicacion@inditex.com',                       'Inditex',           'empresa'),
       ('r.inversores@inditex.com',                       'Inditex',           'empresa'),
-      ('accionistas@inditex.com',                        'Inditex',           'empresa'),
+       ('accionistas@inditex.com',                        'Inditex',           'empresa'),
+       ('d&i@inditex.com',                                'Inditex',           'empresa'),
+       ('seleccion@cellnextelecom.com',                   'Cellnex',           'empresa'),
+       ('globaltalentacquisition@cellnextelecom.com',      'Cellnex',           'empresa'),
+       ('responsabilidadsocial@mapfre.com',               'Mapfre',            'empresa'),
+       ('hr@cieautomotive.com',                            'CIE Automotive',    'empresa'),
       ('ayudaonline@mercadona.es',                       'Mercadona',         'empresa'),
       ('prensatelefonica@telefonica.com',                'Telefónica',        'empresa'),
       ('industryanalysts@telefonica.com',                'Telefónica',        'empresa'),
@@ -301,7 +306,7 @@ async function ensureEmpresasContacts() {
     // Mark Spanish companies as ES
     await pool.query(`
       UPDATE empresa_contacts SET language = 'es'
-      WHERE company IN ('El Corte Inglés', 'Repsol', 'Iberdrola', 'Avangrid', 'ScottishPower', 'Grupo Santander', 'Inditex', 'Mercadona', 'Telefónica', 'BBVA')
+      WHERE company IN ('El Corte Inglés', 'Repsol', 'Iberdrola', 'Avangrid', 'ScottishPower', 'Grupo Santander', 'Inditex', 'Cellnex', 'Mapfre', 'CIE Automotive', 'Mercadona', 'Telefónica', 'BBVA')
         AND (language IS NULL OR language != 'es')
     `);
     log("Empresa contacts seeded");
