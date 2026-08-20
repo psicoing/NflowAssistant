@@ -203,7 +203,7 @@ export default function Bienvenida() {
                     }`}
                   >
                     {featured && (
-                      <div className="absolute right-5 top-5 rounded-full border border-emerald-200/20 bg-emerald-300/10 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.16em] text-emerald-200">
+                      <div className="mx-auto max-w-full rounded-full border border-emerald-200/20 bg-emerald-300/10 px-2.5 py-1 text-center text-[9px] font-bold uppercase leading-tight tracking-[0.12em] text-emerald-200">
                         Recomendado · Recommended · Recommandé
                       </div>
                     )}
