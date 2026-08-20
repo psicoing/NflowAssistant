@@ -129,26 +129,26 @@ export default function Bienvenida() {
           {/* Differentiation banner: first meaningful message on mobile */}
           <button
             onClick={openComparison}
-            className="group w-full rounded-2xl border border-indigo-300/20 bg-gradient-to-r from-indigo-500/[0.14] via-white/[0.06] to-violet-500/[0.12] p-px text-left shadow-2xl shadow-indigo-950/30 transition-all duration-300 hover:border-indigo-300/40 hover:shadow-indigo-500/10"
-            aria-label="Descubre por qué NUXA no es ChatGPT"
+            className="nuxa-difference-pulse group w-full rounded-xl border border-orange-300/40 bg-gradient-to-r from-orange-500/[0.18] via-amber-300/[0.08] to-orange-500/[0.18] p-px text-left transition-all duration-300 hover:border-orange-200/80"
+            aria-label="NUXA te escucha; ChatGPT solo responde y no siempre bien"
           >
-            <div className="flex items-center gap-3 rounded-[15px] px-4 py-3.5 sm:gap-4 sm:px-5">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-violet-500 shadow-lg shadow-indigo-500/25">
-                <BrainCircuit className="h-5 w-5 text-white" />
+            <div className="flex items-center gap-2.5 rounded-[11px] bg-slate-950/55 px-3 py-2 sm:gap-3 sm:px-4 sm:py-2.5">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 shadow-lg shadow-orange-500/30">
+                <BrainCircuit className="h-4 w-4 text-white" />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-bold text-white sm:text-sm">
-                  <span>Por qué NUXA no es ChatGPT</span>
-                  <span className="text-indigo-300/70">·</span>
-                  <span className="font-medium text-indigo-100/80">Why NUXA is not ChatGPT</span>
-                  <span className="text-indigo-300/70">·</span>
-                  <span className="font-medium text-violet-100/75">Pourquoi NUXA n’est pas ChatGPT</span>
+                <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[11px] font-bold leading-tight text-white sm:text-sm">
+                  <span className="text-orange-200">NUXA listens to you</span>
+                  <span className="text-orange-300/70">·</span>
+                  <span>ChatGPT solo responde y no siempre bien</span>
+                  <span className="text-orange-300/70">·</span>
+                  <span className="text-orange-100">Te juegas tu salud</span>
                 </div>
-                <p className="mt-1 text-[11px] leading-relaxed text-slate-400 sm:text-xs">
-                  Descubre qué hace diferente a NUXA · Discover what makes NUXA different · Découvrez ce qui rend NUXA différente
+                <p className="mt-0.5 text-[9px] leading-relaxed text-orange-100/65 sm:text-[10px]">
+                  Escucha emocional, no solo respuestas · Emotional support, not just answers · Écoute émotionnelle, pas seulement des réponses
                 </p>
               </div>
-              <ArrowRight className="h-4 w-4 shrink-0 text-indigo-300 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-3.5 w-3.5 shrink-0 text-orange-200 transition-transform group-hover:translate-x-1" />
             </div>
           </button>
 

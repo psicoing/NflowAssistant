@@ -597,6 +597,27 @@ body {
   animation: orangeGlow 2s ease-in-out infinite;
 }
 
+@keyframes nuxaDifferencePulse {
+  0%, 100% {
+    border-color: rgba(251, 146, 60, 0.35);
+    box-shadow: 0 0 8px rgba(249, 115, 22, 0.12), 0 4px 18px rgba(249, 115, 22, 0.08);
+  }
+  50% {
+    border-color: rgba(253, 186, 116, 0.9);
+    box-shadow: 0 0 22px rgba(249, 115, 22, 0.34), 0 5px 26px rgba(249, 115, 22, 0.18);
+  }
+}
+
+.nuxa-difference-pulse {
+  animation: nuxaDifferencePulse 3.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nuxa-difference-pulse {
+    animation: none;
+  }
+}
+
 .empathy-pulse {
   animation: gentlePulse 3s ease-in-out infinite;
 }
