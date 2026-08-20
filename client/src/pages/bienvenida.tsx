@@ -9,6 +9,7 @@ import {
   Clock3,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
+import heroBackground from "@assets/image_1787216114813.png";
 
 const PATHS = [
   {
@@ -152,27 +153,38 @@ export default function Bienvenida() {
           </button>
 
           {/* Hero identity */}
-          <section className="px-2 pb-8 pt-10 text-center sm:pb-10 sm:pt-14">
-            <div className="mx-auto mb-5 flex w-fit items-center gap-2 rounded-full border border-emerald-300/15 bg-emerald-400/[0.07] px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-200/80">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.9)]" />
-              <span>Tu espacio de bienestar · Your wellbeing space · Votre espace de bien-être</span>
+          <section className="relative isolate overflow-hidden rounded-[1.5rem] border border-white/10 px-2 pb-5 pt-6 text-center shadow-2xl shadow-indigo-950/30 sm:pb-7 sm:pt-9">
+            <img
+              src={heroBackground}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-slate-950/25" />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/45 via-slate-950/15 to-slate-950/40" />
+
+            <div className="relative z-10">
+              <div className="mx-auto mb-3 flex w-fit max-w-full items-center gap-1.5 rounded-full border border-emerald-300/20 bg-slate-950/45 px-2.5 py-1 text-[8px] font-semibold uppercase tracking-[0.12em] text-emerald-200/90 backdrop-blur-sm sm:text-[9px]">
+                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.9)]" />
+                <span>Tu espacio de bienestar · Your wellbeing space · Votre espace de bien-être</span>
+              </div>
+              <h1 className="text-xl font-black tracking-tight text-white sm:text-3xl">
+                Tu bienestar empieza aquí
+              </h1>
+              <p className="mt-1 text-xl font-semibold tracking-tight text-indigo-100 sm:text-3xl">
+                Your wellbeing starts here
+              </p>
+              <p className="mt-0.5 text-xl text-violet-100/90 sm:text-3xl">
+                Votre bien-être commence ici
+              </p>
+              <p className="mx-auto mt-3 max-w-xl text-xs leading-relaxed text-slate-200/90 sm:text-sm">
+                Apoyo emocional inteligente, privado y disponible cuando lo necesitas
+                <span className="mx-1.5 text-slate-300/70">·</span>
+                Intelligent, private support whenever you need it
+                <span className="mx-1.5 text-slate-300/70">·</span>
+                Un soutien intelligent et privé, quand vous en avez besoin
+              </p>
             </div>
-            <h1 className="text-2xl font-black tracking-tight text-white sm:text-4xl">
-              Tu bienestar empieza aquí
-            </h1>
-            <p className="mt-2 text-2xl font-semibold tracking-tight text-indigo-200 sm:text-4xl">
-              Your wellbeing starts here
-            </p>
-            <p className="mt-1 text-2xl text-violet-200/80 sm:text-4xl">
-              Votre bien-être commence ici
-            </p>
-            <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
-              Apoyo emocional inteligente, privado y disponible cuando lo necesitas
-              <span className="mx-1.5 text-slate-600">·</span>
-              Intelligent, private support whenever you need it
-              <span className="mx-1.5 text-slate-600">·</span>
-              Un soutien intelligent et privé, quand vous en avez besoin
-            </p>
           </section>
 
           {/* Paths */}
