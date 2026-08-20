@@ -128,6 +128,10 @@ const SS_KEY = "nuxa-splash-session";  // sessionStorage — esta pestaña
 
 export function hasSplashBeenShown() {
   try {
+    // En el WebView/preview se fuerza el flujo completo para poder revisar
+    // y mejorar el splash y la pantalla de bienvenida en cada recarga.
+    if (isInPreviewWebview()) return false;
+
     // Si ya se mostró en esta sesión de pestaña → no volver a mostrar
     if (sessionStorage.getItem(SS_KEY) === "1") return true;
     // Si el usuario tiene cuenta y ya lo vio → no volver a mostrar
