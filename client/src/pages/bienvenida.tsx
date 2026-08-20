@@ -130,7 +130,7 @@ export default function Bienvenida() {
           <button
             onClick={openComparison}
             className="nuxa-difference-pulse group w-full rounded-xl border border-orange-300/40 bg-gradient-to-r from-orange-500/[0.18] via-amber-300/[0.08] to-orange-500/[0.18] p-px text-left transition-all duration-300 hover:border-orange-200/80"
-            aria-label="NUXA te escucha; ChatGPT solo responde y no siempre bien"
+            aria-label="NUXA listens to you; ChatGPT only responds and not always well"
           >
             <div className="flex items-center gap-2.5 rounded-[11px] bg-slate-950/55 px-3 py-2 sm:gap-3 sm:px-4 sm:py-2.5">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 shadow-lg shadow-orange-500/30">
@@ -140,9 +140,9 @@ export default function Bienvenida() {
                 <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[11px] font-bold leading-tight text-white sm:text-sm">
                   <span className="text-orange-200">NUXA listens to you</span>
                   <span className="text-orange-300/70">·</span>
-                  <span>ChatGPT solo responde y no siempre bien</span>
+                  <span>ChatGPT only responds and not always well</span>
                   <span className="text-orange-300/70">·</span>
-                  <span className="text-orange-100">Te juegas tu salud</span>
+                  <span className="text-orange-100">Your health is at stake</span>
                 </div>
                 <p className="mt-0.5 text-[9px] leading-relaxed text-orange-100/65 sm:text-[10px]">
                   Escucha emocional, no solo respuestas · Emotional support, not just answers · Écoute émotionnelle, pas seulement des réponses
