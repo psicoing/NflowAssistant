@@ -756,7 +756,13 @@ async function ensureInstitutionContacts() {
       ('marc.guerrero@i2cat.net','Cataluña'),
       ('alex.romaguera@i2cat.net','Cataluña'),
       ('ignasi.oliva@i2cat.net','Cataluña'),
-      ('fundacio@i2cat.net','Cataluña')
+       ('fundacio@i2cat.net','Cataluña'),
+       ('fgcconvocatoria@fgc.cat','Cataluña'),
+       ('info@icf.cat','Cataluña'),
+       ('cimalsa@cimalsa.cat','Cataluña'),
+       ('ports.generalitat@gencat.cat','Cataluña'),
+       ('aula.consum@gencat.cat','Cataluña'),
+       ('accformacio@gencat.cat','Cataluña')
       ON CONFLICT (email) DO NOTHING
     `);
     // Subcarpetes Catalunya per naturalesa
@@ -783,6 +789,12 @@ async function ensureInstitutionContacts() {
         AND email IN ('direcciogerencia@gencat.cat','gestio.recerca.idi@gencat.cat','gerencia.idi@gencat.cat',
                       'atencioalciutada@catsalut.cat','ocatt@catsalut.cat','dpd@ticsalutsocial.cat','sau.tic@gencat.cat')
         AND (contact_type IS NULL OR contact_type NOT LIKE 'CAT ·%')
+    `);
+    await pool.query(`
+      UPDATE institution_contacts SET contact_type = 'CAT · Entitats Públiques'
+      WHERE region = 'Cataluña'
+        AND email IN ('fgcconvocatoria@fgc.cat','info@icf.cat','cimalsa@cimalsa.cat',
+                     'ports.generalitat@gencat.cat','aula.consum@gencat.cat','accformacio@gencat.cat')
     `);
     log("Institution contacts seeded");
   } catch (err: any) {
