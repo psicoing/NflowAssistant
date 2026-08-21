@@ -762,7 +762,20 @@ async function ensureInstitutionContacts() {
        ('cimalsa@cimalsa.cat','Cataluña'),
        ('ports.generalitat@gencat.cat','Cataluña'),
        ('aula.consum@gencat.cat','Cataluña'),
-       ('accformacio@gencat.cat','Cataluña')
+       ('accformacio@gencat.cat','Cataluña'),
+       ('direccio.sem@gencat.cat','Cataluña'),
+       ('rrhh.sem@gencat.cat','Cataluña'),
+       ('formacio.sem@gencat.cat','Cataluña'),
+       ('comunicacio.sem@gencat.cat','Cataluña'),
+       ('psicoleg.sem@gencat.cat','Cataluña'),
+       ('andrescuartero@gencat.cat','Cataluña'),
+       ('ico@iconcologia.net','Cataluña'),
+       ('uicico@iconcologia.net','Cataluña'),
+       ('lmillares@iconcologia.net','Cataluña'),
+       ('mireiaramon@iconcologia.net','Cataluña'),
+       ('regulatorio_icobad@iconcologia.net','Cataluña'),
+       ('aca@gencat.cat','Cataluña'),
+       ('acaparticipacio@gencat.cat','Cataluña')
       ON CONFLICT (email) DO NOTHING
     `);
     // Subcarpetes Catalunya per naturalesa
@@ -794,7 +807,16 @@ async function ensureInstitutionContacts() {
       UPDATE institution_contacts SET contact_type = 'CAT · Entitats Públiques'
       WHERE region = 'Cataluña'
         AND email IN ('fgcconvocatoria@fgc.cat','info@icf.cat','cimalsa@cimalsa.cat',
-                     'ports.generalitat@gencat.cat','aula.consum@gencat.cat','accformacio@gencat.cat')
+                     'ports.generalitat@gencat.cat','aula.consum@gencat.cat','accformacio@gencat.cat',
+                     'direccio.sem@gencat.cat','rrhh.sem@gencat.cat','formacio.sem@gencat.cat',
+                     'comunicacio.sem@gencat.cat','psicoleg.sem@gencat.cat','andrescuartero@gencat.cat',
+                     'aca@gencat.cat','acaparticipacio@gencat.cat')
+    `);
+    await pool.query(`
+      UPDATE institution_contacts SET contact_type = 'CAT · Hospitals i Centres'
+      WHERE region = 'Cataluña'
+        AND email IN ('ico@iconcologia.net','uicico@iconcologia.net','lmillares@iconcologia.net',
+                     'mireiaramon@iconcologia.net','regulatorio_icobad@iconcologia.net')
     `);
     log("Institution contacts seeded");
   } catch (err: any) {
