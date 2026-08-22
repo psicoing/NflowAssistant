@@ -97,6 +97,23 @@ function blogPostingSchema(opts: {
   };
 }
 
+function legalPageSchema(opts: {
+  name: string;
+  description: string;
+  url: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: opts.name,
+    description: opts.description,
+    url: opts.url,
+    inLanguage: "es",
+    isPartOf: { "@type": "WebSite", name: SITE_NAME, url: SITE_URL },
+    publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+  };
+}
+
 const routeMetadata: Record<string, RouteMeta> = {
   "/": {
     title: "NUXA - Tu Psicólogo IA 24/7 | Apoyo Emocional Digital",
@@ -440,6 +457,74 @@ const routeMetadata: Record<string, RouteMeta> = {
         <p><a href="/registro/planes">Activar control parental</a></p>
       </main>`,
   },
+  "/control-shell": {
+    title: "NUXA Control Shell | Bienestar Digital Seguro para Empresas",
+    description:
+      "Conoce NUXA Control Shell, una solución de bienestar digital y supervisión segura para organizaciones que quieren proteger a sus equipos.",
+    canonical: `${SITE_URL}/control-shell`,
+    jsonLd: orgSchema,
+    bodyHtml: `
+      <main>
+        <h1>NUXA Control Shell — Bienestar Digital Seguro</h1>
+        <p>Una solución de bienestar digital y supervisión segura para organizaciones que quieren proteger a sus equipos y gestionar el uso responsable de la tecnología.</p>
+        <h2>Protección y control para organizaciones</h2>
+        <ul>
+          <li>Supervisión y políticas de uso configurables</li>
+          <li>Protección de datos y privacidad</li>
+          <li>Herramientas de bienestar para equipos</li>
+        </ul>
+        <p><a href="/empresa-privada">Soluciones para empresas</a> · <a href="/precios">Ver precios</a></p>
+      </main>`,
+  },
+  "/test-bienestar": {
+    title: "Test de Bienestar Emocional | NUXA",
+    description:
+      "Evalúa tu bienestar emocional con el test gratuito de NUXA y descubre recursos personalizados para cuidar tu salud mental.",
+    canonical: `${SITE_URL}/test-bienestar`,
+    jsonLd: orgSchema,
+    bodyHtml: `
+      <main>
+        <h1>Test de Bienestar Emocional — NUXA</h1>
+        <p>Evalúa de forma sencilla cómo te encuentras y descubre recursos prácticos para cuidar tu salud mental y tu bienestar emocional.</p>
+        <ul>
+          <li>Test gratuito y confidencial</li>
+          <li>Resultado orientativo en pocos minutos</li>
+          <li>Recursos de apoyo adaptados a tus necesidades</li>
+        </ul>
+        <p><a href="/recursos-gratuitos">Ver recursos gratuitos</a> · <a href="/prueba-gratis">Probar NUXA gratis</a></p>
+      </main>`,
+  },
+  "/calculadora-burnout": {
+    title: "Calculadora de Burnout Laboral | NUXA",
+    description:
+      "Calcula tu nivel orientativo de riesgo de burnout y descubre cómo NUXA puede ayudar a cuidar el bienestar emocional en el trabajo.",
+    canonical: `${SITE_URL}/calculadora-burnout`,
+    jsonLd: orgSchema,
+    bodyHtml: `
+      <main>
+        <h1>Calculadora de Burnout Laboral — NUXA</h1>
+        <p>Obtén una estimación orientativa de tu nivel de riesgo de agotamiento laboral y conoce estrategias para proteger tu bienestar emocional.</p>
+        <ul>
+          <li>Evaluación rápida y confidencial</li>
+          <li>Orientación sobre estrés y agotamiento</li>
+          <li>Recursos para personas y organizaciones</li>
+        </ul>
+        <p><a href="/empresa-privada">Bienestar mental para empresas</a> · <a href="/recursos-gratuitos">Más recursos</a></p>
+      </main>`,
+  },
+  "/download-csv": {
+    title: "Descargar Recursos de Bienestar | NUXA",
+    description:
+      "Descarga recursos y datos de bienestar emocional de NUXA para continuar trabajando en tu salud mental.",
+    canonical: `${SITE_URL}/download-csv`,
+    jsonLd: orgSchema,
+    bodyHtml: `
+      <main>
+        <h1>Descargar Recursos de Bienestar — NUXA</h1>
+        <p>Accede a materiales y recursos descargables para apoyar el bienestar emocional de personas, familias y equipos.</p>
+        <p><a href="/recursos-gratuitos">Explorar recursos gratuitos</a> · <a href="/test-bienestar">Hacer el test de bienestar</a></p>
+      </main>`,
+  },
   "/novedades": {
     title: "Novedades NUXA | Últimas Actualizaciones y Noticias",
     description:
@@ -580,6 +665,12 @@ const routeMetadata: Record<string, RouteMeta> = {
     description:
       "Términos y condiciones de uso de NUXA, plataforma de psicología IA. Conoce tus derechos, obligaciones y las condiciones que rigen el uso del servicio.",
     canonical: `${SITE_URL}/legal/terminos`,
+    jsonLd: legalPageSchema({
+      name: "Términos y Condiciones de Uso | NUXA",
+      description:
+        "Términos y condiciones de uso de NUXA, plataforma de psicología IA.",
+      url: `${SITE_URL}/legal/terminos`,
+    }),
     bodyHtml: `
       <main>
         <h1>Términos y Condiciones de Uso — NUXA</h1>
@@ -593,6 +684,12 @@ const routeMetadata: Record<string, RouteMeta> = {
     description:
       "Política de privacidad de NUXA. Cómo recogemos, usamos y protegemos tus datos personales conforme al RGPD y la LOPD española.",
     canonical: `${SITE_URL}/legal/privacidad`,
+    jsonLd: legalPageSchema({
+      name: "Política de Privacidad | NUXA",
+      description:
+        "Cómo NUXA recoge, usa y protege los datos personales conforme al RGPD y la LOPD española.",
+      url: `${SITE_URL}/legal/privacidad`,
+    }),
     bodyHtml: `
       <main>
         <h1>Política de Privacidad — NUXA</h1>
@@ -606,6 +703,12 @@ const routeMetadata: Record<string, RouteMeta> = {
     description:
       "Información sobre el uso de cookies en NUXA: tipos, finalidad y cómo gestionar tus preferencias de privacidad según la normativa europea.",
     canonical: `${SITE_URL}/legal/cookies`,
+    jsonLd: legalPageSchema({
+      name: "Política de Cookies | NUXA",
+      description:
+        "Información sobre el uso de cookies y la gestión de preferencias de privacidad en NUXA.",
+      url: `${SITE_URL}/legal/cookies`,
+    }),
     bodyHtml: `
       <main>
         <h1>Política de Cookies — NUXA</h1>
@@ -619,6 +722,12 @@ const routeMetadata: Record<string, RouteMeta> = {
     description:
       "Aviso legal de NUXA (Empordajobs SL, B02701100). Información sobre el responsable del sitio web, condiciones de uso y normativa aplicable en España.",
     canonical: `${SITE_URL}/legal/aviso-legal`,
+    jsonLd: legalPageSchema({
+      name: "Aviso Legal | NUXA",
+      description:
+        "Información legal sobre el responsable, condiciones de uso y normativa aplicable a NUXA.",
+      url: `${SITE_URL}/legal/aviso-legal`,
+    }),
     bodyHtml: `
       <main>
         <h1>Aviso Legal — NUXA</h1>
@@ -633,8 +742,25 @@ function escAttr(str: string): string {
   return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+function routePathFromUrl(url: string): string {
+  return url.split("?")[0].split("#")[0];
+}
+
+export function isPrerenderablePublicPath(url: string): boolean {
+  return Boolean(routeMetadata[routePathFromUrl(url)]);
+}
+
+function responseStatusForRoute(url: string): number {
+  const routePath = routePathFromUrl(url);
+  // Blog posts are a fixed published set. Returning a real 404 for unknown
+  // slugs prevents search engines from indexing phantom article URLs.
+  return /^\/blog\/[^/]+$/.test(routePath) && !routeMetadata[routePath]
+    ? 404
+    : 200;
+}
+
 export function injectRouteMetadata(html: string, url: string): string {
-  const routePath = url.split("?")[0].split("#")[0];
+  const routePath = routePathFromUrl(url);
   const meta = routeMetadata[routePath];
   if (!meta) return html;
 
@@ -743,7 +869,10 @@ export async function setupVite(app: Express, server: Server) {
       );
       const page = await vite.transformIndexHtml(url, template);
       const injected = injectRouteMetadata(page, url);
-      res.status(200).set({ "Content-Type": "text/html" }).end(injected);
+      res
+        .status(responseStatusForRoute(url))
+        .set({ "Content-Type": "text/html" })
+        .end(injected);
     } catch (e) {
       vite.ssrFixStacktrace(e as Error);
       next(e);
@@ -760,7 +889,10 @@ export function serveStatic(app: Express) {
     );
   }
 
-  app.use(express.static(distPath));
+  // Do not let express.static serve the directory index for `/` directly.
+  // The catch-all below must enrich index.html with route-specific SEO data
+  // before it is returned for the homepage or any SPA public route.
+  app.use(express.static(distPath, { index: false }));
 
   // fall through to index.html — inject route-specific metadata before sending
   app.use("*", (req, res) => {
@@ -771,7 +903,7 @@ export function serveStatic(app: Express) {
         return;
       }
       const injected = injectRouteMetadata(html, req.originalUrl);
-      res.set("Content-Type", "text/html").send(injected);
+       res.status(responseStatusForRoute(req.originalUrl)).set("Content-Type", "text/html").send(injected);
     });
   });
 }

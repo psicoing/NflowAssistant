@@ -174,7 +174,12 @@ function AppContent() {
   const isStandaloneTool = standaloneTools.includes(location);
   const [, setLocation] = useLocation();
   // Mostrar splash solo si no se ha visto ya en esta sesión/cuenta
-  const [showSplash, setShowSplash] = useState(() => !hasSplashBeenShown() && !isStandaloneTool);
+  // The splash is an entry experience for the home page, not an interstitial
+  // for deep links. Public URLs such as blog articles must render directly so
+  // shared links and search results reach their intended content.
+  const [showSplash, setShowSplash] = useState(
+    () => location === "/" && !hasSplashBeenShown() && !isStandaloneTool,
+  );
 
   // Si auth carga y el usuario ya vio el splash → saltarlo
   useEffect(() => {

@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import type { Express } from "express";
-import { injectRouteMetadata } from "./vite";
+import { injectRouteMetadata, isPrerenderablePublicPath } from "./vite";
 
 // Recognise search engines, social crawlers, and AI crawlers that need
 // pre-rendered HTML because they do not (fully) execute JavaScript.
@@ -13,18 +13,19 @@ export function registerSeoMiddleware(app: Express, isProd: boolean) {
     const ua = req.headers["user-agent"] || "";
     if (!BOT_UA.test(ua)) return next();
 
-    // Only handle public-facing HTML routes — skip API, admin, and partner dashboard
+    // Only answer known public document routes. This leaves robots.txt,
+    // sitemaps, llms.txt, APIs and static assets to their normal handlers.
     if (
-      req.path.startsWith("/api") ||
-      req.path.startsWith("/admin") ||
-      req.path.startsWith("/partners/dashboard")
+      !["GET", "HEAD"].includes(req.method) ||
+      path.extname(req.path) ||
+      !isPrerenderablePublicPath(req.path)
     ) {
       return next();
     }
 
     try {
       const htmlPath = isProd
-        ? path.resolve(process.cwd(), "server", "public", "index.html")
+        ? path.resolve(process.cwd(), "dist", "public", "index.html")
         : path.resolve(process.cwd(), "client", "index.html");
 
       const html = await fs.promises.readFile(htmlPath, "utf-8");
@@ -32,9 +33,11 @@ export function registerSeoMiddleware(app: Express, isProd: boolean) {
       // Delegate all metadata + JSON-LD + body injection to the shared
       // injectRouteMetadata function so bots and regular users receive
       // identical enriched HTML.
-      const injected = injectRouteMetadata(html, req.path);
+      const injected = injectRouteMetadata(html, req.originalUrl);
 
-      res.status(200).set("Content-Type", "text/html").end(injected);
+      res.status(200).set("Content-Type", "text/html").end(
+        req.method === "HEAD" ? undefined : injected,
+      );
     } catch {
       next();
     }
