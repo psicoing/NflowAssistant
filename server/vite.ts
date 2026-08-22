@@ -136,6 +136,35 @@ const routeMetadata: Record<string, RouteMeta> = {
         <p><a href="/prueba-gratis">Prueba NUXA gratis</a> · <a href="/precios">Ver planes y precios</a> · <a href="/ejemplos-chat">Ver ejemplos de conversación</a></p>
       </main>`,
   },
+  "/bienvenida": {
+    title: "Bienvenida a NUXA | Welcome to NUXA | Bienvenue sur NUXA",
+    description:
+      "Elige cómo quieres empezar con NUXA: prueba gratuita, recursos de bienestar o acceso a tu cuenta.",
+    canonical: `${SITE_URL}/bienvenida`,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: "Bienvenida a NUXA",
+      description:
+        "Elige cómo empezar con NUXA: apoyo emocional inteligente, privado y disponible cuando lo necesitas.",
+      url: `${SITE_URL}/bienvenida`,
+      inLanguage: ["es", "en", "fr"],
+      isPartOf: { "@type": "WebSite", name: SITE_NAME, url: SITE_URL },
+      publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+    },
+    bodyHtml: `
+      <main>
+        <h1>Bienvenida a NUXA — Tu bienestar empieza aquí</h1>
+        <p>NUXA ofrece apoyo emocional inteligente, privado y disponible cuando lo necesitas. Choose how to start your wellbeing journey.</p>
+        <h2>Elige cómo empezar</h2>
+        <ul>
+          <li><a href="/prueba-gratis">Prueba NUXA gratis</a> — sin tarjeta ni registro</li>
+          <li><a href="/recursos-gratuitos">Recursos gratuitos</a> — guías, técnicas y protocolos</li>
+          <li><a href="/login">Entrar a la app</a> — acceso para usuarios con cuenta</li>
+        </ul>
+        <p><a href="/precios">Ver planes y precios</a> · <a href="/blog">Explorar el blog</a></p>
+      </main>`,
+  },
   "/precios": {
     title: "Plan y Suscripción - NUXA | Planes desde €2.99/mes + Pago Por Uso",
     description:
