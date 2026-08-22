@@ -293,7 +293,40 @@ async function ensureEmpresasContacts() {
       ('prensatelefonica@telefonica.com',                'Telefónica',        'empresa'),
       ('industryanalysts@telefonica.com',                'Telefónica',        'empresa'),
       ('consultasgenerales@bbva.com',                    'BBVA',              'empresa'),
-      ('accionistas@bbva.com',                           'BBVA',              'empresa')
+       ('accionistas@bbva.com',                           'BBVA',              'empresa'),
+       -- New Spanish corporate contacts
+       ('rrhh@rovi.es',                                   'Rovi',             'empresa'),
+       ('bd@rovi.es',                                     'Rovi',             'empresa'),
+       ('departamento.medico@rovi.es',                    'Rovi',             'empresa'),
+       ('qs.investigacion@quironsalud.es',                 'Quirónsalud',      'empresa'),
+       ('proyectos.investigac@quironsalud.es',             'Quirónsalud',      'empresa'),
+       ('marketing@quironsalud.es',                        'Quirónsalud',      'empresa'),
+       ('comunicacioncorporativa@vodafone.com',            'Vodafone',         'empresa'),
+       ('jaime.andres@vodafone.com',                       'Vodafone',         'empresa'),
+       ('adolfo.miranda@vodafone.com',                     'Vodafone',         'empresa'),
+       ('ofertaempleados@vodafone.com',                    'Vodafone',         'empresa'),
+       ('beatriz.guerra@vodafone.com',                     'Vodafone',         'empresa'),
+       ('cinfa@cinfa.com',                                 'Cinfa',            'empresa'),
+       ('sac@cinfa.com',                                   'Cinfa',            'empresa'),
+       ('medicaldispenser.sac@cinfa.com',                  'Cinfa',            'empresa'),
+       ('lavozdelpaciente@cinfa.com',                      'Cinfa',            'empresa'),
+       ('raise@capgemini.com',                             'Capgemini',        'empresa'),
+       ('nicolas.bertet@capgemini.com',                    'Capgemini',        'empresa'),
+       ('luismiguel.marinaparicio@capgemini.com',          'Capgemini',        'empresa'),
+       ('borja.tinao@capgemini.com',                       'Capgemini',        'empresa'),
+       ('david.luengo-ruiz@capgemini.com',                 'Capgemini',        'empresa'),
+       ('cesar.tauste-martinez@capgemini.com',             'Capgemini',        'empresa'),
+       ('damien.halle@capgemini.com',                      'Capgemini',        'empresa'),
+       ('ignacio.grandes-nunez@capgemini.com',             'Capgemini',        'empresa'),
+       ('Ethics@capgemini.com',                            'Capgemini',        'empresa'),
+       ('brad.pick@grifols.com',                           'Grifols',          'empresa'),
+       ('inversores@grifols.com',                          'Grifols',          'empresa'),
+       ('investors@grifols.com',                           'Grifols',          'empresa'),
+       ('media@grifols.com',                               'Grifols',          'empresa'),
+       ('ignacio.jabato@cuatrecasas.com',                  'Cuatrecasas',      'empresa'),
+       ('ruben.doctor@cuatrecasas.com',                    'Cuatrecasas',      'empresa'),
+       ('franciscoramon.lacomba@cuatrecasas.com',           'Cuatrecasas',      'empresa'),
+       ('fundacionsh@sanitas.es',                          'Sanitas',          'empresa')
       ON CONFLICT (email) DO NOTHING
     `);
     // Mark international EN·FR contacts
@@ -311,7 +344,7 @@ async function ensureEmpresasContacts() {
     // Mark Spanish companies as ES
     await pool.query(`
       UPDATE empresa_contacts SET language = 'es'
-      WHERE company IN ('El Corte Inglés', 'Repsol', 'Iberdrola', 'Avangrid', 'ScottishPower', 'Grupo Santander', 'Inditex', 'Cellnex', 'Mapfre', 'CIE Automotive', 'AENA', 'Indra', 'Mercadona', 'Telefónica', 'BBVA')
+      WHERE company IN ('El Corte Inglés', 'Repsol', 'Iberdrola', 'Avangrid', 'ScottishPower', 'Grupo Santander', 'Inditex', 'Cellnex', 'Mapfre', 'CIE Automotive', 'AENA', 'Indra', 'Mercadona', 'Telefónica', 'BBVA', 'Rovi', 'Quirónsalud', 'Cinfa', 'Capgemini', 'Grifols', 'Cuatrecasas', 'Sanitas')
         AND (language IS NULL OR language != 'es')
     `);
     log("Empresa contacts seeded");

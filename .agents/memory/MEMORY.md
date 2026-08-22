@@ -1,1 +1,2 @@
 - [i18n translation approach](i18n-translation-approach.md) — how EN/FR translation is wired in NUXA; what's done and what remains.
+- [Contact seeding environments](contact-seeding-environments.md) — verify campaign contacts separately in development and production; publishing is required for production visibility.
