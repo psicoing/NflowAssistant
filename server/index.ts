@@ -804,19 +804,39 @@ async function ensureInstitutionContacts() {
         AND (contact_type IS NULL OR contact_type NOT LIKE 'CAT ·%')
     `);
     await pool.query(`
-      UPDATE institution_contacts SET contact_type = 'CAT · Entitats Públiques'
+      UPDATE institution_contacts SET contact_type = 'CAT · Mobilitat i Infraestructures'
       WHERE region = 'Cataluña'
-        AND email IN ('fgcconvocatoria@fgc.cat','info@icf.cat','cimalsa@cimalsa.cat',
-                     'ports.generalitat@gencat.cat','aula.consum@gencat.cat','accformacio@gencat.cat',
-                     'direccio.sem@gencat.cat','rrhh.sem@gencat.cat','formacio.sem@gencat.cat',
-                     'comunicacio.sem@gencat.cat','psicoleg.sem@gencat.cat','andrescuartero@gencat.cat',
-                     'aca@gencat.cat','acaparticipacio@gencat.cat')
+        AND email IN ('fgcconvocatoria@fgc.cat','cimalsa@cimalsa.cat','ports.generalitat@gencat.cat')
     `);
     await pool.query(`
-      UPDATE institution_contacts SET contact_type = 'CAT · Hospitals i Centres'
+      UPDATE institution_contacts SET contact_type = 'CAT · Finances Públiques'
+      WHERE region = 'Cataluña' AND email = 'info@icf.cat'
+    `);
+    await pool.query(`
+      UPDATE institution_contacts SET contact_type = 'CAT · Consum i Formació'
+      WHERE region = 'Cataluña'
+        AND email IN ('aula.consum@gencat.cat','accformacio@gencat.cat')
+    `);
+    await pool.query(`
+      UPDATE institution_contacts SET contact_type = 'CAT · Emergències i Salut'
+      WHERE region = 'Cataluña'
+        AND email IN ('direccio.sem@gencat.cat','rrhh.sem@gencat.cat','formacio.sem@gencat.cat',
+                     'comunicacio.sem@gencat.cat','psicoleg.sem@gencat.cat')
+    `);
+    await pool.query(`
+      UPDATE institution_contacts SET contact_type = 'CAT · Oncologia i Hospitals'
       WHERE region = 'Cataluña'
         AND email IN ('ico@iconcologia.net','uicico@iconcologia.net','lmillares@iconcologia.net',
                      'mireiaramon@iconcologia.net','regulatorio_icobad@iconcologia.net')
+    `);
+    await pool.query(`
+      UPDATE institution_contacts SET contact_type = 'CAT · Medi Ambient i Aigua'
+      WHERE region = 'Cataluña'
+        AND email IN ('aca@gencat.cat','acaparticipacio@gencat.cat')
+    `);
+    await pool.query(`
+      UPDATE institution_contacts SET contact_type = 'CAT · Generalitat / Xarxa Pública'
+      WHERE region = 'Cataluña' AND email = 'andrescuartero@gencat.cat'
     `);
     log("Institution contacts seeded");
   } catch (err: any) {

@@ -1395,6 +1395,9 @@ export default function AdminDashboard() {
                         <option value="Asociación">Asociación</option>
                         <option value="Cluster">Cluster</option>
                         <option value="Otro">Otro</option>
+                        {instSelectedContact.contact_type?.startsWith("CAT ·") && (
+                          <option value={instSelectedContact.contact_type}>{instSelectedContact.contact_type}</option>
+                        )}
                       </select>
                     </div>
                     {/* Send history */}
