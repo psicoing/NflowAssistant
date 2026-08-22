@@ -330,7 +330,17 @@ async function ensureEmpresasContacts() {
        ('ignacio.jabato@cuatrecasas.com',                  'Cuatrecasas',      'empresa'),
        ('ruben.doctor@cuatrecasas.com',                    'Cuatrecasas',      'empresa'),
        ('franciscoramon.lacomba@cuatrecasas.com',           'Cuatrecasas',      'empresa'),
-       ('fundacionsh@sanitas.es',                          'Sanitas',          'empresa')
+       ('fundacionsh@sanitas.es',                          'Sanitas',          'empresa'),
+       ('recursoshumanos@crimidesa.es',                    'Crimidesa',        'empresa'),
+       ('info.impulsa@impulsaxp.com',                      'Impulsa XP',       'empresa'),
+       ('hola@cyria360.com',                               'Cyria360',         'empresa'),
+       ('comercial@grado3.com',                            'Grado3',           'empresa'),
+       ('hola@habilitips.com',                             'Habilitips',       'empresa'),
+       ('info@grupoconstant.com',                          'Grupo Constant',   'empresa'),
+       ('info@etalentum.com',                              'eTalentum',        'empresa'),
+       ('info@valora2021.com',                             'Valora 2021',      'empresa'),
+       ('info@enevolucion.com',                            'En Evolución',     'empresa'),
+       ('info@alex.es',                                    'Alex',             'empresa')
       ON CONFLICT (email) DO NOTHING
     `);
     // Mark international EN·FR contacts
@@ -348,7 +358,7 @@ async function ensureEmpresasContacts() {
     // Mark Spanish companies as ES
     await pool.query(`
       UPDATE empresa_contacts SET language = 'es'
-      WHERE company IN ('El Corte Inglés', 'Repsol', 'Iberdrola', 'Avangrid', 'ScottishPower', 'Grupo Santander', 'Inditex', 'Cellnex', 'Mapfre', 'CIE Automotive', 'AENA', 'Indra', 'Mercadona', 'Telefónica', 'BBVA', 'Rovi', 'Quirónsalud', 'Cinfa', 'Capgemini', 'Grifols', 'Cuatrecasas', 'Sanitas')
+      WHERE company IN ('El Corte Inglés', 'Repsol', 'Iberdrola', 'Avangrid', 'ScottishPower', 'Grupo Santander', 'Inditex', 'Cellnex', 'Mapfre', 'CIE Automotive', 'AENA', 'Indra', 'Mercadona', 'Telefónica', 'BBVA', 'Rovi', 'Quirónsalud', 'Cinfa', 'Capgemini', 'Grifols', 'Cuatrecasas', 'Sanitas', 'Crimidesa', 'Impulsa XP', 'Cyria360', 'Grado3', 'Habilitips', 'Grupo Constant', 'eTalentum', 'Valora 2021', 'En Evolución', 'Alex')
         AND (language IS NULL OR language != 'es')
     `);
     log("Empresa contacts seeded");
