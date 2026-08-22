@@ -277,6 +277,7 @@ async function ensureEmpresasContacts() {
       ('atracciondetalento@repsol.com',                  'Repsol',            'empresa'),
       ('informacion@iberdrola.com',                      'Iberdrola',         'empresa'),
       ('comunicacioncorporativa@iberdrola.es',           'Iberdrola',         'empresa'),
+       ('jpalaciosl@iberdrola.es',                        'Iberdrola',         'empresa'),
       ('careers@avangrid.com',                           'Avangrid',          'empresa'),
       ('careers@scottishpower.com',                      'ScottishPower',     'empresa'),
       ('comunicacion@gruposantander.com',                'Grupo Santander',   'empresa'),
@@ -292,6 +293,9 @@ async function ensureEmpresasContacts() {
       ('ayudaonline@mercadona.es',                       'Mercadona',         'empresa'),
       ('prensatelefonica@telefonica.com',                'Telefónica',        'empresa'),
       ('industryanalysts@telefonica.com',                'Telefónica',        'empresa'),
+       ('anamaria.reinosogarcia@telefonica.com',           'Telefónica',        'empresa'),
+       ('fondos.sociales@telefonica.com',                  'Telefónica',        'empresa'),
+       ('ignacio.murrietasanguino@telefonica.com',         'Telefónica',        'empresa'),
       ('consultasgenerales@bbva.com',                    'BBVA',              'empresa'),
        ('accionistas@bbva.com',                           'BBVA',              'empresa'),
        -- New Spanish corporate contacts
