@@ -84,6 +84,41 @@ export default function Footer() {
                   {t('footer.pricing')}
                 </Link>
               </li>
+              <li>
+                <Link href="/app-movil" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  Aplicación Móvil
+                </Link>
+              </li>
+              <li>
+                <Link href="/empresa-privada" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  Empresa Privada
+                </Link>
+              </li>
+              <li>
+                <Link href="/sector-publico" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  Sector Público
+                </Link>
+              </li>
+              <li>
+                <Link href="/quienes-somos" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  Quiénes Somos
+                </Link>
+              </li>
+              <li>
+                <Link href="/control-parental" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  Control Parental
+                </Link>
+              </li>
+              <li>
+                <Link href="/control-shell" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  Control Shell
+                </Link>
+              </li>
+              <li>
+                <Link href="/competencia-nuxa" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  Competencia NUXA
+                </Link>
+              </li>
             </ul>
           </div>
 

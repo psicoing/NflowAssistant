@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Home, MessageCircle, BookOpen, CreditCard, Users, Phone, Info, Smartphone, DollarSign, Star, User, Building2, Landmark, Shield, Trophy, Scale, ChevronRight } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 const menuItems = [
-  { id: "inicio",              name: "Inicio",              sectionId: "top",               icon: Home },
+  { id: "inicio",              name: "Inicio",              href: "/",                     icon: Home },
   { id: "ejemplos-chat",       name: "Chatea con Nuxa",     href: "/ejemplos-chat",          icon: MessageCircle },
   { id: "recursos-gratuitos",  name: "Recursos Gratis",     href: "/recursos-gratuitos",     icon: BookOpen },
   { id: "quienes-somos",       name: "Nuestro Software",    href: "/quienes-somos",          icon: User },
@@ -18,7 +18,7 @@ const menuItems = [
   { id: "precios",             name: "Plan y Suscripción",  href: "/precios",                icon: DollarSign },
   { id: "programa-partners",   name: "Gestión licencias",   href: "/programa-partners",      icon: Users },
   { id: "app-movil",           name: "Aplicación Móvil",   href: "/app-movil",              icon: Smartphone },
-  { id: "marco-legal",         name: "Marco Legal",         externalUrl: "https://jobda.org/investors", icon: Scale },
+  { id: "marco-legal",         name: "Marco Legal",         href: "/legal/aviso-legal",     icon: Scale },
   { id: "contacto-licitacion", name: "Contacto Licitación", href: "/programa-partners",      icon: Phone },
 ];
 
@@ -66,6 +66,10 @@ export default function SmoothScrollMenu() {
         className="bg-nflow-dark border-gray-800 w-[300px] sm:w-80 p-0 flex flex-col"
         style={{ height: "100dvh" }}
       >
+        <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
+        <SheetDescription className="sr-only">
+          Enlaces a las páginas y recursos públicos de NUXA.
+        </SheetDescription>
         {/* Header fijo */}
         <div className="flex items-center gap-2 px-5 pt-5 pb-4 border-b border-gray-800 shrink-0">
           <img src="/favicon.png" alt="NUXA" className="w-7 h-7 rounded-lg" />

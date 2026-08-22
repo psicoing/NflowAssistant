@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { X, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { Link } from "wouter";
 
 interface CookiePreferences {
   necessary: boolean;
@@ -124,14 +125,12 @@ export function CookieConsent() {
           </p>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
             Puede cambiar sus preferencias en cualquier momento visitando nuestra{" "}
-            <a 
-              href="https://jobda.org/privacy" 
-              target="_blank" 
-              rel="noopener noreferrer"
+            <Link
+              href="/legal/privacidad"
               className="text-blue-600 hover:underline"
             >
               Política de Privacidad
-            </a>.
+            </Link>.
           </p>
 
           {/* Preferences Toggle */}
