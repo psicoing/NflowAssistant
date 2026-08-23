@@ -348,7 +348,23 @@ async function ensureEmpresasContacts() {
        ('info@etalentum.com',                              'eTalentum',        'empresa'),
        ('info@valora2021.com',                             'Valora 2021',      'empresa'),
        ('info@enevolucion.com',                            'En Evolución',     'empresa'),
-       ('info@alex.es',                                    'Alex',             'empresa')
+       ('info@alex.es',                                    'Alex',             'empresa'),
+       ('fluidralab@fluidra.com',                          'Fluidra',           'empresa'),
+       ('esg@fluidra.com',                                 'Fluidra',           'empresa'),
+       ('corporate.communication@almirall.com',             'Almirall',          'empresa'),
+       ('international.valenciaconsuelo@vithas.es',         'Vithas',            'empresa'),
+       ('NavalonE@vithas.es',                               'Vithas',            'empresa'),
+       ('International.Madrid@Vithas.es',                  'Vithas',            'empresa'),
+       ('international.madridPA@Vithas.es',                 'Vithas',            'empresa'),
+       ('international.milagrosa@vithas.es',                'Vithas',            'empresa'),
+       ('ventas1.bcn@barcelo.com',                          'Barceló',           'empresa'),
+       ('malaga.comercial@barcelo.com',                    'Barceló',           'empresa'),
+       ('canfrancestacion.comercial@barcelo.com',           'Barceló',           'empresa'),
+       ('rrhh@imqprevencion.es',                            'IMQ Prevención',    'empresa'),
+       ('rrhh@agui.com',                                    'AGUI',              'empresa'),
+       ('rrhh@grupoalava.com',                              'Grupo Álava',       'empresa'),
+       ('rrhh@campo-ochandiano.com',                        'Campo & Ochandiano','empresa'),
+       ('ibonolazabal@walt.es',                             'Walt HR Evolus',    'empresa')
       ON CONFLICT (email) DO NOTHING
     `);
     // Mark international EN·FR contacts
@@ -366,7 +382,7 @@ async function ensureEmpresasContacts() {
     // Mark Spanish companies as ES
     await pool.query(`
       UPDATE empresa_contacts SET language = 'es'
-      WHERE company IN ('El Corte Inglés', 'Repsol', 'Iberdrola', 'Avangrid', 'ScottishPower', 'Grupo Santander', 'Inditex', 'Cellnex', 'Mapfre', 'CIE Automotive', 'AENA', 'Indra', 'Mercadona', 'Telefónica', 'BBVA', 'Rovi', 'Quirónsalud', 'Cinfa', 'Capgemini', 'Grifols', 'Cuatrecasas', 'Sanitas', 'Crimidesa', 'Impulsa XP', 'Cyria360', 'Grado3', 'Habilitips', 'Grupo Constant', 'eTalentum', 'Valora 2021', 'En Evolución', 'Alex')
+      WHERE company IN ('El Corte Inglés', 'Repsol', 'Iberdrola', 'Avangrid', 'ScottishPower', 'Grupo Santander', 'Inditex', 'Cellnex', 'Mapfre', 'CIE Automotive', 'AENA', 'Indra', 'Mercadona', 'Telefónica', 'BBVA', 'Rovi', 'Quirónsalud', 'Cinfa', 'Capgemini', 'Grifols', 'Cuatrecasas', 'Sanitas', 'Crimidesa', 'Impulsa XP', 'Cyria360', 'Grado3', 'Habilitips', 'Grupo Constant', 'eTalentum', 'Valora 2021', 'En Evolución', 'Alex', 'Fluidra', 'Almirall', 'Vithas', 'Barceló', 'IMQ Prevención', 'AGUI', 'Grupo Álava', 'Campo & Ochandiano', 'Walt HR Evolus')
         AND (language IS NULL OR language != 'es')
     `);
     // Clasificación aportada para la prospección corporativa. Se mantiene
@@ -381,6 +397,7 @@ async function ensureEmpresasContacts() {
         WHEN company IN ('Sacyr', 'Aena', 'AENA', 'Renfe', 'Iberia', 'SEAT', 'SEAT/CUPRA', 'Indra', 'Meliá Hotels', 'Vodafone España', 'Vodafone', 'Quirónsalud', 'Sanitas') THEN '5k_19999'
         WHEN company IN ('ROVI', 'Rovi', 'Cinfa', 'Cuatrecasas') THEN '2k_4999'
         WHEN company IN ('CIE Automotive') THEN 'pending'
+        WHEN company IN ('Fluidra', 'Almirall', 'Vithas', 'Barceló', 'IMQ Prevención', 'AGUI', 'Grupo Álava', 'Campo & Ochandiano', 'Walt HR Evolus') THEN 'under_5k'
         WHEN company IN ('Crimidesa', 'Impulsa XP', 'CYRIA', 'Cyria360', 'Grado 3', 'Grado3', 'Habilitips', 'Grupo Constant', 'Etalentum', 'eTalentum', 'Valora', 'Valora 2021', 'enEvolución', 'En Evolución', 'Ruedas Alex', 'Alex', 'Affor Health', 'ICF', 'CIMALSA', 'FGC', 'TIC Salut Social', 'i2CAT', 'AOC', 'IDI', 'SEM', 'CAR', 'Servei Meteorològic de Catalunya', 'Ifercat', 'Agència de l''Aigua', 'Agència de Residus', 'INCASÒL', 'CIRE', 'Agència Catalana de la Joventut') THEN 'under_2k'
         ELSE COALESCE(company_size, 'unclassified')
         END,

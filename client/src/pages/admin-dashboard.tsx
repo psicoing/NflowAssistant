@@ -55,6 +55,7 @@ const empresaSizeOptions = [
   { value: "20k_49999", label: "🟢 20.000–49.999" },
   { value: "5k_19999", label: "🔵 5.000–19.999" },
   { value: "2k_4999", label: "🟣 2.000–4.999" },
+  { value: "under_5k", label: "🔷 Menos de 5.000" },
   { value: "under_2k", label: "🟦 Menos de 2.000" },
   { value: "pending", label: "⚠️ Pendiente de confirmar" },
   { value: "unclassified", label: "Sin clasificar" },

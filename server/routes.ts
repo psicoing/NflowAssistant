@@ -33,7 +33,7 @@ import * as XLSX from "xlsx";
 
 const empresaCompanySizeValues = new Set([
   "200k_plus", "100k_199999", "50k_99999", "20k_49999",
-  "5k_19999", "2k_4999", "under_2k", "pending", "unclassified",
+  "5k_19999", "2k_4999", "under_5k", "under_2k", "pending", "unclassified",
 ]);
 const isEmpresaCompanySize = (value: unknown): value is string =>
   typeof value === "string" && empresaCompanySizeValues.has(value);
