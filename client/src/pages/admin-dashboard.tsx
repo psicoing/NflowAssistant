@@ -48,6 +48,19 @@ interface LicenseFormData {
   commissionRate: string;
 }
 
+const empresaSizeOptions = [
+  { value: "200k_plus", label: "🔴 200.000 o más" },
+  { value: "100k_199999", label: "🟠 100.000–199.999" },
+  { value: "50k_99999", label: "🟡 50.000–99.999" },
+  { value: "20k_49999", label: "🟢 20.000–49.999" },
+  { value: "5k_19999", label: "🔵 5.000–19.999" },
+  { value: "2k_4999", label: "🟣 2.000–4.999" },
+  { value: "under_2k", label: "🟦 Menos de 2.000" },
+  { value: "pending", label: "⚠️ Pendiente de confirmar" },
+  { value: "unclassified", label: "Sin clasificar" },
+];
+const empresaSizeLabel = (value?: string) => empresaSizeOptions.find(option => option.value === value)?.label || "Sin clasificar";
+
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -150,10 +163,12 @@ export default function AdminDashboard() {
   const [empresaNewEmail, setEmpresaNewEmail] = useState("");
   const [empresaNewName, setEmpresaNewName] = useState("");
   const [empresaNewCompany, setEmpresaNewCompany] = useState("");
+  const [empresaNewCompanySize, setEmpresaNewCompanySize] = useState("unclassified");
   const [empresaAddError, setEmpresaAddError] = useState<string | null>(null);
   const [empresaAdding, setEmpresaAdding] = useState(false);
   const [empresaSearch, setEmpresaSearch] = useState("");
   const [empresaCompanyFilter, setEmpresaCompanyFilter] = useState("all");
+  const [empresaSizeFilter, setEmpresaSizeFilter] = useState("all");
   const [empresaStatusFilter, setEmpresaStatusFilter] = useState<"all"|"active"|"baja">("all");
   const [empresaDeleteConfirmId, setEmpresaDeleteConfirmId] = useState<number | null>(null);
   const [empresaCsvImporting, setEmpresaCsvImporting] = useState(false);
@@ -168,6 +183,7 @@ export default function AdminDashboard() {
   const [empresaShowTemplates, setEmpresaShowTemplates] = useState(false);
   const [empresaSavingTemplate, setEmpresaSavingTemplate] = useState(false);
   const [empresaCampaignCompanies, setEmpresaCampaignCompanies] = useState<string[]>([]);
+  const [empresaCampaignSizes, setEmpresaCampaignSizes] = useState<string[]>([]);
   const [empresaScheduledAt, setEmpresaScheduledAt] = useState("");
   const [empresaAbTest, setEmpresaAbTest] = useState(false);
   const [empresaSubjectB, setEmpresaSubjectB] = useState("");
@@ -2274,6 +2290,27 @@ export default function AdminDashboard() {
                     </div>
                     <div className="text-sm text-gray-400 space-y-1">
                       {empresaSelectedContact.company && <p>🏢 {empresaSelectedContact.company}</p>}
+                      <p>👥 {empresaSizeLabel(empresaSelectedContact.company_size)}</p>
+                      <div className="flex gap-2 pt-1">
+                        <select value={empresaSelectedContact.company_size || "unclassified"}
+                          onChange={e => setEmpresaSelectedContact((contact: any) => ({ ...contact, company_size: e.target.value }))}
+                          className="flex-1 bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:border-blue-500">
+                          {empresaSizeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+                        </select>
+                        <button onClick={async () => {
+                          const response = await fetch(`/api/admin/empresas/${empresaSelectedContact.id}`, {
+                            method: "PATCH",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ companySize: empresaSelectedContact.company_size || "unclassified" }),
+                          });
+                          if (response.ok) {
+                            setEmpresaSelectedContact(await response.json());
+                            fetchEmpresas();
+                          }
+                        }} className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all">
+                          Guardar tramo
+                        </button>
+                      </div>
                       {empresaSelectedContact.opted_out && <p className="text-red-400">⛔ Baja registrada</p>}
                     </div>
                     <div>
@@ -2299,7 +2336,7 @@ export default function AdminDashboard() {
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <div>
-                        <CardTitle className="text-white flex items-center gap-2">🏢 Contactos grandes empresas</CardTitle>
+                        <CardTitle className="text-white flex items-center gap-2">🏢 Contactos de empresas</CardTitle>
                         <CardDescription className="text-gray-400">
                           {empresas.filter(e => !e.opted_out).length} activos · {empresas.filter(e => e.opted_out).length} bajas · {empresas.length} total
                         </CardDescription>
@@ -2318,13 +2355,17 @@ export default function AdminDashboard() {
                       <div className="flex gap-2">
                         <input type="text" placeholder="Empresa" value={empresaNewCompany} onChange={e => setEmpresaNewCompany(e.target.value)}
                           className="flex-1 bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+                        <select value={empresaNewCompanySize} onChange={e => setEmpresaNewCompanySize(e.target.value)}
+                          className="w-44 bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-2 text-xs focus:outline-none focus:border-blue-500">
+                          {empresaSizeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+                        </select>
                         <button disabled={empresaAdding} onClick={async () => {
                           setEmpresaAddError(null);
                           if (!empresaNewEmail.includes("@")) { setEmpresaAddError("Email inválido"); return; }
                           setEmpresaAdding(true);
                           try {
-                            const r = await fetch("/api/admin/empresas", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: empresaNewEmail, name: empresaNewName, company: empresaNewCompany }) });
-                            if (r.ok) { setEmpresaNewEmail(""); setEmpresaNewName(""); setEmpresaNewCompany(""); fetchEmpresas(); }
+                            const r = await fetch("/api/admin/empresas", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: empresaNewEmail, name: empresaNewName, company: empresaNewCompany, companySize: empresaNewCompanySize }) });
+                            if (r.ok) { setEmpresaNewEmail(""); setEmpresaNewName(""); setEmpresaNewCompany(""); setEmpresaNewCompanySize("unclassified"); fetchEmpresas(); }
                             else { const d = await r.json().catch(() => ({})); setEmpresaAddError(d.message || `Error ${r.status}`); }
                           } catch { setEmpresaAddError("Sin conexión"); } finally { setEmpresaAdding(false); }
                         }} className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap">
@@ -2335,7 +2376,7 @@ export default function AdminDashboard() {
                     {empresaAddError && <p className="text-red-400 text-xs px-1">{empresaAddError}</p>}
 
                     <label className="block cursor-pointer bg-gray-700/50 hover:bg-gray-700 border border-dashed border-gray-600 hover:border-blue-500 rounded-lg px-3 py-2 text-sm text-gray-400 hover:text-gray-200 transition-all text-center">
-                      {empresaCsvImporting ? "Importando…" : "📥 Importar CSV (email, nombre, empresa)"}
+                      {empresaCsvImporting ? "Importando…" : "📥 Importar CSV (email, nombre, empresa, tamaño)"}
                       <input type="file" accept=".csv,.txt" className="hidden" onChange={async (e) => {
                         const file = e.target.files?.[0]; if (!file) return;
                         setEmpresaCsvImporting(true); setEmpresaCsvResult(null);
@@ -2343,7 +2384,7 @@ export default function AdminDashboard() {
                           const text = await file.text();
                           const rows = text.split("\n").filter(l => l.trim()).map(line => {
                             const p = line.split(/[,;]/).map(p => p.trim().replace(/^["']|["']$/g, ""));
-                            return { email: p[0] || "", name: p[1] || "", company: p[2] || "" };
+                            return { email: p[0] || "", name: p[1] || "", company: p[2] || "", companySize: p[3] || "unclassified" };
                           }).filter(r => r.email.includes("@"));
                           const r = await fetch("/api/admin/empresas/import-csv", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ rows }) });
                           if (r.ok) { setEmpresaCsvResult(await r.json()); fetchEmpresas(); }
@@ -2369,6 +2410,11 @@ export default function AdminDashboard() {
                         <option value="all">Todas las empresas</option>
                         {Array.from(new Set(empresas.map(e => e.company).filter(Boolean))).sort().map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
+                      <select value={empresaSizeFilter} onChange={e => setEmpresaSizeFilter(e.target.value)}
+                        className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none">
+                        <option value="all">Todos los tamaños</option>
+                        {empresaSizeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+                      </select>
                     </div>
 
                     <div className="max-h-[400px] overflow-y-auto space-y-1 pr-1">
@@ -2379,7 +2425,8 @@ export default function AdminDashboard() {
                           const matchSearch = !empresaSearch || e.email.toLowerCase().includes(empresaSearch.toLowerCase()) || (e.name || "").toLowerCase().includes(empresaSearch.toLowerCase()) || (e.company || "").toLowerCase().includes(empresaSearch.toLowerCase());
                           const matchStatus = empresaStatusFilter === "all" || (empresaStatusFilter === "active" && !e.opted_out) || (empresaStatusFilter === "baja" && e.opted_out);
                           const matchCompany = empresaCompanyFilter === "all" || e.company === empresaCompanyFilter;
-                          return matchSearch && matchStatus && matchCompany;
+                          const matchSize = empresaSizeFilter === "all" || (e.company_size || "unclassified") === empresaSizeFilter;
+                          return matchSearch && matchStatus && matchCompany && matchSize;
                         });
                         if (filtered.length === 0) return <p className="text-gray-400 text-sm text-center py-4">Sin resultados</p>;
                         return filtered.map(e => (
@@ -2391,6 +2438,7 @@ export default function AdminDashboard() {
                               <p className="text-gray-300 text-xs truncate">{e.email}</p>
                               <div className="flex gap-1.5 mt-0.5 flex-wrap">
                                 {e.company && <span className="text-gray-500 text-xs">{e.company}</span>}
+                                <span className="text-indigo-300 text-xs bg-indigo-500/15 px-1.5 rounded">{empresaSizeLabel(e.company_size)}</span>
                                 {e.language === 'en_fr' && <span className="text-yellow-300 text-xs bg-yellow-500/15 px-1.5 rounded font-semibold">EN·FR</span>}
                                 {e.campaigns_sent > 0 && <span className="text-blue-400 text-xs bg-blue-500/10 px-1.5 rounded">📧 {e.campaigns_sent}</span>}
                                 {e.opted_out && <span className="text-red-400 text-xs">baja</span>}
@@ -2411,8 +2459,8 @@ export default function AdminDashboard() {
                   <CardHeader>
                     <CardTitle className="text-white flex items-center gap-2">✉️ Redactar campaña</CardTitle>
                     <CardDescription className="text-gray-400">
-                      {empresaCampaignCompanies.length > 0
-                        ? `Empresas: ${empresaCampaignCompanies.join(", ")} · ${empresas.filter(e => !e.opted_out && empresaCampaignCompanies.includes(e.company)).length} destinatarios`
+                      {empresaCampaignCompanies.length > 0 || empresaCampaignSizes.length > 0
+                        ? `${empresaCampaignCompanies.length > 0 ? `Empresas: ${empresaCampaignCompanies.join(", ")}` : "Todas las empresas"}${empresaCampaignSizes.length > 0 ? ` · Tamaños: ${empresaCampaignSizes.map(empresaSizeLabel).join(", ")}` : ""} · ${empresas.filter(e => !e.opted_out && (empresaCampaignCompanies.length === 0 || empresaCampaignCompanies.includes(e.company)) && (empresaCampaignSizes.length === 0 || empresaCampaignSizes.includes(e.company_size || "unclassified"))).length} destinatarios`
                         : `Todas las activas · ${empresas.filter(e => !e.opted_out).length} destinatarios`}
                     </CardDescription>
                   </CardHeader>
@@ -2489,6 +2537,20 @@ export default function AdminDashboard() {
                         )}
                       </div>
                     </div>
+                    <div>
+                      <label className="text-gray-300 text-xs font-medium block mb-1">Filtrar por tamaño <span className="text-gray-500">(vacío = todos)</span></label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {empresaSizeOptions.map(option => (
+                          <button key={option.value} onClick={() => setEmpresaCampaignSizes(prev => prev.includes(option.value) ? prev.filter(size => size !== option.value) : [...prev, option.value])}
+                            className={`text-xs px-2.5 py-1 rounded-full border transition-all ${empresaCampaignSizes.includes(option.value) ? "bg-indigo-600 border-indigo-500 text-white" : "border-gray-600 text-gray-400 hover:text-white hover:border-gray-400"}`}>
+                            {option.label}
+                          </button>
+                        ))}
+                        {empresaCampaignSizes.length > 0 && (
+                          <button onClick={() => setEmpresaCampaignSizes([])} className="text-xs px-2.5 py-1 rounded-full border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-all">✕ Limpiar</button>
+                        )}
+                      </div>
+                    </div>
 
                     <div>
                       <label className="text-gray-300 text-xs font-medium block mb-1">Programar envío <span className="text-gray-500">(opcional)</span></label>
@@ -2513,9 +2575,7 @@ export default function AdminDashboard() {
                       <button onClick={() => setEmpresaStatus("confirm")} disabled={!empresaSubject.trim() || !empresaBody.trim()}
                         className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-40 text-white font-semibold py-3 rounded-xl transition-all">
                         {empresaScheduledAt ? "🕐 Programar envío" : "Preparar envío"} →
-                        ({empresaCampaignCompanies.length > 0
-                          ? empresas.filter(e => !e.opted_out && empresaCampaignCompanies.includes(e.company)).length
-                          : empresas.filter(e => !e.opted_out).length} destinatarios)
+                        ({empresas.filter(e => !e.opted_out && (empresaCampaignCompanies.length === 0 || empresaCampaignCompanies.includes(e.company)) && (empresaCampaignSizes.length === 0 || empresaCampaignSizes.includes(e.company_size || "unclassified"))).length} destinatarios)
                       </button>
                     )}
 
@@ -2525,10 +2585,9 @@ export default function AdminDashboard() {
                           <p className="text-amber-300 text-sm font-semibold">¿Confirmas {empresaScheduledAt ? "la programación" : "el envío"}?</p>
                           <p className="text-gray-400 text-xs mt-1">
                             {empresaCampaignCompanies.length > 0 ? `Empresas: ${empresaCampaignCompanies.join(", ")} · ` : "Todas las activas · "}
+                            {empresaCampaignSizes.length > 0 ? `Tamaños: ${empresaCampaignSizes.map(empresaSizeLabel).join(", ")} · ` : ""}
                             <strong className="text-white">
-                              {empresaCampaignCompanies.length > 0
-                                ? empresas.filter(e => !e.opted_out && empresaCampaignCompanies.includes(e.company)).length
-                                : empresas.filter(e => !e.opted_out).length} destinatarios
+                              {empresas.filter(e => !e.opted_out && (empresaCampaignCompanies.length === 0 || empresaCampaignCompanies.includes(e.company)) && (empresaCampaignSizes.length === 0 || empresaCampaignSizes.includes(e.company_size || "unclassified"))).length} destinatarios
                             </strong>
                             {empresaAbTest && empresaSubjectB && " · A/B testing activo"}
                           </p>
@@ -2543,6 +2602,7 @@ export default function AdminDashboard() {
                                 body: JSON.stringify({
                                   subject: empresaSubject, body: empresaBody,
                                   companies: empresaCampaignCompanies.length > 0 ? empresaCampaignCompanies : undefined,
+                                  companySizes: empresaCampaignSizes.length > 0 ? empresaCampaignSizes : undefined,
                                   scheduledAt: empresaScheduledAt || undefined,
                                   subjectB: empresaAbTest && empresaSubjectB ? empresaSubjectB : undefined,
                                 }),
@@ -2565,7 +2625,7 @@ export default function AdminDashboard() {
                     )}
 
                     {empresaStatus === "done" && (
-                      <button onClick={() => { setEmpresaStatus("idle"); setEmpresaResult(null); setEmpresaCampaignCompanies([]); setEmpresaScheduledAt(""); setEmpresaAbTest(false); setEmpresaSubjectB(""); }}
+                      <button onClick={() => { setEmpresaStatus("idle"); setEmpresaResult(null); setEmpresaCampaignCompanies([]); setEmpresaCampaignSizes([]); setEmpresaScheduledAt(""); setEmpresaAbTest(false); setEmpresaSubjectB(""); }}
                         className="w-full border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm">Nueva campaña</button>
                     )}
                   </CardContent>
@@ -2614,7 +2674,9 @@ export default function AdminDashboard() {
                                 <p className="truncate" title={c.subject}>{c.subject}</p>
                                 {c.subject_b && <p className="truncate text-purple-400" title={c.subject_b}>B: {c.subject_b}</p>}
                               </td>
-                              <td className="py-2 pr-3 text-xs text-gray-500">{c.companies_filter || "Todas"}</td>
+                              <td className="py-2 pr-3 text-xs text-gray-500">
+                                {c.companies_filter || c.sizes_filter ? [c.companies_filter, c.sizes_filter ? `Tamaños: ${c.sizes_filter.split(", ").map(empresaSizeLabel).join(", ")}` : null].filter(Boolean).join(" · ") : "Todas"}
+                              </td>
                               <td className="py-2 pr-3 text-center"><span className="text-emerald-400 font-semibold">{c.sent_count}</span></td>
                               <td className="py-2 pr-3 text-center"><span className={c.failed_count > 0 ? "text-red-400 font-semibold" : "text-gray-500"}>{c.failed_count}</span></td>
                               <td className="py-2 pr-3 text-center">

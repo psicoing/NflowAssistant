@@ -71,6 +71,8 @@ async function ensureEmpresasTables() {
         email TEXT UNIQUE NOT NULL,
         name TEXT,
         company TEXT,
+        company_size TEXT DEFAULT 'unclassified',
+        company_size_source TEXT DEFAULT 'seed',
         opted_out BOOLEAN DEFAULT false,
         opted_out_at TIMESTAMPTZ,
         created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -84,6 +86,7 @@ async function ensureEmpresasTables() {
         failed_count INT DEFAULT 0,
         opens INT DEFAULT 0,
         companies_filter TEXT,
+        sizes_filter TEXT,
         scheduled_at TIMESTAMPTZ,
         status TEXT DEFAULT 'sent',
         subject_b TEXT,
@@ -108,6 +111,11 @@ async function ensureEmpresasTables() {
     // Add language column if the table already existed without it
     await pool.query(`
       ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS language TEXT;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS company_size TEXT DEFAULT 'unclassified';
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS company_size_source TEXT DEFAULT 'seed';
+      ALTER TABLE empresa_campaign_history ADD COLUMN IF NOT EXISTS sizes_filter TEXT;
+      UPDATE empresa_contacts SET company_size = 'unclassified' WHERE company_size IS NULL;
+      UPDATE empresa_contacts SET company_size_source = 'seed' WHERE company_size_source IS NULL;
     `);
     log("Empresa tables ensured");
   } catch (err: any) {
@@ -360,6 +368,25 @@ async function ensureEmpresasContacts() {
       UPDATE empresa_contacts SET language = 'es'
       WHERE company IN ('El Corte Inglés', 'Repsol', 'Iberdrola', 'Avangrid', 'ScottishPower', 'Grupo Santander', 'Inditex', 'Cellnex', 'Mapfre', 'CIE Automotive', 'AENA', 'Indra', 'Mercadona', 'Telefónica', 'BBVA', 'Rovi', 'Quirónsalud', 'Cinfa', 'Capgemini', 'Grifols', 'Cuatrecasas', 'Sanitas', 'Crimidesa', 'Impulsa XP', 'Cyria360', 'Grado3', 'Habilitips', 'Grupo Constant', 'eTalentum', 'Valora 2021', 'En Evolución', 'Alex')
         AND (language IS NULL OR language != 'es')
+    `);
+    // Clasificación aportada para la prospección corporativa. Se mantiene
+    // separada de los planes de NUXA: representa el tamaño de la organización.
+    await pool.query(`
+      UPDATE empresa_contacts SET
+        company_size = CASE
+        WHEN company IN ('Santander', 'Grupo Santander', 'Carrefour', 'Capgemini') THEN '200k_plus'
+        WHEN company IN ('Inditex', 'Mercadona', 'BBVA', 'Telefónica') THEN '100k_199999'
+        WHEN company IN ('Iberdrola', 'CaixaBank', 'Lidl', 'El Corte Inglés', 'Mapfre', 'ACS', 'Endesa', 'Naturgy', 'Correos') THEN '50k_99999'
+        WHEN company IN ('Gestamp', 'Grifols', 'Ferrovial', 'Amadeus') THEN '20k_49999'
+        WHEN company IN ('Sacyr', 'Aena', 'AENA', 'Renfe', 'Iberia', 'SEAT', 'SEAT/CUPRA', 'Indra', 'Meliá Hotels', 'Vodafone España', 'Vodafone', 'Quirónsalud', 'Sanitas') THEN '5k_19999'
+        WHEN company IN ('ROVI', 'Rovi', 'Cinfa', 'Cuatrecasas') THEN '2k_4999'
+        WHEN company IN ('CIE Automotive') THEN 'pending'
+        WHEN company IN ('Crimidesa', 'Impulsa XP', 'CYRIA', 'Cyria360', 'Grado 3', 'Grado3', 'Habilitips', 'Grupo Constant', 'Etalentum', 'eTalentum', 'Valora', 'Valora 2021', 'enEvolución', 'En Evolución', 'Ruedas Alex', 'Alex', 'Affor Health', 'ICF', 'CIMALSA', 'FGC', 'TIC Salut Social', 'i2CAT', 'AOC', 'IDI', 'SEM', 'CAR', 'Servei Meteorològic de Catalunya', 'Ifercat', 'Agència de l''Aigua', 'Agència de Residus', 'INCASÒL', 'CIRE', 'Agència Catalana de la Joventut') THEN 'under_2k'
+        ELSE COALESCE(company_size, 'unclassified')
+        END,
+        company_size_source = 'seed'
+      WHERE contact_type = 'empresa'
+        AND company_size_source = 'seed'
     `);
     log("Empresa contacts seeded");
   } catch (err: any) {

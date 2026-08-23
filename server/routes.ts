@@ -31,6 +31,13 @@ import "./types"; // Import session types
 import multer from "multer";
 import * as XLSX from "xlsx";
 
+const empresaCompanySizeValues = new Set([
+  "200k_plus", "100k_199999", "50k_99999", "20k_49999",
+  "5k_19999", "2k_4999", "under_2k", "pending", "unclassified",
+]);
+const isEmpresaCompanySize = (value: unknown): value is string =>
+  typeof value === "string" && empresaCompanySizeValues.has(value);
+
 // Helper function to check if user has active subscription
 async function checkSubscription(userId: number): Promise<boolean> {
   try {
@@ -1686,14 +1693,29 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
 
   app.post("/api/admin/empresas", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
-    const { email, company, name } = req.body;
+    const { email, company, name, companySize } = req.body;
     if (!email || !email.includes("@")) return res.status(400).json({ message: "Email inválido" });
+    if (companySize && !isEmpresaCompanySize(companySize)) return res.status(400).json({ message: "Tamaño de empresa inválido" });
     try {
       const r = await pool.query(
-        "INSERT INTO empresa_contacts (email, company, name) VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING RETURNING *",
-        [email.toLowerCase().trim(), company || null, name || null]
+        "INSERT INTO empresa_contacts (email, company, name, company_size, company_size_source) VALUES ($1, $2, $3, $4, 'manual') ON CONFLICT (email) DO NOTHING RETURNING *",
+        [email.toLowerCase().trim(), company || null, name || null, companySize || "unclassified"]
       );
       if (r.rows.length === 0) return res.status(409).json({ message: "Email ya existe" });
+      res.json(r.rows[0]);
+    } catch { res.status(500).json({ message: "Error" }); }
+  });
+
+  app.patch("/api/admin/empresas/:id", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { companySize } = req.body;
+    if (!isEmpresaCompanySize(companySize)) return res.status(400).json({ message: "Tamaño de empresa inválido" });
+    try {
+      const r = await pool.query(
+        "UPDATE empresa_contacts SET company_size = $1, company_size_source = 'manual' WHERE id = $2 RETURNING *",
+        [companySize, parseInt(req.params.id)]
+      );
+      if (r.rows.length === 0) return res.status(404).json({ message: "No encontrado" });
       res.json(r.rows[0]);
     } catch { res.status(500).json({ message: "Error" }); }
   });
@@ -1725,10 +1747,11 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
   app.get("/api/admin/empresas/export-csv", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
     try {
-      const r = await pool.query("SELECT email, name, company, opted_out, created_at FROM empresa_contacts ORDER BY company, email");
-      const lines = ["email,nombre,empresa,estado,alta"];
+      const r = await pool.query("SELECT email, name, company, company_size, opted_out, created_at FROM empresa_contacts ORDER BY company_size, company, email");
+      const lines = ["email,nombre,empresa,tamaño_empresa,estado,alta"];
       for (const row of r.rows) {
         lines.push([row.email, row.name || "", row.company || "",
+          row.company_size || "unclassified",
           row.opted_out ? "baja" : "activo",
           row.created_at ? new Date(row.created_at).toISOString().split("T")[0] : ""
         ].map(v => `"${v}"`).join(","));
@@ -1766,22 +1789,28 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
 
   app.post("/api/admin/send-empresa-campaign", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
-    const { subject, body, companies, scheduledAt, subjectB } = req.body;
+    const { subject, body, companies, companySizes, scheduledAt, subjectB } = req.body;
     if (!subject || !body) return res.status(400).json({ message: "Subject y body requeridos" });
+    if (companySizes !== undefined && (!Array.isArray(companySizes) || !companySizes.every(isEmpresaCompanySize))) {
+      return res.status(400).json({ message: "Filtro de tamaño inválido" });
+    }
     try {
       let query = "SELECT * FROM empresa_contacts WHERE opted_out = false";
       const params: any[] = [];
       if (Array.isArray(companies) && companies.length > 0) { query += ` AND company = ANY($1)`; params.push(companies); }
+      const selectedSizes = Array.isArray(companySizes) ? Array.from(new Set(companySizes)) : [];
+      if (selectedSizes.length > 0) { query += ` AND company_size = ANY($${params.length + 1})`; params.push(selectedSizes); }
       query += " ORDER BY id";
       const r = await pool.query(query, params);
       const contacts = r.rows;
       const companiesStr = (Array.isArray(companies) && companies.length > 0) ? companies.join(", ") : null;
+      const sizesStr = selectedSizes.length > 0 ? selectedSizes.join(", ") : null;
       const scheduledDate = scheduledAt ? new Date(scheduledAt) : null;
       const isScheduled = scheduledDate && scheduledDate > new Date();
       const campaignRow = await pool.query(
-        `INSERT INTO empresa_campaign_history (subject, subject_b, body, sent_count, failed_count, companies_filter, scheduled_at, status)
-         VALUES ($1,$2,$3,0,0,$4,$5,$6) RETURNING id`,
-        [subject, subjectB || null, body, companiesStr, scheduledDate, isScheduled ? "scheduled" : "sent"]
+        `INSERT INTO empresa_campaign_history (subject, subject_b, body, sent_count, failed_count, companies_filter, sizes_filter, scheduled_at, status)
+         VALUES ($1,$2,$3,0,0,$4,$5,$6,$7) RETURNING id`,
+        [subject, subjectB || null, body, companiesStr, sizesStr, scheduledDate, isScheduled ? "scheduled" : "sent"]
       );
       const campaignId: number = campaignRow.rows[0].id;
       if (isScheduled) {
@@ -1797,15 +1826,16 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
 
   app.post("/api/admin/empresas/import-csv", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
-    const { rows } = req.body as { rows: { email: string; name?: string; company?: string }[] };
+    const { rows } = req.body as { rows: { email: string; name?: string; company?: string; companySize?: string }[] };
     if (!Array.isArray(rows) || rows.length === 0) return res.status(400).json({ message: "Sin filas" });
     let imported = 0, skipped = 0;
     for (const row of rows) {
       if (!row.email || !row.email.includes("@")) { skipped++; continue; }
       try {
+        const companySize = isEmpresaCompanySize(row.companySize) ? row.companySize : "unclassified";
         const r = await pool.query(
-          "INSERT INTO empresa_contacts (email, name, company) VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING RETURNING id",
-          [row.email.toLowerCase().trim(), row.name || null, row.company || null]
+          "INSERT INTO empresa_contacts (email, name, company, company_size, company_size_source) VALUES ($1, $2, $3, $4, 'manual') ON CONFLICT (email) DO NOTHING RETURNING id",
+          [row.email.toLowerCase().trim(), row.name || null, row.company || null, companySize]
         );
         if (r.rows.length > 0) imported++; else skipped++;
       } catch { skipped++; }
