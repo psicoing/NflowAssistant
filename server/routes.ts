@@ -1855,12 +1855,23 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     const { text } = req.body as { text?: string };
     if (!text || !text.trim()) return res.status(400).json({ message: "Sin contenido" });
 
-    const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+    // Quita el BOM UTF-8 que añaden Excel/Sheets al exportar CSV.
+    const cleanText = text.replace(/^\uFEFF/, "");
+    // Separa un campo CSV que puede venir entre comillas dobles (con "" como comilla escapada)
+    // o sin comillas; nunca altera el contenido real del campo.
+    const stripQuotes = (f: string) => {
+      const t = f.trim();
+      if (t.startsWith('"') && t.endsWith('"') && t.length >= 2) {
+        return t.slice(1, -1).replace(/""/g, '"').trim();
+      }
+      return t;
+    };
+    const lines = cleanText.split("\n").map(l => l.trim()).filter(Boolean);
     let created = 0, updated = 0, skipped = 0;
     const errors: string[] = [];
 
     for (const line of lines) {
-      const fields = line.split(";").map(f => f.trim());
+      const fields = line.split(";").map(stripQuotes);
       // Se admite que falte el último campo (FUENTE) si la línea no lo incluye —
       // se trata como vacío, nunca se inventa. No se admite si faltan más campos.
       if (fields.length < 10 || fields.length > 11) {
@@ -1869,6 +1880,10 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
         continue;
       }
       while (fields.length < 11) fields.push("");
+      // Salta la fila de cabecera si el CSV la incluye (p.ej. "EMPRESA";"EMAIL";...).
+      if (fields[0].toUpperCase() === "EMPRESA" && fields[1].toUpperCase() === "EMAIL") {
+        continue;
+      }
       const [company, emailRaw, phone, address, postalCode, municipio, provincia, employeesRaw, contactArea, priority, source] = fields;
       const email = emailRaw ? emailRaw.toLowerCase() : "";
       if (email && !email.includes("@")) {
@@ -1883,10 +1898,13 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
         errors.push(`Sin email ni empresa, no se puede identificar el contacto: "${line.slice(0, 60)}"`);
         continue;
       }
-      // Extrae el número inicial aunque venga con cualificadores ("500+", "500 aprox.");
-      // nunca se inventa una cifra si no hay ningún número en el campo.
-      const employeeMatch = employeesRaw.match(/\d+/);
-      const employeeCount = employeeMatch ? parseInt(employeeMatch[0], 10) : null;
+      // Extrae el primer número del campo aunque venga con cualificadores ("500+", "500 aprox.")
+      // o con puntos como separador de millares ("1.400"); nunca se inventa una cifra si no
+      // hay ningún número en el campo. El separador de millares solo se reconoce cuando el
+      // patrón completo aparece (dígitos-punto-3dígitos), para no fundir números distintos
+      // separados por espacios o guiones (p.ej. "400 planta / 1.400 grupo" → 400, el primero).
+      const employeeMatch = employeesRaw.match(/\d{1,3}(?:\.\d{3})+|\d+/);
+      const employeeCount = employeeMatch ? parseInt(employeeMatch[0].replace(/\./g, ""), 10) : null;
 
       try {
         const existing = email

@@ -22,3 +22,12 @@ On a matching email, only NULL/empty destination fields get filled from the impo
 `employee_count` (exact headcount per contact, from the import) is a separate column from `company_size` (the pre-existing categorical bucket like `5k_19999` used for campaign segmentation and manually/seed-assigned). They are intentionally not derived from each other — `employee_count` is importer-sourced raw data, `company_size` remains the curated segmentation field.
 
 `phone` and `address` columns exist on `empresa_contacts` specifically so future call/visit campaigns can reuse the same contact record independently of email campaigns, per explicit user request — no call/visit campaign UI exists yet, only the storage.
+
+## Format evolved to 11 fields, and contacts without email are allowed
+The user standardized on an 11-field CSV with `FUENTE` (source URL) appended at the end: `EMPRESA;EMAIL;TELEFONO;DIRECCION;CODIGO_POSTAL;MUNICIPIO;PROVINCIA;EMPLEADOS;AREA_CONTACTO;PRIORIDAD;FUENTE`. Parser accepts 10 or 11 fields (missing FUENTE = empty, never invented).
+
+`email` is nullable at the DB level (`UNIQUE` still allows multiple `NULL`s in Postgres) because some real contacts only have phone/address, for call/visit outreach. When email is empty, dedupe falls back to `email IS NULL AND lower(trim(company)) = lower(trim(:company))`. Campaign-sending queries must explicitly filter `email IS NOT NULL` or they'd try to send to phone-only contacts.
+
+**Why this matters for future imports:** the user exports these lists from spreadsheets, so real files show up quoted (`"Empresa";"email@x.com";...`), sometimes with a UTF-8 BOM at the start, and sometimes with a header row repeating the field names. The importer must: strip a leading BOM, strip per-field wrapping quotes (unescaping `""` → `"`), and skip a row whose first two stripped fields are literally `EMPRESA`/`EMAIL` (case-insensitive) before validating it as data — otherwise the header becomes a bogus contact and quoted files are silently rejected or garbled.
+
+**Employee count extraction:** values come with qualifiers (`"500+"`, `"300+ aprox."`) and European thousands-dot formatting (`"1.000+ aprox."`, `"1.400"`). A naive `\d+` match on a dotted number only captures the digits before the first dot (e.g. "1" from "1.000"). Match `/\d{1,3}(?:\.\d{3})+|\d+/` instead — it prefers a full thousands-grouped number at a given position but still finds the first number left-to-right when the string has several (e.g. "400 planta / 1.400 grupo" → 400, the first one mentioned).

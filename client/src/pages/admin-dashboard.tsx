@@ -2429,8 +2429,17 @@ export default function AdminDashboard() {
                     <div className="space-y-1.5 bg-gray-900/40 border border-gray-700 rounded-lg p-2.5">
                       <p className="text-xs font-semibold text-gray-300">📋 Importar registros (separados por ;)</p>
                       <p className="text-[10px] text-gray-500 leading-relaxed">
-                        Orden fijo: EMPRESA;EMAIL;TELÉFONO;DIRECCIÓN;CP;MUNICIPIO;PROVINCIA;Nº EMPLEADOS;ÁREA;PRIORIDAD;FUENTE — un registro por línea. Deja un campo vacío entre dos ; si no lo tienes.
+                        Orden fijo: EMPRESA;EMAIL;TELÉFONO;DIRECCIÓN;CP;MUNICIPIO;PROVINCIA;Nº EMPLEADOS;ÁREA;PRIORIDAD;FUENTE — un registro por línea. Deja un campo vacío entre dos ; si no lo tienes. Admite CSV con comillas y con o sin fila de cabecera.
                       </p>
+                      <label className="block cursor-pointer bg-gray-700/50 hover:bg-gray-700 border border-dashed border-gray-600 hover:border-indigo-500 rounded-lg px-3 py-1.5 text-[11px] text-gray-400 hover:text-gray-200 transition-all text-center">
+                        📎 Cargar archivo .csv/.txt con este formato
+                        <input type="file" accept=".csv,.txt" className="hidden" onChange={async (e) => {
+                          const file = e.target.files?.[0]; if (!file) return;
+                          const text = await file.text();
+                          setEmpresaBulkText(text);
+                          e.target.value = "";
+                        }} />
+                      </label>
                       <textarea value={empresaBulkText} onChange={e => setEmpresaBulkText(e.target.value)}
                         placeholder={"Empresa;email@empresa.es;;Dirección;17001;Girona;Girona;7500;RRHH;A;LinkedIn"}
                         rows={4}
