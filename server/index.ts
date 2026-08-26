@@ -117,6 +117,21 @@ async function ensureEmpresasTables() {
       UPDATE empresa_contacts SET company_size = 'unclassified' WHERE company_size IS NULL;
       UPDATE empresa_contacts SET company_size_source = 'seed' WHERE company_size_source IS NULL;
     `);
+    // Campos para el importador de contactos por lote (empresa;email;telefono;dirección;
+    // cp;municipio;provincia;empleados;área;prioridad). Teléfono y dirección quedan
+    // disponibles para futuras campañas de llamada/visita, independientes del email.
+    await pool.query(`
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS phone TEXT;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS address TEXT;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS postal_code TEXT;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS municipio TEXT;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS provincia TEXT;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS employee_count INTEGER;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS contact_area TEXT;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS priority TEXT;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS source TEXT;
+      ALTER TABLE empresa_contacts ALTER COLUMN email DROP NOT NULL;
+    `);
     log("Empresa tables ensured");
   } catch (err: any) {
     console.error("ensureEmpresasTables error:", err.message);
@@ -379,7 +394,13 @@ async function ensureEmpresasContacts() {
        ('analystrelations@dxc.com',                         'DXC',               'empresa'),
        ('proveedores@intelcia.com',                         'Intelcia',          'empresa'),
        ('tarik.daoui@intelcia.com',                         'Intelcia',          'empresa'),
-       ('atencionalcliente@digimobil.es',                   'Digi Mobil',        'empresa')
+       ('atencionalcliente@digimobil.es',                   'Digi Mobil',        'empresa'),
+       ('contact@europastry.com',                           'Europastry',        'empresa'),
+       ('info@sdelsol.com',                                 'S del Sol',         'empresa'),
+       ('distritok@distritok.com',                          'Distrito K',        'empresa'),
+       ('rrhh@mango.com',                                   'Mango',             'empresa'),
+       ('carmen.caballero@helvetia.es',                     'Helvetia',          'empresa'),
+       ('privero@caser.es',                                 'Caser',             'empresa')
       ON CONFLICT (email) DO NOTHING
     `);
     // Mark international EN·FR contacts
@@ -410,6 +431,11 @@ async function ensureEmpresasContacts() {
       WHERE company IN ('Obramat', 'Bosch España', 'DXC', 'Intelcia', 'Digi Mobil')
         AND (language IS NULL OR language != 'es')
     `);
+    await pool.query(`
+      UPDATE empresa_contacts SET language = 'es'
+      WHERE company IN ('Europastry', 'S del Sol', 'Distrito K', 'Mango', 'Helvetia', 'Caser')
+        AND (language IS NULL OR language != 'es')
+    `);
     // Clasificación aportada para la prospección corporativa. Se mantiene
     // separada de los planes de NUXA: representa el tamaño de la organización.
     await pool.query(`
@@ -419,7 +445,7 @@ async function ensureEmpresasContacts() {
         WHEN company IN ('Inditex', 'Mercadona', 'BBVA', 'Telefónica') THEN '100k_199999'
         WHEN company IN ('Iberdrola', 'CaixaBank', 'Lidl', 'El Corte Inglés', 'Mapfre', 'ACS', 'Endesa', 'Naturgy', 'Correos') THEN '50k_99999'
         WHEN company IN ('Gestamp', 'Grifols', 'Ferrovial', 'Amadeus') THEN '20k_49999'
-        WHEN company IN ('Sacyr', 'Aena', 'AENA', 'Renfe', 'Iberia', 'SEAT', 'SEAT/CUPRA', 'Indra', 'Meliá Hotels', 'Vodafone España', 'Vodafone', 'Quirónsalud', 'Sanitas', 'Fluidra', 'Obramat', 'Bosch España', 'DXC', 'Intelcia', 'Digi Mobil') THEN '5k_19999'
+        WHEN company IN ('Sacyr', 'Aena', 'AENA', 'Renfe', 'Iberia', 'SEAT', 'SEAT/CUPRA', 'Indra', 'Meliá Hotels', 'Vodafone España', 'Vodafone', 'Quirónsalud', 'Sanitas', 'Fluidra', 'Obramat', 'Bosch España', 'DXC', 'Intelcia', 'Digi Mobil', 'Europastry', 'S del Sol', 'Distrito K', 'Mango', 'Helvetia', 'Caser') THEN '5k_19999'
         WHEN company IN ('ROVI', 'Rovi', 'Cinfa', 'Cuatrecasas') THEN '2k_4999'
         WHEN company IN ('CIE Automotive') THEN 'pending'
         WHEN company IN ('Almirall', 'Vithas', 'Barceló', 'IMQ Prevención', 'AGUI', 'Grupo Álava', 'Campo & Ochandiano', 'Walt HR Evolus', 'Olot Meats', 'Noel', 'C. Juià', 'C. Celrà') THEN 'under_5k'

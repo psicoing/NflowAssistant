@@ -1747,11 +1747,14 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
   app.get("/api/admin/empresas/export-csv", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
     try {
-      const r = await pool.query("SELECT email, name, company, company_size, opted_out, created_at FROM empresa_contacts ORDER BY company_size, company, email");
-      const lines = ["email,nombre,empresa,tamaño_empresa,estado,alta"];
+      const r = await pool.query("SELECT email, name, company, company_size, phone, address, postal_code, municipio, provincia, employee_count, contact_area, priority, source, opted_out, created_at FROM empresa_contacts ORDER BY company_size, company, email");
+      const lines = ["email,nombre,empresa,tamaño_empresa,teléfono,dirección,cp,municipio,provincia,nº_empleados,área,prioridad,fuente,estado,alta"];
       for (const row of r.rows) {
         lines.push([row.email, row.name || "", row.company || "",
           row.company_size || "unclassified",
+          row.phone || "", row.address || "", row.postal_code || "",
+          row.municipio || "", row.provincia || "", row.employee_count ?? "",
+          row.contact_area || "", row.priority || "", row.source || "",
           row.opted_out ? "baja" : "activo",
           row.created_at ? new Date(row.created_at).toISOString().split("T")[0] : ""
         ].map(v => `"${v}"`).join(","));
@@ -1795,7 +1798,7 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       return res.status(400).json({ message: "Filtro de tamaño inválido" });
     }
     try {
-      let query = "SELECT * FROM empresa_contacts WHERE opted_out = false";
+      let query = "SELECT * FROM empresa_contacts WHERE opted_out = false AND email IS NOT NULL";
       const params: any[] = [];
       if (Array.isArray(companies) && companies.length > 0) { query += ` AND company = ANY($1)`; params.push(companies); }
       const selectedSizes = Array.isArray(companySizes) ? Array.from(new Set(companySizes)) : [];
@@ -1841,6 +1844,88 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       } catch { skipped++; }
     }
     res.json({ imported, skipped });
+  });
+
+  // Importador de contactos por lote: registros separados por ";" con 11 campos fijos:
+  // EMPRESA;EMAIL;TELÉFONO;DIRECCIÓN;CP;MUNICIPIO;PROVINCIA;Nº EMPLEADOS;ÁREA;PRIORIDAD;FUENTE.
+  // Campos vacíos se guardan vacíos (nunca se inventan). Detecta duplicados por
+  // empresa + email y solo rellena los campos vacíos de los contactos existentes.
+  app.post("/api/admin/empresas/import-bulk", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { text } = req.body as { text?: string };
+    if (!text || !text.trim()) return res.status(400).json({ message: "Sin contenido" });
+
+    const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+    let created = 0, updated = 0, skipped = 0;
+    const errors: string[] = [];
+
+    for (const line of lines) {
+      const fields = line.split(";").map(f => f.trim());
+      // Se admite que falte el último campo (FUENTE) si la línea no lo incluye —
+      // se trata como vacío, nunca se inventa. No se admite si faltan más campos.
+      if (fields.length < 10 || fields.length > 11) {
+        skipped++;
+        errors.push(`Formato inválido (se esperan 10 u 11 campos separados por ";"): "${line.slice(0, 60)}"`);
+        continue;
+      }
+      while (fields.length < 11) fields.push("");
+      const [company, emailRaw, phone, address, postalCode, municipio, provincia, employeesRaw, contactArea, priority, source] = fields;
+      const email = emailRaw ? emailRaw.toLowerCase() : "";
+      if (email && !email.includes("@")) {
+        skipped++;
+        errors.push(`Email inválido: "${line.slice(0, 60)}"`);
+        continue;
+      }
+      // Sin email no hay forma de mandar campañas por correo a este contacto, pero
+      // sí se guarda para futuras campañas de llamada/visita si al menos hay empresa.
+      if (!email && !company) {
+        skipped++;
+        errors.push(`Sin email ni empresa, no se puede identificar el contacto: "${line.slice(0, 60)}"`);
+        continue;
+      }
+      // Extrae el número inicial aunque venga con cualificadores ("500+", "500 aprox.");
+      // nunca se inventa una cifra si no hay ningún número en el campo.
+      const employeeMatch = employeesRaw.match(/\d+/);
+      const employeeCount = employeeMatch ? parseInt(employeeMatch[0], 10) : null;
+
+      try {
+        const existing = email
+          ? await pool.query("SELECT id FROM empresa_contacts WHERE lower(email) = $1", [email])
+          : await pool.query("SELECT id FROM empresa_contacts WHERE email IS NULL AND lower(trim(company)) = lower(trim($1))", [company]);
+        if (existing.rows.length > 0) {
+          const id = existing.rows[0].id;
+          await pool.query(
+            `UPDATE empresa_contacts SET
+               company = COALESCE(NULLIF(company, ''), NULLIF($1, '')),
+               phone = COALESCE(NULLIF(phone, ''), NULLIF($2, '')),
+               address = COALESCE(NULLIF(address, ''), NULLIF($3, '')),
+               postal_code = COALESCE(NULLIF(postal_code, ''), NULLIF($4, '')),
+               municipio = COALESCE(NULLIF(municipio, ''), NULLIF($5, '')),
+               provincia = COALESCE(NULLIF(provincia, ''), NULLIF($6, '')),
+               employee_count = COALESCE(employee_count, $7),
+               contact_area = COALESCE(NULLIF(contact_area, ''), NULLIF($8, '')),
+               priority = COALESCE(NULLIF(priority, ''), NULLIF($9, '')),
+               source = COALESCE(NULLIF(source, ''), NULLIF($10, ''))
+             WHERE id = $11`,
+            [company, phone, address, postalCode, municipio, provincia, employeeCount, contactArea, priority, source, id]
+          );
+          updated++;
+        } else {
+          await pool.query(
+            `INSERT INTO empresa_contacts
+               (email, company, phone, address, postal_code, municipio, provincia, employee_count, contact_area, priority, source, company_size_source)
+             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,'manual')`,
+            [email || null, company || null, phone || null, address || null, postalCode || null, municipio || null, provincia || null, employeeCount, contactArea || null, priority || null, source || null]
+          );
+          created++;
+        }
+      } catch (e: any) {
+        skipped++;
+        errors.push(`Error guardando "${email || company}": ${e.message}`);
+      }
+    }
+
+    res.json({ created, updated, skipped, errors: errors.slice(0, 20) });
   });
 
   app.get("/api/admin/empresa-templates", async (req, res) => {

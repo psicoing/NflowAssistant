@@ -62,6 +62,18 @@ const empresaSizeOptions = [
 ];
 const empresaSizeLabel = (value?: string) => empresaSizeOptions.find(option => option.value === value)?.label || "Sin clasificar";
 
+const empresaEmployeeBuckets = [
+  { value: "lt_100", label: "< 100", test: (n: number) => n < 100 },
+  { value: "100_999", label: "100–999", test: (n: number) => n >= 100 && n < 1000 },
+  { value: "1000_4999", label: "1.000–4.999", test: (n: number) => n >= 1000 && n < 5000 },
+  { value: "5000_19999", label: "5.000–19.999", test: (n: number) => n >= 5000 && n < 20000 },
+  { value: "20000_plus", label: "20.000 o más", test: (n: number) => n >= 20000 },
+];
+const empresaEmployeeBucketOf = (count?: number | null) => {
+  if (count === null || count === undefined) return "unknown";
+  return empresaEmployeeBuckets.find(b => b.test(count))?.value || "unknown";
+};
+
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -174,6 +186,14 @@ export default function AdminDashboard() {
   const [empresaDeleteConfirmId, setEmpresaDeleteConfirmId] = useState<number | null>(null);
   const [empresaCsvImporting, setEmpresaCsvImporting] = useState(false);
   const [empresaCsvResult, setEmpresaCsvResult] = useState<{imported:number;skipped:number}|null>(null);
+  const [empresaBulkText, setEmpresaBulkText] = useState("");
+  const [empresaBulkImporting, setEmpresaBulkImporting] = useState(false);
+  const [empresaBulkResult, setEmpresaBulkResult] = useState<{created:number;updated:number;skipped:number;errors:string[]}|null>(null);
+  const [empresaProvinciaFilter, setEmpresaProvinciaFilter] = useState("all");
+  const [empresaMunicipioFilter, setEmpresaMunicipioFilter] = useState("all");
+  const [empresaEmployeeFilter, setEmpresaEmployeeFilter] = useState("all");
+  const [empresaPriorityFilter, setEmpresaPriorityFilter] = useState("all");
+  const [empresaSourceFilter, setEmpresaSourceFilter] = useState("all");
   const [empresaCampaignHistory, setEmpresaCampaignHistory] = useState<any[]>([]);
   const [empresaHistoryLoading, setEmpresaHistoryLoading] = useState(false);
   const [empresaSubject, setEmpresaSubject] = useState("NUXA — Bienestar emocional para los equipos de su empresa");
@@ -2286,12 +2306,21 @@ export default function AdminDashboard() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
                   <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 max-w-md w-full space-y-4 max-h-[80vh] overflow-y-auto">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-white font-semibold">{empresaSelectedContact.email}</h3>
+                      <h3 className="text-white font-semibold">{empresaSelectedContact.email || empresaSelectedContact.company || "Sin email"}</h3>
                       <button onClick={() => setEmpresaSelectedContact(null)} className="text-gray-400 hover:text-white text-lg">✕</button>
                     </div>
                     <div className="text-sm text-gray-400 space-y-1">
                       {empresaSelectedContact.company && <p>🏢 {empresaSelectedContact.company}</p>}
                       <p>👥 {empresaSizeLabel(empresaSelectedContact.company_size)}</p>
+                      {empresaSelectedContact.phone && <p>📞 {empresaSelectedContact.phone}</p>}
+                      {empresaSelectedContact.address && <p>📍 {empresaSelectedContact.address}</p>}
+                      {(empresaSelectedContact.postal_code || empresaSelectedContact.municipio || empresaSelectedContact.provincia) && (
+                        <p>🗺️ {[empresaSelectedContact.postal_code, empresaSelectedContact.municipio, empresaSelectedContact.provincia].filter(Boolean).join(", ")}</p>
+                      )}
+                      {empresaSelectedContact.employee_count != null && <p>👤 {empresaSelectedContact.employee_count} empleados</p>}
+                      {empresaSelectedContact.contact_area && <p>🗂️ {empresaSelectedContact.contact_area}</p>}
+                      {empresaSelectedContact.priority && <p>⭐ Prioridad {empresaSelectedContact.priority}</p>}
+                      {empresaSelectedContact.source && <p>🔗 Fuente: {empresaSelectedContact.source}</p>}
                       <div className="flex gap-2 pt-1">
                         <select value={empresaSelectedContact.company_size || "unclassified"}
                           onChange={e => setEmpresaSelectedContact((contact: any) => ({ ...contact, company_size: e.target.value }))}
@@ -2397,6 +2426,40 @@ export default function AdminDashboard() {
                       <p className="text-xs px-1">{empresaCsvResult.skipped === -1 ? <span className="text-red-400">❌ Error al importar</span> : <span className="text-emerald-400">✅ {empresaCsvResult.imported} importados · {empresaCsvResult.skipped} omitidos</span>}</p>
                     )}
 
+                    <div className="space-y-1.5 bg-gray-900/40 border border-gray-700 rounded-lg p-2.5">
+                      <p className="text-xs font-semibold text-gray-300">📋 Importar registros (separados por ;)</p>
+                      <p className="text-[10px] text-gray-500 leading-relaxed">
+                        Orden fijo: EMPRESA;EMAIL;TELÉFONO;DIRECCIÓN;CP;MUNICIPIO;PROVINCIA;Nº EMPLEADOS;ÁREA;PRIORIDAD;FUENTE — un registro por línea. Deja un campo vacío entre dos ; si no lo tienes.
+                      </p>
+                      <textarea value={empresaBulkText} onChange={e => setEmpresaBulkText(e.target.value)}
+                        placeholder={"Empresa;email@empresa.es;;Dirección;17001;Girona;Girona;7500;RRHH;A;LinkedIn"}
+                        rows={4}
+                        className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-2.5 py-2 text-xs font-mono placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+                      <button disabled={empresaBulkImporting || !empresaBulkText.trim()} onClick={async () => {
+                        setEmpresaBulkImporting(true); setEmpresaBulkResult(null);
+                        try {
+                          const r = await fetch("/api/admin/empresas/import-bulk", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: empresaBulkText }) });
+                          if (r.ok) { const data = await r.json(); setEmpresaBulkResult(data); setEmpresaBulkText(""); fetchEmpresas(); }
+                          else { setEmpresaBulkResult({ created: 0, updated: 0, skipped: -1, errors: [] }); }
+                        } catch { setEmpresaBulkResult({ created: 0, updated: 0, skipped: -1, errors: [] }); }
+                        finally { setEmpresaBulkImporting(false); }
+                      }} className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white py-1.5 rounded-lg text-xs font-semibold transition-all">
+                        {empresaBulkImporting ? "Importando…" : "Importar registros"}
+                      </button>
+                      {empresaBulkResult && (
+                        empresaBulkResult.skipped === -1 ? <p className="text-xs text-red-400">❌ Error al importar</p> : (
+                          <div className="text-xs space-y-0.5">
+                            <p className="text-emerald-400">✅ {empresaBulkResult.created} nuevos · {empresaBulkResult.updated} actualizados · {empresaBulkResult.skipped} omitidos</p>
+                            {empresaBulkResult.errors.length > 0 && (
+                              <ul className="text-red-400 text-[10px] list-disc list-inside space-y-0.5">
+                                {empresaBulkResult.errors.map((err, i) => <li key={i}>{err}</li>)}
+                              </ul>
+                            )}
+                          </div>
+                        )
+                      )}
+                    </div>
+
                     <div className="flex gap-2 flex-wrap">
                       <input type="text" placeholder="🔍 Buscar..." value={empresaSearch} onChange={e => setEmpresaSearch(e.target.value)}
                         className="flex-1 min-w-[120px] bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-1.5 text-xs placeholder-gray-500 focus:outline-none focus:border-blue-500" />
@@ -2416,6 +2479,32 @@ export default function AdminDashboard() {
                         <option value="all">Todos los tamaños</option>
                         {empresaSizeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
                       </select>
+                      <select value={empresaProvinciaFilter} onChange={e => setEmpresaProvinciaFilter(e.target.value)}
+                        className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none">
+                        <option value="all">Todas las provincias</option>
+                        {Array.from(new Set(empresas.map(e => e.provincia).filter(Boolean))).sort().map(p => <option key={p} value={p}>{p}</option>)}
+                      </select>
+                      <select value={empresaMunicipioFilter} onChange={e => setEmpresaMunicipioFilter(e.target.value)}
+                        className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none">
+                        <option value="all">Todos los municipios</option>
+                        {Array.from(new Set(empresas.map(e => e.municipio).filter(Boolean))).sort().map(m => <option key={m} value={m}>{m}</option>)}
+                      </select>
+                      <select value={empresaEmployeeFilter} onChange={e => setEmpresaEmployeeFilter(e.target.value)}
+                        className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none">
+                        <option value="all">Nº empleados (todos)</option>
+                        {empresaEmployeeBuckets.map(b => <option key={b.value} value={b.value}>{b.label}</option>)}
+                        <option value="unknown">Sin especificar</option>
+                      </select>
+                      <select value={empresaPriorityFilter} onChange={e => setEmpresaPriorityFilter(e.target.value)}
+                        className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none">
+                        <option value="all">Toda prioridad</option>
+                        {Array.from(new Set(empresas.map(e => e.priority).filter(Boolean))).sort().map(p => <option key={p} value={p}>{p}</option>)}
+                      </select>
+                      <select value={empresaSourceFilter} onChange={e => setEmpresaSourceFilter(e.target.value)}
+                        className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none">
+                        <option value="all">Toda fuente</option>
+                        {Array.from(new Set(empresas.map(e => e.source).filter(Boolean))).sort().map(s => <option key={s} value={s}>{s}</option>)}
+                      </select>
                     </div>
 
                     <div className="max-h-[400px] overflow-y-auto space-y-1 pr-1">
@@ -2423,11 +2512,16 @@ export default function AdminDashboard() {
                         <p className="text-gray-400 text-sm text-center py-4">Cargando...</p>
                       ) : (() => {
                         const filtered = empresas.filter(e => {
-                          const matchSearch = !empresaSearch || e.email.toLowerCase().includes(empresaSearch.toLowerCase()) || (e.name || "").toLowerCase().includes(empresaSearch.toLowerCase()) || (e.company || "").toLowerCase().includes(empresaSearch.toLowerCase());
+                          const matchSearch = !empresaSearch || (e.email || "").toLowerCase().includes(empresaSearch.toLowerCase()) || (e.name || "").toLowerCase().includes(empresaSearch.toLowerCase()) || (e.company || "").toLowerCase().includes(empresaSearch.toLowerCase()) || (e.phone || "").toLowerCase().includes(empresaSearch.toLowerCase());
                           const matchStatus = empresaStatusFilter === "all" || (empresaStatusFilter === "active" && !e.opted_out) || (empresaStatusFilter === "baja" && e.opted_out);
                           const matchCompany = empresaCompanyFilter === "all" || e.company === empresaCompanyFilter;
                           const matchSize = empresaSizeFilter === "all" || (e.company_size || "unclassified") === empresaSizeFilter;
-                          return matchSearch && matchStatus && matchCompany && matchSize;
+                          const matchProvincia = empresaProvinciaFilter === "all" || e.provincia === empresaProvinciaFilter;
+                          const matchMunicipio = empresaMunicipioFilter === "all" || e.municipio === empresaMunicipioFilter;
+                          const matchEmployee = empresaEmployeeFilter === "all" || empresaEmployeeBucketOf(e.employee_count) === empresaEmployeeFilter;
+                          const matchPriority = empresaPriorityFilter === "all" || e.priority === empresaPriorityFilter;
+                          const matchSource = empresaSourceFilter === "all" || e.source === empresaSourceFilter;
+                          return matchSearch && matchStatus && matchCompany && matchSize && matchProvincia && matchMunicipio && matchEmployee && matchPriority && matchSource;
                         });
                         if (filtered.length === 0) return <p className="text-gray-400 text-sm text-center py-4">Sin resultados</p>;
                         return filtered.map(e => (
@@ -2436,12 +2530,18 @@ export default function AdminDashboard() {
                             className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all ${e.opted_out ? "opacity-50 bg-gray-700/20 hover:bg-gray-700/30" : "bg-gray-700/50 hover:bg-gray-700"}`}>
                             <div className="min-w-0 flex-1">
                               {e.name && <p className="text-white text-xs font-semibold truncate">{e.name}</p>}
-                              <p className="text-gray-300 text-xs truncate">{e.email}</p>
+                              <p className="text-gray-300 text-xs truncate">{e.email || (e.phone ? `📞 ${e.phone}` : "Sin email")}</p>
                               <div className="flex gap-1.5 mt-0.5 flex-wrap">
                                 {e.company && <span className="text-gray-500 text-xs">{e.company}</span>}
                                 <span className="text-indigo-300 text-xs bg-indigo-500/15 px-1.5 rounded">{empresaSizeLabel(e.company_size)}</span>
                                 {e.language === 'en_fr' && <span className="text-yellow-300 text-xs bg-yellow-500/15 px-1.5 rounded font-semibold">EN·FR</span>}
                                 {e.campaigns_sent > 0 && <span className="text-blue-400 text-xs bg-blue-500/10 px-1.5 rounded">📧 {e.campaigns_sent}</span>}
+                                {e.phone && <span className="text-emerald-300 text-xs bg-emerald-500/10 px-1.5 rounded">📞</span>}
+                                {e.address && <span className="text-emerald-300 text-xs bg-emerald-500/10 px-1.5 rounded">📍</span>}
+                                {(e.municipio || e.provincia) && <span className="text-gray-500 text-xs">{[e.municipio, e.provincia].filter(Boolean).join(", ")}</span>}
+                                {e.employee_count != null && <span className="text-gray-500 text-xs">👥 {e.employee_count}</span>}
+                                {e.priority && <span className="text-orange-300 text-xs bg-orange-500/15 px-1.5 rounded font-semibold">{e.priority}</span>}
+                                {e.source && <span className="text-cyan-300 text-xs bg-cyan-500/10 px-1.5 rounded">{e.source}</span>}
                                 {e.opted_out && <span className="text-red-400 text-xs">baja</span>}
                               </div>
                             </div>
