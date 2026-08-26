@@ -368,7 +368,18 @@ async function ensureEmpresasContacts() {
        ('olotmeats@olotmeats.com',                          'Olot Meats',        'empresa'),
        ('noel@noel.es',                                     'Noel',              'empresa'),
        ('sales@cjuia.com',                                  'C. Juià',           'empresa'),
-       ('ccelra@ccelra.com',                                'C. Celrà',          'empresa')
+       ('ccelra@ccelra.com',                                'C. Celrà',          'empresa'),
+       ('dei@fluidra.com',                                  'Fluidra',           'empresa'),
+       ('info@fluidra.com',                                 'Fluidra',           'empresa'),
+       ('corporatecommunications@fluidra.com',              'Fluidra',           'empresa'),
+       ('reclutamientoyseleccion@obramat.es',               'Obramat',           'empresa'),
+       ('personal.rbef@es.bosch.com',                       'Bosch España',      'empresa'),
+       ('comunicacion.bosch@es.bosch.com',                  'Bosch España',      'empresa'),
+       ('buzon.construyetufuturo@es.bosch.com',             'Bosch España',      'empresa'),
+       ('analystrelations@dxc.com',                         'DXC',               'empresa'),
+       ('proveedores@intelcia.com',                         'Intelcia',          'empresa'),
+       ('tarik.daoui@intelcia.com',                         'Intelcia',          'empresa'),
+       ('atencionalcliente@digimobil.es',                   'Digi Mobil',        'empresa')
       ON CONFLICT (email) DO NOTHING
     `);
     // Mark international EN·FR contacts
@@ -394,6 +405,11 @@ async function ensureEmpresasContacts() {
       WHERE company IN ('Olot Meats', 'Noel', 'C. Juià', 'C. Celrà')
         AND (language IS NULL OR language != 'es')
     `);
+    await pool.query(`
+      UPDATE empresa_contacts SET language = 'es'
+      WHERE company IN ('Obramat', 'Bosch España', 'DXC', 'Intelcia', 'Digi Mobil')
+        AND (language IS NULL OR language != 'es')
+    `);
     // Clasificación aportada para la prospección corporativa. Se mantiene
     // separada de los planes de NUXA: representa el tamaño de la organización.
     await pool.query(`
@@ -403,10 +419,10 @@ async function ensureEmpresasContacts() {
         WHEN company IN ('Inditex', 'Mercadona', 'BBVA', 'Telefónica') THEN '100k_199999'
         WHEN company IN ('Iberdrola', 'CaixaBank', 'Lidl', 'El Corte Inglés', 'Mapfre', 'ACS', 'Endesa', 'Naturgy', 'Correos') THEN '50k_99999'
         WHEN company IN ('Gestamp', 'Grifols', 'Ferrovial', 'Amadeus') THEN '20k_49999'
-        WHEN company IN ('Sacyr', 'Aena', 'AENA', 'Renfe', 'Iberia', 'SEAT', 'SEAT/CUPRA', 'Indra', 'Meliá Hotels', 'Vodafone España', 'Vodafone', 'Quirónsalud', 'Sanitas') THEN '5k_19999'
+        WHEN company IN ('Sacyr', 'Aena', 'AENA', 'Renfe', 'Iberia', 'SEAT', 'SEAT/CUPRA', 'Indra', 'Meliá Hotels', 'Vodafone España', 'Vodafone', 'Quirónsalud', 'Sanitas', 'Fluidra', 'Obramat', 'Bosch España', 'DXC', 'Intelcia', 'Digi Mobil') THEN '5k_19999'
         WHEN company IN ('ROVI', 'Rovi', 'Cinfa', 'Cuatrecasas') THEN '2k_4999'
         WHEN company IN ('CIE Automotive') THEN 'pending'
-        WHEN company IN ('Fluidra', 'Almirall', 'Vithas', 'Barceló', 'IMQ Prevención', 'AGUI', 'Grupo Álava', 'Campo & Ochandiano', 'Walt HR Evolus', 'Olot Meats', 'Noel', 'C. Juià', 'C. Celrà') THEN 'under_5k'
+        WHEN company IN ('Almirall', 'Vithas', 'Barceló', 'IMQ Prevención', 'AGUI', 'Grupo Álava', 'Campo & Ochandiano', 'Walt HR Evolus', 'Olot Meats', 'Noel', 'C. Juià', 'C. Celrà') THEN 'under_5k'
         WHEN company IN ('Crimidesa', 'Impulsa XP', 'CYRIA', 'Cyria360', 'Grado 3', 'Grado3', 'Habilitips', 'Grupo Constant', 'Etalentum', 'eTalentum', 'Valora', 'Valora 2021', 'enEvolución', 'En Evolución', 'Ruedas Alex', 'Alex', 'Affor Health', 'ICF', 'CIMALSA', 'FGC', 'TIC Salut Social', 'i2CAT', 'AOC', 'IDI', 'SEM', 'CAR', 'Servei Meteorològic de Catalunya', 'Ifercat', 'Agència de l''Aigua', 'Agència de Residus', 'INCASÒL', 'CIRE', 'Agència Catalana de la Joventut') THEN 'under_2k'
         ELSE COALESCE(company_size, 'unclassified')
         END,
