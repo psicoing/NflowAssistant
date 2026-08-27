@@ -6,6 +6,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { registerSeoMiddleware } from "./seo-middleware";
 import { pool } from "./db";
+import { attachVoiceDemoWebSocket } from "./voiceDemoBridge";
 
 async function ensureAdminUser() {
   try {
@@ -1068,6 +1069,7 @@ app.use((req, res, next) => {
   await ensureEmpresaTemplates();
   await ensureLeadTables();
   const server = await registerRoutes(app);
+  attachVoiceDemoWebSocket(server);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;

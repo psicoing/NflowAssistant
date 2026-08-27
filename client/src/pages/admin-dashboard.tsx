@@ -681,6 +681,7 @@ export default function AdminDashboard() {
               <TabsTrigger value="instituciones" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchInstitutions(); checkResendDomain(); fetchInstCampaignHistory(); }}>🏛️ Instituciones</TabsTrigger>
               <TabsTrigger value="mutuas" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchMutuas(); checkResendDomain(); fetchMutuaCampaignHistory(); }}>🤝 Mutuas</TabsTrigger>
               <TabsTrigger value="empresas" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchEmpresas(); checkResendDomain(); fetchEmpresaCampaignHistory(); }}>🏢 Empresas</TabsTrigger>
+              <TabsTrigger value="voz" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">📞 Demo Voz IA</TabsTrigger>
             </TabsList>
           </div>
 
@@ -2807,6 +2808,37 @@ export default function AdminDashboard() {
                 </CardContent>
               </Card>
 
+            </div>
+          </TabsContent>
+
+          {/* ── DEMO DE LLAMADA CON IA POR VOZ ── */}
+          <TabsContent value="voz">
+            <div className="max-w-2xl mx-auto space-y-6">
+              <Card className="bg-gray-800/50 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    📞 Demo de llamada con IA por voz
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Llama a este número para hablar por voz con NUXA y evaluar la calidad de la conversación.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="bg-gray-900/60 border border-gray-700 rounded-lg p-4 text-center">
+                    <p className="text-gray-400 text-sm mb-1">Número de prueba</p>
+                    <p className="text-2xl font-bold text-white tracking-wide">+1 254 282 4325</p>
+                    <p className="text-gray-500 text-xs mt-1">Número de EE. UU. (Twilio) — llamar desde España tiene coste de llamada internacional según tu operador.</p>
+                  </div>
+                  <div className="space-y-2 text-sm text-gray-300">
+                    <p><strong className="text-white">Cómo probarlo:</strong> llama al número de arriba desde cualquier teléfono. NUXA se presentará y podrás hablar con ella en español como en una llamada normal.</p>
+                    <p><strong className="text-white">Qué evaluar:</strong> naturalidad de la voz, tiempo de respuesta, si te interrumpe o te deja hablar, y si las respuestas tienen sentido para una conversación de apoyo emocional.</p>
+                  </div>
+                  <div className="bg-yellow-900/20 border border-yellow-700/40 rounded-lg p-3 text-xs text-yellow-200 space-y-1">
+                    <p>⚠️ Esto es solo una demo entrante para pruebas: no se usa para llamar a contactos, ni a empresas/instituciones/mutuas, ni para campañas reales.</p>
+                    <p>La cuenta de Twilio es de prueba (trial) y el número es de EE. UU. porque los números españoles requieren verificación de identidad adicional (bundle regulatorio) que no está completada.</p>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
 

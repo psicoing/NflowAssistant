@@ -25,6 +25,8 @@ import { processUserMessage } from "./prompt-handler";
 import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
+import twilio from "twilio";
+import { getVoiceDemoIncomingCallUrl, getVoiceDemoStreamUrl } from "./voiceDemoBridge";
 import { db, pool } from "./db";
 import { eq, and, desc, gte, count } from "drizzle-orm";
 import "./types"; // Import session types
@@ -4131,6 +4133,38 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     }
   });
 
+
+  // ---------------------------------------------------------------------
+  // Demo de llamada con IA por voz (Task #39). Twilio llama a esta ruta
+  // cuando alguien marca el número de prueba; devolvemos TwiML que conecta
+  // el audio de la llamada al puente WebSocket (server/voiceDemoBridge.ts),
+  // que a su vez habla con la API Realtime de OpenAI.
+  // Solo demo entrante: no se usa para llamadas salientes ni campañas.
+  // ---------------------------------------------------------------------
+  app.post("/api/voice-demo/incoming-call", (req, res) => {
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    const signature = req.header("X-Twilio-Signature");
+    // Fail closed: si tenemos AuthToken configurado (que es el caso normal),
+    // una petición sin firma válida se rechaza siempre, nunca se sirve TwiML.
+    if (!authToken) {
+      console.error("Voice demo: TWILIO_AUTH_TOKEN no configurado, no se puede validar el webhook");
+      return res.status(403).send("Not configured");
+    }
+    const fullUrl = getVoiceDemoIncomingCallUrl();
+    const valid = !!signature && twilio.validateRequest(authToken, signature, fullUrl, req.body || {});
+    if (!valid) {
+      console.warn("Voice demo: firma de Twilio inválida o ausente, petición rechazada");
+      return res.status(403).send("Invalid signature");
+    }
+
+    const twiml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Connect>
+    <Stream url="${getVoiceDemoStreamUrl()}" />
+  </Connect>
+</Response>`;
+    res.type("text/xml").send(twiml);
+  });
 
   const httpServer = createServer(app);
   return httpServer;
