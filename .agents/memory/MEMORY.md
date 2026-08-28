@@ -2,3 +2,4 @@
 - [Contact seeding environments](contact-seeding-environments.md) — verify campaign contacts separately in development and production; publishing is required for production visibility.
 - [Empresa contacts bulk importer](empresa-contacts-bulk-importer.md) — semicolon-delimited format, dedupe key, and empty-field-only merge rule for empresa_contacts.
 - [OpenAI Realtime + Twilio voice bridge](openai-realtime-twilio-voice-bridge.md) — correct GA audio format schema (`audio/pcmu`) and Twilio trial account phone-number-purchase gotchas.
+- [Resend delivery visibility](resend-delivery-visibility.md) — send-only API keys return an acceptance ID but cannot confirm delivery or bounce status.
