@@ -136,7 +136,10 @@ function statusForProfile(
   profile: EmpresaBrandProfile,
   verified: boolean,
   message: string,
+  availableOverride?: boolean,
+  fromOverride?: string | null,
 ): EmpresaBrandStatus {
+  const operationalFrom = fromOverride === undefined ? profile.fromEmail : fromOverride;
   return {
     id: profile.id,
     name: profile.name,
@@ -149,10 +152,10 @@ function statusForProfile(
     gradient: profile.gradient,
     softBackground: profile.softBackground,
     accent: profile.accent,
-    from: profile.fromEmail,
-    configured: Boolean(profile.fromEmail),
+    from: operationalFrom,
+    configured: Boolean(operationalFrom),
     verified,
-    available: Boolean(profile.fromEmail) && verified,
+    available: availableOverride ?? (Boolean(profile.fromEmail) && verified),
     message,
   };
 }
@@ -174,18 +177,27 @@ export async function getEmpresaBrandStatuses(): Promise<EmpresaBrandStatus[]> {
     try {
       const configuredSender = await getConfiguredSendGridFromEmail();
       const authorized = configuredSender.toLowerCase() === sharedSender.toLowerCase();
+      const fallbackAvailable = Boolean(EMPRESA_LEGACY_NUXA_FROM_EMAIL);
       return EMPRESA_BRAND_IDS.map(id =>
         statusForProfile(
           profiles[id],
           authorized,
           authorized
             ? `Todos los proyectos usan el remitente compartido ${sharedSender}.`
-            : `${sharedSender} todavía no está autorizado como remitente en SendGrid.`,
+            : `Se usará temporalmente el remitente histórico de NUXA (${EMPRESA_LEGACY_NUXA_FROM_EMAIL}); las respuestas llegarán a ${sharedSender}.`,
+          authorized || fallbackAvailable,
+          authorized ? sharedSender : EMPRESA_LEGACY_NUXA_FROM_EMAIL,
         ),
       );
     } catch {
       return EMPRESA_BRAND_IDS.map(id =>
-        statusForProfile(profiles[id], false, "No se pudo comprobar el remitente compartido en SendGrid."),
+        statusForProfile(
+          profiles[id],
+          false,
+          `Se usará temporalmente el remitente histórico de NUXA (${EMPRESA_LEGACY_NUXA_FROM_EMAIL}); las respuestas llegarán a ${sharedSender}.`,
+          true,
+          EMPRESA_LEGACY_NUXA_FROM_EMAIL,
+        ),
       );
     }
   }

@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 import twilio from 'twilio';
 import crypto from 'crypto';
-import { EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandProfile, type EmpresaBrand } from './empresaBrands';
+import { EMPRESA_LEGACY_NUXA_FROM_EMAIL, EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandProfile, type EmpresaBrand } from './empresaBrands';
 import { getUncachableSendGridClient } from './sendgridClient';
 
 // -------------------------------------------------------
@@ -790,30 +790,32 @@ export async function sendEmpresaEmail(params: {
     if (fromEmail.toLowerCase().endsWith("@gmail.com")) {
       try {
         const { client, fromEmail: configuredFromEmail } = await getUncachableSendGridClient();
-        if (configuredFromEmail.toLowerCase() !== fromEmail.toLowerCase()) {
-          console.error(`sendEmpresaEmail: SendGrid no está autorizado para ${params.fromEmailOverride || brand.fromEmail}`);
-          return { ok: false };
+        if (configuredFromEmail.toLowerCase() === fromEmail.toLowerCase()) {
+          const [response] = await client.send({
+            from: { email: configuredFromEmail, name: fromName },
+            replyTo: { email: EMPRESA_SHARED_FROM_EMAIL, name: fromName },
+            to: params.email,
+            subject: params.subject,
+            text: `${params.body}\n\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
+            html,
+            ...(params.campaignId ? { categories: [`empresa-${params.campaignId}`] } : {}),
+          });
+          const messageId = response.headers?.["x-message-id"];
+          return { ok: true, messageId: Array.isArray(messageId) ? messageId[0] : messageId };
         }
-        const [response] = await client.send({
-          from: { email: configuredFromEmail, name: fromName },
-          replyTo: { email: EMPRESA_SHARED_FROM_EMAIL, name: fromName },
-          to: params.email,
-          subject: params.subject,
-          text: `${params.body}\n\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
-          html,
-          ...(params.campaignId ? { categories: [`empresa-${params.campaignId}`] } : {}),
-        });
-        const messageId = response.headers?.["x-message-id"];
-        return { ok: true, messageId: Array.isArray(messageId) ? messageId[0] : messageId };
+        console.warn(`sendEmpresaEmail: ${fromEmail} no está autorizado en SendGrid; se usará ${EMPRESA_LEGACY_NUXA_FROM_EMAIL}`);
       } catch (error) {
-        console.error("sendEmpresaEmail SendGrid error:", error);
-        return { ok: false };
+        console.warn("sendEmpresaEmail: no se pudo usar SendGrid; se usará el remitente histórico de NUXA", error);
       }
     }
 
     const resend = getResendClient();
+    const resendFromEmail = fromEmail.toLowerCase().endsWith("@gmail.com")
+      ? EMPRESA_LEGACY_NUXA_FROM_EMAIL
+      : fromEmail;
+    const resendFromName = fromEmail.toLowerCase().endsWith("@gmail.com") ? "NUXA" : fromName;
     const { data, error } = await resend.emails.send({
-      from: `${fromName} <${fromEmail}>`,
+      from: `${resendFromName} <${resendFromEmail}>`,
       replyTo: EMPRESA_SHARED_FROM_EMAIL,
       to: params.email,
       subject: params.subject,
