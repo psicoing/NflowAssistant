@@ -27,7 +27,7 @@ import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 import twilio from "twilio";
 import { getVoiceDemoIncomingCallUrl, getVoiceDemoStreamUrl } from "./voiceDemoBridge";
-import { getEmpresaBrandStatuses, getEmpresaBrandStatus, isEmpresaBrand, type EmpresaBrand } from "./empresaBrands";
+import { EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandStatuses, getEmpresaBrandStatus, isEmpresaBrand, type EmpresaBrand } from "./empresaBrands";
 import { db, pool } from "./db";
 import { eq, and, desc, gte, count } from "drizzle-orm";
 import "./types"; // Import session types
@@ -1846,6 +1846,32 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
         setImmediate(() => executeEmpresaCampaignSend(campaignId, subject, body, contacts, subjectB || undefined, brand));
       }
     } catch (e) { console.error("send-empresa-campaign error:", e); res.status(500).json({ message: "Error" }); }
+  });
+
+  app.post("/api/admin/send-empresa-test", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const { subject, body, brand: requestedBrand } = req.body;
+    if (!subject || !body) return res.status(400).json({ message: "Subject y body requeridos" });
+    const brand: EmpresaBrand = requestedBrand || "nuxa";
+    if (!isEmpresaBrand(brand)) return res.status(400).json({ message: "Marca de prueba inválida" });
+    try {
+      const brandStatus = await getEmpresaBrandStatus(brand);
+      if (!brandStatus.available) {
+        return res.status(400).json({ code: "BRAND_SENDER_NOT_READY", message: `${brandStatus.name}: ${brandStatus.message}` });
+      }
+      const result = await sendEmpresaEmail({
+        email: EMPRESA_SHARED_FROM_EMAIL,
+        subject,
+        body,
+        empresaId: 0,
+        brand,
+      });
+      if (!result.ok) return res.status(502).json({ message: "El proveedor no aceptó el envío de prueba" });
+      res.json({ sent: true, recipient: EMPRESA_SHARED_FROM_EMAIL, brand, messageId: result.messageId });
+    } catch (e) {
+      console.error("send-empresa-test error:", e);
+      res.status(500).json({ message: "Error al enviar la prueba" });
+    }
   });
 
   app.post("/api/admin/empresas/import-csv", async (req, res) => {

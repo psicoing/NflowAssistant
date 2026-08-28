@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { getConfiguredSendGridFromEmail } from "./sendgridClient";
 
 export type EmpresaBrand = "nuxa" | "jobda" | "empordajobs";
 
@@ -162,9 +163,23 @@ export async function getEmpresaBrandStatuses(): Promise<EmpresaBrandStatus[]> {
 
   const sharedSender = EMPRESA_SHARED_FROM_EMAIL;
   if (EMPRESA_BRAND_IDS.every(id => profiles[id].fromEmail === sharedSender)) {
-    return EMPRESA_BRAND_IDS.map(id =>
-      statusForProfile(profiles[id], true, `Todos los proyectos usan el remitente compartido ${sharedSender}.`),
-    );
+    try {
+      const configuredSender = await getConfiguredSendGridFromEmail();
+      const authorized = configuredSender.toLowerCase() === sharedSender.toLowerCase();
+      return EMPRESA_BRAND_IDS.map(id =>
+        statusForProfile(
+          profiles[id],
+          authorized,
+          authorized
+            ? `Todos los proyectos usan el remitente compartido ${sharedSender}.`
+            : `${sharedSender} todavía no está autorizado como remitente en SendGrid.`,
+        ),
+      );
+    } catch {
+      return EMPRESA_BRAND_IDS.map(id =>
+        statusForProfile(profiles[id], false, "No se pudo comprobar el remitente compartido en SendGrid."),
+      );
+    }
   }
 
   try {

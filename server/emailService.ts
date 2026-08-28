@@ -1,8 +1,8 @@
 import { Resend } from 'resend';
-import sgMail from '@sendgrid/mail';
 import twilio from 'twilio';
 import crypto from 'crypto';
 import { getEmpresaBrandProfile, type EmpresaBrand } from './empresaBrands';
+import { getUncachableSendGridClient } from './sendgridClient';
 
 // -------------------------------------------------------
 // Resend client (owner notifications)
@@ -17,40 +17,6 @@ function getResendClient() {
 // -------------------------------------------------------
 // SendGrid client (legacy – magic links, Skrill emails)
 // -------------------------------------------------------
-
-let connectionSettings: any;
-
-async function getCredentials() {
-  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
-  const xReplitToken = process.env.REPL_IDENTITY
-    ? 'repl ' + process.env.REPL_IDENTITY
-    : process.env.WEB_REPL_RENEWAL
-    ? 'depl ' + process.env.WEB_REPL_RENEWAL
-    : null;
-
-  if (!xReplitToken) throw new Error('X_REPLIT_TOKEN not found for repl/depl');
-
-  connectionSettings = await fetch(
-    'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=sendgrid',
-    {
-      headers: {
-        Accept: 'application/json',
-        X_REPLIT_TOKEN: xReplitToken,
-      },
-    }
-  ).then(res => res.json()).then(data => data.items?.[0]);
-
-  if (!connectionSettings || !connectionSettings.settings.api_key || !connectionSettings.settings.from_email) {
-    throw new Error('SendGrid not connected');
-  }
-  return { apiKey: connectionSettings.settings.api_key, email: connectionSettings.settings.from_email };
-}
-
-async function getUncachableSendGridClient() {
-  const { apiKey, email } = await getCredentials();
-  sgMail.setApiKey(apiKey);
-  return { client: sgMail, fromEmail: email };
-}
 
 // -------------------------------------------------------
 // Skrill helpers
@@ -756,7 +722,6 @@ export async function sendEmpresaEmail(params: {
   brand?: EmpresaBrand;
 }): Promise<{ ok: boolean; messageId?: string }> {
   try {
-    const resend = getResendClient();
     const brand = getEmpresaBrandProfile(params.brand || "nuxa");
     if (!brand.fromEmail) {
       console.error(`sendEmpresaEmail: no hay remitente configurado para ${brand.id}`);
@@ -815,6 +780,30 @@ export async function sendEmpresaEmail(params: {
       ? [{ name: "campaign_id", value: `e${params.campaignId}` }]
       : undefined;
 
+    if (brand.fromEmail.toLowerCase().endsWith("@gmail.com")) {
+      try {
+        const { client, fromEmail } = await getUncachableSendGridClient();
+        if (fromEmail.toLowerCase() !== brand.fromEmail.toLowerCase()) {
+          console.error(`sendEmpresaEmail: SendGrid no está autorizado para ${brand.fromEmail}`);
+          return { ok: false };
+        }
+        const [response] = await client.send({
+          from: { email: fromEmail, name: brand.fromName },
+          to: params.email,
+          subject: params.subject,
+          text: `${params.body}\n\n---\n${brand.name} · ${brand.contact}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
+          html,
+          ...(params.campaignId ? { categories: [`empresa-${params.campaignId}`] } : {}),
+        });
+        const messageId = response.headers?.["x-message-id"];
+        return { ok: true, messageId: Array.isArray(messageId) ? messageId[0] : messageId };
+      } catch (error) {
+        console.error("sendEmpresaEmail SendGrid error:", error);
+        return { ok: false };
+      }
+    }
+
+    const resend = getResendClient();
     const { data, error } = await resend.emails.send({
       from: `${brand.fromName} <${brand.fromEmail}>`,
       to: params.email,
