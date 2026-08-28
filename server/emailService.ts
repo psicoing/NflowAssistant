@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 import twilio from 'twilio';
 import crypto from 'crypto';
-import { getEmpresaBrandProfile, type EmpresaBrand } from './empresaBrands';
+import { EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandProfile, type EmpresaBrand } from './empresaBrands';
 import { getUncachableSendGridClient } from './sendgridClient';
 
 // -------------------------------------------------------
@@ -793,6 +793,7 @@ export async function sendEmpresaEmail(params: {
         }
         const [response] = await client.send({
           from: { email: configuredFromEmail, name: fromName },
+          replyTo: { email: EMPRESA_SHARED_FROM_EMAIL, name: fromName },
           to: params.email,
           subject: params.subject,
           text: `${params.body}\n\n---\n${brand.name} · ${brand.contact}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
@@ -810,6 +811,7 @@ export async function sendEmpresaEmail(params: {
     const resend = getResendClient();
     const { data, error } = await resend.emails.send({
       from: `${fromName} <${fromEmail}>`,
+      replyTo: EMPRESA_SHARED_FROM_EMAIL,
       to: params.email,
       subject: params.subject,
       text: `${params.body}\n\n---\n${brand.name} · ${brand.contact}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
