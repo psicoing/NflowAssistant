@@ -61,8 +61,8 @@ const profiles: Record<EmpresaBrand, EmpresaBrandProfile> = {
   jobda: {
     id: "jobda",
     name: "JOBDA",
-    tagline: "Selección inteligente · Tecnología y talento",
-    description: "Selección de personal y soluciones digitales con IA para empresas.",
+    tagline: "Desarrollo avanzado de software · IA para empresas",
+    description: "Servicio de desarrollo personalizado de apps con IA para la transformación digital de tu empresa.",
     website: "https://jobda.org",
     contact: EMPRESA_SHARED_FROM_EMAIL,
     fromName: "JOBDA",
