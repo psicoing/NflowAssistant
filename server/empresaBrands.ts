@@ -10,6 +10,7 @@ export interface EmpresaBrandProfile {
   description: string;
   website?: string;
   contact: string;
+  contactPhone: string;
   fromName: string;
   fromEmail: string | null;
   allowedDomains: string[];
@@ -27,6 +28,7 @@ export interface EmpresaBrandStatus {
   description: string;
   website?: string;
   contact: string;
+  contactPhone: string;
   icon: string;
   gradient: string;
   softBackground: string;
@@ -39,6 +41,7 @@ export interface EmpresaBrandStatus {
 }
 
 export const EMPRESA_SHARED_FROM_EMAIL = "rmportbou@gmail.com";
+export const EMPRESA_SHARED_CONTACT_PHONE = "+34 660452136";
 export const EMPRESA_LEGACY_NUXA_FROM_EMAIL = "hola@nuxa.life";
 
 const profiles: Record<EmpresaBrand, EmpresaBrandProfile> = {
@@ -49,6 +52,7 @@ const profiles: Record<EmpresaBrand, EmpresaBrandProfile> = {
     description: "Bienestar emocional y apoyo psicológico digital para equipos.",
     website: "https://nuxa.life",
     contact: EMPRESA_SHARED_FROM_EMAIL,
+    contactPhone: EMPRESA_SHARED_CONTACT_PHONE,
     fromName: "NUXA",
     fromEmail: EMPRESA_SHARED_FROM_EMAIL,
     allowedDomains: ["gmail.com"],
@@ -65,6 +69,7 @@ const profiles: Record<EmpresaBrand, EmpresaBrandProfile> = {
     description: "Servicio de desarrollo personalizado de apps con IA para la transformación digital de tu empresa.",
     website: "https://jobda.org",
     contact: EMPRESA_SHARED_FROM_EMAIL,
+    contactPhone: EMPRESA_SHARED_CONTACT_PHONE,
     fromName: "JOBDA",
     fromEmail: EMPRESA_SHARED_FROM_EMAIL,
     allowedDomains: ["gmail.com"],
@@ -80,6 +85,7 @@ const profiles: Record<EmpresaBrand, EmpresaBrandProfile> = {
     tagline: "RR. HH. inteligente · Ingeniería y tecnología",
     description: "Plataforma de empleo y gestión de recursos humanos para empresas.",
     contact: EMPRESA_SHARED_FROM_EMAIL,
+    contactPhone: EMPRESA_SHARED_CONTACT_PHONE,
     fromName: "EmpordaJobs",
     fromEmail: EMPRESA_SHARED_FROM_EMAIL,
     allowedDomains: ["gmail.com"],
@@ -138,6 +144,7 @@ function statusForProfile(
     description: profile.description,
     website: profile.website,
     contact: profile.contact,
+    contactPhone: profile.contactPhone,
     icon: profile.icon,
     gradient: profile.gradient,
     softBackground: profile.softBackground,

@@ -765,6 +765,9 @@ export async function sendEmpresaEmail(params: {
           <p style="margin:0 0 10px;font-size:11px;color:#9ca3af;">
             ${escapeHtml(brand.legalFooter)}
           </p>
+          <p style="margin:0 0 10px;font-size:11px;color:#6b7280;">
+            Contacto: ${escapeHtml(brand.contact)} · ${escapeHtml(brand.contactPhone)}
+          </p>
           ${brand.website ? `<a href="${brand.website}" style="display:inline-block;margin-bottom:10px;color:${brand.accent};font-size:12px;font-weight:600;text-decoration:none;">${escapeHtml(brand.website.replace(/^https?:\/\//, ""))}</a><br>` : ""}
           <a href="${unsubscribeUrl}"
             style="display:inline-block;padding:10px 24px;background:${brand.accent};color:#ffffff;font-size:13px;font-weight:700;border-radius:8px;text-decoration:none;letter-spacing:0.3px;">
@@ -796,7 +799,7 @@ export async function sendEmpresaEmail(params: {
           replyTo: { email: EMPRESA_SHARED_FROM_EMAIL, name: fromName },
           to: params.email,
           subject: params.subject,
-          text: `${params.body}\n\n---\n${brand.name} · ${brand.contact}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
+          text: `${params.body}\n\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
           html,
           ...(params.campaignId ? { categories: [`empresa-${params.campaignId}`] } : {}),
         });
@@ -814,7 +817,7 @@ export async function sendEmpresaEmail(params: {
       replyTo: EMPRESA_SHARED_FROM_EMAIL,
       to: params.email,
       subject: params.subject,
-      text: `${params.body}\n\n---\n${brand.name} · ${brand.contact}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
+      text: `${params.body}\n\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
       html,
       ...(tags ? { tags } : {}),
     });

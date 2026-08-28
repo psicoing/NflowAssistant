@@ -76,6 +76,7 @@ const empresaEmployeeBucketOf = (count?: number | null) => {
 
 type EmpresaBrand = "nuxa" | "jobda" | "empordajobs";
 const empresaSharedFromEmail = "rmportbou@gmail.com";
+const empresaSharedContactPhone = "+34 660452136";
 
 const empresaBrandOptions: Array<{
   id: EmpresaBrand;
@@ -84,6 +85,7 @@ const empresaBrandOptions: Array<{
   tagline: string;
   description: string;
   contact: string;
+  contactPhone: string;
   website?: string;
   gradient: string;
   accent: string;
@@ -97,11 +99,12 @@ const empresaBrandOptions: Array<{
     tagline: "Apoyo emocional profesional · ISO 45003",
     description: "Bienestar emocional y apoyo psicológico digital para equipos.",
     contact: empresaSharedFromEmail,
+    contactPhone: empresaSharedContactPhone,
     website: "https://nuxa.life",
     gradient: "linear-gradient(135deg,#1e40af,#3b82f6)",
     accent: "#2563eb",
     subject: "NUXA — Bienestar emocional para los equipos de su empresa",
-    body: `Estimados/as,\n\nNos dirigimos a ustedes para presentarles NUXA (nuxa.life), una plataforma de apoyo emocional profesional diseñada para las grandes organizaciones.\n\nNUXA permite a las empresas:\n• Ofrecer acompañamiento emocional 24/7 a toda la plantilla\n• Reducir el absentismo por ansiedad, estrés y burnout\n• Cumplir con la normativa ISO 45003 de riesgo psicosocial\n• Acceder a informes agregados y anónimos para RRHH\n\nNos gustaría explorar cómo NUXA puede integrarse en su estrategia de bienestar corporativo.\n\n¿Podríamos agendar una llamada de 20 minutos?\n\nQuedamos a su disposición.\n\nEquipo NUXA\nhttps://nuxa.life`,
+    body: `Estimados/as,\n\nNos dirigimos a ustedes para presentarles NUXA (nuxa.life), una plataforma de apoyo emocional profesional diseñada para las grandes organizaciones.\n\nNUXA permite a las empresas:\n• Ofrecer acompañamiento emocional 24/7 a toda la plantilla\n• Reducir el absentismo por ansiedad, estrés y burnout\n• Cumplir con la normativa ISO 45003 de riesgo psicosocial\n• Acceder a informes agregados y anónimos para RRHH\n\nNos gustaría explorar cómo NUXA puede integrarse en su estrategia de bienestar corporativo.\n\n¿Podríamos agendar una llamada de 20 minutos?\n\nQuedamos a su disposición.\n\nEquipo NUXA\n${empresaSharedFromEmail}\n${empresaSharedContactPhone}\nhttps://nuxa.life`,
   },
   {
     id: "jobda",
@@ -110,11 +113,12 @@ const empresaBrandOptions: Array<{
     tagline: "Desarrollo avanzado de software · IA para empresas",
     description: "Servicio de desarrollo personalizado de apps con IA para la transformación digital de tu empresa.",
     contact: empresaSharedFromEmail,
+    contactPhone: empresaSharedContactPhone,
     website: "https://jobda.org",
     gradient: "linear-gradient(135deg,#5b21b6,#9333ea)",
     accent: "#7c3aed",
     subject: "JOBDA — Desarrollo avanzado de software para su empresa",
-    body: `Estimados/as,\n\nNos ponemos en contacto para presentarles JOBDA, una plataforma avanzada de desarrollo de software para empresas.\n\nJOBDA ofrece un servicio de desarrollo personalizado de aplicaciones con inteligencia artificial para impulsar la transformación digital de su empresa:\n• Desarrollo de soluciones de software adaptadas a sus necesidades\n• Aplicaciones web y móviles con tecnología de IA\n• Digitalización y optimización de procesos empresariales\n• Herramientas avanzadas para mejorar la productividad y la eficiencia\n\nNos gustaría conocer sus necesidades tecnológicas y mostrarles cómo JOBDA puede ayudarles a desarrollar soluciones de software avanzadas para su empresa.\n\n¿Podríamos concertar una breve reunión?\n\nQuedamos a su disposición.\n\nEquipo JOBDA\nhttps://jobda.org`,
+    body: `Estimados/as,\n\nNos ponemos en contacto para presentarles JOBDA, una plataforma avanzada de desarrollo de software para empresas.\n\nJOBDA ofrece un servicio de desarrollo personalizado de aplicaciones con inteligencia artificial para impulsar la transformación digital de su empresa:\n• Desarrollo de soluciones de software adaptadas a sus necesidades\n• Aplicaciones web y móviles con tecnología de IA\n• Digitalización y optimización de procesos empresariales\n• Herramientas avanzadas para mejorar la productividad y la eficiencia\n\nNos gustaría conocer sus necesidades tecnológicas y mostrarles cómo JOBDA puede ayudarles a desarrollar soluciones de software avanzadas para su empresa.\n\n¿Podríamos concertar una breve reunión?\n\nQuedamos a su disposición.\n\nEquipo JOBDA\n${empresaSharedFromEmail}\n${empresaSharedContactPhone}\nhttps://jobda.org`,
   },
   {
     id: "empordajobs",
@@ -123,10 +127,11 @@ const empresaBrandOptions: Array<{
     tagline: "RR. HH. inteligente · Ingeniería y tecnología",
     description: "Plataforma de empleo y gestión de recursos humanos para empresas.",
     contact: empresaSharedFromEmail,
+    contactPhone: empresaSharedContactPhone,
     gradient: "linear-gradient(135deg,#047857,#10b981)",
     accent: "#059669",
     subject: "EmpordaJobs — Talento técnico y gestión inteligente de RR. HH.",
-    body: `Estimados/as,\n\nLes presentamos EmpordaJobs, una plataforma de empleo y gestión de recursos humanos especializada en ingeniería, tecnología y formación profesional.\n\nEmpordaJobs ofrece a las empresas:\n• Acceso a profesionales técnicos junior y senior\n• Publicación y difusión de oportunidades laborales\n• Matching inteligente entre candidatos y vacantes\n• Procesos de selección automatizados y sin intermediarios\n• Cobertura local, nacional y europea\n\nNos gustaría conocer sus necesidades de contratación y explicarles cómo nuestra plataforma puede ayudarles a encontrar el perfil adecuado.\n\n¿Podríamos concertar una breve reunión?\n\nQuedamos a su disposición.\n\nEquipo EmpordaJobs\nempordajobs@gmail.com`,
+    body: `Estimados/as,\n\nLes presentamos EmpordaJobs, una plataforma de empleo y gestión de recursos humanos especializada en ingeniería, tecnología y formación profesional.\n\nEmpordaJobs ofrece a las empresas:\n• Acceso a profesionales técnicos junior y senior\n• Publicación y difusión de oportunidades laborales\n• Matching inteligente entre candidatos y vacantes\n• Procesos de selección automatizados y sin intermediarios\n• Cobertura local, nacional y europea\n\nNos gustaría conocer sus necesidades de contratación y explicarles cómo nuestra plataforma puede ayudarles a encontrar el perfil adecuado.\n\n¿Podríamos concertar una breve reunión?\n\nQuedamos a su disposición.\n\nEquipo EmpordaJobs\n${empresaSharedFromEmail}\n${empresaSharedContactPhone}`,
   },
 ];
 
