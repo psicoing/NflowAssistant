@@ -720,10 +720,14 @@ export async function sendEmpresaEmail(params: {
   empresaId: number;
   campaignId?: number;
   brand?: EmpresaBrand;
+  fromEmailOverride?: string;
+  fromNameOverride?: string;
 }): Promise<{ ok: boolean; messageId?: string }> {
   try {
     const brand = getEmpresaBrandProfile(params.brand || "nuxa");
-    if (!brand.fromEmail) {
+    const fromEmail = params.fromEmailOverride || brand.fromEmail;
+    const fromName = params.fromNameOverride || brand.fromName;
+    if (!fromEmail) {
       console.error(`sendEmpresaEmail: no hay remitente configurado para ${brand.id}`);
       return { ok: false };
     }
@@ -780,15 +784,15 @@ export async function sendEmpresaEmail(params: {
       ? [{ name: "campaign_id", value: `e${params.campaignId}` }]
       : undefined;
 
-    if (brand.fromEmail.toLowerCase().endsWith("@gmail.com")) {
+    if (fromEmail.toLowerCase().endsWith("@gmail.com")) {
       try {
-        const { client, fromEmail } = await getUncachableSendGridClient();
-        if (fromEmail.toLowerCase() !== brand.fromEmail.toLowerCase()) {
-          console.error(`sendEmpresaEmail: SendGrid no está autorizado para ${brand.fromEmail}`);
+        const { client, fromEmail: configuredFromEmail } = await getUncachableSendGridClient();
+        if (configuredFromEmail.toLowerCase() !== fromEmail.toLowerCase()) {
+          console.error(`sendEmpresaEmail: SendGrid no está autorizado para ${params.fromEmailOverride || brand.fromEmail}`);
           return { ok: false };
         }
         const [response] = await client.send({
-          from: { email: fromEmail, name: brand.fromName },
+          from: { email: configuredFromEmail, name: fromName },
           to: params.email,
           subject: params.subject,
           text: `${params.body}\n\n---\n${brand.name} · ${brand.contact}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
@@ -805,7 +809,7 @@ export async function sendEmpresaEmail(params: {
 
     const resend = getResendClient();
     const { data, error } = await resend.emails.send({
-      from: `${brand.fromName} <${brand.fromEmail}>`,
+      from: `${fromName} <${fromEmail}>`,
       to: params.email,
       subject: params.subject,
       text: `${params.body}\n\n---\n${brand.name} · ${brand.contact}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,

@@ -27,7 +27,7 @@ import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 import twilio from "twilio";
 import { getVoiceDemoIncomingCallUrl, getVoiceDemoStreamUrl } from "./voiceDemoBridge";
-import { EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandStatuses, getEmpresaBrandStatus, isEmpresaBrand, type EmpresaBrand } from "./empresaBrands";
+import { EMPRESA_LEGACY_NUXA_FROM_EMAIL, EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandStatuses, getEmpresaBrandStatus, isEmpresaBrand, type EmpresaBrand } from "./empresaBrands";
 import { db, pool } from "./db";
 import { eq, and, desc, gte, count } from "drizzle-orm";
 import "./types"; // Import session types
@@ -1855,16 +1855,14 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     const brand: EmpresaBrand = requestedBrand || "nuxa";
     if (!isEmpresaBrand(brand)) return res.status(400).json({ message: "Marca de prueba inválida" });
     try {
-      const brandStatus = await getEmpresaBrandStatus(brand);
-      if (!brandStatus.available) {
-        return res.status(400).json({ code: "BRAND_SENDER_NOT_READY", message: `${brandStatus.name}: ${brandStatus.message}` });
-      }
       const result = await sendEmpresaEmail({
         email: EMPRESA_SHARED_FROM_EMAIL,
         subject,
         body,
         empresaId: 0,
         brand,
+        fromEmailOverride: EMPRESA_LEGACY_NUXA_FROM_EMAIL,
+        fromNameOverride: "NUXA",
       });
       if (!result.ok) return res.status(502).json({ message: "El proveedor no aceptó el envío de prueba" });
       res.json({ sent: true, recipient: EMPRESA_SHARED_FROM_EMAIL, brand, messageId: result.messageId });

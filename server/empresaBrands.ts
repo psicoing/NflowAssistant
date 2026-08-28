@@ -39,6 +39,7 @@ export interface EmpresaBrandStatus {
 }
 
 export const EMPRESA_SHARED_FROM_EMAIL = "rmportbou@gmail.com";
+export const EMPRESA_LEGACY_NUXA_FROM_EMAIL = "hola@nuxa.life";
 
 const profiles: Record<EmpresaBrand, EmpresaBrandProfile> = {
   nuxa: {
