@@ -74,6 +74,66 @@ const empresaEmployeeBucketOf = (count?: number | null) => {
   return empresaEmployeeBuckets.find(b => b.test(count))?.value || "unknown";
 };
 
+type EmpresaBrand = "nuxa" | "jobda" | "empordajobs";
+const empresaSharedFromEmail = "rmportbou@gmail.com";
+
+const empresaBrandOptions: Array<{
+  id: EmpresaBrand;
+  name: string;
+  icon: string;
+  tagline: string;
+  description: string;
+  contact: string;
+  website?: string;
+  gradient: string;
+  accent: string;
+  subject: string;
+  body: string;
+}> = [
+  {
+    id: "nuxa",
+    name: "NUXA",
+    icon: "🧠",
+    tagline: "Apoyo emocional profesional · ISO 45003",
+    description: "Bienestar emocional y apoyo psicológico digital para equipos.",
+    contact: empresaSharedFromEmail,
+    website: "https://nuxa.life",
+    gradient: "linear-gradient(135deg,#1e40af,#3b82f6)",
+    accent: "#2563eb",
+    subject: "NUXA — Bienestar emocional para los equipos de su empresa",
+    body: `Estimados/as,\n\nNos dirigimos a ustedes para presentarles NUXA (nuxa.life), una plataforma de apoyo emocional profesional diseñada para las grandes organizaciones.\n\nNUXA permite a las empresas:\n• Ofrecer acompañamiento emocional 24/7 a toda la plantilla\n• Reducir el absentismo por ansiedad, estrés y burnout\n• Cumplir con la normativa ISO 45003 de riesgo psicosocial\n• Acceder a informes agregados y anónimos para RRHH\n\nNos gustaría explorar cómo NUXA puede integrarse en su estrategia de bienestar corporativo.\n\n¿Podríamos agendar una llamada de 20 minutos?\n\nQuedamos a su disposición.\n\nEquipo NUXA\nhttps://nuxa.life`,
+  },
+  {
+    id: "jobda",
+    name: "JOBDA",
+    icon: "⚙️",
+    tagline: "Selección inteligente · Tecnología y talento",
+    description: "Selección de personal y soluciones digitales con IA para empresas.",
+    contact: empresaSharedFromEmail,
+    website: "https://jobda.org",
+    gradient: "linear-gradient(135deg,#5b21b6,#9333ea)",
+    accent: "#7c3aed",
+    subject: "JOBDA — Selección inteligente de talento para su empresa",
+    body: `Estimados/as,\n\nNos ponemos en contacto para presentarles JOBDA, una plataforma de selección de personal inteligente que conecta empresas con profesionales cualificados mediante análisis avanzado de perfiles y competencias.\n\nJOBDA ayuda a las empresas a:\n• Identificar candidatos adecuados con mayor rapidez\n• Evaluar perfiles y competencias con tecnología de IA\n• Reducir tiempo y costes en los procesos de selección\n• Proteger la continuidad de sus proyectos tecnológicos\n\nNos gustaría conocer sus necesidades de talento y mostrarles cómo JOBDA puede apoyar sus próximos procesos de selección.\n\n¿Podríamos concertar una breve reunión?\n\nQuedamos a su disposición.\n\nEquipo JOBDA\nhttps://jobda.org`,
+  },
+  {
+    id: "empordajobs",
+    name: "EMPORDAJOBS",
+    icon: "💼",
+    tagline: "RR. HH. inteligente · Ingeniería y tecnología",
+    description: "Plataforma de empleo y gestión de recursos humanos para empresas.",
+    contact: empresaSharedFromEmail,
+    gradient: "linear-gradient(135deg,#047857,#10b981)",
+    accent: "#059669",
+    subject: "EmpordaJobs — Talento técnico y gestión inteligente de RR. HH.",
+    body: `Estimados/as,\n\nLes presentamos EmpordaJobs, una plataforma de empleo y gestión de recursos humanos especializada en ingeniería, tecnología y formación profesional.\n\nEmpordaJobs ofrece a las empresas:\n• Acceso a profesionales técnicos junior y senior\n• Publicación y difusión de oportunidades laborales\n• Matching inteligente entre candidatos y vacantes\n• Procesos de selección automatizados y sin intermediarios\n• Cobertura local, nacional y europea\n\nNos gustaría conocer sus necesidades de contratación y explicarles cómo nuestra plataforma puede ayudarles a encontrar el perfil adecuado.\n\n¿Podríamos concertar una breve reunión?\n\nQuedamos a su disposición.\n\nEquipo EmpordaJobs\nempordajobs@gmail.com`,
+  },
+];
+
+const getEmpresaBrandOption = (brand?: string) =>
+  empresaBrandOptions.find(option => option.id === brand) || empresaBrandOptions[0];
+const empresaBrandLabel = (brand?: string) => getEmpresaBrandOption(brand).name;
+
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -196,10 +256,13 @@ export default function AdminDashboard() {
   const [empresaSourceFilter, setEmpresaSourceFilter] = useState("all");
   const [empresaCampaignHistory, setEmpresaCampaignHistory] = useState<any[]>([]);
   const [empresaHistoryLoading, setEmpresaHistoryLoading] = useState(false);
-  const [empresaSubject, setEmpresaSubject] = useState("NUXA — Bienestar emocional para los equipos de su empresa");
-  const [empresaBody, setEmpresaBody] = useState(`Estimados/as,\n\nNos dirigimos a ustedes para presentarles NUXA (nuxa.life), una plataforma de apoyo emocional profesional diseñada para las grandes organizaciones.\n\nNUXA permite a las empresas:\n• Ofrecer acompañamiento emocional 24/7 a toda la plantilla\n• Reducir el absentismo por ansiedad, estrés y burnout\n• Cumplir con la normativa ISO 45003 de riesgo psicosocial\n• Acceder a informes agregados y anónimos para RRHH\n\nNos gustaría explorar cómo NUXA puede integrarse en su estrategia de bienestar corporativo.\n\n¿Podríamos agendar una llamada de 20 minutos?\n\nQuedamos a su disposición.\n\nEquipo NUXA\nhttps://nuxa.life`);
+  const [empresaBrand, setEmpresaBrand] = useState<EmpresaBrand>("nuxa");
+  const [empresaBrandStatuses, setEmpresaBrandStatuses] = useState<any[]>([]);
+  const [empresaBrandLoading, setEmpresaBrandLoading] = useState(false);
+  const [empresaSubject, setEmpresaSubject] = useState(getEmpresaBrandOption("nuxa").subject);
+  const [empresaBody, setEmpresaBody] = useState(getEmpresaBrandOption("nuxa").body);
   const [empresaStatus, setEmpresaStatus] = useState<"idle"|"confirm"|"sending"|"done"|"error">("idle");
-  const [empresaResult, setEmpresaResult] = useState<{sent?:number;failed?:number;scheduled?:boolean;scheduledAt?:string;recipients?:number}|null>(null);
+  const [empresaResult, setEmpresaResult] = useState<{sent?:number;failed?:number;scheduled?:boolean;scheduledAt?:string;recipients?:number;brand?:EmpresaBrand;message?:string;code?:string}|null>(null);
   const [empresaTemplates, setEmpresaTemplates] = useState<any[]>([]);
   const [empresaShowTemplates, setEmpresaShowTemplates] = useState(false);
   const [empresaSavingTemplate, setEmpresaSavingTemplate] = useState(false);
@@ -318,6 +381,17 @@ export default function AdminDashboard() {
   const fetchEmpresaTemplates = async () => {
     try { const r = await fetch("/api/admin/empresa-templates"); if (r.ok) setEmpresaTemplates(await r.json()); } catch {}
   };
+  const fetchEmpresaBrandStatuses = async () => {
+    setEmpresaBrandLoading(true);
+    try {
+      const r = await fetch("/api/admin/empresa-brands");
+      if (r.ok) setEmpresaBrandStatuses(await r.json());
+    } catch {
+      setEmpresaBrandStatuses([]);
+    } finally {
+      setEmpresaBrandLoading(false);
+    }
+  };
   const fetchEmpresaContactHistory = async (id: number) => {
     setEmpresaContactHistoryLoading(true);
     try { const r = await fetch(`/api/admin/empresas/${id}/history`); if (r.ok) setEmpresaContactHistory(await r.json()); else setEmpresaContactHistory([]); }
@@ -358,6 +432,7 @@ export default function AdminDashboard() {
       checkResendDomain();
       fetchEmpresaCampaignHistory();
       fetchEmpresaTemplates();
+      fetchEmpresaBrandStatuses();
     }
   }, [activeTab]);
 
@@ -555,6 +630,19 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error("Logout error:", error);
     }
+  };
+
+  const selectedEmpresaBrand = getEmpresaBrandOption(empresaBrand);
+  const selectedEmpresaBrandStatus = empresaBrandStatuses.find(status => status.id === empresaBrand);
+  const selectEmpresaBrand = (brand: EmpresaBrand) => {
+    const option = getEmpresaBrandOption(brand);
+    setEmpresaBrand(brand);
+    setEmpresaSubject(option.subject);
+    setEmpresaBody(option.body);
+    setEmpresaStatus("idle");
+    setEmpresaResult(null);
+    setEmpresaAbTest(false);
+    setEmpresaSubjectB("");
   };
 
   if (loading) {
@@ -1842,7 +1930,7 @@ export default function AdminDashboard() {
                       <table className="w-full text-sm">
                         <thead>
                           <tr className="text-gray-400 text-xs border-b border-gray-700">
-                            <th className="text-left pb-2 pr-3">Fecha</th>
+                             <th className="text-left pb-2 pr-3">Fecha</th>
                             <th className="text-left pb-2 pr-3">Asunto</th>
                             <th className="text-left pb-2 pr-3">Regiones</th>
                             <th className="text-center pb-2 pr-3">Enviados</th>
@@ -1856,7 +1944,7 @@ export default function AdminDashboard() {
                             <tr key={c.id} className="text-gray-300 hover:bg-gray-700/20 transition-all">
                               <td className="py-2 pr-3 text-xs text-gray-400 whitespace-nowrap">
                                 {new Date(c.sent_at).toLocaleDateString("es-ES", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
-                              </td>
+                               </td>
                               <td className="py-2 pr-3 max-w-[160px] text-xs">
                                 <p className="truncate" title={c.subject}>{c.subject}</p>
                                 {c.subject_b && <p className="truncate text-purple-400" title={c.subject_b}>B: {c.subject_b}</p>}
@@ -2576,6 +2664,69 @@ export default function AdminDashboard() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-gray-300 text-xs font-medium">Carta y remitente</label>
+                        {empresaBrandLoading && <span className="text-[10px] text-gray-500">Comprobando remitentes…</span>}
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        {empresaBrandOptions.map(option => {
+                          const status = empresaBrandStatuses.find(item => item.id === option.id);
+                          const selected = empresaBrand === option.id;
+                          return (
+                            <button
+                              key={option.id}
+                              type="button"
+                              onClick={() => selectEmpresaBrand(option.id)}
+                              className={`text-left rounded-xl border p-3 transition-all ${
+                                selected
+                                  ? "border-white/60 bg-white/10 ring-1 ring-white/20"
+                                  : "border-gray-700 bg-gray-900/30 hover:border-gray-500 hover:bg-gray-700/40"
+                              }`}
+                            >
+                              <div className="flex items-start gap-2">
+                                <span className="text-xl">{option.icon}</span>
+                                <div className="min-w-0">
+                                  <p className="text-sm font-bold text-white">{option.name}</p>
+                                  <p className="text-[10px] text-gray-400 leading-tight mt-0.5">{option.description}</p>
+                                  <span className={`inline-flex mt-2 text-[9px] px-1.5 py-0.5 rounded-full ${
+                                    status?.available
+                                      ? "bg-emerald-500/15 text-emerald-300"
+                                      : "bg-amber-500/15 text-amber-300"
+                                  }`}>
+                                    {status?.available ? "Remitente listo" : "Configuración pendiente"}
+                                  </span>
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="overflow-hidden rounded-xl border border-gray-700 bg-white">
+                      <div className="px-4 py-4 text-center text-white" style={{ background: selectedEmpresaBrand.gradient }}>
+                        <div className="text-2xl">{selectedEmpresaBrand.icon}</div>
+                        <p className="font-bold text-base mt-1">{selectedEmpresaBrand.name}</p>
+                        <p className="text-[11px] text-white/80 mt-0.5">{selectedEmpresaBrand.tagline}</p>
+                      </div>
+                      <div className="px-4 py-3">
+                        <p className="text-[11px] font-semibold text-gray-800 truncate">{empresaSubject || "Sin asunto"}</p>
+                        <p className="text-[10px] text-gray-500 mt-1 line-clamp-2 whitespace-pre-line">{empresaBody || "Sin contenido"}</p>
+                        <div className="mt-3 pt-2 border-t border-gray-100 flex items-center justify-between gap-2 text-[9px] text-gray-400">
+                          <span>{selectedEmpresaBrand.website?.replace(/^https?:\/\//, "") || selectedEmpresaBrand.contact}</span>
+                          <span>{selectedEmpresaBrandStatus?.from ? `De: ${selectedEmpresaBrandStatus.from}` : "Remitente pendiente"}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {selectedEmpresaBrandStatus && !selectedEmpresaBrandStatus.available && (
+                      <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3">
+                        <p className="text-amber-300 text-xs font-semibold">{selectedEmpresaBrand.name} todavía no puede enviar</p>
+                        <p className="text-amber-200/70 text-[11px] mt-1">{selectedEmpresaBrandStatus.message}</p>
+                      </div>
+                    )}
+
                     <div className="flex gap-2">
                       <button onClick={async () => { await fetchEmpresaTemplates(); setEmpresaShowTemplates(!empresaShowTemplates); }}
                         className="flex-1 border border-gray-600 text-gray-300 hover:bg-gray-700 py-1.5 rounded-lg text-xs font-medium transition-all">
@@ -2585,7 +2736,7 @@ export default function AdminDashboard() {
                         const name = prompt("Nombre de la plantilla:") || "";
                         if (!name || !empresaSubject || !empresaBody) return;
                         setEmpresaSavingTemplate(true);
-                        await fetch("/api/admin/empresa-templates", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, subject: empresaSubject, body: empresaBody }) });
+                         await fetch("/api/admin/empresa-templates", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, subject: empresaSubject, body: empresaBody, brand: empresaBrand }) });
                         setEmpresaSavingTemplate(false); fetchEmpresaTemplates();
                       }} disabled={empresaSavingTemplate || !empresaSubject.trim() || !empresaBody.trim()}
                         className="border border-blue-500/40 text-blue-300 hover:bg-blue-500/10 disabled:opacity-40 py-1.5 px-3 rounded-lg text-xs font-medium transition-all whitespace-nowrap">
@@ -2596,8 +2747,17 @@ export default function AdminDashboard() {
                       <div className="bg-gray-700/50 rounded-xl p-2 space-y-1 max-h-36 overflow-y-auto">
                         {empresaTemplates.map(t => (
                           <div key={t.id} className="flex items-center gap-2">
-                            <button onClick={() => { setEmpresaSubject(t.subject); setEmpresaBody(t.body); setEmpresaShowTemplates(false); }}
-                              className="flex-1 text-left text-xs text-gray-200 hover:text-white bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-lg transition-all truncate">{t.name}</button>
+                            <button onClick={() => {
+                              setEmpresaBrand((t.brand || "nuxa") as EmpresaBrand);
+                              setEmpresaSubject(t.subject);
+                              setEmpresaBody(t.body);
+                              setEmpresaShowTemplates(false);
+                              setEmpresaStatus("idle");
+                              setEmpresaResult(null);
+                            }}
+                              className="flex-1 text-left text-xs text-gray-200 hover:text-white bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-lg transition-all truncate">
+                              <span className="text-gray-400 mr-1.5">{empresaBrandLabel(t.brand)}</span>{t.name}
+                            </button>
                             <button onClick={async () => { await fetch(`/api/admin/empresa-templates/${t.id}`, { method: "DELETE" }); fetchEmpresaTemplates(); }}
                               className="text-red-400 hover:text-red-300 text-xs px-1.5 py-1 rounded hover:bg-red-500/20">✕</button>
                           </div>
@@ -2678,12 +2838,12 @@ export default function AdminDashboard() {
                     )}
                     {empresaStatus === "error" && (
                       <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3">
-                        <p className="text-red-300 text-sm">❌ Error al enviar. Revisa los logs.</p>
+                        <p className="text-red-300 text-sm">❌ {empresaResult?.message || "Error al enviar. Revisa los logs."}</p>
                       </div>
                     )}
 
                     {empresaStatus === "idle" && (
-                      <button onClick={() => setEmpresaStatus("confirm")} disabled={!empresaSubject.trim() || !empresaBody.trim()}
+                      <button onClick={() => setEmpresaStatus("confirm")} disabled={!empresaSubject.trim() || !empresaBody.trim() || !selectedEmpresaBrandStatus?.available}
                         className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-40 text-white font-semibold py-3 rounded-xl transition-all">
                         {empresaScheduledAt ? "🕐 Programar envío" : "Preparar envío"} →
                         ({empresas.filter(e => !e.opted_out && (empresaCampaignCompanies.length === 0 || empresaCampaignCompanies.includes(e.company)) && (empresaCampaignSizes.length === 0 || empresaCampaignSizes.includes(e.company_size || "unclassified"))).length} destinatarios)
@@ -2697,6 +2857,7 @@ export default function AdminDashboard() {
                           <p className="text-gray-400 text-xs mt-1">
                             {empresaCampaignCompanies.length > 0 ? `Empresas: ${empresaCampaignCompanies.join(", ")} · ` : "Todas las activas · "}
                             {empresaCampaignSizes.length > 0 ? `Tamaños: ${empresaCampaignSizes.map(empresaSizeLabel).join(", ")} · ` : ""}
+                            <strong className="text-white">Carta: {selectedEmpresaBrand.name} · </strong>
                             <strong className="text-white">
                               {empresas.filter(e => !e.opted_out && (empresaCampaignCompanies.length === 0 || empresaCampaignCompanies.includes(e.company)) && (empresaCampaignSizes.length === 0 || empresaCampaignSizes.includes(e.company_size || "unclassified"))).length} destinatarios
                             </strong>
@@ -2711,7 +2872,7 @@ export default function AdminDashboard() {
                               const r = await fetch("/api/admin/send-empresa-campaign", {
                                 method: "POST", headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify({
-                                  subject: empresaSubject, body: empresaBody,
+                                  subject: empresaSubject, body: empresaBody, brand: empresaBrand,
                                   companies: empresaCampaignCompanies.length > 0 ? empresaCampaignCompanies : undefined,
                                   companySizes: empresaCampaignSizes.length > 0 ? empresaCampaignSizes : undefined,
                                   scheduledAt: empresaScheduledAt || undefined,
@@ -2719,7 +2880,13 @@ export default function AdminDashboard() {
                                 }),
                               });
                               const d = await r.json();
-                              setEmpresaResult(d); setEmpresaStatus("done"); fetchEmpresaCampaignHistory();
+                               setEmpresaResult(d);
+                               if (!r.ok) {
+                                 setEmpresaStatus("error");
+                                 fetchEmpresaBrandStatuses();
+                                 return;
+                               }
+                               setEmpresaStatus("done"); fetchEmpresaCampaignHistory();
                             } catch { setEmpresaStatus("error"); }
                           }} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition-all text-sm">
                             {empresaScheduledAt ? "🕐 Programar" : "✉️ Enviar ahora"}
@@ -2767,6 +2934,7 @@ export default function AdminDashboard() {
                         <thead>
                           <tr className="text-gray-400 text-xs border-b border-gray-700">
                             <th className="text-left pb-2 pr-3">Fecha</th>
+                             <th className="text-left pb-2 pr-3">Marca</th>
                             <th className="text-left pb-2 pr-3">Asunto</th>
                             <th className="text-left pb-2 pr-3">Empresas</th>
                             <th className="text-center pb-2 pr-3">Enviados</th>
@@ -2781,6 +2949,11 @@ export default function AdminDashboard() {
                               <td className="py-2 pr-3 text-xs text-gray-400 whitespace-nowrap">
                                 {new Date(c.sent_at).toLocaleDateString("es-ES", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
                               </td>
+                               <td className="py-2 pr-3">
+                                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-700 text-gray-200">
+                                   {getEmpresaBrandOption(c.brand).icon} {empresaBrandLabel(c.brand)}
+                                 </span>
+                               </td>
                               <td className="py-2 pr-3 max-w-[160px] text-xs">
                                 <p className="truncate" title={c.subject}>{c.subject}</p>
                                 {c.subject_b && <p className="truncate text-purple-400" title={c.subject_b}>B: {c.subject_b}</p>}

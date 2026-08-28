@@ -2,6 +2,7 @@ import { Resend } from 'resend';
 import sgMail from '@sendgrid/mail';
 import twilio from 'twilio';
 import crypto from 'crypto';
+import { getEmpresaBrandProfile, type EmpresaBrand } from './empresaBrands';
 
 // -------------------------------------------------------
 // Resend client (owner notifications)
@@ -752,39 +753,52 @@ export async function sendEmpresaEmail(params: {
   body: string;
   empresaId: number;
   campaignId?: number;
+  brand?: EmpresaBrand;
 }): Promise<{ ok: boolean; messageId?: string }> {
   try {
     const resend = getResendClient();
+    const brand = getEmpresaBrandProfile(params.brand || "nuxa");
+    if (!brand.fromEmail) {
+      console.error(`sendEmpresaEmail: no hay remitente configurado para ${brand.id}`);
+      return { ok: false };
+    }
     const uid = Buffer.from(params.empresaId.toString()).toString("base64url");
     const unsubscribeUrl = `https://nuxa.life/api/unsubscribe-empresa?uid=${uid}`;
 
+    const escapeHtml = (value: string) => value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
     const bodyHtml = params.body
       .split("\n")
       .filter(l => l.trim())
-      .map(l => `<p style="margin:0 0 14px;color:#374151;font-size:15px;line-height:1.7;">${l}</p>`)
+      .map(l => `<p style="margin:0 0 14px;color:#374151;font-size:15px;line-height:1.7;">${escapeHtml(l)}</p>`)
       .join("");
 
     const html = `<!DOCTYPE html>
 <html lang="es">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;background:#f0f4ff;">
+<body style="margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;background:${brand.softBackground};">
   <table width="100%" cellpadding="0" cellspacing="0" style="padding:32px 16px;">
     <tr><td align="center">
       <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
-        <tr><td style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:32px;text-align:center;">
-          <p style="margin:0 0 6px;font-size:28px;">🧠</p>
-          <p style="margin:0;font-size:22px;font-weight:700;color:#fff;">NUXA</p>
-          <p style="margin:6px 0 0;color:#bfdbfe;font-size:14px;">Apoyo emocional profesional · ISO 45003</p>
+        <tr><td style="background:${brand.gradient};padding:32px;text-align:center;">
+          <p style="margin:0 0 6px;font-size:28px;">${brand.icon}</p>
+          <p style="margin:0;font-size:22px;font-weight:700;color:#fff;">${escapeHtml(brand.name)}</p>
+          <p style="margin:6px 0 0;color:rgba(255,255,255,0.82);font-size:14px;">${escapeHtml(brand.tagline)}</p>
         </td></tr>
         <tr><td style="padding:32px;">
           ${bodyHtml}
         </td></tr>
-        <tr><td style="padding:24px 32px;background:#fff1f2;border-top:2px solid #fca5a5;text-align:center;">
+        <tr><td style="padding:24px 32px;background:${brand.softBackground};border-top:2px solid ${brand.accent};text-align:center;">
           <p style="margin:0 0 10px;font-size:11px;color:#9ca3af;">
-            NUXA &middot; Empordajobs SL &middot; B02701100 &middot; nuxa.life
+            ${escapeHtml(brand.legalFooter)}
           </p>
+          ${brand.website ? `<a href="${brand.website}" style="display:inline-block;margin-bottom:10px;color:${brand.accent};font-size:12px;font-weight:600;text-decoration:none;">${escapeHtml(brand.website.replace(/^https?:\/\//, ""))}</a><br>` : ""}
           <a href="${unsubscribeUrl}"
-            style="display:inline-block;padding:10px 24px;background:#dc2626;color:#ffffff;font-size:13px;font-weight:700;border-radius:8px;text-decoration:none;letter-spacing:0.3px;">
+            style="display:inline-block;padding:10px 24px;background:${brand.accent};color:#ffffff;font-size:13px;font-weight:700;border-radius:8px;text-decoration:none;letter-spacing:0.3px;">
             🚫 Darme de baja — no quiero recibir más emails
           </a>
           <p style="margin:10px 0 0;font-size:10px;color:#9ca3af;">
@@ -802,10 +816,10 @@ export async function sendEmpresaEmail(params: {
       : undefined;
 
     const { data, error } = await resend.emails.send({
-      from: "NUXA <hola@nuxa.life>",
+      from: `${brand.fromName} <${brand.fromEmail}>`,
       to: params.email,
       subject: params.subject,
-      text: `${params.body}\n\n---\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
+      text: `${params.body}\n\n---\n${brand.name} · ${brand.contact}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
       html,
       ...(tags ? { tags } : {}),
     });

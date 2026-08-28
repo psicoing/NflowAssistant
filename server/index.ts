@@ -83,6 +83,7 @@ async function ensureEmpresasTables() {
         id SERIAL PRIMARY KEY,
         sent_at TIMESTAMPTZ DEFAULT NOW(),
         subject TEXT NOT NULL,
+        brand TEXT NOT NULL DEFAULT 'nuxa',
         sent_count INT DEFAULT 0,
         failed_count INT DEFAULT 0,
         opens INT DEFAULT 0,
@@ -106,6 +107,7 @@ async function ensureEmpresasTables() {
         name TEXT NOT NULL,
         subject TEXT NOT NULL,
         body TEXT NOT NULL,
+        brand TEXT NOT NULL DEFAULT 'nuxa',
         created_at TIMESTAMPTZ DEFAULT NOW()
       );
     `);
@@ -115,6 +117,10 @@ async function ensureEmpresasTables() {
       ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS company_size TEXT DEFAULT 'unclassified';
       ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS company_size_source TEXT DEFAULT 'seed';
       ALTER TABLE empresa_campaign_history ADD COLUMN IF NOT EXISTS sizes_filter TEXT;
+      ALTER TABLE empresa_campaign_history ADD COLUMN IF NOT EXISTS brand TEXT DEFAULT 'nuxa';
+      ALTER TABLE empresa_email_templates ADD COLUMN IF NOT EXISTS brand TEXT DEFAULT 'nuxa';
+      UPDATE empresa_campaign_history SET brand = 'nuxa' WHERE brand IS NULL;
+      UPDATE empresa_email_templates SET brand = 'nuxa' WHERE brand IS NULL;
       UPDATE empresa_contacts SET company_size = 'unclassified' WHERE company_size IS NULL;
       UPDATE empresa_contacts SET company_size_source = 'seed' WHERE company_size_source IS NULL;
     `);

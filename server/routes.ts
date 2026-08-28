@@ -27,6 +27,7 @@ import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 import twilio from "twilio";
 import { getVoiceDemoIncomingCallUrl, getVoiceDemoStreamUrl } from "./voiceDemoBridge";
+import { getEmpresaBrandStatuses, getEmpresaBrandStatus, isEmpresaBrand, type EmpresaBrand } from "./empresaBrands";
 import { db, pool } from "./db";
 import { eq, and, desc, gte, count } from "drizzle-orm";
 import "./types"; // Import session types
@@ -1767,14 +1768,23 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     } catch { res.status(500).json({ message: "Error" }); }
   });
 
-  async function executeEmpresaCampaignSend(campaignId: number, subject: string, body: string, contacts: any[], subjectB?: string) {
+  async function executeEmpresaCampaignSend(campaignId: number, subject: string, body: string, contacts: any[], subjectB?: string, brand: EmpresaBrand = "nuxa") {
+    const brandStatus = await getEmpresaBrandStatus(brand);
+    if (!brandStatus.available) {
+      await pool.query(
+        "UPDATE empresa_campaign_history SET status = 'blocked', failed_count = $1 WHERE id = $2",
+        [contacts.length, campaignId],
+      );
+      console.error(`Empresa campaign ${campaignId} blocked before execution: ${brandStatus.message}`);
+      return;
+    }
     let sent = 0, failed = 0;
     const half = subjectB ? Math.ceil(contacts.length / 2) : contacts.length;
     for (let i = 0; i < contacts.length; i++) {
       const contact = contacts[i];
       const variant = (subjectB && i >= half) ? "b" : "a";
       const usedSubject = variant === "b" && subjectB ? subjectB : subject;
-      const result = await sendEmpresaEmail({ email: contact.email, subject: usedSubject, body, empresaId: contact.id, campaignId });
+      const result = await sendEmpresaEmail({ email: contact.email, subject: usedSubject, body, empresaId: contact.id, campaignId, brand });
       if (result.ok) {
         sent++;
         await pool.query(
@@ -1784,7 +1794,7 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       } else { failed++; }
       await new Promise(resolve => setTimeout(resolve, 150));
     }
-    await sendEmpresaEmail({ email: "rmportbou@gmail.com", subject: `[COPIA] ${subject}`, body, empresaId: 0, campaignId }).catch(() => {});
+    await sendEmpresaEmail({ email: "rmportbou@gmail.com", subject: `[COPIA] ${subject}`, body, empresaId: 0, campaignId, brand }).catch(() => {});
     await pool.query(
       "UPDATE empresa_campaign_history SET sent_count=$1, failed_count=$2, status='sent', sent_at=NOW() WHERE id=$3",
       [sent, failed, campaignId]
@@ -1794,12 +1804,21 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
 
   app.post("/api/admin/send-empresa-campaign", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
-    const { subject, body, companies, companySizes, scheduledAt, subjectB } = req.body;
+    const { subject, body, companies, companySizes, scheduledAt, subjectB, brand: requestedBrand } = req.body;
     if (!subject || !body) return res.status(400).json({ message: "Subject y body requeridos" });
+    const brand: EmpresaBrand = requestedBrand || "nuxa";
+    if (!isEmpresaBrand(brand)) return res.status(400).json({ message: "Marca de campaña inválida" });
     if (companySizes !== undefined && (!Array.isArray(companySizes) || !companySizes.every(isEmpresaCompanySize))) {
       return res.status(400).json({ message: "Filtro de tamaño inválido" });
     }
     try {
+      const brandStatus = await getEmpresaBrandStatus(brand);
+      if (!brandStatus.available) {
+        return res.status(400).json({
+          code: "BRAND_SENDER_NOT_READY",
+          message: `${brandStatus.name}: ${brandStatus.message}`,
+        });
+      }
       let query = "SELECT * FROM empresa_contacts WHERE opted_out = false AND email IS NOT NULL";
       const params: any[] = [];
       if (Array.isArray(companies) && companies.length > 0) { query += ` AND company = ANY($1)`; params.push(companies); }
@@ -1813,18 +1832,18 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       const scheduledDate = scheduledAt ? new Date(scheduledAt) : null;
       const isScheduled = scheduledDate && scheduledDate > new Date();
       const campaignRow = await pool.query(
-        `INSERT INTO empresa_campaign_history (subject, subject_b, body, sent_count, failed_count, companies_filter, sizes_filter, scheduled_at, status)
-         VALUES ($1,$2,$3,0,0,$4,$5,$6,$7) RETURNING id`,
-        [subject, subjectB || null, body, companiesStr, sizesStr, scheduledDate, isScheduled ? "scheduled" : "sent"]
+        `INSERT INTO empresa_campaign_history (subject, subject_b, body, brand, sent_count, failed_count, companies_filter, sizes_filter, scheduled_at, status)
+         VALUES ($1,$2,$3,$4,0,0,$5,$6,$7,$8) RETURNING id`,
+        [subject, subjectB || null, body, brand, companiesStr, sizesStr, scheduledDate, isScheduled ? "scheduled" : "sent"]
       );
       const campaignId: number = campaignRow.rows[0].id;
       if (isScheduled) {
         const delay = scheduledDate!.getTime() - Date.now();
-        setTimeout(() => executeEmpresaCampaignSend(campaignId, subject, body, contacts, subjectB || undefined), delay);
-        res.json({ scheduled: true, campaignId, scheduledAt: scheduledDate, recipients: contacts.length });
+        setTimeout(() => executeEmpresaCampaignSend(campaignId, subject, body, contacts, subjectB || undefined, brand), delay);
+        res.json({ scheduled: true, campaignId, scheduledAt: scheduledDate, recipients: contacts.length, brand });
       } else {
-        res.json({ sending: true, campaignId, recipients: contacts.length });
-        setImmediate(() => executeEmpresaCampaignSend(campaignId, subject, body, contacts, subjectB || undefined));
+        res.json({ sending: true, campaignId, recipients: contacts.length, brand });
+        setImmediate(() => executeEmpresaCampaignSend(campaignId, subject, body, contacts, subjectB || undefined, brand));
       }
     } catch (e) { console.error("send-empresa-campaign error:", e); res.status(500).json({ message: "Error" }); }
   });
@@ -1948,6 +1967,15 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     res.json({ created, updated, skipped, errors: errors.slice(0, 20) });
   });
 
+  app.get("/api/admin/empresa-brands", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      res.json(await getEmpresaBrandStatuses());
+    } catch {
+      res.status(500).json({ message: "No se pudo comprobar las marcas" });
+    }
+  });
+
   app.get("/api/admin/empresa-templates", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
     try { const r = await pool.query("SELECT * FROM empresa_email_templates ORDER BY created_at DESC"); res.json(r.rows); }
@@ -1956,10 +1984,12 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
 
   app.post("/api/admin/empresa-templates", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
-    const { name, subject, body } = req.body;
+    const { name, subject, body, brand: requestedBrand } = req.body;
     if (!name || !subject || !body) return res.status(400).json({ message: "Faltan campos" });
+    const brand: EmpresaBrand = requestedBrand || "nuxa";
+    if (!isEmpresaBrand(brand)) return res.status(400).json({ message: "Marca de plantilla inválida" });
     try {
-      const r = await pool.query("INSERT INTO empresa_email_templates (name, subject, body) VALUES ($1,$2,$3) RETURNING *", [name, subject, body]);
+      const r = await pool.query("INSERT INTO empresa_email_templates (name, subject, body, brand) VALUES ($1,$2,$3,$4) RETURNING *", [name, subject, body, brand]);
       res.json(r.rows[0]);
     } catch { res.status(500).json({ message: "Error" }); }
   });
