@@ -209,9 +209,11 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
                   format: { type: "audio/pcmu" },
                    turn_detection: {
                      type: "server_vad",
-                     threshold: 0.5,
+                      // Un umbral algo más alto evita que el ruido de línea
+                      // active falsos turnos durante el mensaje comercial.
+                      threshold: 0.65,
                      prefix_padding_ms: 300,
-                     silence_duration_ms: 700,
+                      silence_duration_ms: 850,
                      create_response: true,
                      interrupt_response: true,
                    },
@@ -253,7 +255,9 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
 
       case "input_audio_buffer.speech_started":
         // La persona empieza a hablar: corta el audio que se esté reproduciendo.
-        if (streamSid) {
+        // No enviamos "clear" por un falso positivo cuando NUXA ya ha
+        // terminado de hablar; así evitamos pequeños chasquidos o cortes.
+        if (streamSid && responseActive) {
           twilioWs.send(JSON.stringify({ event: "clear", streamSid }));
         }
         if (responseActive && openaiWs.readyState === WebSocket.OPEN) {
