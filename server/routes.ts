@@ -4330,6 +4330,7 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     const to = typeof req.body?.to === "string"
       ? req.body.to.trim()
       : "";
+    const enableSpainLowRisk = req.body?.enableSpainLowRisk === true;
     const authToken = process.env.TWILIO_AUTH_TOKEN;
 
     if (!/^AC[a-f0-9]{32}$/i.test(accountSid)) {
@@ -4351,6 +4352,19 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       const from = numbers.find((number) => number.phoneNumber && number.capabilities?.voice)?.phoneNumber;
       if (!from) {
         return res.status(409).json({ message: "La cuenta no tiene un número de Twilio con capacidad de voz." });
+      }
+
+      if (to.startsWith("+34") && enableSpainLowRisk) {
+        await client.voice.v1.dialingPermissions.bulkCountryUpdates.create({
+          updateRequest: JSON.stringify([
+            {
+              iso_code: "ES",
+              low_risk_numbers_enabled: true,
+              high_risk_special_numbers_enabled: false,
+              high_risk_tollfraud_numbers_enabled: false,
+            },
+          ]),
+        });
       }
 
       lastOutboundVoiceTestStartedAt = Date.now();
@@ -4379,6 +4393,8 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       return res.status(502).json({
         message: twilioCode === "21212"
           ? "El número de origen de Twilio no es válido."
+          : twilioCode === "21215"
+            ? "Twilio todavía tiene bloqueadas las llamadas a España en los permisos geográficos."
           : twilioCode === "13227"
             ? "Twilio no permite llamadas a este destino con la configuración actual."
             : "Twilio no pudo iniciar la llamada de prueba.",

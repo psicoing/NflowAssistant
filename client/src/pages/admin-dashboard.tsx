@@ -268,7 +268,7 @@ export default function AdminDashboard() {
       return;
     }
     const confirmed = window.confirm(
-      `Se hará una única llamada de prueba en español a ${to} desde ${from}. ¿La persona autorizó expresamente esta llamada?`,
+      `Se hará una única llamada de prueba en español a ${to} desde ${from}. Si el destino es español, se activará únicamente España para números de bajo riesgo. ¿La persona autorizó expresamente esta llamada?`,
     );
     if (!confirmed) return;
 
@@ -278,7 +278,11 @@ export default function AdminDashboard() {
       const response = await fetch("/api/admin/twilio/test-outbound-call", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ accountSid, to }),
+        body: JSON.stringify({
+          accountSid,
+          to,
+          enableSpainLowRisk: to.startsWith("+34"),
+        }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "No se pudo iniciar la llamada.");
