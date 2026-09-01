@@ -170,6 +170,17 @@ export default function AdminDashboard() {
   const [campaignStatus, setCampaignStatus] = useState<"idle"|"loading"|"confirm"|"sending"|"done"|"error">("idle");
   const [campaignResult, setCampaignResult] = useState<{sent:number; failed:number; skipped:number} | null>(null);
   const [trialCount, setTrialCount] = useState<number | null>(null);
+  const [twilioAccountSid, setTwilioAccountSid] = useState("");
+  const [twilioChecking, setTwilioChecking] = useState(false);
+  const [twilioCheckResult, setTwilioCheckResult] = useState<{
+    status?: string;
+    type?: string;
+    balance?: string;
+    currency?: string;
+    numbers?: Array<{phoneNumber: string; friendlyName: string; status: string; capabilities: string[]; voiceUrl?: string | null; voiceMethod?: string | null}>;
+    verifiedCallerIds?: number;
+    message?: string;
+  } | null>(null);
 
   // Instituciones
   const [institutions, setInstitutions] = useState<any[]>([]);
@@ -178,6 +189,30 @@ export default function AdminDashboard() {
   const checkResendDomain = async () => {
     const r = await fetch("/api/admin/resend-domain-status");
     if (r.ok) setResendDomain(await r.json());
+  };
+  const checkTwilioAccount = async () => {
+    const accountSid = twilioAccountSid.trim();
+    if (!/^AC[a-f0-9]{32}$/i.test(accountSid)) {
+      setTwilioCheckResult({ message: "Introduce un Account SID válido (empieza por AC)." });
+      return;
+    }
+
+    setTwilioChecking(true);
+    setTwilioCheckResult(null);
+    try {
+      const response = await fetch("/api/admin/twilio/account-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountSid }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "No se pudo consultar Twilio.");
+      setTwilioCheckResult(data);
+    } catch (error: any) {
+      setTwilioCheckResult({ message: error?.message || "No se pudo consultar Twilio." });
+    } finally {
+      setTwilioChecking(false);
+    }
   };
 
   const [instNewEmail, setInstNewEmail] = useState("");
@@ -2992,6 +3027,51 @@ export default function AdminDashboard() {
           {/* ── DEMO DE LLAMADA CON IA POR VOZ ── */}
           <TabsContent value="voz">
             <div className="max-w-2xl mx-auto space-y-6">
+              <Card className="bg-gray-800/50 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Configuración de Twilio NUXA</CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Introduce el Account SID de la cuenta que quieres comprobar. El Auth Token permanece protegido en el servidor.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <Label htmlFor="twilio-account-sid" className="text-gray-200">Account SID</Label>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Input
+                      id="twilio-account-sid"
+                      value={twilioAccountSid}
+                      onChange={(event) => setTwilioAccountSid(event.target.value)}
+                      placeholder="AC..."
+                      autoComplete="off"
+                      spellCheck={false}
+                      className="bg-gray-900/70 border-gray-600 text-white font-mono"
+                    />
+                    <Button
+                      type="button"
+                      onClick={checkTwilioAccount}
+                      disabled={twilioChecking}
+                      className="bg-blue-600 hover:bg-blue-700 shrink-0"
+                    >
+                      {twilioChecking ? "Comprobando…" : "Comprobar cuenta"}
+                    </Button>
+                  </div>
+                  {twilioCheckResult?.message && (
+                    <p className="text-sm text-red-300">{twilioCheckResult.message}</p>
+                  )}
+                  {twilioCheckResult?.status && (
+                    <div className="rounded-lg border border-emerald-700/50 bg-emerald-950/30 p-3 text-sm text-emerald-200 space-y-1">
+                      <p><strong>Cuenta:</strong> {twilioCheckResult.status} · {twilioCheckResult.type}</p>
+                      <p><strong>Saldo:</strong> {twilioCheckResult.balance} {twilioCheckResult.currency} · <strong>Caller IDs verificados:</strong> {twilioCheckResult.verifiedCallerIds}</p>
+                      <p><strong>Números comprados:</strong> {twilioCheckResult.numbers?.length || 0}</p>
+                      {twilioCheckResult.numbers?.map((number) => (
+                        <p key={number.phoneNumber} className="font-mono text-xs">
+                          {number.phoneNumber} · {number.capabilities.join(", ") || "sin capacidades"}
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
               <Card className="bg-gray-800/50 border-gray-700">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">

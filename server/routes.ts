@@ -4195,6 +4195,59 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
   // que a su vez habla con la API Realtime de OpenAI.
   // Solo demo entrante: no se usa para llamadas salientes ni campañas.
   // ---------------------------------------------------------------------
+  app.post("/api/admin/twilio/account-check", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+
+    const accountSid = typeof req.body?.accountSid === "string"
+      ? req.body.accountSid.trim()
+      : "";
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+
+    if (!/^AC[a-f0-9]{32}$/i.test(accountSid)) {
+      return res.status(400).json({ message: "El Account SID debe empezar por AC y tener 32 caracteres hexadecimales después." });
+    }
+    if (!authToken) {
+      return res.status(503).json({ message: "Falta configurar el Auth Token de Twilio en el servidor." });
+    }
+
+    try {
+      const client = twilio(accountSid, authToken);
+      const account = await client.api.v2010.accounts(accountSid).fetch();
+      const balance = await client.api.v2010.accounts(accountSid).balance.fetch();
+      const [numbers, callerIds] = await Promise.all([
+        client.incomingPhoneNumbers.list({ limit: 20 }),
+        client.outgoingCallerIds.list({ limit: 100 }),
+      ]);
+
+      return res.json({
+        status: account.status,
+        type: account.type,
+        balance: balance.balance,
+        currency: balance.currency,
+        numbers: numbers.map((number) => ({
+          phoneNumber: number.phoneNumber,
+          friendlyName: number.friendlyName,
+          status: number.status,
+          capabilities: Object.entries(number.capabilities || {})
+            .filter(([, enabled]) => enabled)
+            .map(([capability]) => capability),
+          voiceUrl: number.voiceUrl || null,
+          voiceMethod: number.voiceMethod || null,
+        })),
+        verifiedCallerIds: callerIds.length,
+      });
+    } catch (error: any) {
+      const twilioCode = error?.code ? String(error.code) : undefined;
+      console.error("Twilio account check failed", twilioCode || "unknown");
+      return res.status(502).json({
+        message: twilioCode === "20003"
+          ? "Twilio no acepta este SID con el Auth Token configurado. Comprueba que ambos pertenecen a la misma cuenta."
+          : "No se pudo consultar la cuenta de Twilio.",
+        code: twilioCode,
+      });
+    }
+  });
+
   app.post("/api/voice-demo/incoming-call", (req, res) => {
     const authToken = process.env.TWILIO_AUTH_TOKEN;
     const signature = req.header("X-Twilio-Signature");
