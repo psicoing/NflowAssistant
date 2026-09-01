@@ -26,7 +26,13 @@ import { authenticatePartner, registerPartner, generateReferralCode } from "./pa
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 import twilio from "twilio";
-import { getVoiceDemoIncomingCallUrl, getVoiceDemoStreamUrl } from "./voiceDemoBridge";
+import {
+  getVoiceDemoIncomingCallUrl,
+  getVoiceDemoStreamUrl,
+  getVoiceDemoOutboundCallUrl,
+  getVoiceDemoOutboundStreamUrl,
+  getVoiceDemoOutboundStatusUrl,
+} from "./voiceDemoBridge";
 import { EMPRESA_LEGACY_NUXA_FROM_EMAIL, EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandStatuses, getEmpresaBrandStatus, isEmpresaBrand, type EmpresaBrand } from "./empresaBrands";
 import { db, pool } from "./db";
 import { eq, and, desc, gte, count } from "drizzle-orm";
@@ -40,6 +46,8 @@ const empresaCompanySizeValues = new Set([
 ]);
 const isEmpresaCompanySize = (value: unknown): value is string =>
   typeof value === "string" && empresaCompanySizeValues.has(value);
+
+let lastOutboundVoiceTestStartedAt = 0;
 
 // Helper function to check if user has active subscription
 async function checkSubscription(userId: number): Promise<boolean> {
@@ -4313,6 +4321,72 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     }
   });
 
+  app.post("/api/admin/twilio/test-outbound-call", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+
+    const accountSid = typeof req.body?.accountSid === "string"
+      ? req.body.accountSid.trim()
+      : "";
+    const to = typeof req.body?.to === "string"
+      ? req.body.to.trim()
+      : "";
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+
+    if (!/^AC[a-f0-9]{32}$/i.test(accountSid)) {
+      return res.status(400).json({ message: "El Account SID no es válido." });
+    }
+    if (!/^\+[1-9]\d{7,14}$/.test(to)) {
+      return res.status(400).json({ message: "El número de destino debe estar en formato internacional, por ejemplo +34…." });
+    }
+    if (!authToken) {
+      return res.status(503).json({ message: "Falta configurar el Auth Token de Twilio." });
+    }
+    if (Date.now() - lastOutboundVoiceTestStartedAt < 60_000) {
+      return res.status(429).json({ message: "Espera un minuto antes de iniciar otra llamada de prueba." });
+    }
+
+    try {
+      const client = twilio(accountSid, authToken);
+      const numbers = await client.incomingPhoneNumbers.list({ limit: 20 });
+      const from = numbers.find((number) => number.phoneNumber && number.capabilities?.voice)?.phoneNumber;
+      if (!from) {
+        return res.status(409).json({ message: "La cuenta no tiene un número de Twilio con capacidad de voz." });
+      }
+
+      lastOutboundVoiceTestStartedAt = Date.now();
+      const call = await client.calls.create({
+        to,
+        from,
+        url: getVoiceDemoOutboundCallUrl(),
+        method: "POST",
+        statusCallback: getVoiceDemoOutboundStatusUrl(),
+        statusCallbackMethod: "POST",
+        statusCallbackEvent: ["initiated", "ringing", "answered", "completed"],
+        timeout: 30,
+      });
+
+      return res.status(201).json({
+        message: "Llamada de prueba iniciada.",
+        callSid: call.sid,
+        status: call.status,
+        from,
+        to,
+      });
+    } catch (error: any) {
+      lastOutboundVoiceTestStartedAt = 0;
+      const twilioCode = error?.code ? String(error.code) : undefined;
+      console.error("Twilio outbound voice test failed", twilioCode || "unknown");
+      return res.status(502).json({
+        message: twilioCode === "21212"
+          ? "El número de origen de Twilio no es válido."
+          : twilioCode === "13227"
+            ? "Twilio no permite llamadas a este destino con la configuración actual."
+            : "Twilio no pudo iniciar la llamada de prueba.",
+        code: twilioCode,
+      });
+    }
+  });
+
   app.post("/api/voice-demo/incoming-call", (req, res) => {
     const authToken = process.env.TWILIO_AUTH_TOKEN;
     const signature = req.header("X-Twilio-Signature");
@@ -4336,6 +4410,44 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
   </Connect>
 </Response>`;
     res.type("text/xml").send(twiml);
+  });
+
+  app.post("/api/voice-demo/outbound-call", (req, res) => {
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    const signature = req.header("X-Twilio-Signature");
+    if (!authToken) {
+      console.error("Voice demo: TWILIO_AUTH_TOKEN no configurado, no se puede validar la llamada saliente");
+      return res.status(403).send("Not configured");
+    }
+    const fullUrl = getVoiceDemoOutboundCallUrl();
+    const valid = !!signature && twilio.validateRequest(authToken, signature, fullUrl, req.body || {});
+    if (!valid) {
+      console.warn("Voice demo: firma inválida en el webhook de llamada saliente");
+      return res.status(403).send("Invalid signature");
+    }
+
+    const twiml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Connect>
+    <Stream url="${getVoiceDemoOutboundStreamUrl()}" />
+  </Connect>
+</Response>`;
+    res.type("text/xml").send(twiml);
+  });
+
+  app.post("/api/voice-demo/outbound-status", (req, res) => {
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    const signature = req.header("X-Twilio-Signature");
+    if (!authToken) return res.status(403).send("Not configured");
+
+    const fullUrl = getVoiceDemoOutboundStatusUrl();
+    const valid = !!signature && twilio.validateRequest(authToken, signature, fullUrl, req.body || {});
+    if (!valid) return res.status(403).send("Invalid signature");
+
+    const callSid = typeof req.body?.CallSid === "string" ? req.body.CallSid : "unknown";
+    const status = typeof req.body?.CallStatus === "string" ? req.body.CallStatus : "unknown";
+    console.log(`[voice-demo] Estado llamada saliente (callSid=${callSid}, status=${status})`);
+    res.sendStatus(204);
   });
 
   const httpServer = createServer(app);

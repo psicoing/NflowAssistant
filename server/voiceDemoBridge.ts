@@ -2,8 +2,8 @@
 // Realtime de OpenAI (modelo GA `gpt-realtime`). Permite que alguien llame
 // a un número de teléfono y converse por voz con el agente NUXA.
 //
-// Alcance: SOLO llamadas entrantes de demo/prueba. No se usa para llamadas
-// salientes ni para contactar `empresa_contacts`/instituciones/mutuas.
+// Alcance: llamadas entrantes de demo y una llamada saliente manual de prueba.
+// No se usa para campañas ni para contactar automáticamente `empresa_contacts`.
 import type { Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import twilio from "twilio";
@@ -11,6 +11,9 @@ import { log } from "./vite";
 
 export const VOICE_DEMO_STREAM_PATH = "/api/voice-demo/media-stream";
 export const VOICE_DEMO_INCOMING_CALL_PATH = "/api/voice-demo/incoming-call";
+export const VOICE_DEMO_OUTBOUND_STREAM_PATH = "/api/voice-demo/outbound-media-stream";
+export const VOICE_DEMO_OUTBOUND_CALL_PATH = "/api/voice-demo/outbound-call";
+export const VOICE_DEMO_OUTBOUND_STATUS_PATH = "/api/voice-demo/outbound-status";
 
 // Máximo de llamadas simultáneas permitidas: es solo una demo/prueba, no un
 // servicio de producción, así que se limita de forma agresiva como defensa
@@ -40,13 +43,25 @@ export function getVoiceDemoStreamUrl(): string {
   return `wss://${getVoiceDemoPublicDomain()}${VOICE_DEMO_STREAM_PATH}`;
 }
 
+export function getVoiceDemoOutboundStreamUrl(): string {
+  return `wss://${getVoiceDemoPublicDomain()}${VOICE_DEMO_OUTBOUND_STREAM_PATH}`;
+}
+
+export function getVoiceDemoOutboundCallUrl(): string {
+  return `https://${getVoiceDemoPublicDomain()}${VOICE_DEMO_OUTBOUND_CALL_PATH}`;
+}
+
+export function getVoiceDemoOutboundStatusUrl(): string {
+  return `https://${getVoiceDemoPublicDomain()}${VOICE_DEMO_OUTBOUND_STATUS_PATH}`;
+}
+
 /**
  * Valida la firma X-Twilio-Signature de la petición HTTP inicial que Twilio
  * envía para abrir el WebSocket del Media Stream. Si no hay AuthToken
  * configurado, la validación no puede hacerse (se registra y se rechaza:
  * fail closed).
  */
-function isValidTwilioStreamSignature(signature: string | undefined): boolean {
+function isValidTwilioStreamSignature(signature: string | undefined, streamUrl: string): boolean {
   const authToken = process.env.TWILIO_AUTH_TOKEN;
   if (!authToken) {
     console.error("Voice demo: TWILIO_AUTH_TOKEN no configurado, no se puede validar el WebSocket entrante");
@@ -55,12 +70,11 @@ function isValidTwilioStreamSignature(signature: string | undefined): boolean {
   if (!signature) {
     return false;
   }
-  const baseUrl = getVoiceDemoStreamUrl();
   // Twilio recomienda probar con una barra final si la validación falla,
   // ver docs de seguridad de Twilio ("For voice WSS handshake requests").
   return (
-    twilio.validateRequest(authToken, signature, baseUrl, {}) ||
-    twilio.validateRequest(authToken, signature, `${baseUrl}/`, {})
+    twilio.validateRequest(authToken, signature, streamUrl, {}) ||
+    twilio.validateRequest(authToken, signature, `${streamUrl}/`, {})
   );
 }
 
@@ -75,6 +89,20 @@ Mantén las respuestas cortas y naturales, como una conversación real por telé
 No sustituyes a un profesional sanitario: si detectas una crisis grave o riesgo para la persona, recomiéndale con calma buscar ayuda profesional o de emergencia inmediata.
 Esta llamada es una demostración de producto: si te preguntan, puedes explicar que NUXA también está disponible por chat 24/7 en la web y la app.`;
 
+const NUXA_OUTBOUND_TEST_INSTRUCTIONS = `Eres NUXA, una asistente comercial de NUXA hablando en una única llamada de prueba autorizada con una empresa española.
+Habla siempre en español de España, con tono cálido, claro, profesional y muy breve.
+Empieza diciendo: "Hola, soy NUXA, la asistente de inteligencia artificial de NUXA. Esta es una llamada de demostración autorizada. ¿Te viene bien hablar un momento?".
+Si la persona no puede hablar, despídete y no insistas.
+Si acepta, explica que quieres validar si NUXA puede ayudar a empresas con asistentes de IA y pregunta de forma natural:
+1) con quién estás hablando y qué función tiene, solo si quiere compartirlo;
+2) cómo gestionan actualmente la atención, el bienestar o la comunicación interna;
+3) qué dificultad concreta les gustaría mejorar;
+4) si tendría sentido recibir más información o hacer una demostración.
+No pidas contraseñas, datos financieros, información médica ni datos personales innecesarios.
+No inventes características, precios, clientes ni resultados. No prometas enviar nada si no te lo han pedido.
+Si muestran interés, pregunta cuál sería el mejor siguiente paso y si autorizan un contacto posterior.
+Mantén respuestas cortas, sin listas ni markdown, dejando espacio para que la persona hable.
+Si preguntan, aclara que eres una IA y que la llamada es solo una prueba de producto.`;
 /**
  * Adjunta el WebSocket del media stream de Twilio al servidor HTTP existente,
  * sin interferir con el WebSocket de HMR de Vite (que se registra en el mismo
@@ -85,12 +113,15 @@ export function attachVoiceDemoWebSocket(httpServer: Server) {
 
   httpServer.on("upgrade", (req, socket, head) => {
     const url = req.url || "";
-    if (!url.startsWith(VOICE_DEMO_STREAM_PATH)) {
+    const isInboundStream = url.startsWith(VOICE_DEMO_STREAM_PATH);
+    const isOutboundStream = url.startsWith(VOICE_DEMO_OUTBOUND_STREAM_PATH);
+    if (!isInboundStream && !isOutboundStream) {
       return; // deja que otros listeners (p.ej. HMR de Vite) decidan
     }
 
     const signature = req.headers["x-twilio-signature"] as string | undefined;
-    if (!isValidTwilioStreamSignature(signature)) {
+    const streamUrl = isOutboundStream ? getVoiceDemoOutboundStreamUrl() : getVoiceDemoStreamUrl();
+    if (!isValidTwilioStreamSignature(signature, streamUrl)) {
       console.warn("Voice demo: WebSocket rechazado, firma de Twilio ausente o inválida");
       socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");
       socket.destroy();
@@ -109,18 +140,19 @@ export function attachVoiceDemoWebSocket(httpServer: Server) {
     });
   });
 
-  wss.on("connection", (twilioWs) => {
+  wss.on("connection", (twilioWs, req) => {
     activeCalls++;
     twilioWs.once("close", () => {
       activeCalls = Math.max(0, activeCalls - 1);
     });
-    handleTwilioCall(twilioWs);
+    const outbound = req.url?.startsWith(VOICE_DEMO_OUTBOUND_STREAM_PATH) ?? false;
+    handleTwilioCall(twilioWs, outbound ? "outbound-test" : "inbound-demo");
   });
 
   log("Puente de voz NUXA (Twilio <-> OpenAI Realtime) listo", "voice-demo");
 }
 
-function handleTwilioCall(twilioWs: WebSocket) {
+function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-test") {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     console.error("Voice demo: falta OPENAI_API_KEY, no se puede iniciar la llamada");
@@ -158,7 +190,9 @@ function handleTwilioCall(twilioWs: WebSocket) {
             type: "session.update",
             session: {
               type: "realtime",
-              instructions: NUXA_VOICE_INSTRUCTIONS,
+               instructions: mode === "outbound-test"
+                 ? NUXA_OUTBOUND_TEST_INSTRUCTIONS
+                 : NUXA_VOICE_INSTRUCTIONS,
               output_modalities: ["audio"],
               audio: {
                 input: {

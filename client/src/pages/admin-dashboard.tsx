@@ -174,6 +174,9 @@ export default function AdminDashboard() {
   const [twilioChecking, setTwilioChecking] = useState(false);
   const [twilioPurchasing, setTwilioPurchasing] = useState(false);
   const [twilioPurchaseMessage, setTwilioPurchaseMessage] = useState<string | null>(null);
+  const [twilioOutboundTo, setTwilioOutboundTo] = useState("");
+  const [twilioOutboundCalling, setTwilioOutboundCalling] = useState(false);
+  const [twilioOutboundMessage, setTwilioOutboundMessage] = useState<string | null>(null);
   const [twilioCheckResult, setTwilioCheckResult] = useState<{
     status?: string;
     type?: string;
@@ -246,6 +249,46 @@ export default function AdminDashboard() {
       setTwilioPurchaseMessage(error?.message || "No se pudo comprar el número.");
     } finally {
       setTwilioPurchasing(false);
+    }
+  };
+  const startTwilioOutboundTestCall = async () => {
+    const accountSid = twilioAccountSid.trim();
+    const to = twilioOutboundTo.trim().replace(/[()\s-]/g, "");
+    if (!/^AC[a-f0-9]{32}$/i.test(accountSid)) {
+      setTwilioOutboundMessage("Introduce y comprueba primero un Account SID válido.");
+      return;
+    }
+    if (!/^\+[1-9]\d{7,14}$/.test(to)) {
+      setTwilioOutboundMessage("Introduce un número válido en formato internacional, por ejemplo +34….");
+      return;
+    }
+    const from = twilioCheckResult?.numbers?.find((number) => number.capabilities.includes("voice"))?.phoneNumber;
+    if (!from) {
+      setTwilioOutboundMessage("Comprueba la cuenta y asegúrate de que tiene un número Twilio con voz.");
+      return;
+    }
+    const confirmed = window.confirm(
+      `Se hará una única llamada de prueba en español a ${to} desde ${from}. ¿La persona autorizó expresamente esta llamada?`,
+    );
+    if (!confirmed) return;
+
+    setTwilioOutboundCalling(true);
+    setTwilioOutboundMessage(null);
+    try {
+      const response = await fetch("/api/admin/twilio/test-outbound-call", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountSid, to }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "No se pudo iniciar la llamada.");
+      setTwilioOutboundMessage(
+        `Llamada iniciada desde ${data.from} a ${data.to}. NUXA hablará en español y la llamada quedará limitada a esta prueba.`,
+      );
+    } catch (error: any) {
+      setTwilioOutboundMessage(error?.message || "No se pudo iniciar la llamada.");
+    } finally {
+      setTwilioOutboundCalling(false);
     }
   };
 
@@ -3159,6 +3202,51 @@ export default function AdminDashboard() {
                     <p>⚠️ Esto es solo una demo entrante para pruebas: no se usa para llamar a contactos, ni a empresas/instituciones/mutuas, ni para campañas reales.</p>
                     <p>El número mostrado siempre corresponde a la cuenta de Twilio que hayas comprobado en el recuadro superior.</p>
                   </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-gray-800/50 border-orange-700/50">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    📲 Prueba saliente a una empresa autorizada
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Realiza una única llamada manual desde el número de Twilio comprobado. No activa campañas ni recorre la base de datos.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="twilio-outbound-to" className="text-gray-200">
+                      Número autorizado en formato internacional
+                    </Label>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <Input
+                        id="twilio-outbound-to"
+                        type="tel"
+                        value={twilioOutboundTo}
+                        onChange={(event) => setTwilioOutboundTo(event.target.value)}
+                        placeholder="+34..."
+                        autoComplete="off"
+                        className="bg-gray-900/70 border-gray-600 text-white font-mono"
+                      />
+                      <Button
+                        type="button"
+                        onClick={startTwilioOutboundTestCall}
+                        disabled={twilioOutboundCalling || !twilioCheckResult?.numbers?.some((number) => number.capabilities.includes("voice"))}
+                        className="bg-orange-600 hover:bg-orange-700 shrink-0"
+                      >
+                        {twilioOutboundCalling ? "Llamando…" : "Iniciar una llamada"}
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-orange-700/40 bg-orange-950/20 p-3 text-xs text-orange-100 space-y-1">
+                    <p>NUXA se identifica como asistente de IA, explica que es una prueba autorizada y pregunta si es buen momento antes de continuar.</p>
+                    <p>En esta primera prueba solo se registran los estados técnicos de la llamada. No se guarda grabación ni transcripción.</p>
+                  </div>
+                  {twilioOutboundMessage && (
+                    <p className={`text-sm ${twilioOutboundMessage.includes("iniciada") ? "text-emerald-300" : "text-red-300"}`}>
+                      {twilioOutboundMessage}
+                    </p>
+                  )}
                 </CardContent>
               </Card>
             </div>
