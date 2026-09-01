@@ -800,16 +800,16 @@ export async function sendEmpresaEmail(params: {
         <tr><td style="padding:32px;">
            ${bodyHtml}
            ${callConsentUrl ? `
-           <div style="margin-top:26px;padding:20px 18px;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;text-align:center;">
-             <p style="margin:0 0 8px;color:#166534;font-size:15px;font-weight:700;">¿Te interesa hablar un momento con NUXA?</p>
+             <div style="margin-top:26px;padding:20px 18px;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;text-align:center;">
+               <p style="margin:0 0 8px;color:#166534;font-size:15px;font-weight:700;">¿Quieres recibir información sobre NUXA.life?</p>
              <p style="margin:0 0 16px;color:#374151;font-size:13px;line-height:1.6;">
-               Puedes autorizar una llamada breve con nuestra asistente de IA para conocerla. Después podrás contactar con nosotros directamente si te interesa; no queremos repetirte comunicaciones.
+                 Puedes autorizar una breve llamada informativa con nuestra asistente comercial de IA para entender cómo NUXA.life puede ayudar a tu empresa y cómo contratarlo. La atención psicológica no se realiza por teléfono: la ofrece la app NUXA.life.
              </p>
              <p style="margin:0 0 16px;padding:10px 12px;background:#fffbeb;border-radius:8px;color:#92400e;font-size:12px;line-height:1.55;text-align:left;">
                <strong>Importante:</strong> de momento, la llamada aparecerá desde el número estadounidense <strong>${EMPRESA_CURRENT_CALL_NUMBER}</strong>. Te lo indicamos para que puedas reconocerla y no cuelgues al recibirla. Próximamente utilizaremos un número español.
              </p>
              <a href="${callConsentUrl}" style="display:inline-block;padding:12px 22px;background:${brand.accent};color:#ffffff;font-size:13px;font-weight:700;border-radius:8px;text-decoration:none;">
-               ✅ Autorizar una llamada breve con NUXA
+               ✅ Autorizar llamada informativa
              </a>
              <p style="margin:12px 0 0;color:#6b7280;font-size:11px;line-height:1.5;">
                El enlace te permitirá confirmar el teléfono y retirar el permiso cuando quieras.
@@ -851,7 +851,7 @@ export async function sendEmpresaEmail(params: {
             replyTo: { email: EMPRESA_SHARED_FROM_EMAIL, name: fromName },
             to: params.email,
             subject: params.subject,
-       text: `${params.body}\n\n${callConsentUrl ? `¿Te interesa hablar un momento con NUXA?\nAutoriza una llamada breve con nuestra asistente de IA: ${callConsentUrl}\n${EMPRESA_CALL_NUMBER_NOTICE}\nDespués podrás contactar con nosotros directamente si te interesa; no queremos repetirte comunicaciones.\n` : ""}\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
+       text: `${params.body}\n\n${callConsentUrl ? `¿Quieres recibir información sobre NUXA.life?\nAutoriza una breve llamada informativa con nuestra asistente comercial de IA para conocer cómo contratar NUXA.life: ${callConsentUrl}\nLa atención psicológica no se realiza por teléfono: la ofrece la app NUXA.life.\n${EMPRESA_CALL_NUMBER_NOTICE}\nDespués podrás contactar con nosotros directamente si te interesa; no queremos repetirte comunicaciones.\n` : ""}\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
             html,
             ...(params.campaignId ? { categories: [`empresa-${params.campaignId}`] } : {}),
           });
@@ -874,7 +874,7 @@ export async function sendEmpresaEmail(params: {
       replyTo: EMPRESA_SHARED_FROM_EMAIL,
       to: params.email,
       subject: params.subject,
-        text: `${params.body}\n\n${callConsentUrl ? `¿Te interesa hablar un momento con NUXA?\nAutoriza una llamada breve con nuestra asistente de IA: ${callConsentUrl}\n${EMPRESA_CALL_NUMBER_NOTICE}\nDespués podrás contactar con nosotros directamente si te interesa; no queremos repetirte comunicaciones.\n` : ""}\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
+        text: `${params.body}\n\n${callConsentUrl ? `¿Quieres recibir información sobre NUXA.life?\nAutoriza una breve llamada informativa con nuestra asistente comercial de IA para conocer cómo contratar NUXA.life: ${callConsentUrl}\nLa atención psicológica no se realiza por teléfono: la ofrece la app NUXA.life.\n${EMPRESA_CALL_NUMBER_NOTICE}\nDespués podrás contactar con nosotros directamente si te interesa; no queremos repetirte comunicaciones.\n` : ""}\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
       html,
       ...(tags ? { tags } : {}),
     });
