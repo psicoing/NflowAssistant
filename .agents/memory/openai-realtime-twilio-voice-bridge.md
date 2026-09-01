@@ -30,6 +30,10 @@ have no such requirement and are the reliable fallback for "get a working inboun
 right now," even for a non-US product — flag this tradeoff to the user rather than silently
 substituting country.
 
+For the current voice demo, the working end-to-end tests used Twilio's US trial number. Treat
+the Spanish-number issue as a separate provisioning/availability problem; do not replace the
+known-working US test route until a Spanish number is actually provisioned and tested.
+
 ## Media Streams WebSocket handshake must be authenticated, not just the TwiML webhook
 Twilio signs the initial HTTP request that upgrades to a Media Streams WebSocket the same way it
 signs regular webhooks (`X-Twilio-Signature`, validated against the exact `<Stream url>` you
