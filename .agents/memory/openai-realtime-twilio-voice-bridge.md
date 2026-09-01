@@ -44,3 +44,16 @@ default and validate the signature (plus a concurrent-connection cap as defense 
 ever proxying to the upstream API. Same fail-closed rule applies to the TwiML webhook itself: treat
 a missing/invalid signature as rejected whenever an auth token is configured, never as "skip
 validation."
+
+## Use the authenticated app control plane for Twilio provisioning
+If direct Twilio API calls from the shell return 401 while the authenticated admin panel can
+successfully check the same account, do not retry purchases from the shell or guess which account
+the credentials belong to. Perform account operations through a protected server-side route using
+the workflow's current secret, with an explicit confirmation before any charge.
+
+**Why:** workflow secrets and the shell environment can be out of sync after credentials are
+updated, and a provisioning retry risks charging the wrong Twilio account or buying duplicates.
+
+**How to apply:** gate provisioning routes behind admin authentication, validate the submitted
+Account SID, check existing numbers before buying, configure the webhook at purchase time, and
+return the purchased number to the panel.
