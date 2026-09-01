@@ -4641,6 +4641,8 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
   <Connect>
     <Stream url="${getVoiceDemoStreamUrl()}" />
   </Connect>
+  <Say language="es-ES" voice="alice">Ahora mismo no puedo conectar con la asistente de NUXA.life. Por favor, inténtalo de nuevo más tarde.</Say>
+  <Hangup />
 </Response>`;
     res.type("text/xml").send(twiml);
   });
@@ -4664,6 +4666,8 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
   <Connect>
     <Stream url="${getVoiceDemoOutboundStreamUrl()}" />
   </Connect>
+  <Say language="es-ES" voice="alice">Ahora mismo no puedo conectar con la asistente de NUXA.life. Por favor, inténtalo de nuevo más tarde.</Say>
+  <Hangup />
 </Response>`;
     res.type("text/xml").send(twiml);
   });

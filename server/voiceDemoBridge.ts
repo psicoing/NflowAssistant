@@ -263,6 +263,19 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
 
       case "error":
         console.error("Voice demo: error de OpenAI Realtime:", JSON.stringify(event.error));
+        if (
+          event.error?.code === "insufficient_quota" ||
+          event.error?.code === "credit_balance_exhausted"
+        ) {
+          console.error(
+            "Voice demo: OpenAI no tiene crédito disponible; se cerrará el stream para reproducir el mensaje de contingencia de Twilio",
+          );
+          try {
+            openaiWs.close();
+          } catch {
+            // ignore
+          }
+        }
         break;
     }
   });
@@ -272,6 +285,11 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
   });
 
   openaiWs.on("close", () => {
+    responseActive = false;
+    log(
+      `Voice demo: sesión OpenAI finalizada; Twilio continuará con el mensaje de contingencia (callSid=${callSid ?? "desconocido"})`,
+      "voice-demo",
+    );
     try {
       twilioWs.close();
     } catch {
