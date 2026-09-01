@@ -112,6 +112,17 @@ Si muestran interés, pregunta cuál sería el mejor siguiente paso y si desean 
 Mantén cada respuesta en una o dos frases. Haz una sola pregunta cada vez y espera en silencio. No encadenes preguntas, no rellenes los silencios y no monopolices la conversación. Si la persona empieza a hablar, interrúmpete inmediatamente.
 Si preguntan, aclara que eres una IA y que la llamada es únicamente informativa y de demostración del servicio.
 ${NUXA_PRICE_INFORMATION}`;
+
+const TURN_RESPONSE_INSTRUCTIONS = `Responde únicamente a lo último que ha dicho la persona.
+Sé muy breve: una o dos frases cortas como máximo y una sola pregunta como máximo.
+No hagas presentaciones largas, no enumeres características o precios salvo que te los hayan preguntado y no cambies de tema.
+Si haces una pregunta, termina ahí y espera en silencio a la respuesta. No continúes hablando por tu cuenta.`;
+
+const INITIAL_INBOUND_RESPONSE = `Di únicamente este saludo, sin añadir ninguna explicación:
+"Hola, soy NUXA, la asistente comercial de inteligencia artificial de NUXA.life. Esta llamada es comercial e informativa sobre nuestro servicio. ¿Qué te gustaría conocer?"`;
+
+const INITIAL_OUTBOUND_RESPONSE = `Di únicamente este saludo, sin añadir ninguna explicación:
+"Hola, soy NUXA, la asistente comercial de inteligencia artificial de NUXA.life. Esta es una llamada comercial e informativa de demostración autorizada para explicar nuestro servicio. ¿Te viene bien hablar un momento?"`;
 /**
  * Adjunta el WebSocket del media stream de Twilio al servidor HTTP existente,
  * sin interferir con el WebSocket de HMR de Vite (que se registra en el mismo
@@ -214,7 +225,9 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
                       threshold: 0.65,
                      prefix_padding_ms: 300,
                       silence_duration_ms: 850,
-                     create_response: true,
+                      // Las respuestas se crean al recibir speech_stopped para
+                      // poder limitar cada turno y evitar monólogos.
+                      create_response: false,
                      interrupt_response: true,
                    },
                 },
@@ -230,7 +243,18 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
 
       case "session.updated":
         // Sesión lista: que NUXA salude primero.
-        openaiWs.send(JSON.stringify({ type: "response.create" }));
+        openaiWs.send(
+          JSON.stringify({
+            type: "response.create",
+            response: {
+              output_modalities: ["audio"],
+              instructions: mode === "outbound-test"
+                ? INITIAL_OUTBOUND_RESPONSE
+                : INITIAL_INBOUND_RESPONSE,
+              max_output_tokens: 70,
+            },
+          }),
+        );
         break;
 
       case "response.created":
@@ -262,6 +286,24 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
         }
         if (responseActive && openaiWs.readyState === WebSocket.OPEN) {
           openaiWs.send(JSON.stringify({ type: "response.cancel" }));
+        }
+        break;
+
+      case "input_audio_buffer.speech_stopped":
+        // Con create_response=false, este es el único punto donde se genera
+        // una respuesta a la persona. Así cada turno puede limitarse y NUXA
+        // no continúa con un discurso después de hacer una pregunta.
+        if (!responseActive && openaiWs.readyState === WebSocket.OPEN) {
+          openaiWs.send(
+            JSON.stringify({
+              type: "response.create",
+              response: {
+                output_modalities: ["audio"],
+                instructions: TURN_RESPONSE_INSTRUCTIONS,
+                max_output_tokens: 90,
+              },
+            }),
+          );
         }
         break;
 
