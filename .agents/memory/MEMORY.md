@@ -3,3 +3,4 @@
 - [Empresa contacts bulk importer](empresa-contacts-bulk-importer.md) — semicolon-delimited format, dedupe key, and empty-field-only merge rule for empresa_contacts.
 - [OpenAI Realtime + Twilio voice bridge](openai-realtime-twilio-voice-bridge.md) — correct GA audio format schema (`audio/pcmu`) and Twilio trial account phone-number-purchase gotchas.
 - [Resend delivery visibility](resend-delivery-visibility.md) — send-only API keys return an acceptance ID but cannot confirm delivery or bounce status.
+- [Twilio Spanish number verification](twilio-spanish-number-verification.md) — Spanish numbers require verified identity and address documentation; facial retry loops need Twilio review.
