@@ -172,6 +172,8 @@ export default function AdminDashboard() {
   const [trialCount, setTrialCount] = useState<number | null>(null);
   const [twilioAccountSid, setTwilioAccountSid] = useState("");
   const [twilioChecking, setTwilioChecking] = useState(false);
+  const [twilioPurchasing, setTwilioPurchasing] = useState(false);
+  const [twilioPurchaseMessage, setTwilioPurchaseMessage] = useState<string | null>(null);
   const [twilioCheckResult, setTwilioCheckResult] = useState<{
     status?: string;
     type?: string;
@@ -212,6 +214,38 @@ export default function AdminDashboard() {
       setTwilioCheckResult({ message: error?.message || "No se pudo consultar Twilio." });
     } finally {
       setTwilioChecking(false);
+    }
+  };
+  const purchaseTwilioUsNumber = async () => {
+    const accountSid = twilioAccountSid.trim();
+    if (!/^AC[a-f0-9]{32}$/i.test(accountSid)) {
+      setTwilioPurchaseMessage("Introduce y comprueba primero un Account SID válido.");
+      return;
+    }
+    const confirmed = window.confirm(
+      "Twilio descontará del saldo el coste del número y aplicará su cuota mensual. ¿Quieres comprar un número estadounidense con voz y conectarlo a NUXA?",
+    );
+    if (!confirmed) return;
+
+    setTwilioPurchasing(true);
+    setTwilioPurchaseMessage(null);
+    try {
+      const response = await fetch("/api/admin/twilio/purchase-us-number", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountSid }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "No se pudo comprar el número.");
+      setTwilioCheckResult((current) => ({
+        ...current,
+        numbers: data.number ? [data.number] : current?.numbers,
+      }));
+      setTwilioPurchaseMessage(`Número ${data.number.phoneNumber} comprado y conectado a NUXA.`);
+    } catch (error: any) {
+      setTwilioPurchaseMessage(error?.message || "No se pudo comprar el número.");
+    } finally {
+      setTwilioPurchasing(false);
     }
   };
 
@@ -3070,6 +3104,28 @@ export default function AdminDashboard() {
                       ))}
                     </div>
                   )}
+                  {twilioCheckResult?.status === "active" &&
+                    twilioCheckResult?.type?.toLowerCase() === "full" &&
+                    (twilioCheckResult.numbers?.length || 0) === 0 && (
+                      <div className="rounded-lg border border-amber-700/50 bg-amber-950/20 p-3 space-y-2">
+                        <p className="text-xs text-amber-200">
+                          La cuenta no tiene números. La compra consumirá saldo y añadirá la cuota mensual de Twilio.
+                        </p>
+                        <Button
+                          type="button"
+                          onClick={purchaseTwilioUsNumber}
+                          disabled={twilioPurchasing}
+                          className="bg-amber-600 hover:bg-amber-700"
+                        >
+                          {twilioPurchasing ? "Comprando…" : "Comprar número de voz de EE. UU."}
+                        </Button>
+                      </div>
+                    )}
+                  {twilioPurchaseMessage && (
+                    <p className={`text-sm ${twilioPurchaseMessage.includes("comprado") ? "text-emerald-300" : "text-red-300"}`}>
+                      {twilioPurchaseMessage}
+                    </p>
+                  )}
                 </CardContent>
               </Card>
               <Card className="bg-gray-800/50 border-gray-700">
@@ -3083,17 +3139,25 @@ export default function AdminDashboard() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="bg-gray-900/60 border border-gray-700 rounded-lg p-4 text-center">
-                    <p className="text-gray-400 text-sm mb-1">Número de prueba</p>
-                    <p className="text-2xl font-bold text-white tracking-wide">+1 254 282 4325</p>
-                    <p className="text-gray-500 text-xs mt-1">Número de EE. UU. (Twilio) — llamar desde España tiene coste de llamada internacional según tu operador.</p>
+                    <p className="text-gray-400 text-sm mb-1">Número de prueba de la cuenta comprobada</p>
+                    <p className="text-2xl font-bold text-white tracking-wide">
+                      {twilioCheckResult?.status
+                        ? (twilioCheckResult.numbers?.[0]?.phoneNumber || "Sin número comprado")
+                        : "Comprueba la cuenta arriba"}
+                    </p>
+                    <p className="text-gray-500 text-xs mt-1">
+                      {twilioCheckResult?.numbers?.[0]?.phoneNumber
+                        ? "Número de EE. UU. (Twilio) — llamar desde España puede tener coste internacional según tu operador."
+                        : "Cuando compres el número, aparecerá aquí automáticamente."}
+                    </p>
                   </div>
                   <div className="space-y-2 text-sm text-gray-300">
-                    <p><strong className="text-white">Cómo probarlo:</strong> llama al número de arriba desde cualquier teléfono. NUXA se presentará y podrás hablar con ella en español como en una llamada normal.</p>
+                    <p><strong className="text-white">Cómo probarlo:</strong> cuando aparezca el nuevo número, llama desde cualquier teléfono. NUXA se presentará y podrás hablar con ella en español como en una llamada normal.</p>
                     <p><strong className="text-white">Qué evaluar:</strong> naturalidad de la voz, tiempo de respuesta, si te interrumpe o te deja hablar, y si las respuestas tienen sentido para una conversación de apoyo emocional.</p>
                   </div>
                   <div className="bg-yellow-900/20 border border-yellow-700/40 rounded-lg p-3 text-xs text-yellow-200 space-y-1">
                     <p>⚠️ Esto es solo una demo entrante para pruebas: no se usa para llamar a contactos, ni a empresas/instituciones/mutuas, ni para campañas reales.</p>
-                    <p>La cuenta de Twilio es de prueba (trial) y el número es de EE. UU. porque los números españoles requieren verificación de identidad adicional (bundle regulatorio) que no está completada.</p>
+                    <p>El número mostrado siempre corresponde a la cuenta de Twilio que hayas comprobado en el recuadro superior.</p>
                   </div>
                 </CardContent>
               </Card>

@@ -4248,6 +4248,71 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     }
   });
 
+  app.post("/api/admin/twilio/purchase-us-number", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+
+    const accountSid = typeof req.body?.accountSid === "string"
+      ? req.body.accountSid.trim()
+      : "";
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+
+    if (!/^AC[a-f0-9]{32}$/i.test(accountSid)) {
+      return res.status(400).json({ message: "El Account SID no es válido." });
+    }
+    if (!authToken) {
+      return res.status(503).json({ message: "Falta configurar el Auth Token de Twilio." });
+    }
+
+    try {
+      const client = twilio(accountSid, authToken);
+      const existingNumbers = await client.incomingPhoneNumbers.list({ limit: 20 });
+      if (existingNumbers.length > 0) {
+        return res.status(409).json({
+          message: "La cuenta ya tiene un número comprado. Compruébala de nuevo antes de adquirir otro.",
+        });
+      }
+
+      const available = await client.availablePhoneNumbers("US").local.list({
+        voiceEnabled: true,
+        limit: 1,
+      });
+      const candidate = available[0];
+      if (!candidate?.phoneNumber) {
+        return res.status(404).json({ message: "Twilio no tiene números estadounidenses con voz disponibles en este momento." });
+      }
+
+      const purchased = await client.incomingPhoneNumbers.create({
+        phoneNumber: candidate.phoneNumber,
+        friendlyName: "NUXA Demo Voz IA",
+        voiceUrl: getVoiceDemoIncomingCallUrl(),
+        voiceMethod: "POST",
+      });
+
+      return res.status(201).json({
+        message: "Número comprado y configurado correctamente.",
+        number: {
+          phoneNumber: purchased.phoneNumber,
+          friendlyName: purchased.friendlyName,
+          status: purchased.status,
+          capabilities: Object.entries(purchased.capabilities || {})
+            .filter(([, enabled]) => enabled)
+            .map(([capability]) => capability),
+          voiceUrl: purchased.voiceUrl || null,
+          voiceMethod: purchased.voiceMethod || null,
+        },
+      });
+    } catch (error: any) {
+      const twilioCode = error?.code ? String(error.code) : undefined;
+      console.error("Twilio US number purchase failed", twilioCode || "unknown");
+      return res.status(502).json({
+        message: twilioCode === "20003"
+          ? "Twilio no acepta este SID con el Auth Token configurado."
+          : "Twilio no pudo completar la compra del número.",
+        code: twilioCode,
+      });
+    }
+  });
+
   app.post("/api/voice-demo/incoming-call", (req, res) => {
     const authToken = process.env.TWILIO_AUTH_TOKEN;
     const signature = req.header("X-Twilio-Signature");
