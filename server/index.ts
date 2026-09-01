@@ -137,6 +137,13 @@ async function ensureEmpresasTables() {
       ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS contact_area TEXT;
       ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS priority TEXT;
       ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS source TEXT;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS call_authorized BOOLEAN DEFAULT false;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS call_authorized_at TIMESTAMPTZ;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS call_authorization_source TEXT;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS call_authorized_phone TEXT;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS call_authorization_revoked_at TIMESTAMPTZ;
+      ALTER TABLE empresa_contacts ALTER COLUMN call_authorized SET DEFAULT false;
+      UPDATE empresa_contacts SET call_authorized = false WHERE call_authorized IS NULL;
       ALTER TABLE empresa_contacts ALTER COLUMN email DROP NOT NULL;
     `);
     log("Empresa tables ensured");

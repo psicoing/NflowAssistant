@@ -18,7 +18,21 @@ function isRateLimited(ip: string, maxPerHour = 5): boolean {
 import fs from "fs";
 import path from "path";
 import { storage } from "./storage";
-import { buildSkrillLink, sendSkrillRegistrationEmail, sendOwnerNotification, sendOwnerSMS, sendLeadWelcomeEmail, generateUnsubscribeToken, sendTrialExhaustedEmail, sendReactivationEmail, sendInstitutionEmail, sendMutuaEmail, sendEmpresaEmail } from "./emailService";
+import {
+  buildSkrillLink,
+  sendSkrillRegistrationEmail,
+  sendOwnerNotification,
+  sendOwnerSMS,
+  sendLeadWelcomeEmail,
+  generateUnsubscribeToken,
+  sendTrialExhaustedEmail,
+  sendReactivationEmail,
+  sendInstitutionEmail,
+  sendMutuaEmail,
+  sendEmpresaEmail,
+  verifyEmpresaCallConsentToken,
+  EMPRESA_CALL_NUMBER_NOTICE,
+} from "./emailService";
 import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog, conversations, messages } from "@shared/schema";
 import { emailLeads } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
@@ -48,6 +62,71 @@ const isEmpresaCompanySize = (value: unknown): value is string =>
   typeof value === "string" && empresaCompanySizeValues.has(value);
 
 let lastOutboundVoiceTestStartedAt = 0;
+
+const escapeHtmlPage = (value: unknown) => String(value ?? "")
+  .replace(/&/g, "&amp;")
+  .replace(/</g, "&lt;")
+  .replace(/>/g, "&gt;")
+  .replace(/"/g, "&quot;")
+  .replace(/'/g, "&#039;");
+
+const normalizeInternationalPhone = (value: unknown): string => {
+  const raw = typeof value === "string" ? value.trim() : "";
+  if (raw.startsWith("00")) return `+${raw.slice(2).replace(/\D/g, "")}`;
+  return raw.startsWith("+")
+    ? `+${raw.slice(1).replace(/\D/g, "")}`
+    : raw.replace(/\D/g, "");
+};
+
+const isInternationalPhone = (value: string) => /^\+[1-9]\d{7,14}$/.test(value);
+
+function renderEmpresaCallConsentPage(params: {
+  title: string;
+  message: string;
+  token?: string;
+  company?: string | null;
+  phone?: string | null;
+  authorized?: boolean;
+}) {
+  const token = params.token ? escapeHtmlPage(params.token) : "";
+  const company = escapeHtmlPage(params.company || "su empresa");
+  const phone = escapeHtmlPage(params.phone || "");
+  const action = params.authorized
+    ? `<form method="post" action="/api/empresa-call-consent/revoke" style="margin-top:24px;">
+         <input type="hidden" name="token" value="${token}">
+         <button type="submit" style="border:0;background:#fee2e2;color:#991b1b;padding:12px 20px;border-radius:8px;font-weight:700;cursor:pointer;">Retirar autorización</button>
+       </form>`
+    : token
+      ? `<form method="post" action="/api/empresa-call-consent/confirm" style="margin-top:24px;text-align:left;">
+           <label for="phone" style="display:block;color:#374151;font-weight:600;font-size:14px;margin-bottom:8px;">Teléfono al que podemos llamar</label>
+           <input id="phone" name="phone" type="tel" value="${phone}" placeholder="+34..." required
+             style="box-sizing:border-box;width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;">
+           <input type="hidden" name="token" value="${token}">
+           <label style="display:flex;gap:9px;align-items:flex-start;margin-top:16px;color:#374151;font-size:13px;line-height:1.5;">
+             <input type="checkbox" name="accept" value="yes" required style="margin-top:3px;">
+             <span>Autorizo a NUXA a realizar una llamada breve de presentación a este número. Entiendo que puedo retirar esta autorización cuando quiera.</span>
+           </label>
+           <button type="submit" style="display:block;width:100%;margin-top:20px;border:0;background:#059669;color:#fff;padding:13px 20px;border-radius:8px;font-weight:700;cursor:pointer;">Confirmar autorización</button>
+         </form>`
+      : "";
+
+  return `<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${escapeHtmlPage(params.title)} · NUXA</title></head>
+<body style="margin:0;background:#f0fdf4;font-family:'Segoe UI',Arial,sans-serif;color:#1f2937;">
+  <main style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;">
+    <section style="width:100%;max-width:480px;background:#fff;border-radius:18px;padding:34px;box-shadow:0 6px 28px rgba(15,23,42,.12);">
+      <div style="text-align:center;font-size:36px;">🧠</div>
+      <h1 style="margin:12px 0 10px;text-align:center;color:#047857;font-size:24px;">${escapeHtmlPage(params.title)}</h1>
+      <p style="margin:0;text-align:center;color:#4b5563;line-height:1.65;">${escapeHtmlPage(params.message)}</p>
+      ${params.company ? `<p style="margin:20px 0 0;text-align:center;color:#111827;font-weight:700;">${company}</p>` : ""}
+      ${action}
+      <p style="margin:20px 0 0;padding:11px 12px;background:#fffbeb;border-radius:8px;color:#92400e;font-size:12px;line-height:1.55;text-align:left;"><strong>Importante sobre el número:</strong> ${escapeHtmlPage(EMPRESA_CALL_NUMBER_NOTICE)}</p>
+      <p style="margin:16px 0 0;text-align:center;color:#6b7280;font-size:12px;line-height:1.6;">NUXA se identificará como asistente de inteligencia artificial. La llamada es breve y no activa comunicaciones automáticas adicionales.</p>
+    </section>
+  </main>
+</body></html>`;
+}
 
 // Helper function to check if user has active subscription
 async function checkSubscription(userId: number): Promise<boolean> {
@@ -1702,6 +1781,22 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     } catch { res.status(500).json({ message: "Error" }); }
   });
 
+  app.get("/api/admin/empresa-call-authorizations", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const r = await pool.query(`
+        SELECT id, email, name, company, phone, call_authorized_phone,
+               call_authorized_at, call_authorization_source
+        FROM empresa_contacts
+        WHERE call_authorized = true
+          AND call_authorization_revoked_at IS NULL
+          AND opted_out = false
+        ORDER BY call_authorized_at DESC NULLS LAST, company, email
+      `);
+      res.json(r.rows);
+    } catch { res.status(500).json({ message: "Error" }); }
+  });
+
   app.post("/api/admin/empresas", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
     const { email, company, name, companySize } = req.body;
@@ -1758,12 +1853,16 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
   app.get("/api/admin/empresas/export-csv", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
     try {
-      const r = await pool.query("SELECT email, name, company, company_size, phone, address, postal_code, municipio, provincia, employee_count, contact_area, priority, source, opted_out, created_at FROM empresa_contacts ORDER BY company_size, company, email");
-      const lines = ["email,nombre,empresa,tamaño_empresa,teléfono,dirección,cp,municipio,provincia,nº_empleados,área,prioridad,fuente,estado,alta"];
+       const r = await pool.query("SELECT email, name, company, company_size, phone, call_authorized_phone, call_authorized, call_authorized_at, call_authorization_revoked_at, address, postal_code, municipio, provincia, employee_count, contact_area, priority, source, opted_out, created_at FROM empresa_contacts ORDER BY company_size, company, email");
+       const lines = ["email,nombre,empresa,tamaño_empresa,teléfono,teléfono_autorizado_llamada,llamadas_autorizadas,autorizada_el,dirección,cp,municipio,provincia,nº_empleados,área,prioridad,fuente,estado,alta"];
       for (const row of r.rows) {
         lines.push([row.email, row.name || "", row.company || "",
           row.company_size || "unclassified",
-          row.phone || "", row.address || "", row.postal_code || "",
+          row.phone || "",
+          row.call_authorized_phone || "",
+          row.call_authorized && !row.call_authorization_revoked_at ? "sí" : "no",
+          row.call_authorized_at ? new Date(row.call_authorized_at).toISOString() : "",
+          row.address || "", row.postal_code || "",
           row.municipio || "", row.provincia || "", row.employee_count ?? "",
           row.contact_area || "", row.priority || "", row.source || "",
           row.opted_out ? "baja" : "activo",
@@ -2046,7 +2145,15 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       if (!uid) return res.status(400).send("Token inválido");
       const id = parseInt(Buffer.from(uid, "base64url").toString(), 10);
       if (isNaN(id)) return res.status(400).send("Token inválido");
-      await pool.query("UPDATE empresa_contacts SET opted_out = true, opted_out_at = NOW() WHERE id = $1", [id]);
+      await pool.query(
+        `UPDATE empresa_contacts
+         SET opted_out = true,
+             opted_out_at = NOW(),
+             call_authorized = false,
+             call_authorization_revoked_at = COALESCE(call_authorization_revoked_at, NOW())
+         WHERE id = $1`,
+        [id],
+      );
       res.send(`<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Baja confirmada – NUXA</title>
 <style>body{margin:0;font-family:'Segoe UI',sans-serif;background:#eff6ff;display:flex;align-items:center;justify-content:center;min-height:100vh;}
 .box{background:#fff;border-radius:20px;padding:48px 40px;max-width:400px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);}
@@ -2054,6 +2161,116 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
 <body><div class="box"><p style="font-size:36px;margin:0 0 16px">✅</p>
 <h1>Baja registrada</h1><p>Su empresa no volverá a recibir comunicaciones de NUXA.<br>Si en el futuro desea conocer nuestros servicios, puede contactarnos en <a href="https://nuxa.life">nuxa.life</a>.</p></div></body></html>`);
     } catch { res.status(500).send("Error"); }
+  });
+
+  app.get("/api/empresa-call-consent", async (req, res) => {
+    try {
+      const id = verifyEmpresaCallConsentToken(req.query.token);
+      if (!id) return res.status(400).send("Enlace de autorización no válido o caducado.");
+
+      const result = await pool.query(
+        `SELECT id, company, name, phone, call_authorized_phone, call_authorized,
+                call_authorization_revoked_at, opted_out
+         FROM empresa_contacts WHERE id = $1`,
+        [id],
+      );
+      const contact = result.rows[0];
+      if (!contact) return res.status(404).send("No se ha encontrado el contacto.");
+      if (contact.opted_out) {
+        return res.status(410).send(renderEmpresaCallConsentPage({
+          title: "Autorización no disponible",
+          message: "Este contacto ha solicitado no recibir comunicaciones de NUXA.",
+        }));
+      }
+
+      const phone = contact.call_authorized_phone || contact.phone || "";
+      if (contact.call_authorized && !contact.call_authorization_revoked_at) {
+        return res.send(renderEmpresaCallConsentPage({
+          title: "Llamadas autorizadas",
+          message: "Ya has autorizado una llamada breve de NUXA para este contacto. Puedes retirar el permiso cuando quieras.",
+          token: String(req.query.token),
+          company: contact.company,
+          phone,
+          authorized: true,
+        }));
+      }
+
+      return res.send(renderEmpresaCallConsentPage({
+        title: "Autorizar una llamada de NUXA",
+        message: "Si te interesa conocer a NUXA, confirma que deseas recibir una llamada breve de nuestra asistente de inteligencia artificial.",
+        token: String(req.query.token),
+        company: contact.company,
+        phone,
+      }));
+    } catch (error) {
+      console.error("empresa-call-consent GET error:", error);
+      return res.status(500).send("No se pudo cargar la autorización.");
+    }
+  });
+
+  app.post("/api/empresa-call-consent/confirm", async (req, res) => {
+    try {
+      const id = verifyEmpresaCallConsentToken(req.body?.token);
+      if (!id) return res.status(400).send("Enlace de autorización no válido o caducado.");
+      if (req.body?.accept !== "yes") {
+        return res.status(400).send("Debes confirmar expresamente la autorización.");
+      }
+
+      const phone = normalizeInternationalPhone(req.body?.phone);
+      if (!isInternationalPhone(phone)) {
+        return res.status(400).send(renderEmpresaCallConsentPage({
+          title: "Teléfono no válido",
+          message: "Introduce el número completo en formato internacional, por ejemplo +34 600 000 000.",
+          token: String(req.body?.token || ""),
+          phone: String(req.body?.phone || ""),
+        }));
+      }
+
+      const result = await pool.query(
+        `UPDATE empresa_contacts
+         SET call_authorized = true,
+             call_authorized_at = NOW(),
+             call_authorization_source = 'email',
+             call_authorized_phone = $1,
+             call_authorization_revoked_at = NULL,
+             phone = COALESCE(NULLIF(phone, ''), $1)
+         WHERE id = $2 AND opted_out = false
+         RETURNING company`,
+        [phone, id],
+      );
+      if (result.rows.length === 0) return res.status(410).send("Esta autorización ya no está disponible.");
+
+      return res.send(renderEmpresaCallConsentPage({
+        title: "Llamada autorizada",
+        message: "Gracias. NUXA ya puede realizar una llamada breve al número confirmado. Después podrás contactar con nosotros directamente si te interesa.",
+        company: result.rows[0].company,
+      }));
+    } catch (error) {
+      console.error("empresa-call-consent confirm error:", error);
+      return res.status(500).send("No se pudo guardar la autorización.");
+    }
+  });
+
+  app.post("/api/empresa-call-consent/revoke", async (req, res) => {
+    try {
+      const id = verifyEmpresaCallConsentToken(req.body?.token);
+      if (!id) return res.status(400).send("Enlace de autorización no válido o caducado.");
+
+      await pool.query(
+        `UPDATE empresa_contacts
+         SET call_authorized = false,
+             call_authorization_revoked_at = NOW()
+         WHERE id = $1`,
+        [id],
+      );
+      return res.send(renderEmpresaCallConsentPage({
+        title: "Autorización retirada",
+        message: "Hemos retirado el permiso para que NUXA realice llamadas a este contacto.",
+      }));
+    } catch (error) {
+      console.error("empresa-call-consent revoke error:", error);
+      return res.status(500).send("No se pudo retirar la autorización.");
+    }
   });
 
   // ===== CAMPAÑA DE REACTIVACIÓN =====

@@ -363,7 +363,7 @@ export default function AdminDashboard() {
   const [empresaSearch, setEmpresaSearch] = useState("");
   const [empresaCompanyFilter, setEmpresaCompanyFilter] = useState("all");
   const [empresaSizeFilter, setEmpresaSizeFilter] = useState("all");
-  const [empresaStatusFilter, setEmpresaStatusFilter] = useState<"all"|"active"|"baja">("all");
+  const [empresaStatusFilter, setEmpresaStatusFilter] = useState<"all"|"active"|"baja"|"call_authorized">("all");
   const [empresaDeleteConfirmId, setEmpresaDeleteConfirmId] = useState<number | null>(null);
   const [empresaCsvImporting, setEmpresaCsvImporting] = useState(false);
   const [empresaCsvResult, setEmpresaCsvResult] = useState<{imported:number;skipped:number}|null>(null);
@@ -2578,7 +2578,7 @@ export default function AdminDashboard() {
                       <div>
                         <CardTitle className="text-white flex items-center gap-2">🏢 Contactos de empresas</CardTitle>
                         <CardDescription className="text-gray-400">
-                          {empresas.filter(e => !e.opted_out).length} activos · {empresas.filter(e => e.opted_out).length} bajas · {empresas.length} total
+                          {empresas.filter(e => !e.opted_out).length} activos · {empresas.filter(e => e.call_authorized && !e.call_authorization_revoked_at && !e.opted_out).length} autorizados para llamada · {empresas.filter(e => e.opted_out).length} bajas · {empresas.length} total
                         </CardDescription>
                       </div>
                       <button onClick={exportEmpresaCSV} title="Exportar CSV" className="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1 border border-emerald-500/30 px-2.5 py-1 rounded-lg hover:bg-emerald-500/10 transition-all">⬇ CSV</button>
@@ -2686,6 +2686,7 @@ export default function AdminDashboard() {
                         className="bg-gray-700 border border-gray-600 text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none">
                         <option value="all">Todos</option>
                         <option value="active">Activos</option>
+                        <option value="call_authorized">Llamada autorizada</option>
                         <option value="baja">Bajas</option>
                       </select>
                       <select value={empresaCompanyFilter} onChange={e => setEmpresaCompanyFilter(e.target.value)}
@@ -2732,7 +2733,10 @@ export default function AdminDashboard() {
                       ) : (() => {
                         const filtered = empresas.filter(e => {
                           const matchSearch = !empresaSearch || (e.email || "").toLowerCase().includes(empresaSearch.toLowerCase()) || (e.name || "").toLowerCase().includes(empresaSearch.toLowerCase()) || (e.company || "").toLowerCase().includes(empresaSearch.toLowerCase()) || (e.phone || "").toLowerCase().includes(empresaSearch.toLowerCase());
-                          const matchStatus = empresaStatusFilter === "all" || (empresaStatusFilter === "active" && !e.opted_out) || (empresaStatusFilter === "baja" && e.opted_out);
+                          const matchStatus = empresaStatusFilter === "all"
+                            || (empresaStatusFilter === "active" && !e.opted_out)
+                            || (empresaStatusFilter === "call_authorized" && e.call_authorized && !e.call_authorization_revoked_at && !e.opted_out)
+                            || (empresaStatusFilter === "baja" && e.opted_out);
                           const matchCompany = empresaCompanyFilter === "all" || e.company === empresaCompanyFilter;
                           const matchSize = empresaSizeFilter === "all" || (e.company_size || "unclassified") === empresaSizeFilter;
                           const matchProvincia = empresaProvinciaFilter === "all" || e.provincia === empresaProvinciaFilter;
@@ -2756,6 +2760,11 @@ export default function AdminDashboard() {
                                 {e.language === 'en_fr' && <span className="text-yellow-300 text-xs bg-yellow-500/15 px-1.5 rounded font-semibold">EN·FR</span>}
                                 {e.campaigns_sent > 0 && <span className="text-blue-400 text-xs bg-blue-500/10 px-1.5 rounded">📧 {e.campaigns_sent}</span>}
                                 {e.phone && <span className="text-emerald-300 text-xs bg-emerald-500/10 px-1.5 rounded">📞</span>}
+                                {e.call_authorized && !e.call_authorization_revoked_at && !e.opted_out && (
+                                  <span className="text-emerald-200 text-xs bg-emerald-500/20 border border-emerald-500/30 px-1.5 rounded font-semibold">
+                                    ✓ llamada autorizada
+                                  </span>
+                                )}
                                 {e.address && <span className="text-emerald-300 text-xs bg-emerald-500/10 px-1.5 rounded">📍</span>}
                                 {(e.municipio || e.provincia) && <span className="text-gray-500 text-xs">{[e.municipio, e.provincia].filter(Boolean).join(", ")}</span>}
                                 {e.employee_count != null && <span className="text-gray-500 text-xs">👥 {e.employee_count}</span>}

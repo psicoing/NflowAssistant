@@ -55,6 +55,42 @@ export function buildSkrillLink(params: { nombre: string; apellidos: string; ema
 // -------------------------------------------------------
 
 const OWNER_EMAIL = "rmportbou@gmail.com";
+export const EMPRESA_CURRENT_CALL_NUMBER = "+1 781 782 2371";
+export const EMPRESA_CALL_NUMBER_NOTICE =
+  `De momento, la llamada aparecerá desde el número estadounidense ${EMPRESA_CURRENT_CALL_NUMBER}. Te lo indicamos para que puedas reconocerla y no cuelgues al recibirla. Próximamente utilizaremos un número español.`;
+
+function getCallConsentSecret(): string {
+  const secret = process.env.SESSION_SECRET;
+  if (!secret) throw new Error("SESSION_SECRET is required for company call-consent links");
+  return secret;
+}
+
+export function generateEmpresaCallConsentToken(empresaId: number): string {
+  const payload = String(empresaId);
+  const signature = crypto
+    .createHmac("sha256", getCallConsentSecret())
+    .update(`empresa-call-consent:${payload}`)
+    .digest("base64url");
+  return `${payload}.${signature}`;
+}
+
+export function verifyEmpresaCallConsentToken(token: unknown): number | null {
+  if (typeof token !== "string") return null;
+  const [payload, signature] = token.split(".");
+  if (!payload || !signature || !/^\d+$/.test(payload)) return null;
+  const expected = crypto
+    .createHmac("sha256", getCallConsentSecret())
+    .update(`empresa-call-consent:${payload}`)
+    .digest("base64url");
+  const providedBuffer = Buffer.from(signature);
+  const expectedBuffer = Buffer.from(expected);
+  if (
+    providedBuffer.length !== expectedBuffer.length ||
+    !crypto.timingSafeEqual(providedBuffer, expectedBuffer)
+  ) return null;
+  const id = Number(payload);
+  return Number.isSafeInteger(id) && id > 0 ? id : null;
+}
 
 export async function sendOwnerNotification(params: {
   tipo: "individual" | "empresa_media" | "licitacion";
@@ -731,8 +767,11 @@ export async function sendEmpresaEmail(params: {
       console.error(`sendEmpresaEmail: no hay remitente configurado para ${brand.id}`);
       return { ok: false };
     }
-    const uid = Buffer.from(params.empresaId.toString()).toString("base64url");
+     const uid = Buffer.from(params.empresaId.toString()).toString("base64url");
     const unsubscribeUrl = `https://nuxa.life/api/unsubscribe-empresa?uid=${uid}`;
+     const callConsentUrl = params.empresaId > 0
+       ? `https://nuxa.life/api/empresa-call-consent?token=${encodeURIComponent(generateEmpresaCallConsentToken(params.empresaId))}`
+       : "";
 
     const escapeHtml = (value: string) => value
       .replace(/&/g, "&amp;")
@@ -759,7 +798,23 @@ export async function sendEmpresaEmail(params: {
           <p style="margin:6px 0 0;color:rgba(255,255,255,0.82);font-size:14px;">${escapeHtml(brand.tagline)}</p>
         </td></tr>
         <tr><td style="padding:32px;">
-          ${bodyHtml}
+           ${bodyHtml}
+           ${callConsentUrl ? `
+           <div style="margin-top:26px;padding:20px 18px;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;text-align:center;">
+             <p style="margin:0 0 8px;color:#166534;font-size:15px;font-weight:700;">¿Te interesa hablar un momento con NUXA?</p>
+             <p style="margin:0 0 16px;color:#374151;font-size:13px;line-height:1.6;">
+               Puedes autorizar una llamada breve con nuestra asistente de IA para conocerla. Después podrás contactar con nosotros directamente si te interesa; no queremos repetirte comunicaciones.
+             </p>
+             <p style="margin:0 0 16px;padding:10px 12px;background:#fffbeb;border-radius:8px;color:#92400e;font-size:12px;line-height:1.55;text-align:left;">
+               <strong>Importante:</strong> de momento, la llamada aparecerá desde el número estadounidense <strong>${EMPRESA_CURRENT_CALL_NUMBER}</strong>. Te lo indicamos para que puedas reconocerla y no cuelgues al recibirla. Próximamente utilizaremos un número español.
+             </p>
+             <a href="${callConsentUrl}" style="display:inline-block;padding:12px 22px;background:${brand.accent};color:#ffffff;font-size:13px;font-weight:700;border-radius:8px;text-decoration:none;">
+               ✅ Autorizar una llamada breve con NUXA
+             </a>
+             <p style="margin:12px 0 0;color:#6b7280;font-size:11px;line-height:1.5;">
+               El enlace te permitirá confirmar el teléfono y retirar el permiso cuando quieras.
+             </p>
+           </div>` : ""}
         </td></tr>
         <tr><td style="padding:24px 32px;background:${brand.softBackground};border-top:2px solid ${brand.accent};text-align:center;">
           <p style="margin:0 0 10px;font-size:11px;color:#9ca3af;">
@@ -796,7 +851,7 @@ export async function sendEmpresaEmail(params: {
             replyTo: { email: EMPRESA_SHARED_FROM_EMAIL, name: fromName },
             to: params.email,
             subject: params.subject,
-            text: `${params.body}\n\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
+       text: `${params.body}\n\n${callConsentUrl ? `¿Te interesa hablar un momento con NUXA?\nAutoriza una llamada breve con nuestra asistente de IA: ${callConsentUrl}\n${EMPRESA_CALL_NUMBER_NOTICE}\nDespués podrás contactar con nosotros directamente si te interesa; no queremos repetirte comunicaciones.\n` : ""}\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
             html,
             ...(params.campaignId ? { categories: [`empresa-${params.campaignId}`] } : {}),
           });
@@ -819,7 +874,7 @@ export async function sendEmpresaEmail(params: {
       replyTo: EMPRESA_SHARED_FROM_EMAIL,
       to: params.email,
       subject: params.subject,
-      text: `${params.body}\n\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
+        text: `${params.body}\n\n${callConsentUrl ? `¿Te interesa hablar un momento con NUXA?\nAutoriza una llamada breve con nuestra asistente de IA: ${callConsentUrl}\n${EMPRESA_CALL_NUMBER_NOTICE}\nDespués podrás contactar con nosotros directamente si te interesa; no queremos repetirte comunicaciones.\n` : ""}\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
       html,
       ...(tags ? { tags } : {}),
     });
