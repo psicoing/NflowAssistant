@@ -57,3 +57,15 @@ updated, and a provisioning retry risks charging the wrong Twilio account or buy
 **How to apply:** gate provisioning routes behind admin authentication, validate the submitted
 Account SID, check existing numbers before buying, configure the webhook at purchase time, and
 return the purchased number to the panel.
+
+## Do not use a custom domain for Twilio while its TLS certificate is unavailable
+A custom domain can resolve correctly in DNS but still terminate the TLS handshake without
+presenting a certificate. Twilio then plays its generic English application-error message before
+the request ever reaches the webhook, so there are no application logs to diagnose.
+
+**Why:** the voice webhook failed this way while the deployment's generated Replit domain remained
+reachable with a valid HTTPS response.
+
+**How to apply:** verify the exact webhook hostname with an external TLS/HTTPS check before blaming
+Twilio or OpenAI. Until the custom-domain certificate is healthy, use the deployment's generated
+`replit.app` domain consistently for both the TwiML webhook and Media Streams signature validation.

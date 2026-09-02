@@ -45,4 +45,4 @@ timeoutMs = 20000
 [userenv]
 
 [userenv.shared]
-VOICE_DEMO_PUBLIC_URL = "https://nflow.jobda.es"
+VOICE_DEMO_PUBLIC_URL = "https://nflow-assistant-rmportbou.replit.app"
