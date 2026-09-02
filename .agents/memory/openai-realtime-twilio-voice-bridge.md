@@ -72,3 +72,15 @@ Twilio or OpenAI. Until the custom-domain certificate is healthy, use the deploy
 When a deployment exposes several approved domains, validate Twilio signatures against the
 explicit configured URL and every runtime-provided Replit domain; choosing only the first domain
 can reject legitimate requests after a webhook hostname change.
+
+## Release turn state immediately when cancelling Realtime audio
+When the caller interrupts an active response, clearing Twilio audio and sending
+`response.cancel` is not enough: the local active-response flag must also be released immediately.
+
+**Why:** a cancelled response may not emit the completion event the bridge normally relies on.
+Leaving the flag active blocks the caller's next `speech_stopped` event and produces a call that
+starts correctly, then remains silent.
+
+**How to apply:** clear local response state when cancellation is sent, buffer a short amount of
+early caller audio until the OpenAI socket is ready, and keep VAD thresholds tolerant enough for
+ordinary mobile-call volume.

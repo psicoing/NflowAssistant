@@ -224,13 +224,24 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
   let streamSid: string | null = null;
   let callSid: string | null = null;
   let responseActive = false;
+  let openaiReady = false;
+  const pendingAudio: string[] = [];
 
   const openaiWs = new WebSocket(`wss://api.openai.com/v1/realtime?model=${REALTIME_MODEL}`, {
     headers: { Authorization: `Bearer ${apiKey}` },
   });
 
   openaiWs.on("open", () => {
+    openaiReady = true;
     log("Voice demo: conectado a OpenAI Realtime", "voice-demo");
+    while (pendingAudio.length > 0 && openaiWs.readyState === WebSocket.OPEN) {
+      openaiWs.send(
+        JSON.stringify({
+          type: "input_audio_buffer.append",
+          audio: pendingAudio.shift(),
+        }),
+      );
+    }
   });
 
   openaiWs.on("message", (raw) => {
@@ -259,9 +270,9 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
                      type: "server_vad",
                       // Un umbral algo más alto evita que el ruido de línea
                       // active falsos turnos durante el mensaje comercial.
-                      threshold: 0.65,
+                       threshold: 0.55,
                      prefix_padding_ms: 300,
-                      silence_duration_ms: 850,
+                       silence_duration_ms: 700,
                       // Las respuestas se crean al recibir speech_stopped para
                       // poder limitar cada turno y evitar monólogos.
                       create_response: false,
@@ -322,6 +333,10 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
           twilioWs.send(JSON.stringify({ event: "clear", streamSid }));
         }
         if (responseActive && openaiWs.readyState === WebSocket.OPEN) {
+          // El evento response.done puede no llegar después de cancelar una
+          // respuesta. Liberamos el estado inmediatamente para no bloquear el
+          // turno siguiente cuando llegue speech_stopped.
+          responseActive = false;
           openaiWs.send(JSON.stringify({ type: "response.cancel" }));
         }
         break;
@@ -330,7 +345,8 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
         // Con create_response=false, este es el único punto donde se genera
         // una respuesta a la persona. Así cada turno puede limitarse y NUXA
         // no continúa con un discurso después de hacer una pregunta.
-        if (!responseActive && openaiWs.readyState === WebSocket.OPEN) {
+        if (openaiWs.readyState === WebSocket.OPEN) {
+          responseActive = true;
           openaiWs.send(
             JSON.stringify({
               type: "response.create",
@@ -396,7 +412,9 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
         break;
 
       case "media":
-        if (openaiWs.readyState === WebSocket.OPEN && msg.media?.payload) {
+        if (msg.media?.payload && !openaiReady && pendingAudio.length < 100) {
+          pendingAudio.push(msg.media.payload);
+        } else if (openaiWs.readyState === WebSocket.OPEN && msg.media?.payload) {
           openaiWs.send(
             JSON.stringify({
               type: "input_audio_buffer.append",
