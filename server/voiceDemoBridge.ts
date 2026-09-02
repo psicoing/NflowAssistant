@@ -22,26 +22,39 @@ const MAX_CONCURRENT_CALLS = 3;
 let activeCalls = 0;
 
 /**
- * Dominio público canónico usado tanto para construir la URL del <Stream>
- * en el TwiML como para validar la firma de Twilio. Nunca se debe derivar
- * del header Host de la petición entrante (no es de confianza).
+ * Dominios públicos permitidos para construir URLs y validar firmas de Twilio.
+ * Nunca se derivan del header Host de la petición entrante (no es de confianza).
  */
-export function getVoiceDemoPublicDomain(): string {
+export function getVoiceDemoAllowedDomains(): string[] {
+  const domains: string[] = [];
+  const addDomain = (candidate: string | undefined) => {
+    const value = candidate?.trim();
+    if (!value) return;
+    const parsed = new URL(value.includes("://") ? value : `https://${value}`);
+    if (parsed.protocol !== "https:") return;
+    if (!domains.includes(parsed.host)) domains.push(parsed.host);
+  };
+
   const configuredPublicUrl = process.env.VOICE_DEMO_PUBLIC_URL?.trim();
   if (configuredPublicUrl) {
     const parsed = new URL(configuredPublicUrl);
     if (parsed.protocol !== "https:") {
       throw new Error("VOICE_DEMO_PUBLIC_URL debe usar HTTPS");
     }
-    return parsed.host;
+    addDomain(configuredPublicUrl);
   }
 
-  const fromDomains = process.env.REPLIT_DOMAINS?.split(",")[0]?.trim();
-  const domain = fromDomains || process.env.REPLIT_DEV_DOMAIN;
-  if (!domain) {
+  process.env.REPLIT_DOMAINS?.split(",").forEach(addDomain);
+  addDomain(process.env.REPLIT_DEV_DOMAIN);
+
+  if (domains.length === 0) {
     throw new Error("No se pudo determinar el dominio público de la demo de voz");
   }
-  return domain;
+  return domains;
+}
+
+export function getVoiceDemoPublicDomain(): string {
+  return getVoiceDemoAllowedDomains()[0];
 }
 
 export function getVoiceDemoIncomingCallUrl(): string {
@@ -70,21 +83,36 @@ export function getVoiceDemoOutboundStatusUrl(): string {
  * configurado, la validación no puede hacerse (se registra y se rechaza:
  * fail closed).
  */
-function isValidTwilioStreamSignature(signature: string | undefined, streamUrl: string): boolean {
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
+export function isValidTwilioVoiceSignature(
+  authToken: string | undefined,
+  signature: string | undefined,
+  path: string,
+  params: Record<string, any> = {},
+  protocol: "https" | "wss" = "https",
+): boolean {
   if (!authToken) {
-    console.error("Voice demo: TWILIO_AUTH_TOKEN no configurado, no se puede validar el WebSocket entrante");
     return false;
   }
   if (!signature) {
     return false;
   }
-  // Twilio recomienda probar con una barra final si la validación falla,
-  // ver docs de seguridad de Twilio ("For voice WSS handshake requests").
-  return (
-    twilio.validateRequest(authToken, signature, streamUrl, {}) ||
-    twilio.validateRequest(authToken, signature, `${streamUrl}/`, {})
-  );
+  return getVoiceDemoAllowedDomains().some((domain) => {
+    const url = `${protocol}://${domain}${path}`;
+    // Twilio recomienda probar con una barra final para firmas WSS.
+    return (
+      twilio.validateRequest(authToken, signature, url, params) ||
+      (protocol === "wss" && twilio.validateRequest(authToken, signature, `${url}/`, params))
+    );
+  });
+}
+
+function isValidTwilioStreamSignature(signature: string | undefined, streamPath: string): boolean {
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  if (!authToken) {
+    console.error("Voice demo: TWILIO_AUTH_TOKEN no configurado, no se puede validar el WebSocket entrante");
+    return false;
+  }
+  return isValidTwilioVoiceSignature(authToken, signature, streamPath, {}, "wss");
 }
 
 const REALTIME_MODEL = "gpt-realtime";
@@ -149,8 +177,8 @@ export function attachVoiceDemoWebSocket(httpServer: Server) {
     }
 
     const signature = req.headers["x-twilio-signature"] as string | undefined;
-    const streamUrl = isOutboundStream ? getVoiceDemoOutboundStreamUrl() : getVoiceDemoStreamUrl();
-    if (!isValidTwilioStreamSignature(signature, streamUrl)) {
+    const streamPath = isOutboundStream ? VOICE_DEMO_OUTBOUND_STREAM_PATH : VOICE_DEMO_STREAM_PATH;
+    if (!isValidTwilioStreamSignature(signature, streamPath)) {
       console.warn("Voice demo: WebSocket rechazado, firma de Twilio ausente o inválida");
       socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");
       socket.destroy();

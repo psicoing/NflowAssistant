@@ -69,3 +69,6 @@ reachable with a valid HTTPS response.
 **How to apply:** verify the exact webhook hostname with an external TLS/HTTPS check before blaming
 Twilio or OpenAI. Until the custom-domain certificate is healthy, use the deployment's generated
 `replit.app` domain consistently for both the TwiML webhook and Media Streams signature validation.
+When a deployment exposes several approved domains, validate Twilio signatures against the
+explicit configured URL and every runtime-provided Replit domain; choosing only the first domain
+can reject legitimate requests after a webhook hostname change.

@@ -46,6 +46,7 @@ import {
   getVoiceDemoOutboundCallUrl,
   getVoiceDemoOutboundStreamUrl,
   getVoiceDemoOutboundStatusUrl,
+  isValidTwilioVoiceSignature,
 } from "./voiceDemoBridge";
 import { EMPRESA_LEGACY_NUXA_FROM_EMAIL, EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandStatuses, getEmpresaBrandStatus, isEmpresaBrand, type EmpresaBrand } from "./empresaBrands";
 import { db, pool } from "./db";
@@ -4686,8 +4687,12 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       console.error("Voice demo: TWILIO_AUTH_TOKEN no configurado, no se puede validar el webhook");
       return res.status(403).send("Not configured");
     }
-    const fullUrl = getVoiceDemoIncomingCallUrl();
-    const valid = !!signature && twilio.validateRequest(authToken, signature, fullUrl, req.body || {});
+    const valid = isValidTwilioVoiceSignature(
+      authToken,
+      signature,
+      "/api/voice-demo/incoming-call",
+      req.body || {},
+    );
     if (!valid) {
       console.warn("Voice demo: firma de Twilio inválida o ausente, petición rechazada");
       return res.status(403).send("Invalid signature");
@@ -4711,8 +4716,12 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       console.error("Voice demo: TWILIO_AUTH_TOKEN no configurado, no se puede validar la llamada saliente");
       return res.status(403).send("Not configured");
     }
-    const fullUrl = getVoiceDemoOutboundCallUrl();
-    const valid = !!signature && twilio.validateRequest(authToken, signature, fullUrl, req.body || {});
+    const valid = isValidTwilioVoiceSignature(
+      authToken,
+      signature,
+      "/api/voice-demo/outbound-call",
+      req.body || {},
+    );
     if (!valid) {
       console.warn("Voice demo: firma inválida en el webhook de llamada saliente");
       return res.status(403).send("Invalid signature");
@@ -4734,8 +4743,12 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     const signature = req.header("X-Twilio-Signature");
     if (!authToken) return res.status(403).send("Not configured");
 
-    const fullUrl = getVoiceDemoOutboundStatusUrl();
-    const valid = !!signature && twilio.validateRequest(authToken, signature, fullUrl, req.body || {});
+    const valid = isValidTwilioVoiceSignature(
+      authToken,
+      signature,
+      "/api/voice-demo/outbound-status",
+      req.body || {},
+    );
     if (!valid) return res.status(403).send("Invalid signature");
 
     const callSid = typeof req.body?.CallSid === "string" ? req.body.CallSid : "unknown";
