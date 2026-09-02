@@ -224,6 +224,7 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
   let streamSid: string | null = null;
   let callSid: string | null = null;
   let responseActive = false;
+  let responseRequestPending = false;
   let openaiReady = false;
   const pendingAudio: string[] = [];
 
@@ -270,9 +271,9 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
                      type: "server_vad",
                       // Un umbral algo más alto evita que el ruido de línea
                       // active falsos turnos durante el mensaje comercial.
-                       threshold: 0.55,
+                       threshold: 0.65,
                      prefix_padding_ms: 300,
-                       silence_duration_ms: 700,
+                       silence_duration_ms: 800,
                       // Las respuestas se crean al recibir speech_stopped para
                       // poder limitar cada turno y evitar monólogos.
                       create_response: false,
@@ -307,10 +308,12 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
 
       case "response.created":
         responseActive = true;
+        responseRequestPending = false;
         break;
 
       case "response.done":
         responseActive = false;
+        responseRequestPending = false;
         break;
 
       case "response.output_audio.delta":
@@ -337,6 +340,7 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
           // respuesta. Liberamos el estado inmediatamente para no bloquear el
           // turno siguiente cuando llegue speech_stopped.
           responseActive = false;
+          responseRequestPending = false;
           openaiWs.send(JSON.stringify({ type: "response.cancel" }));
         }
         break;
@@ -345,8 +349,12 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
         // Con create_response=false, este es el único punto donde se genera
         // una respuesta a la persona. Así cada turno puede limitarse y NUXA
         // no continúa con un discurso después de hacer una pregunta.
-        if (openaiWs.readyState === WebSocket.OPEN) {
-          responseActive = true;
+        if (
+          !responseActive &&
+          !responseRequestPending &&
+          openaiWs.readyState === WebSocket.OPEN
+        ) {
+          responseRequestPending = true;
           openaiWs.send(
             JSON.stringify({
               type: "response.create",

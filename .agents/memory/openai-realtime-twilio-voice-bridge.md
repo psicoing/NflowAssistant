@@ -83,4 +83,6 @@ starts correctly, then remains silent.
 
 **How to apply:** clear local response state when cancellation is sent, buffer a short amount of
 early caller audio until the OpenAI socket is ready, and keep VAD thresholds tolerant enough for
-ordinary mobile-call volume.
+ordinary mobile-call volume. Track a requested response separately from one confirmed active by
+`response.created`; never send `response.cancel` for a merely pending request, because OpenAI
+rejects it and repeated false VAD triggers make Twilio audio sound clipped.
