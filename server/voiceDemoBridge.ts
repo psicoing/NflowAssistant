@@ -27,10 +27,19 @@ let activeCalls = 0;
  * del header Host de la petición entrante (no es de confianza).
  */
 export function getVoiceDemoPublicDomain(): string {
+  const configuredPublicUrl = process.env.VOICE_DEMO_PUBLIC_URL?.trim();
+  if (configuredPublicUrl) {
+    const parsed = new URL(configuredPublicUrl);
+    if (parsed.protocol !== "https:") {
+      throw new Error("VOICE_DEMO_PUBLIC_URL debe usar HTTPS");
+    }
+    return parsed.host;
+  }
+
   const fromDomains = process.env.REPLIT_DOMAINS?.split(",")[0]?.trim();
   const domain = fromDomains || process.env.REPLIT_DEV_DOMAIN;
   if (!domain) {
-    throw new Error("No se pudo determinar el dominio público (REPLIT_DOMAINS/REPLIT_DEV_DOMAIN no definidos)");
+    throw new Error("No se pudo determinar el dominio público de la demo de voz");
   }
   return domain;
 }

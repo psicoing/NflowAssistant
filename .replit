@@ -41,3 +41,8 @@ integrations = ["javascript_paypal:1.0.0", "javascript_stripe:1.0.0", "javascrip
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 20000
+
+[userenv]
+
+[userenv.shared]
+VOICE_DEMO_PUBLIC_URL = "https://nflow.jobda.es"

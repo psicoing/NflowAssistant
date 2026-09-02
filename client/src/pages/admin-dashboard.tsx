@@ -174,6 +174,8 @@ export default function AdminDashboard() {
   const [twilioChecking, setTwilioChecking] = useState(false);
   const [twilioPurchasing, setTwilioPurchasing] = useState(false);
   const [twilioPurchaseMessage, setTwilioPurchaseMessage] = useState<string | null>(null);
+  const [twilioWebhookRepairing, setTwilioWebhookRepairing] = useState(false);
+  const [twilioWebhookMessage, setTwilioWebhookMessage] = useState<string | null>(null);
   const [twilioOutboundTo, setTwilioOutboundTo] = useState("");
   const [twilioOutboundCalling, setTwilioOutboundCalling] = useState(false);
   const [twilioOutboundMessage, setTwilioOutboundMessage] = useState<string | null>(null);
@@ -249,6 +251,44 @@ export default function AdminDashboard() {
       setTwilioPurchaseMessage(error?.message || "No se pudo comprar el número.");
     } finally {
       setTwilioPurchasing(false);
+    }
+  };
+  const repairTwilioVoiceWebhook = async () => {
+    const accountSid = twilioAccountSid.trim();
+    const number = twilioCheckResult?.numbers?.find((item) => item.capabilities.includes("voice"));
+    if (!/^AC[a-f0-9]{32}$/i.test(accountSid) || !number?.phoneNumber) {
+      setTwilioWebhookMessage("Comprueba primero la cuenta y selecciona un número con capacidad de voz.");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Se actualizará el webhook de llamadas entrantes de ${number.phoneNumber} para conectarlo con la versión publicada de NUXA. ¿Quieres continuar?`,
+    );
+    if (!confirmed) return;
+
+    setTwilioWebhookRepairing(true);
+    setTwilioWebhookMessage(null);
+    try {
+      const response = await fetch("/api/admin/twilio/configure-voice-webhook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountSid, phoneNumber: number.phoneNumber }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "No se pudo reparar el webhook de voz.");
+      setTwilioCheckResult((current) => ({
+        ...current,
+        numbers: current?.numbers?.map((item) =>
+          item.phoneNumber === data.phoneNumber
+            ? { ...item, voiceUrl: data.voiceUrl, voiceMethod: data.voiceMethod }
+            : item,
+        ),
+      }));
+      setTwilioWebhookMessage("Conexión de llamadas entrantes reparada correctamente.");
+    } catch (error: any) {
+      setTwilioWebhookMessage(error?.message || "No se pudo reparar el webhook de voz.");
+    } finally {
+      setTwilioWebhookRepairing(false);
     }
   };
   const startTwilioOutboundTestCall = async () => {
@@ -3154,10 +3194,34 @@ export default function AdminDashboard() {
                       <p><strong>Saldo:</strong> {twilioCheckResult.balance} {twilioCheckResult.currency} · <strong>Caller IDs verificados:</strong> {twilioCheckResult.verifiedCallerIds}</p>
                       <p><strong>Números comprados:</strong> {twilioCheckResult.numbers?.length || 0}</p>
                       {twilioCheckResult.numbers?.map((number) => (
-                        <p key={number.phoneNumber} className="font-mono text-xs">
-                          {number.phoneNumber} · {number.capabilities.join(", ") || "sin capacidades"}
-                        </p>
+                        <div key={number.phoneNumber} className="space-y-0.5">
+                          <p className="font-mono text-xs">
+                            {number.phoneNumber} · {number.capabilities.join(", ") || "sin capacidades"}
+                          </p>
+                          {number.voiceUrl && (
+                            <p className="text-xs text-emerald-300/80 break-all">
+                              Webhook: {number.voiceMethod || "POST"} {number.voiceUrl}
+                            </p>
+                          )}
+                        </div>
                       ))}
+                      {twilioCheckResult.numbers?.some((number) => number.capabilities.includes("voice")) && (
+                        <div className="pt-2 space-y-2">
+                          <Button
+                            type="button"
+                            onClick={repairTwilioVoiceWebhook}
+                            disabled={twilioWebhookRepairing}
+                            className="bg-emerald-600 hover:bg-emerald-700"
+                          >
+                            {twilioWebhookRepairing ? "Reparando conexión…" : "Reparar conexión de llamadas"}
+                          </Button>
+                          {twilioWebhookMessage && (
+                            <p className={`text-xs ${twilioWebhookMessage.includes("correctamente") ? "text-emerald-300" : "text-red-300"}`}>
+                              {twilioWebhookMessage}
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
                   {twilioCheckResult?.status === "active" &&
@@ -3209,7 +3273,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="space-y-2 text-sm text-gray-300">
                     <p><strong className="text-white">Cómo probarlo:</strong> cuando aparezca el nuevo número, llama desde cualquier teléfono. NUXA se presentará y podrás hablar con ella en español como en una llamada normal.</p>
-                    <p><strong className="text-white">Qué evaluar:</strong> naturalidad de la voz, tiempo de respuesta, si te interrumpe o te deja hablar, y si las respuestas tienen sentido para una conversación de apoyo emocional.</p>
+                    <p><strong className="text-white">Qué evaluar:</strong> naturalidad de la voz, tiempo de respuesta, si te interrumpe o te deja hablar, y si mantiene una conversación comercial breve e interactiva.</p>
                   </div>
                   <div className="bg-yellow-900/20 border border-yellow-700/40 rounded-lg p-3 text-xs text-yellow-200 space-y-1">
                     <p>⚠️ Esto es solo una demo entrante para pruebas: no se usa para llamar a contactos, ni a empresas/instituciones/mutuas, ni para campañas reales.</p>

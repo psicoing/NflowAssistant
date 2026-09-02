@@ -4538,6 +4538,63 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     }
   });
 
+  app.post("/api/admin/twilio/configure-voice-webhook", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+
+    const accountSid = typeof req.body?.accountSid === "string"
+      ? req.body.accountSid.trim()
+      : "";
+    const phoneNumber = typeof req.body?.phoneNumber === "string"
+      ? req.body.phoneNumber.trim()
+      : "";
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+
+    if (!/^AC[a-f0-9]{32}$/i.test(accountSid)) {
+      return res.status(400).json({ message: "El Account SID no es válido." });
+    }
+    if (!/^\+[1-9]\d{7,14}$/.test(phoneNumber)) {
+      return res.status(400).json({ message: "El número de Twilio no es válido." });
+    }
+    if (!authToken) {
+      return res.status(503).json({ message: "Falta configurar el Auth Token de Twilio." });
+    }
+
+    try {
+      const client = twilio(accountSid, authToken);
+      const numbers = await client.incomingPhoneNumbers.list({ phoneNumber, limit: 20 });
+      const selected = numbers.find(
+        (number) => number.phoneNumber === phoneNumber && number.capabilities?.voice,
+      );
+      if (!selected) {
+        return res.status(404).json({
+          message: "No se encontró ese número con capacidad de voz en la cuenta comprobada.",
+        });
+      }
+
+      const voiceUrl = getVoiceDemoIncomingCallUrl();
+      const updated = await client.incomingPhoneNumbers(selected.sid).update({
+        voiceUrl,
+        voiceMethod: "POST",
+      });
+
+      return res.json({
+        message: "Webhook de voz actualizado correctamente.",
+        phoneNumber: updated.phoneNumber,
+        voiceUrl: updated.voiceUrl,
+        voiceMethod: updated.voiceMethod,
+      });
+    } catch (error: any) {
+      const twilioCode = error?.code ? String(error.code) : undefined;
+      console.error("Twilio voice webhook update failed", twilioCode || "unknown");
+      return res.status(502).json({
+        message: twilioCode === "20003"
+          ? "Twilio no acepta este SID con el Auth Token configurado."
+          : "No se pudo actualizar el webhook de voz en Twilio.",
+        code: twilioCode,
+      });
+    }
+  });
+
   app.post("/api/admin/twilio/test-outbound-call", async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
 
