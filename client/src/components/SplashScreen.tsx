@@ -7,23 +7,28 @@ const SLIDES = [
     title: "NUXA",
     subtitle: "Tu app de salud mental y riesgos laborales",
     cta: "Pruébala gratis y sin tarjeta",
+    phoneLabel: "Llama al robot NUXA",
   },
   {
     lang: "EN",
     title: "NUXA",
     subtitle: "Your mental health & workplace wellbeing app",
     cta: "Try it free, no card required",
+    phoneLabel: "Call NUXA's AI assistant",
   },
   {
     lang: "FR",
     title: "NUXA",
     subtitle: "Votre application de santé mentale et de risques psychosociaux",
     cta: "Essayez-la gratuitement, sans carte",
+    phoneLabel: "Appelez l'assistant IA NUXA",
   },
 ];
 
 const TOTAL_DURATION_MS = 8000;
 const SLIDE_DURATION_MS = TOTAL_DURATION_MS / SLIDES.length;
+const NUXA_VOICE_PHONE = "+17817822371";
+const NUXA_VOICE_PHONE_DISPLAY = "+1 781 782 2371";
 
 export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -99,6 +104,21 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         <p className="text-white font-semibold text-base bg-gradient-to-r from-indigo-500 to-violet-500 inline-block px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-500/25">
           {slide.cta}
         </p>
+        <a
+          href={`tel:${NUXA_VOICE_PHONE}`}
+          aria-label={`${slide.phoneLabel}: ${NUXA_VOICE_PHONE_DISPLAY}`}
+          className="mt-5 inline-flex items-center gap-2 rounded-xl border border-cyan-400/70 bg-slate-950/70 px-4 py-2.5 text-sm font-semibold text-cyan-100 shadow-[0_0_14px_rgba(34,211,238,0.22)] transition-colors hover:border-cyan-300 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-slate-950"
+        >
+          <span aria-hidden="true">☎</span>
+          <span>
+            <span className="block text-[11px] font-medium uppercase tracking-wide text-cyan-300/80">
+              {slide.phoneLabel}
+            </span>
+            <span className="block text-base tracking-wide" dir="ltr">
+              {NUXA_VOICE_PHONE_DISPLAY}
+            </span>
+          </span>
+        </a>
       </div>
 
       <div className="absolute bottom-10 flex gap-2">
