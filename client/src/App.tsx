@@ -6,7 +6,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { useAuth } from "@/hooks/useAuth";
 import { lazy, Suspense, useEffect, useState } from "react";
-import SplashScreen, { hasSplashBeenShown, markSplashShown } from "@/components/SplashScreen";
+import SplashScreen, {
+  hasSplashBeenShown,
+  isInPreviewWebview,
+  markSplashShown,
+} from "@/components/SplashScreen";
 import PWAInstallPrompt from "@/components/ui/pwa-install-prompt";
 import { CookieConsent } from "@/components/ui/cookie-consent";
 import FloatingCTAButton from "@/components/FloatingCTAButton";
@@ -172,13 +176,16 @@ function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
   const standaloneTools = ["/test-bienestar", "/calculadora-burnout"];
   const isStandaloneTool = standaloneTools.includes(location);
+  const isPreviewWebview = isInPreviewWebview();
   const [, setLocation] = useLocation();
   // Mostrar splash solo si no se ha visto ya en esta sesión/cuenta
   // The splash is an entry experience for the home page, not an interstitial
   // for deep links. Public URLs such as blog articles must render directly so
   // shared links and search results reach their intended content.
   const [showSplash, setShowSplash] = useState(
-    () => location === "/" && !hasSplashBeenShown() && !isStandaloneTool,
+    () =>
+      !isStandaloneTool &&
+      (isPreviewWebview || (location === "/" && !hasSplashBeenShown())),
   );
 
   // Si auth carga y el usuario ya vio el splash → saltarlo

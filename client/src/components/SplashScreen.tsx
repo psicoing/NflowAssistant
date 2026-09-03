@@ -135,9 +135,12 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
   );
 }
 
-function isInPreviewWebview() {
+export function isInPreviewWebview() {
   try {
-    return window.self !== window.top;
+    // Replit can render the preview as a top-level dev page or as an iframe.
+    // DEV covers both forms; the frame check also keeps embedded previews fresh
+    // when they are served outside the Vite development host.
+    return import.meta.env.DEV || window.self !== window.top;
   } catch {
     return true;
   }
