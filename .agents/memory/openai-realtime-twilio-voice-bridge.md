@@ -86,3 +86,15 @@ early caller audio until the OpenAI socket is ready, and keep VAD thresholds tol
 ordinary mobile-call volume. Track a requested response separately from one confirmed active by
 `response.created`; never send `response.cancel` for a merely pending request, because OpenAI
 rejects it and repeated false VAD triggers make Twilio audio sound clipped.
+
+## Voice demo language selection starts in English
+The phone demo opens in English and asks whether the caller prefers English or Spanish; after the
+choice, the assistant should stay in that language. Spanish responses remain specifically
+peninsular Spanish, while the phone call remains commercial rather than psychological support.
+
+**Why:** the first greeting needs to be understandable to international callers without weakening
+the existing Spanish-market positioning or moving psychological care into the phone call.
+
+**How to apply:** keep the initial greeting and per-turn language instruction aligned in both
+inbound and authorized outbound demo modes; test the language choice on a real call after
+publishing.
