@@ -98,3 +98,13 @@ the existing Spanish-market positioning or moving psychological care into the ph
 **How to apply:** keep the initial greeting and per-turn language instruction aligned in both
 inbound and authorized outbound demo modes; test the language choice on a real call after
 publishing.
+
+## Approved phone CTA presentation
+The localized phone CTA on the opening splash is an accepted pattern: a visible, accessible
+`tel:` link presented as a compact dark capsule with a cyan border and clear localized label.
+
+**Why:** this makes the voice demo immediately discoverable without relying on an image or
+requiring users to copy a number manually.
+
+**How to apply:** reuse the same presentation for future voice-contact entry points unless a
+different context needs a more prominent call-to-action.
