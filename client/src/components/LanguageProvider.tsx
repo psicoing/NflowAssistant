@@ -1,5 +1,6 @@
 import { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { Language, languages, translations } from '@/hooks/useLanguage';
+import { trackEvent } from '@/lib/analytics';
 
 interface LanguageContextType {
   currentLanguage: Language;
@@ -39,6 +40,12 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   }, []);
 
   const changeLanguage = (language: Language) => {
+    if (language !== currentLanguage) {
+      trackEvent('language_selected', {
+        language,
+        previous_language: currentLanguage,
+      });
+    }
     setCurrentLanguage(language);
     localStorage.setItem('nflow-language', language);
   };

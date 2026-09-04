@@ -21,6 +21,7 @@ import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import type { Conversation, Message } from "@shared/schema";
 import { SEOHead } from "@/components/SEOHead";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Chat() {
   const { id } = useParams<{ id?: string }>();
@@ -177,12 +178,21 @@ export default function Chat() {
       return response.json();
     },
     onSuccess: () => {
+      trackEvent("chat_message_succeeded", {
+        chat_mode: chatMode,
+        language: currentLanguage,
+      });
       refetchMessages();
       queryClient.invalidateQueries({ queryKey: ["/api/conversations"] });
       queryClient.invalidateQueries({ queryKey: ["/api/question-limit"] });
     },
     onError: (error: any) => {
       console.error("Error sending message:", error);
+      trackEvent("chat_message_failed", {
+        chat_mode: chatMode,
+        language: currentLanguage,
+        reason: error.message?.includes("429") ? "limit" : "network_or_server",
+      });
       
       // Handle question limit exceeded (429 status)
       if (error.message?.includes("429")) {

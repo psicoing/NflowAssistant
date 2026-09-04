@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SEOHead } from "@/components/SEOHead";
 import { apiRequest } from "@/lib/queryClient";
+import { trackEvent } from "@/lib/analytics";
 import { MessageCircle, CheckCircle, Sparkles, Lock, ArrowRight, CalendarClock, Trophy } from "lucide-react";
 
 export default function PruebaGratis() {
@@ -41,6 +42,10 @@ export default function PruebaGratis() {
     setLoading(true);
     try {
       await apiRequest("POST", "/api/prueba-gratis", form);
+      trackEvent("registration_succeeded", {
+        registration_type: "free_trial",
+        destination: "chat",
+      });
       // Auto-create a conversation so user lands directly in the chat
       // Use full page reload so auth state refreshes before route guard runs
       try {
@@ -53,10 +58,22 @@ export default function PruebaGratis() {
     } catch (err: any) {
       const msg = err?.message || "";
       if (msg.includes("429")) {
+        trackEvent("registration_failed", {
+          registration_type: "free_trial",
+          reason: "capacity",
+        });
         setCupoLleno(true);
       } else if (msg.includes("409") || msg.toLowerCase().includes("exist")) {
+        trackEvent("registration_failed", {
+          registration_type: "free_trial",
+          reason: "duplicate",
+        });
         setError("Ese nombre de usuario ya está en uso. Elige otro.");
       } else {
+        trackEvent("registration_failed", {
+          registration_type: "free_trial",
+          reason: "unknown",
+        });
         setError("Ha ocurrido un error. Inténtalo de nuevo.");
       }
     } finally {

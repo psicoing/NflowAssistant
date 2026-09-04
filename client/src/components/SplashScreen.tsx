@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import PsychologySeal from "@/components/ui/psychology-seal";
+import { trackEvent } from "@/lib/analytics";
 
 const SLIDES = [
   {
@@ -106,6 +107,12 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         </p>
         <a
           href={`tel:${NUXA_VOICE_PHONE}`}
+          onClick={() =>
+            trackEvent("splash_phone_cta_clicked", {
+              language: slide.lang.toLowerCase(),
+              placement: "splash",
+            })
+          }
           aria-label={`${slide.phoneLabel}: ${NUXA_VOICE_PHONE_DISPLAY}`}
           className="mt-5 inline-flex items-center gap-2 rounded-xl border border-cyan-400/70 bg-slate-950/70 px-4 py-2.5 text-sm font-semibold text-cyan-100 shadow-[0_0_14px_rgba(34,211,238,0.22)] transition-colors hover:border-cyan-300 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-slate-950"
         >

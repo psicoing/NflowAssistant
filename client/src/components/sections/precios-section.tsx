@@ -3,9 +3,22 @@ import { useLocation } from "wouter";
 import { Check, Shield, Star, Gem, Users, Building, FileSpreadsheet, Lock, UserCheck, Eye, Globe, Briefcase, FileText, ArrowRight } from "lucide-react";
 import PurchaseCreditsModal from "@/components/modals/purchase-credits-modal";
 import { useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 export default function PreciosSection() {
   const [, setLocation] = useLocation();
+  const selectPlan = (
+    planId: string,
+    billingModel: string,
+    destination: string,
+  ) => {
+    trackEvent("pricing_plan_selected", {
+      plan_id: planId,
+      billing_model: billingModel,
+      placement: "pricing_section",
+    });
+    setLocation(destination);
+  };
 
   const institutionalPlans = [
     { users: 5000, pricePerUser: 2.99, total: 14950 },
@@ -57,7 +70,7 @@ export default function PreciosSection() {
                   </li>
                 </ul>
                 <Button 
-                  onClick={() => setLocation("/login")}
+                  onClick={() => selectPlan("basic", "monthly", "/login")}
                   className="w-full bg-blue-600 hover:bg-blue-700"
                   data-testid="button-plan-basico"
                 >
@@ -95,7 +108,7 @@ export default function PreciosSection() {
                   </li>
                 </ul>
                 <Button 
-                  onClick={() => setLocation("/login")}
+                  onClick={() => selectPlan("individual", "monthly", "/login")}
                   className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
                   data-testid="button-plan-individual"
                 >
@@ -131,7 +144,7 @@ export default function PreciosSection() {
                   </li>
                 </ul>
                 <Button 
-                  onClick={() => setLocation("/login")}
+                  onClick={() => selectPlan("premium", "annual", "/login")}
                   className="w-full bg-purple-600 hover:bg-purple-700"
                   data-testid="button-plan-premium"
                 >
@@ -156,7 +169,19 @@ export default function PreciosSection() {
                 <div className="text-right">
                   <p className="text-2xl font-bold text-indigo-600">€5</p>
                   <PurchaseCreditsModal>
-                    <Button size="sm" variant="outline" className="mt-1 text-xs" data-testid="button-pack-basico">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="mt-1 text-xs"
+                      data-testid="button-pack-basico"
+                      onClick={() =>
+                        trackEvent("pricing_plan_selected", {
+                          plan_id: "credit_pack_basic",
+                          billing_model: "one_time",
+                          placement: "pricing_section",
+                        })
+                      }
+                    >
                       Comprar
                     </Button>
                   </PurchaseCreditsModal>
@@ -173,7 +198,18 @@ export default function PreciosSection() {
                 <div className="text-right">
                   <p className="text-2xl font-bold text-purple-600">€10</p>
                   <PurchaseCreditsModal>
-                    <Button size="sm" className="mt-1 text-xs bg-purple-600 hover:bg-purple-700" data-testid="button-pack-premium">
+                    <Button
+                      size="sm"
+                      className="mt-1 text-xs bg-purple-600 hover:bg-purple-700"
+                      data-testid="button-pack-premium"
+                      onClick={() =>
+                        trackEvent("pricing_plan_selected", {
+                          plan_id: "credit_pack_premium",
+                          billing_model: "one_time",
+                          placement: "pricing_section",
+                        })
+                      }
+                    >
                       Comprar
                     </Button>
                   </PurchaseCreditsModal>

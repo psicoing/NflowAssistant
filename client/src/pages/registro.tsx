@@ -8,6 +8,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { Link } from "wouter";
 import { useState } from "react";
 import { apiRequest } from "@/lib/queryClient";
+import { trackEvent } from "@/lib/analytics";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 
@@ -52,11 +53,24 @@ export default function Registro() {
       const res = await apiRequest("POST", "/api/stripe/create-pack-session", { packType, email: form.email });
       const data = await res.json();
       if (data.url) {
+        trackEvent("checkout_started", {
+          plan_id: form.plan,
+          product_type: "question_pack",
+          billing_model: "one_time",
+        });
         window.location.href = data.url;
       } else {
+        trackEvent("checkout_start_failed", {
+          plan_id: form.plan,
+          reason: "no_checkout_url",
+        });
         setError(data.error || "Error al crear la sesión de pago");
       }
     } catch {
+      trackEvent("checkout_start_failed", {
+        plan_id: form.plan,
+        reason: "network",
+      });
       setError("Error de conexión. Inténtalo de nuevo.");
     } finally {
       setLoading(false);
@@ -71,11 +85,19 @@ export default function Registro() {
       const res = await apiRequest("POST", "/api/registro-empresa", eForm);
       const data = await res.json();
       if (data.success) {
+        trackEvent("registration_succeeded", {
+          registration_type: "enterprise",
+          destination: "confirmation",
+        });
         setEResult(true);
       } else {
         setEError(data.message || "Error al procesar la solicitud");
       }
     } catch {
+      trackEvent("registration_failed", {
+        registration_type: "enterprise",
+        reason: "network",
+      });
       setEError("Error de conexión. Inténtalo de nuevo.");
     } finally {
       setELoading(false);
@@ -90,11 +112,20 @@ export default function Registro() {
       const res = await apiRequest("POST", "/api/registro-empresa-media", mForm);
       const data = await res.json();
       if (data.success) {
+        trackEvent("registration_succeeded", {
+          registration_type: "mid_market",
+          plan_id: mForm.plan,
+          destination: "confirmation",
+        });
         setMResult(true);
       } else {
         setMError(data.message || "Error al procesar la solicitud");
       }
     } catch {
+      trackEvent("registration_failed", {
+        registration_type: "mid_market",
+        reason: "network",
+      });
       setMError("Error de conexión. Inténtalo de nuevo.");
     } finally {
       setMLoading(false);

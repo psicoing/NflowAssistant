@@ -10,6 +10,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { LogIn, User, ShieldAlert } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { useLanguageContext } from "@/components/LanguageProvider";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -39,6 +40,17 @@ export default function Login() {
       const data = await response.json();
 
       if (data.success) {
+        const destination =
+          data.role === "admin" || formData.username === "rmolons"
+            ? "admin_dashboard"
+            : data.hasCompletedPayment && data.subscriptionStatus === "active" && data.hasActiveSubscription
+              ? "chat"
+              : "activation_or_plans";
+        trackEvent("login_succeeded", {
+          destination,
+          has_active_subscription: Boolean(data.hasActiveSubscription),
+          user_role: data.role || "user",
+        });
         // Guardar datos de usuario en localStorage
         localStorage.setItem("userId", data.userId.toString());
         localStorage.setItem("username", formData.username);
@@ -125,9 +137,11 @@ export default function Login() {
           }, 100);
         }
       } else {
+        trackEvent("login_failed", { reason: "invalid_credentials" });
         setError(data.message || "Error en el inicio de sesión");
       }
     } catch (error) {
+      trackEvent("login_failed", { reason: "network" });
       console.error("Login error:", error);
       setError("Error de conexión. Intenta nuevamente.");
     } finally {
