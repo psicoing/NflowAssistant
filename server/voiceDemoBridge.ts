@@ -137,6 +137,7 @@ const NUXA_VOICE_INSTRUCTIONS = `Eres NUXA, la asistente comercial de NUXA.life 
 Tu función principal en esta llamada es presentar y vender NUXA.life, despertar interés, explicar su propuesta de valor y orientar a las personas o empresas interesadas sobre cómo contratarlo. Esta es una conversación comercial, no una consulta de ayuda ni un servicio de atención psicológica por teléfono.
 Empieza la conversación en inglés y ofrece elegir entre inglés y español. La primera frase debe ser el saludo inicial indicado por la aplicación. Si la persona elige español, continúa en español de España peninsular; si elige inglés, continúa en inglés natural y claro. Si no elige explícitamente, mantén el inglés y pregunta una sola vez si prefiere English or Spanish. Después de elegir, mantén ese idioma durante toda la llamada salvo que la persona pida cambiarlo.
 Cuando hables en español, usa un tono cercano, cálido y profesional, con vocabulario y formas propias de España: "tú", "vosotros", "podéis", "queréis", "móvil" y "presupuesto". Evita el voseo, "ustedes" como forma habitual, los giros latinoamericanos y el acento o pronunciación sudamericanos; marca de forma natural la distinción castellana entre "c/z" y "s".
+Habla con claridad a un ritmo moderado, aproximadamente entre 125 y 145 palabras por minuto. Articula cada palabra y cifra, haz pausas breves entre frases, pronuncia NUXA como "NUK-sa" en dos sílabas, no aceleres al final y termina siempre la frase completa.
 Explica que la atención y el acompañamiento psicológico los ofrece la app NUXA.life, no esta llamada telefónica. Si la persona pide ayuda psicológica, no hagas terapia ni evaluaciones: indícale con claridad que debe utilizar la app o acudir a un profesional o servicio de emergencia si existe un riesgo inmediato.
 Si preguntan por la contratación, presenta las opciones de NUXA.life, explica el precio que corresponda y recoge su interés para que el equipo les facilite los siguientes pasos comerciales. No inventes características, precios, clientes ni resultados.
 Mantén las respuestas muy cortas y naturales: como máximo una o dos frases cada vez. Haz una sola pregunta cada vez y, después de preguntar, cállate y espera a que la persona termine. No encadenes preguntas ni rellenes los silencios. Deja que la persona lleve el ritmo de la conversación.
@@ -148,6 +149,7 @@ const NUXA_OUTBOUND_TEST_INSTRUCTIONS = `Eres NUXA, la asistente comercial de NU
 Tu objetivo es presentar y vender NUXA.life, despertar interés en contratarlo y orientar sobre el siguiente paso comercial. Esta llamada es comercial e informativa; no ofrece atención psicológica: el acompañamiento psicológico lo proporciona la app NUXA.life.
 Empieza la conversación en inglés y ofrece elegir entre inglés y español. La primera frase debe ser el saludo inicial indicado por la aplicación. Si la persona elige español, continúa en español de España peninsular; si elige inglés, continúa en inglés natural y claro. Si no elige explícitamente, mantén el inglés y pregunta una sola vez si prefiere English or Spanish. Después de elegir, mantén ese idioma durante toda la llamada salvo que la persona pida cambiarlo.
 Cuando hables en español, usa tono cálido, claro, profesional y muy breve. Usa "tú", "vosotros", "podéis", "queréis", "móvil" y "presupuesto"; evita el voseo, los giros latinoamericanos y el acento o pronunciación sudamericanos. Marca de forma natural la distinción castellana entre "c/z" y "s".
+Habla con claridad a un ritmo moderado, aproximadamente entre 125 y 145 palabras por minuto. Articula cada palabra y cifra, haz pausas breves entre frases, pronuncia NUXA como "NUK-sa" en dos sílabas, no aceleres al final y termina siempre la frase completa.
 Si la persona no puede hablar, despídete y no insistas.
 Si acepta, pregunta de forma natural con quién estás hablando y qué le gustaría mejorar o conocer de NUXA.life. Explica que puedes informar sobre el producto y ayudar a iniciar una conversación para contratarlo.
 Si preguntan por atención psicológica, aclara que no se realiza por teléfono y que esa función corresponde a la app NUXA.life.
@@ -162,6 +164,7 @@ ${NUXA_PRICE_INFORMATION}`;
 const TURN_RESPONSE_INSTRUCTIONS = `Responde únicamente a lo último que ha dicho la persona.
 Sé muy breve: una o dos frases cortas como máximo y una sola pregunta como máximo.
 Responde en el idioma que la persona haya elegido al inicio: inglés si aún no ha elegido o si ha elegido English, y español de España si ha elegido español. Cambia de idioma solo si la persona lo pide.
+Habla con claridad a un ritmo de 125 a 145 palabras por minuto. Articula cifras y precios, haz una pausa breve entre frases, pronuncia NUXA como "NUK-sa", no aceleres al final y termina siempre la frase completa.
 Si la persona acaba de elegir English o español, confirma el idioma en una frase y pregunta qué quiere conocer de NUXA.life: cómo funciona, planes para particulares, empresas o precios.
 Habla exclusivamente de NUXA.life y de la pregunta comercial de la persona. No conviertas la conversación en consejos generales de bienestar y no hables de fitness, ejercicio, nutrición, dietas o pérdida de peso como si fueran servicios de NUXA.
 Cuando pregunten qué es NUXA o qué ofrece, explica brevemente la app y menciona que hay 5 consultas gratis sin tarjeta; después pregunta si quiere conocer los planes o precios.
@@ -239,6 +242,7 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
   let streamSid: string | null = null;
   let callSid: string | null = null;
   let responseActive = false;
+  let responseAudioStarted = false;
   let responseRequestPending = false;
   let openaiReady = false;
   const pendingAudio: string[] = [];
@@ -307,6 +311,7 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
 
       case "session.updated":
         // Sesión lista: que NUXA salude primero.
+        responseRequestPending = true;
         openaiWs.send(
           JSON.stringify({
             type: "response.create",
@@ -315,7 +320,7 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
               instructions: mode === "outbound-test"
                 ? INITIAL_OUTBOUND_RESPONSE
                 : INITIAL_INBOUND_RESPONSE,
-              max_output_tokens: 70,
+              max_output_tokens: 400,
             },
           }),
         );
@@ -323,15 +328,18 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
 
       case "response.created":
         responseActive = true;
+        responseAudioStarted = false;
         responseRequestPending = false;
         break;
 
       case "response.done":
         responseActive = false;
+        responseAudioStarted = false;
         responseRequestPending = false;
         break;
 
       case "response.output_audio.delta":
+        responseAudioStarted = true;
         if (streamSid && event.delta) {
           twilioWs.send(
             JSON.stringify({
@@ -347,16 +355,16 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
         // La persona empieza a hablar: corta el audio que se esté reproduciendo.
         // No enviamos "clear" por un falso positivo cuando NUXA ya ha
         // terminado de hablar; así evitamos pequeños chasquidos o cortes.
-        if (streamSid && responseActive) {
+        if (streamSid && responseActive && responseAudioStarted) {
           twilioWs.send(JSON.stringify({ event: "clear", streamSid }));
         }
-        if (responseActive && openaiWs.readyState === WebSocket.OPEN) {
-          // El evento response.done puede no llegar después de cancelar una
-          // respuesta. Liberamos el estado inmediatamente para no bloquear el
-          // turno siguiente cuando llegue speech_stopped.
+        if (responseActive) {
+          // server_vad ya tiene interrupt_response=true y cancela la respuesta
+          // en OpenAI. Enviar además response.cancel provoca una segunda
+          // cancelación, errores response_cancel_not_active y posibles cortes.
           responseActive = false;
+          responseAudioStarted = false;
           responseRequestPending = false;
-          openaiWs.send(JSON.stringify({ type: "response.cancel" }));
         }
         break;
 
@@ -376,7 +384,7 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
               response: {
                 output_modalities: ["audio"],
                 instructions: TURN_RESPONSE_INSTRUCTIONS,
-                max_output_tokens: 90,
+                max_output_tokens: 500,
               },
             }),
           );
@@ -408,6 +416,7 @@ function handleTwilioCall(twilioWs: WebSocket, mode: "inbound-demo" | "outbound-
 
   openaiWs.on("close", () => {
     responseActive = false;
+    responseAudioStarted = false;
     log(
       `Voice demo: sesión OpenAI finalizada; Twilio continuará con el mensaje de contingencia (callSid=${callSid ?? "desconocido"})`,
       "voice-demo",

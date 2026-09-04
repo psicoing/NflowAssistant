@@ -73,19 +73,29 @@ When a deployment exposes several approved domains, validate Twilio signatures a
 explicit configured URL and every runtime-provided Replit domain; choosing only the first domain
 can reject legitimate requests after a webhook hostname change.
 
-## Release turn state immediately when cancelling Realtime audio
-When the caller interrupts an active response, clearing Twilio audio and sending
-`response.cancel` is not enough: the local active-response flag must also be released immediately.
+## Do not cancel Realtime audio twice
+When server VAD has `interrupt_response` enabled, OpenAI already cancels the active response when
+the caller starts speaking. The bridge should clear Twilio's buffered playback and release its
+local state, but must not also send a manual `response.cancel`.
 
-**Why:** a cancelled response may not emit the completion event the bridge normally relies on.
-Leaving the flag active blocks the caller's next `speech_stopped` event and produces a call that
-starts correctly, then remains silent.
+**Why:** automatic plus manual cancellation produces `response_cancel_not_active`; repeated false
+VAD triggers can then make the telephone audio sound clipped or noisy.
 
-**How to apply:** clear local response state when cancellation is sent, buffer a short amount of
-early caller audio until the OpenAI socket is ready, and keep VAD thresholds tolerant enough for
-ordinary mobile-call volume. Track a requested response separately from one confirmed active by
-`response.created`; never send `response.cancel` for a merely pending request, because OpenAI
-rejects it and repeated false VAD triggers make Twilio audio sound clipped.
+**How to apply:** track response lifecycle separately from whether audio deltas have actually
+started, clear Twilio only after audio output begins, and let server VAD own upstream cancellation.
+Buffer a short amount of early caller audio until the OpenAI socket is ready.
+
+## Realtime audio needs a much larger token budget than text
+Small output limits that look sufficient for one or two written sentences can cut telephone audio
+after only a few seconds. PCMU tests showed that a 300-token response could still end incomplete,
+while larger limits completed cleanly and transcribed correctly.
+
+**Why:** generated audio consumes output tokens at a much higher rate than the equivalent transcript;
+mid-sentence token exhaustion sounds like choppy audio rather than an obvious model error.
+
+**How to apply:** constrain response length through instructions, not an extremely small hard cap.
+Before changing voice pacing or limits, generate a PCMU 8 kHz sample, require a `completed` status,
+measure clipping/noise, and transcribe it to verify every phrase and price.
 
 ## Voice demo language selection starts in English
 The phone demo opens in English and asks whether the caller prefers English or Spanish; after the
