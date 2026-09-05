@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useLanguage } from "@/hooks/useLanguage";
-import { Sparkles, ArrowRight, Star, ExternalLink, X } from "lucide-react";
+import { Sparkles, ArrowRight, Star, ExternalLink, X, Phone, ShieldCheck, Globe2, Clock3 } from "lucide-react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/sections/hero-section";
@@ -84,6 +84,7 @@ import {
 } from "@/components/sections/nuxa-robot-scenes";
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/components/StructuredData";
+import { trackEvent } from "@/lib/analytics";
 
 const AWARENESS_BANNER_KEY = "nuxa-awareness-banner-dismissed";
 
@@ -263,6 +264,98 @@ function AwarenessBanner({ onClose }: { onClose: () => void }) {
   );
 }
 
+function HomepageConversionBlock() {
+  const handleFreeTrialClick = () => {
+    trackEvent("free_trial_cta_clicked", {
+      placement: "homepage_hero",
+      audience: "individual",
+    });
+  };
+
+  const handlePhoneClick = () => {
+    trackEvent("homepage_phone_cta_clicked", {
+      placement: "homepage_hero",
+      audience: "individual",
+    });
+  };
+
+  return (
+    <section
+      aria-labelledby="homepage-conversion-title"
+      className="relative overflow-hidden border-y border-orange-200/20 bg-[#17233d] px-4 py-8 text-white sm:py-10"
+    >
+      <div className="pointer-events-none absolute -left-24 top-1/2 h-64 w-64 -translate-y-1/2 rounded-full bg-orange-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-teal-400/10 blur-3xl" />
+
+      <div className="relative mx-auto max-w-6xl">
+        <div className="grid items-center gap-8 lg:grid-cols-[1.15fr_.85fr] lg:gap-12">
+          <div>
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-orange-300/30 bg-orange-300/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-orange-200">
+              <span className="h-2 w-2 rounded-full bg-orange-300" aria-hidden="true" />
+              Empieza cuando lo necesites
+            </div>
+            <h1 id="homepage-conversion-title" className="max-w-2xl text-3xl font-black leading-[1.08] tracking-tight sm:text-4xl lg:text-[3.25rem]">
+              Apoyo emocional claro, disponible <span className="text-orange-300">24/7</span>
+            </h1>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg">
+              Habla con NUXA cuando necesites ordenar lo que sientes, sin esperas y sin juicios. Para ti, tu familia o tu equipo.
+            </p>
+
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Link
+                href="/prueba-gratis"
+                onClick={handleFreeTrialClick}
+                className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-orange-500 px-6 py-3.5 text-base font-extrabold text-white shadow-lg shadow-orange-950/30 transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200 focus:ring-offset-2 focus:ring-offset-[#17233d] sm:px-7"
+              >
+                Probar gratis ahora
+                <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true" />
+              </Link>
+              <a
+                href="tel:+17817822371"
+                onClick={handlePhoneClick}
+                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-cyan-300/60 bg-cyan-300/10 px-5 py-3.5 text-sm font-bold text-cyan-100 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-300/20 focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:ring-offset-2 focus:ring-offset-[#17233d] sm:px-6"
+              >
+                <Phone className="h-4 w-4" aria-hidden="true" />
+                Llamar al asistente NUXA
+              </a>
+            </div>
+            <p className="mt-3 text-xs font-medium text-slate-400">
+              5 consultas gratuitas · Sin tarjeta · Después, desde 2,99 €/mes y sin permanencia
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/[0.07] p-5 shadow-2xl shadow-slate-950/20 backdrop-blur-sm sm:p-6">
+            <p className="mb-4 text-sm font-bold text-white">Lo esencial, desde el primer día</p>
+            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+              <div className="flex items-start gap-3 rounded-2xl bg-slate-950/20 p-3">
+                <ShieldCheck className="mt-0.5 h-5 w-5 flex-none text-orange-300" aria-hidden="true" />
+                <div>
+                  <p className="text-sm font-bold text-white">5 consultas gratis</p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-slate-300">Sin introducir datos de pago.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 rounded-2xl bg-slate-950/20 p-3">
+                <Globe2 className="mt-0.5 h-5 w-5 flex-none text-teal-300" aria-hidden="true" />
+                <div>
+                  <p className="text-sm font-bold text-white">Más de 150 idiomas</p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-slate-300">Conecta desde cualquier lugar.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 rounded-2xl bg-slate-950/20 p-3">
+                <Clock3 className="mt-0.5 h-5 w-5 flex-none text-cyan-300" aria-hidden="true" />
+                <div>
+                  <p className="text-sm font-bold text-white">Siempre disponible</p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-slate-300">De día, de noche y cuando más importa.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const { t } = useLanguage();
   const [awarenessBanner, setAwarenessBanner] = useState(false);
@@ -304,12 +397,7 @@ export default function Home() {
 
         <NuxaRobotForestSection />
 
-        {/* Barra de valor - recursos gratuitos */}
-        <div className="bg-gradient-to-r from-emerald-600 to-teal-600 py-2.5 px-4 text-center">
-          <p className="text-white text-sm font-semibold tracking-wide">
-            ✦ Recursos emocionales gratuitos, sin pagar, ¡abiertos a todo el mundo!
-          </p>
-        </div>
+        <HomepageConversionBlock />
 
         {/* Sección "Para quién es NUXA" — futurista */}
         <div className="relative bg-gradient-to-br from-slate-900 via-emerald-950 to-teal-950 py-16 px-4 overflow-hidden">
