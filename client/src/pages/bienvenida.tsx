@@ -1,4 +1,5 @@
 import { useLocation } from "wouter";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   Sparkles,
@@ -71,9 +72,41 @@ const PATHS = [
   },
 ];
 
+const HERO_LANGUAGES = [
+  {
+    code: "ES",
+    eyebrow: "Tu espacio de bienestar",
+    title: "Tu bienestar empieza aquí",
+    description: "Apoyo emocional inteligente, privado y disponible cuando lo necesitas",
+  },
+  {
+    code: "EN",
+    eyebrow: "Your wellbeing space",
+    title: "Your wellbeing starts here",
+    description: "Intelligent, private support whenever you need it",
+  },
+  {
+    code: "FR",
+    eyebrow: "Votre espace de bien-être",
+    title: "Votre bien-être commence ici",
+    description: "Un soutien intelligent et privé, quand vous en avez besoin",
+  },
+];
+
 
 export default function Bienvenida() {
   const [, setLocation] = useLocation();
+  const [heroLanguageIndex, setHeroLanguageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setHeroLanguageIndex((current) => (current + 1) % HERO_LANGUAGES.length);
+    }, 2000);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
+  const heroLanguage = HERO_LANGUAGES[heroLanguageIndex];
 
   const openComparison = () => {
     setLocation("/");
@@ -166,33 +199,36 @@ export default function Bienvenida() {
             <div className="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-950/35 to-slate-950/10" />
             <div className="absolute inset-0 bg-gradient-to-b from-slate-950/35 via-transparent to-slate-950/35" />
 
-            <div className="relative z-10 w-full max-w-[72%] sm:max-w-[58%]">
+            <div
+              key={heroLanguage.code}
+              className="relative z-10 w-full max-w-[72%] animate-in fade-in duration-500 sm:max-w-[58%]"
+            >
               <div className="mb-3 flex w-fit max-w-full items-center gap-1.5 rounded-full border border-emerald-300/20 bg-slate-950/45 px-2.5 py-1 text-[8px] font-semibold uppercase tracking-[0.12em] text-emerald-200/90 backdrop-blur-sm sm:text-[9px]">
                 <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.9)]" />
-                <span>Tu espacio de bienestar · Your wellbeing space · Votre espace de bien-être</span>
+                <span>{heroLanguage.code} · {heroLanguage.eyebrow}</span>
               </div>
               <h1 className="text-xl font-black leading-tight tracking-tight text-white sm:text-3xl">
-                Tu bienestar empieza aquí
+                {heroLanguage.title}
               </h1>
-              <p className="mt-1 text-base font-semibold leading-tight tracking-tight text-indigo-100 sm:text-xl">
-                Your wellbeing starts here
-              </p>
-              <p className="mt-0.5 text-base leading-tight text-violet-100/90 sm:text-xl">
-                Votre bien-être commence ici
-              </p>
               <p className="mt-3 max-w-md text-[10px] leading-relaxed text-slate-200/90 sm:text-sm">
-                Apoyo emocional inteligente, privado y disponible cuando lo necesitas
-                <span className="mx-1.5 text-slate-300/70">·</span>
-                Intelligent, private support whenever you need it
-                <span className="mx-1.5 text-slate-300/70">·</span>
-                Un soutien intelligent et privé, quand vous en avez besoin
+                {heroLanguage.description}
               </p>
+              <div className="mt-3 flex gap-1.5" aria-label={`Idioma activo: ${heroLanguage.code}`}>
+                {HERO_LANGUAGES.map((language, index) => (
+                  <span
+                    key={language.code}
+                    className={`h-1 rounded-full transition-all duration-300 ${
+                      index === heroLanguageIndex ? "w-6 bg-emerald-300" : "w-2 bg-white/30"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
           </section>
 
           {/* Paths */}
-          <section className="flex min-h-0 flex-1 flex-col pb-4 lg:pb-2" aria-label="Elige cómo empezar">
-            <div className="mb-3 flex items-end justify-between px-1 pt-1">
+          <section className="flex min-h-0 flex-col pb-3 lg:pb-2" aria-label="Elige cómo empezar">
+            <div className="mb-2 flex items-end justify-between px-1 pt-1">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Elige tu camino</p>
                 <p className="mt-1 text-xs text-slate-500">Choose your path · Choisissez votre chemin</p>
@@ -203,7 +239,7 @@ export default function Bienvenida() {
               </div>
             </div>
 
-            <div className="grid flex-1 grid-cols-1 gap-4 md:grid-cols-3 lg:min-h-0">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-3 lg:h-[205px] lg:min-h-0">
               {PATHS.map((path, idx) => {
                 const Icon = path.icon;
                 const featured = idx === 0;
@@ -211,27 +247,27 @@ export default function Bienvenida() {
                   <button
                     key={path.href}
                     onClick={() => setLocation(path.href)}
-                    className={`group relative flex h-full min-h-[230px] flex-col gap-3 overflow-hidden rounded-3xl border p-5 text-left shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl lg:min-h-0 lg:p-4 ${
+                    className={`group relative flex min-h-[210px] flex-col gap-2 overflow-hidden rounded-2xl border p-4 text-left shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl lg:h-[205px] lg:min-h-0 lg:p-3.5 ${
                       featured
                         ? "border-emerald-300/40 bg-gradient-to-br from-emerald-500/[0.18] via-white/[0.06] to-teal-500/[0.08] shadow-emerald-950/40 hover:border-emerald-200/70 hover:shadow-emerald-500/15"
                         : `bg-white/[0.045] ${path.border} ${path.glow} backdrop-blur-xl`
                     }`}
                   >
                     {featured && (
-                      <div className="mx-auto max-w-full rounded-full border border-emerald-200/20 bg-emerald-300/10 px-2.5 py-1 text-center text-[8px] font-bold uppercase leading-tight tracking-[0.1em] text-emerald-200">
+                      <div className="mx-auto max-w-full rounded-full border border-emerald-200/20 bg-emerald-300/10 px-2 py-0.5 text-center text-[7px] font-bold uppercase leading-tight tracking-[0.08em] text-emerald-200">
                         Recomendado · Recommended · Recommandé
                       </div>
                     )}
                     <div className="flex items-center justify-between">
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${path.color} shadow-lg`}>
-                        <Icon className="h-5 w-5 text-white" />
+                      <div className={`flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br ${path.color} shadow-lg`}>
+                        <Icon className="h-4 w-4 text-white" />
                       </div>
-                      <div className={`flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br ${path.color} shadow-lg transition-transform group-hover:scale-110`}>
-                        <ArrowRight className="h-4 w-4 text-white" />
+                      <div className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br ${path.color} shadow-lg transition-transform group-hover:scale-110`}>
+                        <ArrowRight className="h-3.5 w-3.5 text-white" />
                       </div>
                     </div>
 
-                    <div className="grid flex-1 content-center gap-2.5">
+                    <div className="grid flex-1 content-center gap-1.5">
                       {[
                         { code: "ES", content: path.es, tone: "text-white", badge: "text-indigo-300 bg-indigo-500/10 border-indigo-400/20" },
                         { code: "EN", content: path.en, tone: "text-slate-200", badge: "text-blue-300 bg-blue-500/10 border-blue-400/20" },
@@ -239,8 +275,8 @@ export default function Bienvenida() {
                       ].map(({ code, content, tone, badge }) => (
                         <div key={code}>
                            <span className={`mr-2 inline-block rounded-full border px-2 py-0.5 text-[8px] font-bold tracking-widest ${badge}`}>{code}</span>
-                           <span className={`${tone} text-[13px] font-bold leading-snug`}>{content.label}</span>
-                           <p className="mt-0.5 pl-0 text-[10px] leading-snug text-slate-400">{content.sub}</p>
+                            <span className={`${tone} text-[12px] font-bold leading-snug`}>{content.label}</span>
+                            <p className="mt-0.5 pl-0 text-[9px] leading-snug text-slate-400">{content.sub}</p>
                         </div>
                       ))}
                     </div>
