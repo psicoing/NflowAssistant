@@ -7,6 +7,7 @@ import { setupVite, serveStatic, log } from "./vite";
 import { registerSeoMiddleware } from "./seo-middleware";
 import { pool } from "./db";
 import { attachVoiceDemoWebSocket } from "./voiceDemoBridge";
+import { createServer } from "http";
 
 async function ensureAdminUser() {
   try {
@@ -1071,6 +1072,28 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  let startupState: "starting" | "ready" = "starting";
+  const startedAt = Date.now();
+
+  // Open the production port before database initialization. Autoscale health
+  // checks can now succeed while one-time schema and seed work finishes.
+  app.get(["/health", "/healthz", "/api/health"], (_req, res) => {
+    res.status(200).json({
+      status: startupState,
+      uptimeSeconds: Math.floor((Date.now() - startedAt) / 1000),
+    });
+  });
+
+  const server = createServer(app);
+  const port = Number(process.env.PORT) || 5000;
+  server.listen({
+    port,
+    host: "0.0.0.0",
+    reusePort: true,
+  }, () => {
+    log(`serving on port ${port} (initializing)`);
+  });
+
   await ensureAdminUser();
   await ensureInstitutionTables();
   await ensureInstitutionContacts();
@@ -1081,7 +1104,7 @@ app.use((req, res, next) => {
   await ensureEmpresasContacts();
   await ensureEmpresaTemplates();
   await ensureLeadTables();
-  const server = await registerRoutes(app);
+  await registerRoutes(app, server);
   attachVoiceDemoWebSocket(server);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -1107,14 +1130,6 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // Replit previews use port 5000 by default. Accepting PORT also lets the
-  // packaged production server be smoke-tested without disrupting the preview.
-  const port = Number(process.env.PORT) || 5000;
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-  });
+  startupState = "ready";
+  log(`application ready on port ${port}`);
 })();

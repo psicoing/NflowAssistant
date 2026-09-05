@@ -158,7 +158,7 @@ async function checkSubscription(userId: number): Promise<boolean> {
   }
 }
 
-export async function registerRoutes(app: Express): Promise<Server> {
+export async function registerRoutes(app: Express, existingServer?: Server): Promise<Server> {
   
   // Block WordPress bot requests - return 404 immediately
   app.use((req, res, next) => {
@@ -4757,6 +4757,6 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     res.sendStatus(204);
   });
 
-  const httpServer = createServer(app);
+  const httpServer = existingServer ?? createServer(app);
   return httpServer;
 }
