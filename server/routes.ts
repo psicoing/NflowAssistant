@@ -82,6 +82,44 @@ const normalizeInternationalPhone = (value: unknown): string => {
 
 const isInternationalPhone = (value: string) => /^\+[1-9]\d{7,14}$/.test(value);
 
+const usaCallTimezones: Record<string, string> = {
+  CA: "America/Los_Angeles", OR: "America/Los_Angeles", WA: "America/Los_Angeles",
+  TX: "America/Chicago", IL: "America/Chicago", MN: "America/Chicago",
+  AR: "America/Chicago", TN: "America/Chicago",
+  NY: "America/New_York", NJ: "America/New_York", CT: "America/New_York",
+  RI: "America/New_York", MD: "America/New_York", VA: "America/New_York",
+  NC: "America/New_York", GA: "America/New_York", OH: "America/New_York",
+  MI: "America/Detroit", IN: "America/Indiana/Indianapolis",
+  KY: "America/Kentucky/Louisville",
+};
+
+const getBusinessCallWindow = (timeZone: unknown) => {
+  if (typeof timeZone !== "string" || !timeZone.trim()) {
+    return { canCallNow: false, localTime: null, reason: "Zona horaria no verificada" };
+  }
+  try {
+    const parts = new Intl.DateTimeFormat("en-GB", {
+      timeZone,
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).formatToParts(new Date());
+    const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+    const hour = Number(values.hour);
+    const weekday = values.weekday;
+    const businessDay = weekday !== "Sat" && weekday !== "Sun";
+    const canCallNow = businessDay && hour >= 9 && hour < 14;
+    return {
+      canCallNow,
+      localTime: `${weekday} ${values.hour}:${values.minute}`,
+      reason: canCallNow ? null : businessDay ? "Fuera del horario local 09:00–14:00" : "Fin de semana local",
+    };
+  } catch {
+    return { canCallNow: false, localTime: null, reason: "Zona horaria no válida" };
+  }
+};
+
 const voiceCrmOutcomeStatuses = new Set([
   "NO_CONTESTA", "BUZON_CENTRALITA", "NO_INTERESADO", "ENVIAR_INFORMACION",
   "INTERES_BAJO", "INTERES_MEDIO", "INTERES_ALTO", "SOLICITA_REUNION",
@@ -2198,18 +2236,19 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
               contact_area = COALESCE(NULLIF(contact_area, ''), NULLIF($9, '')),
               priority = COALESCE(NULLIF(priority, ''), NULLIF($10, '')),
               source = COALESCE(NULLIF(source, ''), NULLIF($11, '')),
-              voice_crm_import_key = COALESCE(voice_crm_import_key, $12)
-             WHERE id = $13`,
-            [company, email, phone, address, postalCode, municipio, provincia, employeeCount, contactArea, priority, source, importKey, existing.rows[0].id],
+              voice_crm_import_key = COALESCE(voice_crm_import_key, $12),
+              call_timezone = COALESCE(call_timezone, $13)
+             WHERE id = $14`,
+            [company, email, phone, address, postalCode, municipio, provincia, employeeCount, contactArea, priority, source, importKey, usaCallTimezones[provincia.toUpperCase()] || null, existing.rows[0].id],
           );
           updated++;
         } else {
           await pool.query(
             `INSERT INTO empresa_contacts
               (email, company, phone, address, postal_code, municipio, provincia, employee_count,
-               contact_area, priority, source, voice_crm_import_key, call_authorized, company_size_source)
-             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,false,'manual')`,
-            [email || null, company, phone || null, address || null, postalCode || null, municipio || null, provincia || null, employeeCount, contactArea || null, priority || null, source || null, importKey],
+               contact_area, priority, source, voice_crm_import_key, call_timezone, call_authorized, company_size_source)
+              VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,false,'manual')`,
+            [email || null, company, phone || null, address || null, postalCode || null, municipio || null, provincia || null, employeeCount, contactArea || null, priority || null, source || null, importKey, usaCallTimezones[provincia.toUpperCase()] || null],
           );
           created++;
         }
@@ -2267,7 +2306,12 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
           WHERE a.outcome_status IN ('POSIBLE_CIERRE','SOLICITA_REUNION','DERIVAR_COMERCIAL_HUMANO','SOLICITA_PRECIOS','INTERES_ALTO','INTERES_MEDIO','ENVIAR_INFORMACION')
           ORDER BY score DESC, a.started_at DESC`),
       ]);
-      res.json({ contacts: contacts.rows, attempts: attempts.rows, metrics: metricRows.rows[0], opportunities: opportunities.rows });
+      res.json({
+        contacts: contacts.rows.map(contact => ({ ...contact, ...getBusinessCallWindow(contact.call_timezone) })),
+        attempts: attempts.rows,
+        metrics: metricRows.rows[0],
+        opportunities: opportunities.rows,
+      });
     } catch (error) { console.error("voice CRM dashboard error", error); res.status(500).json({ message: "Error cargando Voice CRM" }); }
   });
 
@@ -2293,6 +2337,14 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
           !isInternationalPhone(to) || to !== authorizedPhone) {
         await client.query("ROLLBACK");
         return res.status(403).json({ message: "La llamada requiere consentimiento activo para este teléfono exacto." });
+      }
+      const businessWindow = getBusinessCallWindow(row.call_timezone);
+      if (!businessWindow.canCallNow) {
+        await client.query("ROLLBACK");
+        return res.status(409).json({
+          message: `${businessWindow.reason}. Hora local: ${businessWindow.localTime || "desconocida"}.`,
+          ...businessWindow,
+        });
       }
       const attempt = await client.query(
         "INSERT INTO voice_crm_call_attempts (contact_id, to_phone, provider_status) VALUES ($1,$2,'queued') RETURNING id",

@@ -158,6 +158,20 @@ async function ensureVoiceCrmTables() {
   try {
     await pool.query(`
       ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS voice_crm_import_key TEXT;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS call_timezone TEXT;
+      UPDATE empresa_contacts
+      SET call_timezone = CASE provincia
+        WHEN 'CA' THEN 'America/Los_Angeles' WHEN 'OR' THEN 'America/Los_Angeles' WHEN 'WA' THEN 'America/Los_Angeles'
+        WHEN 'TX' THEN 'America/Chicago' WHEN 'IL' THEN 'America/Chicago' WHEN 'MN' THEN 'America/Chicago'
+        WHEN 'AR' THEN 'America/Chicago' WHEN 'TN' THEN 'America/Chicago'
+        WHEN 'NY' THEN 'America/New_York' WHEN 'NJ' THEN 'America/New_York' WHEN 'CT' THEN 'America/New_York'
+        WHEN 'RI' THEN 'America/New_York' WHEN 'MD' THEN 'America/New_York' WHEN 'VA' THEN 'America/New_York'
+        WHEN 'NC' THEN 'America/New_York' WHEN 'GA' THEN 'America/New_York' WHEN 'OH' THEN 'America/New_York'
+        WHEN 'MI' THEN 'America/Detroit' WHEN 'IN' THEN 'America/Indiana/Indianapolis'
+        WHEN 'KY' THEN 'America/Kentucky/Louisville'
+        ELSE call_timezone
+      END
+      WHERE voice_crm_import_key LIKE 'usa50:%' AND call_timezone IS NULL;
       CREATE UNIQUE INDEX IF NOT EXISTS empresa_contacts_voice_crm_import_key_unique
         ON empresa_contacts (voice_crm_import_key) WHERE voice_crm_import_key IS NOT NULL;
       CREATE TABLE IF NOT EXISTS voice_crm_call_attempts (

@@ -2765,7 +2765,10 @@ export default function AdminDashboard() {
                                     {authorized ? "✓ Consentimiento activo para este teléfono" : `⛔ ${voiceConsentReason(contact)}`}
                                   </p>
                                 </div>
-                                <button type="button" disabled={!authorized || voiceCrmCallId !== null || Number(voiceCrmMetrics.active_calls || 0) > 0} title={!authorized ? voiceConsentReason(contact) : Number(voiceCrmMetrics.active_calls || 0) > 0 ? "Hay una llamada en curso" : undefined} onClick={async () => {
+                                <p className={`mt-1 text-[11px] ${contact.canCallNow ? "text-emerald-300" : "text-sky-300"}`}>
+                                  🕐 {contact.localTime || "Hora local desconocida"} · {contact.canCallNow ? "Dentro del horario 09:00–14:00" : contact.reason || "Fuera de horario"}
+                                </p>
+                                <button type="button" disabled={!authorized || !contact.canCallNow || voiceCrmCallId !== null || Number(voiceCrmMetrics.active_calls || 0) > 0} title={!authorized ? voiceConsentReason(contact) : !contact.canCallNow ? contact.reason : Number(voiceCrmMetrics.active_calls || 0) > 0 ? "Hay una llamada en curso" : undefined} onClick={async () => {
                                   setVoiceCrmCallId(contact.id);
                                   setVoiceCrmMessage(null);
                                   try {
