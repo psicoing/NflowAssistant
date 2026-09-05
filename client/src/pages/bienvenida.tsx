@@ -99,15 +99,15 @@ export default function Bienvenida() {
         canonicalUrl="https://nuxa.life/bienvenida"
       />
 
-      <div className="relative isolate min-h-screen overflow-hidden bg-slate-950 text-white">
+      <div className="relative isolate min-h-screen overflow-x-hidden bg-slate-950 text-white lg:h-screen lg:overflow-hidden">
         {/* Ambient light keeps the page warm and dimensional without adding assets. */}
         <div className="pointer-events-none absolute -left-40 top-24 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl" />
         <div className="pointer-events-none absolute -right-40 top-72 h-[28rem] w-[28rem] rounded-full bg-violet-500/15 blur-3xl" />
         <div className="pointer-events-none absolute left-1/2 top-[38rem] h-80 w-80 -translate-x-1/2 rounded-full bg-blue-500/10 blur-3xl" />
 
-        <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 sm:px-6">
+        <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 sm:px-6 lg:h-screen">
           {/* Top bar */}
-          <header className="flex items-center justify-between py-5 sm:py-7">
+          <header className="flex items-center justify-between py-4 sm:py-5">
             <div className="flex items-center gap-3">
               <div className="flex -space-x-2">
                 <img src="/favicon.png" alt="NUXA chica" className="h-10 w-10 rounded-2xl shadow-lg shadow-indigo-500/20 ring-2 ring-slate-950" />
@@ -155,7 +155,7 @@ export default function Bienvenida() {
           </button>
 
           {/* Hero identity */}
-          <section className="relative isolate overflow-hidden rounded-[1.5rem] border border-white/10 px-4 pb-5 pt-5 text-left shadow-2xl shadow-indigo-950/30 sm:px-8 sm:pb-7 sm:pt-8">
+          <section className="relative isolate overflow-hidden rounded-[1.5rem] border border-white/10 px-4 pb-5 pt-5 text-left shadow-2xl shadow-indigo-950/30 sm:px-8 sm:pb-6 sm:pt-6 lg:pb-4 lg:pt-4">
             <img
               src={heroBackground}
               alt=""
@@ -191,8 +191,8 @@ export default function Bienvenida() {
           </section>
 
           {/* Paths */}
-          <section className="pb-8" aria-label="Elige cómo empezar">
-            <div className="mb-4 flex items-end justify-between px-1">
+          <section className="flex min-h-0 flex-1 flex-col pb-4 lg:pb-2" aria-label="Elige cómo empezar">
+            <div className="mb-3 flex items-end justify-between px-1 pt-1">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Elige tu camino</p>
                 <p className="mt-1 text-xs text-slate-500">Choose your path · Choisissez votre chemin</p>
@@ -203,7 +203,7 @@ export default function Bienvenida() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid flex-1 grid-cols-1 gap-4 md:grid-cols-3 lg:min-h-0">
               {PATHS.map((path, idx) => {
                 const Icon = path.icon;
                 const featured = idx === 0;
@@ -211,19 +211,19 @@ export default function Bienvenida() {
                   <button
                     key={path.href}
                     onClick={() => setLocation(path.href)}
-                    className={`group relative flex flex-col gap-4 overflow-hidden rounded-3xl border p-5 text-left shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:p-6 ${
+                    className={`group relative flex h-full min-h-[230px] flex-col gap-3 overflow-hidden rounded-3xl border p-5 text-left shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl lg:min-h-0 lg:p-4 ${
                       featured
-                        ? "border-emerald-300/40 bg-gradient-to-br from-emerald-500/[0.18] via-white/[0.06] to-teal-500/[0.08] shadow-emerald-950/40 hover:border-emerald-200/70 hover:shadow-emerald-500/15 md:col-span-2"
+                        ? "border-emerald-300/40 bg-gradient-to-br from-emerald-500/[0.18] via-white/[0.06] to-teal-500/[0.08] shadow-emerald-950/40 hover:border-emerald-200/70 hover:shadow-emerald-500/15"
                         : `bg-white/[0.045] ${path.border} ${path.glow} backdrop-blur-xl`
                     }`}
                   >
                     {featured && (
-                      <div className="mx-auto max-w-full rounded-full border border-emerald-200/20 bg-emerald-300/10 px-2.5 py-1 text-center text-[9px] font-bold uppercase leading-tight tracking-[0.12em] text-emerald-200">
+                      <div className="mx-auto max-w-full rounded-full border border-emerald-200/20 bg-emerald-300/10 px-2.5 py-1 text-center text-[8px] font-bold uppercase leading-tight tracking-[0.1em] text-emerald-200">
                         Recomendado · Recommended · Recommandé
                       </div>
                     )}
                     <div className="flex items-center justify-between">
-                      <div className={`flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br ${path.color} shadow-lg`}>
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${path.color} shadow-lg`}>
                         <Icon className="h-5 w-5 text-white" />
                       </div>
                       <div className={`flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br ${path.color} shadow-lg transition-transform group-hover:scale-110`}>
@@ -231,16 +231,16 @@ export default function Bienvenida() {
                       </div>
                     </div>
 
-                    <div className="grid gap-3 sm:grid-cols-3 sm:gap-5">
+                    <div className="grid flex-1 content-center gap-2.5">
                       {[
                         { code: "ES", content: path.es, tone: "text-white", badge: "text-indigo-300 bg-indigo-500/10 border-indigo-400/20" },
                         { code: "EN", content: path.en, tone: "text-slate-200", badge: "text-blue-300 bg-blue-500/10 border-blue-400/20" },
                         { code: "FR", content: path.fr, tone: "text-slate-300", badge: "text-violet-300 bg-violet-500/10 border-violet-400/20" },
                       ].map(({ code, content, tone, badge }) => (
                         <div key={code}>
-                          <span className={`mb-1.5 inline-block rounded-full border px-2 py-0.5 text-[9px] font-bold tracking-widest ${badge}`}>{code}</span>
-                          <p className={`${tone} text-sm font-bold leading-snug`}>{content.label}</p>
-                          <p className="mt-1 text-xs leading-relaxed text-slate-400">{content.sub}</p>
+                           <span className={`mr-2 inline-block rounded-full border px-2 py-0.5 text-[8px] font-bold tracking-widest ${badge}`}>{code}</span>
+                           <span className={`${tone} text-[13px] font-bold leading-snug`}>{content.label}</span>
+                           <p className="mt-0.5 pl-0 text-[10px] leading-snug text-slate-400">{content.sub}</p>
                         </div>
                       ))}
                     </div>
@@ -251,7 +251,7 @@ export default function Bienvenida() {
           </section>
 
           {/* Trust line */}
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-white/[0.07] py-5 text-[10px] text-slate-500 sm:text-xs">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-white/[0.07] py-2 text-[10px] text-slate-500">
             <span className="inline-flex items-center gap-1.5"><Clock3 className="h-3.5 w-3.5 text-indigo-300" /> 24/7 · Siempre disponible · Always available · Toujours disponible</span>
             <span className="hidden text-slate-700 sm:inline">•</span>
             <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-emerald-300" /> Privado · Private · Privé</span>
