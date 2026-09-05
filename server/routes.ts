@@ -1337,6 +1337,15 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       if (result.ok) {
         sent++;
         await pool.query(
+          `UPDATE empresa_contacts
+           SET call_authorization_requested_at = NOW()
+           WHERE id = $1
+             AND call_authorized = false
+             AND call_authorization_revoked_at IS NULL
+             AND opted_out = false`,
+          [contact.id],
+        ).catch(() => {});
+        await pool.query(
           "INSERT INTO institution_email_tracking (campaign_id, contact_email, resend_message_id, subject_variant) VALUES ($1,$2,$3,$4)",
           [campaignId, contact.email, result.messageId || null, variant]
         ).catch(() => {});
@@ -2224,6 +2233,11 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
           JOIN empresa_contacts ec ON ec.id = a.contact_id ORDER BY a.started_at DESC LIMIT 200`),
         pool.query(`SELECT COUNT(*)::int AS total_contacts,
           COUNT(*) FILTER (WHERE call_authorized AND call_authorization_revoked_at IS NULL AND NOT opted_out)::int AS callable_contacts,
+          COUNT(*) FILTER (WHERE call_authorization_requested_at IS NOT NULL AND NOT call_authorized
+            AND call_authorization_revoked_at IS NULL AND NOT opted_out)::int AS authorization_open,
+          COUNT(*) FILTER (WHERE call_authorization_requested_at IS NULL AND NOT call_authorized
+            AND call_authorization_revoked_at IS NULL AND NOT opted_out)::int AS authorization_not_requested,
+          COUNT(*) FILTER (WHERE call_authorization_revoked_at IS NOT NULL OR opted_out)::int AS authorization_closed,
           (SELECT COUNT(*)::int FROM voice_crm_call_attempts) AS total_attempts,
           (SELECT COUNT(*)::int FROM voice_crm_call_attempts) AS calls_made,
           (SELECT COUNT(*)::int FROM voice_crm_call_attempts WHERE answered_at IS NOT NULL) AS answered,

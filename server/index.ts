@@ -140,6 +140,7 @@ async function ensureEmpresasTables() {
       ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS source TEXT;
       ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS call_authorized BOOLEAN DEFAULT false;
       ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS call_authorized_at TIMESTAMPTZ;
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS call_authorization_requested_at TIMESTAMPTZ;
       ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS call_authorization_source TEXT;
       ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS call_authorized_phone TEXT;
       ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS call_authorization_revoked_at TIMESTAMPTZ;

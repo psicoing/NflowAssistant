@@ -623,6 +623,7 @@ export default function AdminDashboard() {
   const voiceConsentReason = (contact: any) => {
     if (contact?.opted_out) return "Baja registrada";
     if (contact?.call_authorization_revoked_at) return "Consentimiento revocado";
+    if (contact?.call_authorization_requested_at) return "Autorización solicitada · pendiente de respuesta";
     if (!contact?.call_authorized) return "Sin consentimiento explícito";
     if (!contact?.phone || !contact?.call_authorized_phone) return "Falta teléfono autorizado";
     return "El teléfono no coincide con el autorizado";
@@ -2719,6 +2720,9 @@ export default function AdminDashboard() {
                     {[
                       ["Contactos", voiceCrmMetrics.total_contacts ?? voiceCrmMetrics.contacts ?? voiceCrmContacts.length],
                       ["Autorizados", voiceCrmMetrics.callable_contacts ?? voiceCrmMetrics.authorized ?? voiceCrmMetrics.call_authorized ?? voiceCrmContacts.filter(isVoiceCallAuthorized).length],
+                      ["Líneas abiertas", voiceCrmMetrics.authorization_open ?? 0],
+                      ["Sin solicitar", voiceCrmMetrics.authorization_not_requested ?? 0],
+                      ["Cerradas / revocadas", voiceCrmMetrics.authorization_closed ?? 0],
                       ["Intentos", voiceCrmMetrics.total_attempts ?? voiceCrmMetrics.attempts ?? voiceCrmAttempts.length],
                       ["Oportunidades", voiceCrmMetrics.opportunities ?? voiceCrmOpportunities.length],
                       ["Atendidas", voiceCrmMetrics.answered_calls ?? voiceCrmMetrics.answered],
