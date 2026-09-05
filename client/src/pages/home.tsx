@@ -85,6 +85,7 @@ import {
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData, NFlowOrganizationData, NFlowWebAppData } from "@/components/StructuredData";
 import { trackEvent } from "@/lib/analytics";
+import { useLanguageContext } from "@/components/LanguageProvider";
 
 const AWARENESS_BANNER_KEY = "nuxa-awareness-banner-dismissed";
 
@@ -265,6 +266,56 @@ function AwarenessBanner({ onClose }: { onClose: () => void }) {
 }
 
 function HomepageConversionBlock() {
+  const { currentLanguage } = useLanguageContext();
+  const copy = {
+    es: {
+      eyebrow: "Empieza cuando lo necesites",
+      title: "Apoyo emocional claro, disponible",
+      description: "Habla con NUXA cuando necesites ordenar lo que sientes, sin esperas y sin juicios. Para ti, tu familia o tu equipo.",
+      trial: "Probar gratis ahora",
+      call: "Llamar al asistente NUXA",
+      pricing: "5 consultas gratuitas · Sin tarjeta · Después, desde 2,99 €/mes y sin permanencia",
+      essentials: "Lo esencial, desde el primer día",
+      freeTitle: "5 consultas gratis",
+      freeText: "Sin introducir datos de pago.",
+      languagesTitle: "Más de 150 idiomas",
+      languagesText: "Conecta desde cualquier lugar.",
+      availableTitle: "Siempre disponible",
+      availableText: "De día, de noche y cuando más importa.",
+    },
+    en: {
+      eyebrow: "Start whenever you need",
+      title: "Clear emotional support, available",
+      description: "Talk to NUXA whenever you need to make sense of how you feel, without waiting or judgement. For you, your family or your team.",
+      trial: "Try it free now",
+      call: "Call the NUXA assistant",
+      pricing: "5 free consultations · No card · Then from €2.99/month, cancel anytime",
+      essentials: "The essentials, from day one",
+      freeTitle: "5 free consultations",
+      freeText: "No payment details required.",
+      languagesTitle: "More than 150 languages",
+      languagesText: "Connect from anywhere.",
+      availableTitle: "Always available",
+      availableText: "Day, night and when it matters most.",
+    },
+    fr: {
+      eyebrow: "Commencez quand vous en avez besoin",
+      title: "Un soutien émotionnel clair, disponible",
+      description: "Parlez à NUXA lorsque vous avez besoin de comprendre ce que vous ressentez, sans attente et sans jugement. Pour vous, votre famille ou votre équipe.",
+      trial: "Essayer gratuitement",
+      call: "Appeler l’assistant NUXA",
+      pricing: "5 consultations gratuites · Sans carte · Puis dès 2,99 €/mois, sans engagement",
+      essentials: "L’essentiel, dès le premier jour",
+      freeTitle: "5 consultations gratuites",
+      freeText: "Aucune donnée de paiement requise.",
+      languagesTitle: "Plus de 150 langues",
+      languagesText: "Connectez-vous où que vous soyez.",
+      availableTitle: "Toujours disponible",
+      availableText: "De jour, de nuit et lorsque cela compte le plus.",
+    },
+  } as const;
+  const content = copy[currentLanguage as keyof typeof copy] || copy.es;
+
   const handleFreeTrialClick = () => {
     trackEvent("free_trial_cta_clicked", {
       placement: "homepage_hero",
@@ -292,13 +343,13 @@ function HomepageConversionBlock() {
           <div>
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-orange-300/30 bg-orange-300/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-orange-200">
               <span className="h-2 w-2 rounded-full bg-orange-300" aria-hidden="true" />
-              Empieza cuando lo necesites
+              {content.eyebrow}
             </div>
             <h1 id="homepage-conversion-title" className="max-w-2xl text-3xl font-black leading-[1.08] tracking-tight sm:text-4xl lg:text-[3.25rem]">
-              Apoyo emocional claro, disponible <span className="text-orange-300">24/7</span>
+              {content.title} <span className="text-orange-300">24/7</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg">
-              Habla con NUXA cuando necesites ordenar lo que sientes, sin esperas y sin juicios. Para ti, tu familia o tu equipo.
+              {content.description}
             </p>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -307,7 +358,7 @@ function HomepageConversionBlock() {
                 onClick={handleFreeTrialClick}
                 className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-orange-500 px-6 py-3.5 text-base font-extrabold text-white shadow-lg shadow-orange-950/30 transition-all duration-200 hover:-translate-y-0.5 hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200 focus:ring-offset-2 focus:ring-offset-[#17233d] sm:px-7"
               >
-                Probar gratis ahora
+                {content.trial}
                 <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true" />
               </Link>
               <a
@@ -316,36 +367,36 @@ function HomepageConversionBlock() {
                 className="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-cyan-300/60 bg-cyan-300/10 px-5 py-3.5 text-sm font-bold text-cyan-100 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-cyan-300/20 focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:ring-offset-2 focus:ring-offset-[#17233d] sm:px-6"
               >
                 <Phone className="h-4 w-4" aria-hidden="true" />
-                Llamar al asistente NUXA
+                {content.call}
               </a>
             </div>
             <p className="mt-3 text-xs font-medium text-slate-400">
-              5 consultas gratuitas · Sin tarjeta · Después, desde 2,99 €/mes y sin permanencia
+              {content.pricing}
             </p>
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.07] p-5 shadow-2xl shadow-slate-950/20 backdrop-blur-sm sm:p-6">
-            <p className="mb-4 text-sm font-bold text-white">Lo esencial, desde el primer día</p>
+            <p className="mb-4 text-sm font-bold text-white">{content.essentials}</p>
             <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
               <div className="flex items-start gap-3 rounded-2xl bg-slate-950/20 p-3">
                 <ShieldCheck className="mt-0.5 h-5 w-5 flex-none text-orange-300" aria-hidden="true" />
                 <div>
-                  <p className="text-sm font-bold text-white">5 consultas gratis</p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-slate-300">Sin introducir datos de pago.</p>
+                  <p className="text-sm font-bold text-white">{content.freeTitle}</p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-slate-300">{content.freeText}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 rounded-2xl bg-slate-950/20 p-3">
                 <Globe2 className="mt-0.5 h-5 w-5 flex-none text-teal-300" aria-hidden="true" />
                 <div>
-                  <p className="text-sm font-bold text-white">Más de 150 idiomas</p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-slate-300">Conecta desde cualquier lugar.</p>
+                  <p className="text-sm font-bold text-white">{content.languagesTitle}</p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-slate-300">{content.languagesText}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 rounded-2xl bg-slate-950/20 p-3">
                 <Clock3 className="mt-0.5 h-5 w-5 flex-none text-cyan-300" aria-hidden="true" />
                 <div>
-                  <p className="text-sm font-bold text-white">Siempre disponible</p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-slate-300">De día, de noche y cuando más importa.</p>
+                  <p className="text-sm font-bold text-white">{content.availableTitle}</p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-slate-300">{content.availableText}</p>
                 </div>
               </div>
             </div>

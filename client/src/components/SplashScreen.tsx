@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "wouter";
 import PsychologySeal from "@/components/ui/psychology-seal";
 import { trackEvent } from "@/lib/analytics";
 
@@ -8,6 +9,7 @@ const SLIDES = [
     title: "NUXA",
     subtitle: "Tu app de salud mental y riesgos laborales",
     cta: "Pruébala gratis y sin tarjeta",
+    highlights: ["5 consultas gratis", "Más de 150 idiomas", "Disponible 24/7"],
     phoneLabel: "Llama al robot NUXA",
   },
   {
@@ -15,6 +17,7 @@ const SLIDES = [
     title: "NUXA",
     subtitle: "Your mental health & workplace wellbeing app",
     cta: "Try it free, no card required",
+    highlights: ["5 free consultations", "150+ languages", "Available 24/7"],
     phoneLabel: "Call NUXA's AI assistant",
   },
   {
@@ -22,11 +25,12 @@ const SLIDES = [
     title: "NUXA",
     subtitle: "Votre application de santé mentale et de risques psychosociaux",
     cta: "Essayez-la gratuitement, sans carte",
+    highlights: ["5 consultations gratuites", "Plus de 150 langues", "Disponible 24h/24"],
     phoneLabel: "Appelez l'assistant IA NUXA",
   },
 ];
 
-const TOTAL_DURATION_MS = 8000;
+const TOTAL_DURATION_MS = 12000;
 const SLIDE_DURATION_MS = TOTAL_DURATION_MS / SLIDES.length;
 const NUXA_VOICE_PHONE = "+17817822371";
 const NUXA_VOICE_PHONE_DISPLAY = "+1 781 782 2371";
@@ -67,7 +71,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
       role="status"
       aria-live="polite"
     >
-      <div className="flex items-center gap-2.5 mb-6">
+      <div className="flex items-center gap-2.5 mb-4 sm:mb-6">
         {[
           { code: "eu", label: "Unión Europea" },
           { code: "gb", label: "Reino Unido" },
@@ -85,7 +89,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         ))}
       </div>
 
-      <div className="flex items-center gap-6 mb-8">
+      <div className="flex items-center gap-6 mb-5 sm:mb-7">
         <div className="flex items-center gap-3">
           <img src="/favicon.png" alt="NUXA" className="w-14 h-14 rounded-2xl shadow-lg shadow-indigo-500/30" />
           <img src="/icon-boy.png" alt="NUXA" className="w-14 h-14 rounded-2xl shadow-lg shadow-indigo-500/30" />
@@ -101,10 +105,29 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
           {slide.lang}
         </span>
         <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">{slide.title}</h1>
-        <p className="text-slate-300 text-lg leading-relaxed mb-5">{slide.subtitle}</p>
-        <p className="text-white font-semibold text-base bg-gradient-to-r from-indigo-500 to-violet-500 inline-block px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-500/25">
+        <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-4">{slide.subtitle}</p>
+        <div className="mb-4 flex flex-wrap justify-center gap-2">
+          {slide.highlights.map((highlight) => (
+            <span
+              key={highlight}
+              className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200"
+            >
+              {highlight}
+            </span>
+          ))}
+        </div>
+        <Link
+          href="/prueba-gratis"
+          onClick={() =>
+            trackEvent("free_trial_cta_clicked", {
+              language: slide.lang.toLowerCase(),
+              placement: "splash",
+            })
+          }
+          className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 px-5 py-2.5 text-base font-semibold text-white shadow-lg shadow-indigo-500/25 transition-transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2 focus:ring-offset-slate-950"
+        >
           {slide.cta}
-        </p>
+        </Link>
         <a
           href={`tel:${NUXA_VOICE_PHONE}`}
           onClick={() =>
@@ -114,7 +137,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
             })
           }
           aria-label={`${slide.phoneLabel}: ${NUXA_VOICE_PHONE_DISPLAY}`}
-          className="mt-5 inline-flex items-center gap-2 rounded-xl border border-cyan-400/70 bg-slate-950/70 px-4 py-2.5 text-sm font-semibold text-cyan-100 shadow-[0_0_14px_rgba(34,211,238,0.22)] transition-colors hover:border-cyan-300 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-slate-950"
+          className="mt-3 inline-flex items-center gap-2 rounded-xl border border-cyan-400/70 bg-slate-950/70 px-4 py-2 text-sm font-semibold text-cyan-100 shadow-[0_0_14px_rgba(34,211,238,0.22)] transition-colors hover:border-cyan-300 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-slate-950"
         >
           <span aria-hidden="true">☎</span>
           <span>
