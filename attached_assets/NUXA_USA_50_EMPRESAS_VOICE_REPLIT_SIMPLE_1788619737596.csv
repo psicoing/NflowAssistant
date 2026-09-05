@@ -1,0 +1,51 @@
+EMPRESA;EMAIL;TELEFONO;DIRECCION;CODIGO_POSTAL;MUNICIPIO;PROVINCIA;EMPLEADOS;AREA_CONTACTO;PRIORIDAD;FUENTE
+Apple Inc.;;1-877-412-7753;One Apple Park Way;95014;Cupertino;CA;Enterprise;Enterprise / Corporate routing;A;https://www.apple.com/contact/
+Microsoft Corporation;;1-425-882-8080;One Microsoft Way;98052-6399;Redmond;WA;Enterprise;Corporate / HR routing;A;https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/msft-20260630.htm
+Amazon.com Inc.;;1-206-266-1000;410 Terry Avenue North;98109-5210;Seattle;WA;Enterprise;Corporate / Employee benefits routing;A;https://www.sec.gov/Archives/edgar/data/1018724/000101872426000012/amzn-20260429.htm
+Meta Platforms Inc.;;1-650-543-4800;1 Meta Way;94025;Menlo Park;CA;Enterprise;Corporate / People routing;A;https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/meta-20251231.htm
+IBM;;1-914-499-1900;1 New Orchard Road;10504;Armonk;NY;Enterprise;Corporate / HR;A;https://www.sec.gov/Archives/edgar/data/51143/000005114326000010/ibm-20251231.htm
+Oracle Corporation;;1-737-867-1000;2300 Oracle Way;78741;Austin;TX;Enterprise;Corporate / HR / Partnerships;A;https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-20260531.htm
+Salesforce;;1-800-667-6389;;;San Francisco;CA;Enterprise;Corporate / Sales routing;A;https://help.salesforce.com/s/articleView?id=000989536&language=en_US&type=1
+Cisco Systems Inc.;;1-408-526-4000;170 West Tasman Drive;95134-1706;San Jose;CA;Enterprise;Corporate / People / Wellbeing;A;https://www.sec.gov/Archives/edgar/data/858877/000085887726000132/csco-20260725.htm
+NVIDIA Corporation;info@nvidia.com;1-408-486-2000;2788 San Tomas Expressway;95051;Santa Clara;CA;Enterprise;Corporate / HR / Partnerships;A;https://www.nvidia.com/en-us/contact/
+Intel Corporation;;1-408-765-8080;2200 Mission College Blvd.;95054;Santa Clara;CA;Enterprise;Corporate / HR;A;https://www.intel.com/content/www/us/en/support/articles/000015122/programs.html
+Adobe Inc.;;1-408-536-6000;345 Park Avenue;95110-2704;San Jose;CA;Enterprise;Corporate / People;A;https://www.adobe.com/about-adobe/contact.html
+Dell Technologies Inc.;;1-800-289-3355;One Dell Way;78682;Round Rock;TX;Enterprise;Corporate / HR / Enterprise;A;https://www.sec.gov/Archives/edgar/data/1571996/000157199626000008/dell-20260130.htm
+Workday Inc.;;1-925-951-9000;6110 Stoneridge Mall Road;94588;Pleasanton;CA;Enterprise;HR technology / Partnerships;A;https://www.workday.com/en-us/company/about-workday/contact-us.html
+Zoom Communications Inc.;;1-888-799-9666;;;San Jose;CA;Enterprise;Corporate / Partnerships;A;https://www.zoom.com/en/contact/
+PayPal Holdings Inc.;;1-877-579-5975;2211 North First Street;95131;San Jose;CA;Enterprise;Business / Corporate routing;A;https://www.paypal.com/us/business/contact-sales
+JPMorgan Chase & Co.;;1-212-270-6000;270 Park Avenue;10017;New York;NY;Enterprise;Corporate / Employee benefits;A;https://www.sec.gov/Archives/edgar/data/19617/000162828026023927/annualreport-2025.pdf
+Bank of America Corporation;;1-704-386-5681;100 North Tryon Street;28255;Charlotte;NC;Enterprise;Corporate / HR;A;https://www.sec.gov/Archives/edgar/data/70858/000007085826000364/bac-20260723.htm
+Wells Fargo & Company;;1-415-371-2921;333 Market Street;94105;San Francisco;CA;Enterprise;Corporate / HR;A;https://www.sec.gov/Archives/edgar/data/72971/000007297126000133/wfc-20251231_d2.htm
+Morgan Stanley;;1-212-761-4000;1585 Broadway;10036;New York;NY;Enterprise;Corporate / HR;A;https://www.morganstanley.com/about-us/global-offices/americas/united-states
+Mastercard Incorporated;;1-914-249-2000;2000 Purchase Street;10577;Purchase;NY;Enterprise;Corporate / People;A;https://www.mastercard.com/us/en/for-the-world/about-us/global-locations.html
+UnitedHealth Group;;1-800-328-5979;P.O. Box 1459;55440-1459;Minneapolis;MN;Enterprise;Corporate / Wellbeing / HR;A;https://www.unitedhealthgroup.com/contact-us.html
+CVS Health;;1-800-746-7287;1 CVS Drive;02895;Woonsocket;RI;Enterprise;Corporate / Wellbeing / HR;A;https://www.cvshealth.com/contact.html
+The Cigna Group;;1-800-997-1654;900 Cottage Grove Road;06002;Bloomfield;CT;Enterprise;Corporate / Wellbeing / Employer solutions;A;https://www.thecignagroup.com/about-us/contact-us
+Elevance Health Inc.;;1-833-401-1577;220 Virginia Avenue;46204;Indianapolis;IN;Enterprise;Corporate / Wellbeing / HR;A;https://www.elevancehealth.com/contact-us
+Humana Inc.;;1-800-232-2006;;;Louisville;KY;Enterprise;Employer group / Wellbeing;A;https://www.humana.com/contact-us
+Walmart Inc.;IR@walmart.com;1-479-273-4000;702 S.W. 8th Street;72716;Bentonville;AR;Enterprise;Corporate / Associate wellbeing;A;https://corporate.walmart.com/content/dam/corporate/documents/newsroom/2025/04/24/walmart-releases-2025-annual-report-and-proxy-statement/walmart-inc-2025-annual-report.pdf
+Target Corporation;;1-612-304-6073;;;Minneapolis;MN;Enterprise;Corporate / Team member wellbeing;A;https://www.target.com/help/contact-us/corporate-information
+Costco Wholesale Corporation;;1-425-313-8100;999 Lake Drive;98027;Issaquah;WA;Enterprise;Corporate / Employee wellbeing;A;https://customerservice.costco.com/app/answers/detail/a_id/828
+The Home Depot Inc.;;1-800-466-3337;;;Atlanta;GA;Enterprise;Corporate / Associate wellbeing;A;https://corporate.homedepot.com/page/contact-us
+Lowe's Companies Inc.;;1-800-445-6937;;;Mooresville;NC;Enterprise;Corporate / Associate wellbeing;A;https://corporate.lowes.com/contact-us
+Starbucks Corporation;;1-206-318-7100;;;Seattle;WA;Enterprise;Corporate / Partner wellbeing;A;https://about.starbucks.com/contact/
+McDonald's Corporation;press@us.mcd.com;1-888-511-9903;110 N. Carpenter St.;60607;Chicago;IL;Enterprise;Corporate / People routing;B;https://corporate.mcdonalds.com/corpmcd/contact.html
+NIKE Inc.;;1-503-671-6453;One Bowerman Drive;97005;Beaverton;OR;Enterprise;Corporate / Employee wellbeing;A;https://about.nike.com/en/company
+The Walt Disney Company;;1-818-560-1000;500 South Buena Vista Street;91521;Burbank;CA;Enterprise;Corporate / Cast member wellbeing;A;https://www.sec.gov/Archives/edgar/data/1744489/000174448926000056/dis-20260805.htm
+Marriott International Inc.;;1-800-535-4028;;;Bethesda;MD;Enterprise;Corporate / Associate wellbeing;A;https://help.marriott.com/s/article/customer-support-contact-details
+Hilton Worldwide Holdings Inc.;ir@hilton.com;1-703-883-1000;7930 Jones Branch Drive;22102;McLean;VA;Enterprise;Corporate / Team member wellbeing;A;https://www.hilton.com/en/corporate/contact-us/
+Delta Air Lines Inc.;;1-800-455-2720;1030 Delta Boulevard;30354-1989;Atlanta;GA;Enterprise;Corporate / Employee wellbeing;A;https://www.delta.com/us/en/legal/imprint
+American Airlines Group Inc.;;1-682-278-9000;1 Skyview Drive;76155;Fort Worth;TX;Enterprise;Corporate / Team member wellbeing;A;https://www.aa.com/web/i18n/customer-service/about-us/corporate-structure.html
+United Parcel Service Inc.;;1-800-742-5877;;;Atlanta;GA;Enterprise;Corporate / Employee wellbeing;A;https://www.ups.com/us/en/support/contact-us
+FedEx Corporation;;1-800-463-3339;;;Memphis;TN;Enterprise;Corporate / Employee wellbeing;A;https://www.fedex.com/en-us/customer-support/contact-us.html
+Verizon Communications Inc.;;1-212-395-1000;1095 Avenue of the Americas;10036;New York;NY;Enterprise;Corporate / Employee wellbeing;A;https://www.verizon.com/about/our-company/verizon-corporate-headquarters
+AT&T Inc.;;1-210-821-4105;;;Dallas;TX;Enterprise;Corporate / Employee wellbeing;A;https://investors.att.com/resources/faqs
+T-Mobile US Inc.;;1-833-800-0323;;;Bellevue;WA;Enterprise;T-Mobile for Business / Corporate routing;A;https://www.t-mobile.com/contact-us
+General Motors Company;;1-313-667-1500;1240 Woodward Avenue;48265;Detroit;MI;Enterprise;Corporate / Employee wellbeing;A;https://www.sec.gov/Archives/edgar/data/1467858/000146785826000013/gm-20251231.htm
+PepsiCo Inc.;;1-914-253-2000;700 Anderson Hill Road;10577;Purchase;NY;Enterprise;Corporate / Employee wellbeing;A;https://www.sec.gov/Archives/edgar/data/77476/000007747626000007/pep-20251227.htm
+The Coca-Cola Company;;1-404-676-2121;One Coca-Cola Plaza;30313;Atlanta;GA;Enterprise;Corporate / Employee wellbeing;A;https://www.sec.gov/Archives/edgar/data/21344/000162828026010047/ko-20251231.htm
+The Procter & Gamble Company;;1-513-983-1100;One Procter & Gamble Plaza;45202;Cincinnati;OH;Enterprise;Corporate / Employee wellbeing;A;https://www.sec.gov/Archives/edgar/data/80424/000008042426000103/pg-20260630.htm
+Johnson & Johnson;;1-732-524-0400;One Johnson & Johnson Plaza;08933;New Brunswick;NJ;Enterprise;Corporate / Employee wellbeing;A;https://www.sec.gov/Archives/edgar/data/200406/000020040626000167/jnj-20260804.htm
+Pfizer Inc.;;1-212-733-2323;66 Hudson Boulevard East;10001-2192;New York;NY;Enterprise;Corporate / Employee wellbeing;A;https://www.sec.gov/Archives/edgar/data/78003/000007800326000026/pfe-20251231.htm
+Ford Motor Company;;1-313-322-3000;One American Road;48126;Dearborn;MI;Enterprise;Corporate / Employee wellbeing;A;https://www.sec.gov/Archives/edgar/data/37996/000003799626000155/f-20260728.htm

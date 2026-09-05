@@ -1,0 +1,60 @@
+Implementar módulo VOICE IA para prospección comercial de NUXA.
+
+El sistema debe trabajar sobre el listado de empresas cargado en Comercialización y realizar llamadas una por una, nunca todas a la vez. Cada llamada debe usar el número de Twilio configurado y presentar a NUXA como asistente comercial IA, no como psicóloga ni como servicio de atención psicológica.
+
+El objetivo de la llamada es explicar brevemente qué es NUXA.life, detectar si la empresa puede estar interesada en ofrecer NUXA a sus trabajadores y recoger información comercial útil.
+
+Durante cada llamada, la IA debe detectar y guardar:
+
+nombre de la empresa;
+nombre de la persona que atiende;
+cargo o departamento;
+teléfono;
+email si lo facilita;
+nivel de interés;
+necesidades detectadas;
+número aproximado de trabajadores si se menciona;
+si ya tienen programa de bienestar, salud mental o EAP;
+objeciones;
+si pide información por email;
+si acepta una segunda llamada;
+si quiere reunión;
+si solicita precios;
+si quiere hablar con una persona del equipo;
+observaciones relevantes.
+
+Al terminar, debe generar automáticamente un resumen corto de la conversación y guardarlo en la ficha de la empresa.
+
+Además, debe clasificar el resultado de cada llamada en estados como:
+
+NO CONTESTA
+BUZÓN / CENTRALITA
+NO INTERESADO
+ENVIAR INFORMACIÓN
+INTERÉS BAJO
+INTERÉS MEDIO
+INTERÉS ALTO
+SOLICITA REUNIÓN
+SOLICITA PRECIOS
+POSIBLE CIERRE
+DERIVAR A COMERCIAL HUMANO
+
+Quiero que las empresas con señales claras de compra queden destacadas automáticamente.
+
+Debe marcar como POSIBLE CIERRE cuando detecte varias señales como interés alto, petición de precios, reunión, número de trabajadores, pregunta por implantación, presupuesto, contrato, prueba piloto o deseo de hablar con una persona.
+
+Esas empresas deben aparecer en una sección prioritaria tipo:
+
+🔥 OPORTUNIDADES DE CIERRE
+
+y ordenarse de mayor a menor prioridad.
+
+La IA no debe cerrar contratos por su cuenta salvo que posteriormente se habilite esa opción. Su función inicial es:
+
+llamar → explicar → detectar interés → recoger datos → resumir → clasificar → pasar los mejores leads al equipo humano.
+
+También quiero métricas globales:
+
+llamadas realizadas, contestadas, conversaciones completas, interesados, reuniones, posibles cierres, coste por llamada, duración media y ratio de conversión.
+
+Y debe existir un botón para iniciar la siguiente llamada manualmente o un modo automático que vaya llamando una empresa cada vez, respetando pausas, límites de Twilio y la normativa aplicable.
