@@ -74,6 +74,22 @@ const empresaEmployeeBucketOf = (count?: number | null) => {
   return empresaEmployeeBuckets.find(b => b.test(count))?.value || "unknown";
 };
 
+const voiceCallResultOptions = [
+  "NO_CONTESTA",
+  "BUZON_CENTRALITA",
+  "NO_INTERESADO",
+  "ENVIAR_INFORMACION",
+  "INTERES_BAJO",
+  "INTERES_MEDIO",
+  "INTERES_ALTO",
+  "SOLICITA_REUNION",
+  "SOLICITA_PRECIOS",
+  "POSIBLE_CIERRE",
+  "DERIVAR_COMERCIAL_HUMANO",
+] as const;
+
+const voiceResultLabel = (status?: string) => (status || "").replace(/_/g, " ") || "Sin resultado";
+
 type EmpresaBrand = "nuxa" | "jobda" | "empordajobs";
 const empresaSharedFromEmail = "rmportbou@gmail.com";
 const empresaSharedContactPhone = "+34 660452136";
@@ -435,6 +451,26 @@ export default function AdminDashboard() {
   const [empresaSelectedContact, setEmpresaSelectedContact] = useState<any|null>(null);
   const [empresaContactHistory, setEmpresaContactHistory] = useState<any[]>([]);
   const [empresaContactHistoryLoading, setEmpresaContactHistoryLoading] = useState(false);
+  // ── VOICE IA CRM ─────────────────────────────────────────────────────────
+  const [voiceCrmContacts, setVoiceCrmContacts] = useState<any[]>([]);
+  const [voiceCrmAttempts, setVoiceCrmAttempts] = useState<any[]>([]);
+  const [voiceCrmMetrics, setVoiceCrmMetrics] = useState<any>({});
+  const [voiceCrmOpportunities, setVoiceCrmOpportunities] = useState<any[]>([]);
+  const [voiceCrmLoading, setVoiceCrmLoading] = useState(false);
+  const [voiceCrmImporting, setVoiceCrmImporting] = useState(false);
+  const [voiceCrmImportMessage, setVoiceCrmImportMessage] = useState<string | null>(null);
+  const [voiceCrmCallId, setVoiceCrmCallId] = useState<number | string | null>(null);
+  const [voiceCrmMessage, setVoiceCrmMessage] = useState<string | null>(null);
+  const [voiceCrmResultAttempt, setVoiceCrmResultAttempt] = useState<any | null>(null);
+  const [voiceCrmResultStatus, setVoiceCrmResultStatus] = useState<typeof voiceCallResultOptions[number]>("NO_CONTESTA");
+  const [voiceCrmResultNotes, setVoiceCrmResultNotes] = useState("");
+  const [voiceCrmResultDetails, setVoiceCrmResultDetails] = useState({
+    personName: "", roleDepartment: "", email: "", interestLevel: "", needs: "",
+    approximateWorkers: "", existingWellnessProgram: "", objections: "",
+    requestsEmail: false, acceptsSecondCall: false, wantsMeeting: false,
+    asksPrices: false, wantsHuman: false, summary: "", observations: "",
+  });
+  const [voiceCrmSavingResult, setVoiceCrmSavingResult] = useState(false);
 
   // ── Mutuas ──────────────────────────────────────────────────────────────
   const [mutuas, setMutuas] = useState<any[]>([]);
@@ -561,6 +597,37 @@ export default function AdminDashboard() {
   };
   const exportEmpresaCSV = () => window.open("/api/admin/empresas/export-csv", "_blank");
 
+  const fetchVoiceCrmDashboard = async () => {
+    setVoiceCrmLoading(true);
+    try {
+      const response = await fetch("/api/admin/voice-crm/dashboard");
+      if (!response.ok) throw new Error("No se pudo cargar el CRM de voz.");
+      const data = await response.json();
+      setVoiceCrmContacts(Array.isArray(data.contacts) ? data.contacts : []);
+      setVoiceCrmAttempts(Array.isArray(data.attempts) ? data.attempts : []);
+      setVoiceCrmMetrics(data.metrics || {});
+      setVoiceCrmOpportunities(Array.isArray(data.opportunities) ? data.opportunities : []);
+    } catch (error: any) {
+      setVoiceCrmMessage(error?.message || "No se pudo cargar el CRM de voz.");
+    } finally {
+      setVoiceCrmLoading(false);
+    }
+  };
+
+  const normalizedVoicePhone = (value?: string) => (value || "").trim().replace(/[()\s.-]/g, "");
+  const isVoiceCallAuthorized = (contact: any) => {
+    const destination = normalizedVoicePhone(contact?.normalized_phone || contact?.phone_normalized || contact?.phone);
+    const authorizedPhone = normalizedVoicePhone(contact?.call_authorized_phone);
+    return Boolean(contact?.call_authorized && !contact?.call_authorization_revoked_at && !contact?.opted_out && destination && authorizedPhone && destination === authorizedPhone);
+  };
+  const voiceConsentReason = (contact: any) => {
+    if (contact?.opted_out) return "Baja registrada";
+    if (contact?.call_authorization_revoked_at) return "Consentimiento revocado";
+    if (!contact?.call_authorized) return "Sin consentimiento explícito";
+    if (!contact?.phone || !contact?.call_authorized_phone) return "Falta teléfono autorizado";
+    return "El teléfono no coincide con el autorizado";
+  };
+
   useEffect(() => {
     checkAuthAndFetchStats();
   }, []);
@@ -594,6 +661,7 @@ export default function AdminDashboard() {
       fetchEmpresaCampaignHistory();
       fetchEmpresaTemplates();
       fetchEmpresaBrandStatuses();
+      fetchVoiceCrmDashboard();
     }
   }, [activeTab]);
 
@@ -2608,6 +2676,217 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               )}
+
+              <Card className="bg-gradient-to-br from-indigo-950/60 to-gray-800/70 border-indigo-500/40">
+                <CardHeader>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <CardTitle className="text-white flex items-center gap-2">🎙️ VOICE IA · CRM comercial</CardTitle>
+                      <CardDescription className="text-gray-300 mt-1">
+                        Cola manual: una llamada cada vez y únicamente al teléfono con consentimiento explícito vigente.
+                      </CardDescription>
+                    </div>
+                    <label className={`inline-flex cursor-pointer items-center justify-center rounded-lg px-3 py-2 text-xs font-semibold transition-all ${voiceCrmImporting ? "bg-gray-700 text-gray-400" : "bg-indigo-600 text-white hover:bg-indigo-500"}`}>
+                      {voiceCrmImporting ? "Importando…" : "📥 Importar USA50 (.csv)"}
+                      <input type="file" accept=".csv,text/csv" className="hidden" disabled={voiceCrmImporting} onChange={async (event) => {
+                        const file = event.target.files?.[0];
+                        if (!file) return;
+                        setVoiceCrmImporting(true);
+                        setVoiceCrmImportMessage(null);
+                        try {
+                          const formData = new FormData();
+                          formData.append("file", file);
+                          const response = await fetch("/api/admin/voice-crm/import-usa50", { method: "POST", body: formData });
+                          const data = await response.json().catch(() => ({}));
+                          if (!response.ok) throw new Error(data.message || "No se pudo importar el CSV.");
+                          const imported = data.imported ?? data.created ?? 0;
+                          const skipped = data.skipped ?? data.updated ?? 0;
+                          setVoiceCrmImportMessage(`Importación completada: ${imported} incorporados · ${skipped} ya existentes/omitidos.`);
+                          await fetchVoiceCrmDashboard();
+                        } catch (error: any) {
+                          setVoiceCrmImportMessage(error?.message || "No se pudo importar el CSV.");
+                        } finally {
+                          setVoiceCrmImporting(false);
+                          event.target.value = "";
+                        }
+                      }} />
+                    </label>
+                  </div>
+                  {voiceCrmImportMessage && <p className={`text-xs mt-2 ${voiceCrmImportMessage.startsWith("Importación") ? "text-emerald-300" : "text-red-300"}`}>{voiceCrmImportMessage}</p>}
+                </CardHeader>
+                <CardContent className="space-y-5">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3">
+                    {[
+                      ["Contactos", voiceCrmMetrics.total_contacts ?? voiceCrmMetrics.contacts ?? voiceCrmContacts.length],
+                      ["Autorizados", voiceCrmMetrics.callable_contacts ?? voiceCrmMetrics.authorized ?? voiceCrmMetrics.call_authorized ?? voiceCrmContacts.filter(isVoiceCallAuthorized).length],
+                      ["Intentos", voiceCrmMetrics.total_attempts ?? voiceCrmMetrics.attempts ?? voiceCrmAttempts.length],
+                      ["Oportunidades", voiceCrmMetrics.opportunities ?? voiceCrmOpportunities.length],
+                      ["Atendidas", voiceCrmMetrics.answered_calls ?? voiceCrmMetrics.answered],
+                      ["Completadas", voiceCrmMetrics.completed_calls ?? voiceCrmMetrics.completed],
+                      ["Interesadas", voiceCrmMetrics.interested_calls ?? voiceCrmMetrics.interested],
+                      ["Reuniones", voiceCrmMetrics.meetings ?? voiceCrmMetrics.meetings_requested],
+                      ["Posibles cierres", voiceCrmMetrics.possible_closes ?? voiceCrmMetrics.possible_closures],
+                      ["Duración media", voiceCrmMetrics.average_duration ?? voiceCrmMetrics.avg_duration],
+                      ["Coste", voiceCrmMetrics.cost ?? voiceCrmMetrics.total_cost],
+                      ["Conversión", voiceCrmMetrics.conversion_rate ?? voiceCrmMetrics.conversion],
+                    ].map(([label, value]) => (
+                      <div key={String(label)} className="rounded-xl border border-gray-700 bg-gray-900/50 p-3">
+                        <p className="text-[11px] uppercase tracking-wide text-gray-400">{label}</p>
+                        <p className="mt-1 text-2xl font-bold text-white">{value === undefined || value === null ? "—" : String(value)}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+                    <div className="rounded-xl border border-gray-700 bg-gray-900/35 p-4">
+                      <div className="flex items-center justify-between gap-3 mb-3">
+                        <div>
+                          <h3 className="text-sm font-bold text-white">Cola de contactos</h3>
+                          <p className="text-[11px] text-gray-400">No se ejecutan campañas automáticas.</p>
+                        </div>
+                        <button type="button" onClick={fetchVoiceCrmDashboard} disabled={voiceCrmLoading} className="text-xs text-indigo-300 hover:text-white disabled:opacity-50">↻ Actualizar</button>
+                      </div>
+                      <div className="max-h-80 overflow-y-auto space-y-2 pr-1">
+                        {voiceCrmLoading ? <p className="py-5 text-center text-sm text-gray-400">Cargando CRM…</p>
+                          : voiceCrmContacts.length === 0 ? <p className="py-5 text-center text-sm text-gray-500">No hay contactos en la cola.</p>
+                          : voiceCrmContacts.map((contact) => {
+                            const authorized = isVoiceCallAuthorized(contact);
+                            const contactName = contact.name || contact.contact_name || contact.company || "Contacto sin nombre";
+                            return <div key={contact.id} className="rounded-lg border border-gray-700 bg-gray-800/70 p-3">
+                              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                                <div className="min-w-0">
+                                  <p className="text-sm font-semibold text-white truncate">{contactName}</p>
+                                  <p className="text-xs text-gray-400 truncate">{contact.company && `${contact.company} · `}{contact.phone || contact.normalized_phone || "Sin teléfono"}</p>
+                                  <p className={`mt-1 text-[11px] font-medium ${authorized ? "text-emerald-300" : "text-amber-300"}`}>
+                                    {authorized ? "✓ Consentimiento activo para este teléfono" : `⛔ ${voiceConsentReason(contact)}`}
+                                  </p>
+                                </div>
+                                <button type="button" disabled={!authorized || voiceCrmCallId !== null || Number(voiceCrmMetrics.active_calls || 0) > 0} title={!authorized ? voiceConsentReason(contact) : Number(voiceCrmMetrics.active_calls || 0) > 0 ? "Hay una llamada en curso" : undefined} onClick={async () => {
+                                  setVoiceCrmCallId(contact.id);
+                                  setVoiceCrmMessage(null);
+                                  try {
+                                    const response = await fetch(`/api/admin/voice-crm/contacts/${contact.id}/call`, { method: "POST" });
+                                    const data = await response.json().catch(() => ({}));
+                                    if (!response.ok) throw new Error(data.message || (response.status === 403 ? "La llamada no está autorizada para este teléfono." : "No se pudo iniciar la llamada."));
+                                    setVoiceCrmMessage("Llamada iniciada manualmente. No se iniciará ninguna otra desde la cola hasta terminar esta acción.");
+                                    await fetchVoiceCrmDashboard();
+                                  } catch (error: any) {
+                                    setVoiceCrmMessage(error?.message || "No se pudo iniciar la llamada.");
+                                  } finally {
+                                    setVoiceCrmCallId(null);
+                                  }
+                                }} className="shrink-0 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-gray-400">
+                                  {voiceCrmCallId === contact.id ? "Iniciando…" : "📞 Llamar ahora"}
+                                </button>
+                              </div>
+                            </div>;
+                          })}
+                      </div>
+                      {voiceCrmMessage && <p className={`mt-3 text-xs ${voiceCrmMessage.includes("iniciada") ? "text-emerald-300" : "text-red-300"}`}>{voiceCrmMessage}</p>}
+                    </div>
+
+                    <div className="rounded-xl border border-amber-500/40 bg-amber-950/15 p-4">
+                      <h3 className="text-sm font-bold text-amber-100">⭐ OPORTUNIDADES DE CIERRE</h3>
+                      <p className="mt-1 text-[11px] text-amber-200/70">Priorizadas por señales fuertes de compra, puntuación y resultado comercial.</p>
+                      <div className="mt-3 max-h-80 overflow-y-auto space-y-2 pr-1">
+                        {[...voiceCrmOpportunities].sort((a, b) => Number(b.score ?? b.opportunity_score ?? 0) - Number(a.score ?? a.opportunity_score ?? 0)).map((opportunity) => (
+                          <div key={opportunity.id || opportunity.attempt_id || opportunity.contact_id} className="rounded-lg border border-amber-600/30 bg-gray-900/55 p-3">
+                            <div className="flex justify-between gap-3">
+                              <div className="min-w-0">
+                                <p className="text-sm font-semibold text-white truncate">{opportunity.name || opportunity.contact_name || opportunity.company || "Oportunidad comercial"}</p>
+                                <p className="text-xs text-gray-400 truncate">{opportunity.company || opportunity.phone || voiceResultLabel(opportunity.outcome_status || opportunity.status)}</p>
+                              </div>
+                              <span className="shrink-0 rounded-full bg-amber-400/15 px-2 py-0.5 text-xs font-bold text-amber-200">Score {opportunity.score ?? opportunity.opportunity_score ?? 0}</span>
+                            </div>
+                          </div>
+                        ))}
+                        {voiceCrmOpportunities.length === 0 && <p className="py-5 text-center text-sm text-gray-500">Aún no hay oportunidades calificadas.</p>}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-gray-700 bg-gray-900/35 p-4">
+                    <h3 className="text-sm font-bold text-white">Registrar resultado de llamada</h3>
+                    <p className="mt-1 text-[11px] text-gray-400">Guarda un resultado estructurado para un intento ya realizado.</p>
+                    <div className="mt-3 grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-3">
+                      <select value={voiceCrmResultAttempt?.id ?? ""} onChange={(event) => setVoiceCrmResultAttempt(voiceCrmAttempts.find((attempt) => String(attempt.id) === event.target.value) || null)} className="bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-indigo-500">
+                        <option value="">Selecciona un intento</option>
+                        {voiceCrmAttempts.map((attempt) => <option key={attempt.id} value={attempt.id}>#{attempt.id} · {attempt.contact_name || attempt.name || attempt.company || attempt.phone || "Llamada"} · {voiceResultLabel(attempt.outcome_status || attempt.status)}</option>)}
+                      </select>
+                      <select value={voiceCrmResultStatus} onChange={(event) => setVoiceCrmResultStatus(event.target.value as typeof voiceCallResultOptions[number])} className="bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-indigo-500">
+                        {voiceCallResultOptions.map((status) => <option key={status} value={status}>{voiceResultLabel(status)}</option>)}
+                      </select>
+                    </div>
+                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2">
+                      <input value={voiceCrmResultDetails.personName} onChange={(event) => setVoiceCrmResultDetails(current => ({ ...current, personName: event.target.value }))} placeholder="Persona de contacto" className="bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 text-xs placeholder:text-gray-500" />
+                      <input value={voiceCrmResultDetails.roleDepartment} onChange={(event) => setVoiceCrmResultDetails(current => ({ ...current, roleDepartment: event.target.value }))} placeholder="Cargo / departamento" className="bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 text-xs placeholder:text-gray-500" />
+                      <input type="email" value={voiceCrmResultDetails.email} onChange={(event) => setVoiceCrmResultDetails(current => ({ ...current, email: event.target.value }))} placeholder="Email de contacto" className="bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 text-xs placeholder:text-gray-500" />
+                      <select value={voiceCrmResultDetails.interestLevel} onChange={(event) => setVoiceCrmResultDetails(current => ({ ...current, interestLevel: event.target.value }))} className="bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 text-xs">
+                        <option value="">Nivel de interés</option><option value="BAJO">Bajo</option><option value="MEDIO">Medio</option><option value="ALTO">Alto</option>
+                      </select>
+                      <input value={voiceCrmResultDetails.needs} onChange={(event) => setVoiceCrmResultDetails(current => ({ ...current, needs: event.target.value }))} placeholder="Necesidades detectadas" className="bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 text-xs placeholder:text-gray-500" />
+                      <input type="number" min="0" value={voiceCrmResultDetails.approximateWorkers} onChange={(event) => setVoiceCrmResultDetails(current => ({ ...current, approximateWorkers: event.target.value }))} placeholder="Trabajadores aprox." className="bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 text-xs placeholder:text-gray-500" />
+                      <input value={voiceCrmResultDetails.existingWellnessProgram} onChange={(event) => setVoiceCrmResultDetails(current => ({ ...current, existingWellnessProgram: event.target.value }))} placeholder="Programa bienestar / EAP actual" className="bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 text-xs placeholder:text-gray-500 sm:col-span-2" />
+                    </div>
+                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <textarea value={voiceCrmResultDetails.objections} onChange={(event) => setVoiceCrmResultDetails(current => ({ ...current, objections: event.target.value }))} rows={2} placeholder="Objeciones" className="w-full bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 text-xs placeholder:text-gray-500" />
+                      <textarea value={voiceCrmResultDetails.summary} onChange={(event) => setVoiceCrmResultDetails(current => ({ ...current, summary: event.target.value }))} rows={2} placeholder="Resumen breve de la conversación" className="w-full bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 text-xs placeholder:text-gray-500" />
+                    </div>
+                    <textarea value={voiceCrmResultDetails.observations} onChange={(event) => setVoiceCrmResultDetails(current => ({ ...current, observations: event.target.value }))} rows={2} placeholder="Observaciones y siguiente paso" className="mt-3 w-full bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 text-xs placeholder:text-gray-500" />
+                    <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
+                      {[
+                        ["requestsEmail", "Solicita email"],
+                        ["acceptsSecondCall", "Acepta segunda llamada"],
+                        ["wantsMeeting", "Quiere reunión"],
+                        ["asksPrices", "Pide precios"],
+                        ["wantsHuman", "Quiere comercial humano"],
+                      ].map(([field, label]) => <label key={field} className="flex items-center gap-1.5 text-xs text-gray-300 cursor-pointer">
+                        <input type="checkbox" checked={voiceCrmResultDetails[field as keyof typeof voiceCrmResultDetails] as boolean} onChange={(event) => setVoiceCrmResultDetails(current => ({ ...current, [field]: event.target.checked }))} className="accent-indigo-500" />{label}
+                      </label>)}
+                    </div>
+                    <textarea value={voiceCrmResultNotes} onChange={(event) => setVoiceCrmResultNotes(event.target.value)} rows={2} placeholder="Notas internas adicionales (opcional)" className="mt-3 w-full bg-gray-800 border border-gray-600 text-white rounded-lg px-3 py-2 text-xs placeholder:text-gray-500 focus:outline-none focus:border-indigo-500" />
+                    <button type="button" disabled={!voiceCrmResultAttempt || voiceCrmSavingResult} onClick={async () => {
+                      if (!voiceCrmResultAttempt) return;
+                      setVoiceCrmSavingResult(true);
+                      setVoiceCrmMessage(null);
+                      try {
+                        const result = {
+                          personName: voiceCrmResultDetails.personName,
+                          roleDepartment: voiceCrmResultDetails.roleDepartment,
+                          email: voiceCrmResultDetails.email,
+                          interestLevel: voiceCrmResultDetails.interestLevel,
+                          needs: voiceCrmResultDetails.needs,
+                          approximateWorkers: voiceCrmResultDetails.approximateWorkers ? Number(voiceCrmResultDetails.approximateWorkers) : null,
+                          existingWellnessProgram: voiceCrmResultDetails.existingWellnessProgram,
+                          objections: voiceCrmResultDetails.objections,
+                          requestsEmail: voiceCrmResultDetails.requestsEmail,
+                          acceptsSecondCall: voiceCrmResultDetails.acceptsSecondCall,
+                          wantsMeeting: voiceCrmResultDetails.wantsMeeting,
+                          asksPrices: voiceCrmResultDetails.asksPrices,
+                          wantsHuman: voiceCrmResultDetails.wantsHuman,
+                          summary: voiceCrmResultDetails.summary,
+                          observations: voiceCrmResultDetails.observations,
+                          notes: voiceCrmResultNotes,
+                        };
+                        const response = await fetch(`/api/admin/voice-crm/attempts/${voiceCrmResultAttempt.id}/result`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: voiceCrmResultStatus, result }) });
+                        const data = await response.json().catch(() => ({}));
+                        if (!response.ok) throw new Error(data.message || "No se pudo guardar el resultado.");
+                        setVoiceCrmMessage("Resultado guardado correctamente.");
+                        setVoiceCrmResultAttempt(null);
+                        setVoiceCrmResultNotes("");
+                        setVoiceCrmResultDetails({ personName: "", roleDepartment: "", email: "", interestLevel: "", needs: "", approximateWorkers: "", existingWellnessProgram: "", objections: "", requestsEmail: false, acceptsSecondCall: false, wantsMeeting: false, asksPrices: false, wantsHuman: false, summary: "", observations: "" });
+                        await fetchVoiceCrmDashboard();
+                      } catch (error: any) {
+                        setVoiceCrmMessage(error?.message || "No se pudo guardar el resultado.");
+                      } finally {
+                        setVoiceCrmSavingResult(false);
+                      }
+                    }} className="mt-3 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50">
+                      {voiceCrmSavingResult ? "Guardando…" : "Guardar resultado"}
+                    </button>
+                  </div>
+                </CardContent>
+              </Card>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 

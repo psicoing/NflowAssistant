@@ -46,6 +46,7 @@ import {
   getVoiceDemoOutboundCallUrl,
   getVoiceDemoOutboundStreamUrl,
   getVoiceDemoOutboundStatusUrl,
+  getVoiceDemoAllowedDomains,
   isValidTwilioVoiceSignature,
 } from "./voiceDemoBridge";
 import { EMPRESA_LEGACY_NUXA_FROM_EMAIL, EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandStatuses, getEmpresaBrandStatus, isEmpresaBrand, type EmpresaBrand } from "./empresaBrands";
@@ -80,6 +81,43 @@ const normalizeInternationalPhone = (value: unknown): string => {
 };
 
 const isInternationalPhone = (value: string) => /^\+[1-9]\d{7,14}$/.test(value);
+
+const voiceCrmOutcomeStatuses = new Set([
+  "NO_CONTESTA", "BUZON_CENTRALITA", "NO_INTERESADO", "ENVIAR_INFORMACION",
+  "INTERES_BAJO", "INTERES_MEDIO", "INTERES_ALTO", "SOLICITA_REUNION",
+  "SOLICITA_PRECIOS", "POSIBLE_CIERRE", "DERIVAR_COMERCIAL_HUMANO",
+]);
+const voiceCrmUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 2 * 1024 * 1024 },
+  fileFilter: (_req, file, callback) => {
+    if (file.originalname.toLowerCase().endsWith(".csv") || file.mimetype === "text/csv" || file.mimetype === "application/vnd.ms-excel") {
+      callback(null, true);
+    } else callback(new Error("Solo se admite CSV."));
+  },
+});
+
+const parseSemicolonCsv = (text: string): string[][] => {
+  const rows: string[][] = [];
+  let row: string[] = [], field = "", quoted = false;
+  const input = text.replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n");
+  for (let i = 0; i < input.length; i++) {
+    const char = input[i];
+    if (char === '"') {
+      if (quoted && input[i + 1] === '"') { field += '"'; i++; }
+      else quoted = !quoted;
+    } else if (char === ";" && !quoted) {
+      row.push(field.trim()); field = "";
+    } else if (char === "\n" && !quoted) {
+      row.push(field.trim()); field = "";
+      if (row.some(Boolean)) rows.push(row);
+      row = [];
+    } else field += char;
+  }
+  row.push(field.trim());
+  if (row.some(Boolean)) rows.push(row);
+  return rows;
+};
 
 function renderEmpresaCallConsentPage(params: {
   title: string;
@@ -2097,6 +2135,239 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     }
 
     res.json({ created, updated, skipped, errors: errors.slice(0, 20) });
+  });
+
+  // Voice CRM is deliberately a manual, consent-gated workflow.  This importer
+  // accepts the supplied USA list but never creates or changes call consent.
+  app.post("/api/admin/voice-crm/import-usa50", voiceCrmUpload.single("file"), async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const uploaded = req.file?.buffer?.toString("utf8");
+    const text = uploaded || (typeof req.body?.text === "string" ? req.body.text : "");
+    if (!text.trim()) return res.status(400).json({ message: "Adjunta un CSV separado por punto y coma." });
+
+    let created = 0, updated = 0, skipped = 0;
+    const errors: string[] = [];
+    for (const fields of parseSemicolonCsv(text)) {
+      if (fields[0]?.trim().toUpperCase() === "EMPRESA") continue;
+      if (fields.length !== 11) {
+        skipped++; errors.push(`Fila con ${fields.length} campos; se esperaban 11.`);
+        continue;
+      }
+      const [company, emailRaw, phone, address, postalCode, municipio, provincia, employeesRaw, contactArea, priority, source] = fields;
+      const email = emailRaw.trim().toLowerCase();
+      if (!company || (!phone && !email)) {
+        skipped++; errors.push(`Fila sin empresa o identificador: ${company || "(vacía)"}`);
+        continue;
+      }
+      if (email && !email.includes("@")) {
+        skipped++; errors.push(`Email inválido para ${company}`); continue;
+      }
+      const importKey = `usa50:${company.trim().toLowerCase()}|${normalizeInternationalPhone(phone) || phone.trim().toLowerCase()}`;
+      const employeeMatch = employeesRaw.match(/\d{1,3}(?:[.,]\d{3})+|\d+/);
+      const employeeCount = employeeMatch ? parseInt(employeeMatch[0].replace(/[.,]/g, ""), 10) : null;
+      try {
+        const existing = await pool.query(
+          `SELECT id FROM empresa_contacts
+           WHERE voice_crm_import_key = $1
+              OR ($2 <> '' AND lower(email) = $2)
+              OR ($2 = '' AND lower(trim(company)) = lower(trim($3))
+                  AND COALESCE(phone, '') = $4)
+           LIMIT 1`,
+          [importKey, email, company, phone],
+        );
+        if (existing.rows[0]) {
+          await pool.query(
+            `UPDATE empresa_contacts SET
+              company = COALESCE(NULLIF(company, ''), NULLIF($1, '')),
+              email = COALESCE(NULLIF(email, ''), NULLIF($2, '')),
+              phone = COALESCE(NULLIF(phone, ''), NULLIF($3, '')),
+              address = COALESCE(NULLIF(address, ''), NULLIF($4, '')),
+              postal_code = COALESCE(NULLIF(postal_code, ''), NULLIF($5, '')),
+              municipio = COALESCE(NULLIF(municipio, ''), NULLIF($6, '')),
+              provincia = COALESCE(NULLIF(provincia, ''), NULLIF($7, '')),
+              employee_count = COALESCE(employee_count, $8),
+              contact_area = COALESCE(NULLIF(contact_area, ''), NULLIF($9, '')),
+              priority = COALESCE(NULLIF(priority, ''), NULLIF($10, '')),
+              source = COALESCE(NULLIF(source, ''), NULLIF($11, '')),
+              voice_crm_import_key = COALESCE(voice_crm_import_key, $12)
+             WHERE id = $13`,
+            [company, email, phone, address, postalCode, municipio, provincia, employeeCount, contactArea, priority, source, importKey, existing.rows[0].id],
+          );
+          updated++;
+        } else {
+          await pool.query(
+            `INSERT INTO empresa_contacts
+              (email, company, phone, address, postal_code, municipio, provincia, employee_count,
+               contact_area, priority, source, voice_crm_import_key, call_authorized, company_size_source)
+             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,false,'manual')`,
+            [email || null, company, phone || null, address || null, postalCode || null, municipio || null, provincia || null, employeeCount, contactArea || null, priority || null, source || null, importKey],
+          );
+          created++;
+        }
+      } catch (error: any) {
+        skipped++; errors.push(`No se pudo importar ${company}: ${error.message}`);
+      }
+    }
+    res.json({ created, updated, skipped, errors: errors.slice(0, 20) });
+  });
+
+  app.get("/api/admin/voice-crm/dashboard", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    try {
+      const [contacts, attempts, metricRows, opportunities] = await Promise.all([
+        pool.query(`SELECT ec.*, latest.outcome_status AS latest_outcome_status, latest.started_at AS last_call_at
+          FROM empresa_contacts ec LEFT JOIN LATERAL (
+            SELECT outcome_status, started_at FROM voice_crm_call_attempts
+            WHERE contact_id = ec.id ORDER BY started_at DESC LIMIT 1
+          ) latest ON true WHERE ec.voice_crm_import_key IS NOT NULL ORDER BY ec.priority, ec.company`),
+        pool.query(`SELECT a.*, ec.company, ec.name, ec.email FROM voice_crm_call_attempts a
+          JOIN empresa_contacts ec ON ec.id = a.contact_id ORDER BY a.started_at DESC LIMIT 200`),
+        pool.query(`SELECT COUNT(*)::int AS total_contacts,
+          COUNT(*) FILTER (WHERE call_authorized AND call_authorization_revoked_at IS NULL AND NOT opted_out)::int AS callable_contacts,
+          (SELECT COUNT(*)::int FROM voice_crm_call_attempts) AS total_attempts,
+          (SELECT COUNT(*)::int FROM voice_crm_call_attempts) AS calls_made,
+          (SELECT COUNT(*)::int FROM voice_crm_call_attempts WHERE answered_at IS NOT NULL) AS answered,
+          (SELECT COUNT(*)::int FROM voice_crm_call_attempts WHERE outcome_status IS NOT NULL) AS completed_conversations,
+          (SELECT COUNT(*)::int FROM voice_crm_call_attempts WHERE outcome_status IN
+            ('INTERES_BAJO','INTERES_MEDIO','INTERES_ALTO','SOLICITA_REUNION','SOLICITA_PRECIOS','POSIBLE_CIERRE','DERIVAR_COMERCIAL_HUMANO')) AS interested,
+          (SELECT COUNT(*)::int FROM voice_crm_call_attempts WHERE outcome_status = 'SOLICITA_REUNION') AS meetings,
+          (SELECT COUNT(*)::int FROM voice_crm_call_attempts WHERE outcome_status = 'POSIBLE_CIERRE') AS possible_closes,
+          (SELECT COALESCE(AVG(duration_seconds), 0)::float FROM voice_crm_call_attempts WHERE duration_seconds IS NOT NULL) AS average_duration_seconds,
+          (SELECT COALESCE(SUM(ABS(cost_amount)), 0)::float FROM voice_crm_call_attempts WHERE cost_amount IS NOT NULL) AS total_cost,
+          (SELECT COALESCE(AVG(ABS(cost_amount)), 0)::float FROM voice_crm_call_attempts WHERE cost_amount IS NOT NULL) AS average_cost,
+          (SELECT COALESCE(MAX(currency), 'USD') FROM voice_crm_call_attempts WHERE cost_amount IS NOT NULL) AS currency,
+          (SELECT COUNT(*)::int FROM voice_crm_call_attempts WHERE outcome_status IN
+            ('POSIBLE_CIERRE','SOLICITA_REUNION','DERIVAR_COMERCIAL_HUMANO','SOLICITA_PRECIOS','INTERES_ALTO','INTERES_MEDIO','ENVIAR_INFORMACION')) AS opportunities_count,
+          (SELECT CASE WHEN COUNT(*) = 0 THEN 0 ELSE
+            COUNT(*) FILTER (WHERE outcome_status IN ('INTERES_BAJO','INTERES_MEDIO','INTERES_ALTO','SOLICITA_REUNION','SOLICITA_PRECIOS','POSIBLE_CIERRE','DERIVAR_COMERCIAL_HUMANO'))::float / COUNT(*) END
+            FROM voice_crm_call_attempts) AS conversion_ratio,
+          (SELECT COUNT(*)::int FROM voice_crm_call_attempts WHERE provider_status IN ('queued','initiated','ringing','in-progress')) AS active_calls
+          FROM empresa_contacts WHERE voice_crm_import_key IS NOT NULL`),
+        pool.query(`SELECT a.id AS attempt_id, a.contact_id, ec.company, ec.name, ec.email,
+          a.outcome_status, a.result, a.started_at,
+          CASE a.outcome_status WHEN 'POSIBLE_CIERRE' THEN 100 WHEN 'SOLICITA_REUNION' THEN 95
+            WHEN 'DERIVAR_COMERCIAL_HUMANO' THEN 90 WHEN 'SOLICITA_PRECIOS' THEN 85
+            WHEN 'INTERES_ALTO' THEN 75 WHEN 'INTERES_MEDIO' THEN 50
+            WHEN 'ENVIAR_INFORMACION' THEN 35 WHEN 'INTERES_BAJO' THEN 15 ELSE 0 END AS score
+          FROM voice_crm_call_attempts a JOIN empresa_contacts ec ON ec.id = a.contact_id
+          WHERE a.outcome_status IN ('POSIBLE_CIERRE','SOLICITA_REUNION','DERIVAR_COMERCIAL_HUMANO','SOLICITA_PRECIOS','INTERES_ALTO','INTERES_MEDIO','ENVIAR_INFORMACION')
+          ORDER BY score DESC, a.started_at DESC`),
+      ]);
+      res.json({ contacts: contacts.rows, attempts: attempts.rows, metrics: metricRows.rows[0], opportunities: opportunities.rows });
+    } catch (error) { console.error("voice CRM dashboard error", error); res.status(500).json({ message: "Error cargando Voice CRM" }); }
+  });
+
+  app.post("/api/admin/voice-crm/contacts/:id/call", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const contactId = Number.parseInt(req.params.id, 10);
+    if (!Number.isSafeInteger(contactId)) return res.status(400).json({ message: "Contacto inválido" });
+    const client = await pool.connect();
+    let attemptId: number;
+    let to: string;
+    try {
+      await client.query("BEGIN");
+      // Transaction-scoped lock makes the one-at-a-time limit race-safe across workers.
+      await client.query("SELECT pg_advisory_xact_lock(91827364)");
+      const active = await client.query(`SELECT id FROM voice_crm_call_attempts
+        WHERE provider_status IN ('queued','initiated','ringing','in-progress') LIMIT 1`);
+      if (active.rows.length) { await client.query("ROLLBACK"); return res.status(409).json({ message: "Ya hay una llamada en curso." }); }
+      const contact = await client.query(`SELECT * FROM empresa_contacts WHERE id = $1 FOR UPDATE`, [contactId]);
+      const row = contact.rows[0];
+      to = normalizeInternationalPhone(row?.phone);
+      const authorizedPhone = normalizeInternationalPhone(row?.call_authorized_phone);
+      if (!row || row.call_authorized !== true || row.call_authorization_revoked_at || row.opted_out ||
+          !isInternationalPhone(to) || to !== authorizedPhone) {
+        await client.query("ROLLBACK");
+        return res.status(403).json({ message: "La llamada requiere consentimiento activo para este teléfono exacto." });
+      }
+      const attempt = await client.query(
+        "INSERT INTO voice_crm_call_attempts (contact_id, to_phone, provider_status) VALUES ($1,$2,'queued') RETURNING id",
+        [contactId, to],
+      );
+      attemptId = attempt.rows[0].id;
+      await client.query("COMMIT");
+    } catch (error) {
+      await client.query("ROLLBACK").catch(() => {});
+      console.error("voice CRM call preparation error", error);
+      return res.status(500).json({ message: "No se pudo preparar la llamada." });
+    } finally { client.release(); }
+
+    const accountSid = process.env.TWILIO_ACCOUNT_SID?.trim();
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    if (!accountSid || !authToken) {
+      await pool.query("UPDATE voice_crm_call_attempts SET provider_status='failed', completed_at=NOW(), updated_at=NOW() WHERE id=$1", [attemptId]);
+      return res.status(503).json({ message: "Twilio no está configurado." });
+    }
+    try {
+      const twilioClient = twilio(accountSid, authToken);
+      const configuredFrom = normalizeInternationalPhone(process.env.TWILIO_PHONE_NUMBER);
+      const from = configuredFrom || (await twilioClient.incomingPhoneNumbers.list({ limit: 20 }))
+        .find(number => number.phoneNumber && number.capabilities?.voice)?.phoneNumber;
+      if (!from) throw new Error("No hay número Twilio con voz configurado.");
+      const domain = getVoiceDemoAllowedDomains()[0];
+      const call = await twilioClient.calls.create({
+        to, from, url: getVoiceDemoOutboundCallUrl(), method: "POST",
+        statusCallback: `https://${domain}/api/admin/voice-crm/status`,
+        statusCallbackMethod: "POST", statusCallbackEvent: ["initiated", "ringing", "answered", "completed"], timeout: 30,
+      });
+      await pool.query("UPDATE voice_crm_call_attempts SET twilio_call_sid=$1, provider_status=$2, updated_at=NOW() WHERE id=$3", [call.sid, call.status || "initiated", attemptId]);
+      return res.status(201).json({ attemptId, callSid: call.sid, status: call.status, to });
+    } catch (error: any) {
+      await pool.query("UPDATE voice_crm_call_attempts SET provider_status='failed', completed_at=NOW(), updated_at=NOW() WHERE id=$1", [attemptId]);
+      console.error("voice CRM Twilio call error", error?.code || error?.message);
+      return res.status(502).json({ message: "Twilio no pudo iniciar la llamada.", code: error?.code });
+    }
+  });
+
+  app.post("/api/admin/voice-crm/attempts/:id/result", async (req, res) => {
+    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
+    const attemptId = Number.parseInt(req.params.id, 10);
+    const outcomeStatus = req.body?.outcomeStatus ?? req.body?.status;
+    if (!Number.isSafeInteger(attemptId) || !voiceCrmOutcomeStatuses.has(outcomeStatus)) {
+      return res.status(400).json({ message: "Resultado de llamada inválido." });
+    }
+    const result = typeof req.body?.result === "object" && req.body.result !== null
+      ? req.body.result : { notes: typeof req.body?.notes === "string" ? req.body.notes.slice(0, 5000) : null };
+    try {
+      const updated = await pool.query(`UPDATE voice_crm_call_attempts SET outcome_status=$1, result=$2::jsonb,
+        updated_at=NOW() WHERE id=$3 RETURNING *`, [outcomeStatus, JSON.stringify(result), attemptId]);
+      if (!updated.rows[0]) return res.status(404).json({ message: "Intento no encontrado." });
+      res.json(updated.rows[0]);
+    } catch { res.status(500).json({ message: "No se pudo guardar el resultado." }); }
+  });
+
+  // Twilio retries webhooks, so this update is intentionally idempotent. A
+  // completed callback is terminal and cannot be overwritten by a late event.
+  app.post("/api/admin/voice-crm/status", async (req, res) => {
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    if (!isValidTwilioVoiceSignature(authToken, req.header("X-Twilio-Signature"), "/api/admin/voice-crm/status", req.body || {})) {
+      return res.status(403).send("Invalid signature");
+    }
+    const sid = typeof req.body?.CallSid === "string" ? req.body.CallSid : "";
+    const status = typeof req.body?.CallStatus === "string" ? req.body.CallStatus.toLowerCase().slice(0, 40) : "";
+    if (!sid || !status) return res.sendStatus(400);
+    const durationValue = typeof req.body?.CallDuration === "string" || typeof req.body?.CallDuration === "number"
+      ? Number(req.body.CallDuration) : null;
+    const duration = Number.isInteger(durationValue) && durationValue! >= 0 ? durationValue : null;
+    const priceValue = typeof req.body?.Price === "string" || typeof req.body?.Price === "number"
+      ? Number(req.body.Price) : null;
+    const price = Number.isFinite(priceValue) ? priceValue : null;
+    const currency = typeof req.body?.PriceUnit === "string" && /^[A-Za-z]{3}$/.test(req.body.PriceUnit)
+      ? req.body.PriceUnit.toUpperCase() : null;
+    try {
+      await pool.query(`UPDATE voice_crm_call_attempts SET provider_status=$1,
+        completed_at = CASE WHEN $1 IN ('completed','busy','failed','no-answer','canceled') THEN COALESCE(completed_at, NOW()) ELSE completed_at END,
+        answered_at = CASE WHEN $1 = 'in-progress' THEN COALESCE(answered_at, NOW()) ELSE answered_at END,
+        duration_seconds = COALESCE($2, duration_seconds),
+        cost_amount = COALESCE($3::numeric, cost_amount),
+        currency = COALESCE($4, currency),
+        updated_at=NOW()
+        WHERE twilio_call_sid=$5 AND (provider_status <> 'completed' OR $1 = 'completed')`, [status, duration, price, currency, sid]);
+      res.sendStatus(204);
+    } catch (error) {
+      console.error("voice CRM status callback error", error);
+      res.sendStatus(500);
+    }
   });
 
   app.get("/api/admin/empresa-brands", async (req, res) => {

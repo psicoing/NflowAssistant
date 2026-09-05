@@ -153,6 +153,48 @@ async function ensureEmpresasTables() {
   }
 }
 
+async function ensureVoiceCrmTables() {
+  try {
+    await pool.query(`
+      ALTER TABLE empresa_contacts ADD COLUMN IF NOT EXISTS voice_crm_import_key TEXT;
+      CREATE UNIQUE INDEX IF NOT EXISTS empresa_contacts_voice_crm_import_key_unique
+        ON empresa_contacts (voice_crm_import_key) WHERE voice_crm_import_key IS NOT NULL;
+      CREATE TABLE IF NOT EXISTS voice_crm_call_attempts (
+        id SERIAL PRIMARY KEY,
+        contact_id INTEGER NOT NULL REFERENCES empresa_contacts(id) ON DELETE CASCADE,
+        to_phone TEXT NOT NULL,
+        twilio_call_sid TEXT UNIQUE,
+        provider_status TEXT NOT NULL DEFAULT 'queued',
+        outcome_status TEXT,
+        result JSONB,
+        started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        completed_at TIMESTAMPTZ,
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        CONSTRAINT voice_crm_outcome_status_check CHECK (
+          outcome_status IS NULL OR outcome_status IN (
+            'NO_CONTESTA', 'BUZON_CENTRALITA', 'NO_INTERESADO',
+            'ENVIAR_INFORMACION', 'INTERES_BAJO', 'INTERES_MEDIO',
+            'INTERES_ALTO', 'SOLICITA_REUNION', 'SOLICITA_PRECIOS',
+            'POSIBLE_CIERRE', 'DERIVAR_COMERCIAL_HUMANO'
+          )
+        )
+      );
+      CREATE INDEX IF NOT EXISTS voice_crm_call_attempts_contact_started_idx
+        ON voice_crm_call_attempts (contact_id, started_at DESC);
+      CREATE INDEX IF NOT EXISTS voice_crm_call_attempts_active_idx
+        ON voice_crm_call_attempts (provider_status)
+        WHERE provider_status IN ('queued', 'initiated', 'ringing', 'in-progress');
+      ALTER TABLE voice_crm_call_attempts ADD COLUMN IF NOT EXISTS answered_at TIMESTAMPTZ;
+      ALTER TABLE voice_crm_call_attempts ADD COLUMN IF NOT EXISTS duration_seconds INTEGER;
+      ALTER TABLE voice_crm_call_attempts ADD COLUMN IF NOT EXISTS cost_amount NUMERIC(12,4);
+      ALTER TABLE voice_crm_call_attempts ADD COLUMN IF NOT EXISTS currency TEXT;
+    `);
+    log("Voice CRM tables ensured");
+  } catch (err: any) {
+    console.error("ensureVoiceCrmTables error:", err.message);
+  }
+}
+
 async function ensureEmpresasContacts() {
   try {
     await pool.query(`
@@ -1083,6 +1125,12 @@ app.use((req, res, next) => {
       uptimeSeconds: Math.floor((Date.now() - startedAt) / 1000),
     });
   });
+  app.use((req, res, next) => {
+    if (startupState === "starting" && req.path === "/" && (req.method === "GET" || req.method === "HEAD")) {
+      return res.status(200).type("text/plain").send("NUXA is starting");
+    }
+    next();
+  });
 
   const server = createServer(app);
   const port = Number(process.env.PORT) || 5000;
@@ -1101,6 +1149,7 @@ app.use((req, res, next) => {
   await ensureMutuaTables();
   await ensureMutuaContacts();
   await ensureEmpresasTables();
+  await ensureVoiceCrmTables();
   await ensureEmpresasContacts();
   await ensureEmpresaTemplates();
   await ensureLeadTables();

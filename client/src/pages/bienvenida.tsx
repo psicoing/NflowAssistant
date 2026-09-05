@@ -196,7 +196,7 @@ export default function Bienvenida() {
                   <img
                     src={language.image}
                     alt={language.alt}
-                    className="h-full w-full animate-in object-contain fade-in duration-500"
+                    className="h-full w-full animate-in object-cover object-top fade-in duration-500"
                   />
                   <span className="absolute right-2 top-2 rounded-full border border-white/15 bg-slate-950/80 px-2 py-1 text-[8px] font-black tracking-[0.16em] text-white backdrop-blur-sm sm:text-[10px]">
                     {language.code}
