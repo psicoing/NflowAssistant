@@ -10,7 +10,9 @@ import {
   Clock3,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
-import heroBackground from "@assets/image_1788616461483.png";
+import heroSpanish from "@assets/image_1788617410204.png";
+import heroEnglish from "@assets/nuxa-map-en.png";
+import heroFrench from "@assets/nuxa-map-fr.png";
 
 const PATHS = [
   {
@@ -75,21 +77,18 @@ const PATHS = [
 const HERO_LANGUAGES = [
   {
     code: "ES",
-    eyebrow: "Tu espacio de bienestar",
-    title: "Tu bienestar empieza aquí",
-    description: "Apoyo emocional inteligente, privado y disponible cuando lo necesitas",
+    image: heroSpanish,
+    alt: "Presentación comercial de NUXA en español",
   },
   {
     code: "EN",
-    eyebrow: "Your wellbeing space",
-    title: "Your wellbeing starts here",
-    description: "Intelligent, private support whenever you need it",
+    image: heroEnglish,
+    alt: "NUXA commercial presentation in English",
   },
   {
     code: "FR",
-    eyebrow: "Votre espace de bien-être",
-    title: "Votre bien-être commence ici",
-    description: "Un soutien intelligent et privé, quand vous en avez besoin",
+    image: heroFrench,
+    alt: "Présentation commerciale de NUXA en français",
   },
 ];
 
@@ -187,42 +186,23 @@ export default function Bienvenida() {
             </div>
           </button>
 
-          {/* Hero identity */}
-          <section className="relative isolate overflow-hidden rounded-[1.5rem] border border-white/10 px-4 pb-5 pt-5 text-left shadow-2xl shadow-indigo-950/30 sm:px-8 sm:pb-6 sm:pt-6 lg:pb-4 lg:pt-4">
+          {/* Complete localized commercial image */}
+          <section className="relative isolate flex h-[260px] items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/70 shadow-2xl shadow-indigo-950/30 sm:h-[285px] lg:h-[300px]">
             <img
-              src={heroBackground}
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-0 h-full w-full object-cover object-[68%_center]"
-            />
-            <div className="absolute inset-0 bg-slate-950/25" />
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-950/35 to-slate-950/10" />
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/35 via-transparent to-slate-950/35" />
-
-            <div
               key={heroLanguage.code}
-              className="relative z-10 w-full max-w-[72%] animate-in fade-in duration-500 sm:max-w-[58%]"
-            >
-              <div className="mb-3 flex w-fit max-w-full items-center gap-1.5 rounded-full border border-emerald-300/20 bg-slate-950/45 px-2.5 py-1 text-[8px] font-semibold uppercase tracking-[0.12em] text-emerald-200/90 backdrop-blur-sm sm:text-[9px]">
-                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.9)]" />
-                <span>{heroLanguage.code} · {heroLanguage.eyebrow}</span>
-              </div>
-              <h1 className="text-xl font-black leading-tight tracking-tight text-white sm:text-3xl">
-                {heroLanguage.title}
-              </h1>
-              <p className="mt-3 max-w-md text-[10px] leading-relaxed text-slate-200/90 sm:text-sm">
-                {heroLanguage.description}
-              </p>
-              <div className="mt-3 flex gap-1.5" aria-label={`Idioma activo: ${heroLanguage.code}`}>
-                {HERO_LANGUAGES.map((language, index) => (
-                  <span
-                    key={language.code}
-                    className={`h-1 rounded-full transition-all duration-300 ${
-                      index === heroLanguageIndex ? "w-6 bg-emerald-300" : "w-2 bg-white/30"
-                    }`}
-                  />
-                ))}
-              </div>
+              src={heroLanguage.image}
+              alt={heroLanguage.alt}
+              className="h-full w-full animate-in object-contain fade-in duration-500"
+            />
+            <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5 rounded-full bg-slate-950/70 px-2.5 py-1.5 backdrop-blur-sm" aria-label={`Idioma activo: ${heroLanguage.code}`}>
+              {HERO_LANGUAGES.map((language, index) => (
+                <span
+                  key={language.code}
+                  className={`h-1 rounded-full transition-all duration-300 ${
+                    index === heroLanguageIndex ? "w-6 bg-emerald-300" : "w-2 bg-white/40"
+                  }`}
+                />
+              ))}
             </div>
           </section>
 
