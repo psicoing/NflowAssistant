@@ -9,7 +9,7 @@ import {
   Clock3,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
-import heroBackground from "@assets/image_1787216114813.png";
+import heroBackground from "@assets/image_1788616461483.png";
 
 const PATHS = [
   {
