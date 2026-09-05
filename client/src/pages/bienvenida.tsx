@@ -105,8 +105,6 @@ export default function Bienvenida() {
     return () => window.clearInterval(interval);
   }, []);
 
-  const heroLanguage = HERO_LANGUAGES[heroLanguageIndex];
-
   const openComparison = () => {
     setLocation("/");
     let attempts = 0;
@@ -186,24 +184,26 @@ export default function Bienvenida() {
             </div>
           </button>
 
-          {/* Complete localized commercial image */}
-          <section className="relative isolate flex h-[260px] items-center justify-center overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/70 shadow-2xl shadow-indigo-950/30 sm:h-[285px] lg:h-[300px]">
-            <img
-              key={heroLanguage.code}
-              src={heroLanguage.image}
-              alt={heroLanguage.alt}
-              className="h-full w-full animate-in object-contain fade-in duration-500"
-            />
-            <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5 rounded-full bg-slate-950/70 px-2.5 py-1.5 backdrop-blur-sm" aria-label={`Idioma activo: ${heroLanguage.code}`}>
-              {HERO_LANGUAGES.map((language, index) => (
-                <span
-                  key={language.code}
-                  className={`h-1 rounded-full transition-all duration-300 ${
-                    index === heroLanguageIndex ? "w-6 bg-emerald-300" : "w-2 bg-white/40"
-                  }`}
-                />
-              ))}
-            </div>
+          {/* Three localized images rotate positions every two seconds */}
+          <section className="grid grid-cols-3 gap-2 sm:gap-3" aria-label="Presentación comercial de NUXA en tres idiomas">
+            {HERO_LANGUAGES.map((_, panelIndex) => {
+              const language = HERO_LANGUAGES[(heroLanguageIndex + panelIndex) % HERO_LANGUAGES.length];
+              return (
+                <div
+                  key={`${panelIndex}-${language.code}`}
+                  className="relative isolate flex h-[145px] items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-black/70 shadow-xl shadow-indigo-950/30 sm:h-[205px] lg:h-[220px]"
+                >
+                  <img
+                    src={language.image}
+                    alt={language.alt}
+                    className="h-full w-full animate-in object-contain fade-in duration-500"
+                  />
+                  <span className="absolute right-2 top-2 rounded-full border border-white/15 bg-slate-950/80 px-2 py-1 text-[8px] font-black tracking-[0.16em] text-white backdrop-blur-sm sm:text-[10px]">
+                    {language.code}
+                  </span>
+                </div>
+              );
+            })}
           </section>
 
           {/* Paths */}
