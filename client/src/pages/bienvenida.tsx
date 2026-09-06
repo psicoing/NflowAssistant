@@ -92,6 +92,39 @@ const HERO_LANGUAGES = [
   },
 ];
 
+const DESKTOP_TRUST_TILES = [
+  {
+    icon: BrainCircuit,
+    number: "01",
+    eyebrow: "COMPRENSIÓN",
+    title: "Te escucha de verdad",
+    description: "Una conversación que comprende el contexto, no solo palabras.",
+    accent: "from-orange-300 via-amber-400 to-orange-500",
+    glow: "bg-orange-400/20",
+    border: "hover:border-orange-300/45",
+  },
+  {
+    icon: ShieldCheck,
+    number: "02",
+    eyebrow: "CONFIANZA",
+    title: "Tu espacio privado",
+    description: "Diseñado para que puedas expresarte con libertad y seguridad.",
+    accent: "from-emerald-300 via-teal-400 to-cyan-500",
+    glow: "bg-emerald-400/20",
+    border: "hover:border-emerald-300/45",
+  },
+  {
+    icon: Clock3,
+    number: "03",
+    eyebrow: "CERCANÍA",
+    title: "Siempre a tu lado",
+    description: "Apoyo emocional disponible cuando realmente lo necesitas.",
+    accent: "from-indigo-300 via-violet-400 to-fuchsia-500",
+    glow: "bg-violet-400/20",
+    border: "hover:border-violet-300/45",
+  },
+];
+
 
 export default function Bienvenida() {
   const [, setLocation] = useLocation();
@@ -184,34 +217,23 @@ export default function Bienvenida() {
             </div>
           </button>
 
-          {/* Three localized panels rotate positions every two seconds.
-              On desktop these are deliberately square: the artwork stays legible
-              and the strip feels like a small gallery rather than a stretched banner. */}
-          <section
-            className="mx-auto grid w-full grid-cols-3 gap-2 sm:gap-3 lg:h-[clamp(232px,31vh,300px)] lg:w-max lg:max-w-none lg:grid-cols-[repeat(3,clamp(232px,31vh,300px))] lg:gap-4"
-            aria-label="Presentación comercial de NUXA en tres idiomas"
-          >
+          {/* Three localized images rotate positions every two seconds */}
+          <section className="grid grid-cols-3 gap-2 sm:gap-3" aria-label="Presentación comercial de NUXA en tres idiomas">
             {HERO_LANGUAGES.map((_, panelIndex) => {
               const language = HERO_LANGUAGES[(heroLanguageIndex + panelIndex) % HERO_LANGUAGES.length];
               return (
                 <div
                   key={`${panelIndex}-${language.code}`}
-                  className="group/panel relative isolate flex min-w-0 aspect-square items-center justify-center overflow-hidden rounded-2xl border border-white/[0.14] bg-[#111d39] shadow-[0_18px_42px_-22px_rgba(7,15,40,0.95)] transition-all duration-500 hover:-translate-y-1 hover:border-orange-200/45 hover:shadow-[0_24px_48px_-20px_rgba(241,143,71,0.22)] lg:h-full lg:aspect-square"
+                  className="relative isolate flex h-[145px] items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-black/70 shadow-xl shadow-indigo-950/30 sm:h-[205px] lg:h-[220px]"
                 >
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(244,171,105,0.2),transparent_38%),linear-gradient(145deg,rgba(255,255,255,0.08),transparent_48%,rgba(14,28,62,0.42))]" />
                   <img
                     src={language.image}
                     alt={language.alt}
-                    className="relative z-[1] h-full w-full object-contain p-1.5 transition-transform duration-700 ease-out group-hover/panel:scale-[1.025] sm:p-2 lg:p-2.5"
+                    className="h-full w-full animate-in object-fill fade-in duration-500"
                   />
-                  <div className="absolute inset-x-2 bottom-2 z-[2] flex items-center justify-between sm:inset-x-3 sm:bottom-3">
-                    <span className="rounded-full border border-white/20 bg-[#0c1630]/80 px-2 py-1 text-[8px] font-black tracking-[0.16em] text-white/90 shadow-lg backdrop-blur-md sm:px-2.5 sm:text-[10px]">
-                      {language.code}
-                    </span>
-                    <span className="hidden rounded-full border border-orange-200/25 bg-orange-200/10 px-2 py-1 text-[8px] font-semibold tracking-[0.12em] text-orange-100/85 backdrop-blur-md transition-opacity duration-300 group-hover/panel:opacity-100 sm:block sm:opacity-0">
-                      NUXA / {String(panelIndex + 1).padStart(2, "0")}
-                    </span>
-                  </div>
+                  <span className="absolute right-2 top-2 rounded-full border border-white/15 bg-slate-950/80 px-2 py-1 text-[8px] font-black tracking-[0.16em] text-white backdrop-blur-sm sm:text-[10px]">
+                    {language.code}
+                  </span>
                 </div>
               );
             })}
@@ -283,6 +305,38 @@ export default function Bienvenida() {
             <span className="hidden text-slate-700 sm:inline">•</span>
             <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-emerald-300" /> Privado · Private · Privé</span>
           </div>
+
+          {/* Desktop-only visual anchors fill the otherwise empty lower canvas. */}
+          <section
+            className="hidden min-h-0 flex-1 grid-cols-3 place-items-center gap-6 pb-5 pt-3 lg:grid"
+            aria-label="Valores principales de NUXA"
+          >
+            {DESKTOP_TRUST_TILES.map((tile) => {
+              const Icon = tile.icon;
+              return (
+                <article
+                  key={tile.number}
+                  className={`group relative aspect-square h-full max-h-[190px] min-h-[118px] overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-white/[0.085] via-white/[0.035] to-transparent p-5 shadow-[0_24px_70px_-34px_rgba(0,0,0,0.95)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1.5 ${tile.border}`}
+                >
+                  <div className={`pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full blur-3xl transition-transform duration-700 group-hover:scale-150 ${tile.glow}`} />
+                  <div className="pointer-events-none absolute inset-px rounded-[27px] bg-[linear-gradient(145deg,rgba(255,255,255,0.08),transparent_42%)]" />
+                  <span className="absolute right-5 top-4 font-mono text-[11px] tracking-[0.2em] text-white/25">{tile.number}</span>
+
+                  <div className="relative flex h-full flex-col justify-between">
+                    <div className={`flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br ${tile.accent} shadow-lg transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110`}>
+                      <Icon className="h-5 w-5 text-slate-950" strokeWidth={2.2} />
+                    </div>
+                    <div>
+                      <p className="mb-1 text-[8px] font-black tracking-[0.24em] text-white/40">{tile.eyebrow}</p>
+                      <h2 className="text-[clamp(14px,1.2vw,18px)] font-black leading-tight tracking-tight text-white">{tile.title}</h2>
+                      <p className="mt-2 line-clamp-3 text-[10px] leading-relaxed text-slate-400">{tile.description}</p>
+                    </div>
+                    <div className={`h-px w-10 bg-gradient-to-r ${tile.accent} transition-all duration-500 group-hover:w-full`} />
+                  </div>
+                </article>
+              );
+            })}
+          </section>
         </div>
       </div>
     </>
