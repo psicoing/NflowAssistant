@@ -184,23 +184,34 @@ export default function Bienvenida() {
             </div>
           </button>
 
-          {/* Three localized images rotate positions every two seconds */}
-          <section className="grid grid-cols-3 gap-2 sm:gap-3" aria-label="Presentación comercial de NUXA en tres idiomas">
+          {/* Three localized panels rotate positions every two seconds.
+              On desktop these are deliberately square: the artwork stays legible
+              and the strip feels like a small gallery rather than a stretched banner. */}
+          <section
+            className="mx-auto grid w-full grid-cols-3 gap-2 sm:gap-3 lg:h-[clamp(232px,31vh,300px)] lg:w-max lg:max-w-none lg:grid-cols-[repeat(3,clamp(232px,31vh,300px))] lg:gap-4"
+            aria-label="Presentación comercial de NUXA en tres idiomas"
+          >
             {HERO_LANGUAGES.map((_, panelIndex) => {
               const language = HERO_LANGUAGES[(heroLanguageIndex + panelIndex) % HERO_LANGUAGES.length];
               return (
                 <div
                   key={`${panelIndex}-${language.code}`}
-                  className="relative isolate flex h-[145px] items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-black/70 shadow-xl shadow-indigo-950/30 sm:h-[205px] lg:h-[220px]"
+                  className="group/panel relative isolate flex min-w-0 aspect-square items-center justify-center overflow-hidden rounded-2xl border border-white/[0.14] bg-[#111d39] shadow-[0_18px_42px_-22px_rgba(7,15,40,0.95)] transition-all duration-500 hover:-translate-y-1 hover:border-orange-200/45 hover:shadow-[0_24px_48px_-20px_rgba(241,143,71,0.22)] lg:h-full lg:aspect-square"
                 >
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(244,171,105,0.2),transparent_38%),linear-gradient(145deg,rgba(255,255,255,0.08),transparent_48%,rgba(14,28,62,0.42))]" />
                   <img
                     src={language.image}
                     alt={language.alt}
-                    className="h-full w-full animate-in object-fill fade-in duration-500"
+                    className="relative z-[1] h-full w-full object-contain p-1.5 transition-transform duration-700 ease-out group-hover/panel:scale-[1.025] sm:p-2 lg:p-2.5"
                   />
-                  <span className="absolute right-2 top-2 rounded-full border border-white/15 bg-slate-950/80 px-2 py-1 text-[8px] font-black tracking-[0.16em] text-white backdrop-blur-sm sm:text-[10px]">
-                    {language.code}
-                  </span>
+                  <div className="absolute inset-x-2 bottom-2 z-[2] flex items-center justify-between sm:inset-x-3 sm:bottom-3">
+                    <span className="rounded-full border border-white/20 bg-[#0c1630]/80 px-2 py-1 text-[8px] font-black tracking-[0.16em] text-white/90 shadow-lg backdrop-blur-md sm:px-2.5 sm:text-[10px]">
+                      {language.code}
+                    </span>
+                    <span className="hidden rounded-full border border-orange-200/25 bg-orange-200/10 px-2 py-1 text-[8px] font-semibold tracking-[0.12em] text-orange-100/85 backdrop-blur-md transition-opacity duration-300 group-hover/panel:opacity-100 sm:block sm:opacity-0">
+                      NUXA / {String(panelIndex + 1).padStart(2, "0")}
+                    </span>
+                  </div>
                 </div>
               );
             })}
