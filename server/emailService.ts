@@ -799,22 +799,31 @@ export async function sendEmpresaEmail(params: {
         </td></tr>
         <tr><td style="padding:32px;">
            ${bodyHtml}
-           ${callConsentUrl ? `
-             <div style="margin-top:26px;padding:20px 18px;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;text-align:center;">
-               <p style="margin:0 0 8px;color:#166534;font-size:15px;font-weight:700;">¿Quieres recibir información sobre NUXA.life?</p>
+            <div style="margin-top:26px;padding:22px 18px;background:#f0fdf4;border:2px solid ${brand.accent};border-radius:12px;text-align:center;">
+              <p style="margin:0 0 8px;color:#166534;font-size:16px;font-weight:800;">Autoriza una llamada de nuestro asistente Voice IA</p>
              <p style="margin:0 0 16px;color:#374151;font-size:13px;line-height:1.6;">
-                 Puedes autorizar una breve llamada informativa con nuestra asistente comercial de IA para entender cómo NUXA.life puede ayudar a tu empresa y cómo contratarlo. La atención psicológica no se realiza por teléfono: la ofrece la app NUXA.life.
+                Si deseas ampliar información sobre <strong>${escapeHtml(brand.name)}</strong>, puedes indicarnos el móvil de la persona responsable y autorizar una breve llamada comercial realizada por nuestro asistente de inteligencia artificial.
              </p>
+              <div style="margin:0 auto 16px;max-width:360px;text-align:left;">
+                <p style="margin:0 0 6px;color:#374151;font-size:12px;font-weight:700;">Móvil del responsable</p>
+                <div style="height:42px;box-sizing:border-box;padding:12px;background:#ffffff;border:1px solid #9ca3af;border-radius:8px;color:#9ca3af;font-size:13px;">
+                  Se introduce y confirma en el formulario seguro
+                </div>
+              </div>
              <p style="margin:0 0 16px;padding:10px 12px;background:#fffbeb;border-radius:8px;color:#92400e;font-size:12px;line-height:1.55;text-align:left;">
                <strong>Importante:</strong> de momento, la llamada aparecerá desde el número estadounidense <strong>${EMPRESA_CURRENT_CALL_NUMBER}</strong>. Te lo indicamos para que puedas reconocerla y no cuelgues al recibirla. Próximamente utilizaremos un número español.
              </p>
-             <a href="${callConsentUrl}" style="display:inline-block;padding:12px 22px;background:${brand.accent};color:#ffffff;font-size:13px;font-weight:700;border-radius:8px;text-decoration:none;">
-               ✅ Autorizar llamada informativa
-             </a>
+              ${callConsentUrl
+                ? `<a href="${callConsentUrl}" style="display:inline-block;padding:12px 22px;background:${brand.accent};color:#ffffff;font-size:13px;font-weight:700;border-radius:8px;text-decoration:none;">
+                    Indicar móvil y autorizar llamada
+                  </a>`
+                : `<span style="display:inline-block;padding:12px 22px;background:#9ca3af;color:#ffffff;font-size:13px;font-weight:700;border-radius:8px;">
+                    Vista de prueba · enlace activo en el envío real
+                  </span>`}
              <p style="margin:12px 0 0;color:#6b7280;font-size:11px;line-height:1.5;">
-               El enlace te permitirá confirmar el teléfono y retirar el permiso cuando quieras.
+                Una sola autorización sirve para comunicaciones comerciales de NUXA, JOBDA y EmpordaJobs. El permiso puede retirarse cuando quieras.
              </p>
-           </div>` : ""}
+            </div>
         </td></tr>
         <tr><td style="padding:24px 32px;background:${brand.softBackground};border-top:2px solid ${brand.accent};text-align:center;">
           <p style="margin:0 0 10px;font-size:11px;color:#9ca3af;">

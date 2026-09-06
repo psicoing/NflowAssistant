@@ -181,7 +181,7 @@ function renderEmpresaCallConsentPage(params: {
            <input type="hidden" name="token" value="${token}">
            <label style="display:flex;gap:9px;align-items:flex-start;margin-top:16px;color:#374151;font-size:13px;line-height:1.5;">
              <input type="checkbox" name="accept" value="yes" required style="margin-top:3px;">
-             <span>Autorizo a NUXA.life a realizar una llamada informativa y comercial sobre su servicio a este número. Entiendo que la atención psicológica la ofrece la app, no esta llamada, y que puedo retirar esta autorización cuando quiera.</span>
+              <span>Autorizo una llamada informativa y comercial realizada por el asistente Voice IA de NUXA, JOBDA o EmpordaJobs a este número. Entiendo que puedo retirar esta autorización cuando quiera.</span>
            </label>
            <button type="submit" style="display:block;width:100%;margin-top:20px;border:0;background:#059669;color:#fff;padding:13px 20px;border-radius:8px;font-weight:700;cursor:pointer;">Confirmar autorización</button>
          </form>`
@@ -2525,7 +2525,7 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       if (contact.call_authorized && !contact.call_authorization_revoked_at) {
         return res.send(renderEmpresaCallConsentPage({
           title: "Llamadas autorizadas",
-          message: "Ya has autorizado una llamada informativa de NUXA.life para este contacto. Puedes retirar el permiso cuando quieras.",
+           message: "Ya has autorizado llamadas informativas de Voice IA de NUXA, JOBDA y EmpordaJobs para este contacto. Puedes retirar el permiso cuando quieras.",
           token: String(req.query.token),
           company: contact.company,
           phone,
@@ -2534,8 +2534,8 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       }
 
       return res.send(renderEmpresaCallConsentPage({
-        title: "Autorizar llamada informativa de NUXA.life",
-        message: "Si te interesa contratar NUXA.life para tu empresa, confirma que deseas recibir una llamada informativa de nuestra asistente comercial de inteligencia artificial. La atención psicológica no se realiza por teléfono: la ofrece la app.",
+         title: "Autorizar llamada informativa de Voice IA",
+         message: "Indica el móvil de la persona responsable y confirma que deseas recibir una llamada comercial de nuestro asistente Voice IA. Una sola autorización sirve para NUXA, JOBDA y EmpordaJobs.",
         token: String(req.query.token),
         company: contact.company,
         phone,
