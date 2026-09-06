@@ -2048,11 +2048,21 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     const brand: EmpresaBrand = requestedBrand || "nuxa";
     if (!isEmpresaBrand(brand)) return res.status(400).json({ message: "Marca de prueba inválida" });
     try {
+      const testContact = await pool.query(
+        `INSERT INTO empresa_contacts
+           (email, name, company, company_size, company_size_source, source, opted_out)
+         VALUES ($1, 'Contacto de prueba', $2, 'unclassified', 'manual', 'prueba interna Voice IA', false)
+         ON CONFLICT (email) DO UPDATE
+         SET name = COALESCE(NULLIF(empresa_contacts.name, ''), EXCLUDED.name),
+             company = COALESCE(NULLIF(empresa_contacts.company, ''), EXCLUDED.company)
+         RETURNING id`,
+        [EMPRESA_SHARED_FROM_EMAIL, `Prueba interna ${brand.toUpperCase()}`],
+      );
       const result = await sendEmpresaEmail({
         email: EMPRESA_SHARED_FROM_EMAIL,
         subject,
         body,
-        empresaId: 0,
+        empresaId: testContact.rows[0].id,
         brand,
         fromEmailOverride: EMPRESA_LEGACY_NUXA_FROM_EMAIL,
         fromNameOverride: "NUXA",
