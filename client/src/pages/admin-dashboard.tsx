@@ -155,6 +155,160 @@ const getEmpresaBrandOption = (brand?: string) =>
   empresaBrandOptions.find(option => option.id === brand) || empresaBrandOptions[0];
 const empresaBrandLabel = (brand?: string) => getEmpresaBrandOption(brand).name;
 
+type EmpresaLetterLanguage = "es" | "en" | "fr";
+
+const empresaInternationalLetters: Record<EmpresaBrand, Record<Exclude<EmpresaLetterLanguage, "es">, { subject: string; body: string }>> = {
+  nuxa: {
+    en: {
+      subject: "NUXA — Professional emotional wellbeing for your teams",
+      body: `Dear Sir or Madam,
+
+We would like to introduce NUXA (nuxa.life), a professional emotional support platform designed for organisations that want to care for their people in a practical, confidential and accessible way.
+
+NUXA helps companies to:
+• Provide 24/7 emotional support for the entire workforce
+• Reduce the impact of stress, anxiety and burnout
+• Support ISO 45003 psychosocial risk-management objectives
+• Access aggregated and anonymous insights for HR teams
+
+We would be pleased to learn about your organisation's wellbeing priorities and show you how NUXA could complement your current employee-support strategy.
+
+Would you be available for a brief introductory conversation?
+
+Kind regards,
+
+The NUXA Team
+${empresaSharedFromEmail}
+${empresaSharedContactPhone}
+https://nuxa.life`,
+    },
+    fr: {
+      subject: "NUXA — Bien-être émotionnel professionnel pour vos équipes",
+      body: `Madame, Monsieur,
+
+Nous souhaitons vous présenter NUXA (nuxa.life), une plateforme professionnelle de soutien émotionnel conçue pour les organisations qui veulent prendre soin de leurs équipes de manière pratique, confidentielle et accessible.
+
+NUXA permet aux entreprises de :
+• Proposer un accompagnement émotionnel disponible 24h/24 et 7j/7
+• Réduire l'impact du stress, de l'anxiété et du burnout
+• Soutenir les objectifs de gestion des risques psychosociaux de la norme ISO 45003
+• Accéder à des informations agrégées et anonymes pour les équipes RH
+
+Nous serions heureux de connaître les priorités de votre organisation en matière de bien-être et de vous montrer comment NUXA peut compléter votre stratégie actuelle d'accompagnement des collaborateurs.
+
+Seriez-vous disponible pour un bref échange de présentation ?
+
+Cordialement,
+
+L'équipe NUXA
+${empresaSharedFromEmail}
+${empresaSharedContactPhone}
+https://nuxa.life`,
+    },
+  },
+  jobda: {
+    en: {
+      subject: "JOBDA — Advanced software and AI solutions for your company",
+      body: `Dear Sir or Madam,
+
+We would like to introduce JOBDA, a software-development service focused on creating practical, tailor-made digital solutions for companies.
+
+JOBDA helps organisations to:
+• Develop web and mobile applications adapted to real business needs
+• Integrate artificial intelligence into everyday processes
+• Digitalise and automate repetitive workflows
+• Improve productivity with reliable, scalable tools
+
+We would be pleased to learn about your current technology needs and explore how a customised solution could help your organisation move forward.
+
+Would you be available for a brief introductory conversation?
+
+Kind regards,
+
+The JOBDA Team
+${empresaSharedFromEmail}
+${empresaSharedContactPhone}
+https://jobda.org`,
+    },
+    fr: {
+      subject: "JOBDA — Logiciels avancés et solutions IA pour votre entreprise",
+      body: `Madame, Monsieur,
+
+Nous souhaitons vous présenter JOBDA, un service de développement logiciel spécialisé dans la création de solutions numériques pratiques et personnalisées pour les entreprises.
+
+JOBDA aide les organisations à :
+• Développer des applications web et mobiles adaptées à leurs besoins réels
+• Intégrer l'intelligence artificielle dans les processus quotidiens
+• Numériser et automatiser les tâches répétitives
+• Améliorer la productivité grâce à des outils fiables et évolutifs
+
+Nous serions heureux de connaître vos besoins technologiques actuels et d'étudier comment une solution sur mesure pourrait accompagner le développement de votre organisation.
+
+Seriez-vous disponible pour un bref échange de présentation ?
+
+Cordialement,
+
+L'équipe JOBDA
+${empresaSharedFromEmail}
+${empresaSharedContactPhone}
+https://jobda.org`,
+    },
+  },
+  empordajobs: {
+    en: {
+      subject: "EmpordaJobs — Technical talent and intelligent recruitment",
+      body: `Dear Sir or Madam,
+
+We would like to introduce EmpordaJobs, an employment and human-resources platform specialising in engineering, technology and vocational talent.
+
+EmpordaJobs offers companies:
+• Access to junior and senior technical professionals
+• Publication and promotion of employment opportunities
+• Intelligent matching between candidates and vacancies
+• Streamlined recruitment processes without unnecessary intermediaries
+• Local, national and European coverage
+
+We would be pleased to learn about your recruitment needs and explain how our platform can help you identify the right profiles.
+
+Would you be available for a brief introductory conversation?
+
+Kind regards,
+
+The EmpordaJobs Team
+${empresaSharedFromEmail}
+${empresaSharedContactPhone}`,
+    },
+    fr: {
+      subject: "EmpordaJobs — Talents techniques et recrutement intelligent",
+      body: `Madame, Monsieur,
+
+Nous souhaitons vous présenter EmpordaJobs, une plateforme d'emploi et de ressources humaines spécialisée dans l'ingénierie, la technologie et la formation professionnelle.
+
+EmpordaJobs propose aux entreprises :
+• Un accès à des profils techniques juniors et seniors
+• La publication et la diffusion d'offres d'emploi
+• Une mise en relation intelligente entre candidats et postes à pourvoir
+• Des processus de recrutement simplifiés, sans intermédiaires inutiles
+• Une couverture locale, nationale et européenne
+
+Nous serions heureux de connaître vos besoins en recrutement et de vous expliquer comment notre plateforme peut vous aider à identifier les profils adaptés.
+
+Seriez-vous disponible pour un bref échange de présentation ?
+
+Cordialement,
+
+L'équipe EmpordaJobs
+${empresaSharedFromEmail}
+${empresaSharedContactPhone}`,
+    },
+  },
+};
+
+const getEmpresaLetter = (brand: EmpresaBrand, language: EmpresaLetterLanguage) => {
+  const option = getEmpresaBrandOption(brand);
+  return language === "es" ? { subject: option.subject, body: option.body } : empresaInternationalLetters[brand][language];
+};
+
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -434,6 +588,7 @@ export default function AdminDashboard() {
   const [empresaCampaignHistory, setEmpresaCampaignHistory] = useState<any[]>([]);
   const [empresaHistoryLoading, setEmpresaHistoryLoading] = useState(false);
   const [empresaBrand, setEmpresaBrand] = useState<EmpresaBrand>("nuxa");
+  const [empresaLanguage, setEmpresaLanguage] = useState<EmpresaLetterLanguage>("es");
   const [empresaBrandStatuses, setEmpresaBrandStatuses] = useState<any[]>([]);
   const [empresaBrandLoading, setEmpresaBrandLoading] = useState(false);
   const [empresaSubject, setEmpresaSubject] = useState(getEmpresaBrandOption("nuxa").subject);
@@ -865,13 +1020,21 @@ export default function AdminDashboard() {
   const selectedEmpresaBrand = getEmpresaBrandOption(empresaBrand);
   const selectedEmpresaBrandStatus = empresaBrandStatuses.find(status => status.id === empresaBrand);
   const selectEmpresaBrand = (brand: EmpresaBrand) => {
-    const option = getEmpresaBrandOption(brand);
+    const letter = getEmpresaLetter(brand, empresaLanguage);
     setEmpresaBrand(brand);
-    setEmpresaSubject(option.subject);
-    setEmpresaBody(option.body);
+    setEmpresaSubject(letter.subject);
+    setEmpresaBody(letter.body);
     setEmpresaStatus("idle");
     setEmpresaResult(null);
     setEmpresaAbTest(false);
+    setEmpresaSubjectB("");
+  };
+
+  const selectEmpresaLanguage = (language: EmpresaLetterLanguage) => {
+    const letter = getEmpresaLetter(empresaBrand, language);
+    setEmpresaLanguage(language);
+    setEmpresaSubject(letter.subject);
+    setEmpresaBody(letter.body);
     setEmpresaSubjectB("");
   };
 
@@ -3123,7 +3286,29 @@ export default function AdminDashboard() {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <label className="text-gray-300 text-xs font-medium">Carta y remitente</label>
-                        {empresaBrandLoading && <span className="text-[10px] text-gray-500">Comprobando remitentes…</span>}
+                        <div className="flex items-center gap-2">
+                          <div className="flex rounded-lg border border-gray-700 bg-gray-900/60 p-0.5" aria-label="Idioma de la carta">
+                            {([
+                              ["es", "ES"],
+                              ["en", "EN"],
+                              ["fr", "FR"],
+                            ] as const).map(([language, label]) => (
+                              <button
+                                key={language}
+                                type="button"
+                                onClick={() => selectEmpresaLanguage(language)}
+                                className={`rounded-md px-2.5 py-1 text-[10px] font-bold transition-all ${
+                                  empresaLanguage === language
+                                    ? "bg-indigo-500 text-white shadow-sm"
+                                    : "text-gray-400 hover:bg-gray-700 hover:text-white"
+                                }`}
+                              >
+                                {label}
+                              </button>
+                            ))}
+                          </div>
+                          {empresaBrandLoading && <span className="text-[10px] text-gray-500">Comprobando remitentes…</span>}
+                        </div>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         {empresaBrandOptions.map(option => {
