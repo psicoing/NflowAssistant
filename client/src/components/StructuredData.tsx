@@ -57,7 +57,7 @@ export const NuxaOrganizationData = {
 };
 
 export const NuxaWebAppData = {
-  name: 'NUXA - Tu Psicólogo IA 24/7',
+  name: 'NUXA - Tu asistente de bienestar emocional, disponible 24/7',
   applicationCategory: 'HealthApplication',
   operatingSystem: 'Web, iOS, Android',
   offers: {

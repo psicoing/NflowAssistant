@@ -17,7 +17,7 @@ export default function BorderlessSupportSection() {
         
         <div className="space-y-3">
           <p className="text-lg md:text-xl text-gray-200 font-light">
-            <span className="text-white font-semibold tracking-wide">Un psicólogo en tu bolsillo</span>
+            <span className="text-white font-semibold tracking-wide">Tu asistente de bienestar emocional</span>
           </p>
           <p className="text-base md:text-lg text-gray-300 leading-relaxed max-w-2xl mx-auto">
             <span className="text-teal-400 font-medium">Donde estés</span>, 

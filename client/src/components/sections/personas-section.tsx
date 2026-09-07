@@ -52,7 +52,7 @@ export default function PersonasSection() {
     <section className="py-20 px-4 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-          NUXA, un psicólogo en tu bolsillo
+          NUXA, tu asistente de bienestar emocional
         </h2>
         <div className="w-24 h-1 bg-nflow-blue mx-auto mb-6"></div>
         <p className="text-xl text-gray-300 mb-16 max-w-4xl mx-auto">

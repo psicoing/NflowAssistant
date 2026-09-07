@@ -527,7 +527,7 @@ export async function sendLeadWelcomeEmail(params: {
         <tr><td style="background:linear-gradient(135deg,#10b981,#0d9488);padding:32px;text-align:center;">
           <p style="margin:0 0 8px;font-size:36px;">🧠</p>
           <p style="margin:0;font-size:24px;font-weight:700;color:#fff;">¡Bienvenido/a a NUXA!</p>
-          <p style="margin:8px 0 0;color:#a7f3d0;font-size:15px;">Tu psicólogo IA está aquí para ti</p>
+          <p style="margin:8px 0 0;color:#a7f3d0;font-size:15px;">Tu asistente de bienestar emocional está aquí para ti</p>
         </td></tr>
         <tr><td style="padding:32px;">
           <p style="margin:0 0 20px;color:#374151;font-size:15px;line-height:1.7;">
@@ -571,7 +571,7 @@ export async function sendLeadWelcomeEmail(params: {
     const { error: leadErr } = await resend.emails.send({
       from: "NUXA <hola@nuxa.life>",
       to: params.email,
-      subject: "Bienvenido/a a NUXA - Tu psicólogo IA te espera",
+      subject: "Bienvenido/a a NUXA - Tu asistente de bienestar emocional",
       text: `Gracias por suscribirte a NUXA.\n\nA partir de ahora recibirás recordatorios mensuales de bienestar, recursos nuevos y novedades de la plataforma.\n\nExplora NUXA gratis: https://nuxa.life/prueba-gratis\n\n---\nPara darte de baja: ${unsubscribeUrl}`,
       html,
     });

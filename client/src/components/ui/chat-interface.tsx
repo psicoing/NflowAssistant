@@ -716,7 +716,7 @@ export default function ChatInterface({
             <h3 className="font-bold text-xl text-white">NUXA Assistant</h3>
             <p className="text-sm text-gray-300 flex items-center">
               <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-              Conectado · Tu psicólogo digital
+              Conectado · Tu asistente de bienestar emocional
             </p>
           </div>
         </div>
@@ -732,7 +732,7 @@ export default function ChatInterface({
             <h3 className="font-semibold text-white text-sm">NUXA Assistant</h3>
             <p className="text-xs text-gray-300 flex items-center">
               <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5 animate-pulse"></span>
-              Tu psicólogo digital
+              Tu asistente de bienestar emocional
             </p>
           </div>
         </div>

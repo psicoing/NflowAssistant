@@ -631,7 +631,7 @@ export default function ChatBubbleInterface({
             <h3 className="font-semibold text-white text-base">NUXA Assistant</h3>
             <p className="text-xs text-emerald-100 dark:text-emerald-200 flex items-center">
               <span className="w-1.5 h-1.5 bg-green-400 rounded-full mr-1.5 animate-pulse"></span>
-              En línea • Tu psicólogo IA
+              En línea • Tu asistente de bienestar emocional
             </p>
           </div>
           <MessageCircle className="w-5 h-5 text-white opacity-80" />

@@ -26,7 +26,7 @@ export default function PackagesSection() {
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-8">
             NUXA,{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-nflow-orange via-nflow-orange-light to-nflow-blue">
-              un psicólogo en tu bolsillo
+              tu asistente de bienestar emocional
             </span>
           </h2>
           <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">

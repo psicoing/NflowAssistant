@@ -206,7 +206,7 @@ export const translations = {
     'emergency.close': 'Cerrar',
 
     // Hero (pocket version)
-    'hero.pocket.title': 'Un psicólogo en tu bolsillo',
+    'hero.pocket.title': 'Tu asistente de bienestar emocional',
     'hero.pocket.subtitle': 'Asistente de salud mental con inteligencia artificial para adolescentes, familias y entorno laboral',
     'hero.cta.try': 'Prueba NUXA gratis',
 

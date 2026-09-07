@@ -14,7 +14,7 @@ export function ClientLanguageProvider({ children }: LanguageProviderProps) {
     
     // Update page title based on language
     const titles = {
-      es: 'NUXA - Tu Psicólogo de Bolsillo',
+      es: 'NUXA - Tu asistente de bienestar emocional, disponible 24/7',
       en: 'NUXA - Your Pocket Psychologist',
       fr: 'NUXA - Votre Psychologue de Poche',
       de: 'NUXA - Ihr Taschen-Psychologe',

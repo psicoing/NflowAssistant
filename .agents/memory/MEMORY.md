@@ -6,3 +6,4 @@
 - [Twilio Spanish number verification](twilio-spanish-number-verification.md) — Spanish numbers require verified identity and address documentation; facial retry loops need Twilio review.
 - [Company call consent](empresa-call-consent.md) — company calls require explicit two-step, phone-specific, revocable permission before any automation.
 - [Voice commercial positioning](voice-commercial-positioning.md) — phone calls explain and sell NUXA.life; psychological support belongs to the app.
+- [NUXA wellbeing positioning](nuxa-wellbeing-positioning.md) — present NUXA as an emotional wellbeing assistant, never as an AI psychologist replacing clinical care.

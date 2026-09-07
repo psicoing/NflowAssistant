@@ -116,15 +116,15 @@ function legalPageSchema(opts: {
 
 const routeMetadata: Record<string, RouteMeta> = {
   "/": {
-    title: "NUXA - Tu Psicólogo IA 24/7 | Apoyo Emocional Digital",
+    title: "NUXA - Tu asistente de bienestar emocional, disponible 24/7",
     description:
-      "NUXA es tu psicólogo disponible 24/7. Asistente de IA para salud mental de personas, familias y trabajadores. Apoyo emocional continuo y confidencial.",
+      "NUXA es tu asistente de bienestar emocional, disponible 24/7. Acompañamiento continuo y confidencial para personas, familias y trabajadores.",
     canonical: `${SITE_URL}`,
     jsonLd: [orgSchema, webSiteSchema],
     bodyHtml: `
       <main>
-        <h1>NUXA — Tu Psicólogo IA 24/7</h1>
-        <p>NUXA es tu psicólogo disponible 24 horas, 7 días a la semana. Apoyo emocional continuo, confidencial y accesible para personas, familias y trabajadores.</p>
+        <h1>NUXA — Tu asistente de bienestar emocional, disponible 24/7</h1>
+        <p>NUXA ofrece acompañamiento emocional continuo, confidencial y accesible para personas, familias y trabajadores.</p>
         <h2>¿Por qué NUXA?</h2>
         <ul>
           <li>Disponible 24/7, sin listas de espera</li>

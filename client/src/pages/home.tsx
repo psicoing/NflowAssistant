@@ -433,7 +433,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-nflow-dark">
       <SEOHead
-        title="NUXA - Tu Psicólogo IA 24/7 | Salud Mental"
+        title="NUXA - Tu asistente de bienestar emocional, disponible 24/7"
         description="Tu psicólogo IA disponible 24/7. Apoyo emocional en español para personas, familias y trabajadores. ISO 45003. Confidencial y personalizado."
         keywords="psicólogo IA, NUXA, salud mental, apoyo emocional, chat psicológico, ansiedad, depresión, ISO 45003, bienestar laboral, terapia online, psicólogo virtual, inteligencia artificial"
         ogTitle="NUXA - Tu Psicólogo IA Disponible 24/7"
