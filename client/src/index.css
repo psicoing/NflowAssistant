@@ -137,6 +137,169 @@
   --ring: 22 100% 60%; /* #FF6B35 */
 }
 
+/* NUXA mobile companion navigation: deep ink, sea-glass active state, warm coral detail. */
+.nuxa-mobile-nav {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .nuxa-mobile-nav {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    padding: 8px 12px max(8px, env(safe-area-inset-bottom));
+    background: rgba(15, 29, 39, 0.94);
+    border-top: 1px solid rgba(141, 224, 193, 0.16);
+    box-shadow: 0 -12px 34px rgba(4, 15, 22, 0.24);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .nuxa-mobile-nav-inner {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    max-width: 520px;
+    margin: 0 auto;
+    gap: 2px;
+  }
+
+  .nuxa-mobile-nav-item {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 58px;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    flex-direction: column;
+    border: 0;
+    border-radius: 16px;
+    background: transparent;
+    color: rgba(223, 239, 234, 0.63);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nuxa-mobile-nav-item:active {
+    transform: scale(0.94);
+  }
+
+  .nuxa-mobile-nav-item.is-active {
+    color: #9ce7c8;
+    background: rgba(141, 224, 193, 0.11);
+  }
+
+  .nuxa-mobile-nav-item.is-active::after {
+    position: absolute;
+    content: "";
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: #f5a385;
+  }
+
+  .nuxa-nav-icon-wrap {
+    display: grid;
+    width: 30px;
+    height: 28px;
+    place-items: center;
+    transition: transform 180ms ease;
+  }
+
+  .nuxa-mobile-nav-item.is-active .nuxa-nav-icon-wrap {
+    transform: translateY(-1px);
+  }
+
+  .nuxa-mobile-more-panel {
+    position: absolute;
+    right: 12px;
+    bottom: calc(100% + 10px);
+    left: 12px;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 13px;
+    border: 1px solid rgba(141, 224, 193, 0.2);
+    border-radius: 20px;
+    background: #f3f8f5;
+    box-shadow: 0 18px 50px rgba(4, 15, 22, 0.24);
+    animation: nuxa-menu-rise 180ms ease-out both;
+  }
+
+  .nuxa-nav-icon-button {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    border: 0;
+    border-radius: 10px;
+    color: #49616a;
+    background: rgba(18, 48, 58, 0.07);
+  }
+
+  .nuxa-more-link {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    gap: 9px;
+    padding: 0 11px;
+    border: 1px solid rgba(43, 79, 83, 0.09);
+    border-radius: 13px;
+    color: #26424b;
+    background: rgba(255, 255, 255, 0.58);
+    font-size: 12px;
+    font-weight: 650;
+    text-decoration: none;
+    transition: transform 180ms ease, background-color 180ms ease, color 180ms ease;
+  }
+
+  .nuxa-more-link:active {
+    transform: scale(0.97);
+  }
+
+  .nuxa-more-link.is-active {
+    color: #11644f;
+    border-color: rgba(38, 154, 116, 0.28);
+    background: #d9f2e7;
+  }
+
+  .nuxa-floating-cta {
+    bottom: calc(78px + env(safe-area-inset-bottom)) !important;
+    right: 16px !important;
+  }
+
+  body {
+    padding-bottom: calc(82px + env(safe-area-inset-bottom));
+  }
+}
+
+@keyframes nuxa-menu-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nuxa-mobile-nav-item,
+  .nuxa-more-link,
+  .nuxa-mobile-more-panel {
+    animation: none;
+    transition: none;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;

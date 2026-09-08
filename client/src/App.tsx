@@ -15,6 +15,7 @@ import PWAInstallPrompt from "@/components/ui/pwa-install-prompt";
 import { CookieConsent } from "@/components/ui/cookie-consent";
 import FloatingCTAButton from "@/components/FloatingCTAButton";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
+import MobileBottomNav from "@/components/layout/mobile-bottom-nav";
 
 // Las páginas se descargan solo cuando se visita su ruta. Esto reduce mucho
 // el primer paquete que debe cargar el navegador/WebView.
@@ -215,6 +216,7 @@ function AppContent() {
       <CookieConsent />
       {showFloatingCTA && <FloatingCTAButton />}
       {showFloatingCTA && <ExitIntentPopup />}
+      <MobileBottomNav />
     </div>
   );
 }

@@ -31,7 +31,7 @@ export default function FloatingCTAButton() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex items-end space-x-2">
+    <div className="nuxa-floating-cta fixed bottom-6 right-6 z-50 flex items-end space-x-2">
       {/* Expanded message */}
       {isExpanded && (
         <div className="bg-white border-2 border-emerald-500 text-gray-900 p-4 rounded-2xl shadow-2xl max-w-xs">
