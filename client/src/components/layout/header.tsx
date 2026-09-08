@@ -41,17 +41,17 @@ export default function Header({ showBanner = false, sealOffset = false }: Heade
         isScrolled ? "bg-nflow-dark/95 backdrop-blur-md" : "bg-nflow-dark/90"
       } border-b border-gray-800`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-              <img src="/favicon.png" alt="NUXA chica" className="w-8 h-8 rounded-lg" />
-              <img src="/icon-boy.png" alt="NUXA chico" className="w-8 h-8 rounded-lg" />
-            <span className="text-xl font-bold text-white">NUXA</span>
+          <Link href="/" className="flex min-w-0 shrink items-center gap-1 sm:gap-2 hover:opacity-80 transition-opacity">
+              <img src="/favicon.png" alt="NUXA chica" className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg shrink-0" />
+              <img src="/icon-boy.png" alt="NUXA chico" className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg shrink-0" />
+            <span className="text-lg sm:text-xl font-bold text-white">NUXA</span>
           </Link>
 
           {/* Desktop and Mobile Navigation */}
-          <div className="flex items-center space-x-2 sm:space-x-4">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-4">
             
             {/* Language Toggle - Always visible for UK market expansion */}
             <EsEnLanguageToggle />
