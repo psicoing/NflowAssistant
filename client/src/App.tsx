@@ -65,7 +65,6 @@ const CalculadoraBurnout = lazy(() => import("@/pages/calculadora-burnout"));
 const RecursosIntro = lazy(() => import("@/pages/recursos-intro"));
 const SorteoRecursos = lazy(() => import("@/pages/sorteo-recursos"));
 const ProgramaPartners = lazy(() => import("@/pages/programa-partners"));
-const Bienvenida = lazy(() => import("@/pages/bienvenida"));
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -75,7 +74,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/bienvenida", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos", "/test-bienestar", "/calculadora-burnout", "/programa-partners", "/recompensas"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos", "/test-bienestar", "/calculadora-burnout", "/programa-partners", "/recompensas"];
     // Allow magic link access routes
     if (location.startsWith("/acceso/")) {
       return;
@@ -119,7 +118,6 @@ function AuthenticatedRouter() {
     >
       <Switch>
         <Route path="/" component={Home} />
-        <Route path="/bienvenida" component={Bienvenida} />
         <Route path="/ejemplos-chat" component={EjemplosChat} />
         <Route path="/novedades" component={Novedades} />
         <Route path="/recursos" component={RecursosGratis} />
@@ -204,7 +202,7 @@ function AppContent() {
     return <SplashScreen onFinish={() => {
       markSplashShown(isAuthenticated); // sessionStorage siempre; localStorage si tiene cuenta
       setShowSplash(false);
-      setLocation("/bienvenida");
+      setLocation("/");
     }} />;
   }
 

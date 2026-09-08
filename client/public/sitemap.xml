@@ -7,12 +7,6 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://nuxa.life/bienvenida</loc>
-    <lastmod>2026-08-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://nuxa.life/prueba-gratis</loc>
     <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
