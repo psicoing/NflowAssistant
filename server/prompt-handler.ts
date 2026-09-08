@@ -808,18 +808,20 @@ FORMATO JSON:
     const finalPrompt = chatMode === 'brief' ? briefModePrompt : systemPrompt;
     const maxTokens = chatMode === 'brief' ? 500 : 4000;
 
-    // Realizar la llamada a OpenAI con configuración optimizada para NEUROPSI-AI
+    // Mantener una versión estable por defecto para que cambios futuros del alias
+    // no alteren inesperadamente el comportamiento clínico-conversacional.
+    const chatModel = process.env.OPENAI_CHAT_MODEL?.trim() || "gpt-5.5-2026-04-23";
+
+    // Realizar la llamada a OpenAI conservando el prompt, el historial y el JSON.
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      model: chatModel,
       messages: [
         { role: "system", content: finalPrompt },
         ...conversationHistory,
         { role: "user", content: userMessage }
       ],
       response_format: { type: "json_object" },
-      max_tokens: maxTokens,
-      temperature: 0.4,
-      top_p: 0.9
+      max_completion_tokens: maxTokens
     });
 
     const responseContent = completion.choices[0].message.content;
