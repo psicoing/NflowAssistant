@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Brain, Globe, LogIn, UserPlus, ChevronDown, Wifi, WifiOff } from "lucide-react";
+import { Download, Wifi, WifiOff } from "lucide-react";
 import SmoothScrollMenu from "@/components/ui/smooth-scroll-menu";
 import EsEnLanguageToggle from "@/components/ui/es-en-language-toggle";
 
@@ -52,6 +52,16 @@ export default function Header({ showBanner = false, sealOffset = false }: Heade
 
           {/* Desktop and Mobile Navigation */}
           <div className="flex shrink-0 items-center gap-1 sm:gap-4">
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event("nuxa-open-install-guide"))}
+              className="group flex h-9 items-center gap-1.5 rounded-xl border border-nflow-orange/40 bg-nflow-orange/10 px-2 text-nflow-orange transition-colors hover:bg-nflow-orange hover:text-white sm:px-3"
+              aria-label="Instalar NUXA en el móvil"
+              title="Instalar NUXA en el móvil"
+            >
+              <Download className="h-4 w-4" />
+              <span className="hidden text-xs font-semibold md:inline">Instalar app</span>
+            </button>
             
             {/* Language Toggle - Always visible for UK market expansion */}
             <EsEnLanguageToggle />

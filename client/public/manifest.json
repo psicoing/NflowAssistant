@@ -1,7 +1,7 @@
 {
   "name": "NUXA - Tu asistente de bienestar emocional, disponible 24/7",
   "short_name": "NUXA",
-  "description": "Tu psicólogo disponible 24/7. Asistente de IA para salud mental personalizado y confidencial.",
+  "description": "Tu asistente de bienestar emocional, disponible 24/7. Apoyo personalizado y confidencial desde cualquier dispositivo.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",

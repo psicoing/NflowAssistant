@@ -1,192 +1,235 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Download, Share2, Smartphone, Store, Check, Chrome } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { X, Download, Smartphone, Zap, Shield, Clock } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useLanguageContext } from "@/components/LanguageProvider";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
+const copy = {
+  es: {
+    title: "Instala NUXA en tu móvil",
+    description: "Ten NUXA como una app, directamente desde tu navegador.",
+    noStoreTitle: "No necesitas App Store ni Google Play",
+    noStoreText:
+      "NUXA es una PWA de alta calidad: se instala desde la web, sin pagar una descarga y sin depender de la aprobación de una tienda.",
+    benefit: "Aparecerá en tu pantalla de inicio y se abrirá como una aplicación.",
+    iphone: "iPhone o iPad",
+    iphoneSteps: [
+      "Abre NUXA en Safari.",
+      "Pulsa Compartir (el cuadrado con la flecha hacia arriba).",
+      "Elige “Añadir a pantalla de inicio” y confirma.",
+    ],
+    android: "Android",
+    androidSteps: [
+      "Abre NUXA en Chrome.",
+      "Pulsa el menú de los tres puntos.",
+      "Elige “Instalar aplicación” o “Añadir a pantalla de inicio”.",
+    ],
+    install: "Instalar NUXA ahora",
+    installHint: "Tu navegador permite instalarla directamente.",
+    safariHint: "En iPhone debes usar Safari para ver la opción de instalación.",
+  },
+  en: {
+    title: "Install NUXA on your phone",
+    description: "Use NUXA like an app, directly from your browser.",
+    noStoreTitle: "No App Store or Google Play required",
+    noStoreText:
+      "NUXA is a high-quality PWA: install it from the web without paying for a download or depending on an app-store approval.",
+    benefit: "It will appear on your home screen and open like an app.",
+    iphone: "iPhone or iPad",
+    iphoneSteps: [
+      "Open NUXA in Safari.",
+      "Tap Share (the square with the upward arrow).",
+      "Choose “Add to Home Screen” and confirm.",
+    ],
+    android: "Android",
+    androidSteps: [
+      "Open NUXA in Chrome.",
+      "Tap the three-dot menu.",
+      "Choose “Install app” or “Add to Home screen”.",
+    ],
+    install: "Install NUXA now",
+    installHint: "Your browser can install it directly.",
+    safariHint: "On iPhone, use Safari to access the installation option.",
+  },
+  fr: {
+    title: "Installez NUXA sur votre mobile",
+    description: "Utilisez NUXA comme une app, directement depuis votre navigateur.",
+    noStoreTitle: "Pas besoin de l’App Store ni de Google Play",
+    noStoreText:
+      "NUXA est une PWA de haute qualité : elle s’installe depuis le Web, sans téléchargement payant ni approbation d’une boutique.",
+    benefit: "Elle apparaîtra sur votre écran d’accueil et s’ouvrira comme une application.",
+    iphone: "iPhone ou iPad",
+    iphoneSteps: [
+      "Ouvrez NUXA dans Safari.",
+      "Touchez Partager (le carré avec la flèche vers le haut).",
+      "Choisissez « Sur l’écran d’accueil », puis confirmez.",
+    ],
+    android: "Android",
+    androidSteps: [
+      "Ouvrez NUXA dans Chrome.",
+      "Touchez le menu à trois points.",
+      "Choisissez « Installer l’application » ou « Ajouter à l’écran d’accueil ».",
+    ],
+    install: "Installer NUXA maintenant",
+    installHint: "Votre navigateur permet l’installation directe.",
+    safariHint: "Sur iPhone, utilisez Safari pour accéder à l’option d’installation.",
+  },
+};
+
 export default function PWAInstallPrompt() {
-  const { t } = useLanguageContext();
+  const { currentLanguage } = useLanguageContext();
+  const installLanguage =
+    currentLanguage === "en" || currentLanguage === "fr" ? currentLanguage : "es";
+  const text = copy[installLanguage];
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [showPrompt, setShowPrompt] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const device = useMemo(() => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    return {
+      ios: /iphone|ipad|ipod/.test(userAgent),
+      android: /android/.test(userAgent),
+    };
+  }, []);
 
   useEffect(() => {
-    // Check if app is already installed
-    if (
-      window.self === window.top &&
-      window.navigator &&
-      'getInstalledRelatedApps' in window.navigator
-    ) {
-      // Algunos WebViews/iframes exponen el método, pero rechazan la llamada.
-      // No debe generar un error no controlado ni bloquear la carga de la app.
-      // @ts-ignore
-      window.navigator.getInstalledRelatedApps()
-        .then((relatedApps: any[]) => {
-          if (relatedApps.length > 0) {
-            setIsInstalled(true);
-          }
-        })
-        .catch(() => {
-          // La instalación sigue funcionando mediante beforeinstallprompt.
-        });
-    }
-
-    // Listen for the beforeinstallprompt event
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      
-      // Show prompt after a delay if not already installed
-      setTimeout(() => {
-        if (!isInstalled && !localStorage.getItem('nflow-pwa-dismissed')) {
-          setShowPrompt(true);
-        }
-      }, 3000);
+    const handleBeforeInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setDeferredPrompt(event as BeforeInstallPromptEvent);
+    };
+    const openInstallGuide = () => setIsOpen(true);
+    const handleInstalled = () => {
+      setIsOpen(false);
+      setDeferredPrompt(null);
     };
 
-    // Listen for app installed event
-    const handleAppInstalled = () => {
-      setIsInstalled(true);
-      setShowPrompt(false);
-      localStorage.setItem('nflow-pwa-installed', 'true');
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    window.addEventListener('appinstalled', handleAppInstalled);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("nuxa-open-install-guide", openInstallGuide);
+    window.addEventListener("appinstalled", handleInstalled);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('appinstalled', handleAppInstalled);
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener("nuxa-open-install-guide", openInstallGuide);
+      window.removeEventListener("appinstalled", handleInstalled);
     };
-  }, [isInstalled]);
+  }, []);
 
-  const handleInstallClick = async () => {
+  const installDirectly = async () => {
     if (!deferredPrompt) return;
-
-    try {
-      await deferredPrompt.prompt();
-      const choiceResult = await deferredPrompt.userChoice;
-      
-      if (choiceResult.outcome === 'accepted') {
-        setShowPrompt(false);
-        setIsInstalled(true);
-      }
-      
-      setDeferredPrompt(null);
-    } catch (error) {
-      console.error('Error during installation:', error);
-    }
+    await deferredPrompt.prompt();
+    const choice = await deferredPrompt.userChoice;
+    if (choice.outcome === "accepted") setIsOpen(false);
+    setDeferredPrompt(null);
   };
 
-  const handleDismiss = () => {
-    setShowPrompt(false);
-    localStorage.setItem('nflow-pwa-dismissed', 'true');
-    
-    // Show again after 7 days
-    setTimeout(() => {
-      localStorage.removeItem('nflow-pwa-dismissed');
-    }, 7 * 24 * 60 * 60 * 1000);
-  };
-
-  // Don't show if already installed or no install prompt available
-  if (!showPrompt || !deferredPrompt || isInstalled) {
-    return null;
-  }
+  const Guide = ({
+    title,
+    steps,
+    active,
+    icon,
+  }: {
+    title: string;
+    steps: string[];
+    active: boolean;
+    icon: React.ReactNode;
+  }) => (
+    <section
+      className={`rounded-2xl border p-4 ${
+        active
+          ? "border-nflow-orange/60 bg-nflow-orange/10 shadow-lg shadow-orange-950/20"
+          : "border-white/10 bg-white/[0.04]"
+      }`}
+    >
+      <div className="mb-3 flex items-center gap-2 text-white">
+        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10">{icon}</span>
+        <h3 className="font-semibold">{title}</h3>
+      </div>
+      <ol className="space-y-2">
+        {steps.map((step, index) => (
+          <li key={step} className="flex gap-2.5 text-sm leading-relaxed text-gray-200">
+            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-nflow-orange text-xs font-bold text-white">
+              {index + 1}
+            </span>
+            <span>{step}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0, y: 100, scale: 0.9 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 100, scale: 0.9 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:right-4 md:w-80"
-      >
-        {/* Backdrop Blur */}
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-sm rounded-2xl"></div>
-        
-        <div className="relative bg-gradient-to-br from-gray-900/95 via-nflow-dark/95 to-gray-800/95 rounded-2xl border border-nflow-orange/30 shadow-2xl backdrop-blur-xl overflow-hidden">
-          {/* Floating Orbs Background */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-10 -right-10 w-20 h-20 bg-nflow-orange/10 rounded-full blur-xl"></div>
-            <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-nflow-blue/10 rounded-full blur-xl"></div>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent className="max-h-[90vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto border-white/10 bg-gradient-to-b from-slate-900 to-nflow-dark p-0 text-white sm:rounded-3xl">
+        <div className="p-5 sm:p-7">
+          <DialogHeader className="pr-7 text-left">
+            <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-nflow-orange to-orange-500 shadow-lg shadow-orange-950/30">
+              <Download className="h-6 w-6" />
+            </div>
+            <DialogTitle className="text-2xl leading-tight text-white">{text.title}</DialogTitle>
+            <DialogDescription className="text-base text-gray-300">{text.description}</DialogDescription>
+          </DialogHeader>
+
+          <div className="my-5 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4">
+            <div className="flex gap-3">
+              <Store className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+              <div>
+                <p className="font-semibold text-emerald-100">{text.noStoreTitle}</p>
+                <p className="mt-1 text-sm leading-relaxed text-emerald-50/80">{text.noStoreText}</p>
+                <p className="mt-2 flex items-start gap-2 text-sm text-white">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />
+                  {text.benefit}
+                </p>
+              </div>
+            </div>
           </div>
-          
-          {/* Close Button */}
-          <button
-            onClick={handleDismiss}
-            className="absolute top-3 right-3 z-10 w-8 h-8 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/20 transition-all duration-200"
-          >
-            <X className="h-4 w-4" />
-          </button>
 
-          <div className="relative p-6">
-            {/* Header with Icon */}
-            <div className="text-center mb-6">
-              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-nflow-orange to-nflow-orange-light rounded-2xl flex items-center justify-center mb-4 shadow-lg">
-                <Smartphone className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-1">{t('pwa.title')}</h3>
-              <p className="text-gray-300 text-sm">{t('pwa.subtitle')}</p>
-            </div>
-
-            {/* Elegant Feature Cards */}
-            <div className="grid grid-cols-1 gap-3 mb-6">
-              <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-xl border border-white/10">
-                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
-                  <Zap className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-white font-medium text-sm">{t('pwa.feature1')}</p>
-                  <p className="text-gray-400 text-xs">{t('pwa.feature1.desc')}</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-xl border border-white/10">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
-                  <Shield className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <p className="text-white font-medium text-sm">{t('pwa.feature2')}</p>
-                  <p className="text-gray-400 text-xs">{t('pwa.feature2.desc')}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Call to Action */}
-            <div className="space-y-3">
+          {deferredPrompt && (
+            <div className="mb-5 rounded-2xl border border-nflow-orange/30 bg-white/[0.04] p-4">
+              <p className="mb-3 text-sm text-gray-300">{text.installHint}</p>
               <Button
-                onClick={handleInstallClick}
-                className="w-full bg-gradient-to-r from-nflow-orange via-orange-500 to-nflow-orange-light hover:shadow-lg hover:shadow-nflow-orange/30 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105"
+                onClick={installDirectly}
+                className="w-full rounded-xl bg-nflow-orange font-semibold text-white hover:bg-orange-500"
               >
-                <Download className="h-5 w-5 mr-2" />
-                {t('pwa.install')}
+                <Download className="mr-2 h-4 w-4" />
+                {text.install}
               </Button>
-              
-              <button
-                onClick={handleDismiss}
-                className="w-full text-gray-400 hover:text-white text-sm transition-colors py-2"
-              >
-                {t('pwa.dismiss')}
-              </button>
             </div>
+          )}
 
-            {/* Small Badge */}
-            <div className="text-center mt-4">
-              <div className="inline-flex items-center space-x-1 px-3 py-1 bg-white/10 rounded-full">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-gray-300">Instalación directa desde navegador</span>
-              </div>
-            </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Guide
+              title={text.iphone}
+              steps={text.iphoneSteps}
+              active={device.ios}
+              icon={<Share2 className="h-5 w-5 text-blue-300" />}
+            />
+            <Guide
+              title={text.android}
+              steps={text.androidSteps}
+              active={device.android}
+              icon={<Chrome className="h-5 w-5 text-green-300" />}
+            />
           </div>
+
+          {device.ios && !deferredPrompt && (
+            <p className="mt-4 flex items-center gap-2 text-xs text-amber-200">
+              <Smartphone className="h-4 w-4 shrink-0" />
+              {text.safariHint}
+            </p>
+          )}
         </div>
-      </motion.div>
-    </AnimatePresence>
+      </DialogContent>
+    </Dialog>
   );
 }
