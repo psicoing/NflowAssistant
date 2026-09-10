@@ -1894,6 +1894,9 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
         [email.toLowerCase().trim(), company || null, name || null, companySize || "unclassified"]
       );
       if (r.rows.length === 0) return res.status(409).json({ message: "Email ya existe" });
+      if (r.rows[0].opted_out) {
+        return res.status(409).json({ message: "Empresa incluida en la lista permanente de bajas" });
+      }
       res.json(r.rows[0]);
     } catch { res.status(500).json({ message: "Error" }); }
   });
@@ -1975,6 +1978,20 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     const half = subjectB ? Math.ceil(contacts.length / 2) : contacts.length;
     for (let i = 0; i < contacts.length; i++) {
       const contact = contacts[i];
+      const stillAllowed = await pool.query(
+        `SELECT 1
+         FROM empresa_contacts ec
+         WHERE ec.id = $1
+           AND ec.opted_out = false
+           AND NOT EXISTS (
+             SELECT 1 FROM empresa_suppression_list esl
+             WHERE (esl.suppression_type = 'email' AND esl.normalized_value = lower(trim(COALESCE(ec.email, ''))))
+                OR (esl.suppression_type = 'domain' AND esl.normalized_value = lower(split_part(COALESCE(ec.email, ''), '@', 2)))
+                OR (esl.suppression_type = 'company' AND esl.normalized_value = lower(regexp_replace(trim(COALESCE(ec.company, '')), '\\s+', ' ', 'g')))
+           )`,
+        [contact.id],
+      );
+      if (stillAllowed.rows.length === 0) continue;
       const variant = (subjectB && i >= half) ? "b" : "a";
       const usedSubject = variant === "b" && subjectB ? subjectB : subject;
       const result = await sendEmpresaEmail({ email: contact.email, subject: usedSubject, body, empresaId: contact.id, campaignId, brand });
@@ -2012,7 +2029,15 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
           message: `${brandStatus.name}: ${brandStatus.message}`,
         });
       }
-      let query = "SELECT * FROM empresa_contacts WHERE opted_out = false AND email IS NOT NULL";
+      let query = `SELECT * FROM empresa_contacts ec
+        WHERE opted_out = false
+          AND email IS NOT NULL
+          AND NOT EXISTS (
+            SELECT 1 FROM empresa_suppression_list esl
+            WHERE (esl.suppression_type = 'email' AND esl.normalized_value = lower(trim(ec.email)))
+               OR (esl.suppression_type = 'domain' AND esl.normalized_value = lower(split_part(ec.email, '@', 2)))
+               OR (esl.suppression_type = 'company' AND esl.normalized_value = lower(regexp_replace(trim(COALESCE(ec.company, '')), '\\s+', ' ', 'g')))
+          )`;
       const params: any[] = [];
       if (Array.isArray(companies) && companies.length > 0) { query += ` AND company = ANY($1)`; params.push(companies); }
       const selectedSizes = Array.isArray(companySizes) ? Array.from(new Set(companySizes)) : [];
@@ -2493,15 +2518,59 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       if (!uid) return res.status(400).send("Token inválido");
       const id = parseInt(Buffer.from(uid, "base64url").toString(), 10);
       if (isNaN(id)) return res.status(400).send("Token inválido");
-      await pool.query(
-        `UPDATE empresa_contacts
-         SET opted_out = true,
-             opted_out_at = NOW(),
-             call_authorized = false,
-             call_authorization_revoked_at = COALESCE(call_authorization_revoked_at, NOW())
-         WHERE id = $1`,
-        [id],
-      );
+      const client = await pool.connect();
+      try {
+        await client.query("BEGIN");
+        const contactResult = await client.query(
+          `SELECT id, lower(trim(COALESCE(email, ''))) AS email,
+                  lower(split_part(COALESCE(email, ''), '@', 2)) AS domain,
+                  lower(regexp_replace(trim(COALESCE(company, '')), '\\s+', ' ', 'g')) AS company
+           FROM empresa_contacts WHERE id = $1 FOR UPDATE`,
+          [id],
+        );
+        const contact = contactResult.rows[0];
+        if (contact) {
+          const publicDomains = new Set([
+            "gmail.com", "googlemail.com", "hotmail.com", "outlook.com", "live.com",
+            "msn.com", "yahoo.com", "icloud.com", "me.com", "proton.me",
+            "protonmail.com", "gmx.com",
+          ]);
+          const suppressions = [
+            contact.email && ["email", contact.email],
+            contact.domain && !publicDomains.has(contact.domain) && ["domain", contact.domain],
+            contact.company && ["company", contact.company],
+          ].filter(Boolean) as string[][];
+
+          for (const [type, value] of suppressions) {
+            await client.query(
+              `INSERT INTO empresa_suppression_list
+                 (suppression_type, normalized_value, source_contact_id)
+               VALUES ($1, $2, $3)
+               ON CONFLICT (suppression_type, normalized_value) DO NOTHING`,
+              [type, value, id],
+            );
+          }
+
+          await client.query(
+            `UPDATE empresa_contacts ec
+             SET opted_out = true,
+                 opted_out_at = COALESCE(opted_out_at, NOW()),
+                 call_authorized = false,
+                 call_authorization_revoked_at = COALESCE(call_authorization_revoked_at, NOW())
+             WHERE lower(trim(COALESCE(ec.email, ''))) = $1
+                OR ($2 <> '' AND lower(split_part(COALESCE(ec.email, ''), '@', 2)) = $2
+                    AND $2 <> ALL($4::text[]))
+                OR ($3 <> '' AND lower(regexp_replace(trim(COALESCE(ec.company, '')), '\\s+', ' ', 'g')) = $3)`,
+            [contact.email, contact.domain, contact.company, Array.from(publicDomains)],
+          );
+        }
+        await client.query("COMMIT");
+      } catch (error) {
+        await client.query("ROLLBACK");
+        throw error;
+      } finally {
+        client.release();
+      }
       res.send(`<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Baja confirmada – NUXA</title>
 <style>body{margin:0;font-family:'Segoe UI',sans-serif;background:#eff6ff;display:flex;align-items:center;justify-content:center;min-height:100vh;}
 .box{background:#fff;border-radius:20px;padding:48px 40px;max-width:400px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08);}

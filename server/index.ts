@@ -80,6 +80,14 @@ async function ensureEmpresasTables() {
         created_at TIMESTAMPTZ DEFAULT NOW(),
         contact_type TEXT DEFAULT 'empresa'
       );
+      CREATE TABLE IF NOT EXISTS empresa_suppression_list (
+        id SERIAL PRIMARY KEY,
+        suppression_type TEXT NOT NULL CHECK (suppression_type IN ('email', 'domain', 'company')),
+        normalized_value TEXT NOT NULL,
+        source_contact_id INTEGER,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        UNIQUE (suppression_type, normalized_value)
+      );
       CREATE TABLE IF NOT EXISTS empresa_campaign_history (
         id SERIAL PRIMARY KEY,
         sent_at TIMESTAMPTZ DEFAULT NOW(),
@@ -147,6 +155,37 @@ async function ensureEmpresasTables() {
       ALTER TABLE empresa_contacts ALTER COLUMN call_authorized SET DEFAULT false;
       UPDATE empresa_contacts SET call_authorized = false WHERE call_authorized IS NULL;
       ALTER TABLE empresa_contacts ALTER COLUMN email DROP NOT NULL;
+
+      CREATE OR REPLACE FUNCTION enforce_empresa_suppression()
+      RETURNS TRIGGER AS $$
+      DECLARE
+        normalized_company TEXT;
+        email_domain TEXT;
+      BEGIN
+        normalized_company := lower(regexp_replace(trim(COALESCE(NEW.company, '')), '\s+', ' ', 'g'));
+        email_domain := lower(split_part(COALESCE(NEW.email, ''), '@', 2));
+
+        IF EXISTS (
+          SELECT 1
+          FROM empresa_suppression_list esl
+          WHERE (esl.suppression_type = 'email' AND esl.normalized_value = lower(trim(COALESCE(NEW.email, ''))))
+             OR (esl.suppression_type = 'domain' AND esl.normalized_value = email_domain)
+             OR (esl.suppression_type = 'company' AND esl.normalized_value = normalized_company)
+        ) THEN
+          NEW.opted_out := true;
+          NEW.opted_out_at := COALESCE(NEW.opted_out_at, NOW());
+          NEW.call_authorized := false;
+          NEW.call_authorization_revoked_at := COALESCE(NEW.call_authorization_revoked_at, NOW());
+        END IF;
+
+        RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql;
+
+      DROP TRIGGER IF EXISTS empresa_contacts_enforce_suppression ON empresa_contacts;
+      CREATE TRIGGER empresa_contacts_enforce_suppression
+      BEFORE INSERT OR UPDATE OF email, company ON empresa_contacts
+      FOR EACH ROW EXECUTE FUNCTION enforce_empresa_suppression();
     `);
     log("Empresa tables ensured");
   } catch (err: any) {
