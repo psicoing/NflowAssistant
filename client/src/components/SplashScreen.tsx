@@ -74,6 +74,13 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
       role="status"
       aria-live="polite"
     >
+      <p
+        key={`tagline-${activeSlide}`}
+        className="mb-5 max-w-md px-6 text-center text-sm sm:text-base font-light italic leading-relaxed tracking-[0.08em] text-indigo-100/90 animate-in fade-in duration-500"
+      >
+        {slide.tagline}
+      </p>
+
       <div className="flex items-center gap-2.5 mb-4 sm:mb-6">
         {[
           { code: "eu", label: "Unión Europea" },
@@ -107,10 +114,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         <span className="inline-block text-[11px] font-semibold tracking-widest text-indigo-300 bg-indigo-500/10 border border-indigo-400/20 rounded-full px-3 py-1 mb-4">
           {slide.lang}
         </span>
-        <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">{slide.title}</h1>
-        <p className="mx-auto mb-2 max-w-sm text-sm sm:text-base font-medium leading-relaxed tracking-wide text-indigo-200">
-          {slide.tagline}
-        </p>
+        <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">{slide.title}</h1>
         <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-4">{slide.subtitle}</p>
         <div className="mb-4 flex flex-wrap justify-center gap-2">
           {slide.highlights.map((highlight) => (
