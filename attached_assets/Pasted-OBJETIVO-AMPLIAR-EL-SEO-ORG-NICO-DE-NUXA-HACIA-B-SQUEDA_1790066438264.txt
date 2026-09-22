@@ -1,0 +1,214 @@
+OBJETIVO: AMPLIAR EL SEO ORGÁNICO DE NUXA HACIA BÚSQUEDAS REALES DE PROBLEMAS Y NECESIDADES PSICOLÓGICAS
+
+La web de NUXA ya está siendo indexada y tiene presencia en búsquedas relacionadas con conceptos como bienestar emocional, inteligencia artificial, asistente emocional, disponibilidad 24/7 y multilingüe.
+
+NO quiero sustituir, rehacer ni perjudicar el SEO actual.
+
+Quiero añadir una nueva capa SEO destinada a captar búsquedas naturales de personas que NO conocen NUXA y que escriben directamente su problema o necesidad en Google.
+
+Ejemplos:
+
+- "me siento muy estresado"
+- "cómo controlar la ansiedad antes de dormir"
+- "no puedo dejar de preocuparme"
+- "me siento solo y necesito hablar con alguien"
+- "cómo recuperar la autoestima"
+- "problemas con mi pareja y no sé qué hacer"
+- "cómo superar una ruptura de pareja"
+- "cómo afrontar un duelo"
+- "cómo afrontar la pérdida de un ser querido"
+- "estoy quemado en el trabajo"
+- "cómo manejar el estrés laboral"
+- "cómo poner límites sin sentirme culpable"
+- "cómo gestionar mis emociones"
+- "me siento triste y no sé por qué"
+- "cómo manejar conflictos familiares"
+- "mi hijo adolescente tiene ansiedad"
+- "cómo ayudar a un adolescente con ansiedad"
+- "qué hacer si me siento desbordado emocionalmente"
+- "cómo mejorar mi bienestar emocional"
+- "necesito orientación emocional online"
+
+IMPLEMENTACIÓN
+
+Crear dentro de NUXA una nueva sección pública, perfectamente integrada con el diseño actual, orientada a necesidades psicológicas frecuentes.
+
+Puede denominarse, por ejemplo:
+
+"¿Qué te preocupa hoy?"
+
+Crear páginas SEO individuales y permanentes para diferentes necesidades.
+
+Ejemplos de rutas:
+
+/ansiedad
+/ansiedad-sin-motivo
+/ansiedad-antes-de-dormir
+/estres
+/estres-laboral
+/agotamiento-emocional
+/autoestima
+/soledad
+/duelo
+/perdida-ser-querido
+/ruptura-pareja
+/problemas-pareja
+/conflictos-familiares
+/gestion-emocional
+/limites-sin-culpa
+/ansiedad-adolescentes
+/bienestar-emocional
+/orientacion-emocional-online
+
+IMPORTANTE:
+
+No crear páginas vacías, duplicadas o simples páginas de keywords.
+
+Cada URL debe tener contenido propio, útil, sustancial y escrito para personas.
+
+Cada página deberá explicar:
+
+1. Qué puede estar experimentando la persona.
+2. Situaciones habituales relacionadas.
+3. Factores que pueden influir.
+4. Estrategias generales y psicoeducativas que pueden ayudar.
+5. Cuándo puede ser recomendable consultar con un profesional sanitario.
+6. Cómo NUXA puede proporcionar orientación psicológica y psicoeducativa relacionada con esa situación.
+
+No presentar NUXA como sustituto de psicólogos, médicos o servicios de emergencia.
+
+NUXA ofrece orientación y apoyo psicoeducativo; no debe presentarse como diagnóstico, tratamiento médico o servicio de emergencias.
+
+SEO TÉCNICO
+
+Cada página debe disponer de:
+
+- <title> único.
+- Meta description única.
+- Canonical propia.
+- Open Graph title.
+- Open Graph description.
+- Open Graph URL.
+- H1 único.
+- Jerarquía correcta H1/H2/H3.
+- Texto semánticamente relacionado con la consulta objetivo.
+- Enlaces internos hacia otros contenidos relacionados.
+- Enlace hacia NUXA cuando sea apropiado.
+- Breadcrumbs.
+- Datos estructurados Schema.org apropiados.
+- Inclusión automática en sitemap.xml.
+- Página accesible para crawlers sin depender exclusivamente de la hidratación JavaScript cuando técnicamente sea posible.
+
+Añadir enlaces HTML reales <a href=""> desde la nueva sección hacia las páginas temáticas para facilitar el rastreo.
+
+ESTRATEGIA DE CONTENIDO
+
+No realizar keyword stuffing.
+
+Los títulos deben aproximarse a la manera real en que una persona formula el problema.
+
+Ejemplos:
+
+"¿Por qué tengo ansiedad sin saber por qué?"
+
+"¿Qué puedo hacer si no puedo dormir por estrés?"
+
+"Me siento solo: ¿qué puedo hacer?"
+
+"¿Cómo afrontar la pérdida de un ser querido?"
+
+"¿Cómo poner límites sin sentirme culpable?"
+
+"Estoy agotado por el trabajo: cómo reconocer y gestionar el estrés laboral"
+
+"Mi hijo adolescente tiene ansiedad: cómo puedo ayudarle"
+
+Dentro de los contenidos utilizar preguntas relacionadas como H2/H3 cuando sean naturales.
+
+ARQUITECTURA
+
+Crear una página central que funcione como HUB:
+
+/bienestar-emocional
+
+o reutilizar una existente si ya cumple esta función.
+
+Desde ella enlazar las diferentes páginas temáticas.
+
+Las páginas temáticas también deben enlazarse entre sí cuando exista una relación semántica lógica.
+
+Ejemplo:
+
+Ansiedad → sueño → estrés → preocupación.
+
+Duelo → tristeza → soledad → bienestar emocional.
+
+Adolescentes → ansiedad → familia → autoestima.
+
+Esto debe crear una arquitectura temática clara para buscadores.
+
+IDIOMAS
+
+NUXA trabaja en múltiples idiomas.
+
+Diseñar la arquitectura de forma que posteriormente estas páginas puedan disponer de versiones ES, EN y FR y utilizar hreflang correctamente.
+
+No generar traducciones automáticas masivas ahora si pueden reducir la calidad del contenido.
+
+PRIORIDAD INICIAL
+
+Empezar por 10 páginas de alta calidad:
+
+1. Ansiedad
+2. Ansiedad antes de dormir
+3. Estrés laboral
+4. Duelo
+5. Soledad
+6. Autoestima
+7. Ruptura de pareja
+8. Límites y sentimiento de culpa
+9. Ansiedad en adolescentes
+10. Bienestar emocional
+
+Primero calidad e indexabilidad; después ampliar el número de páginas.
+
+MUY IMPORTANTE
+
+Antes de modificar código:
+
+1. Auditar las rutas y componentes existentes.
+2. Reutilizar la arquitectura y componentes actuales siempre que sea posible.
+3. No eliminar metadata, structured data, canonical, sitemap, robots ni SEO existente que esté funcionando.
+4. No cambiar URLs actualmente indexadas salvo necesidad justificada.
+5. Evitar contenido duplicado.
+6. Mantener intactas las funciones de registro, chat, pagos, PWA y autenticación.
+7. Comprobar que ninguna nueva página expone endpoints, información privada o datos de usuarios.
+
+DESPUÉS DE IMPLEMENTAR
+
+Verificar:
+
+- Todas las nuevas URLs devuelven HTTP 200.
+- Cada URL tiene title y description propios.
+- Canonical correcta.
+- H1 único.
+- Contenido visible para el crawler.
+- Enlaces internos funcionales.
+- Structured data válido.
+- Sitemap actualizado.
+- robots.txt permite su indexación.
+- No existen páginas duplicadas.
+- No aparecen errores de consola.
+- Registro, login, chat y pagos siguen funcionando.
+
+Finalmente, entregar un listado de:
+
+URL creada
+Keyword/intención principal
+Title
+Meta description
+H1
+Schema utilizado
+Enlaces internos añadidos
+
+No realizar cambios innecesarios fuera de este objetivo.

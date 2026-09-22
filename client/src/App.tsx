@@ -65,6 +65,7 @@ const CalculadoraBurnout = lazy(() => import("@/pages/calculadora-burnout"));
 const RecursosIntro = lazy(() => import("@/pages/recursos-intro"));
 const SorteoRecursos = lazy(() => import("@/pages/sorteo-recursos"));
 const ProgramaPartners = lazy(() => import("@/pages/programa-partners"));
+const BienestarTematico = lazy(() => import("@/pages/bienestar-tematico"));
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -74,7 +75,7 @@ function AuthenticatedRouter() {
     if (isLoading) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos", "/test-bienestar", "/calculadora-burnout", "/programa-partners", "/recompensas"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos", "/test-bienestar", "/calculadora-burnout", "/programa-partners", "/recompensas", "/bienestar-emocional", "/ansiedad", "/ansiedad-antes-de-dormir", "/estres-laboral", "/duelo", "/soledad", "/autoestima", "/ruptura-de-pareja", "/limites-sin-culpa", "/ansiedad-adolescentes"];
     // Allow magic link access routes
     if (location.startsWith("/acceso/")) {
       return;
@@ -163,6 +164,16 @@ function AuthenticatedRouter() {
         <Route path="/competencia-nuxa" component={CompetenciaNuxa} />
         <Route path="/sorteo-recursos" component={SorteoRecursos} />
         <Route path="/programa-partners" component={ProgramaPartners} />
+        <Route path="/bienestar-emocional"><BienestarTematico slug="bienestar-emocional" /></Route>
+        <Route path="/ansiedad"><BienestarTematico slug="ansiedad" /></Route>
+        <Route path="/ansiedad-antes-de-dormir"><BienestarTematico slug="ansiedad-antes-de-dormir" /></Route>
+        <Route path="/estres-laboral"><BienestarTematico slug="estres-laboral" /></Route>
+        <Route path="/duelo"><BienestarTematico slug="duelo" /></Route>
+        <Route path="/soledad"><BienestarTematico slug="soledad" /></Route>
+        <Route path="/autoestima"><BienestarTematico slug="autoestima" /></Route>
+        <Route path="/ruptura-de-pareja"><BienestarTematico slug="ruptura-de-pareja" /></Route>
+        <Route path="/limites-sin-culpa"><BienestarTematico slug="limites-sin-culpa" /></Route>
+        <Route path="/ansiedad-adolescentes"><BienestarTematico slug="ansiedad-adolescentes" /></Route>
         <Route path="/acceso/:token" component={AccesoMagico} />
         <Route component={NotFound} />
       </Switch>
