@@ -159,10 +159,10 @@ export default function Login() {
   return (
     <>
       <SEOHead
-        title="Acceso - NUXA Psicólogo IA"
-        description="Inicia sesión en NUXA y accede a tu psicólogo IA disponible 24/7. Apoyo emocional profesional en español para tu salud mental."
-        keywords="login NUXA, acceso psicólogo IA, iniciar sesión salud mental, chat psicológico online"
-        ogTitle="Inicia sesión en NUXA - Tu Psicólogo IA"
+        title="Acceso - NUXA Bienestar emocional"
+        description="Inicia sesión en NUXA y accede a tu asistente de bienestar emocional disponible 24/7."
+        keywords="login NUXA, asistente de bienestar emocional, iniciar sesión salud mental, apoyo emocional online"
+        ogTitle="Inicia sesión en NUXA - Bienestar emocional 24/7"
         canonicalUrl="https://nuxa.life/login"
       />
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">

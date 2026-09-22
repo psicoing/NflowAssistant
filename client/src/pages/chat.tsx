@@ -407,10 +407,10 @@ export default function Chat() {
   return (
     <>
       <SEOHead
-        title="Chat - NEUROPSI-AI | NUXA Psicólogo IA"
-        description="Chatea con NEUROPSI-AI, tu psicólogo virtual disponible 24/7. Apoyo emocional profesional con inteligencia artificial en español."
-        keywords="chat psicólogo IA, NEUROPSI-AI, conversación salud mental, terapia online chat, psicólogo virtual"
-        ogTitle="Chat con NEUROPSI-AI - Tu Psicólogo IA Personal"
+        title="Chat de bienestar emocional | NUXA"
+        description="Chatea con NUXA, tu asistente de bienestar emocional disponible 24/7. Orientación personalizada con inteligencia artificial en español."
+        keywords="chat bienestar emocional, NUXA, conversación salud mental, apoyo emocional online, asistente de inteligencia artificial"
+        ogTitle="Chat con NUXA - Tu asistente de bienestar emocional"
         canonicalUrl="https://nuxa.life/chat"
       />
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">

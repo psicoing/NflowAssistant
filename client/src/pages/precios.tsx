@@ -15,7 +15,7 @@ export default function PreciosPage() {
       <SEOHead
         title="Plan y Suscripción - NUXA | Planes desde €2.99/mes + Pago Por Uso"
         description="NUXA: Suscripciones desde €2.99/mes o packs de créditos prepagados €5/15 preguntas. Sin caducidad. Apoyo emocional 24/7 con IA en 150+ idiomas. Elige la opción perfecta para ti."
-        keywords="precios psicólogo IA, suscripción salud mental, pago por uso terapia, créditos prepagados IA, plan terapia online, NUXA precios, ISO 45003 empresas"
+        keywords="precios asistente bienestar emocional, suscripción salud mental, pago por uso, créditos prepagados IA, apoyo emocional online, NUXA precios, ISO 45003 empresas"
         ogTitle="Plan y Suscripción NUXA - Flexible y Accesible"
         ogDescription="Suscripciones mensuales o pago por uso. Créditos que nunca caducan. Apoyo emocional profesional 24/7 en 150+ idiomas."
         canonicalUrl="https://nuxa.life/precios"

@@ -951,7 +951,7 @@ export default function EjemplosChat() {
   return (
     <>
       <SEOHead
-        title="Ejemplos de Conversación con NUXA | Psicólogo IA"
+        title="Ejemplos de Conversación | Asistente NUXA"
         description="Descubre cómo NUXA responde en situaciones reales. Ejemplos de conversaciones sobre ansiedad, estrés laboral, relaciones personales y más."
         canonicalUrl="https://nuxa.life/ejemplos-chat"
         ogUrl="https://nuxa.life/ejemplos-chat"

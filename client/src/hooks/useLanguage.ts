@@ -28,7 +28,7 @@ export const translations = {
     'nav.disconnected': 'Desconectado',
     
     // Hero Section
-    'hero.title': 'Tu psicólogo personal',
+    'hero.title': 'Tu asistente de bienestar emocional',
     'hero.subtitle': 'disponible 24/7',
     'hero.description': 'Apoyo profesional en salud mental con inteligencia artificial avanzada. Conversaciones confidenciales y respuestas personalizadas para tu bienestar emocional.',
     'hero.cta.primary': 'Empezar Chat',

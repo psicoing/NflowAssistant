@@ -316,15 +316,15 @@ const routeMetadata: Record<string, RouteMeta> = {
       </main>`,
   },
   "/prueba-gratis": {
-    title: "Prueba NUXA Gratis | 3 Consultas Sin Registro",
+    title: "Prueba NUXA Gratis | 5 Consultas Sin Registro",
     description:
-      "Prueba NUXA gratis sin registro. Habla con nuestro psicólogo IA ahora mismo. 5 consultas gratuitas para descubrir el poder del apoyo emocional digital.",
+      "Prueba NUXA gratis sin registro. Habla con nuestro asistente de bienestar emocional ahora mismo. 5 consultas gratuitas para descubrir el apoyo emocional digital.",
     canonical: `${SITE_URL}/prueba-gratis`,
     jsonLd: orgSchema,
     bodyHtml: `
       <main>
-        <h1>Prueba NUXA Gratis — 3 Consultas Sin Registro</h1>
-        <p>Accede al psicólogo IA de NUXA sin necesidad de crear una cuenta. Tienes 5 consultas gratuitas para descubrir cómo la IA puede apoyar tu bienestar emocional.</p>
+        <h1>Prueba NUXA Gratis — 5 Consultas Sin Registro</h1>
+        <p>Accede al asistente de bienestar emocional de NUXA sin necesidad de crear una cuenta. Tienes 5 consultas gratuitas para descubrir cómo la IA puede apoyar tu bienestar emocional.</p>
         <ul>
           <li>Sin tarjeta de crédito</li>
           <li>Sin registro obligatorio</li>
@@ -364,7 +364,7 @@ const routeMetadata: Record<string, RouteMeta> = {
       </main>`,
   },
   "/ejemplos-chat": {
-    title: "Ejemplos de Conversación con NUXA | Psicólogo IA",
+    title: "Ejemplos de Conversación | Asistente NUXA",
     description:
       "Descubre cómo NUXA responde en situaciones reales. Ejemplos de conversaciones sobre ansiedad, estrés laboral, relaciones personales y más.",
     canonical: `${SITE_URL}/ejemplos-chat`,
@@ -399,7 +399,7 @@ const routeMetadata: Record<string, RouteMeta> = {
       </main>`,
   },
   "/quienes-somos": {
-    title: "Quiénes Somos | NUXA - Psicólogo IA 24/7",
+    title: "Quiénes Somos | NUXA - Bienestar emocional 24/7",
     description:
       "El equipo detrás de NUXA. Profesionales de salud mental e IA trabajando para hacer el apoyo psicológico accesible para todos.",
     canonical: `${SITE_URL}/quienes-somos`,
@@ -411,16 +411,16 @@ const routeMetadata: Record<string, RouteMeta> = {
       </main>`,
   },
   "/app-movil": {
-    title: "App Móvil NUXA | Psicólogo IA en tu Bolsillo",
+    title: "App Móvil NUXA | Bienestar emocional en tu bolsillo",
     description:
-      "Descarga la app de NUXA para iOS y Android. Tu psicólogo IA siempre contigo, disponible 24/7 desde cualquier lugar.",
+      "Instala NUXA desde tu navegador en iOS y Android. Tu asistente de bienestar emocional, disponible 24/7 desde cualquier lugar.",
     canonical: `${SITE_URL}/app-movil`,
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "MobileApplication",
-      name: "NUXA — Psicólogo IA",
+      name: "NUXA — Asistente de bienestar emocional",
       description:
-        "Tu psicólogo IA siempre contigo. Disponible 24/7 desde cualquier lugar.",
+        "Tu asistente de bienestar emocional siempre contigo. Disponible 24/7 desde cualquier lugar.",
       operatingSystem: "iOS, Android",
       applicationCategory: "HealthApplication",
       offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
@@ -428,8 +428,8 @@ const routeMetadata: Record<string, RouteMeta> = {
     },
     bodyHtml: `
       <main>
-        <h1>App Móvil NUXA — Psicólogo IA en tu Bolsillo</h1>
-        <p>Descarga la aplicación de NUXA para iOS y Android. Tu psicólogo IA siempre contigo, disponible 24 horas, 7 días a la semana desde cualquier lugar.</p>
+        <h1>App Móvil NUXA — Bienestar emocional en tu bolsillo</h1>
+        <p>Instala NUXA desde tu navegador en iOS y Android. Tu asistente de bienestar emocional, disponible 24 horas, 7 días a la semana desde cualquier lugar.</p>
         <ul>
           <li>Compatible con iPhone y dispositivos Android</li>
           <li>Notificaciones de bienestar personalizadas</li>
@@ -615,9 +615,9 @@ const routeMetadata: Record<string, RouteMeta> = {
     // Transactional UI — no JSON-LD or body prerender; metadata tags sufficient
   },
   "/login": {
-    title: "Iniciar Sesión | NUXA - Tu Psicólogo IA",
+    title: "Iniciar Sesión | NUXA - Bienestar emocional",
     description:
-      "Accede a tu cuenta NUXA. Continúa tu sesión de apoyo emocional con tu psicólogo IA personal.",
+      "Accede a tu cuenta NUXA. Continúa tu sesión con tu asistente de bienestar emocional.",
     canonical: `${SITE_URL}/login`,
     // Transactional UI — no JSON-LD or body prerender; metadata tags sufficient
   },

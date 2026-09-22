@@ -11,8 +11,8 @@ export default function AppMovil() {
   return (
     <>
       <SEOHead
-        title="App Móvil NUXA | Psicólogo IA en tu Bolsillo"
-        description="Descarga la app de NUXA para iOS y Android. Tu psicólogo IA siempre contigo, disponible 24/7 desde cualquier lugar."
+        title="App Móvil NUXA | Bienestar emocional en tu bolsillo"
+        description="Instala NUXA desde tu navegador en iOS y Android. Tu asistente de bienestar emocional, disponible 24/7 desde cualquier lugar."
         canonicalUrl="https://nuxa.life/app-movil"
         ogUrl="https://nuxa.life/app-movil"
       />
@@ -433,7 +433,7 @@ export default function AppMovil() {
             </h2>
             
             <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
-              Comienza ahora mismo y ten acceso inmediato a tu psicólogo de bolsillo
+              Comienza ahora mismo y ten acceso inmediato a tu asistente de bienestar emocional
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
