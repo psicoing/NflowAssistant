@@ -7,6 +7,7 @@ const SLIDES = [
   {
     lang: "ES",
     title: "NUXA",
+    tagline: "Un espacio para sentir, entender y avanzar.",
     subtitle: "Tu app de salud mental y riesgos laborales",
     cta: "Pruébala gratis y sin tarjeta",
     highlights: ["5 consultas gratis", "Más de 150 idiomas", "Disponible 24/7"],
@@ -15,6 +16,7 @@ const SLIDES = [
   {
     lang: "EN",
     title: "NUXA",
+    tagline: "A space to feel, understand and move forward.",
     subtitle: "Your mental health & workplace wellbeing app",
     cta: "Try it free, no card required",
     highlights: ["5 free consultations", "150+ languages", "Available 24/7"],
@@ -23,6 +25,7 @@ const SLIDES = [
   {
     lang: "FR",
     title: "NUXA",
+    tagline: "Un espace pour ressentir, comprendre et avancer.",
     subtitle: "Votre application de santé mentale et de risques psychosociaux",
     cta: "Essayez-la gratuitement, sans carte",
     highlights: ["5 consultations gratuites", "Plus de 150 langues", "Disponible 24h/24"],
@@ -104,7 +107,10 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         <span className="inline-block text-[11px] font-semibold tracking-widest text-indigo-300 bg-indigo-500/10 border border-indigo-400/20 rounded-full px-3 py-1 mb-4">
           {slide.lang}
         </span>
-        <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">{slide.title}</h1>
+        <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">{slide.title}</h1>
+        <p className="mx-auto mb-2 max-w-sm text-sm sm:text-base font-medium leading-relaxed tracking-wide text-indigo-200">
+          {slide.tagline}
+        </p>
         <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-4">{slide.subtitle}</p>
         <div className="mb-4 flex flex-wrap justify-center gap-2">
           {slide.highlights.map((highlight) => (
