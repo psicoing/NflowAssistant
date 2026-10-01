@@ -6,7 +6,7 @@ import { injectRouteMetadata, isPrerenderablePublicPath } from "./vite";
 // Recognise search engines, social crawlers, and AI crawlers that need
 // pre-rendered HTML because they do not (fully) execute JavaScript.
 const BOT_UA =
-  /googlebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|sogou|exabot|facebot|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora|outbrain|pinterest|slack|whatsapp|telegram|discord|gptbot|claudebot|perplexitybot|anthropic|ccbot|cohere|meta-externalagent|ia_archiver|archive\.org/i;
+  /googlebot|bingbot|oai-searchbot|slurp|duckduckbot|baiduspider|yandexbot|sogou|exabot|facebot|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora|outbrain|pinterest|slack|whatsapp|telegram|discord|gptbot|claudebot|perplexitybot|anthropic|ccbot|cohere|meta-externalagent|ia_archiver|archive\.org/i;
 
 export function registerSeoMiddleware(app: Express, isProd: boolean) {
   app.use(async (req, res, next) => {

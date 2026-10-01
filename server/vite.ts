@@ -5,6 +5,10 @@ import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
 import viteConfig from "../vite.config";
 import { nanoid } from "nanoid";
+import { getInternationalRouteMetadata } from "./international-seo";
+import { organizationSchema } from "../shared/seo";
+import { isNonIndexablePath } from "../shared/seo/policy";
+import { blogSeoEntries } from "../shared/seo/blog";
 
 const viteLogger = createLogger();
 
@@ -36,6 +40,10 @@ interface RouteMeta {
   /** Static body HTML injected into <div id="root"> for bot crawlability.
    *  React replaces it on hydration; non-JS crawlers index it directly. */
   bodyHtml?: string;
+  language?: string;
+  alternates?: { hreflang: string; href: string }[];
+  inlineCss?: string;
+  persistentBody?: boolean;
 }
 
 const OG_IMAGE_DEFAULT = "https://nuxa.life/icon-512.png";
@@ -43,29 +51,15 @@ const SITE_NAME = "NUXA";
 const SITE_URL = "https://nuxa.life";
 
 // Shared schema fragments
-const orgSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: SITE_NAME,
-  url: SITE_URL,
-  logo: `${SITE_URL}/icon-512.png`,
-  description:
-    "NUXA es la plataforma de psicología IA disponible 24/7. Apoyo emocional continuo y confidencial para personas, familias y empresas.",
-  foundingDate: "2024",
-  areaServed: "ES",
-  knowsLanguage: ["es", "en", "ca", "eu", "gl", "fr", "de", "it", "pt"],
-};
+const orgSchema = organizationSchema;
 
 const webSiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: SITE_NAME,
+  "@id": `${SITE_URL}/#website`,
   url: SITE_URL,
-  potentialAction: {
-    "@type": "SearchAction",
-    target: `${SITE_URL}/blog?q={search_term_string}`,
-    "query-input": "required name=search_term_string",
-  },
+  publisher: { "@id": orgSchema["@id"] },
 };
 
 function blogPostingSchema(opts: {
@@ -321,7 +315,7 @@ const routeMetadata: Record<string, RouteMeta> = {
     title: "NUXA - Tu asistente de bienestar emocional, disponible 24/7",
     description:
       "NUXA es tu asistente de bienestar emocional, disponible 24/7. Acompañamiento continuo y confidencial para personas, familias y trabajadores.",
-    canonical: `${SITE_URL}`,
+    canonical: `${SITE_URL}/`,
     jsonLd: [orgSchema, webSiteSchema],
     bodyHtml: `
       <main>
@@ -940,6 +934,78 @@ const routeMetadata: Record<string, RouteMeta> = {
   },
 };
 
+// Shared editorial records replace the old blog snippets. Both source HTML and
+// the visible React articles use the same revised title, content and byline.
+for (const post of blogSeoEntries) {
+  const canonical = `${SITE_URL}/blog/${post.id}`;
+  routeMetadata[`/blog/${post.id}`] = {
+    title: `${post.title} | Blog NUXA`,
+    description: post.excerpt,
+    canonical,
+    ogType: "article",
+    ogImage: post.absoluteImageUrl,
+    jsonLd: [
+      orgSchema,
+      {
+        ...blogPostingSchema({
+          headline: post.title,
+          description: post.excerpt,
+          url: canonical,
+          datePublished: post.dateIso,
+          image: post.absoluteImageUrl,
+        }),
+        dateModified: post.updatedIso,
+        author: { "@id": orgSchema["@id"] },
+        publisher: { "@id": orgSchema["@id"] },
+      },
+    ],
+    bodyHtml: `<article><h1>${post.title}</h1><p>${post.excerpt}</p>
+      <p>NUXA · EMPORDAJOBS SL · Publicado <time datetime="${post.dateIso}">${post.dateIso}</time>
+      · Actualizado <time datetime="${post.updatedIso}">${post.updatedIso}</time></p>
+      ${post.fullContent}<nav><a href="/blog">Blog</a> · <a href="/es/editorial-policy">Política editorial</a>
+      · <a href="/es/">Guías y fuentes de NUXA</a></nav></article>`,
+  };
+}
+routeMetadata["/blog"] = {
+  title: "Blog NUXA | IA y bienestar emocional",
+  description: "Artículos informativos sobre herramientas digitales, bienestar emocional y uso responsable de la inteligencia artificial. No sustituyen la atención profesional.",
+  canonical: `${SITE_URL}/blog`,
+  jsonLd: [
+    orgSchema,
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "Blog NUXA — Artículos sobre IA y bienestar emocional",
+      description: "Artículos informativos sobre herramientas digitales, bienestar emocional y uso responsable de la inteligencia artificial. No sustituyen la atención profesional.",
+      url: `${SITE_URL}/blog`,
+      publisher: { "@id": orgSchema["@id"] },
+      hasPart: blogSeoEntries.map(post => ({
+        "@type": "BlogPosting",
+        headline: post.title,
+        url: `${SITE_URL}/blog/${post.id}`,
+        datePublished: post.dateIso,
+        dateModified: post.updatedIso,
+        author: { "@id": orgSchema["@id"] },
+        description: post.excerpt,
+        image: post.absoluteImageUrl,
+      })),
+    },
+  ],
+  bodyHtml: `<main><h1>Blog NUXA</h1>
+    <p>Artículos informativos sobre herramientas digitales, bienestar emocional y uso responsable de la inteligencia artificial. No sustituyen la atención profesional.</p>
+    <nav aria-label="Artículos">${blogSeoEntries.map(post => `<article><h2><a href="/blog/${post.id}">${post.title}</a></h2><p>${post.excerpt}</p><p>NUXA · EMPORDAJOBS SL · Publicado <time datetime="${post.dateIso}">${post.dateIso}</time> · Actualizado <time datetime="${post.updatedIso}">${post.updatedIso}</time></p></article>`).join("")}</nav>
+    <p><a href="/es/">Guías de bienestar</a> · <a href="/es/editorial-policy">Política editorial</a></p></main>`,
+};
+routeMetadata["/"].bodyHtml = routeMetadata["/"].bodyHtml
+  ?.replace("Totalmente confidencial y seguro", "Información de privacidad y límites disponible en nuestras políticas")
+  .replace("</main>", `<p>NUXA no sustituye a un psicólogo, médico ni servicio de emergencias; no ofrece diagnóstico, tratamiento ni psicoterapia.</p>
+    <nav aria-label="Información internacional de NUXA"><a href="/es/">España</a> ·
+    <a href="/en-us/">United States</a> · <a href="/en-gb/">United Kingdom</a> · <a href="/fr/">France</a></nav></main>`);
+
+export function getLegacyRouteMetadata(): Record<string, RouteMeta> {
+  return routeMetadata;
+}
+
 function escAttr(str: string): string {
   return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
@@ -949,7 +1015,7 @@ function routePathFromUrl(url: string): string {
 }
 
 export function isPrerenderablePublicPath(url: string): boolean {
-  return Boolean(routeMetadata[routePathFromUrl(url)]);
+  return Boolean(getInternationalRouteMetadata(url) || routeMetadata[routePathFromUrl(url)]);
 }
 
 function responseStatusForRoute(url: string): number {
@@ -963,7 +1029,7 @@ function responseStatusForRoute(url: string): number {
 
 export function injectRouteMetadata(html: string, url: string): string {
   const routePath = routePathFromUrl(url);
-  const meta = routeMetadata[routePath];
+  const meta: RouteMeta | undefined = getInternationalRouteMetadata(url) || routeMetadata[routePath];
   if (!meta) return html;
 
   const ogType = meta.ogType ?? "website";
@@ -974,9 +1040,12 @@ export function injectRouteMetadata(html: string, url: string): string {
   // Build head tags
   const headTags = `
     <!-- Route-specific metadata injected server-side -->
-    <title>${meta.title}</title>
+    <title>${title}</title>
     <meta name="description" content="${desc}">
-    <link rel="canonical" href="${meta.canonical}">
+    <link rel="canonical" href="${escAttr(meta.canonical)}">
+    <meta name="robots" content="${isNonIndexablePath(routePath) ? "noindex, nofollow" : "index, follow"}">
+    <meta property="og:locale" content="${(meta.language || "es-ES").replace("-", "_")}">
+    ${(meta.alternates || []).map(alternate => `<link rel="alternate" hreflang="${alternate.hreflang}" href="${escAttr(alternate.href)}">`).join("\n    ")}
     <meta property="og:title" content="${title}">
     <meta property="og:description" content="${desc}">
     <meta property="og:url" content="${meta.canonical}">
@@ -994,7 +1063,7 @@ export function injectRouteMetadata(html: string, url: string): string {
     ldTags = schemas
       .map(
         (s) =>
-          `<script type="application/ld+json">${JSON.stringify(s)}</script>`,
+          `<script type="application/ld+json" data-nuxa-route-schema>${JSON.stringify(s).replace(/</g, "\\u003c")}</script>`,
       )
       .join("\n    ");
     ldTags = `\n    ${ldTags}`;
@@ -1004,7 +1073,14 @@ export function injectRouteMetadata(html: string, url: string): string {
   let result = html
     .replace(/<title>[^<]*<\/title>/g, "")
     .replace(/<meta\s+name="description"[^>]*>/gi, "")
-    .replace("</head>", `${headTags}${ldTags}\n  </head>`);
+    .replace(/<html\s+lang="[^"]*"/, `<html lang="${meta.language || "es-ES"}"`)
+    .replace("</head>", `${headTags}${ldTags}${meta.inlineCss ? `\n<style id="nuxa-international-css">${meta.inlineCss}</style>` : ""}\n  </head>`);
+
+  if (meta.persistentBody && meta.bodyHtml) {
+    // The same shared markup is rendered to browsers and crawlers, and remains
+    // visible without JS. No bot-only copy or synchronous removal is used.
+    return result.replace('<div id="root"></div>', `<div id="root">${meta.bodyHtml}</div>`);
+  }
 
   // Inject static body content for bot crawlability.
   //

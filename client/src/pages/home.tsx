@@ -439,7 +439,7 @@ export default function Home() {
         ogTitle="NUXA - Tu asistente de bienestar emocional 24/7"
         ogDescription="Apoyo emocional profesional con IA. Atención en español las 24 horas. Salud mental para personas, familias y trabajadores."
         ogUrl="https://nuxa.life"
-        canonicalUrl="https://nuxa.life"
+        canonicalUrl="https://nuxa.life/"
       />
       <StructuredData type="Organization" data={NFlowOrganizationData} />
       <StructuredData type="WebApplication" data={NFlowWebAppData} />

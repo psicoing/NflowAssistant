@@ -1,60 +1,45 @@
-# NUXA — Tu Psicólogo IA disponible 24/7
+# NUXA
 
-NUXA is a Spanish-language AI mental health platform providing confidential emotional support,
-psychological assistance, and wellness resources for individuals, families, and organisations.
-Compliant with ISO 45003 (psychosocial risk management) and GDPR. Operating at https://nuxa.life.
+NUXA is a digital platform operated by EMPORDAJOBS SL with conversational tools and general information related to emotional wellbeing. NUXA is not a psychologist, clinical service, or emergency service. Its tools do not provide a diagnosis or replace care from a qualified health professional. No claim of clinical efficacy, professional review, certification, guaranteed confidentiality, or guaranteed security is made here.
 
-Supported languages: Spanish (es), Catalan (ca), Basque (eu), Galician (gl), English (en),
-French (fr), German (de), Italian (it), Portuguese (pt).
+## Language hubs
 
-## Product
+- Spanish: https://nuxa.life/es/
+- English (United States): https://nuxa.life/en-us/
+- English (United Kingdom): https://nuxa.life/en-gb/
+- French: https://nuxa.life/fr/
 
-NUXA is an AI-powered psychologist available 24/7 — no waiting lists, no appointments, fully
-confidential. It provides emotional support, stress management, and mental wellness guidance.
-Plans start at €2.99/month; 3 free consultations available with no registration required.
+## About NUXA
 
-## Key pages
+- About NUXA: https://nuxa.life/es/about-nuxa
+- How NUXA works: https://nuxa.life/es/how-nuxa-works
+- Science information: https://nuxa.life/es/science
+- Safety information: https://nuxa.life/es/safety
+- Privacy: https://nuxa.life/es/privacy
+- For organizations: https://nuxa.life/es/for-organizations
+- For professionals: https://nuxa.life/es/for-professionals
+- Editorial policy: https://nuxa.life/es/editorial-policy
+
+## Public information and resources
 
 - Home: https://nuxa.life/
-- Free trial (no card required): https://nuxa.life/prueba-gratis
-- Pricing plans: https://nuxa.life/precios
-- Access plans: https://nuxa.life/registro/planes
-- Free mental health resources: https://nuxa.life/recursos-gratuitos
-- All resources: https://nuxa.life/recursos
-- Emotional wellbeing test: https://nuxa.life/test-bienestar
-- Burnout risk calculator: https://nuxa.life/calculadora-burnout
-- Blog (AI & mental health articles): https://nuxa.life/blog
-- Chat conversation examples: https://nuxa.life/ejemplos-chat
-- Mobile app: https://nuxa.life/app-movil
-- News & platform updates: https://nuxa.life/novedades
-- Comparison vs competitors: https://nuxa.life/competencia-nuxa
-- Monthly giveaway: https://nuxa.life/sorteo-recursos
+- Blog: https://nuxa.life/blog
+- Free resources: https://nuxa.life/recursos-gratuitos
+- Resources: https://nuxa.life/recursos
+- Conversation examples: https://nuxa.life/ejemplos-chat
+- Platform updates: https://nuxa.life/novedades
+- Trial information: https://nuxa.life/prueba-gratis
+- Plans and pricing information: https://nuxa.life/precios
+- Mobile app information: https://nuxa.life/app-movil
 
-## Audience sections
-
-- For individuals and families: https://nuxa.life/
-- For private companies (ISO 45003 compliance): https://nuxa.life/empresa-privada
-- For public sector & institutions: https://nuxa.life/sector-publico
-- Parental controls for minors: https://nuxa.life/control-parental
-- Rewards programme: https://nuxa.life/recompensas
-
-## Partners
-
-- Partner programme: https://nuxa.life/programa-partners
-- Commercial partners: https://nuxa.life/partners-comerciales
-- Partner portal: https://nuxa.life/partners
-
-## About
-
-- About NUXA: https://nuxa.life/nosotros
-- Who we are: https://nuxa.life/quienes-somos
-
-## Legal
+## Legal information
 
 - Terms of service: https://nuxa.life/legal/terminos
 - Privacy policy: https://nuxa.life/legal/privacidad
 - Cookie policy: https://nuxa.life/legal/cookies
 - Legal notice: https://nuxa.life/legal/aviso-legal
+
+For current product details, data practices, eligibility, availability, and terms, consult the linked pages directly. This file does not specify prices or promise any particular service level.
 
 ## Sitemap
 

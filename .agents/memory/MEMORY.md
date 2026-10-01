@@ -7,3 +7,4 @@
 - [Company call consent](empresa-call-consent.md) — company calls require explicit two-step, phone-specific, revocable permission before any automation.
 - [Voice commercial positioning](voice-commercial-positioning.md) — phone calls explain and sell NUXA.life; psychological support belongs to the app.
 - [NUXA wellbeing positioning](nuxa-wellbeing-positioning.md) — present NUXA as an emotional wellbeing assistant, never as an AI psychologist replacing clinical care.
+- [International SEO boundaries](seo-market-scope.md) — additive market content protects app journeys; Replit preview noindex is distinct from production indexing.

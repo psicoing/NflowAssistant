@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { organizationSchema } from "@shared/seo/identity";
 
 interface StructuredDataProps {
   type: 'Organization' | 'WebApplication' | 'WebSite' | 'Product' | 'FAQPage' | 'BlogPosting' | 'Article' | 'CollectionPage' | 'BreadcrumbList';
@@ -39,39 +40,21 @@ export function StructuredData({ type, data }: StructuredDataProps) {
 }
 
 // Predefined structured data for NUXA
-export const NuxaOrganizationData = {
+export const NuxaOrganizationData = organizationSchema;
+
+export const NuxaWebSiteData = {
+  '@id': 'https://nuxa.life/#website',
   name: 'NUXA',
   url: 'https://nuxa.life',
-  logo: 'https://nuxa.life/icon-512.png',
-  description: 'Tu asistente de bienestar emocional disponible 24/7. Orientación personalizada con inteligencia artificial y enfoque ISO 45003.',
-  sameAs: [
-    'https://www.linkedin.com/company/nuxa',
-    'https://twitter.com/nuxalife',
-  ],
-  contactPoint: {
-    '@type': 'ContactPoint',
-    contactType: 'customer support',
-    email: 'soporte@nuxa.life',
-    availableLanguage: ['es', 'en'],
-  },
+  publisher: { '@id': 'https://nuxa.life/#organization' },
 };
 
 export const NuxaWebAppData = {
-  name: 'NUXA - Tu asistente de bienestar emocional, disponible 24/7',
-  applicationCategory: 'HealthApplication',
-  operatingSystem: 'Web, iOS, Android',
-  offers: {
-    '@type': 'Offer',
-    price: '2.99',
-    priceCurrency: 'EUR',
-    availability: 'https://schema.org/InStock',
-  },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    reviewCount: '15000',
-  },
-  description: 'Tu asistente de bienestar emocional disponible 24/7 para personas, familias y trabajadores.',
+  '@id': 'https://nuxa.life/#webapp',
+  name: 'NUXA',
+  url: 'https://nuxa.life',
+  publisher: { '@id': 'https://nuxa.life/#organization' },
+  description: 'NUXA es una plataforma digital con herramientas conversacionales e información general relacionada con el bienestar emocional. No sustituye la atención profesional.',
 };
 
 // Legacy exports for backwards compatibility (deprecated)

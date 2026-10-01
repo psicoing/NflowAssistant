@@ -1,135 +1,42 @@
 import { useParams, Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Calendar, User, Clock, Share2, BookOpen, Heart, Eye, Bot, Building2, Sparkles, TrendingUp } from "lucide-react";
+import { ArrowLeft, Calendar, User, Clock, BookOpen, Bot, Building2, Sparkles, TrendingUp } from "lucide-react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { SEOHead } from "@/components/SEOHead";
 import { StructuredData } from "@/components/StructuredData";
 import chatbotBenefitsImage from "@assets/generated_images/Business_chatbot_wellness_newspaper_e38ea534.png";
+import { blogSeoEntries } from "@shared/seo/blog";
 
-const blogPosts = [
-  {
-    id: 1,
-    title: "Cómo la IA puede ayudar a la salud mental de los adolescentes",
-    excerpt: "Descubre cómo la inteligencia artificial está revolucionando el apoyo psicológico para jóvenes, ofreciendo herramientas accesibles, anónimas y disponibles 24/7 para combatir la ansiedad, depresión y otros desafíos emocionales.",
-    dateIso: "2025-08-23",
-    fullContent: `
-      <div class="prose prose-lg max-w-none">
-        <h2 class="text-3xl font-bold mb-6 text-gray-900">La Revolución de la IA en la Salud Mental Juvenil</h2>
-        <p class="text-lg text-gray-700 mb-6 leading-relaxed">Los adolescentes de hoy enfrentan desafíos únicos en salud mental. Según la OMS, 1 de cada 7 adolescentes entre 10-19 años experimenta trastornos mentales. La IA emerge como una solución innovadora y accesible.</p>
-        
-        <div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8">
-          <h3 class="text-xl font-semibold mb-4 text-blue-800">📊 Datos Clave</h3>
-          <ul class="list-disc list-inside space-y-2 text-blue-700">
-            <li>14% de adolescentes experimenta problemas de salud mental</li>
-            <li>Suicidio es la 4ta causa de muerte en jóvenes de 15-19 años</li>
-            <li>Solo 1 de cada 5 adolescentes recibe ayuda profesional</li>
-          </ul>
-        </div>
-        
-        <h3 class="text-2xl font-bold mb-4 text-gray-900">🚀 Beneficios Clave de la IA para Adolescentes:</h3>
-        
-        <div class="grid md:grid-cols-2 gap-6 mb-8">
-          <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">
-            <h4 class="font-bold text-lg mb-3 text-green-800">🕐 Accesibilidad 24/7</h4>
-            <p class="text-green-700">Los jóvenes pueden acceder al apoyo cuando más lo necesitan, sin esperas ni citas. Especialmente crítico durante crisis nocturnas o fin de semana.</p>
-          </div>
-          
-          <div class="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-xl border border-purple-200">
-            <h4 class="font-bold text-lg mb-3 text-purple-800">🎭 Anonimato</h4>
-            <p class="text-purple-700">Reduce el estigma y permite expresión honesta sin juicios. El 78% de adolescentes prefiere buscar ayuda inicial de forma anónima.</p>
-          </div>
-        </div>
-        
-        <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white p-8 rounded-2xl text-center">
-          <h4 class="text-xl font-bold mb-4">¿Quieres experimentar el futuro de la salud mental?</h4>
-          <p class="mb-6">Únete a miles de jóvenes que ya están transformando su bienestar con NUXA.</p>
-        </div>
-      </div>
-    `,
-    date: "23 Agosto 2025",
-    author: "Dr. Ana Martínez",
-    category: "IA & Juventud",
-    icon: Bot,
-    color: "bg-gradient-to-r from-blue-500 to-purple-600",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    absoluteImageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    readTime: "8 min",
-    tags: ["IA", "Adolescentes", "Salud Mental", "Innovación"],
-    views: "2,847",
-    likes: 156
-  },
-  {
-    id: 2,
-    title: "5 beneficios de usar chatbots para la salud emocional en empresas",
-    excerpt: "Las organizaciones líderes están implementando chatbots especializados en salud mental para mejorar el bienestar de sus empleados, reducir el ausentismo y crear culturas empresariales más saludables y productivas.",
-    fullContent: `
-      <div class="prose prose-lg max-w-none">
-        <h2 class="text-3xl font-bold mb-6 text-gray-900">Transformando el Bienestar Corporativo con IA</h2>
-        <p class="text-lg text-gray-700 mb-6 leading-relaxed">El 76% de las empresas Fortune 500 ya han implementado algún tipo de tecnología de salud mental. Los chatbots especializados están liderando esta revolución.</p>
-        
-        <h3 class="text-2xl font-bold mb-6 text-gray-900">🏆 Los 5 Beneficios Principales:</h3>
-        
-        <div class="space-y-8">
-          <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-lg">
-            <h4 class="text-xl font-bold mb-4 text-blue-600">1. ⚡ Disponibilidad Inmediata</h4>
-            <p class="text-gray-700 mb-4">Los empleados pueden acceder al apoyo en cualquier momento, reduciendo el tiempo de espera de semanas a segundos.</p>
-            <div class="bg-blue-50 p-4 rounded-lg">
-              <p class="text-blue-800 font-semibold">Impacto: Reducción del 85% en tiempo de respuesta inicial</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="bg-gradient-to-r from-green-500 to-blue-500 text-white p-8 rounded-2xl text-center">
-          <h4 class="text-xl font-bold mb-4">¿Lista tu empresa para el futuro del bienestar?</h4>
-          <p class="mb-6">Únete a las organizaciones líderes que ya están transformando la salud mental corporativa.</p>
-        </div>
-      </div>
-    `,
-    dateIso: "2025-08-22",
-    date: "22 Agosto 2025",
-    author: "Lic. Roberto Silva",
-    category: "Empresas & Bienestar",
+const BLOG_AUTHOR = "NUXA — EMPORDAJOBS SL";
+const blogUiMetadata: Record<number, { icon: typeof Bot; color: string; image?: string }> = {
+  1: { icon: Bot, color: "bg-gradient-to-r from-blue-500 to-purple-600" },
+  2: {
     icon: Building2,
     color: "bg-gradient-to-r from-green-500 to-teal-600",
     image: chatbotBenefitsImage,
-    absoluteImageUrl: "https://nuxa.life/icon-512.png",
-    readTime: "6 min",
-    tags: ["Empresas", "Chatbots", "ROI", "Bienestar Laboral"],
-    views: "1,923",
-    likes: 89
   },
-  {
-    id: 3,
-    title: "El futuro de la terapia: IA como complemento del psicólogo",
-    excerpt: "La inteligencia artificial no reemplaza a los terapeutas humanos, sino que los potencia. Descubre cómo esta sinergia está creando nuevos paradigmas en el tratamiento de la salud mental.",
-    fullContent: `
-      <div class="prose prose-lg max-w-none">
-        <h2 class="text-3xl font-bold mb-6 text-gray-900">La Sinergia Perfecta: Humano + IA</h2>
-        <p class="text-lg text-gray-700 mb-6 leading-relaxed">El futuro de la salud mental no es elegir entre IA o terapeutas humanos, sino combinar lo mejor de ambos mundos para crear experiencias de tratamiento más efectivas y accesibles.</p>
-        
-        <h3 class="text-2xl font-bold mb-6 text-gray-900">🤝 Cómo la IA Potencia la Terapia Tradicional:</h3>
-        
-        <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-8 rounded-2xl text-center">
-          <h4 class="text-xl font-bold mb-4">¿Eres un profesional de la salud mental?</h4>
-          <p class="mb-6">Descubre cómo NUXA puede potenciar tu práctica terapéutica y mejorar los resultados de tus pacientes.</p>
-        </div>
-      </div>
-    `,
-    dateIso: "2025-08-21",
-    date: "21 Agosto 2025",
-    author: "Dr. Miguel Herrera",
-    category: "Innovación Terapéutica",
-    icon: Sparkles,
-    color: "bg-gradient-to-r from-purple-500 to-pink-600",
-    image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    absoluteImageUrl: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    readTime: "7 min",
-    tags: ["Terapia", "IA", "Psicólogos", "Innovación"],
-    views: "3,156",
-    likes: 203
-  }
-];
+  3: { icon: Sparkles, color: "bg-gradient-to-r from-purple-500 to-pink-600" },
+};
+const formatBlogDate = (dateIso: string) =>
+  new Intl.DateTimeFormat("es-ES", {
+    day: "numeric",
+    month: "long",
+    timeZone: "UTC",
+    year: "numeric",
+  }).format(new Date(`${dateIso}T00:00:00Z`));
+
+const blogPosts = blogSeoEntries.map((entry) => {
+  const ui = blogUiMetadata[entry.id];
+  return {
+    ...entry,
+    author: BLOG_AUTHOR,
+    icon: ui.icon,
+    color: ui.color,
+    image: ui.image ?? entry.absoluteImageUrl,
+    date: formatBlogDate(entry.dateIso),
+  };
+});
 
 export default function BlogPage() {
   const params = useParams();
@@ -159,14 +66,17 @@ export default function BlogPage() {
       headline: post.title,
       description: post.excerpt,
       image: post.absoluteImageUrl,
-      author: { "@type": "Person", name: post.author },
+      author: { "@type": "Organization", "@id": "https://nuxa.life/#organization" },
       publisher: {
         "@type": "Organization",
+        "@id": "https://nuxa.life/#organization",
         name: "NUXA",
+        legalName: "EMPORDAJOBS SL",
+        url: "https://nuxa.life",
         logo: { "@type": "ImageObject", url: "https://nuxa.life/icon-512.png" }
       },
       datePublished: post.dateIso,
-      dateModified: post.dateIso,
+      dateModified: post.updatedIso,
       mainEntityOfPage: { "@type": "WebPage", "@id": `https://nuxa.life/blog/${post.id}` },
       keywords: post.tags.join(", "),
       articleSection: post.category,
@@ -223,16 +133,15 @@ export default function BlogPage() {
                   <span>{post.date}</span>
                 </div>
                 <div className="flex items-center space-x-2">
+                  <Calendar className="w-5 h-5" />
+                  <span>
+                    Actualizado el{" "}
+                    <time dateTime={post.updatedIso}>{formatBlogDate(post.updatedIso)}</time>
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
                   <Clock className="w-5 h-5" />
                   <span>{post.readTime} de lectura</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Eye className="w-5 h-5" />
-                  <span>{post.views} vistas</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Heart className="w-5 h-5" />
-                  <span>{post.likes} likes</span>
                 </div>
               </div>
               
@@ -269,7 +178,7 @@ export default function BlogPage() {
               {/* CTA final */}
               <div className="mt-12 bg-gradient-to-r from-orange-500 to-red-500 text-white p-8 rounded-2xl text-center">
                 <h3 className="text-2xl font-bold mb-4">¿Te interesó este artículo?</h3>
-                <p className="text-lg mb-6">Únete a NUXA y experimenta el futuro de la salud mental digital.</p>
+                <p className="text-lg mb-6">Conoce la plataforma digital de NUXA y consulta sus condiciones antes de usarla.</p>
                 <Button 
                   className="bg-white text-orange-600 hover:bg-gray-100 font-bold px-8 py-3 rounded-xl"
                   asChild
@@ -288,16 +197,17 @@ export default function BlogPage() {
   
   // Lista de todos los artículos
   const collectionPageData = {
-    name: "Blog NUXA — Artículos sobre IA y Salud Mental",
-    description: "Artículos especializados sobre inteligencia artificial y salud mental, bienestar emocional, innovación terapéutica y las últimas tendencias en psicología digital.",
+    name: "Blog NUXA — Artículos sobre IA y bienestar emocional",
+    description: "Artículos informativos sobre herramientas digitales, bienestar emocional y uso responsable de la inteligencia artificial. No sustituyen la atención profesional.",
     url: "https://nuxa.life/blog",
-    publisher: { "@type": "Organization", name: "NUXA", url: "https://nuxa.life" },
+    publisher: { "@type": "Organization", "@id": "https://nuxa.life/#organization", name: "NUXA", legalName: "EMPORDAJOBS SL", url: "https://nuxa.life" },
     hasPart: blogPosts.map(p => ({
       "@type": "BlogPosting",
       headline: p.title,
       url: `https://nuxa.life/blog/${p.id}`,
       datePublished: p.dateIso,
-      author: { "@type": "Person", name: p.author },
+      dateModified: p.updatedIso,
+      author: { "@type": "Organization", "@id": "https://nuxa.life/#organization" },
       description: p.excerpt,
       image: p.absoluteImageUrl,
     }))
@@ -306,9 +216,9 @@ export default function BlogPage() {
   return (
     <>
       <SEOHead
-        title="Blog NUXA | Artículos sobre IA y Salud Mental"
-        description="Artículos especializados sobre inteligencia artificial y salud mental, bienestar emocional, innovación terapéutica y las últimas tendencias en psicología digital."
-        keywords="blog salud mental, artículos psicología, IA salud mental, bienestar emocional, tendencias psicología"
+        title="Blog NUXA | IA y bienestar emocional"
+        description="Artículos informativos sobre herramientas digitales, bienestar emocional y uso responsable de la inteligencia artificial. No sustituyen la atención profesional."
+        keywords="blog NUXA, herramientas digitales, inteligencia artificial, bienestar emocional"
         ogUrl="https://nuxa.life/blog"
         canonicalUrl="https://nuxa.life/blog"
       />
@@ -329,8 +239,8 @@ export default function BlogPage() {
               </h1>
             </div>
             <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto leading-relaxed">
-              Artículos especializados sobre IA y salud mental, innovación en bienestar digital 
-              y las últimas tendencias en psicología moderna.
+                Artículos informativos sobre herramientas digitales, bienestar emocional y uso responsable
+              de la inteligencia artificial. No sustituyen la atención profesional.
             </p>
             <div className="w-24 h-1 bg-white/30 mx-auto mt-6 rounded-full"></div>
           </div>
@@ -416,8 +326,7 @@ export default function BlogPage() {
           <div className="max-w-4xl mx-auto px-4 text-center">
             <h3 className="text-3xl font-bold text-gray-900 mb-4">¿Te interesan más artículos?</h3>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Descubre nuestra biblioteca completa de artículos sobre inteligencia artificial, 
-              salud mental y las últimas innovaciones en bienestar digital.
+              Consulta artículos informativos sobre inteligencia artificial, bienestar emocional y el uso responsable de herramientas digitales.
             </p>
             <Button 
               className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { isNonIndexablePath } from "@shared/seo/policy";
 
 interface SEOHeadProps {
   title: string;
@@ -11,6 +12,9 @@ interface SEOHeadProps {
   ogType?: 'website' | 'article';
   twitterCard?: 'summary' | 'summary_large_image';
   canonicalUrl?: string;
+  language?: string;
+  alternates?: { hreflang: string; href: string }[];
+  jsonLd?: object[];
 }
 
 export function SEOHead({
@@ -24,10 +28,14 @@ export function SEOHead({
   ogType = 'website',
   twitterCard = 'summary_large_image',
   canonicalUrl,
+  language = "es-ES",
+  alternates,
+  jsonLd,
 }: SEOHeadProps) {
   useEffect(() => {
     // Update page title
     document.title = title;
+    document.documentElement.lang = language;
 
     // Update or create meta tags
     const updateMetaTag = (name: string, content: string, isProperty = false) => {
@@ -45,6 +53,7 @@ export function SEOHead({
 
     // Basic meta tags
     updateMetaTag('description', description);
+    updateMetaTag('robots', isNonIndexablePath(window.location.pathname) ? 'noindex, nofollow' : 'index, follow');
     if (keywords) {
       updateMetaTag('keywords', keywords);
     }
@@ -54,8 +63,9 @@ export function SEOHead({
     updateMetaTag('og:description', ogDescription || description, true);
     updateMetaTag('og:image', ogImage, true);
     updateMetaTag('og:type', ogType, true);
-    if (ogUrl) {
-      updateMetaTag('og:url', ogUrl, true);
+    updateMetaTag('og:locale', language.replace("-", "_"), true);
+    if (ogUrl || canonicalUrl) {
+      updateMetaTag('og:url', ogUrl || canonicalUrl!, true);
     }
 
     // Twitter Card tags
@@ -76,7 +86,26 @@ export function SEOHead({
       
       linkElement.setAttribute('href', canonicalUrl);
     }
-  }, [title, description, keywords, ogTitle, ogDescription, ogImage, ogUrl, ogType, twitterCard, canonicalUrl]);
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(node => node.remove());
+    for (const alternate of alternates || []) {
+      const link = document.createElement("link");
+      link.rel = "alternate";
+      link.hreflang = alternate.hreflang;
+      link.href = alternate.href;
+      document.head.appendChild(link);
+    }
+    document.querySelectorAll("script[data-nuxa-route-schema]").forEach(node => node.remove());
+    for (const schema of jsonLd || []) {
+      const script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.dataset.nuxaRouteSchema = "";
+      script.textContent = JSON.stringify(schema);
+      document.head.appendChild(script);
+    }
+    return () => {
+      document.querySelectorAll('link[rel="alternate"][hreflang],script[data-nuxa-route-schema]').forEach(node => node.remove());
+    };
+  }, [title, description, keywords, ogTitle, ogDescription, ogImage, ogUrl, ogType, twitterCard, canonicalUrl, language, alternates, jsonLd]);
 
   return null;
 }

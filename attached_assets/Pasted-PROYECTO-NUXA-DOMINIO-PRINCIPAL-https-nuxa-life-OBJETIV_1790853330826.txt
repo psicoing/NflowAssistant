@@ -1,0 +1,623 @@
+PROYECTO: NUXA
+DOMINIO PRINCIPAL: https://nuxa.life
+
+OBJETIVO PRINCIPAL
+
+Quiero convertir nuxa.life en un sitio altamente descubrible, indexable y citable por buscadores tradicionales y sistemas de búsqueda con IA en cuatro mercados prioritarios:
+
+1. Estados Unidos — inglés estadounidense
+2. Reino Unido — inglés británico
+3. Francia — francés
+4. España — español
+
+El objetivo no es hacer keyword stuffing ni crear miles de páginas automáticas.
+
+El objetivo es construir una arquitectura internacional de contenido de alta calidad para que buscadores y sistemas de IA puedan comprender claramente:
+
+- qué es NUXA;
+- qué ofrece;
+- para quién sirve;
+- qué problemas aborda;
+- en qué idiomas está disponible;
+- cuáles son sus límites;
+- qué organización está detrás;
+- qué páginas son las fuentes canónicas sobre cada tema.
+
+IMPORTANTE
+
+NO eliminar ni sustituir el SEO existente que ya está funcionando.
+
+Antes de modificar nada:
+
+1. Auditar la implementación SEO actual.
+2. Identificar titles, descriptions, canonicals, sitemap, robots.txt, schemas, hreflang y páginas ya indexables.
+3. Conservar URLs que ya estén indexadas.
+4. No modificar registro, login, chat, Stripe, PWA, API ni autenticación salvo que sea imprescindible.
+5. Evitar contenido duplicado.
+
+==================================================
+1. ARQUITECTURA INTERNACIONAL
+==================================================
+
+Implementar una arquitectura consistente por idioma/mercado.
+
+Propuesta:
+
+/es/
+/en-us/
+/en-gb/
+/fr/
+
+Mantener las URLs existentes cuando cambiarlas pueda perjudicar su indexación.
+
+Utilizar hreflang correctamente:
+
+es-ES
+en-US
+en-GB
+fr-FR
+x-default
+
+Cada página internacional debe tener:
+
+- URL propia
+- canonical correcta
+- hreflang recíproco
+- title propio
+- description propia
+- H1 propio
+- Open Graph
+- contenido adaptado lingüística y culturalmente
+
+NO limitarse a traducciones literales.
+
+==================================================
+2. DEFINICIÓN CLARA DE NUXA
+==================================================
+
+Los buscadores y motores de IA deben poder identificar claramente NUXA.
+
+Crear una descripción institucional consistente en todo el sitio.
+
+ESPAÑA:
+
+NUXA es una plataforma digital de orientación psicológica y bienestar emocional basada en inteligencia artificial, disponible 24/7 y diseñada para ofrecer orientación y recursos psicoeducativos en múltiples idiomas.
+
+USA:
+
+NUXA is an AI-powered psychological guidance and emotional wellbeing platform available 24/7, providing multilingual guidance and psychoeducational resources.
+
+UK:
+
+NUXA is an AI-powered psychological guidance and emotional wellbeing platform providing 24/7 multilingual guidance and psychoeducational resources.
+
+FRANCE:
+
+NUXA est une plateforme numérique d'orientation psychologique et de bien-être émotionnel basée sur l'intelligence artificielle, disponible 24h/24 et 7j/7, proposant une orientation et des ressources psychoéducatives multilingues.
+
+Mantener claramente los límites del producto:
+
+NUXA no sustituye a un psicólogo, médico ni servicio de emergencias.
+
+No presentar NUXA como diagnóstico médico, tratamiento médico, psicoterapia ni servicio de crisis.
+
+==================================================
+3. PÁGINAS DE ENTIDAD
+==================================================
+
+Crear o mejorar páginas públicas que permitan comprender la entidad NUXA:
+
+/about
+/about-nuxa
+/how-nuxa-works
+/science
+/safety
+/privacy
+/for-organizations
+/for-professionals
+
+Adaptarlas internacionalmente cuando corresponda.
+
+La página About NUXA debe explicar de forma clara:
+
+- qué es NUXA;
+- propósito;
+- tecnología;
+- orientación psicológica y psicoeducativa;
+- funcionamiento;
+- disponibilidad internacional;
+- idiomas;
+- seguridad;
+- privacidad;
+- límites;
+- organizaciones y profesionales;
+- información verificable sobre la entidad responsable.
+
+Evitar afirmaciones clínicas que no puedan demostrarse.
+
+==================================================
+4. SEO POR NECESIDAD REAL
+==================================================
+
+Crear contenido de alta calidad alrededor de preguntas que las personas realmente realizan.
+
+ESPAÑA:
+
+ansiedad
+estrés laboral
+bienestar emocional
+duelo
+soledad
+autoestima
+ruptura de pareja
+conflictos familiares
+ansiedad adolescentes
+agotamiento emocional
+problemas para dormir por estrés
+gestión emocional
+
+USA:
+
+emotional wellbeing
+anxiety support
+work stress
+emotional exhaustion
+grief support
+loneliness
+self-esteem
+relationship stress
+teen anxiety
+emotional support online
+AI emotional wellbeing
+24/7 emotional support
+psychological guidance online
+
+UK:
+
+emotional wellbeing
+workplace stress
+anxiety support
+mental wellbeing
+grief support
+loneliness
+emotional exhaustion
+relationship difficulties
+teenage anxiety
+online emotional support
+psychological guidance
+
+FRANCE:
+
+bien-être émotionnel
+anxiété
+stress au travail
+épuisement émotionnel
+deuil
+solitude
+estime de soi
+problèmes de couple
+anxiété chez les adolescents
+soutien émotionnel en ligne
+orientation psychologique en ligne
+
+Cada página debe responder realmente al problema.
+
+NO crear thin content.
+
+NO generar páginas masivamente cambiando únicamente keywords.
+
+==================================================
+5. CONTENIDO EN FORMATO PREGUNTA/RESPUESTA
+==================================================
+
+Introducir preguntas naturales dentro de las páginas.
+
+Ejemplos:
+
+What can I do when I feel overwhelmed?
+Why do I feel anxious at night?
+How can I manage work-related stress?
+Where can I find emotional support online?
+How can I cope with grief?
+How can I help a teenager experiencing anxiety?
+
+¿Qué puedo hacer si me siento desbordado?
+¿Por qué tengo ansiedad por la noche?
+¿Cómo manejar el estrés laboral?
+¿Cómo afrontar un duelo?
+
+Que puis-je faire lorsque je me sens dépassé ?
+Comment gérer le stress au travail ?
+Comment faire face à un deuil ?
+Pourquoi suis-je anxieux le soir ?
+
+Responder con contenido útil, prudente y profesional.
+
+==================================================
+6. STRUCTURED DATA / SCHEMA.ORG
+==================================================
+
+Auditar el Schema actual.
+
+Implementar únicamente schemas apropiados y compatibles con el contenido visible.
+
+Considerar según página:
+
+Organization
+WebSite
+WebPage
+AboutPage
+Article
+BlogPosting
+BreadcrumbList
+FAQPage cuando sea apropiado
+
+No inventar datos.
+
+Todos los structured data deben coincidir con contenido visible.
+
+Crear una entidad Organization consistente para NUXA.
+
+Usar siempre el mismo:
+
+name
+url
+logo
+description
+
+y otros datos corporativos únicamente cuando estén confirmados.
+
+==================================================
+7. CRAWLERS Y MOTORES DE IA
+==================================================
+
+Auditar robots.txt.
+
+Asegurar que los crawlers de búsqueda necesarios no estén bloqueados accidentalmente.
+
+Especialmente verificar:
+
+Googlebot
+Bingbot
+OAI-SearchBot
+
+OAI-SearchBot debe poder acceder al contenido público que queremos que pueda aparecer en ChatGPT Search.
+
+No modificar las políticas relacionadas con entrenamiento de modelos sin revisar primero su finalidad.
+
+IMPORTANTE:
+
+OAI-SearchBot y GPTBot tienen funciones diferentes.
+
+No asumir que permitir búsquedas obliga a permitir entrenamiento.
+
+No bloquear páginas SEO públicas mediante firewall, CDN o middleware.
+
+Mantener bloqueadas:
+
+/admin
+/account
+/private
+/api privadas
+datos personales
+sesiones
+pagos
+información de usuarios
+
+==================================================
+8. SITEMAP
+==================================================
+
+Crear o verificar:
+
+/sitemap.xml
+
+Debe contener exclusivamente URLs:
+
+- públicas;
+- indexables;
+- canónicas;
+- HTTP 200.
+
+Añadir lastmod correcto cuando corresponda.
+
+Si el sitio crece mucho, crear sitemap index separado por:
+
+pages
+blog
+ES
+EN-US
+EN-GB
+FR
+
+==================================================
+9. INDEXNOW / BING / COPILOT
+==================================================
+
+Implementar IndexNow correctamente para comunicar nuevas páginas y actualizaciones.
+
+No enviar URLs privadas.
+
+Preparar NUXA para Bing Webmaster Tools y Microsoft Copilot mediante:
+
+- sitemap limpio
+- IndexNow
+- canonicals
+- enlaces internos HTML
+- contenido rastreable
+- titles/descriptions claros
+
+==================================================
+10. CHATGPT SEARCH
+==================================================
+
+Verificar expresamente que:
+
+OAI-SearchBot puede acceder a las páginas públicas.
+
+No bloquearlo en:
+
+robots.txt
+Cloudflare
+middleware
+firewall
+rate limiting
+
+Mantener protegidos endpoints privados.
+
+==================================================
+11. LLMS.TXT
+==================================================
+
+Crear /llms.txt como mecanismo complementario si todavía no existe.
+
+IMPORTANTE:
+
+No tratar llms.txt como sustituto del SEO.
+
+No afirmar que garantiza indexación en sistemas de IA.
+
+Debe funcionar únicamente como documento adicional para sistemas que decidan utilizarlo.
+
+Contenido sugerido:
+
+# NUXA
+
+> NUXA is an AI-powered psychological guidance and emotional wellbeing platform providing 24/7 multilingual guidance and psychoeducational resources.
+
+Official website:
+https://nuxa.life/
+
+Primary topics:
+- Emotional wellbeing
+- Psychological guidance
+- Psychoeducation
+- Anxiety
+- Stress
+- Workplace wellbeing
+- Grief
+- Self-esteem
+- Relationships
+- Family wellbeing
+- Adolescent wellbeing
+
+Languages:
+Spanish
+English
+French
+and additional supported languages.
+
+Important:
+NUXA does not replace healthcare professionals, emergency services, medical diagnosis or medical treatment.
+
+Incluir enlaces a las páginas públicas más importantes.
+
+==================================================
+12. AUTORIDAD Y CONFIANZA
+==================================================
+
+Especialmente por tratarse de salud/bienestar, reforzar transparencia.
+
+Los artículos deben mostrar cuando corresponda:
+
+- autor;
+- cualificación profesional real;
+- fecha de publicación;
+- fecha de actualización;
+- fuentes;
+- referencias;
+- responsable editorial.
+
+Crear una política editorial pública.
+
+Crear página:
+
+/editorial-policy
+
+Explicar:
+
+- cómo se produce el contenido;
+- cómo se revisa;
+- criterios de calidad;
+- actualización;
+- utilización de IA cuando corresponda;
+- supervisión profesional cuando exista realmente.
+
+No inventar revisores ni credenciales.
+
+==================================================
+13. CONTENIDO ORIGINAL
+==================================================
+
+Prioridad absoluta:
+
+crear contenido que aporte información propia y útil.
+
+No copiar contenidos de competidores.
+
+No producir cientos de artículos genéricos mediante IA.
+
+Priorizar:
+
+experiencia profesional;
+explicaciones originales;
+metodología NUXA;
+datos propios anonimizados cuando legalmente sea posible;
+investigación;
+guías;
+recursos;
+preguntas frecuentes reales.
+
+==================================================
+14. HTML RASTREABLE
+==================================================
+
+NUXA utiliza React/Vite/SPA.
+
+Auditar si las páginas SEO dependen exclusivamente de JavaScript para:
+
+title
+description
+canonical
+H1
+contenido
+structured data
+
+Cuando sea necesario implementar:
+
+SSR,
+SSG,
+o prerendering.
+
+El HTML inicial de las páginas SEO importantes debe contener suficiente contenido para ser comprendido y rastreado.
+
+==================================================
+15. ENLAZADO INTERNO
+==================================================
+
+Crear enlaces HTML reales:
+
+<a href="...">
+
+No depender únicamente de botones JavaScript.
+
+Arquitectura:
+
+Home
+   ↓
+Bienestar emocional
+   ↓
+Ansiedad
+Estrés
+Duelo
+Autoestima
+Relaciones
+Adolescentes
+Trabajo
+Familia
+
+Blog ↔ páginas temáticas ↔ NUXA
+
+Crear breadcrumbs.
+
+==================================================
+16. OPTIMIZACIÓN PARA CITACIÓN
+==================================================
+
+Hacer que las páginas puedan ser utilizadas fácilmente como fuentes.
+
+Cada artículo debe:
+
+- responder rápidamente a la pregunta principal;
+- explicar conceptos con claridad;
+- diferenciar hechos de orientación general;
+- proporcionar fuentes cuando corresponda;
+- utilizar encabezados descriptivos;
+- mantener fechas visibles;
+- identificar autoría;
+- evitar afirmaciones absolutas;
+- incluir información actualizada.
+
+No escribir para engañar a una IA.
+
+Escribir para que humanos y sistemas de recuperación puedan comprender y verificar fácilmente el contenido.
+
+==================================================
+17. MONITORIZACIÓN
+==================================================
+
+Preparar medición mediante:
+
+Google Search Console
+Bing Webmaster Tools
+
+Comprobar también los informes disponibles de visibilidad en experiencias de IA.
+
+Medir por país:
+
+USA
+UK
+France
+Spain
+
+Medir:
+
+impressions
+clicks
+CTR
+queries
+indexed pages
+AI citations cuando la plataforma las proporcione
+landing pages
+organic registrations
+
+==================================================
+18. PRUEBA FINAL
+==================================================
+
+Después de implementar:
+
+1. Comprobar robots.txt.
+2. Comprobar sitemap.xml.
+3. Comprobar llms.txt.
+4. Validar todos los hreflang.
+5. Validar canonicals.
+6. Validar structured data.
+7. Comprobar HTTP status.
+8. Verificar HTML inicial.
+9. Comprobar enlaces internos.
+10. Confirmar que OAI-SearchBot no está bloqueado.
+11. Confirmar que Googlebot no está bloqueado.
+12. Confirmar que Bingbot no está bloqueado.
+13. Confirmar que endpoints privados siguen protegidos.
+14. Comprobar que no se ha roto login, registro, chat, Stripe ni PWA.
+
+ENTREGA FINAL DEL AGENT
+
+No limitarse a decir "SEO mejorado".
+
+Entregar una tabla con:
+
+URL
+País
+Idioma
+Title
+Meta description
+H1
+Canonical
+hreflang
+Schema
+Sitemap
+Indexable YES/NO
+
+Y otra sección:
+
+- robots.txt final
+- sitemap final
+- llms.txt final
+- crawlers permitidos
+- errores encontrados
+- errores corregidos
+- acciones que requieren intervención manual
+
+No realizar cambios innecesarios fuera de este objetivo.

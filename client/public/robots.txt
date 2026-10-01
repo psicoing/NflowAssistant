@@ -1,10 +1,16 @@
 User-agent: *
 Allow: /
 
+# Googlebot, Bingbot and OAI-SearchBot inherit this public-search policy.
+# Existing GPTBot/training policy remains unchanged; search is not training.
 # Rutas privadas — no indexar
 Disallow: /chat
 Disallow: /chat/
-Disallow: /admin/
+Disallow: /admin
+Disallow: /account
+Disallow: /private
+Disallow: /login
+Disallow: /registro
 Disallow: /partners/dashboard
 Disallow: /partners/login
 Disallow: /partners/register

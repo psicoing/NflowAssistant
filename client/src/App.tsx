@@ -16,6 +16,7 @@ import { CookieConsent } from "@/components/ui/cookie-consent";
 import FloatingCTAButton from "@/components/FloatingCTAButton";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import MobileBottomNav from "@/components/layout/mobile-bottom-nav";
+import { isPublishedSeoPath } from "@shared/seo/paths";
 
 // Las páginas se descargan solo cuando se visita su ruta. Esto reduce mucho
 // el primer paquete que debe cargar el navegador/WebView.
@@ -66,13 +67,17 @@ const RecursosIntro = lazy(() => import("@/pages/recursos-intro"));
 const SorteoRecursos = lazy(() => import("@/pages/sorteo-recursos"));
 const ProgramaPartners = lazy(() => import("@/pages/programa-partners"));
 const BienestarTematico = lazy(() => import("@/pages/bienestar-tematico"));
+const InternationalSeoPage = lazy(() => import("@/pages/international-seo"));
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
   const [location, setLocation] = useLocation();
+  const seoPage = isPublishedSeoPath(location);
 
   useEffect(() => {
     if (isLoading) return;
+    // Only exact, published catalogue entries become public documents.
+    if (isPublishedSeoPath(location)) return;
 
     // Always allow access to public routes
     const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos", "/test-bienestar", "/calculadora-burnout", "/programa-partners", "/recompensas", "/bienestar-emocional", "/ansiedad", "/ansiedad-antes-de-dormir", "/estres-laboral", "/duelo", "/soledad", "/autoestima", "/ruptura-de-pareja", "/limites-sin-culpa", "/ansiedad-adolescentes"];
@@ -101,7 +106,7 @@ function AuthenticatedRouter() {
     }
   }, [isAuthenticated, needsPayment, location, isLoading, setLocation]);
 
-  if (isLoading) {
+  if (isLoading && !seoPage) {
     return (
       <div className="h-screen flex items-center justify-center">
         <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
@@ -117,7 +122,7 @@ function AuthenticatedRouter() {
         </div>
       }
     >
-      <Switch>
+      {seoPage ? <InternationalSeoPage /> : <Switch>
         <Route path="/" component={Home} />
         <Route path="/ejemplos-chat" component={EjemplosChat} />
         <Route path="/novedades" component={Novedades} />
@@ -176,7 +181,7 @@ function AuthenticatedRouter() {
         <Route path="/ansiedad-adolescentes"><BienestarTematico slug="ansiedad-adolescentes" /></Route>
         <Route path="/acceso/:token" component={AccesoMagico} />
         <Route component={NotFound} />
-      </Switch>
+      </Switch>}
     </Suspense>
   );
 }
@@ -186,6 +191,7 @@ function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
   const standaloneTools = ["/test-bienestar", "/calculadora-burnout"];
   const isStandaloneTool = standaloneTools.includes(location);
+  const isSeoPublicDocument = isPublishedSeoPath(location);
   const isPreviewWebview = isInPreviewWebview();
   const [, setLocation] = useLocation();
   // Mostrar splash solo si no se ha visto ya en esta sesión/cuenta
@@ -195,6 +201,7 @@ function AppContent() {
   const [showSplash, setShowSplash] = useState(
     () =>
       !isStandaloneTool &&
+      !isSeoPublicDocument &&
       (isPreviewWebview || (location === "/" && !hasSplashBeenShown())),
   );
 
@@ -209,7 +216,7 @@ function AppContent() {
     (location === "/" || location === "/ejemplos-chat" || location === "/precios" || 
      location === "/app-movil" || location === "/nosotros" || location === "/control-parental" || location === "/blog");
 
-  if (showSplash && !isStandaloneTool) {
+  if (showSplash && !isStandaloneTool && !isSeoPublicDocument) {
     return <SplashScreen onFinish={() => {
       markSplashShown(isAuthenticated); // sessionStorage siempre; localStorage si tiene cuenta
       setShowSplash(false);
@@ -225,7 +232,7 @@ function AppContent() {
       <CookieConsent />
       {showFloatingCTA && <FloatingCTAButton />}
       {showFloatingCTA && <ExitIntentPopup />}
-      <MobileBottomNav />
+      {!isSeoPublicDocument && <MobileBottomNav />}
     </div>
   );
 }

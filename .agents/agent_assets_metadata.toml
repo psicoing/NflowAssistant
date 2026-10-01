@@ -1,5 +1,4 @@
 uploads = []
-outputs = []
 
 [[generated]]
 id = "zeK7roWH394mW4rpQEh9r"
@@ -24,3 +23,31 @@ id = "nHlvl3nFQA9WPIsbiN1zK"
 uri = "file://attached_assets/pwa_icon_boy.png"
 type = "image"
 title = "pwa_boy_chatting_white_frame"
+
+[[outputs]]
+id = "xwNPcqozwseXRCIcXSdo_"
+uri = "file://reports/nuxa-seo-internacional.html"
+type = "html"
+title = "NUXA · Informe SEO internacional"
+description = "Inventario completo por URL, validación, archivos robots/sitemap/llms finales, errores corregidos y pendientes de publicación y revisión."
+logical_id = "c95b50b0-f20b-49e4-999e-3e62a44fdc0a"
+content_hash = "sha256:409274e532db7dc5e81eef7144a045f87f6e544e409f356625d24b58a87c2d9c"
+size = 157105
+mtime_ms = 1790854904985
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/c95b50b0-f20b-49e4-999e-3e62a44fdc0a/f996e5c4-7555-4f65-80f2-4f5314216225"
+storage_version_token = "1790854944387802"
+content_type = "text/html"
+
+[[outputs]]
+id = "aE9WX_8SxlvvNXkyydaLT"
+uri = "file://reports/nuxa-seo-inventario.csv"
+type = "table"
+title = "NUXA · Inventario SEO por URL"
+description = "Tabla descargable para Excel: URL, país, idioma, title, description, H1, canonical, hreflang, schema, sitemap e indexabilidad."
+logical_id = "413241f4-366a-44b8-97b3-a3b6069d0e8e"
+content_hash = "sha256:f04a5442f3fe20f3260f507614054f37453de1bfcab1bfbba3d25f8ecce07870"
+size = 65199
+mtime_ms = 1790854904985
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/413241f4-366a-44b8-97b3-a3b6069d0e8e/7f665d04-79f8-4e63-9db4-71f0d0604b5c"
+storage_version_token = "1790854945520284"
+content_type = "text/csv"

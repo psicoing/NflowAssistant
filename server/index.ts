@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { registerSeoMiddleware } from "./seo-middleware";
+import { registerSeoDiscovery } from "./seo-discovery";
 import { pool } from "./db";
 import { attachVoiceDemoWebSocket } from "./voiceDemoBridge";
 import { createServer } from "http";
@@ -1106,6 +1107,7 @@ process.on("unhandledRejection", (reason: unknown) => {
 });
 
 const app = express();
+registerSeoDiscovery(app);
 
 // Apply express.json() conditionally - exclude Stripe webhook route
 app.use((req, res, next) => {

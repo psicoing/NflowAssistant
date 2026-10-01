@@ -20,6 +20,13 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-gray-400 mb-6 max-w-md text-xs">{t('footer.tagline')}</p>
+            <nav aria-label="NUXA internacional" className="mb-5 flex flex-wrap gap-x-4 gap-y-2 text-xs text-teal-300">
+              <a href="/es/" className="hover:underline">España · ES</a>
+              <a href="/en-us/" className="hover:underline">United States · EN</a>
+              <a href="/en-gb/" className="hover:underline">United Kingdom · EN</a>
+              <a href="/fr/" className="hover:underline">France · FR</a>
+              <a href="/es/editorial-policy" className="hover:underline">Política editorial</a>
+            </nav>
             <div className="flex space-x-3">
               <a 
                 href="https://www.linkedin.com/in/empordajobs/"
