@@ -7,17 +7,19 @@ import type { Plugin } from "esbuild";
 export const offlineChatBudgetPlugin: Plugin = {
   name: "offline-chat-budget",
   setup(builder) {
-    builder.onResolve({ filter: /(^|\/)chat-budget$/ }, () => ({ path: "budget", namespace: "offline-budget" }));
+    builder.onResolve({ filter: /(^|\/)chat-completion-router$/ }, () => ({ path: "budget", namespace: "offline-budget" }));
     builder.onLoad({ filter: /.*/, namespace: "offline-budget" }, () => ({
-      contents: `export async function budgetedChatCompletion(request, client) {
+      contents: `import {createChatAiClient} from ${JSON.stringify(new URL("../../server/chat-ai-client.ts", import.meta.url).pathname)};
+      export async function routedChatCompletion(request) {
         if (globalThis.__nuxaOfflineMonthlyBudgetExceeded) {
           const error = new Error("Offline budget exhausted");
           error.code = "NUXA_CHAT_MONTHLY_BUDGET_EXCEEDED";
           throw error;
         }
-        return client.chat.completions.create(request);
+        return createChatAiClient().chat.completions.create(request);
       }`,
       loader: "js",
+      resolveDir: new URL("../../", import.meta.url).pathname,
     }));
   },
 };

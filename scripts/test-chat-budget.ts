@@ -59,7 +59,7 @@ try {
   const fakeClient = { chat: { completions: { create: async (request: any) => {
     providerCalls++;
     assert.equal(request.service_tier, "default");
-    return { usage, service_tier: "default", choices: [{ message: { content: '{"response":"Synthetic answer"}' } }] };
+    return { model: quote.model, usage, service_tier: "default", choices: [{ message: { content: '{"response":"Synthetic answer"}' } }] };
   } } } } as any;
   const request = { model: quote.model, messages, max_completion_tokens: 500, response_format: { type: "json_object" as const } };
   await assert.rejects(budgetedChatCompletion(request, fakeClient, restored), { code: "NUXA_CHAT_MONTHLY_BUDGET_EXCEEDED" });
@@ -79,7 +79,7 @@ try {
   await restored.settle(overBound, { prompt_tokens: quote.inputTokenBound + 1, completion_tokens: 1 }, "default");
   assert.equal((await restored.status()).blockedForAccountingReview, true);
   await assert.rejects(restored.reserve(quote));
-  console.log("PASS: $20 global calendar-month cap, atomic PostgreSQL reservations under 12 concurrent calls, durable/restart-safe uncertain costs, idempotent settlement, monthly rollover, both token counters, provider blocked before call, no unpriced models, input/output limits, standard tier, failed-call retention and accounting-breach stop. Only synthetic provider calls; no paid AI requests or user data.");
+  console.log("PASS: $20 Replit calendar-month cap, atomic PostgreSQL reservations under 12 concurrent calls, durable/restart-safe uncertain costs, idempotent settlement, monthly rollover, both token counters, provider blocked before call, no unpriced models, input/output limits, standard tier, failed-call retention and accounting-breach stop. Only synthetic provider calls; no paid AI requests or user data.");
 } finally {
   if (created) await pool.query(`DROP SCHEMA "${schema}" CASCADE`);
   await pool.end();

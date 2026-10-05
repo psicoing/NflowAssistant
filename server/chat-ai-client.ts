@@ -1,11 +1,9 @@
 import OpenAI from "openai";
 
-type ChatProvider = "replit" | "openai" | "invalid";
+export type ChatProvider = "replit" | "openai";
+type ChatMode = ChatProvider | "dual" | "invalid";
 
-export function chatAiReadiness(env: NodeJS.ProcessEnv = process.env) {
-  const selected = env.NUXA_CHAT_AI_PROVIDER?.trim() || "replit";
-  const provider: ChatProvider = selected === "replit" || selected === "openai" ? selected : "invalid";
-  const model = env.OPENAI_CHAT_MODEL?.trim() || "gpt-5.5-2026-04-23";
+function providerConfiguration(env: NodeJS.ProcessEnv, provider: ChatProvider) {
   const missing: string[] = [];
   if (provider === "replit") {
     if (!env.AI_INTEGRATIONS_OPENAI_API_KEY?.trim()) missing.push("AI_INTEGRATIONS_OPENAI_API_KEY");
@@ -19,25 +17,39 @@ export function chatAiReadiness(env: NodeJS.ProcessEnv = process.env) {
       }
     }
   } else if (provider === "openai" && !env.OPENAI_API_KEY?.trim()) missing.push("OPENAI_API_KEY");
-  if (provider === "invalid") missing.push("valid-NUXA_CHAT_AI_PROVIDER");
+  return { configured: missing.length === 0, missing };
+}
+
+export function chatAiReadiness(env: NodeJS.ProcessEnv = process.env) {
+  const selected = env.NUXA_CHAT_AI_PROVIDER?.trim() || "dual";
+  const provider: ChatMode = ["dual", "openai", "replit"].includes(selected) ? selected as ChatMode : "invalid";
+  const model = env.OPENAI_CHAT_MODEL?.trim() || "gpt-5.5-2026-04-23";
+  const providers = { openai: providerConfiguration(env, "openai"), replit: providerConfiguration(env, "replit") };
+  const configuration = provider === "invalid"
+    ? { configured: false, missing: ["valid-NUXA_CHAT_AI_PROVIDER"] }
+    : providers[provider === "dual" ? "openai" : provider];
   // Configuration readiness is NOT a successful request or confirmed billing.
-  return { provider, model, configured: missing.length === 0, missing, voiceChanged: false };
+  return { provider, model, ...configuration, providers, voiceChanged: false };
 }
 
 export class ChatAiConfigurationError extends Error {
   readonly code = "NUXA_CHAT_AI_NOT_CONFIGURED";
-  constructor(provider: ChatProvider, missing: string[]) {
+  constructor(provider: ChatMode, missing: string[]) {
     super(`Chat AI provider ${provider} is not configured. Missing: ${missing.join(", ")}. No alternative billing provider was used.`);
     this.name = "ChatAiConfigurationError";
   }
 }
 
-// Written chat only. Never fall back from managed billing to the personal key.
+// Written chat only. Default dual mode starts with the explicitly approved
+// direct OpenAI payer. Only the completion router decides whether to use backup.
 // Construct a fresh client so a token is not retained across requests.
-export function createChatAiClient(env: NodeJS.ProcessEnv = process.env): OpenAI {
+export function createChatAiClient(env: NodeJS.ProcessEnv = process.env, requestedProvider?: ChatProvider): OpenAI {
   const readiness = chatAiReadiness(env);
-  if (!readiness.configured) throw new ChatAiConfigurationError(readiness.provider, readiness.missing);
-  return readiness.provider === "replit"
+  if (readiness.provider === "invalid") throw new ChatAiConfigurationError(readiness.provider, readiness.missing);
+  const provider = requestedProvider ?? (readiness.provider === "dual" ? "openai" : readiness.provider);
+  const configuration = readiness.providers[provider];
+  if (!configuration.configured) throw new ChatAiConfigurationError(provider, configuration.missing);
+  return provider === "replit"
     ? new OpenAI({
       apiKey: env.AI_INTEGRATIONS_OPENAI_API_KEY!,
       baseURL: env.AI_INTEGRATIONS_OPENAI_BASE_URL!,

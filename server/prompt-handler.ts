@@ -5,7 +5,7 @@
  * y generar respuestas utilizando la API de OpenAI con enriquecimiento de prompts.
  */
 
-import { chatAiReadiness, createChatAiClient } from "./chat-ai-client";
+import { chatAiReadiness } from "./chat-ai-client";
 import { selectRelevantExamples } from "./prompt-utils";
 import type { Message } from "@shared/schema";
 import { chatFailureMessage, hasSafetySignal, profileInstructions, sharedChatPolicy } from "./chat-policy";
@@ -13,7 +13,7 @@ import { chatEvidenceInstructions, needsUrgentConversationSupport, resolveEviden
 import { scientificAnalysisInstructions, scientificEvidenceEngine } from "./knowledge/scientific-engine";
 import { compactChatPresentation } from "./chat-presentation";
 import { boundedChatHistory } from "./chat-cost-policy";
-import { budgetedChatCompletion } from "./chat-budget";
+import { routedChatCompletion } from "./chat-completion-router";
 import { chatCostLimitMessage } from "./chat-policy";
 
 export interface ChatResponse {
@@ -766,10 +766,9 @@ export async function generateChatResponse(userMessage: string, history: Message
     // Mantener una versión estable por defecto para que cambios futuros del alias
     // no alteren inesperadamente el comportamiento clínico-conversacional.
     const chatModel = chatAiReadiness().model;
-    const openai = createChatAiClient();
 
     // Realizar la llamada a OpenAI conservando el prompt, el historial y el JSON.
-    const completion = await budgetedChatCompletion({
+    const completion = await routedChatCompletion({
       model: chatModel,
       messages: [
         { role: "system", content: finalPrompt },
@@ -778,7 +777,7 @@ export async function generateChatResponse(userMessage: string, history: Message
       ],
       response_format: { type: "json_object" },
       max_completion_tokens: maxTokens
-    }, openai);
+    });
 
     const responseContent = completion.choices[0].message.content;
     if (!responseContent) {

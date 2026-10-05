@@ -24,7 +24,7 @@ try {
     }],
   });
   const { chatAiReadiness, createChatAiClient } = await import(pathToFileURL(outfile).href);
-  const personalOnly = { OPENAI_API_KEY: "synthetic-personal-key" };
+  const personalOnly = { OPENAI_API_KEY: "synthetic-personal-key", NUXA_CHAT_AI_PROVIDER: "replit" };
   const unconfigured = chatAiReadiness(personalOnly);
   assert.equal(unconfigured.provider, "replit");
   assert.equal(unconfigured.configured, false);
@@ -52,9 +52,20 @@ try {
   assert.equal(constructed.length, count);
   createChatAiClient({ ...personalOnly, NUXA_CHAT_AI_PROVIDER: "openai" });
   assert.deepEqual(constructed.at(-1), { apiKey: personalOnly.OPENAI_API_KEY, baseURL: "https://api.openai.com/v1", maxRetries: 0, timeout: 60_000 });
+  const dual = { ...managed, NUXA_CHAT_AI_PROVIDER: "dual" };
+  assert.equal(chatAiReadiness(dual).provider, "dual");
+  createChatAiClient(dual);
+  assert.equal(constructed.at(-1)!.apiKey, personalOnly.OPENAI_API_KEY, "Approved dual mode starts with direct OpenAI");
+  createChatAiClient(dual, "replit");
+  assert.equal(constructed.at(-1)!.apiKey, managed.AI_INTEGRATIONS_OPENAI_API_KEY);
+  const defaultDual = chatAiReadiness({ OPENAI_API_KEY: "synthetic-personal-key" });
+  assert.equal(defaultDual.provider, "dual");
+  assert(defaultDual.configured);
+  assert(!defaultDual.providers.replit.configured, "Primary configuration does not falsely confirm backup activation");
+  assert.throws(() => createChatAiClient({}, "openai"));
   const voice = await fs.readFile("server/voiceDemoBridge.ts", "utf8");
   assert(!voice.includes("createChatAiClient"), "Do not migrate voice credentials");
-  console.log("PASS: written chat defaults to managed Replit credentials/endpoint, no silent personal-key fallback, explicit direct mode only, model preserved, invalid/partial config blocked, readiness contains no credentials. No network or paid AI calls.");
+  console.log("PASS: approved dual default uses direct OpenAI first, explicit managed/direct modes preserved, independent backup readiness, correct payer endpoints, no SDK retries, model preserved, invalid/partial config blocked, readiness contains no credentials. No network or paid AI calls.");
 } finally {
   delete (globalThis as any).__offlineChatProviderConstructors;
   await fs.rm(dir, { recursive: true, force: true });

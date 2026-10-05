@@ -1,31 +1,36 @@
-# Cobro del chat escrito mediante Replit
+# Chat escrito: OpenAI principal y Replit de respaldo
 
 ## Decisión y estado
 
-### Nueva propuesta del usuario: sistema dual
+### Decisión vigente: sistema dual
 
 El usuario plantea OpenAI como principal cuando tenga saldo de API, con Replit
 como respaldo cuando no tenga saldo, siempre con control de tokens.
 El usuario aclaró que los «20 euros» eran una referencia al volumen de tokens,
 no una afirmación de saldo o presupuesto de OpenAI. Eligió **OpenAI aparte y
 Replit hasta 20 USD adicionales al mes**: el límite es exclusivo del respaldo,
-no compartido. Antes de activar OpenAI como principal, definir su propio máximo
-mensual. No interpretar «aparte» como autorización de gasto ilimitado.
+no compartido. Después autorizó **25 USD mensuales para OpenAI**. El máximo
+local conjunto es **45 USD al mes para todo el chat**, no por usuario,
+excluyendo voz y otras funciones.
 
 La facturación de la API y ChatGPT es independiente:
 https://help.openai.com/en/articles/9039756-billing-settings-in-chatgpt-vs-platform
 
-No implementar llamadas simultáneas ni respaldo por cualquier HTTP 429 o
-timeout. Solo rechazos de facturación inequívocos pueden justificar pasar
-al respaldo sin arriesgar una segunda generación cobrada.
-La propuesta dual todavía no modifica la selección del proveedor en el código.
+El código usa OpenAI primero y Replit únicamente si se agota la asignación
+autorizada de OpenAI o su API rechaza inequívocamente la facturación.
+No llama a ambos simultáneamente ni usa respaldo por cualquier HTTP 429,
+timeout, 401 o 500. Rechazos directos reconocidos: HTTP 402/429 con
+`insufficient_quota`, `billing_not_active` o `billing_hard_limit_reached`.
+No inferir el saldo real del usuario a partir de esos errores.
 
-### Estado técnico de la preparación anterior
+### Estado de activación
 
-El usuario eligió usar créditos de Replit para el chat escrito de NUXA.
-La voz y las demás llamadas directas a OpenAI quedan fuera de esta migración.
+La voz y las demás llamadas directas a OpenAI quedan fuera de este cambio.
+OpenAI utiliza la clave API existente exclusivamente en el servidor; no se
+modifica ni se muestra. Tener una clave configurada no acredita saldo ni
+facturación de generación activa.
 
-El código del chat ahora selecciona la conexión gestionada de Replit por defecto.
+El modo por defecto es `dual`, con OpenAI como principal.
 **La activación del servicio todavía está pendiente:** en esta sesión no existen
 las credenciales gestionadas ni se ofrece una conexión OpenAI en el inventario
 de integraciones accesible al agente. Preparar código no activa facturación.
@@ -45,13 +50,15 @@ ni crear esas credenciales a mano para aparentar facturación de Replit.
 La documentación oficial describe aprobación de AI Integrations en el editor:
 https://docs.replit.com/features/integrations/replit-ai-integrations
 
-Sin ambas variables, el chat falla de forma controlada y **no** pasa a la cuenta
-personal de OpenAI. El constructor se ejecuta por petición, no durante el arranque.
-La página y la orientación urgente estática siguen disponibles.
+Sin ambas variables, el respaldo falla de forma controlada. No vuelve a
+OpenAI ni genera un bucle de intentos. El cliente se construye por petición,
+no durante el arranque. La página y la orientación urgente estática siguen
+disponibles cuando ambos proveedores están bloqueados.
 
-`NUXA_CHAT_AI_PROVIDER=openai` habilitaría explícitamente el proveedor directo.
-No hacerlo como recuperación automática ni sin nueva autorización del usuario.
-El valor por defecto es `replit`.
+`NUXA_CHAT_AI_PROVIDER=dual` selecciona el orden aprobado. Los modos explícitos
+`openai` y `replit` seleccionan solo ese pagador, sin respaldo automático.
+En todos los modos siguen aplicándose los topes independientes de 25/20 USD.
+No se solicitan reintentos automáticos del SDK.
 
 ## Modelo y funciones conservadas
 
@@ -64,18 +71,18 @@ y los límites de tokens. No se modifica registro, pagos, voz o Twilio.
 
 ## Verificación
 
-### Presupuesto vigente y protección de la preparación anterior
+### Presupuestos independientes implementados
 
-La decisión vigente es **hasta 20 USD mensuales para el respaldo de Replit**,
-adicionales al gasto de OpenAI. Es global para todos los usuarios del chat,
-no por usuario ni para toda la cuenta Replit. No incluye Agent, alojamiento,
-suscripción o voz.
+La decisión vigente es **25 USD mensuales de OpenAI y hasta 20 USD adicionales
+para el respaldo Replit**, globales para todos los usuarios del chat.
+No incluye Agent, alojamiento, suscripción o voz.
 
-El control ya implementado en la preparación anterior aplica 20 USD por mes
-natural UTC al proveedor seleccionado, todavía Replit por defecto. La ruta
-dual y la separación de contabilidad no están implementadas: no declarar
-ese control global como un reparto ya aplicado a ambos proveedores.
-El máximo de OpenAI debe definirse antes de activar su ruta principal.
+Dos registros duraderos e independientes por mes natural UTC. Las tablas
+anteriores se conservan íntegramente como registro de Replit, incluidos saldos
+reservados e incertidumbre. Las nuevas tablas `chat_ai_openai_budget_months`
+y `chat_ai_openai_budget_requests` registran OpenAI sin reiniciar Replit.
+Todos los registros están también declarados en el esquema Drizzle.
+No se traslada saldo sobrante entre proveedores ni entre meses.
 
 La aplicación aplica el control antes de cualquier petición del chat:
 
@@ -92,6 +99,13 @@ La aplicación aplica el control antes de cualquier petición del chat:
 - Conserva toda la reserva si faltan datos de uso o falla la petición: un
   timeout puede haber sido cobrado. El registro no contiene conversaciones
   ni identificadores de pacientes.
+- Solo libera una reserva de OpenAI si hubo un rechazo inequívoco de
+  facturación antes de generación, con actualización idempotente y atómica.
+  No libera una reserva por timeout, error genérico, caducidad o reinicio.
+- Verifica el modelo devuelto antes de calcular su coste. Un modelo sin tarifa
+  verificada o una discrepancia de contabilidad detienen ambos proveedores
+  para revisión, sin cambiar el modelo ni continuar por el respaldo.
+  El cambio de mes no resuelve automáticamente un fallo de contabilidad.
 - Conserva ayuda urgente estática y mensajes ES/EN/FR/DE/IT/PT/CA/EU/GL.
 - No descuenta preguntas de suscripción o créditos prepagados cuando devuelve
   un aviso estático por bloqueo, fallo del proveedor o contexto excesivo.
@@ -101,7 +115,7 @@ https://developers.openai.com/api/docs/models/gpt-5.5 :
 5 USD/millón de entrada y 30 USD/millón de salida. La reserva cubre también
 la tarifa Priority de 2,5x y el suplemento regional del 10%. El cálculo
 contable conserva un margen regional y no presupone descuento de caché;
-por eso puede bloquear antes del gasto real de 20 USD. Una tarifa/modelo no
+por eso puede bloquear antes del gasto real de 25/20 USD. Una tarifa/modelo no
 verificado no permite llamadas ni cambia el modelo automáticamente.
 Revisar tarifas oficiales al activar la conexión y cuando cambien las tarifas.
 
@@ -109,7 +123,7 @@ Revisar tarifas oficiales al activar la conexión y cuando cambien las tarifas.
 verificado una factura real.** El control es local al chat, calculado de forma
 conservadora con tarifas públicas. Activación del gateway y comprobación real
 de consumo siguen pendientes; no presentar el límite local como una garantía
-de que la factura total de Replit sea de 20 USD.
+de que las facturas totales de OpenAI y Replit sean de 25 y 20 USD.
 
 El contexto normal de la misma consulta sintética sin historial pasó de
 27.604 a 9.663 caracteres, aproximadamente un 65% menos. No es una medida
@@ -143,6 +157,7 @@ npx tsx scripts/check-chat-ai.ts
 # Pruebas con SDK simulado y credenciales ficticias locales al proceso:
 npx tsx scripts/test-chat-ai-provider.ts
 npx tsx scripts/test-chat-budget.ts
+npx tsx scripts/test-chat-dual.ts
 npx tsx scripts/check-chat-budget.ts
 npx tsx scripts/test-chat-policy.ts
 npx tsx scripts/test-chat-evidence.ts

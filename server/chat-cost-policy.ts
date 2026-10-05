@@ -1,4 +1,8 @@
-// Approved by the owner: total written-chat AI consumption, not per user.
+// Owner-approved independent budgets, global across written-chat users.
+export type ChatBillingProvider = "openai" | "replit";
+export const CHAT_PROVIDER_BUDGET_USD = { openai: 25, replit: 20 } as const;
+export const CHAT_COMBINED_BUDGET_USD = 45;
+// Compatibility alias for the original Replit ledger, not a shared ceiling.
 export const CHAT_MONTHLY_BUDGET_USD = 20;
 export const CHAT_MONTHLY_BUDGET_NANO_USD = CHAT_MONTHLY_BUDGET_USD * 1_000_000_000;
 export const CHAT_MAX_INPUT_TOKEN_BOUND = 64_000;
