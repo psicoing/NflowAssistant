@@ -1,3 +1,4 @@
+import { CitationText } from "@/lib/citation-links";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -145,7 +146,7 @@ export default function ChatBriefInterface({
                 }`}
               >
                 <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                  {message.content}
+                  {message.isUser ? message.content : <CitationText content={message.content} />}
                 </p>
               </div>
               {message.isUser && (

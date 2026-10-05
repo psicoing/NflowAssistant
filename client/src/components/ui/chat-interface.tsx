@@ -6,6 +6,7 @@ import { Send, Bot, User, Loader2, Copy, RotateCcw, Zap, Clock, Brain, Heart, Pa
 import { useToast } from "@/hooks/use-toast";
 import type { Message } from "@shared/schema";
 import DOMPurify from 'dompurify';
+import { linkifyCitations } from "@/lib/citation-links";
 
 // Función para detectar y convertir técnicas/recursos en bookmarks automáticos
 function detectBookmarkableContent(content: string): string[] {
@@ -78,15 +79,15 @@ function formatMarkdownToHtml(content: string, onOptionClick?: (option: string) 
     .replace(/\n/g, '<br/>');
     
   // Sanitizar el HTML con DOMPurify permitiendo elementos interactivos necesarios
-  const sanitizedHtml = DOMPurify.sanitize(html, {
+  const sanitizedHtml = DOMPurify.sanitize(linkifyCitations(html), {
     ALLOWED_TAGS: [
       'div', 'span', 'button', 'input', 'h1', 'h2', 'h3', 'p', 'br', 'strong', 
-      'em', 'li', 'blockquote', 'ul', 'ol'
+      'em', 'li', 'blockquote', 'ul', 'ol', 'a'
     ],
     ALLOWED_ATTR: [
       'class', 'data-choice', 'data-choice-text', 'data-value', 'data-scale-type',
       'data-symptom', 'data-checkbox-text', 'data-option', 'data-answer', 
-      'data-question', 'data-bookmark', 'type', 'style'
+      'data-question', 'data-bookmark', 'type', 'style', 'href', 'target', 'rel'
     ],
     KEEP_CONTENT: true
   });
