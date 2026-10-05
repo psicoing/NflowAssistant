@@ -10,6 +10,9 @@ import { CitationText, linkifyCitations } from "../client/src/lib/citation-links
 import { pilotSources } from "../server/knowledge/pilot-sources";
 import { retrieveChatEvidence, resolveEvidenceCitations } from "../server/chat-evidence";
 import { evidenceCases } from "./fixtures/chat-evidence-cases";
+import { installOfflineManagedChatConfiguration } from "./fixtures/chat-provider-offline";
+
+installOfflineManagedChatConfiguration();
 
 assert.equal(evidenceCases.length, 30);
 assert(pilotSources.length >= 15 && pilotSources.length <= 20);

@@ -5,6 +5,9 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { build } from "esbuild";
 import { chatFailureMessage, hasSafetySignal } from "../server/chat-policy";
+import { installOfflineManagedChatConfiguration } from "./fixtures/chat-provider-offline";
+
+installOfflineManagedChatConfiguration();
 
 // Exercise the actual handler/API request boundary without accounts or OpenAI calls.
 const state = { fail: false, invalid: false, requests: [] as any[] };

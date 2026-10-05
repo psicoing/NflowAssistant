@@ -5,16 +5,12 @@
  * y generar respuestas utilizando la API de OpenAI con enriquecimiento de prompts.
  */
 
-import OpenAI from "openai";
+import { chatAiReadiness, createChatAiClient } from "./chat-ai-client";
 import { selectRelevantExamples } from "./prompt-utils";
 import type { Message } from "@shared/schema";
 import { chatFailureMessage, hasSafetySignal, profileInstructions, sharedChatPolicy } from "./chat-policy";
 import { chatEvidenceInstructions, needsUrgentConversationSupport, resolveEvidenceCitations, retrieveChatEvidence } from "./chat-evidence";
 import { scientificAnalysisInstructions, scientificEvidenceEngine } from "./knowledge/scientific-engine";
-
-const openai = new OpenAI({ 
-  apiKey: process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY || "default_key"
-});
 
 export interface ChatResponse {
   content: string;
@@ -766,7 +762,8 @@ export async function generateChatResponse(userMessage: string, history: Message
 
     // Mantener una versión estable por defecto para que cambios futuros del alias
     // no alteren inesperadamente el comportamiento clínico-conversacional.
-    const chatModel = process.env.OPENAI_CHAT_MODEL?.trim() || "gpt-5.5-2026-04-23";
+    const chatModel = chatAiReadiness().model;
+    const openai = createChatAiClient();
 
     // Realizar la llamada a OpenAI conservando el prompt, el historial y el JSON.
     const completion = await openai.chat.completions.create({

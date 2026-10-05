@@ -9,6 +9,9 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { installOfflineManagedChatConfiguration } from "./fixtures/chat-provider-offline";
+
+installOfflineManagedChatConfiguration();
 
 const corpus = adaptPilotDocuments();
 const index = new ScientificKnowledgeIndex(corpus);
