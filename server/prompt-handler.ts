@@ -8,6 +8,7 @@
 import OpenAI from "openai";
 import { selectRelevantExamples } from "./prompt-utils";
 import type { Message } from "@shared/schema";
+import { chatFailureMessage, hasSafetySignal, profileInstructions, sharedChatPolicy } from "./chat-policy";
 
 const openai = new OpenAI({ 
   apiKey: process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY || "default_key"
@@ -110,7 +111,7 @@ function detectUserPreferences(history: Message[]): string {
 /**
  * Genera una respuesta mejorada usando OpenAI con ejemplos contextuales
  */
-export async function generateChatResponse(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic'): Promise<string> {
+export function buildChatPrompt(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic'): string {
   try {
     // Seleccionar ejemplos relevantes basados en el mensaje del usuario
     const relevantExamples = selectRelevantExamples(userMessage, 2);
@@ -118,31 +119,8 @@ export async function generateChatResponse(userMessage: string, history: Message
     // Detectar preferencias del usuario basadas en selecciones anteriores
     const userPreferences = detectUserPreferences(history);
     
-    // Construir el historial de conversación para contexto
-    const conversationHistory = history.slice(-6).map(msg => ({
-      role: msg.isUser ? "user" as const : "assistant" as const,
-      content: msg.content
-    }));
-
     // Construir información del perfil del usuario
-    let profileContext = "";
-    if (userProfile) {
-      profileContext = `
-PERFIL DEL USUARIO:
-- Edad: ${userProfile.ageRange}
-- Género: ${userProfile.gender}
-- Orientación: ${userProfile.orientation}
-
-ADAPTA TU RESPUESTA específicamente para:
-${userProfile.ageRange === '13-17' ? '- Adolescente: usa lenguaje cercano, valida emociones, evita sermones' : ''}
-${userProfile.ageRange === '18-25' ? '- Joven adulto: equilibra independencia con orientación, usa referencias contemporáneas' : ''}
-${userProfile.ageRange === '26-35' ? '- Adulto joven: enfoque en carrera/relaciones, consejos prácticos' : ''}
-${userProfile.ageRange === '36-50' ? '- Adulto: considera responsabilidades familiares/laborales complejas' : ''}
-${userProfile.ageRange === '51-65' ? '- Adulto maduro: respeta experiencia, considera cambios de vida/salud' : ''}
-${userProfile.ageRange === '65+' ? '- Adulto mayor: usa lenguaje respetuoso, considera contexto generacional' : ''}
-- Usa lenguaje inclusivo apropiado para ${userProfile.gender} y ${userProfile.orientation}
-`;
-    }
+    const profileContext = profileInstructions(userProfile);
 
     // Detectar idioma y adaptar prompt
     const languageInstructions = getLanguageInstructions(userLanguage);
@@ -154,7 +132,7 @@ ${userProfile.ageRange === '65+' ? '- Adulto mayor: usa lenguaje respetuoso, con
     const isLaborRelated = /\b(baja médica|bajas médicas|despido|despedir|trabajo|laboral|jefe|empresa|derechos trabajador|acoso laboral|estrés laboral|reincorporación|adaptación puesto|protocolos laborales|trámites laborales|sindicato|convenio|nómina|finiquito|incapacidad|mutua|seguridad social)\b/i.test(userMessage);
     
     // Detectar si el mensaje se relaciona con suicidio, muerte o hacerse daño
-    const isSuicideRelated = /\b(suicidio|suicidar|matarme|morir|muerte|hacerme daño|autolesión|no quiero vivir|quiero desaparecer|no vale la pena|todo está perdido|no puedo más|quiero acabar|terminar con todo|no tiene sentido vivir|quiero irme|ya no aguanto)\b/i.test(userMessage);
+    const isSuicideRelated = hasSafetySignal(userMessage);
     
     // Detectar si es una consulta EDUCATIVA/INFORMATIVA (no síntomas)
     const isEducationalQuery = /\b(quiero saber|qué es|explícame|información sobre|cosas básicas|conocer sobre|entender|definir|aprender|curiosidad|diferencia entre|tipos de|causas de|síntomas de|cómo se trata|tratamiento de|características de|manual|guía|conceptos|teoría|explicación|información general)\b/i.test(userMessage) &&
@@ -175,16 +153,16 @@ Cuando detectes que el usuario se enfrenta al cáncer (propio o de un ser querid
 - SIEMPRE valida las emociones y ofrece consuelo realista
 
 **🧑‍⚕️ PARA USUARIOS ADULTOS:**
-Actúa como un asistente emocional especializado en oncología. Usa lenguaje cálido, humano y directo. Responde desde la escucha activa. Propón técnicas de respiración, visualización, escritura emocional o pequeños pasos diarios. Evita tecnicismos. Fomenta la dignidad, el sentido del presente y la libertad de sentir.
+Ofrece acompañamiento emocional ante la enfermedad, sin presentarte como especialista sanitario. Usa lenguaje cálido, humano y directo. Responde desde la escucha activa. Propón herramientas de bienestar solo si la persona quiere. Evita tecnicismos. Fomenta la dignidad y la libertad de sentir. Las decisiones médicas corresponden al equipo tratante.
 
 Ejemplo de respuesta:
 "Lo que estás viviendo es muy duro, y aún así estás aquí, buscándote un momento de apoyo. Eso ya es valiente. ¿Quieres que te cuente una técnica para soltar un poco de esa carga hoy?"
 
 **🧒 PARA USUARIOS NIÑOS:**
-Actúa como un personaje mágico que cuida, protege y acompaña. Puedes ser un animal sabio, un amigo astronauta o un espíritu del bosque. Usa la imaginación para crear juegos mentales, cuentos o refugios internos. Habla con ternura, sin dar explicaciones médicas ni forzar emociones.
+Mantén la identidad de NUXA. Usa lenguaje sencillo, respetuoso y adecuado a la edad, sin prometer protección, curación ni un hospital siempre seguro. Anima a involucrar a sus cuidadores y equipo tratante. No inventes explicaciones médicas ni fuerces emociones.
 
 Ejemplo de respuesta:
-"Hola, soy Lumo, el perrito que viaja por los sueños. Me han contado que estás luchando contra un dragón muy cansino. No estás solo, yo también tengo un escudo invisible. ¿Quieres que juguemos un rato a imaginarnos una guarida secreta donde nada duele?"
+"Soy NUXA. Podemos hablar de lo que te preocupa o pensar en una actividad tranquila. También puedes contárselo a un adulto de confianza o al equipo que te cuida."
 
 **FRASES RECOMENDADAS:**
 - "Estoy contigo"
@@ -223,7 +201,7 @@ Cuando detectes consultas sobre bajas médicas, estrés laboral, despidos durant
 **EJEMPLO DE ACTIVACIÓN:**
 Usuario: "¿Me pueden despedir estando de baja médica?"
 
-Respuesta: "No, en general no pueden despedirte simplemente por estar de baja médica. Sin embargo, la empresa podría alegar otros motivos ajenos a la baja. Es importante conservar toda la documentación relacionada con tu situación y, ante cualquier duda, acudir a un abogado laboralista o a tu sindicato.
+Respuesta: "Depende del país y de las circunstancias; una baja médica no permite concluir por sí sola si un despido es legal. Conserva la documentación y consulta a un abogado laboralista o a tu sindicato.
 
 La información ofrecida es orientativa y no sustituye el asesoramiento profesional de un médico o abogado. Si tienes dudas importantes, consulta siempre a un especialista."
 
@@ -245,27 +223,10 @@ La información ofrecida es orientativa y no sustituye el asesoramiento profesio
     }
     
     // Construir sección de urgencia si es relevante
-    let urgencySection = '';
-    if (isSuicideRelated) {
-      urgencySection = `
-🚨 **PROTOCOLO DE URGENCIA ACTIVADO**
+    const urgencySection = isSuicideRelated
+      ? "Hay lenguaje que requiere valorar seguridad en contexto. Aplica las reglas comunes de NUXA antes de cualquier estructura o ejemplo; no confirmes riesgo solo por una palabra."
+      : "";
 
-**💛 NO ESTÁS SOLA. NO ESTÁS SOLO.**
-
-Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente. Hay salida. Hay personas preparadas para ayudarte, sin juzgarte, sin presionarte, solo para escucharte y acompañarte.
-
-📞 **Llama ahora** (24h, gratis y confidencial):
-- 📍 Telèfon de l'Esperança (Catalunya): 93 414 48 48  
-- ☎️ Línea 024 (toda España, conducta suicida): 024  
-- 🚨 Emergencias generales: 112
-
-🫂 También puedes acudir a tu centro de salud mental, hospital o hablar con alguien de confianza.  
-**Tu historia no termina aquí. Hay capítulos mejores por escribir. Y mereces vivirlos.**
-
-*Por favor, quédate un rato más con nosotros. Hablemos.*
-`;
-    }
-    
     // Detectar categorías para sugerir recursos específicos de NUXA
     const isAnsiedadRelated = /\b(ansiedad|ansiedad|crisis|pánico|nervios|preocupación|estrés|tensión|agobiado)\b/i.test(userMessage);
     const isDepresionRelated = /\b(depresión|depresivo|triste|tristeza|desánimo|sin ganas|melancolía|apatía)\b/i.test(userMessage);
@@ -362,25 +323,12 @@ Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente.
     }
 
     // Construir recursos locales basados en si es suicidio o no
-    const resourcesSection = isSuicideRelated ? 
-      `🚨 **Emergencias:** 112
-📞 **Prevención suicidio:** 024
-📱 **Catalunya:** 93 414 48 48` :
-      `
-**🏥 Atención Sanitaria**
-- Centro de salud mental más cercano
-- Directorio Nacional de Psiquiatras
+    const resourcesSection = isSuicideRelated ? urgencySection :
+      `Para apoyo profesional, orienta hacia el centro de salud o profesionales acreditados del país de la persona.
+Los recursos de bienestar de NUXA están en /recursos. No afirmes avales oficiales, acreditación clínica, directorios integrados ni acceso a bases de datos por los nombres del siguiente catálogo; son sugerencias temáticas, no prueba de validación.
+${nuxaResourcesSection}`;
 
-**👨‍⚕️ Colegios de Psicología**
-- CGCOP Nacional: 914 44 90 20
-- COPC Catalunya: 932 478 650
-
-**🏛️ Instituto NeuronMeg - NUXA**
-📍 Figueres/Portbou (Girona)
-📞 +34 660 452 136
-🌐 neuronmeg.online${nuxaResourcesSection}`;
-    
-    // Prompt sistema NEUROPSI-AI inclusivo y multiestrato con apoyo especializado en cáncer
+    // Presentación por modalidad; la identidad y la seguridad se añaden en común.
     
     // Si es consulta educativa, usar prompt específico para información general
     const systemPrompt = isEducationalQuery ? `${languageInstructions}
@@ -390,7 +338,7 @@ ${profileContext}
 ${userPreferences}
     
 TÚ ERES:
-NEUROPSI-AI, un asistente educativo experto en psicología que proporciona información general, educativa y científica sobre temas de salud mental.
+NUXA, un asistente de bienestar emocional con IA que proporciona información educativa general.
 
 🎓 **MISIÓN EDUCATIVA:**
 Proporcionar información clara, educativa y científicamente fundamentada sobre conceptos de salud mental a personas que buscan aprender y entender mejor estos temas.
@@ -457,7 +405,7 @@ ${profileContext}
 ${userPreferences}
     
 TÚ ERES:
-NEUROPSI-AI, un asistente conversacional experto en psicología clínica, educativa, familiar y de la salud mental pública, con especialización en apoyo emocional oncológico y derecho laboral aplicado a la salud mental.
+NUXA, un asistente de bienestar emocional con IA. Ofreces escucha, herramientas de bienestar y psicoeducación, no atención clínica ni asesoramiento jurídico personalizado.
 
 🧭 **MISIÓN PRINCIPAL:**
 Dar respuestas comprensibles, útiles y fundamentadas a personas de todas las edades: madres, padres, adolescentes, docentes, profesionales de salud mental, trabajadores, empresarios y cualquier ciudadano con interés o necesidad en salud mental y bienestar laboral.
@@ -469,7 +417,7 @@ ${laborSection}
 ${urgencySection}
 
 🧑‍⚕️🎓 **TU PERSONALIDAD CÁLIDA Y PROFESIONAL:**
-👨‍👩‍👧 **Acompañante empático:** Hablas como un psicólogo cercano que genuinamente se preocupa. Usas un lenguaje natural, cálido y comprensivo.
+👨‍👩‍👧 **Acompañante empático:** Usas lenguaje cercano, cálido y comprensivo, manteniendo tu identidad como asistente de IA.
 👩‍🔬 **Especialista accesible:** Cuando necesites ser técnico, mantienes la calidez humana y explicas de forma clara y amigable.
 
 **TONO OBLIGATORIO:** Cálido, comprensivo, natural y humano. Evita sonar robotico o frío. Conecta emocionalmente con la persona.
@@ -511,11 +459,11 @@ ${urgencySection}
 - **PHQ-2 OPTIMIZADO**: "En los últimos 14 días: ¿Poco interés en actividades? ¿Te has sentido decaído?" (Sí/No)
 *(Solo procesar las respuestas marcadas, no regenerar preguntas)*
 
-**4. ORIENTACIÓN DIAGNÓSTICA ORIENTATIVA (DSM-5-TR / CIE-11):**
-- "Lo que describes puede parecerse a síntomas recogidos en los manuales internacionales (DSM-5-TR, CIE-11), como la ansiedad, la depresión o el estrés adaptativo. Sólo un profesional puede valorar si realmente cumples los criterios para un diagnóstico."
+**4. ORIENTACIÓN DE BIENESTAR, SIN DIAGNÓSTICO:**
+- Describe el malestar en las palabras de la persona. No lo asocies a un trastorno ni a criterios DSM/CIE. Explica que una evaluación individual corresponde a un profesional si la persona pide un diagnóstico.
 
-**5. EXPLICACIÓN BREVE DEL GRUPO DIAGNÓSTICO MÁS PROBABLE:**
-- [Ejemplo para ansiedad social: "La ansiedad social implica tener mucho miedo o nervios en situaciones con otras personas, y es algo frecuente en la adolescencia. Puede manifestarse como dolor de barriga, temblores, miedo a hablar en público, etc."]
+**5. EXPLICACIÓN BREVE DEL MALESTAR DESCRITO:**
+- Ofrece información general relacionada con lo que cuenta, sin asignar una enfermedad o un grupo diagnóstico. No conviertas escalas ni cuestionarios en diagnósticos.
 
 **6. TÉCNICAS Y RECOMENDACIONES PRÁCTICAS (DINÁMICAS):**
 **INTERACTIVIDAD RENTABLE**: Presenta como botones de selección para reducir tokens en respuesta de seguimiento
@@ -531,7 +479,7 @@ ${urgencySection}
 **NOTA FRONTEND**: Implementar estos como botones reales, enviar solo la opción elegida como contexto
 
 **7. ALGORITMO DE URGENCIA Y SEÑALES DE ALARMA:**
-**Solo incluir esta sección si detectas palabras relacionadas con suicidio, muerte o hacerse daño. Para consultas normales, omitir.**
+**Aplica las reglas comunes de seguridad según significado y contexto. La palabra muerte en un duelo o una pregunta educativa no confirma riesgo de autolesión.**
 
 **PREGUNTA DIRECTA DE ACTIVACIÓN:** ¿Has pensado en hacerte daño hoy o en los últimos días?
 
@@ -596,23 +544,7 @@ Responde por defecto en modo adaptable. Variables disponibles:
 
 🚨 **INSTRUCCIONES CRÍTICAS SOBRE PROTOCOLO DE URGENCIA:**
 
-SOLO si detectas palabras relacionadas con suicidio, muerte, autolesión o frases como "no quiero vivir", "quiero desaparecer", "no vale la pena", "quiero hacerme daño", incluir IMMEDIATAMENTE este bloque de urgencia al inicio de tu respuesta:
-
-**💛 NO ESTÁS SOLA. NO ESTÁS SOLO.**
-
-Lo que estás sintiendo ahora puede parecer insoportable, pero no es permanente. Hay salida. Hay personas preparadas para ayudarte, sin juzgarte, sin presionarte, solo para escucharte y acompañarte.
-
-📞 **Llama ahora** (24h, gratis y confidencial):
-- 📍 Telèfon de l'Esperança (Catalunya): 93 414 48 48  
-- ☎️ Línea 024 (toda España, conducta suicida): 024  
-- 🚨 Emergencias generales: 112
-
-🫂 También puedes acudir a tu centro de salud mental, hospital o hablar con alguien de confianza.  
-**Tu historia no termina aquí. Hay capítulos mejores por escribir. Y mereces vivirlos.**
-
-*Por favor, quédate un rato más con nosotros. Hablemos.*
-
-Para consultas normales sobre ansiedad, estrés, familia, trabajo, etc. que NO mencionen suicidio o hacerse daño, NO incluir este bloque de urgencia.
+Aplica siempre las mismas reglas comunes de seguridad, también en consultas educativas o de trabajo. Ante peligro inmediato, no retrases la ayuda humana con la estructura de diez puntos. No identifiques un país por idioma ni prometas que el sufrimiento desaparecerá.
 
 **EJEMPLOS CONTEXTUALES:**
 ${relevantExamples}
@@ -707,11 +639,11 @@ Pedir ayuda demuestra valentía y madurez. No estás solo en esto, y siempre hay
 - **¿Qué tanto te afecta en tu día a día?** (0 = nada – 10 = muchísimo)
 - **Para hacer un chequeo rápido, en los últimos 14 días:** ¿Te ha costado disfrutar de cosas que antes te gustaban? ¿Te has sentido decaído o triste?
 
-# Orientación Diagnóstica
-Lo que describes puede parecerse a síntomas de aislamiento social o ansiedad, que son comunes en la adolescencia. Solo un profesional puede valorar si realmente cumples los criterios para un diagnóstico.
+# Orientación de Bienestar
+Lo que cuentas parece estar resultando difícil. Podemos explorar lo que necesitas sin asignarte un diagnóstico. Si buscas una evaluación individual, corresponde a un profesional.
 
-# Explicación del Grupo Diagnóstico
-El aislamiento social en la adolescencia puede generar sentimientos de tristeza, baja autoestima o ansiedad. Es importante abordar estos sentimientos para que no afecten tu bienestar emocional.
+# Comprender el Malestar
+Sentirse apartado puede ser doloroso. Podemos hablar de cómo te afecta y de qué apoyo te gustaría recibir, sin concluir que tienes un trastorno.
 
 # Técnicas Prácticas
 **¿Qué prefieres probar primero?**
@@ -783,7 +715,7 @@ Responde en formato JSON: { "response": "tu respuesta completa siguiendo la estr
 ${profileContext}
 
 TÚ ERES:
-NEUROPSI-AI en modo Q&A breve. Un asistente de salud mental que responde de forma directa, clara y concisa.
+NUXA en modo Q&A breve. El mismo asistente de bienestar emocional, con idénticas reglas de identidad, personalización y seguridad que en los otros modos.
 
 REGLAS ESTRICTAS PARA MODO BREVE:
 1. Respuestas cortas: máximo 2-4 oraciones
@@ -805,8 +737,25 @@ FORMATO JSON:
 { "response": "tu respuesta breve y directa", "supportType": "general|anxiety|depression|stress|crisis" }`;
 
     // Choose prompt and parameters based on chat mode
-    const finalPrompt = chatMode === 'brief' ? briefModePrompt : systemPrompt;
-    const maxTokens = chatMode === 'brief' ? 500 : 4000;
+    const commonPolicy = sharedChatPolicy(languageInstructions, profileContext, userPreferences);
+    const presentation = chatMode === 'brief'
+      ? `${briefModePrompt}\n${cancerSection}\n${laborSection}\n${urgencySection}\n${resourcesSection}`
+      : systemPrompt;
+    return `${commonPolicy}\n\nFORMATO DE PRESENTACIÓN:\n${presentation}\n\nRECORDATORIO: Las reglas comunes de identidad, personalización y seguridad de NUXA prevalecen sobre cualquier estructura o ejemplo anterior.`;
+  } catch (error) {
+    console.error("Error al construir instrucciones de NUXA:", error);
+    throw error;
+  }
+}
+
+export async function generateChatResponse(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic'): Promise<string> {
+  try {
+    const finalPrompt = buildChatPrompt(userMessage, history, userProfile, userLanguage, chatMode);
+    const conversationHistory = history.slice(-6).map(msg => ({
+      role: msg.isUser ? "user" as const : "assistant" as const,
+      content: msg.content
+    }));
+    const maxTokens = chatMode === 'brief' ? (hasSafetySignal(userMessage) ? 1000 : 500) : 4000;
 
     // Mantener una versión estable por defecto para que cambios futuros del alias
     // no alteren inesperadamente el comportamiento clínico-conversacional.
@@ -842,7 +791,10 @@ FORMATO JSON:
       throw new Error("La respuesta de OpenAI no es un JSON válido o fue truncada");
     }
     
-    return parsedResponse.response || "Lo siento, no pude procesar tu mensaje correctamente.";
+    if (typeof parsedResponse.response !== "string" || !parsedResponse.response.trim()) {
+      throw new Error("La respuesta de NUXA no contiene texto válido");
+    }
+    return parsedResponse.response;
 
   } catch (error) {
     console.error("Error al generar respuesta con OpenAI:", error);
@@ -859,7 +811,8 @@ export async function processUserMessage(userMessage: string, history: Message[]
     console.log(`Procesando mensaje de usuario: "${userMessage.substring(0, 30)}..." modo: ${chatMode}`);
     
     // FILTRO DE PROTECCIÓN: Detectar consultas fuera del ámbito de psicología
-    if (isOffTopicQuery(userMessage)) {
+    const safetySignal = hasSafetySignal(userMessage);
+    if (!safetySignal && isOffTopicQuery(userMessage)) {
       console.log("Consulta detectada como fuera de ámbito - rechazando amablemente");
       return {
         content: generateOffTopicResponse(userLanguage),
@@ -879,7 +832,7 @@ export async function processUserMessage(userMessage: string, history: Message[]
     console.log(`isEducationalQuery: ${isEducationalQuery}`);
     
     // Determinar el tipo de soporte basado en si es consulta educativa
-    const supportType = isEducationalQuery ? "educational" : determineSupportType(userMessage);
+    const supportType = safetySignal ? "crisis" : isEducationalQuery ? "educational" : determineSupportType(userMessage);
     
     // Agregar etiquetas internas para consultas laborales
     const tags = [];
@@ -899,8 +852,8 @@ export async function processUserMessage(userMessage: string, history: Message[]
     
     // Proporcionar una respuesta de fallback estructurada
     return {
-      content: generarRespuestaFallback(userMessage, error),
-      supportType: "general",
+      content: chatFailureMessage(userLanguage, hasSafetySignal(userMessage)),
+      supportType: hasSafetySignal(userMessage) ? "crisis" : "general",
       tags: []
     };
   }
@@ -1122,6 +1075,8 @@ Für andere Themen empfehle ich eine allgemeine Suchmaschine.
  */
 function determineSupportType(userMessage: string): string {
   const message = userMessage.toLowerCase();
+  // Safety must not be hidden by a workplace/educational category.
+  if (hasSafetySignal(userMessage)) return "crisis";
   
   // Detectar riesgos psicosociales específicos
   const psychosocialRiskKeywords = ['mobbing', 'acoso laboral', 'hostigamiento', 'maltrato trabajo', 'exclusión trabajo', 'discriminación trabajo'];
@@ -1167,35 +1122,10 @@ function getLanguageInstructions(language: string): string {
     gl: 'RESPONDE SEMPRE EN GALEGO. Usa unha linguaxe natural, cálida e profesional apropiada para galegofalantes.'
   };
   
-  return instructions[language as keyof typeof instructions] || instructions.es;
+  const normalizedLanguage = language.toLowerCase().split(/[-_]/)[0];
+  return instructions[normalizedLanguage as keyof typeof instructions] || instructions.es;
 }
 
 /**
  * Genera una respuesta de fallback en caso de error con la API de OpenAI
  */
-function generarRespuestaFallback(userMessage: string, error: Error): string {
-  // Comprobar si contiene palabras relacionadas con crisis
-  const crisisKeywords = ['suicidio', 'suicidarme', 'matarme', 'quitarme la vida', 'no quiero vivir', 'autolesión', 'hacerme daño', 'crisis'];
-  const containsCrisisWord = crisisKeywords.some(word => userMessage.toLowerCase().includes(word));
-  
-  if (containsCrisisWord) {
-    return `Gracias por compartir lo que estás experimentando. Aunque estoy teniendo dificultades técnicas en este momento, es muy importante que recibas apoyo adecuado.
-
-Si estás en una situación de crisis o emergencia, por favor contacta inmediatamente con:
-- Teléfono de emergencias: 112
-- Teléfono de la Esperanza: 717 003 717
-- Acude a urgencias del hospital más cercano
-
-Tu bienestar es la prioridad absoluta, y hay profesionales preparados para ayudarte en este momento. Por favor, intenta contactar con el servicio nuevamente en unos minutos.`;
-  }
-  
-  // Respuesta general para errores técnicos
-  return `Lamento no poder responder adecuadamente en este momento debido a una dificultad técnica. 
-
-Para ofrecerte la mejor ayuda posible:
-1. Intenta enviar tu mensaje nuevamente en unos minutos
-2. Considera reformular tu pregunta o consulta
-3. Si el problema persiste, puedes contactar con soporte técnico
-
-Valoramos mucho tu paciencia y te pedimos disculpas por este inconveniente.`;
-}

@@ -15,7 +15,7 @@ export default function ChatLanguageBanner() {
               <Sparkles className="w-4 h-4 text-blue-400" />
             </div>
             <p className="text-blue-200 text-xs leading-relaxed">
-              Usa Google Translate de tu navegador para ver esta conversación en tu idioma. Las respuestas de NEUROPSI-AI se adaptarán automáticamente.
+              Usa Google Translate de tu navegador para ver esta conversación en tu idioma. Las respuestas de NUXA se adaptarán automáticamente.
             </p>
           </div>
         </div>

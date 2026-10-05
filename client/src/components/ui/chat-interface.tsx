@@ -37,7 +37,7 @@ function formatMarkdownToHtml(content: string, onOptionClick?: (option: string) 
     .replace(/^## (.+)$/gm, '<h2 class="text-base font-semibold text-white mt-4 mb-2 pb-1 border-b border-gray-600/30">$1</h2>')
     .replace(/^### (.+)$/gm, '<h3 class="text-sm font-medium text-nflow-orange mt-3 mb-1">$1</h3>')
     // Técnicas destacadas con botón de bookmark automático
-    .replace(/\*\*Técnica[^:]*: ([^*]+)\*\*/gi, '<div class="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-400/30 rounded-lg p-4 my-3 relative"><div class="flex items-center justify-between mb-2"><div class="flex items-center space-x-2"><span class="text-green-300 font-semibold">🧠</span><strong class="font-semibold text-white">Técnica: $1</strong></div><button class="bookmark-btn text-xs bg-green-500/20 hover:bg-green-500/40 text-green-300 px-2 py-1 rounded border border-green-400/30 transition-all duration-200" data-bookmark="Técnica: $1">💾 Guardar</button></div><div class="text-sm text-gray-300">Técnica profesional recomendada por NEUROPSI-AI</div></div>')
+    .replace(/\*\*Técnica[^:]*: ([^*]+)\*\*/gi, '<div class="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-400/30 rounded-lg p-4 my-3 relative"><div class="flex items-center justify-between mb-2"><div class="flex items-center space-x-2"><span class="text-green-300 font-semibold">🧠</span><strong class="font-semibold text-white">Técnica: $1</strong></div><button class="bookmark-btn text-xs bg-green-500/20 hover:bg-green-500/40 text-green-300 px-2 py-1 rounded border border-green-400/30 transition-all duration-200" data-bookmark="Técnica: $1">💾 Guardar</button></div><div class="text-sm text-gray-300">Herramienta de bienestar sugerida por NUXA</div></div>')
     // Ejercicios destacados con bookmark
     .replace(/\*\*Ejercicio[^:]*: ([^*]+)\*\*/gi, '<div class="bg-gradient-to-r from-purple-500/20 to-violet-500/20 border border-purple-400/30 rounded-lg p-4 my-3 relative"><div class="flex items-center justify-between mb-2"><div class="flex items-center space-x-2"><span class="text-purple-300 font-semibold">🏃</span><strong class="font-semibold text-white">Ejercicio: $1</strong></div><button class="bookmark-btn text-xs bg-purple-500/20 hover:bg-purple-500/40 text-purple-300 px-2 py-1 rounded border border-purple-400/30 transition-all duration-200" data-bookmark="Ejercicio: $1">💾 Guardar</button></div><div class="text-sm text-gray-300">Ejercicio personalizado para tu situación</div></div>')
     // Recursos destacados con bookmark
@@ -465,7 +465,7 @@ function PersonalizedSummary({ content }: { content: string }) {
       
       <div className="mt-3 pt-3 border-t border-gray-600/30">
         <p className="text-xs text-gray-400 italic">
-          Resumen generado automáticamente por NEUROPSI-AI para tu seguimiento personal
+          Resumen generado automáticamente por NUXA para tu seguimiento personal
         </p>
       </div>
     </div>
@@ -913,7 +913,7 @@ export default function ChatInterface({
                   </div>
                   <div className="flex items-center space-x-2">
                     <Brain className="w-4 h-4 text-nflow-orange animate-pulse" />
-                    <span className="text-sm font-medium">NEUROPSI-AI</span>
+                    <span className="text-sm font-medium">NUXA</span>
                   </div>
                 </div>
 
