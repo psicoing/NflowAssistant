@@ -6,9 +6,11 @@
 
 El usuario plantea OpenAI como principal cuando tenga saldo de API, con Replit
 como respaldo cuando no tenga saldo, siempre con control de tokens.
-Antes de cambiar la conexión, confirmar si sus «20 euros al mes» son saldo
-de la API o una suscripción a ChatGPT, y si el límite aprobado de 20 USD es
-compartido o exclusivo del respaldo. No ampliar el presupuesto por inferencia.
+El usuario aclaró que los «20 euros» eran una referencia al volumen de tokens,
+no una afirmación de saldo o presupuesto de OpenAI. Eligió **OpenAI aparte y
+Replit hasta 20 USD adicionales al mes**: el límite es exclusivo del respaldo,
+no compartido. Antes de activar OpenAI como principal, definir su propio máximo
+mensual. No interpretar «aparte» como autorización de gasto ilimitado.
 
 La facturación de la API y ChatGPT es independiente:
 https://help.openai.com/en/articles/9039756-billing-settings-in-chatgpt-vs-platform
@@ -62,11 +64,18 @@ y los límites de tokens. No se modifica registro, pagos, voz o Twilio.
 
 ## Verificación
 
-### Presupuesto aprobado e implementado
+### Presupuesto vigente y protección de la preparación anterior
 
-El usuario autorizó **20 USD por mes natural (UTC), globales para todos los
-usuarios del chat escrito**. No es un límite por usuario ni de toda la cuenta
-Replit; no incluye Agent, alojamiento, suscripción o voz.
+La decisión vigente es **hasta 20 USD mensuales para el respaldo de Replit**,
+adicionales al gasto de OpenAI. Es global para todos los usuarios del chat,
+no por usuario ni para toda la cuenta Replit. No incluye Agent, alojamiento,
+suscripción o voz.
+
+El control ya implementado en la preparación anterior aplica 20 USD por mes
+natural UTC al proveedor seleccionado, todavía Replit por defecto. La ruta
+dual y la separación de contabilidad no están implementadas: no declarar
+ese control global como un reparto ya aplicado a ambos proveedores.
+El máximo de OpenAI debe definirse antes de activar su ruta principal.
 
 La aplicación aplica el control antes de cualquier petición del chat:
 

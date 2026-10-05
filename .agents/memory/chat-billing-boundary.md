@@ -30,14 +30,19 @@ prompt, historial y evidencia en la entrada; no confundir caché documental con
 ahorro garantizado de tokens del modelo. Preservar seguridad y bibliografía
 pertinente al reducir contexto.
 
-El usuario autorizó **20 USD mensuales** para el consumo de la IA del chat
-escrito de NUXA, excluyendo suscripción a Replit y voz. Es un presupuesto
-global del chat, no 20 USD por cliente. No aumentarlo sin nueva autorización.
+El usuario confirmó **OpenAI aparte y Replit hasta 20 USD mensuales adicionales**
+como respaldo del chat escrito. El límite de 20 USD es exclusivo de Replit,
+global para todos los clientes; no compartido entre ambos ni por cliente.
+Excluye suscripción a Replit y voz. No aumentarlo sin nueva autorización.
+Los 20 euros que mencionó eran una referencia al volumen de tokens, no una
+afirmación de saldo ni un presupuesto autorizado para OpenAI.
 
-**Why:** Es la cantidad que el usuario dio al definir el máximo mensual para
-evitar un gasto ruinoso por tokens.
+**Why:** El usuario eligió explícitamente «OpenAI aparte; Replit hasta 20 USD
+adicionales» y aclaró que los 20 euros eran una referencia de tokens.
 
-**How to apply:** Aplicar reserva duradera antes de las peticiones; un fallo de
+**How to apply:** Obtener un máximo explícito para OpenAI antes de activar su
+uso como proveedor principal; no convertir «aparte» en gasto ilimitado.
+Separar la contabilidad de cada proveedor. Aplicar reserva duradera antes de las peticiones; un fallo de
 red no prueba ausencia de cargo. No liberar reservas inciertas por caducidad
 o reinicio. Distinguir contabilidad conservadora local de factura real y del
 presupuesto global de la cuenta Replit. Las respuestas estáticas por bloqueo
