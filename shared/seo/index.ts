@@ -2,12 +2,13 @@ import { entityPages } from "./entity-pages";
 import { topicPages } from "./topic-pages";
 import { markets, SEO_SITE_URL, type InternationalPage, type Market } from "./types";
 import { organizationSchema } from "./identity";
+import { discoveryPages } from "./discovery-pages";
 export { organizationSchema } from "./identity";
 
 export { markets, SEO_SITE_URL } from "./types";
 export type { InternationalPage, Market } from "./types";
 
-export const internationalPages: InternationalPage[] = [...entityPages, ...topicPages];
+export const internationalPages: InternationalPage[] = [...entityPages, ...topicPages, ...discoveryPages];
 
 export function normalizeSeoPath(path: string): string {
   const clean = path.split(/[?#]/)[0];
@@ -88,6 +89,20 @@ export function getPageJsonLd(page: InternationalPage): object[] {
       mainEntityOfPage: { "@id": url + "#webpage" },
       image: SEO_SITE_URL + "/icon-512.png",
       citation: page.sources.map(source => source.href),
+    });
+  }
+  // Expandable FAQs are public HTML, identical to these answers. This does not
+  // imply eligibility for a search engine's restricted health FAQ rich results.
+  if (page.faqs.length) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "@id": url + "#faq",
+      mainEntity: page.faqs.map(faq => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      })),
     });
   }
   return schemas;

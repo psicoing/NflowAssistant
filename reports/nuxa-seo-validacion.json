@@ -1,8 +1,7 @@
 {
   "results": [
-    "Catalogue validated: 84 pages, reciprocal hreflang, canonical, H1, schema and identical initial/visible content.",
-    "Recomprobación dirigida de fallos de transporte anteriores: /novedades. Se conservan las comprobaciones previas que no han cambiado.",
-    "HTTP checked 113 sitemap URLs; search-bot samples, alias redirects, localized 404, noindex and anonymous API-access samples."
+    "Catalogue validated: 100 pages, reciprocal hreflang, canonical, H1, schema and identical initial/visible content.",
+    "HTTP checked 129 sitemap URLs; search-bot samples, alias redirects, localized 404, noindex and anonymous API-access samples."
   ],
   "errors": [],
   "rows": [
@@ -15,7 +14,7 @@
       "h1": "Bienestar emocional: cómo cuidar lo que sientes",
       "canonical": "https://nuxa.life/bienestar-emocional",
       "hreflang": "es-ES: https://nuxa.life/bienestar-emocional\nen-US: https://nuxa.life/en-us/emotional-wellbeing\nen-GB: https://nuxa.life/en-gb/emotional-wellbeing\nfr-FR: https://nuxa.life/fr/bien-etre-emotionnel\nx-default: https://nuxa.life/bienestar-emocional",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -29,7 +28,7 @@
       "h1": "Ansiedad: qué hacer cuando te sientes desbordado",
       "canonical": "https://nuxa.life/ansiedad",
       "hreflang": "es-ES: https://nuxa.life/ansiedad\nen-US: https://nuxa.life/en-us/anxiety\nen-GB: https://nuxa.life/en-gb/anxiety\nfr-FR: https://nuxa.life/fr/anxiete\nx-default: https://nuxa.life/ansiedad",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -43,7 +42,7 @@
       "h1": "Ansiedad antes de dormir: cómo calmar la mente",
       "canonical": "https://nuxa.life/ansiedad-antes-de-dormir",
       "hreflang": "es-ES: https://nuxa.life/ansiedad-antes-de-dormir\nen-US: https://nuxa.life/en-us/anxiety-before-sleep\nen-GB: https://nuxa.life/en-gb/anxiety-before-sleep\nfr-FR: https://nuxa.life/fr/anxiete-avant-de-dormir\nx-default: https://nuxa.life/ansiedad-antes-de-dormir",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -57,7 +56,7 @@
       "h1": "Estrés laboral: cómo reconocerlo y actuar",
       "canonical": "https://nuxa.life/estres-laboral",
       "hreflang": "es-ES: https://nuxa.life/estres-laboral\nen-US: https://nuxa.life/en-us/work-stress\nen-GB: https://nuxa.life/en-gb/work-stress\nfr-FR: https://nuxa.life/fr/stress-au-travail\nx-default: https://nuxa.life/estres-laboral",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -71,7 +70,7 @@
       "h1": "Duelo: cómo afrontar una pérdida a tu manera",
       "canonical": "https://nuxa.life/duelo",
       "hreflang": "es-ES: https://nuxa.life/duelo\nen-US: https://nuxa.life/en-us/grief\nen-GB: https://nuxa.life/en-gb/grief\nfr-FR: https://nuxa.life/fr/deuil\nx-default: https://nuxa.life/duelo",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -85,7 +84,7 @@
       "h1": "Soledad: cómo volver a conectar sin presionarte",
       "canonical": "https://nuxa.life/soledad",
       "hreflang": "es-ES: https://nuxa.life/soledad\nen-US: https://nuxa.life/en-us/loneliness\nen-GB: https://nuxa.life/en-gb/loneliness\nfr-FR: https://nuxa.life/fr/solitude\nx-default: https://nuxa.life/soledad",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -99,7 +98,7 @@
       "h1": "Autoestima: tratarte con respeto y realismo",
       "canonical": "https://nuxa.life/autoestima",
       "hreflang": "es-ES: https://nuxa.life/autoestima\nen-US: https://nuxa.life/en-us/self-esteem\nen-GB: https://nuxa.life/en-gb/self-esteem\nfr-FR: https://nuxa.life/fr/estime-de-soi\nx-default: https://nuxa.life/autoestima",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -113,7 +112,7 @@
       "h1": "Ruptura de pareja: recuperar estabilidad paso a paso",
       "canonical": "https://nuxa.life/ruptura-de-pareja",
       "hreflang": "es-ES: https://nuxa.life/ruptura-de-pareja\nen-US: https://nuxa.life/en-us/breakup\nen-GB: https://nuxa.life/en-gb/breakup\nfr-FR: https://nuxa.life/fr/rupture-amoureuse\nx-default: https://nuxa.life/ruptura-de-pareja",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -127,7 +126,7 @@
       "h1": "Poner límites sin culpa: una guía práctica",
       "canonical": "https://nuxa.life/limites-sin-culpa",
       "hreflang": "es-ES: https://nuxa.life/limites-sin-culpa\nen-US: https://nuxa.life/en-us/healthy-boundaries\nen-GB: https://nuxa.life/en-gb/healthy-boundaries\nfr-FR: https://nuxa.life/fr/poser-ses-limites\nx-default: https://nuxa.life/limites-sin-culpa",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -141,7 +140,7 @@
       "h1": "Ansiedad en adolescentes: cómo acompañar sin juzgar",
       "canonical": "https://nuxa.life/ansiedad-adolescentes",
       "hreflang": "es-ES: https://nuxa.life/ansiedad-adolescentes\nen-US: https://nuxa.life/en-us/teen-anxiety\nen-GB: https://nuxa.life/en-gb/teen-anxiety\nfr-FR: https://nuxa.life/fr/anxiete-chez-les-adolescents\nx-default: https://nuxa.life/ansiedad-adolescentes",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -151,7 +150,7 @@
       "country": "España",
       "language": "es-ES",
       "title": "NUXA - Tu asistente de bienestar emocional, disponible 24/7",
-      "description": "NUXA es tu asistente de bienestar emocional, disponible 24/7. Acompañamiento continuo y confidencial para personas, familias y trabajadores.",
+      "description": "NUXA ofrece orientación psicoeducativa y bienestar emocional con IA en varios idiomas, con acceso online anunciado 24/7. No sustituye atención profesional ni emergencias.",
       "h1": "NUXA — Tu asistente de bienestar emocional, disponible 24/7",
       "canonical": "https://nuxa.life/",
       "hreflang": "— (sin equivalentes internacionales)",
@@ -631,7 +630,7 @@
       "h1": "Información clara sobre NUXA y el apoyo emocional digital",
       "canonical": "https://nuxa.life/es/",
       "hreflang": "es-ES: https://nuxa.life/es/\nen-US: https://nuxa.life/en-us/\nen-GB: https://nuxa.life/en-gb/\nfr-FR: https://nuxa.life/fr/\nx-default: https://nuxa.life/es/",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -645,7 +644,7 @@
       "h1": "Quién es NUXA",
       "canonical": "https://nuxa.life/es/about-nuxa",
       "hreflang": "es-ES: https://nuxa.life/es/about-nuxa\nen-US: https://nuxa.life/en-us/about-nuxa\nen-GB: https://nuxa.life/en-gb/about-nuxa\nfr-FR: https://nuxa.life/fr/about-nuxa\nx-default: https://nuxa.life/es/about-nuxa",
-      "schema": "Organization, WebSite, AboutPage, BreadcrumbList",
+      "schema": "Organization, WebSite, AboutPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -659,7 +658,7 @@
       "h1": "Cómo funciona NUXA",
       "canonical": "https://nuxa.life/es/how-nuxa-works",
       "hreflang": "es-ES: https://nuxa.life/es/how-nuxa-works\nen-US: https://nuxa.life/en-us/how-nuxa-works\nen-GB: https://nuxa.life/en-gb/how-nuxa-works\nfr-FR: https://nuxa.life/fr/how-nuxa-works\nx-default: https://nuxa.life/es/how-nuxa-works",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -673,7 +672,7 @@
       "h1": "Ciencia y evidencia: alcance de lo que afirmamos",
       "canonical": "https://nuxa.life/es/science",
       "hreflang": "es-ES: https://nuxa.life/es/science\nen-US: https://nuxa.life/en-us/science\nen-GB: https://nuxa.life/en-gb/science\nfr-FR: https://nuxa.life/fr/science\nx-default: https://nuxa.life/es/science",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -687,7 +686,7 @@
       "h1": "Seguridad: usa NUXA con límites claros",
       "canonical": "https://nuxa.life/es/safety",
       "hreflang": "es-ES: https://nuxa.life/es/safety\nen-US: https://nuxa.life/en-us/safety\nen-GB: https://nuxa.life/en-gb/safety\nfr-FR: https://nuxa.life/fr/safety\nx-default: https://nuxa.life/es/safety",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -701,7 +700,7 @@
       "h1": "Privacidad: consulta la política legal vigente",
       "canonical": "https://nuxa.life/es/privacy",
       "hreflang": "es-ES: https://nuxa.life/es/privacy\nen-US: https://nuxa.life/en-us/privacy\nen-GB: https://nuxa.life/en-gb/privacy\nfr-FR: https://nuxa.life/fr/privacy\nx-default: https://nuxa.life/es/privacy",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -715,7 +714,7 @@
       "h1": "Información sobre NUXA para organizaciones",
       "canonical": "https://nuxa.life/es/for-organizations",
       "hreflang": "es-ES: https://nuxa.life/es/for-organizations\nen-US: https://nuxa.life/en-us/for-organizations\nen-GB: https://nuxa.life/en-gb/for-organizations\nfr-FR: https://nuxa.life/fr/for-organizations\nx-default: https://nuxa.life/es/for-organizations",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -729,7 +728,7 @@
       "h1": "Información sobre NUXA para profesionales",
       "canonical": "https://nuxa.life/es/for-professionals",
       "hreflang": "es-ES: https://nuxa.life/es/for-professionals\nen-US: https://nuxa.life/en-us/for-professionals\nen-GB: https://nuxa.life/en-gb/for-professionals\nfr-FR: https://nuxa.life/fr/for-professionals\nx-default: https://nuxa.life/es/for-professionals",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -743,7 +742,7 @@
       "h1": "Política editorial y de fuentes",
       "canonical": "https://nuxa.life/es/editorial-policy",
       "hreflang": "es-ES: https://nuxa.life/es/editorial-policy\nen-US: https://nuxa.life/en-us/editorial-policy\nen-GB: https://nuxa.life/en-gb/editorial-policy\nfr-FR: https://nuxa.life/fr/editorial-policy\nx-default: https://nuxa.life/es/editorial-policy",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -757,7 +756,7 @@
       "h1": "Clear information about NUXA and digital emotional support",
       "canonical": "https://nuxa.life/en-us/",
       "hreflang": "es-ES: https://nuxa.life/es/\nen-US: https://nuxa.life/en-us/\nen-GB: https://nuxa.life/en-gb/\nfr-FR: https://nuxa.life/fr/\nx-default: https://nuxa.life/es/",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -771,7 +770,7 @@
       "h1": "About NUXA",
       "canonical": "https://nuxa.life/en-us/about-nuxa",
       "hreflang": "es-ES: https://nuxa.life/es/about-nuxa\nen-US: https://nuxa.life/en-us/about-nuxa\nen-GB: https://nuxa.life/en-gb/about-nuxa\nfr-FR: https://nuxa.life/fr/about-nuxa\nx-default: https://nuxa.life/es/about-nuxa",
-      "schema": "Organization, WebSite, AboutPage, BreadcrumbList",
+      "schema": "Organization, WebSite, AboutPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -785,7 +784,7 @@
       "h1": "How NUXA works",
       "canonical": "https://nuxa.life/en-us/how-nuxa-works",
       "hreflang": "es-ES: https://nuxa.life/es/how-nuxa-works\nen-US: https://nuxa.life/en-us/how-nuxa-works\nen-GB: https://nuxa.life/en-gb/how-nuxa-works\nfr-FR: https://nuxa.life/fr/how-nuxa-works\nx-default: https://nuxa.life/es/how-nuxa-works",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -799,7 +798,7 @@
       "h1": "Science and evidence: the limits of our claims",
       "canonical": "https://nuxa.life/en-us/science",
       "hreflang": "es-ES: https://nuxa.life/es/science\nen-US: https://nuxa.life/en-us/science\nen-GB: https://nuxa.life/en-gb/science\nfr-FR: https://nuxa.life/fr/science\nx-default: https://nuxa.life/es/science",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -813,7 +812,7 @@
       "h1": "Safety: use NUXA with clear limits",
       "canonical": "https://nuxa.life/en-us/safety",
       "hreflang": "es-ES: https://nuxa.life/es/safety\nen-US: https://nuxa.life/en-us/safety\nen-GB: https://nuxa.life/en-gb/safety\nfr-FR: https://nuxa.life/fr/safety\nx-default: https://nuxa.life/es/safety",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -827,7 +826,7 @@
       "h1": "Privacy: read the published legal policy",
       "canonical": "https://nuxa.life/en-us/privacy",
       "hreflang": "es-ES: https://nuxa.life/es/privacy\nen-US: https://nuxa.life/en-us/privacy\nen-GB: https://nuxa.life/en-gb/privacy\nfr-FR: https://nuxa.life/fr/privacy\nx-default: https://nuxa.life/es/privacy",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -841,7 +840,7 @@
       "h1": "Information about NUXA for organizations",
       "canonical": "https://nuxa.life/en-us/for-organizations",
       "hreflang": "es-ES: https://nuxa.life/es/for-organizations\nen-US: https://nuxa.life/en-us/for-organizations\nen-GB: https://nuxa.life/en-gb/for-organizations\nfr-FR: https://nuxa.life/fr/for-organizations\nx-default: https://nuxa.life/es/for-organizations",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -855,7 +854,7 @@
       "h1": "Information about NUXA for professionals",
       "canonical": "https://nuxa.life/en-us/for-professionals",
       "hreflang": "es-ES: https://nuxa.life/es/for-professionals\nen-US: https://nuxa.life/en-us/for-professionals\nen-GB: https://nuxa.life/en-gb/for-professionals\nfr-FR: https://nuxa.life/fr/for-professionals\nx-default: https://nuxa.life/es/for-professionals",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -869,7 +868,7 @@
       "h1": "Editorial and sourcing policy",
       "canonical": "https://nuxa.life/en-us/editorial-policy",
       "hreflang": "es-ES: https://nuxa.life/es/editorial-policy\nen-US: https://nuxa.life/en-us/editorial-policy\nen-GB: https://nuxa.life/en-gb/editorial-policy\nfr-FR: https://nuxa.life/fr/editorial-policy\nx-default: https://nuxa.life/es/editorial-policy",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -883,7 +882,7 @@
       "h1": "Clear information about NUXA and digital emotional support",
       "canonical": "https://nuxa.life/en-gb/",
       "hreflang": "es-ES: https://nuxa.life/es/\nen-US: https://nuxa.life/en-us/\nen-GB: https://nuxa.life/en-gb/\nfr-FR: https://nuxa.life/fr/\nx-default: https://nuxa.life/es/",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -897,7 +896,7 @@
       "h1": "About NUXA",
       "canonical": "https://nuxa.life/en-gb/about-nuxa",
       "hreflang": "es-ES: https://nuxa.life/es/about-nuxa\nen-US: https://nuxa.life/en-us/about-nuxa\nen-GB: https://nuxa.life/en-gb/about-nuxa\nfr-FR: https://nuxa.life/fr/about-nuxa\nx-default: https://nuxa.life/es/about-nuxa",
-      "schema": "Organization, WebSite, AboutPage, BreadcrumbList",
+      "schema": "Organization, WebSite, AboutPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -911,7 +910,7 @@
       "h1": "How NUXA works",
       "canonical": "https://nuxa.life/en-gb/how-nuxa-works",
       "hreflang": "es-ES: https://nuxa.life/es/how-nuxa-works\nen-US: https://nuxa.life/en-us/how-nuxa-works\nen-GB: https://nuxa.life/en-gb/how-nuxa-works\nfr-FR: https://nuxa.life/fr/how-nuxa-works\nx-default: https://nuxa.life/es/how-nuxa-works",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -925,7 +924,7 @@
       "h1": "Science and evidence: the limits of our claims",
       "canonical": "https://nuxa.life/en-gb/science",
       "hreflang": "es-ES: https://nuxa.life/es/science\nen-US: https://nuxa.life/en-us/science\nen-GB: https://nuxa.life/en-gb/science\nfr-FR: https://nuxa.life/fr/science\nx-default: https://nuxa.life/es/science",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -939,7 +938,7 @@
       "h1": "Safety: use NUXA with clear limits",
       "canonical": "https://nuxa.life/en-gb/safety",
       "hreflang": "es-ES: https://nuxa.life/es/safety\nen-US: https://nuxa.life/en-us/safety\nen-GB: https://nuxa.life/en-gb/safety\nfr-FR: https://nuxa.life/fr/safety\nx-default: https://nuxa.life/es/safety",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -953,7 +952,7 @@
       "h1": "Privacy: read the published legal policy",
       "canonical": "https://nuxa.life/en-gb/privacy",
       "hreflang": "es-ES: https://nuxa.life/es/privacy\nen-US: https://nuxa.life/en-us/privacy\nen-GB: https://nuxa.life/en-gb/privacy\nfr-FR: https://nuxa.life/fr/privacy\nx-default: https://nuxa.life/es/privacy",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -967,7 +966,7 @@
       "h1": "Information about NUXA for organisations",
       "canonical": "https://nuxa.life/en-gb/for-organizations",
       "hreflang": "es-ES: https://nuxa.life/es/for-organizations\nen-US: https://nuxa.life/en-us/for-organizations\nen-GB: https://nuxa.life/en-gb/for-organizations\nfr-FR: https://nuxa.life/fr/for-organizations\nx-default: https://nuxa.life/es/for-organizations",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -981,7 +980,7 @@
       "h1": "Information about NUXA for professionals",
       "canonical": "https://nuxa.life/en-gb/for-professionals",
       "hreflang": "es-ES: https://nuxa.life/es/for-professionals\nen-US: https://nuxa.life/en-us/for-professionals\nen-GB: https://nuxa.life/en-gb/for-professionals\nfr-FR: https://nuxa.life/fr/for-professionals\nx-default: https://nuxa.life/es/for-professionals",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -995,7 +994,7 @@
       "h1": "Editorial and sourcing policy",
       "canonical": "https://nuxa.life/en-gb/editorial-policy",
       "hreflang": "es-ES: https://nuxa.life/es/editorial-policy\nen-US: https://nuxa.life/en-us/editorial-policy\nen-GB: https://nuxa.life/en-gb/editorial-policy\nfr-FR: https://nuxa.life/fr/editorial-policy\nx-default: https://nuxa.life/es/editorial-policy",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1009,7 +1008,7 @@
       "h1": "Comprendre NUXA et le soutien émotionnel numérique",
       "canonical": "https://nuxa.life/fr/",
       "hreflang": "es-ES: https://nuxa.life/es/\nen-US: https://nuxa.life/en-us/\nen-GB: https://nuxa.life/en-gb/\nfr-FR: https://nuxa.life/fr/\nx-default: https://nuxa.life/es/",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1023,7 +1022,7 @@
       "h1": "À propos de NUXA",
       "canonical": "https://nuxa.life/fr/about-nuxa",
       "hreflang": "es-ES: https://nuxa.life/es/about-nuxa\nen-US: https://nuxa.life/en-us/about-nuxa\nen-GB: https://nuxa.life/en-gb/about-nuxa\nfr-FR: https://nuxa.life/fr/about-nuxa\nx-default: https://nuxa.life/es/about-nuxa",
-      "schema": "Organization, WebSite, AboutPage, BreadcrumbList",
+      "schema": "Organization, WebSite, AboutPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1037,7 +1036,7 @@
       "h1": "Comment fonctionne NUXA",
       "canonical": "https://nuxa.life/fr/how-nuxa-works",
       "hreflang": "es-ES: https://nuxa.life/es/how-nuxa-works\nen-US: https://nuxa.life/en-us/how-nuxa-works\nen-GB: https://nuxa.life/en-gb/how-nuxa-works\nfr-FR: https://nuxa.life/fr/how-nuxa-works\nx-default: https://nuxa.life/es/how-nuxa-works",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1051,7 +1050,7 @@
       "h1": "Science et données : les limites de nos affirmations",
       "canonical": "https://nuxa.life/fr/science",
       "hreflang": "es-ES: https://nuxa.life/es/science\nen-US: https://nuxa.life/en-us/science\nen-GB: https://nuxa.life/en-gb/science\nfr-FR: https://nuxa.life/fr/science\nx-default: https://nuxa.life/es/science",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1065,7 +1064,7 @@
       "h1": "Sécurité : utiliser NUXA avec des limites claires",
       "canonical": "https://nuxa.life/fr/safety",
       "hreflang": "es-ES: https://nuxa.life/es/safety\nen-US: https://nuxa.life/en-us/safety\nen-GB: https://nuxa.life/en-gb/safety\nfr-FR: https://nuxa.life/fr/safety\nx-default: https://nuxa.life/es/safety",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1079,7 +1078,7 @@
       "h1": "Confidentialité : consultez la politique juridique publiée",
       "canonical": "https://nuxa.life/fr/privacy",
       "hreflang": "es-ES: https://nuxa.life/es/privacy\nen-US: https://nuxa.life/en-us/privacy\nen-GB: https://nuxa.life/en-gb/privacy\nfr-FR: https://nuxa.life/fr/privacy\nx-default: https://nuxa.life/es/privacy",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1093,7 +1092,7 @@
       "h1": "Informations sur NUXA pour les organisations",
       "canonical": "https://nuxa.life/fr/for-organizations",
       "hreflang": "es-ES: https://nuxa.life/es/for-organizations\nen-US: https://nuxa.life/en-us/for-organizations\nen-GB: https://nuxa.life/en-gb/for-organizations\nfr-FR: https://nuxa.life/fr/for-organizations\nx-default: https://nuxa.life/es/for-organizations",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1107,7 +1106,7 @@
       "h1": "Informations sur NUXA pour les professionnels",
       "canonical": "https://nuxa.life/fr/for-professionals",
       "hreflang": "es-ES: https://nuxa.life/es/for-professionals\nen-US: https://nuxa.life/en-us/for-professionals\nen-GB: https://nuxa.life/en-gb/for-professionals\nfr-FR: https://nuxa.life/fr/for-professionals\nx-default: https://nuxa.life/es/for-professionals",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1121,7 +1120,7 @@
       "h1": "Politique éditoriale et références",
       "canonical": "https://nuxa.life/fr/editorial-policy",
       "hreflang": "es-ES: https://nuxa.life/es/editorial-policy\nen-US: https://nuxa.life/en-us/editorial-policy\nen-GB: https://nuxa.life/en-gb/editorial-policy\nfr-FR: https://nuxa.life/fr/editorial-policy\nx-default: https://nuxa.life/es/editorial-policy",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1135,7 +1134,7 @@
       "h1": "Emotional well-being: practical ways to care for yourself",
       "canonical": "https://nuxa.life/en-us/emotional-wellbeing",
       "hreflang": "es-ES: https://nuxa.life/bienestar-emocional\nen-US: https://nuxa.life/en-us/emotional-wellbeing\nen-GB: https://nuxa.life/en-gb/emotional-wellbeing\nfr-FR: https://nuxa.life/fr/bien-etre-emotionnel\nx-default: https://nuxa.life/bienestar-emocional",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1149,7 +1148,7 @@
       "h1": "Emotional wellbeing: practical ways to look after yourself",
       "canonical": "https://nuxa.life/en-gb/emotional-wellbeing",
       "hreflang": "es-ES: https://nuxa.life/bienestar-emocional\nen-US: https://nuxa.life/en-us/emotional-wellbeing\nen-GB: https://nuxa.life/en-gb/emotional-wellbeing\nfr-FR: https://nuxa.life/fr/bien-etre-emotionnel\nx-default: https://nuxa.life/bienestar-emocional",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1163,7 +1162,7 @@
       "h1": "Bien-être émotionnel : prendre soin de soi au quotidien",
       "canonical": "https://nuxa.life/fr/bien-etre-emotionnel",
       "hreflang": "es-ES: https://nuxa.life/bienestar-emocional\nen-US: https://nuxa.life/en-us/emotional-wellbeing\nen-GB: https://nuxa.life/en-gb/emotional-wellbeing\nfr-FR: https://nuxa.life/fr/bien-etre-emotionnel\nx-default: https://nuxa.life/bienestar-emocional",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1177,7 +1176,7 @@
       "h1": "Anxiety: what to do when you feel overwhelmed",
       "canonical": "https://nuxa.life/en-us/anxiety",
       "hreflang": "es-ES: https://nuxa.life/ansiedad\nen-US: https://nuxa.life/en-us/anxiety\nen-GB: https://nuxa.life/en-gb/anxiety\nfr-FR: https://nuxa.life/fr/anxiete\nx-default: https://nuxa.life/ansiedad",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1191,7 +1190,7 @@
       "h1": "Anxiety: what to do when you feel overwhelmed",
       "canonical": "https://nuxa.life/en-gb/anxiety",
       "hreflang": "es-ES: https://nuxa.life/ansiedad\nen-US: https://nuxa.life/en-us/anxiety\nen-GB: https://nuxa.life/en-gb/anxiety\nfr-FR: https://nuxa.life/fr/anxiete\nx-default: https://nuxa.life/ansiedad",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1205,7 +1204,7 @@
       "h1": "Anxiété : que faire quand on se sent dépassé ?",
       "canonical": "https://nuxa.life/fr/anxiete",
       "hreflang": "es-ES: https://nuxa.life/ansiedad\nen-US: https://nuxa.life/en-us/anxiety\nen-GB: https://nuxa.life/en-gb/anxiety\nfr-FR: https://nuxa.life/fr/anxiete\nx-default: https://nuxa.life/ansiedad",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1219,7 +1218,7 @@
       "h1": "Anxiety before sleep: how to quiet a busy mind",
       "canonical": "https://nuxa.life/en-us/anxiety-before-sleep",
       "hreflang": "es-ES: https://nuxa.life/ansiedad-antes-de-dormir\nen-US: https://nuxa.life/en-us/anxiety-before-sleep\nen-GB: https://nuxa.life/en-gb/anxiety-before-sleep\nfr-FR: https://nuxa.life/fr/anxiete-avant-de-dormir\nx-default: https://nuxa.life/ansiedad-antes-de-dormir",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1233,7 +1232,7 @@
       "h1": "Anxiety before sleep: how to quiet a busy mind",
       "canonical": "https://nuxa.life/en-gb/anxiety-before-sleep",
       "hreflang": "es-ES: https://nuxa.life/ansiedad-antes-de-dormir\nen-US: https://nuxa.life/en-us/anxiety-before-sleep\nen-GB: https://nuxa.life/en-gb/anxiety-before-sleep\nfr-FR: https://nuxa.life/fr/anxiete-avant-de-dormir\nx-default: https://nuxa.life/ansiedad-antes-de-dormir",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1247,7 +1246,7 @@
       "h1": "Anxiété avant de dormir : apaiser les pensées",
       "canonical": "https://nuxa.life/fr/anxiete-avant-de-dormir",
       "hreflang": "es-ES: https://nuxa.life/ansiedad-antes-de-dormir\nen-US: https://nuxa.life/en-us/anxiety-before-sleep\nen-GB: https://nuxa.life/en-gb/anxiety-before-sleep\nfr-FR: https://nuxa.life/fr/anxiete-avant-de-dormir\nx-default: https://nuxa.life/ansiedad-antes-de-dormir",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1261,7 +1260,7 @@
       "h1": "Work stress: recognize it and take practical steps",
       "canonical": "https://nuxa.life/en-us/work-stress",
       "hreflang": "es-ES: https://nuxa.life/estres-laboral\nen-US: https://nuxa.life/en-us/work-stress\nen-GB: https://nuxa.life/en-gb/work-stress\nfr-FR: https://nuxa.life/fr/stress-au-travail\nx-default: https://nuxa.life/estres-laboral",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1275,7 +1274,7 @@
       "h1": "Work-related stress: recognise it and take practical steps",
       "canonical": "https://nuxa.life/en-gb/work-stress",
       "hreflang": "es-ES: https://nuxa.life/estres-laboral\nen-US: https://nuxa.life/en-us/work-stress\nen-GB: https://nuxa.life/en-gb/work-stress\nfr-FR: https://nuxa.life/fr/stress-au-travail\nx-default: https://nuxa.life/estres-laboral",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1289,7 +1288,7 @@
       "h1": "Stress au travail : le reconnaître et agir",
       "canonical": "https://nuxa.life/fr/stress-au-travail",
       "hreflang": "es-ES: https://nuxa.life/estres-laboral\nen-US: https://nuxa.life/en-us/work-stress\nen-GB: https://nuxa.life/en-gb/work-stress\nfr-FR: https://nuxa.life/fr/stress-au-travail\nx-default: https://nuxa.life/estres-laboral",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1303,7 +1302,7 @@
       "h1": "Grief: ways to cope with a loss in your own time",
       "canonical": "https://nuxa.life/en-us/grief",
       "hreflang": "es-ES: https://nuxa.life/duelo\nen-US: https://nuxa.life/en-us/grief\nen-GB: https://nuxa.life/en-gb/grief\nfr-FR: https://nuxa.life/fr/deuil\nx-default: https://nuxa.life/duelo",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1317,7 +1316,7 @@
       "h1": "Grief: ways to cope with a loss in your own time",
       "canonical": "https://nuxa.life/en-gb/grief",
       "hreflang": "es-ES: https://nuxa.life/duelo\nen-US: https://nuxa.life/en-us/grief\nen-GB: https://nuxa.life/en-gb/grief\nfr-FR: https://nuxa.life/fr/deuil\nx-default: https://nuxa.life/duelo",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1331,7 +1330,7 @@
       "h1": "Deuil : traverser une perte à son propre rythme",
       "canonical": "https://nuxa.life/fr/deuil",
       "hreflang": "es-ES: https://nuxa.life/duelo\nen-US: https://nuxa.life/en-us/grief\nen-GB: https://nuxa.life/en-gb/grief\nfr-FR: https://nuxa.life/fr/deuil\nx-default: https://nuxa.life/duelo",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1345,7 +1344,7 @@
       "h1": "Loneliness: ways to reconnect without pressure",
       "canonical": "https://nuxa.life/en-us/loneliness",
       "hreflang": "es-ES: https://nuxa.life/soledad\nen-US: https://nuxa.life/en-us/loneliness\nen-GB: https://nuxa.life/en-gb/loneliness\nfr-FR: https://nuxa.life/fr/solitude\nx-default: https://nuxa.life/soledad",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1359,7 +1358,7 @@
       "h1": "Loneliness: ways to reconnect without pressure",
       "canonical": "https://nuxa.life/en-gb/loneliness",
       "hreflang": "es-ES: https://nuxa.life/soledad\nen-US: https://nuxa.life/en-us/loneliness\nen-GB: https://nuxa.life/en-gb/loneliness\nfr-FR: https://nuxa.life/fr/solitude\nx-default: https://nuxa.life/soledad",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1373,7 +1372,7 @@
       "h1": "Solitude : renouer des liens sans se mettre la pression",
       "canonical": "https://nuxa.life/fr/solitude",
       "hreflang": "es-ES: https://nuxa.life/soledad\nen-US: https://nuxa.life/en-us/loneliness\nen-GB: https://nuxa.life/en-gb/loneliness\nfr-FR: https://nuxa.life/fr/solitude\nx-default: https://nuxa.life/soledad",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1387,7 +1386,7 @@
       "h1": "Self-esteem: build a more respectful view of yourself",
       "canonical": "https://nuxa.life/en-us/self-esteem",
       "hreflang": "es-ES: https://nuxa.life/autoestima\nen-US: https://nuxa.life/en-us/self-esteem\nen-GB: https://nuxa.life/en-gb/self-esteem\nfr-FR: https://nuxa.life/fr/estime-de-soi\nx-default: https://nuxa.life/autoestima",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1401,7 +1400,7 @@
       "h1": "Self-esteem: build a more respectful view of yourself",
       "canonical": "https://nuxa.life/en-gb/self-esteem",
       "hreflang": "es-ES: https://nuxa.life/autoestima\nen-US: https://nuxa.life/en-us/self-esteem\nen-GB: https://nuxa.life/en-gb/self-esteem\nfr-FR: https://nuxa.life/fr/estime-de-soi\nx-default: https://nuxa.life/autoestima",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1415,7 +1414,7 @@
       "h1": "Estime de soi : se traiter avec respect et réalisme",
       "canonical": "https://nuxa.life/fr/estime-de-soi",
       "hreflang": "es-ES: https://nuxa.life/autoestima\nen-US: https://nuxa.life/en-us/self-esteem\nen-GB: https://nuxa.life/en-gb/self-esteem\nfr-FR: https://nuxa.life/fr/estime-de-soi\nx-default: https://nuxa.life/autoestima",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1429,7 +1428,7 @@
       "h1": "After a breakup: rebuild steadiness one step at a time",
       "canonical": "https://nuxa.life/en-us/breakup",
       "hreflang": "es-ES: https://nuxa.life/ruptura-de-pareja\nen-US: https://nuxa.life/en-us/breakup\nen-GB: https://nuxa.life/en-gb/breakup\nfr-FR: https://nuxa.life/fr/rupture-amoureuse\nx-default: https://nuxa.life/ruptura-de-pareja",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1443,7 +1442,7 @@
       "h1": "After a breakup: rebuild steadiness one step at a time",
       "canonical": "https://nuxa.life/en-gb/breakup",
       "hreflang": "es-ES: https://nuxa.life/ruptura-de-pareja\nen-US: https://nuxa.life/en-us/breakup\nen-GB: https://nuxa.life/en-gb/breakup\nfr-FR: https://nuxa.life/fr/rupture-amoureuse\nx-default: https://nuxa.life/ruptura-de-pareja",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1457,7 +1456,7 @@
       "h1": "Après une rupture : retrouver des repères pas à pas",
       "canonical": "https://nuxa.life/fr/rupture-amoureuse",
       "hreflang": "es-ES: https://nuxa.life/ruptura-de-pareja\nen-US: https://nuxa.life/en-us/breakup\nen-GB: https://nuxa.life/en-gb/breakup\nfr-FR: https://nuxa.life/fr/rupture-amoureuse\nx-default: https://nuxa.life/ruptura-de-pareja",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1471,7 +1470,7 @@
       "h1": "Healthy boundaries: how to set them without overexplaining",
       "canonical": "https://nuxa.life/en-us/healthy-boundaries",
       "hreflang": "es-ES: https://nuxa.life/limites-sin-culpa\nen-US: https://nuxa.life/en-us/healthy-boundaries\nen-GB: https://nuxa.life/en-gb/healthy-boundaries\nfr-FR: https://nuxa.life/fr/poser-ses-limites\nx-default: https://nuxa.life/limites-sin-culpa",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1485,7 +1484,7 @@
       "h1": "Healthy boundaries: how to set them without overexplaining",
       "canonical": "https://nuxa.life/en-gb/healthy-boundaries",
       "hreflang": "es-ES: https://nuxa.life/limites-sin-culpa\nen-US: https://nuxa.life/en-us/healthy-boundaries\nen-GB: https://nuxa.life/en-gb/healthy-boundaries\nfr-FR: https://nuxa.life/fr/poser-ses-limites\nx-default: https://nuxa.life/limites-sin-culpa",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1499,7 +1498,7 @@
       "h1": "Poser ses limites sans culpabiliser : repères pratiques",
       "canonical": "https://nuxa.life/fr/poser-ses-limites",
       "hreflang": "es-ES: https://nuxa.life/limites-sin-culpa\nen-US: https://nuxa.life/en-us/healthy-boundaries\nen-GB: https://nuxa.life/en-gb/healthy-boundaries\nfr-FR: https://nuxa.life/fr/poser-ses-limites\nx-default: https://nuxa.life/limites-sin-culpa",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1513,7 +1512,7 @@
       "h1": "Teen anxiety: how adults can support without judgement",
       "canonical": "https://nuxa.life/en-us/teen-anxiety",
       "hreflang": "es-ES: https://nuxa.life/ansiedad-adolescentes\nen-US: https://nuxa.life/en-us/teen-anxiety\nen-GB: https://nuxa.life/en-gb/teen-anxiety\nfr-FR: https://nuxa.life/fr/anxiete-chez-les-adolescents\nx-default: https://nuxa.life/ansiedad-adolescentes",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1527,7 +1526,7 @@
       "h1": "Teen anxiety: how adults can support without judgement",
       "canonical": "https://nuxa.life/en-gb/teen-anxiety",
       "hreflang": "es-ES: https://nuxa.life/ansiedad-adolescentes\nen-US: https://nuxa.life/en-us/teen-anxiety\nen-GB: https://nuxa.life/en-gb/teen-anxiety\nfr-FR: https://nuxa.life/fr/anxiete-chez-les-adolescents\nx-default: https://nuxa.life/ansiedad-adolescentes",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1541,7 +1540,7 @@
       "h1": "Anxiété des adolescents : accompagner sans juger",
       "canonical": "https://nuxa.life/fr/anxiete-chez-les-adolescents",
       "hreflang": "es-ES: https://nuxa.life/ansiedad-adolescentes\nen-US: https://nuxa.life/en-us/teen-anxiety\nen-GB: https://nuxa.life/en-gb/teen-anxiety\nfr-FR: https://nuxa.life/fr/anxiete-chez-les-adolescents\nx-default: https://nuxa.life/ansiedad-adolescentes",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1555,7 +1554,7 @@
       "h1": "Agotamiento emocional: señales, límites y apoyo",
       "canonical": "https://nuxa.life/es/agotamiento-emocional",
       "hreflang": "es-ES: https://nuxa.life/es/agotamiento-emocional\nen-US: https://nuxa.life/en-us/emotional-exhaustion\nen-GB: https://nuxa.life/en-gb/emotional-exhaustion\nfr-FR: https://nuxa.life/fr/epuisement-emotionnel\nx-default: https://nuxa.life/es/agotamiento-emocional",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1569,7 +1568,7 @@
       "h1": "Emotional exhaustion: signs, boundaries, and support",
       "canonical": "https://nuxa.life/en-us/emotional-exhaustion",
       "hreflang": "es-ES: https://nuxa.life/es/agotamiento-emocional\nen-US: https://nuxa.life/en-us/emotional-exhaustion\nen-GB: https://nuxa.life/en-gb/emotional-exhaustion\nfr-FR: https://nuxa.life/fr/epuisement-emotionnel\nx-default: https://nuxa.life/es/agotamiento-emocional",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1583,7 +1582,7 @@
       "h1": "Emotional exhaustion: signs, boundaries, and support",
       "canonical": "https://nuxa.life/en-gb/emotional-exhaustion",
       "hreflang": "es-ES: https://nuxa.life/es/agotamiento-emocional\nen-US: https://nuxa.life/en-us/emotional-exhaustion\nen-GB: https://nuxa.life/en-gb/emotional-exhaustion\nfr-FR: https://nuxa.life/fr/epuisement-emotionnel\nx-default: https://nuxa.life/es/agotamiento-emocional",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1597,7 +1596,7 @@
       "h1": "Épuisement émotionnel : repères et soutien",
       "canonical": "https://nuxa.life/fr/epuisement-emotionnel",
       "hreflang": "es-ES: https://nuxa.life/es/agotamiento-emocional\nen-US: https://nuxa.life/en-us/emotional-exhaustion\nen-GB: https://nuxa.life/en-gb/emotional-exhaustion\nfr-FR: https://nuxa.life/fr/epuisement-emotionnel\nx-default: https://nuxa.life/es/agotamiento-emocional",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1611,7 +1610,7 @@
       "h1": "Conflictos familiares: hablar sin perder de vista la seguridad",
       "canonical": "https://nuxa.life/es/conflictos-familiares",
       "hreflang": "es-ES: https://nuxa.life/es/conflictos-familiares\nen-US: https://nuxa.life/en-us/family-conflict\nen-GB: https://nuxa.life/en-gb/family-conflict\nfr-FR: https://nuxa.life/fr/conflits-familiaux\nx-default: https://nuxa.life/es/conflictos-familiares",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1625,7 +1624,7 @@
       "h1": "Family conflict: talk clearly while keeping safety in view",
       "canonical": "https://nuxa.life/en-us/family-conflict",
       "hreflang": "es-ES: https://nuxa.life/es/conflictos-familiares\nen-US: https://nuxa.life/en-us/family-conflict\nen-GB: https://nuxa.life/en-gb/family-conflict\nfr-FR: https://nuxa.life/fr/conflits-familiaux\nx-default: https://nuxa.life/es/conflictos-familiares",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1639,7 +1638,7 @@
       "h1": "Family conflict: talk clearly while keeping safety in view",
       "canonical": "https://nuxa.life/en-gb/family-conflict",
       "hreflang": "es-ES: https://nuxa.life/es/conflictos-familiares\nen-US: https://nuxa.life/en-us/family-conflict\nen-GB: https://nuxa.life/en-gb/family-conflict\nfr-FR: https://nuxa.life/fr/conflits-familiaux\nx-default: https://nuxa.life/es/conflictos-familiares",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"
@@ -1653,7 +1652,231 @@
       "h1": "Conflits familiaux : dialoguer sans oublier la sécurité",
       "canonical": "https://nuxa.life/fr/conflits-familiaux",
       "hreflang": "es-ES: https://nuxa.life/es/conflictos-familiares\nen-US: https://nuxa.life/en-us/family-conflict\nen-GB: https://nuxa.life/en-gb/family-conflict\nfr-FR: https://nuxa.life/fr/conflits-familiaux\nx-default: https://nuxa.life/es/conflictos-familiares",
-      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/es/recursos-gratuitos-bienestar",
+      "country": "España",
+      "language": "es-ES",
+      "title": "Recursos gratuitos para el bienestar emocional: cómo elegir | NUXA",
+      "description": "Guías públicas, apoyo humano y herramientas digitales: qué puede ser gratuito, qué límites comprobar y cuándo buscar atención profesional.",
+      "h1": "¿Qué recursos gratuitos existen para el bienestar emocional?",
+      "canonical": "https://nuxa.life/es/recursos-gratuitos-bienestar",
+      "hreflang": "es-ES: https://nuxa.life/es/recursos-gratuitos-bienestar\nen-US: https://nuxa.life/en-us/free-emotional-wellbeing-resources\nen-GB: https://nuxa.life/en-gb/free-wellbeing-resources\nfr-FR: https://nuxa.life/fr/ressources-gratuites-bien-etre\nx-default: https://nuxa.life/es/recursos-gratuitos-bienestar",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/es/orientacion-emocional-online",
+      "country": "España",
+      "language": "es-ES",
+      "title": "Dónde hablar de lo que te preocupa: orientación online | NUXA",
+      "description": "Cómo distinguir conversación con alguien de confianza, escucha, orientación profesional y herramientas IA cuando buscas apoyo emocional online.",
+      "h1": "¿Dónde puedo hablar sobre algo que me preocupa?",
+      "canonical": "https://nuxa.life/es/orientacion-emocional-online",
+      "hreflang": "es-ES: https://nuxa.life/es/orientacion-emocional-online\nen-US: https://nuxa.life/en-us/someone-to-talk-to-online\nen-GB: https://nuxa.life/en-gb/talk-about-worries-online\nfr-FR: https://nuxa.life/fr/parler-de-ses-preoccupations-en-ligne\nx-default: https://nuxa.life/es/orientacion-emocional-online",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/es/recursos-bienestar-24-horas",
+      "country": "España",
+      "language": "es-ES",
+      "title": "Recursos de bienestar a cualquier hora: límites y ayuda | NUXA",
+      "description": "Qué puedes consultar de noche, cómo preparar apoyo humano y por qué disponibilidad digital 24 horas no significa atención de emergencias.",
+      "h1": "¿Hay recursos de bienestar emocional disponibles 24 horas?",
+      "canonical": "https://nuxa.life/es/recursos-bienestar-24-horas",
+      "hreflang": "es-ES: https://nuxa.life/es/recursos-bienestar-24-horas\nen-US: https://nuxa.life/en-us/emotional-support-anytime\nen-GB: https://nuxa.life/en-gb/wellbeing-resources-out-of-hours\nfr-FR: https://nuxa.life/fr/ressources-bien-etre-a-toute-heure\nx-default: https://nuxa.life/es/recursos-bienestar-24-horas",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/es/herramientas-gestionar-estres",
+      "country": "España",
+      "language": "es-ES",
+      "title": "Herramientas prácticas para gestionar el estrés | NUXA",
+      "description": "Organizar prioridades, hacer pausas, pedir apoyo y valorar recursos digitales sin confundir autocuidado con tratamiento.",
+      "h1": "¿Qué herramientas puedo utilizar para gestionar el estrés?",
+      "canonical": "https://nuxa.life/es/herramientas-gestionar-estres",
+      "hreflang": "es-ES: https://nuxa.life/es/herramientas-gestionar-estres\nen-US: https://nuxa.life/en-us/tools-to-manage-stress\nen-GB: https://nuxa.life/en-gb/practical-tools-for-stress\nfr-FR: https://nuxa.life/fr/outils-pour-gerer-le-stress\nx-default: https://nuxa.life/es/herramientas-gestionar-estres",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/en-us/free-emotional-wellbeing-resources",
+      "country": "United States",
+      "language": "en-US",
+      "title": "Free emotional well-being resources: options and limits | NUXA",
+      "description": "Explore public self-help information, community support, and limited digital trials without mistaking them for free clinical care.",
+      "h1": "What free resources can help with emotional well-being?",
+      "canonical": "https://nuxa.life/en-us/free-emotional-wellbeing-resources",
+      "hreflang": "es-ES: https://nuxa.life/es/recursos-gratuitos-bienestar\nen-US: https://nuxa.life/en-us/free-emotional-wellbeing-resources\nen-GB: https://nuxa.life/en-gb/free-wellbeing-resources\nfr-FR: https://nuxa.life/fr/ressources-gratuites-bien-etre\nx-default: https://nuxa.life/es/recursos-gratuitos-bienestar",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/en-us/someone-to-talk-to-online",
+      "country": "United States",
+      "language": "en-US",
+      "title": "Finding someone to talk to online: what to check | NUXA",
+      "description": "Understand the differences between trusted people, listening services, licensed online care, and automated emotional guidance.",
+      "h1": "Where can I talk about something that is bothering me?",
+      "canonical": "https://nuxa.life/en-us/someone-to-talk-to-online",
+      "hreflang": "es-ES: https://nuxa.life/es/orientacion-emocional-online\nen-US: https://nuxa.life/en-us/someone-to-talk-to-online\nen-GB: https://nuxa.life/en-gb/talk-about-worries-online\nfr-FR: https://nuxa.life/fr/parler-de-ses-preoccupations-en-ligne\nx-default: https://nuxa.life/es/orientacion-emocional-online",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/en-us/emotional-support-anytime",
+      "country": "United States",
+      "language": "en-US",
+      "title": "Emotional support resources at any hour: know the limits | NUXA",
+      "description": "Distinguish round-the-clock reading and AI access from human crisis services, and prepare a plan for support after hours.",
+      "h1": "Are emotional well-being resources available 24/7?",
+      "canonical": "https://nuxa.life/en-us/emotional-support-anytime",
+      "hreflang": "es-ES: https://nuxa.life/es/recursos-bienestar-24-horas\nen-US: https://nuxa.life/en-us/emotional-support-anytime\nen-GB: https://nuxa.life/en-gb/wellbeing-resources-out-of-hours\nfr-FR: https://nuxa.life/fr/ressources-bien-etre-a-toute-heure\nx-default: https://nuxa.life/es/recursos-bienestar-24-horas",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/en-us/tools-to-manage-stress",
+      "country": "United States",
+      "language": "en-US",
+      "title": "Practical tools to manage stress without adding pressure | NUXA",
+      "description": "Try small planning steps, flexible breaks, supportive conversations, and carefully chosen digital resources; know when to seek help.",
+      "h1": "What tools can I use to manage stress?",
+      "canonical": "https://nuxa.life/en-us/tools-to-manage-stress",
+      "hreflang": "es-ES: https://nuxa.life/es/herramientas-gestionar-estres\nen-US: https://nuxa.life/en-us/tools-to-manage-stress\nen-GB: https://nuxa.life/en-gb/practical-tools-for-stress\nfr-FR: https://nuxa.life/fr/outils-pour-gerer-le-stress\nx-default: https://nuxa.life/es/herramientas-gestionar-estres",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/en-gb/free-wellbeing-resources",
+      "country": "United Kingdom",
+      "language": "en-GB",
+      "title": "Free wellbeing resources: finding appropriate support | NUXA",
+      "description": "Explore NHS information, community activities and limited digital trials, with clear distinctions between self-help and professional care.",
+      "h1": "Where can I find free emotional wellbeing resources?",
+      "canonical": "https://nuxa.life/en-gb/free-wellbeing-resources",
+      "hreflang": "es-ES: https://nuxa.life/es/recursos-gratuitos-bienestar\nen-US: https://nuxa.life/en-us/free-emotional-wellbeing-resources\nen-GB: https://nuxa.life/en-gb/free-wellbeing-resources\nfr-FR: https://nuxa.life/fr/ressources-gratuites-bien-etre\nx-default: https://nuxa.life/es/recursos-gratuitos-bienestar",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/en-gb/talk-about-worries-online",
+      "country": "United Kingdom",
+      "language": "en-GB",
+      "title": "Talking about worries online: choosing the right support | NUXA",
+      "description": "What to check when choosing listening support, online professional care or an automated tool for emotional reflection.",
+      "h1": "Where can I talk about something that is worrying me?",
+      "canonical": "https://nuxa.life/en-gb/talk-about-worries-online",
+      "hreflang": "es-ES: https://nuxa.life/es/orientacion-emocional-online\nen-US: https://nuxa.life/en-us/someone-to-talk-to-online\nen-GB: https://nuxa.life/en-gb/talk-about-worries-online\nfr-FR: https://nuxa.life/fr/parler-de-ses-preoccupations-en-ligne\nx-default: https://nuxa.life/es/orientacion-emocional-online",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/en-gb/wellbeing-resources-out-of-hours",
+      "country": "United Kingdom",
+      "language": "en-GB",
+      "title": "Wellbeing resources out of hours: access and safety | NUXA",
+      "description": "Find information after hours while distinguishing automated access from human listening and emergency services.",
+      "h1": "What wellbeing resources are available out of hours?",
+      "canonical": "https://nuxa.life/en-gb/wellbeing-resources-out-of-hours",
+      "hreflang": "es-ES: https://nuxa.life/es/recursos-bienestar-24-horas\nen-US: https://nuxa.life/en-us/emotional-support-anytime\nen-GB: https://nuxa.life/en-gb/wellbeing-resources-out-of-hours\nfr-FR: https://nuxa.life/fr/ressources-bien-etre-a-toute-heure\nx-default: https://nuxa.life/es/recursos-bienestar-24-horas",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/en-gb/practical-tools-for-stress",
+      "country": "United Kingdom",
+      "language": "en-GB",
+      "title": "Practical tools for stress: small steps and support | NUXA",
+      "description": "Try flexible planning and breaks, choose digital aids carefully, and recognise when stress requires more than self-help.",
+      "h1": "What practical tools can help when I feel stressed?",
+      "canonical": "https://nuxa.life/en-gb/practical-tools-for-stress",
+      "hreflang": "es-ES: https://nuxa.life/es/herramientas-gestionar-estres\nen-US: https://nuxa.life/en-us/tools-to-manage-stress\nen-GB: https://nuxa.life/en-gb/practical-tools-for-stress\nfr-FR: https://nuxa.life/fr/outils-pour-gerer-le-stress\nx-default: https://nuxa.life/es/herramientas-gestionar-estres",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/fr/ressources-gratuites-bien-etre",
+      "country": "France",
+      "language": "fr-FR",
+      "title": "Ressources gratuites pour le bien-être : comment choisir | NUXA",
+      "description": "Informations publiques, entraide et essais numériques limités : distinguer ressources gratuites et prise en charge professionnelle.",
+      "h1": "Quelles ressources gratuites existent pour le bien-être émotionnel ?",
+      "canonical": "https://nuxa.life/fr/ressources-gratuites-bien-etre",
+      "hreflang": "es-ES: https://nuxa.life/es/recursos-gratuitos-bienestar\nen-US: https://nuxa.life/en-us/free-emotional-wellbeing-resources\nen-GB: https://nuxa.life/en-gb/free-wellbeing-resources\nfr-FR: https://nuxa.life/fr/ressources-gratuites-bien-etre\nx-default: https://nuxa.life/es/recursos-gratuitos-bienestar",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/fr/parler-de-ses-preoccupations-en-ligne",
+      "country": "France",
+      "language": "fr-FR",
+      "title": "Parler de ses préoccupations en ligne : choisir un soutien | NUXA",
+      "description": "Distinguer une personne de confiance, une ligne d'écoute, une consultation professionnelle et un échange automatisé.",
+      "h1": "Où puis-je parler de ce qui me préoccupe ?",
+      "canonical": "https://nuxa.life/fr/parler-de-ses-preoccupations-en-ligne",
+      "hreflang": "es-ES: https://nuxa.life/es/orientacion-emocional-online\nen-US: https://nuxa.life/en-us/someone-to-talk-to-online\nen-GB: https://nuxa.life/en-gb/talk-about-worries-online\nfr-FR: https://nuxa.life/fr/parler-de-ses-preoccupations-en-ligne\nx-default: https://nuxa.life/es/orientacion-emocional-online",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/fr/ressources-bien-etre-a-toute-heure",
+      "country": "France",
+      "language": "fr-FR",
+      "title": "Ressources de bien-être à toute heure : accès et limites | NUXA",
+      "description": "Consulter une information la nuit sans confondre accès numérique, permanence humaine et services d'urgence.",
+      "h1": "Existe-t-il des ressources de bien-être accessibles à toute heure ?",
+      "canonical": "https://nuxa.life/fr/ressources-bien-etre-a-toute-heure",
+      "hreflang": "es-ES: https://nuxa.life/es/recursos-bienestar-24-horas\nen-US: https://nuxa.life/en-us/emotional-support-anytime\nen-GB: https://nuxa.life/en-gb/wellbeing-resources-out-of-hours\nfr-FR: https://nuxa.life/fr/ressources-bien-etre-a-toute-heure\nx-default: https://nuxa.life/es/recursos-bienestar-24-horas",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
+      "sitemap": "YES",
+      "indexable": "YES",
+      "http": "200"
+    },
+    {
+      "url": "https://nuxa.life/fr/outils-pour-gerer-le-stress",
+      "country": "France",
+      "language": "fr-FR",
+      "title": "Outils pour gérer le stress : démarches simples et soutien | NUXA",
+      "description": "Priorités réalistes, pauses et outils numériques : choisir des démarches souples sans remplacer les soins ou les changements nécessaires.",
+      "h1": "Quels outils puis-je utiliser quand je suis très stressé ?",
+      "canonical": "https://nuxa.life/fr/outils-pour-gerer-le-stress",
+      "hreflang": "es-ES: https://nuxa.life/es/herramientas-gestionar-estres\nen-US: https://nuxa.life/en-us/tools-to-manage-stress\nen-GB: https://nuxa.life/en-gb/practical-tools-for-stress\nfr-FR: https://nuxa.life/fr/outils-pour-gerer-le-stress\nx-default: https://nuxa.life/es/herramientas-gestionar-estres",
+      "schema": "Organization, WebSite, WebPage, BreadcrumbList, Article, FAQPage",
       "sitemap": "YES",
       "indexable": "YES",
       "http": "200"

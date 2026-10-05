@@ -88,6 +88,22 @@ export const internationalSeoPaths = [
   "/en-us/family-conflict",
   "/en-gb/family-conflict",
   "/fr/conflits-familiaux",
+  "/es/recursos-gratuitos-bienestar",
+  "/es/orientacion-emocional-online",
+  "/es/recursos-bienestar-24-horas",
+  "/es/herramientas-gestionar-estres",
+  "/en-us/free-emotional-wellbeing-resources",
+  "/en-us/someone-to-talk-to-online",
+  "/en-us/emotional-support-anytime",
+  "/en-us/tools-to-manage-stress",
+  "/en-gb/free-wellbeing-resources",
+  "/en-gb/talk-about-worries-online",
+  "/en-gb/wellbeing-resources-out-of-hours",
+  "/en-gb/practical-tools-for-stress",
+  "/fr/ressources-gratuites-bien-etre",
+  "/fr/parler-de-ses-preoccupations-en-ligne",
+  "/fr/ressources-bien-etre-a-toute-heure",
+  "/fr/outils-pour-gerer-le-stress",
 ];
 const pathSet = new Set(internationalSeoPaths.map(path => path.replace(/\/+$/, "")));
 export function isPublishedSeoPath(path: string): boolean {

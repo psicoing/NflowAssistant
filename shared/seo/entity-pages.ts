@@ -26,6 +26,6 @@ export const entityPages: InternationalPage[] = (
     market,
     path: draft.id === "home" ? `${marketPrefixes[market]}/` : `${marketPrefixes[market]}/${draft.id}`,
     publishedAt: CONTENT_DATE,
-    updatedAt: CONTENT_DATE,
+    updatedAt: "2026-10-05",
   })),
 );

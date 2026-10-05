@@ -17,6 +17,7 @@ import FloatingCTAButton from "@/components/FloatingCTAButton";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import MobileBottomNav from "@/components/layout/mobile-bottom-nav";
 import { isPublishedSeoPath } from "@shared/seo/paths";
+import { startDiscoveryTracking } from "@/lib/discovery-tracking";
 
 // Las páginas se descargan solo cuando se visita su ruta. Esto reduce mucho
 // el primer paquete que debe cargar el navegador/WebView.
@@ -188,6 +189,7 @@ function AuthenticatedRouter() {
 
 function AppContent() {
   const [location] = useLocation();
+  useEffect(() => startDiscoveryTracking(), []);
   const { isAuthenticated, isLoading } = useAuth();
   const standaloneTools = ["/test-bienestar", "/calculadora-burnout"];
   const isStandaloneTool = standaloneTools.includes(location);

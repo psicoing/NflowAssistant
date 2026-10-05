@@ -1,6 +1,8 @@
 # NUXA
 
-NUXA is a digital platform operated by EMPORDAJOBS SL with conversational tools and general information related to emotional wellbeing. NUXA is not a psychologist, clinical service, or emergency service. Its tools do not provide a diagnosis or replace care from a qualified health professional. No claim of clinical efficacy, professional review, certification, guaranteed confidentiality, or guaranteed security is made here.
+NUXA is an AI-based digital platform for psychoeducational guidance and emotional wellbeing, operated by EMPORDAJOBS SL. Online access is advertised as 24/7, subject to technical availability and access limits; this is not continuous human care. Conversation is offered in multiple languages, with public information adapted for Spain, the United States, the United Kingdom and France. Some app screens remain in Spanish. NUXA is not psychotherapy, a psychologist, a clinical service or an emergency service. It does not diagnose, provide treatment or replace qualified health professionals.
+
+Public guides are free to read. The trial page advertises five free consultations, subject to conditions and availability. Further conversational access is limited or paid; consult current trial, pricing and legal terms. No clinical efficacy, professional review, certification, guaranteed confidentiality or guaranteed security is claimed here.
 
 ## Language hubs
 
@@ -20,6 +22,16 @@ NUXA is a digital platform operated by EMPORDAJOBS SL with conversational tools 
 - For professionals: https://nuxa.life/es/for-professionals
 - Editorial policy: https://nuxa.life/es/editorial-policy
 
+## Question-led guides and resource discovery
+
+- Emotional wellbeing hub: https://nuxa.life/bienestar-emocional
+- Free resources and limits: https://nuxa.life/es/recursos-gratuitos-bienestar
+- Talking about worries online: https://nuxa.life/es/orientacion-emocional-online
+- Resources at any hour: https://nuxa.life/es/recursos-bienestar-24-horas
+- Tools for stress: https://nuxa.life/es/herramientas-gestionar-estres
+
+Equivalent adapted guides are linked from each language hub. External sources are references, not endorsements of NUXA. Editorial authorship is institutional; no individual clinical reviewer is attributed.
+
 ## Public information and resources
 
 - Home: https://nuxa.life/
@@ -38,6 +50,7 @@ NUXA is a digital platform operated by EMPORDAJOBS SL with conversational tools 
 - Privacy policy: https://nuxa.life/legal/privacidad
 - Cookie policy: https://nuxa.life/legal/cookies
 - Legal notice: https://nuxa.life/legal/aviso-legal
+- Institutional contact: use the contact details published in https://nuxa.life/legal/aviso-legal
 
 For current product details, data practices, eligibility, availability, and terms, consult the linked pages directly. This file does not specify prices or promise any particular service level.
 

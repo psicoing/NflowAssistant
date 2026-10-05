@@ -7,7 +7,10 @@ Se conserva la landing `/` y las rutas públicas anteriores. Los centros
 no significan que el proceso completo de registro, pago o chat esté localizado.
 No hay redirecciones automáticas por IP o idioma del navegador.
 
-El catálogo contiene 84 documentos: 36 institucionales y 48 guías temáticas.
+La fase 1 aportó 84 documentos: 36 institucionales y 48 guías temáticas.
+La fase 2 los conserva y añade 16 guías de descubrimiento: el catálogo actual
+contiene 100 documentos. Véanse `nuxa-fase2-auditoria.md` y
+`nuxa-fase2-medicion.md` para la auditoría incremental y el seguimiento.
 Diez guías españolas reutilizan sus URLs existentes; no son URLs nuevas.
 Las nuevas páginas usan el mismo texto en el HTML inicial y en el navegador.
 Los artículos revisados del blog mantienen sus URLs y fechas originales, con
@@ -84,7 +87,9 @@ La app ya emite eventos `registration_succeeded` y `checkout_started` mediante
 el adaptador de analítica, condicionados al consentimiento. El adaptador requiere
 un proveedor activo: la existencia del código no demuestra recopilación de
 datos ni atribución orgánica. No se añadieron rastreadores ni se modificó el
-registro. Para medir altas orgánicas, confirmar primero proveedor, acceso a
+registro. La fase 2 reutiliza este adaptador para `public_discovery_entry`;
+no añade una base de datos ni mide por sí sola altas atribuibles a una cita
+de IA. Para medir altas orgánicas, confirmar primero proveedor, acceso a
 informes, consentimiento y atribución de fuente/landing. Evitar incluir
 contenido del chat, datos clínicos o identificadores personales en eventos.
 

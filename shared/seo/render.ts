@@ -1,5 +1,6 @@
 import { getPageById, getRelatedPages, internationalPages, markets, SEO_SITE_URL } from "./index";
 import type { InternationalPage, Market } from "./types";
+import { entityDefinition } from "./entity-definition";
 
 const marketOrder: Market[] = ["es", "en-us", "en-gb", "fr"];
 
@@ -84,6 +85,23 @@ function navLink(id: string, market: Market, label: string, fallback: string): s
   return `<a href="${escapeHtml(pageLink(id, market, fallback))}">${escapeHtml(label)}</a>`;
 }
 
+function renderDefinition(page: InternationalPage): string {
+  const labels = copy[page.market];
+  const definition = entityDefinition[page.market];
+  const offerLinks = {
+    es: ["Prueba y condiciones", "Precios vigentes", "Recursos gratuitos"],
+    "en-us": ["Trial and conditions", "Current pricing", "Free resources"],
+    "en-gb": ["Trial and conditions", "Current prices", "Free resources"],
+    fr: ["Essai et conditions", "Tarifs actuels", "Ressources gratuites"],
+  }[page.market];
+  return `<section class="nuxa-section" aria-labelledby="nuxa-entity-definition">
+    <h2 id="nuxa-entity-definition">${escapeHtml(definition.heading)}</h2>
+    <p>${escapeHtml(definition.text)}</p><p>${escapeHtml(definition.offer)}</p>
+    <p><a href="/prueba-gratis">${escapeHtml(offerLinks[0])}</a> · <a href="/precios">${escapeHtml(offerLinks[1])}</a> · <a href="/recursos-gratuitos">${escapeHtml(offerLinks[2])}</a></p>
+    <p>${navLink("editorial-policy", page.market, labels.editorial, "/es/editorial-policy")} · ${navLink("privacy", page.market, labels.privacy, "/es/privacy")}</p>
+  </section>`;
+}
+
 function renderArticle(page: InternationalPage, labels: typeof copy[Market]): string {
   const sections = page.sections.map((section, index) => {
     const id = sectionId(section.heading, index);
@@ -104,7 +122,7 @@ function renderArticle(page: InternationalPage, labels: typeof copy[Market]): st
      ? `<nav class="nuxa-related" aria-labelledby="nuxa-related-heading"><h2 id="nuxa-related-heading">${escapeHtml(labels.related)}</h2><ul class="nuxa-related-list">${related.map(item => `<li><a href="${escapeHtml(safeInternalPath(item.path))}">${escapeHtml(item.h1)}</a></li>`).join("")}</ul></nav>` : "";
   return `<div class="nuxa-article-body">${sections}</div>
     <aside class="nuxa-boundary" aria-label="${escapeHtml(labels.safety)}"><strong>${escapeHtml(labels.safety)}.</strong> ${escapeHtml(labels.limits)} ${escapeHtml(labels.crisis)}</aside>
-    ${faqs}${sources}${relatedHtml}`;
+    ${faqs}${renderDefinition(page)}${sources}${relatedHtml}`;
 }
 
 function renderHub(page: InternationalPage): string {

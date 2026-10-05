@@ -1,5 +1,6 @@
 import express, { type Express } from "express";
 import fs from "fs";
+import { entityDefinition, nuxaHomeDescription } from "../shared/seo/entity-definition";
 import path from "path";
 import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
@@ -314,20 +315,21 @@ const routeMetadata: Record<string, RouteMeta> = {
   "/": {
     title: "NUXA - Tu asistente de bienestar emocional, disponible 24/7",
     description:
-      "NUXA es tu asistente de bienestar emocional, disponible 24/7. Acompañamiento continuo y confidencial para personas, familias y trabajadores.",
+      nuxaHomeDescription,
     canonical: `${SITE_URL}/`,
     jsonLd: [orgSchema, webSiteSchema],
     bodyHtml: `
       <main>
         <h1>NUXA — Tu asistente de bienestar emocional, disponible 24/7</h1>
-        <p>NUXA ofrece acompañamiento emocional continuo, confidencial y accesible para personas, familias y trabajadores.</p>
+        <p>${entityDefinition.es.text}</p>
+        <p>${entityDefinition.es.offer}</p>
         <h2>¿Por qué NUXA?</h2>
         <ul>
-          <li>Disponible 24/7, sin listas de espera</li>
-          <li>Totalmente confidencial y seguro</li>
+          <li>Acceso online anunciado 24/7, sujeto a disponibilidad técnica y límites de acceso</li>
+          <li>Consulta las condiciones de privacidad y seguridad publicadas</li>
           <li>Para individuos, familias y empresas</li>
           <li>Tecnología de IA avanzada con enfoque empático</li>
-          <li>Planes desde €2.99/mes · 5 consultas gratuitas sin registro</li>
+          <li>Prueba gratuita limitada, sujeta a condiciones y disponibilidad; consulta los precios vigentes</li>
         </ul>
         <p><a href="/prueba-gratis">Prueba NUXA gratis</a> · <a href="/precios">Ver planes y precios</a> · <a href="/ejemplos-chat">Ver ejemplos de conversación</a></p>
       </main>`,

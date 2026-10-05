@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { entityDefinition, nuxaHomeDescription } from "@shared/seo/entity-definition";
 import { Link } from "wouter";
 import { useLanguage } from "@/hooks/useLanguage";
 import { Sparkles, ArrowRight, Star, ExternalLink, X, Phone, ShieldCheck, Globe2, Clock3 } from "lucide-react";
@@ -434,10 +435,10 @@ export default function Home() {
     <div className="min-h-screen bg-nflow-dark">
       <SEOHead
         title="NUXA - Tu asistente de bienestar emocional, disponible 24/7"
-        description="Tu asistente de bienestar emocional disponible 24/7. Apoyo en español para personas, familias y trabajadores. ISO 45003. Confidencial y personalizado."
+        description={nuxaHomeDescription}
         keywords="asistente de bienestar emocional, NUXA, salud mental, apoyo emocional, ansiedad, depresión, ISO 45003, bienestar laboral, inteligencia artificial"
         ogTitle="NUXA - Tu asistente de bienestar emocional 24/7"
-        ogDescription="Apoyo emocional profesional con IA. Atención en español las 24 horas. Salud mental para personas, familias y trabajadores."
+        ogDescription={nuxaHomeDescription}
         ogUrl="https://nuxa.life"
         canonicalUrl="https://nuxa.life/"
       />
@@ -905,6 +906,19 @@ export default function Home() {
         <ContactoSection />
         
         <NuxaRobotAuroraSection />
+        <section className="max-w-5xl mx-auto px-6 py-12" aria-labelledby="home-nuxa-definition">
+          <h2 id="home-nuxa-definition" className="text-2xl font-bold mb-4">{entityDefinition.es.heading}</h2>
+          <p className="text-white/85 mb-4">{entityDefinition.es.text}</p>
+          <p className="text-white/85 mb-4">{entityDefinition.es.offer}</p>
+          <nav className="flex flex-wrap gap-4 text-emerald-300" aria-label="Información institucional">
+            <Link href="/es/about-nuxa">Sobre NUXA</Link>
+            <Link href="/bienestar-emocional">Guía de bienestar</Link>
+            <Link href="/es/safety">Seguridad y límites</Link>
+            <Link href="/es/editorial-policy">Política editorial</Link>
+            <Link href="/prueba-gratis">Prueba y condiciones</Link>
+            <Link href="/precios">Precios</Link>
+          </nav>
+        </section>
       </main>
       <Footer />
     </div>

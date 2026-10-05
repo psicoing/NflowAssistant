@@ -1,5 +1,6 @@
 import { CONTENT_DATE, type InternationalPage, type Market, type PageSection } from "../types";
 import { marketSources, topicSources } from "./sources";
+import { getQuestionFaqs } from "./questions";
 
 export type FAQ = InternationalPage["faqs"][number];
 export type Guide = {
@@ -21,11 +22,12 @@ export function buildTopicPages(guide: Guide): InternationalPage[] {
     ...guide.titles[market],
     summary: guide.summaries[market],
     sections: guide.sections[market],
-    faqs: guide.faqs[market],
+    faqs: [...guide.faqs[market], ...getQuestionFaqs(guide.id, market)],
     sources: [topicSources[guide.sourceKey][market], ...marketSources[market]],
-    relatedIds: guide.relatedIds,
+    relatedIds: [...guide.relatedIds, ...(guide.id === "wellbeing"
+      ? ["free-resources", "talk-online", "anytime-support", "stress-tools"] : [])],
     kind: "Article" as const,
     publishedAt: CONTENT_DATE,
-    updatedAt: CONTENT_DATE,
+    updatedAt: "2026-10-05",
   }));
 }

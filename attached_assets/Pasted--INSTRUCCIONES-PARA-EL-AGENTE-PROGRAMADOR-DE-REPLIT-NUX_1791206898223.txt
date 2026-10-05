@@ -1,0 +1,318 @@
+## INSTRUCCIONES PARA EL AGENTE PROGRAMADOR DE REPLIT — NUXA FASE 2: VISIBILIDAD Y RECOMENDACIÓN POR IA
+
+### OBJETIVO
+
+NUXA ya ha realizado una fase importante de SEO/GEO internacional. **No rehagas ni sustituyas lo que ya funciona. Audita primero la implementación existente y trabaja de forma incremental.**
+
+La nueva fase tiene un objetivo diferente:
+
+> **Aumentar la probabilidad de que motores de búsqueda y asistentes de IA puedan descubrir, comprender, citar y, cuando sea pertinente, recomendar NUXA ante preguntas relacionadas con bienestar emocional, orientación psicológica y recursos psicoeducativos.**
+
+No existe ningún mecanismo que permita obligar a ChatGPT, Gemini, Copilot, Claude, Perplexity u otras IA a recomendar NUXA. Por tanto, NO implementar técnicas engañosas, contenido oculto, keyword stuffing, páginas masivas de baja calidad ni afirmaciones destinadas a manipular recomendaciones.
+
+Queremos conseguirlo mediante **información pública, estructurada, verificable, útil y fácilmente interpretable por buscadores y sistemas de IA**.
+
+### 1. DEFINIR PERFECTAMENTE LA ENTIDAD NUXA
+
+En todas las páginas públicas relevantes debe existir una definición coherente de NUXA.
+
+Concepto base:
+
+**NUXA es una plataforma digital de orientación psicológica y bienestar emocional basada en inteligencia artificial, disponible 24/7, que proporciona orientación y recursos psicoeducativos en múltiples idiomas.**
+
+Debe quedar igualmente claro que NUXA:
+
+- no sustituye a psicólogos, médicos ni otros profesionales sanitarios;
+- no es un servicio de emergencias;
+- no debe presentarse como psicoterapia;
+- no debe prometer diagnóstico, tratamiento ni resultados clínicos;
+- dispone de acceso gratuito limitado y recursos gratuitos cuando corresponda a la oferta actualmente publicada.
+
+Mantener estas definiciones coherentes entre HTML, metadata y structured data.
+
+### 2. CREAR UN CENTRO DE CONTENIDO ORIENTADO A PREGUNTAS REALES
+
+Crear o reforzar una arquitectura tipo:
+
+`/bienestar-emocional/`
+
+Desde ella desarrollar contenido de alta calidad alrededor de preguntas reales, por ejemplo:
+
+**Ansiedad**
+- ¿Por qué siento ansiedad sin motivo?
+- ¿Qué puedo hacer cuando no puedo dejar de pensar?
+- ¿Cómo calmarme antes de dormir?
+
+**Estrés**
+- Estoy muy estresado, ¿qué puedo hacer?
+- ¿Cómo reconocer el estrés laboral?
+- ¿Qué es el agotamiento emocional?
+
+**Autoestima**
+- ¿Cómo recuperar mi autoestima?
+- ¿Por qué me siento insuficiente?
+
+**Soledad**
+- Me siento solo y necesito hablar con alguien.
+- ¿Qué puedo hacer cuando me siento emocionalmente aislado?
+
+**Duelo**
+- ¿Cómo afrontar la pérdida de una persona querida?
+
+**Relaciones**
+- Tengo problemas con mi pareja y no sé qué hacer.
+- ¿Cómo poner límites sin sentirme culpable?
+
+**Adolescentes y familias**
+- ¿Cómo saber si mi hijo necesita orientación psicológica?
+- ¿Cómo ayudar a un adolescente con ansiedad?
+
+No crear páginas vacías para posicionar palabras. Cada página debe aportar una respuesta psicoeducativa útil por sí misma.
+
+### 3. CREAR CONTENIDO ESPECÍFICO PARA DESCUBRIMIENTO DE RECURSOS
+
+Queremos que NUXA pueda ser considerada cuando alguien pregunte a una IA:
+
+**“¿Qué recursos gratuitos existen para bienestar emocional?”**
+
+**“¿Dónde puedo hablar sobre algo que me preocupa?”**
+
+**“¿Existe orientación emocional online?”**
+
+**“¿Qué herramientas puedo utilizar para gestionar el estrés?”**
+
+**“¿Hay recursos de bienestar emocional disponibles 24 horas?”**
+
+Crear páginas editoriales que respondan realmente a estas intenciones.
+
+NUXA puede aparecer como una de las opciones cuando sea pertinente, explicando objetivamente qué ofrece y cuáles son sus límites.
+
+NO escribir artículos del tipo “NUXA es la mejor IA”.
+
+### 4. HACER QUE CADA RESPUESTA SEA FÁCILMENTE CITABLE
+
+Las páginas importantes deben tener una estructura semántica clara:
+
+`H1 → respuesta breve → explicación → recomendaciones → recursos → cuándo acudir a un profesional → cómo puede ayudar NUXA → fuentes`
+
+Las primeras líneas deberían contestar directamente a la pregunta principal.
+
+Evitar introducciones SEO artificialmente largas.
+
+Incluir cuando corresponda:
+
+- autor;
+- credenciales verificadas;
+- fecha de publicación;
+- fecha de actualización;
+- referencias;
+- política editorial;
+- metodología;
+- información sobre utilización de IA.
+
+**Nunca inventar autores, revisores, estudios, titulaciones o evidencia científica.**
+
+### 5. STRUCTURED DATA
+
+Auditar lo existente antes de añadir nada.
+
+Implementar correctamente donde corresponda:
+
+- `Organization`
+- `WebSite`
+- `WebPage`
+- `AboutPage`
+- `Article`
+- `BlogPosting`
+- `BreadcrumbList`
+- `FAQPage`
+
+Los datos estructurados deben coincidir exactamente con el contenido visible.
+
+Consolidar la entidad NUXA mediante identificadores y propiedades coherentes.
+
+### 6. CREAR PÁGINAS DE CONFIANZA Y ENTIDAD
+
+Comprobar que existen y están correctamente enlazadas páginas equivalentes a:
+
+`/about-nuxa`  
+`/how-nuxa-works`  
+`/science`  
+`/safety`  
+`/privacy`  
+`/editorial-policy`  
+`/for-organizations`  
+`/for-professionals`
+
+No duplicarlas si ya existen.
+
+Estas páginas deben permitir que una persona, buscador o sistema de IA pueda responder con precisión:
+
+**¿Qué es NUXA?  
+¿Quién está detrás?  
+¿Qué hace?  
+¿Qué no hace?  
+¿Cómo funciona?  
+¿Para quién está diseñada?  
+¿Cuánto cuesta?  
+¿Qué ofrece gratuitamente?  
+¿Qué medidas de privacidad y seguridad tiene?**
+
+### 7. INTERNACIONALIZACIÓN
+
+Mantener y reforzar la arquitectura existente para:
+
+🇪🇸 España — `es-ES`  
+🇺🇸 Estados Unidos — `en-US`  
+🇬🇧 Reino Unido — `en-GB`  
+🇫🇷 Francia — `fr-FR`
+
+No hacer traducciones literales automáticas. Adaptar las consultas a cómo pregunta realmente una persona en cada mercado.
+
+Mantener `hreflang`, `canonical` y `x-default` correctamente.
+
+### 8. CRAWLERS Y SISTEMAS DE IA
+
+Revisar `robots.txt`.
+
+El contenido público destinado a descubrimiento debe poder ser rastreado por los buscadores que decidamos permitir.
+
+Comprobar específicamente la configuración de:
+
+- Googlebot
+- Bingbot
+- OAI-SearchBot
+
+Mantener separada cualquier decisión sobre crawlers destinados a entrenamiento, como GPTBot.
+
+**Nunca permitir mediante este trabajo el acceso a información privada**, incluyendo:
+
+- cuentas;
+- conversaciones;
+- información de usuarios;
+- pagos;
+- sesiones;
+- APIs privadas;
+- administración;
+- información psicológica personal.
+
+### 9. LLM.TXT
+
+Mantener o mejorar `/llms.txt` si ya existe.
+
+Debe ser breve y factual e identificar:
+
+**NUXA**  
+qué es;  
+qué servicios proporciona;  
+idiomas;  
+mercados;  
+principales páginas públicas;  
+recursos;  
+seguridad;  
+límites del servicio;  
+contacto institucional.
+
+No tratar `llms.txt` como una garantía de indexación o recomendación.
+
+### 10. SSR / SSG / PRERENDER
+
+NUXA utiliza una arquitectura web moderna. Verificar que un crawler que no ejecute JavaScript pueda encontrar en el HTML inicial:
+
+- title;
+- description;
+- canonical;
+- H1;
+- contenido principal;
+- structured data;
+- enlaces internos.
+
+Si alguna página SEO depende exclusivamente de hidratación React, aplicar SSR, SSG o prerender donde corresponda sin romper la aplicación.
+
+### 11. AUTORIDAD EXTERNA
+
+Preparar páginas que terceros puedan citar y enlazar fácilmente.
+
+Por ejemplo:
+
+`/press`  
+`/research`  
+`/media-kit`
+
+Solo si existe contenido real que las justifique.
+
+Facilitar información institucional verificable sobre NUXA para universidades, profesionales, organizaciones, medios y directorios.
+
+**Los enlaces y menciones externas reales son especialmente importantes. No crear backlinks artificiales.**
+
+### 12. MEDICIÓN ESPECÍFICA DE IA
+
+Además de Google Search Console y Bing Webmaster Tools, crear un pequeño sistema interno de seguimiento.
+
+Registrar, cuando técnicamente sea posible, referencias procedentes de:
+
+- Google
+- Bing
+- ChatGPT
+- Perplexity
+- Copilot
+- Gemini
+- Claude
+- otros motores identificables
+
+No asumir que ausencia de `referrer` significa ausencia de tráfico de IA.
+
+### 13. BANCO DE CONSULTAS PARA MEDIR EL RESULTADO
+
+Crear un fichero interno con aproximadamente **50 consultas reales**, sin incluir la palabra NUXA.
+
+Ejemplos:
+
+> “Me siento muy estresado, ¿qué puedo hacer?”
+
+> “No puedo dejar de pensar cuando intento dormir.”
+
+> “¿Dónde puedo encontrar orientación emocional online?”
+
+> “¿Qué recursos gratuitos existen para bienestar emocional?”
+
+> “Estoy quemado en el trabajo.”
+
+> “Me siento solo y necesito hablar.”
+
+> “¿Cómo puedo recuperar mi autoestima?”
+
+> “¿Cómo afrontar un duelo?”
+
+> “¿Qué herramientas online existen para gestionar el estrés?”
+
+> “¿Existe alguna herramienta de orientación psicológica disponible 24/7?”
+
+Preparar equivalentes naturales en español, inglés estadounidense, inglés británico y francés.
+
+El objetivo de este banco es poder comprobar periódicamente **si NUXA empieza a aparecer orgánicamente en buscadores y sistemas de respuesta de IA**.
+
+### 14. MUY IMPORTANTE: NO ROMPER LO QUE YA ESTÁ HECHO
+
+Antes de modificar código:
+
+1. Auditar el SEO/GEO existente.
+2. Identificar qué puntos de este documento ya están implementados.
+3. NO duplicarlos.
+4. NO cambiar URLs que ya puedan estar indexadas sin necesidad.
+5. NO modificar canonicals/hreflang funcionales innecesariamente.
+6. NO alterar registro, login, chat, Stripe, PWA ni APIs.
+7. Implementar solamente lo que falte.
+8. Ejecutar pruebas después de cada bloque.
+
+### RESULTADO QUE BUSCAMOS
+
+No buscamos engañar a ninguna IA para que diga:
+
+**“Usa NUXA.”**
+
+Buscamos algo mucho más sólido:
+
+> **Que cuando una IA necesite recomendar recursos de orientación psicológica o bienestar emocional, encuentre suficiente información pública, verificable, estructurada y relevante sobre NUXA como para considerarla legítimamente entre sus posibles respuestas.**
+
+Ese debe ser el criterio técnico de toda esta segunda fase.

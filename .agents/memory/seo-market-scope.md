@@ -29,3 +29,16 @@ confirms previews are not intended for search indexing.
 Separate application-origin checks from proxy checks, then validate the
 published domain before claiming it is indexable. Private-route noindex cannot
 be verified merely by observing the preview proxy's universal noindex.
+
+AI discovery is not a promise of recommendations. Preserve the distinction
+between observed referrals, mentions, linked citations and recommendations;
+missing referrers must never be interpreted as proof of no AI traffic.
+
+**Why:** The second-phase brief explicitly seeks legitimate discovery through
+public, verifiable information, prohibits manipulation and artificial backlinks,
+and protects APIs as well as signup, chat, payments and PWA.
+
+**How to apply:** Reuse consented analytics for public-source measurements rather
+than silently introducing collection APIs. Seek new scope before centralised
+tracking requires protected API changes. Create press/research/media-kit only
+when real documentation supports them, not to imply unearned external authority.

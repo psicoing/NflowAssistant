@@ -42,12 +42,40 @@ content_type = "text/html"
 id = "aE9WX_8SxlvvNXkyydaLT"
 uri = "file://reports/nuxa-seo-inventario.csv"
 type = "table"
-title = "NUXA · Inventario SEO por URL"
-description = "Tabla descargable para Excel: URL, país, idioma, title, description, H1, canonical, hreflang, schema, sitemap e indexabilidad."
+title = "NUXA · Inventario SEO actualizado"
+description = "Tabla por URL con metadatos, canonical, hreflang, schema, sitemap, indexabilidad y resultado HTTP."
 logical_id = "413241f4-366a-44b8-97b3-a3b6069d0e8e"
-content_hash = "sha256:f04a5442f3fe20f3260f507614054f37453de1bfcab1bfbba3d25f8ecce07870"
-size = 65199
-mtime_ms = 1790854904985
-storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/413241f4-366a-44b8-97b3-a3b6069d0e8e/7f665d04-79f8-4e63-9db4-71f0d0604b5c"
-storage_version_token = "1790854945520284"
+content_hash = "sha256:bf5fc663cb9b26bafe54f53a28f221009870b6211081f6a9e4bdde1731e0de68"
+size = 78244
+mtime_ms = 1791207817742
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/413241f4-366a-44b8-97b3-a3b6069d0e8e/289c821b-1c8f-403a-9ffe-25107173c87a"
+storage_version_token = "1791208036696504"
+content_type = "text/csv"
+
+[[outputs]]
+id = "SlAXZbCvMwpEHsBKUAW5H"
+uri = "file://reports/nuxa-fase2-entrega.html"
+type = "html"
+title = "NUXA · Informe de la fase 2"
+description = "Cambios incrementales, nuevas páginas, inventario por URL, validaciones, límites y pasos para activar la medición."
+logical_id = "805cfc81-c019-4857-bac0-24f8a51aa767"
+content_hash = "sha256:f491f446bb8b151b453527578054a59fa8a0616f9601fbd0e36cead60023c37e"
+size = 211673
+mtime_ms = 1791208011345
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/805cfc81-c019-4857-bac0-24f8a51aa767/bd6cf310-c439-4f2b-b271-a3ddae30a4be"
+storage_version_token = "1791208035213055"
+content_type = "text/html"
+
+[[outputs]]
+id = "cvQmKP3vo-PIruRCYGEMS"
+uri = "file://docs/nuxa-consultas-ia.csv"
+type = "table"
+title = "NUXA · Banco de 50 consultas"
+description = "50 preguntas sin la marca, con 200 formulaciones en español, inglés estadounidense, inglés británico y francés para evaluaciones periódicas."
+logical_id = "78245618-7721-4fda-8a3a-4191fd2f4076"
+content_hash = "sha256:9cfd90534698d0966805fe215265050eeed1dcdd901cb024cea1dd0dc501d467"
+size = 10960
+mtime_ms = 1791207455457
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/78245618-7721-4fda-8a3a-4191fd2f4076/d66bad18-5ced-4940-a45a-9f741e4cfd59"
+storage_version_token = "1791208036021665"
 content_type = "text/csv"
