@@ -14,3 +14,15 @@ el modelo ni la voz.
 **How to apply:** Antes de declarar la migración completa, comprobar activación
 real del servicio, modelo admitido y una generación real. No presentar código
 preparado o credenciales personales como conexión gestionada de Replit.
+
+Controlar el coste de NUXA por tokens de entrada y salida, no solo por mensajes
+o por el pagador. Centralizar el cobro en Replit no autoriza consumo ilimitado.
+
+**Why:** El usuario insiste en tener en cuenta los tokens porque, sin ese
+control, el gasto podría ser «ruinoso».
+
+**How to apply:** Antes de poner en servicio la nueva conexión, acordar un
+presupuesto y comprobar límites de contexto, salida y consumo. Contabilizar
+prompt, historial y evidencia en la entrada; no confundir caché documental con
+ahorro garantizado de tokens del modelo. Preservar seguridad y bibliografía
+pertinente al reducir contexto.

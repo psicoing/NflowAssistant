@@ -44,6 +44,24 @@ y los límites de tokens. No se modifica registro, pagos, voz o Twilio.
 
 ## Verificación
 
+### Condición de coste antes de activar el servicio
+
+El usuario exige controlar tokens para evitar un gasto excesivo. Acordar un
+presupuesto explícito para el chat y verificar límites y contabilización antes
+de activar generación real a través de Replit.
+
+No basta limitar mensajes o salida: la entrada incluye instrucciones, historial
+y evidencia. El límite de caracteres del clasificador no recorta necesariamente
+el mensaje enviado al modelo. Se necesita medir los tokens de la petición real
+y contabilizar el uso devuelto por el proveedor, no equiparar caracteres a tokens.
+La caché de recuperación ahorra trabajo local, pero no garantiza que el modelo
+deje de procesar o cobrar ese contexto.
+
+Los límites de salida actuales no constituyen un tope mensual de gasto. No
+declarar presupuestos aplicados ni ahorros obtenidos hasta que estén implementados
+y comprobados. No recortar reglas de seguridad para ahorrar tokens ni retirar
+la bibliografía pertinente sin evaluar su utilidad.
+
 ```sh
 # Solo configuración; no envía peticiones ni muestra claves:
 npx tsx scripts/check-chat-ai.ts
