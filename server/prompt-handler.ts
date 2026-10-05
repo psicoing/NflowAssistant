@@ -9,7 +9,8 @@ import OpenAI from "openai";
 import { selectRelevantExamples } from "./prompt-utils";
 import type { Message } from "@shared/schema";
 import { chatFailureMessage, hasSafetySignal, profileInstructions, sharedChatPolicy } from "./chat-policy";
-import { chatEvidenceInstructions, needsUrgentHumanSupport, resolveEvidenceCitations, retrieveChatEvidence } from "./chat-evidence";
+import { chatEvidenceInstructions, needsUrgentConversationSupport, resolveEvidenceCitations, retrieveChatEvidence } from "./chat-evidence";
+import { scientificAnalysisInstructions, scientificEvidenceEngine } from "./knowledge/scientific-engine";
 
 const openai = new OpenAI({ 
   apiKey: process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY || "default_key"
@@ -742,10 +743,12 @@ FORMATO JSON:
     const presentation = chatMode === 'brief'
       ? `${briefModePrompt}\n${cancerSection}\n${laborSection}\n${urgencySection}\n${resourcesSection}`
       : systemPrompt;
-    const sources = retrieveChatEvidence(userMessage, history);
+    const retrieval = scientificEvidenceEngine.retrieve(userMessage, history, userProfile);
+    const sources = retrieval.sources;
     const evidence = chatEvidenceInstructions(sources);
+    const conceptualAnalysis = scientificAnalysisInstructions(retrieval);
     const evidenceReminder = sources.length ? " Usa citas solo cuando aporten valor; no impongas libros ni secciones." : "";
-    return `${commonPolicy}\n\n${evidence}\n\nFORMATO DE PRESENTACIÓN:\n${presentation}\n\nRECORDATORIO: Las reglas comunes de identidad, personalización, seguridad y base documental de NUXA prevalecen sobre cualquier estructura o ejemplo anterior.${evidenceReminder}`;
+    return `${commonPolicy}\n\n${conceptualAnalysis}\n${evidence}\n\nFORMATO DE PRESENTACIÓN:\n${presentation}\n\nRECORDATORIO: Las reglas comunes de identidad, personalización, seguridad y base documental de NUXA prevalecen sobre cualquier estructura o ejemplo anterior.${evidenceReminder}`;
   } catch (error) {
     console.error("Error al construir instrucciones de NUXA:", error);
     throw error;
@@ -759,7 +762,7 @@ export async function generateChatResponse(userMessage: string, history: Message
       role: msg.isUser ? "user" as const : "assistant" as const,
       content: msg.content
     }));
-    const maxTokens = chatMode === 'brief' ? (needsUrgentHumanSupport(userMessage) ? 1000 : 500) : 4000;
+    const maxTokens = chatMode === 'brief' ? (needsUrgentConversationSupport(userMessage, history) ? 1000 : 500) : 4000;
 
     // Mantener una versión estable por defecto para que cambios futuros del alias
     // no alteren inesperadamente el comportamiento clínico-conversacional.
@@ -798,7 +801,7 @@ export async function generateChatResponse(userMessage: string, history: Message
     if (typeof parsedResponse.response !== "string" || !parsedResponse.response.trim()) {
       throw new Error("La respuesta de NUXA no contiene texto válido");
     }
-    const resolvedResponse = resolveEvidenceCitations(parsedResponse.response, retrieveChatEvidence(userMessage, history));
+    const resolvedResponse = resolveEvidenceCitations(parsedResponse.response, retrieveChatEvidence(userMessage, history, userProfile));
     if (!resolvedResponse) throw new Error("La respuesta de NUXA no contiene texto después de validar las referencias");
     return resolvedResponse;
 
@@ -817,7 +820,7 @@ export async function processUserMessage(userMessage: string, history: Message[]
     console.log(`Procesando mensaje de usuario: "${userMessage.substring(0, 30)}..." modo: ${chatMode}`);
     
     // FILTRO DE PROTECCIÓN: Detectar consultas fuera del ámbito de psicología
-    const safetySignal = needsUrgentHumanSupport(userMessage);
+    const safetySignal = needsUrgentConversationSupport(userMessage, history);
     if (!safetySignal && isOffTopicQuery(userMessage)) {
       console.log("Consulta detectada como fuera de ámbito - rechazando amablemente");
       return {
@@ -858,8 +861,8 @@ export async function processUserMessage(userMessage: string, history: Message[]
     
     // Proporcionar una respuesta de fallback estructurada
     return {
-      content: chatFailureMessage(userLanguage, needsUrgentHumanSupport(userMessage)),
-      supportType: needsUrgentHumanSupport(userMessage) ? "crisis" : "general",
+      content: chatFailureMessage(userLanguage, needsUrgentConversationSupport(userMessage, history)),
+      supportType: needsUrgentConversationSupport(userMessage, history) ? "crisis" : "general",
       tags: []
     };
   }

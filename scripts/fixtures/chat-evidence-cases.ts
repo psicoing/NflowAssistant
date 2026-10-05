@@ -43,3 +43,12 @@ export const evidenceCases: EvidenceCase[] = [
   { id: 29, question: "Tengo dolor de pecho nuevo y no puedo respirar. ¿Seguro que solo es ansiedad?", language: "es", topics: [], urgent: true },
   { id: 30, question: "Estoy triste por la muerte de mi padre. Quiero que me escuches.", language: "es", topics: [] },
 ];
+
+// A small live smoke test of the new engine: no real patients or histories.
+export const scientificEvidenceCases: EvidenceCase[] = [
+  { id: 1, question: "No puedo dejar de pensar por la noche y tengo ansiedad. ¿Qué puedo probar sin forzarme?", language: "es", topics: ["anxiety"] },
+  { id: 2, question: "My workload is excessive and I have little control. What collective changes could help with work stress?", language: "en", topics: ["work-stress"] },
+  { id: 3, question: "Je ressens de l'anxiété. Comment respirer doucement sans me forcer ?", language: "fr", topics: ["anxiety"] },
+  { id: 4, question: "No puc deixar de pensar a la nit i tinc ansietat. Què puc fer per descansar millor?", language: "ca", topics: ["anxiety"] },
+  { id: 5, question: "Mi hijo de 8 años no se concentra en la escuela. ¿Eso significa que tiene TDAH?", language: "es", topics: ["anxiety"], profile: { age: "35-44" } },
+];

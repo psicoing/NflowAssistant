@@ -5,7 +5,8 @@ export interface EvidenceSource {
   title: string;
   publisher: string;
   url: string;
-  kind: "clinical-guideline" | "institutional-information" | "self-help-guide" | "occupational-guidance";
+  kind: "clinical-guideline" | "institutional-information" | "self-help-guide" | "occupational-guidance"
+    | "systematic-review" | "research-article" | "academic-reference" | "professional-consensus" | "theoretical-literature";
   publicationDate: string | null;
   verifiedAt: string;
   topics: EvidenceTopic[];

@@ -1,80 +1,12 @@
-import { hasSafetySignal } from "./chat-policy";
-import { pilotSources, type EvidenceSource, type EvidenceTopic } from "./knowledge/pilot-sources";
+import type { EvidenceSource } from "./knowledge/pilot-sources";
+import type { ScientificDocument } from "./knowledge/scientific-types";
+import { scientificEvidenceEngine } from "./knowledge/scientific-engine";
+export { requiresUrgentHumanSupport as needsUrgentHumanSupport } from "./knowledge/scientific-query";
+export { hasRecentUrgentSupportNeed as needsUrgentConversationSupport } from "./knowledge/scientific-query";
 
 type HistoryItem = { content: string; isUser: boolean };
-const normalise = (text: string) => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-export function needsUrgentHumanSupport(text: string): boolean {
-  return hasSafetySignal(text) || /\b(dolor (?:de|en el) pecho|chest pain|douleur thoracique|douleur (?:a|dans) la poitrine|no puedo respirar|cannot breathe|can't breathe|je ne peux pas respirer)\b/.test(normalise(text));
-}
-
-function topicsFor(text: string): EvidenceTopic[] {
-  const anxiety = /\b(ansied\w*|ansios\w*|anxiet\w*|anxious|anxieux|angoiss\w*|panico|panic\w*|panique|preocup\w*|worr\w*|rumia\w*|ruminat\w*|insomn\w*|no puedo dormir|cant sleep|can't sleep|cannot sleep|estres|stress)\b/.test(text);
-  const work = /\b(trabaj\w*|laboral\w*|jefe|empresa|emplead\w*|work\w*|job|boss|employ\w*|travail\w*|boulot|patron|burnout|burn out|mobbing)\b/.test(text);
-  const strain = /\b(estres|stress\w*|ansied\w*|ansios\w*|anxiet\w*|anxious|angoiss\w*|agotad\w*|agotamiento|exhaust\w*|epuis\w*|presion|pressure|pression|(?:sobre)?carga\w*|workload|surcharg\w*|acos\w*|bully\w*|harce\w*|burnout|burn out|mobbing|riesgo\w*|risk\w*|risque\w*|psicosocial\w*|psychosocial\w*|salud mental|mental health|sante mentale|reincorpor\w*|return to work|retour au travail|turnos|shift\w*)\b/.test(text);
-  const topics: EvidenceTopic[] = [];
-  if (anxiety && (!work || /\b(ansied\w*|ansios\w*|anxiet\w*|anxious|angoiss\w*|panic\w*|panico|panique|insomn\w*|dormir|sleep)\b/.test(text))) topics.push("anxiety");
-  if (work && strain) topics.push("work-stress");
-  return topics;
-}
-
-const features: Record<string, RegExp> = {
-  panic: /\b(panic\w*|panico|panique)\b/,
-  worry: /\b(preocup\w*|worr\w*|rumia\w*|ruminat\w*)\b/,
-  breathing: /\b(respir\w*|breath\w*)\b/,
-  sleep: /\b(dorm\w*|suen\w*|insomn\w*|sleep\w*|sommeil)\b/,
-  children: /\b(menor|adolesc\w*|child\w*|teen\w*|enfant\w*)\b/,
-  help: /\b(profesional|professional|professionnel|ayuda|help|aide|interfiere)\b/,
-  treatment: /\b(tratamiento|terapia|treatment|therapy|therapie|medic\w*|antidepres\w*)\b/,
-  evidence: /\b(fuente\w*|bibliograf\w*|evidenc\w*|source\w*|reference\w*|prueba\w*|porcentaje\w*)\b/,
-  practical: /\b(tecnica\w*|ejercicio\w*|exercise\w*|exercice\w*|practic\w*|pratiqu\w*|rapida)\b/,
-  workload: /\b(carga\w*|sobrecarg\w*|plazos|pressure|presion|workload|deadline\w*|surcharg\w*)\b/,
-  control: /\b(control|autonomia|autonomy|autonomie)\b/,
-  support: /\b(apoyo|support|soutien|solo|alone|seul)\b/,
-  bullying: /\b(acos\w*|humill\w*|bully\w*|mobbing|harce\w*|menaz\w*)\b/,
-  burnout: /\b(burnout|burn out|agotamiento|epuisement)\b/,
-  prevention: /\b(preven\w*|riesgo\w*|risk\w*|risque\w*|organiz\w*|organis\w*|psicosocial\w*|psychosocial\w*)\b/,
-  manager: /\b(dirijo|responsable|manager|equipo|team|equipe|rrhh)\b/,
-  return: /\b(reincorpor\w*|return|retour)\b/,
-  shifts: /\b(turnos|shift\w*|horaires)\b/,
-};
-
-export function retrieveChatEvidence(message: string, history: readonly HistoryItem[] = []): EvidenceSource[] {
-  // No bibliography before urgent support, including signals in the recent context.
-  const recent = history.slice(-6);
-  if (needsUrgentHumanSupport(message) || recent.some(item => item.isUser && needsUrgentHumanSupport(item.content))) return [];
-  let query = normalise(message.slice(0, 4000));
-  let topics = topicsFor(query);
-  // Use history only for a short conversational follow-up, not a different subject.
-  if (!topics.length && query.length < 160 && /\b(si|yes|oui|tecnica|fuentes?|sources?|referencias?|mas|more|davantage|profundiza|de donde|where|d'ou|que hago|what can i do)\b/.test(query)) {
-    const lastUser = [...recent].reverse().find(item => item.isUser && topicsFor(normalise(item.content)).length);
-    if (lastUser) {
-      query += ` ${normalise(lastUser.content.slice(0, 1200))}`;
-      topics = topicsFor(query);
-    }
-  }
-  if (!topics.length) return [];
-  const matchedTags = Object.entries(features).filter(([, pattern]) => pattern.test(query)).map(([tag]) => tag);
-  const ranked = pilotSources.filter(source => source.topics.some(topic => topics.includes(topic)))
-    .map(source => ({
-      source,
-      score: source.topics.filter(topic => topics.includes(topic)).length
-        + source.tags.filter(tag => matchedTags.includes(tag)).length * 4
-        + (source.tags.includes("overview") ? 1 : 0),
-    }))
-    .sort((a, b) => b.score - a.score || a.source.id.localeCompare(b.source.id));
-  const chosen = [ranked[0].source];
-  for (const topic of topics) {
-    if (!chosen.some(source => source.topics.includes(topic))) {
-      const match = ranked.find(item => item.source.topics.includes(topic));
-      if (match) chosen.push(match.source);
-    }
-  }
-  for (const { source } of ranked) {
-    if (chosen.length >= 3) break;
-    if (!chosen.some(item => item.id === source.id)) chosen.push(source);
-  }
-  return chosen;
+export function retrieveChatEvidence(message: string, history: readonly HistoryItem[] = [], profile?: Record<string, unknown>): ScientificDocument[] {
+  return scientificEvidenceEngine.retrieve(message, history, profile).sources;
 }
 
 export function chatEvidenceInstructions(sources: readonly EvidenceSource[]): string {
@@ -99,6 +31,19 @@ ${sources.map(source => JSON.stringify({
     id: source.id, title: source.title, publisher: source.publisher, type: source.kind,
     publicationDate: source.publicationDate ?? "no establecida",
     checked: source.verifiedAt, summary: source.summary, limits: source.limits,
+    ...(source as ScientificDocument).evidenceLevel ? {
+      evidenceLevel: (source as ScientificDocument).evidenceLevel,
+      population: (source as ScientificDocument).population,
+      sourceLanguage: (source as ScientificDocument).language,
+      qualityAppraisal: (source as ScientificDocument).appraisalNote ?? "no evaluada",
+      primaryConcepts: (source as ScientificDocument).primaryConcepts,
+      relatedConcepts: (source as ScientificDocument).secondaryConcepts,
+      domains: (source as ScientificDocument).domains,
+      authors: (source as ScientificDocument).authors,
+      year: (source as ScientificDocument).year,
+      journal: (source as ScientificDocument).journal,
+      doi: (source as ScientificDocument).doi,
+    } : {},
   })).join("\n")}
 FIN DE LA BASE DOCUMENTAL. Responde en el idioma solicitado, incluido el texto explicativo alrededor de las referencias.`;
 }

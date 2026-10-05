@@ -47,7 +47,7 @@ try {
   });
   const { buildChatPrompt, processUserMessage } = await import(pathToFileURL(outfile).href);
   for (const item of evidenceCases) {
-    const sources = retrieveChatEvidence(item.question, item.history);
+    const sources = retrieveChatEvidence(item.question, item.history, item.profile);
     assert(sources.length <= 3, `Bounded context: ${item.id}`);
     for (const topic of item.topics) assert(sources.some(source => source.topics.includes(topic)), `Topic ${topic}: ${item.id}`);
     if (!item.topics.length) assert.equal(sources.length, 0, `No unrelated/urgent citations: ${item.id}`);
