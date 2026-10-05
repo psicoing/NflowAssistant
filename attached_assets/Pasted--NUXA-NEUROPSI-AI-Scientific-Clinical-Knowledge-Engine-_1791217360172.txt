@@ -1,0 +1,488 @@
+# NUXA — NEUROPSI-AI
+## Scientific & Clinical Knowledge Engine Upgrade
+
+We want to substantially improve the AI chat engine used by NUXA.
+
+The objective is NOT simply to add links to psychology journals.
+
+The objective is to evolve NEUROPSI-AI into a structured, evidence-informed psychological and neuropsychological reasoning system capable of retrieving, ranking and using high-quality scientific information when answering users.
+
+NUXA should continue to communicate in accessible, empathetic language, but its internal reasoning should increasingly be supported by professional psychological, neuropsychological, neurological and psychosocial literature.
+
+## 1. CREATE A NEW SCIENTIFIC KNOWLEDGE LAYER
+
+Create a dedicated knowledge layer:
+
+**NEUROPSI Scientific Knowledge Base**
+
+It should complement the existing NEUROPSI-AI system rather than replace it.
+
+Organise sources into domains such as:
+
+- Clinical Psychology
+- Psychopathology
+- Neuropsychology
+- Neurology
+- Child and Adolescent Psychology
+- Educational Psychology
+- Social Psychology
+- Work and Organisational Psychology
+- Legal and Forensic Psychology
+- Psychotherapy
+- Psychoanalysis
+- Addiction and Substance Use
+- Social Intervention
+- Mental Health
+- Cognitive Sciences
+
+## 2. PRIORITY SCIENTIFIC SOURCES
+
+Add the following sources to the catalogue of trusted professional resources whenever their content is legally and technically accessible:
+
+ALOMA — Revista de Psicología, Ciencias de la Educación y del Deporte  
+Universitat Ramon Llull
+
+Anuario de Psicología  
+Universitat de Barcelona
+
+Anuario de Psicología Jurídica  
+Colegio Oficial de la Psicología de Madrid
+
+Apuntes de Psicología  
+Colegio Oficial de Psicología de Andalucía Occidental
+
+Clínica y Salud  
+Colegio Oficial de la Psicología de Madrid
+
+Intervención Psicosocial  
+Colegio Oficial de la Psicología de Madrid
+
+Papeles del Psicólogo  
+Consejo General de la Psicología de España
+
+Psicología Educativa  
+Colegio Oficial de la Psicología de Madrid
+
+Revista de Neurología
+
+Revista de Psicología del Trabajo y de las Organizaciones
+
+Revista de Psicopatología y Salud Mental del Niño y del Adolescente
+
+Revista Española de Drogodependencias
+
+Revista de Psicoterapia
+
+RTS — Revista de Trabajo Social
+
+Revista Catalana de Psicoanàlisi
+
+Intercanvis — Papeles de Psicoanálisis
+
+Freudiana
+
+Other professional sources supplied by NUXA administrators should be capable of being incorporated through the same system.
+
+## 3. DATABASE CONNECTORS / CATALOGUE
+
+Prepare the architecture so NEUROPSI-AI can also use indexed bibliographic information from:
+
+### PSICODOC
+
+An important Spanish-language psychology bibliographic database.
+
+It should be considered a high-value resource for locating Spanish and Latin-American psychological research.
+
+### PROQUEST ONE PSYCHOLOGY
+
+Prepare a connector/interface architecture for ProQuest One Psychology.
+
+Potential resources include:
+
+- scientific research
+- journal articles
+- dissertations
+- psychology books
+- counselling transcripts
+- educational videos
+- historical psychology archives
+
+IMPORTANT:
+
+Do NOT scrape, bypass authentication, copy paywalled material or circumvent institutional access restrictions.
+
+NUXA must only retrieve or process content that is legally accessible through public access, licensed APIs, authorised institutional access or material explicitly provided to NUXA.
+
+Metadata can still be used when legally accessible.
+
+## 4. DO NOT TRAIN THE MODEL DIRECTLY ON EVERYTHING
+
+Do not simply insert thousands of articles into the system prompt.
+
+Implement a retrieval architecture.
+
+Preferred pipeline:
+
+USER MESSAGE
+
+↓
+
+NUXA conversational analysis
+
+↓
+
+NEUROPSI-AI clinical concept extraction
+
+↓
+
+Query classification
+
+↓
+
+Scientific retrieval when relevant
+
+↓
+
+Evidence ranking
+
+↓
+
+Relevant-document selection
+
+↓
+
+Context construction
+
+↓
+
+LLM reasoning
+
+↓
+
+Safety / clinical validation layer
+
+↓
+
+USER RESPONSE
+
+The scientific system should therefore work primarily as a RAG-style knowledge system rather than enormously increasing the permanent prompt.
+
+## 5. QUERY CLASSIFICATION
+
+Before retrieving literature, determine what the user is asking about.
+
+Examples:
+
+"I can't stop thinking about things at night."
+
+Possible concepts:
+
+- rumination
+- anxiety
+- insomnia
+- cognitive arousal
+- stress
+
+The system should internally transform the conversational message into appropriate professional concepts before searching the scientific knowledge base.
+
+Another example:
+
+"My 8-year-old cannot concentrate at school."
+
+Potential concepts:
+
+- attention
+- ADHD
+- executive functions
+- learning disorders
+- anxiety
+- sleep
+- developmental factors
+- educational environment
+
+The AI must NOT immediately conclude that the child has ADHD.
+
+It should reason through possible explanations and ask useful questions.
+
+## 6. EVIDENCE HIERARCHY
+
+NEUROPSI-AI must distinguish between levels and types of evidence.
+
+Suggested ranking:
+
+1. Clinical guidelines and authoritative health guidance
+2. Systematic reviews / meta-analyses
+3. High-quality peer-reviewed research
+4. Professional psychological journals
+5. Academic books and reference works
+6. Professional consensus documents
+7. Other academically relevant literature
+
+The ranking should also consider:
+
+- publication date
+- methodological quality
+- relevance to the question
+- population studied
+- sample size when available
+- replication
+- consistency with other evidence
+
+Do NOT treat every published article as equally reliable.
+
+## 7. MULTIPLE PSYCHOLOGICAL PERSPECTIVES
+
+NUXA should not become ideologically tied to one psychological school.
+
+When appropriate, NEUROPSI-AI may consider:
+
+- cognitive-behavioural approaches
+- behavioural psychology
+- neuropsychology
+- cognitive neuroscience
+- systemic approaches
+- developmental psychology
+- humanistic approaches
+- psychodynamic approaches
+- psychoanalytic literature
+- social psychology
+
+However, distinguish clearly between empirical evidence, theoretical interpretation and clinical hypothesis.
+
+## 8. NEUROPSYCHOLOGICAL REASONING
+
+Strengthen NEUROPSI-AI's ability to recognise concepts related to:
+
+- attention
+- memory
+- executive functions
+- language
+- processing speed
+- visuospatial functions
+- social cognition
+- emotional regulation
+- cognitive development
+- ageing
+- acquired brain injury
+- neurodevelopment
+
+The system must distinguish between:
+
+**symptom → hypothesis → assessment → diagnosis**
+
+A symptom is not a diagnosis.
+
+## 9. CLINICAL DIFFERENTIAL REASONING
+
+When relevant, NEUROPSI-AI should internally consider alternative explanations.
+
+For example:
+
+Difficulty concentrating could potentially be associated with:
+
+ADHD  
+anxiety  
+depression  
+sleep deprivation  
+stress  
+medication  
+substance use  
+medical conditions  
+environmental factors  
+learning difficulties
+
+The user should receive a clear explanation rather than an enormous differential diagnosis.
+
+Internal reasoning can be complex.
+
+External communication should remain simple.
+
+## 10. RESPONSE STYLE
+
+Do NOT turn NUXA into an academic search engine.
+
+The user should not normally receive a response full of citations and technical terminology.
+
+NUXA should translate scientific knowledge into understandable language.
+
+For example:
+
+Instead of:
+
+"Persistent cognitive arousal and maladaptive repetitive negative thinking are associated with sleep-onset latency."
+
+NUXA could say:
+
+"What you're describing can happen when the brain remains mentally activated even though the body is tired. Worry and repetitive thoughts can make it difficult to switch into sleep."
+
+Scientific sophistication should happen primarily **behind the conversation**.
+
+## 11. OPTIONAL "SCIENTIFIC BASIS" FEATURE
+
+Add an optional UI element beneath appropriate answers:
+
+**📚 Scientific basis**
+
+When opened, it could display:
+
+- relevant scientific concept
+- 2–5 selected references
+- publication
+- year
+- DOI or source URL when available
+- short explanation of why the source is relevant
+
+This should NOT overwhelm normal users.
+
+## 12. SOURCE TRACEABILITY
+
+Every scientific item stored in the knowledge system should contain metadata whenever available:
+
+title  
+authors  
+year  
+journal  
+DOI  
+URL  
+language  
+document type  
+psychological domain  
+population  
+keywords  
+evidence level  
+access status  
+date indexed
+
+This will allow NEUROPSI-AI to know **where its scientific information came from**.
+
+## 13. LANGUAGE
+
+Scientific retrieval should be multilingual.
+
+At minimum:
+
+Spanish  
+English  
+French  
+Catalan
+
+A Spanish question may retrieve an English scientific article.
+
+The evidence should then be synthesised naturally in the user's language.
+
+## 14. SAFETY
+
+Scientific retrieval must never override NUXA's existing safety mechanisms.
+
+Maintain specific handling for:
+
+- suicidal ideation
+- self-harm
+- violence
+- abuse
+- medical emergencies
+- severe psychiatric symptoms
+- minors
+- medication questions
+
+NUXA should never present itself as replacing professional diagnosis or emergency services.
+
+## 15. PERFORMANCE
+
+Scientific retrieval should NOT run unnecessarily for every conversational turn.
+
+Use it when the question benefits from scientific support.
+
+Simple conversational interactions can remain fast.
+
+Suggested logic:
+
+general conversation → normal NUXA response
+
+psychological question → NEUROPSI reasoning
+
+complex clinical question → NEUROPSI + scientific retrieval
+
+high-risk situation → safety protocol first + NEUROPSI support
+
+## 16. CACHE COMMON KNOWLEDGE
+
+Create a curated evidence cache for frequent NUXA topics:
+
+anxiety  
+stress  
+depression  
+sleep  
+rumination  
+panic  
+grief  
+loneliness  
+work stress  
+burnout  
+ADHD  
+autism  
+relationships  
+emotional regulation  
+self-esteem  
+addictions  
+child development
+
+This will reduce latency and API/database costs.
+
+## 17. ADMINISTRATION PANEL
+
+Create an internal:
+
+**NEUROPSI Knowledge Manager**
+
+It should allow administrators to:
+
+Add source  
+Disable source  
+Add journal  
+Add DOI  
+Add article  
+Upload authorised PDF  
+Assign domain  
+Assign evidence level  
+Re-index content  
+View retrieval statistics  
+View most-used sources  
+Detect broken URLs  
+Remove obsolete evidence
+
+## 18. IMPORTANT COPYRIGHT RULE
+
+NUXA must NEVER assume that being able to see a bibliographic resource means that its full text can legally be copied or indexed.
+
+For restricted resources such as institutional databases or professional-member libraries:
+
+Use only authorised access.
+
+Never bypass login systems.
+
+Never circumvent paywalls.
+
+Never mass-download copyrighted publications without appropriate rights.
+
+Public metadata, abstracts and open-access documents can be treated separately according to their licences and terms.
+
+## 19. FINAL PRODUCT OBJECTIVE
+
+The final architecture should progressively transform:
+
+**NUXA Chat**
+
+into:
+
+**NUXA + NEUROPSI-AI + Scientific Evidence Engine**
+
+The ideal experience is:
+
+A person writes naturally about what is happening to them.
+
+NUXA understands the language.
+
+NEUROPSI identifies the relevant psychological and neuropsychological concepts.
+
+The scientific engine
