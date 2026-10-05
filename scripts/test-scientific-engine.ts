@@ -9,7 +9,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { installOfflineManagedChatConfiguration } from "./fixtures/chat-provider-offline";
+import { installOfflineManagedChatConfiguration, offlineChatBudgetPlugin } from "./fixtures/chat-provider-offline";
 
 installOfflineManagedChatConfiguration();
 
@@ -109,7 +109,7 @@ try {
   const outfile = path.join(dir, "handler.mjs");
   await build({
     entryPoints: ["server/prompt-handler.ts"], outfile, bundle: true, platform: "node", format: "esm",
-    plugins: [{
+    plugins: [offlineChatBudgetPlugin, {
       name: "offline-scientific-provider",
       setup(builder) {
         builder.onResolve({ filter: /^openai$/ }, () => ({ path: "openai", namespace: "offline" }));

@@ -1,4 +1,24 @@
 /** Shared identity and safety rules. Presentation modes must never override them. */
+export function chatCostLimitMessage(language: string, safety: boolean, code: string): string {
+  const lang = language.toLowerCase().split(/[-_]/)[0];
+  const tooLong = code === "NUXA_CHAT_INPUT_TOO_LARGE";
+  const messages: Record<string, [string, string]> = {
+    es: ["Las respuestas de IA de NUXA han alcanzado su límite mensual de consumo. Tus conversaciones y recursos siguen disponibles.", "Tu mensaje o contexto es demasiado largo. Divídelo en mensajes más cortos; no hemos generado una respuesta de IA."],
+    en: ["NUXA's AI responses have reached their monthly usage limit. Your conversations and resources remain available.", "Your message or context is too long. Please split it into shorter messages; no AI response was generated."],
+    fr: ["Les réponses IA de NUXA ont atteint leur limite mensuelle. Vos conversations et ressources restent disponibles.", "Votre message ou contexte est trop long. Divisez-le en messages plus courts ; aucune réponse IA n’a été générée."],
+    de: ["Die KI-Antworten von NUXA haben ihr monatliches Nutzungslimit erreicht. Deine Gespräche und Ressourcen bleiben verfügbar.", "Deine Nachricht oder der Kontext ist zu lang. Teile sie in kürzere Nachrichten auf; keine KI-Antwort wurde erzeugt."],
+    it: ["Le risposte IA di NUXA hanno raggiunto il limite mensile. Conversazioni e risorse restano disponibili.", "Il messaggio o il contesto è troppo lungo. Dividilo in messaggi più brevi; non è stata generata una risposta IA."],
+    pt: ["As respostas de IA de NUXA atingiram o limite mensal. As conversas e os recursos continuam disponíveis.", "A mensagem ou o contexto é demasiado longo. Divide-o em mensagens mais curtas; não foi gerada uma resposta de IA."],
+    ca: ["Les respostes d’IA de NUXA han arribat al límit mensual de consum. Les converses i els recursos continuen disponibles.", "El missatge o context és massa llarg. Divideix-lo en missatges més curts; no s’ha generat cap resposta d’IA."],
+    eu: ["NUXAren AA erantzunek hileko erabilera-muga bete dute. Elkarrizketak eta baliabideak erabilgarri daude.", "Mezua edo testuingurua luzeegia da. Banatu mezu laburragoetan; ez da AA erantzunik sortu."],
+    gl: ["As respostas de IA de NUXA alcanzaron o límite mensual. As conversas e os recursos seguen dispoñibles.", "A mensaxe ou o contexto é demasiado longo. Divídeo en mensaxes máis curtas; non se xerou unha resposta de IA."],
+  };
+  const notice = (messages[lang] || messages.es)[tooLong ? 1 : 0];
+  // Keep emergency guidance available even when no generation is allowed.
+  const urgent = safety ? chatFailureMessage(language, true).replace(/^[^.!?]+[.!?]\s*/, "") : "";
+  return urgent ? `${notice}\n\n${urgent}` : notice;
+}
+
 export function hasSafetySignal(text: string): boolean {
   const value = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   return /\b(suicid\w*|autoles\w*|matarme|matarse|quitarme la vida|hacerme dano|hacerse dano|no quiero vivir|quiero desaparecer|terminar con todo|self[- ]harm|kill myself|hurt myself|end my life|don't want to live|do not want to live|harm myself|me tuer|me faire du mal|en finir|ne veux plus vivre|selbstmord|mich umbringen|nicht mehr leben|uccidermi|nao quero viver)\b/.test(value);

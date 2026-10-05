@@ -1,19 +1,22 @@
 ---
-name: Written-chat billing choice
-description: The user chose Replit credits for written chat, with voice kept separate and no automatic return to personal OpenAI billing.
+name: Dual written-chat billing preference
+description: The user proposes OpenAI API credit first and Replit as a token-budgeted backup; voice and the approved spending ceiling remain separate.
 ---
 
-El usuario eligió «Cambiar a créditos de Replit» para el chat escrito.
-La voz queda fuera del cambio. No recurrir automáticamente a facturación
-directa de OpenAI si falla o falta la conexión gestionada.
+El usuario ahora plantea un sistema dual para el chat escrito: OpenAI primero
+si hay saldo utilizable de API, y Replit como respaldo si no hay saldo, siempre
+dentro de un consumo de tokens controlado. La voz queda fuera del cambio.
 
-**Why:** Quiere centralizar el cobro del chat en Replit; cambiar el pagador
-sin avisar contradice esa elección. El cambio de conexión no autoriza cambiar
-el modelo ni la voz.
+**Why:** El usuario quiere aprovechar el saldo de OpenAI y reservar Replit para
+cuando no haya saldo. Esta propuesta sustituye su preferencia anterior por
+Replit como único pagador. No autoriza cambiar el modelo ni la voz.
 
-**How to apply:** Antes de declarar la migración completa, comprobar activación
-real del servicio, modelo admitido y una generación real. No presentar código
-preparado o credenciales personales como conexión gestionada de Replit.
+**How to apply:** Distinguir saldo de la API de suscripción a ChatGPT, cuya
+facturación es independiente. Confirmar el reparto del presupuesto antes de
+ampliar gasto. El respaldo no debe activarse por cualquier HTTP 429, timeout
+o fallo de red: podrían ser límites de velocidad o solicitudes ya cobradas.
+No llamar a ambos proveedores en paralelo. Comprobar una generación real y
+el pagador antes de declarar el sistema operativo.
 
 Controlar el coste de NUXA por tokens de entrada y salida, no solo por mensajes
 o por el pagador. Centralizar el cobro en Replit no autoriza consumo ilimitado.
@@ -26,3 +29,16 @@ presupuesto y comprobar límites de contexto, salida y consumo. Contabilizar
 prompt, historial y evidencia en la entrada; no confundir caché documental con
 ahorro garantizado de tokens del modelo. Preservar seguridad y bibliografía
 pertinente al reducir contexto.
+
+El usuario autorizó **20 USD mensuales** para el consumo de la IA del chat
+escrito de NUXA, excluyendo suscripción a Replit y voz. Es un presupuesto
+global del chat, no 20 USD por cliente. No aumentarlo sin nueva autorización.
+
+**Why:** Es la cantidad que el usuario dio al definir el máximo mensual para
+evitar un gasto ruinoso por tokens.
+
+**How to apply:** Aplicar reserva duradera antes de las peticiones; un fallo de
+red no prueba ausencia de cargo. No liberar reservas inciertas por caducidad
+o reinicio. Distinguir contabilidad conservadora local de factura real y del
+presupuesto global de la cuenta Replit. Las respuestas estáticas por bloqueo
+no deben consumir preguntas pagadas del cliente.

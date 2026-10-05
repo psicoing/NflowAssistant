@@ -1,6 +1,31 @@
-import { pgTable, text, serial, integer, boolean, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, bigint } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+
+// Durable, aggregate written-chat budget. No conversations or patient identity.
+// Keep these in Drizzle so a later db:push cannot remove the spending ledger.
+export const chatAiBudgetMonths = pgTable("chat_ai_budget_months", {
+  month: text("month").primaryKey(),
+  budgetNanoUsd: bigint("budget_nano_usd", { mode: "number" }).notNull().default(20_000_000_000),
+  accountedNanoUsd: bigint("accounted_nano_usd", { mode: "number" }).notNull().default(0),
+  reservedNanoUsd: bigint("reserved_nano_usd", { mode: "number" }).notNull().default(0),
+  faulted: boolean("faulted").notNull().default(false),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+export const chatAiBudgetRequests = pgTable("chat_ai_budget_requests", {
+  id: text("id").primaryKey(),
+  month: text("month").notNull().references(() => chatAiBudgetMonths.month),
+  model: text("model").notNull(),
+  maximumNanoUsd: bigint("maximum_nano_usd", { mode: "number" }).notNull(),
+  inputTokenBound: integer("input_token_bound").notNull(),
+  outputTokenLimit: integer("output_token_limit").notNull(),
+  accountedNanoUsd: bigint("accounted_nano_usd", { mode: "number" }),
+  inputTokens: integer("input_tokens"),
+  outputTokens: integer("output_tokens"),
+  state: text("state").notNull().default("reserved"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),

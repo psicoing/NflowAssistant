@@ -10,7 +10,7 @@ import { CitationText, linkifyCitations } from "../client/src/lib/citation-links
 import { pilotSources } from "../server/knowledge/pilot-sources";
 import { retrieveChatEvidence, resolveEvidenceCitations } from "../server/chat-evidence";
 import { evidenceCases } from "./fixtures/chat-evidence-cases";
-import { installOfflineManagedChatConfiguration } from "./fixtures/chat-provider-offline";
+import { installOfflineManagedChatConfiguration, offlineChatBudgetPlugin } from "./fixtures/chat-provider-offline";
 
 installOfflineManagedChatConfiguration();
 
@@ -31,7 +31,7 @@ try {
   const outfile = path.join(dir, "handler.mjs");
   await build({
     entryPoints: ["server/prompt-handler.ts"], outfile, bundle: true, platform: "node", format: "esm",
-    plugins: [{
+    plugins: [offlineChatBudgetPlugin, {
       name: "offline-evidence-provider",
       setup(builder) {
         builder.onResolve({ filter: /^openai$/ }, () => ({ path: "openai", namespace: "offline" }));

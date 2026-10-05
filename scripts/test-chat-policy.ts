@@ -5,7 +5,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { build } from "esbuild";
 import { chatFailureMessage, hasSafetySignal } from "../server/chat-policy";
-import { installOfflineManagedChatConfiguration } from "./fixtures/chat-provider-offline";
+import { installOfflineManagedChatConfiguration, offlineChatBudgetPlugin } from "./fixtures/chat-provider-offline";
 
 installOfflineManagedChatConfiguration();
 
@@ -17,7 +17,7 @@ const outfile = path.join(dir, "handler.mjs");
 try {
   await build({
     entryPoints: ["server/prompt-handler.ts"], outfile, bundle: true, platform: "node", format: "esm",
-    plugins: [{
+    plugins: [offlineChatBudgetPlugin, {
       name: "offline-openai",
       setup(builder) {
         builder.onResolve({ filter: /^openai$/ }, () => ({ path: "openai", namespace: "offline" }));
@@ -109,7 +109,24 @@ try {
     const source = await fs.readFile(`client/src/components/ui/${file}`, "utf8");
     assert(!source.includes("NEUROPSI-AI"), `Current chat identity: ${file}`);
   }
-  console.log("PASS: 3 modes × 9 languages, shared identity/profile/preferences/safety, provider-request wiring, crisis precedence, localised outage handling, invalid response, regional language and chat labels. No external AI calls.");
+  state.fail = false;
+  (globalThis as any).__nuxaOfflineMonthlyBudgetExceeded = true;
+  const countBeforeBudgetFailure = state.requests.length;
+  for (const language of languages) {
+    for (const mode of modes) {
+      const answer = await processUserMessage("Me preocupa mi ansiedad", [], profile, language, mode);
+      assert(!answer.content.includes("Offline fixture response"));
+      assert.equal(answer.supportType, "general");
+      assert.equal(answer.countsTowardQuestionQuota, false);
+      const urgent = await processUserMessage("I want to kill myself", [], profile, language, mode);
+      assert.equal(urgent.supportType, "crisis");
+      assert.equal(urgent.countsTowardQuestionQuota, false);
+      assert(urgent.content.length > answer.content.length, "Static emergency guidance survives budget blocking");
+    }
+  }
+  assert.equal(state.requests.length, countBeforeBudgetFailure, "Budget blocking must precede provider invocation");
+  delete (globalThis as any).__nuxaOfflineMonthlyBudgetExceeded;
+  console.log("PASS: 3 modes × 9 languages, shared identity/profile/preferences/safety, provider-request wiring, crisis precedence, localised outage handling, invalid response, regional language and chat labels, monthly budget blocking without provider calls and static urgent guidance. No external AI calls.");
 } finally {
   delete (globalThis as any).__nuxaChatPolicyTest;
   await fs.rm(dir, { recursive: true, force: true });

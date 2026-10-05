@@ -41,6 +41,8 @@ export function createChatAiClient(env: NodeJS.ProcessEnv = process.env): OpenAI
     ? new OpenAI({
       apiKey: env.AI_INTEGRATIONS_OPENAI_API_KEY!,
       baseURL: env.AI_INTEGRATIONS_OPENAI_BASE_URL!,
+      maxRetries: 0,
+      timeout: 60_000,
     })
-    : new OpenAI({ apiKey: env.OPENAI_API_KEY!, baseURL: "https://api.openai.com/v1" });
+    : new OpenAI({ apiKey: env.OPENAI_API_KEY!, baseURL: "https://api.openai.com/v1", maxRetries: 0, timeout: 60_000 });
 }

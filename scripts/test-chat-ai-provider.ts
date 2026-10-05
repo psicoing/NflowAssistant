@@ -41,7 +41,7 @@ try {
   assert(chatAiReadiness(managed).configured);
   assert.equal(chatAiReadiness(managed).model, "configured-model-unchanged");
   createChatAiClient(managed);
-  assert.deepEqual(constructed[0], { apiKey: managed.AI_INTEGRATIONS_OPENAI_API_KEY, baseURL: managed.AI_INTEGRATIONS_OPENAI_BASE_URL });
+  assert.deepEqual(constructed[0], { apiKey: managed.AI_INTEGRATIONS_OPENAI_API_KEY, baseURL: managed.AI_INTEGRATIONS_OPENAI_BASE_URL, maxRetries: 0, timeout: 60_000 });
   assert(!JSON.stringify(chatAiReadiness(managed)).includes("synthetic-managed-key"));
   assert.throws(() => createChatAiClient({ ...managed, AI_INTEGRATIONS_OPENAI_API_KEY: "" }));
   assert.throws(() => createChatAiClient({ ...managed, AI_INTEGRATIONS_OPENAI_BASE_URL: "not-a-url" }));
@@ -51,7 +51,7 @@ try {
   assert.throws(() => createChatAiClient(personalOnly));
   assert.equal(constructed.length, count);
   createChatAiClient({ ...personalOnly, NUXA_CHAT_AI_PROVIDER: "openai" });
-  assert.deepEqual(constructed.at(-1), { apiKey: personalOnly.OPENAI_API_KEY, baseURL: "https://api.openai.com/v1" });
+  assert.deepEqual(constructed.at(-1), { apiKey: personalOnly.OPENAI_API_KEY, baseURL: "https://api.openai.com/v1", maxRetries: 0, timeout: 60_000 });
   const voice = await fs.readFile("server/voiceDemoBridge.ts", "utf8");
   assert(!voice.includes("createChatAiClient"), "Do not migrate voice credentials");
   console.log("PASS: written chat defaults to managed Replit credentials/endpoint, no silent personal-key fallback, explicit direct mode only, model preserved, invalid/partial config blocked, readiness contains no credentials. No network or paid AI calls.");

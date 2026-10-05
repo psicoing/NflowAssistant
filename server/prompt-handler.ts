@@ -11,11 +11,16 @@ import type { Message } from "@shared/schema";
 import { chatFailureMessage, hasSafetySignal, profileInstructions, sharedChatPolicy } from "./chat-policy";
 import { chatEvidenceInstructions, needsUrgentConversationSupport, resolveEvidenceCitations, retrieveChatEvidence } from "./chat-evidence";
 import { scientificAnalysisInstructions, scientificEvidenceEngine } from "./knowledge/scientific-engine";
+import { compactChatPresentation } from "./chat-presentation";
+import { boundedChatHistory } from "./chat-cost-policy";
+import { budgetedChatCompletion } from "./chat-budget";
+import { chatCostLimitMessage } from "./chat-policy";
 
 export interface ChatResponse {
   content: string;
   supportType: string;
   tags?: string[];
+  countsTowardQuestionQuota: boolean;
 }
 
 /**
@@ -736,9 +741,10 @@ FORMATO JSON:
 
     // Choose prompt and parameters based on chat mode
     const commonPolicy = sharedChatPolicy(languageInstructions, profileContext, userPreferences);
-    const presentation = chatMode === 'brief'
-      ? `${briefModePrompt}\n${cancerSection}\n${laborSection}\n${urgencySection}\n${resourcesSection}`
-      : systemPrompt;
+    // Preserve the original templates/catalogue above, but don't re-send the
+    // entire repeated legacy structure and examples on every billable turn.
+    const presentation = compactChatPresentation(chatMode, isEducationalQuery, isCancerRelated, isLaborRelated,
+      needsUrgentConversationSupport(userMessage, history));
     const retrieval = scientificEvidenceEngine.retrieve(userMessage, history, userProfile);
     const sources = retrieval.sources;
     const evidence = chatEvidenceInstructions(sources);
@@ -754,10 +760,7 @@ FORMATO JSON:
 export async function generateChatResponse(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic'): Promise<string> {
   try {
     const finalPrompt = buildChatPrompt(userMessage, history, userProfile, userLanguage, chatMode);
-    const conversationHistory = history.slice(-6).map(msg => ({
-      role: msg.isUser ? "user" as const : "assistant" as const,
-      content: msg.content
-    }));
+    const conversationHistory = boundedChatHistory(history, userMessage);
     const maxTokens = chatMode === 'brief' ? (needsUrgentConversationSupport(userMessage, history) ? 1000 : 500) : 4000;
 
     // Mantener una versión estable por defecto para que cambios futuros del alias
@@ -766,7 +769,7 @@ export async function generateChatResponse(userMessage: string, history: Message
     const openai = createChatAiClient();
 
     // Realizar la llamada a OpenAI conservando el prompt, el historial y el JSON.
-    const completion = await openai.chat.completions.create({
+    const completion = await budgetedChatCompletion({
       model: chatModel,
       messages: [
         { role: "system", content: finalPrompt },
@@ -775,7 +778,7 @@ export async function generateChatResponse(userMessage: string, history: Message
       ],
       response_format: { type: "json_object" },
       max_completion_tokens: maxTokens
-    });
+    }, openai);
 
     const responseContent = completion.choices[0].message.content;
     if (!responseContent) {
@@ -823,6 +826,7 @@ export async function processUserMessage(userMessage: string, history: Message[]
       return {
         content: generateOffTopicResponse(userLanguage),
         supportType: "off_topic",
+        countsTowardQuestionQuota: false,
         tags: ["off_topic_filtered"]
       };
     }
@@ -851,6 +855,7 @@ export async function processUserMessage(userMessage: string, history: Message[]
     return {
       content: responseContent,
       supportType,
+      countsTowardQuestionQuota: true,
       tags
     };
   } catch (error: any) {
@@ -858,8 +863,11 @@ export async function processUserMessage(userMessage: string, history: Message[]
     
     // Proporcionar una respuesta de fallback estructurada
     return {
-      content: chatFailureMessage(userLanguage, needsUrgentConversationSupport(userMessage, history)),
+      content: error?.code === "NUXA_CHAT_MONTHLY_BUDGET_EXCEEDED" || error?.code === "NUXA_CHAT_INPUT_TOO_LARGE"
+        ? chatCostLimitMessage(userLanguage, needsUrgentConversationSupport(userMessage, history), error.code)
+        : chatFailureMessage(userLanguage, needsUrgentConversationSupport(userMessage, history)),
       supportType: needsUrgentConversationSupport(userMessage, history) ? "crisis" : "general",
+      countsTowardQuestionQuota: false,
       tags: []
     };
   }

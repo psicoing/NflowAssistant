@@ -36,6 +36,7 @@ import {
 import { insertConversationSchema, insertMessageSchema, insertUserSchema, insertPartnerSchema, partnerReferrals, partners, users, partnerAdmins, partnerActivityLog, conversations, messages } from "@shared/schema";
 import { emailLeads } from "@shared/schema";
 import { processUserMessage } from "./prompt-handler";
+import { countDeliveredChatQuestion } from "./chat-question-quota";
 import { authenticatePartner, registerPartner, generateReferralCode } from "./partner-auth";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
@@ -847,11 +848,11 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       const aiResponse = await processUserMessage(content, history, userProfile, userLanguage, chatMode);
       console.log("AI Response received:", aiResponse);
 
-      // Increment question count after successful message processing
-      await storage.incrementQuestionCount(userId);
+      // A budget/input/provider error returns static guidance, not a paid reply.
+      const questionsRemaining = await countDeliveredChatQuestion(aiResponse, limitCheck, () => storage.incrementQuestionCount(userId));
 
       // Fire-and-forget: email when trial user uses their last free question
-      if (limitCheck.remaining === 0) {
+      if (aiResponse.countsTowardQuestionQuota && questionsRemaining === 0) {
         const trialUser = await storage.getUser(userId);
         if (trialUser?.email && trialUser.subscriptionStatus === "trial") {
           sendTrialExhaustedEmail({ email: trialUser.email, username: trialUser.username }).catch(() => {});
@@ -869,7 +870,7 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
         userMessage,
         aiMessage,
         supportType: aiResponse.supportType,
-        questionsRemaining: limitCheck.remaining,
+        questionsRemaining,
         tags: aiResponse.tags || []
       });
     } catch (error) {
@@ -928,13 +929,12 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       // Process the message with AI
       const aiResponse = await processUserMessage(message, history, userProfile, userLanguage);
 
-      // Increment question count after successful processing
-      await storage.incrementQuestionCount(userId);
+      const questionsRemaining = await countDeliveredChatQuestion(aiResponse, limitCheck, () => storage.incrementQuestionCount(userId));
 
       res.json({
         content: aiResponse.content,
         supportType: aiResponse.supportType,
-        questionsRemaining: limitCheck.remaining,
+        questionsRemaining,
         tags: aiResponse.tags || []
       });
     } catch (error) {

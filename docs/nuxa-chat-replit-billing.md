@@ -2,6 +2,24 @@
 
 ## Decisión y estado
 
+### Nueva propuesta del usuario: sistema dual
+
+El usuario plantea OpenAI como principal cuando tenga saldo de API, con Replit
+como respaldo cuando no tenga saldo, siempre con control de tokens.
+Antes de cambiar la conexión, confirmar si sus «20 euros al mes» son saldo
+de la API o una suscripción a ChatGPT, y si el límite aprobado de 20 USD es
+compartido o exclusivo del respaldo. No ampliar el presupuesto por inferencia.
+
+La facturación de la API y ChatGPT es independiente:
+https://help.openai.com/en/articles/9039756-billing-settings-in-chatgpt-vs-platform
+
+No implementar llamadas simultáneas ni respaldo por cualquier HTTP 429 o
+timeout. Solo rechazos de facturación inequívocos pueden justificar pasar
+al respaldo sin arriesgar una segunda generación cobrada.
+La propuesta dual todavía no modifica la selección del proveedor en el código.
+
+### Estado técnico de la preparación anterior
+
 El usuario eligió usar créditos de Replit para el chat escrito de NUXA.
 La voz y las demás llamadas directas a OpenAI quedan fuera de esta migración.
 
@@ -44,6 +62,54 @@ y los límites de tokens. No se modifica registro, pagos, voz o Twilio.
 
 ## Verificación
 
+### Presupuesto aprobado e implementado
+
+El usuario autorizó **20 USD por mes natural (UTC), globales para todos los
+usuarios del chat escrito**. No es un límite por usuario ni de toda la cuenta
+Replit; no incluye Agent, alojamiento, suscripción o voz.
+
+La aplicación aplica el control antes de cualquier petición del chat:
+
+- Reserva duradera y transaccional en la misma base de datos existente.
+- Cuenta entrada y generación, incluidos tokens de razonamiento en salida.
+- Resuelve peticiones simultáneas con bloqueo de fila; no reinicia gasto al
+  reiniciar el servidor o publicar otra instancia contra la misma base.
+- Usa el máximo de generación y una cota conservadora de entrada, no una
+  falsa estimación exacta por caracteres. No permite más de 64K en esa cota.
+- Solicita procesamiento estándar y desactiva reintentos automáticos del SDK.
+- Bloquea si el saldo disponible no cubre el peor coste reservado, aunque
+  todavía exista un pequeño saldo. Mensajes demasiado grandes se rechazan,
+  no se recortan silenciosamente.
+- Conserva toda la reserva si faltan datos de uso o falla la petición: un
+  timeout puede haber sido cobrado. El registro no contiene conversaciones
+  ni identificadores de pacientes.
+- Conserva ayuda urgente estática y mensajes ES/EN/FR/DE/IT/PT/CA/EU/GL.
+- No descuenta preguntas de suscripción o créditos prepagados cuando devuelve
+  un aviso estático por bloqueo, fallo del proveedor o contexto excesivo.
+
+Tarifas GPT-5.5 verificadas el 2026-10-05 en
+https://developers.openai.com/api/docs/models/gpt-5.5 :
+5 USD/millón de entrada y 30 USD/millón de salida. La reserva cubre también
+la tarifa Priority de 2,5x y el suplemento regional del 10%. El cálculo
+contable conserva un margen regional y no presupone descuento de caché;
+por eso puede bloquear antes del gasto real de 20 USD. Una tarifa/modelo no
+verificado no permite llamadas ni cambia el modelo automáticamente.
+Revisar tarifas oficiales al activar la conexión y cuando cambien las tarifas.
+
+**No se ha configurado un límite financiero nativo de la cuenta Replit ni
+verificado una factura real.** El control es local al chat, calculado de forma
+conservadora con tarifas públicas. Activación del gateway y comprobación real
+de consumo siguen pendientes; no presentar el límite local como una garantía
+de que la factura total de Replit sea de 20 USD.
+
+El contexto normal de la misma consulta sintética sin historial pasó de
+27.604 a 9.663 caracteres, aproximadamente un 65% menos. No es una medida
+exacta de tokens ni un ahorro real facturado. Las reglas comunes, perfil,
+análisis científico y fuentes seleccionadas permanecen. Los ejemplos y
+plantillas originales no se borran, pero ya no se reenvía toda su estructura
+repetida en cada llamada. El historial se conserva en la base de datos; solo
+se acota la parte enviada al modelo.
+
 ### Condición de coste antes de activar el servicio
 
 El usuario exige controlar tokens para evitar un gasto excesivo. Acordar un
@@ -57,9 +123,9 @@ y contabilizar el uso devuelto por el proveedor, no equiparar caracteres a token
 La caché de recuperación ahorra trabajo local, pero no garantiza que el modelo
 deje de procesar o cobrar ese contexto.
 
-Los límites de salida actuales no constituyen un tope mensual de gasto. No
-declarar presupuestos aplicados ni ahorros obtenidos hasta que estén implementados
-y comprobados. No recortar reglas de seguridad para ahorrar tokens ni retirar
+Los límites de salida por sí solos no constituyen un tope mensual de gasto.
+No declarar ahorros facturados hasta medirlos con el proveedor.
+No recortar reglas de seguridad para ahorrar tokens ni retirar
 la bibliografía pertinente sin evaluar su utilidad.
 
 ```sh
@@ -67,6 +133,8 @@ la bibliografía pertinente sin evaluar su utilidad.
 npx tsx scripts/check-chat-ai.ts
 # Pruebas con SDK simulado y credenciales ficticias locales al proceso:
 npx tsx scripts/test-chat-ai-provider.ts
+npx tsx scripts/test-chat-budget.ts
+npx tsx scripts/check-chat-budget.ts
 npx tsx scripts/test-chat-policy.ts
 npx tsx scripts/test-chat-evidence.ts
 npx tsx scripts/test-scientific-engine.ts
