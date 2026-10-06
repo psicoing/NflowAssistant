@@ -11,7 +11,7 @@
 - [International SEO boundaries](seo-market-scope.md) — additive market content protects app journeys; Replit preview noindex is distinct from production indexing.
 - [Valor del trabajo bibliográfico](bibliographic-work-value.md) — el usuario destaca la importancia de la bibliografía previa; valorar su uso real antes de proponer cambios.
 - [OpenAI billing diagnostics](openai-billing-diagnostics.md) — metadatos accesibles no prueban que la generación tenga facturación activa; separar autenticación, modelo y billing.
-- [Chat billing boundary](chat-billing-boundary.md) — propuesta OpenAI primero/Replit de respaldo; control de tokens, presupuesto autorizado y voz independiente.
+- [Chat billing boundary](chat-billing-boundary.md) — el usuario prefiere solo Replit para el chat; 20 USD mensuales, control de tokens y voz independiente.
 - [Abuso de la prueba gratuita](free-trial-abuse.md) — el usuario quiere impedir que una persona multiplique las preguntas gratis registrando distintos correos.
 - [Tipos de Twilio y tarifas](twilio-pricing-types.md) — el SDK puede conservar snake_case en JSON anidado pese a declarar camelCase; validar tarifas contra respuestas reales.
 - [Base de datos de las pruebas](testing-datastore.md) — las herramientas SQL integradas pueden consultar una base distinta de la app; validar la fuente antes de modificar fixtures.

@@ -1,34 +1,35 @@
 ---
-name: Dual written-chat billing preference
-description: The user proposes OpenAI API credit first and Replit as a token-budgeted backup; voice and the approved spending ceiling remain separate.
+name: Replit como proveedor del chat escrito
+description: El usuario prefiere pagar a Replit para el chat, sin OpenAI directo; mantener presupuesto y voz separados.
 ---
 
-El chat escrito se ha dejado temporalmente en Replit únicamente mientras está
-pendiente activar la facturación de OpenAI directo.
+El usuario prefiere pagar a Replit para el chat escrito de NUXA, sin activar
+OpenAI directo si Replit funciona bien. Ya no es una solución temporal.
 
-**Why:** Una petición real en la web publicada recibió un 429 de OpenAI directo
-que no activó el respaldo; Replit no había recibido ninguna petición. Una única
-generación real usando Replit directamente sí produjo una respuesta.
+**Why:** El usuario dijo: «si replit funciona bien como ai no hace falta gastar
+en openai, prefiero pagar a replit».
 
 **How to apply:** Mantener el modelo y los 20 USD mensuales globales de Replit.
-No ampliar el respaldo a cualquier 429 ni borrar reservas inciertas. Comprobar
-la facturación y el comportamiento de la ruta nativa antes de reactivar el
-sistema dual. Los cambios de configuración requieren republicar para llegar
-al servicio publicado.
+No reactivar OpenAI directo ni el sistema dual sin una nueva petición del
+usuario. La voz queda fuera de esta decisión. No borrar reservas inciertas.
+
+## Preferencia anterior, sustituida por Replit como único proveedor del chat
 
 La preferencia anterior del usuario era un sistema dual: OpenAI primero
 si hay saldo utilizable de API, y Replit como respaldo si no hay saldo, siempre
 dentro de un consumo de tokens controlado. La voz queda fuera del cambio.
 
 **Why:** El usuario quiere aprovechar el saldo de OpenAI y reservar Replit para
-cuando no haya saldo. Esta propuesta sustituye su preferencia anterior por
-Replit como único pagador. No autoriza cambiar el modelo ni la voz.
+cuando no haya saldo. Era la propuesta anterior; la nueva preferencia por
+Replit únicamente la sustituye. No autoriza cambiar el modelo ni la voz.
 
 **How to apply:** Distinguir saldo de la API de suscripción a ChatGPT, cuya
 facturación es independiente. El respaldo no debe activarse por cualquier HTTP 429, timeout
 o fallo de red: podrían ser límites de velocidad o solicitudes ya cobradas.
 No llamar a ambos proveedores en paralelo. Comprobar una generación real y
 el pagador antes de declarar el sistema operativo.
+
+## Control de costes que sigue vigente
 
 Controlar el coste de NUXA por tokens de entrada y salida, no solo por mensajes
 o por el pagador. Centralizar el cobro en Replit no autoriza consumo ilimitado.
@@ -49,9 +50,11 @@ Excluye suscripción a Replit y voz. No aumentarlo sin nueva autorización.
 Los 20 euros que mencionó eran una referencia al volumen de tokens, no una
 afirmación de saldo ni un presupuesto autorizado para OpenAI.
 
-El usuario autorizó **25 USD mensuales para la API de OpenAI**, independientes
+Para el sistema dual anterior, el usuario autorizó **25 USD mensuales para la API de OpenAI**, independientes
 de los **20 USD mensuales del respaldo Replit**. El máximo conjunto del chat
 es 45 USD, no 45 por proveedor o por cliente. No incluye voz ni otras funciones.
+Este presupuesto histórico no autoriza reactivar OpenAI directo: con la nueva
+preferencia solo se usa el límite de 20 USD mensuales de Replit para el chat.
 
 **Why:** El usuario eligió explícitamente «OpenAI aparte; Replit hasta 20 USD
 adicionales», aclaró que los 20 euros eran una referencia de tokens, y autorizó
