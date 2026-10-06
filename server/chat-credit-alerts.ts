@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import type { Pool } from "@neondatabase/serverless";
 import type { ChatProvider } from "./chat-ai-client";
 import { pool } from "./db";
-import { getUncachableSendGridClient } from "./sendgridClient";
+import { sendTwilioEmail } from "./twilio-email";
 import { isConfirmedOpenAiBillingRejection } from "./chat-billing-errors";
 
 export type CreditAlertReason = "billing" | "budget";
@@ -22,18 +22,15 @@ export function creditAlertReason(error: unknown, provider: ChatProvider): Credi
   return null; // A generic 429, timeout, configuration or pricing error is not proof of depleted credit.
 }
 
-export async function sendCreditAlertEmail(event: CreditAlertEvent, test = false) {
+export async function sendCreditAlertEmail(event: CreditAlertEvent, test = false, send = sendTwilioEmail) {
   const to = process.env.NUXA_AI_ALERT_EMAIL?.trim();
   if (!to || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) throw Object.assign(Error("AI alert recipient is not configured"), { notAttempted: true });
-  const { client, fromEmail } = await getUncachableSendGridClient().catch(() => {
-    throw Object.assign(Error("AI alert email connection is unavailable"), { notAttempted: true });
-  });
   const provider = event.provider === "openai" ? "OpenAI directo" : "Replit AI Integrations";
   const explanation = event.reason === "budget"
     ? "El presupuesto interno mensual no puede cubrir una petición de IA. Esto no demuestra que la cuenta del proveedor tenga saldo cero."
     : "El proveedor ha rechazado una petición por saldo o facturación no disponible. No podemos consultar su saldo exacto.";
-  const [response] = await client.send({
-    to, from: { email: fromEmail, name: "NUXA — avisos del servicio" },
+  return send({
+    to,
     subject: test ? "Prueba de avisos de IA de NUXA" : `NUXA: aviso de saldo o presupuesto de IA (${provider})`,
     text: [
       test ? "Este correo prueba el envío de avisos. No representa una nueva incidencia ni se ha hecho una llamada de IA." : "NUXA ha detectado una incidencia de disponibilidad de crédito para el chat.",
@@ -44,8 +41,6 @@ export async function sendCreditAlertEmail(event: CreditAlertEvent, test = false
       "No se incluyen conversaciones, datos de clientes ni claves en este correo. La voz y los SMS son independientes.",
     ].join("\n\n"),
   });
-  if (response.statusCode < 200 || response.statusCode >= 300) throw Error("Email provider did not accept alert");
-  return { accepted: true, statusCode: response.statusCode };
 }
 
 /** Durable per-provider incidents: shared across restarts and Autoscale instances. */
