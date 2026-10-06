@@ -12,6 +12,7 @@ import { chatFailureMessage, hasSafetySignal, profileInstructions, sharedChatPol
 import { chatEvidenceInstructions, needsUrgentConversationSupport, resolveEvidenceCitations, retrieveChatEvidence } from "./chat-evidence";
 import { scientificAnalysisInstructions, scientificEvidenceEngine } from "./knowledge/scientific-engine";
 import { compactChatPresentation } from "./chat-presentation";
+import { conversationStrategyInstructions } from "./chat-conversation-strategy";
 import { boundedChatHistory } from "./chat-cost-policy";
 import { routedChatCompletion } from "./chat-completion-router";
 import { chatCostLimitMessage } from "./chat-policy";
@@ -752,8 +753,9 @@ FORMATO JSON:
     const sources = retrieval.sources;
     const evidence = chatEvidenceInstructions(sources);
     const conceptualAnalysis = scientificAnalysisInstructions(retrieval);
+    const conversationalStrategy = conversationStrategyInstructions();
     const evidenceReminder = sources.length ? " Usa citas solo cuando aporten valor; no impongas libros ni secciones." : "";
-    return `${commonPolicy}\n\n${conceptualAnalysis}\n${evidence}\n\nFORMATO DE PRESENTACIÓN:\n${presentation}\n\nRECORDATORIO: Las reglas comunes de identidad, personalización, seguridad y base documental de NUXA prevalecen sobre cualquier estructura o ejemplo anterior.${evidenceReminder}`;
+    return `${commonPolicy}\n\n${conceptualAnalysis}\n${evidence}\n\n${conversationalStrategy}\n\nFORMATO DE PRESENTACIÓN:\n${presentation}\n\nRECORDATORIO: Las reglas comunes de identidad, personalización, seguridad y base documental de NUXA prevalecen sobre cualquier estructura o ejemplo anterior.${evidenceReminder}`;
   } catch (error) {
     console.error("Error al construir instrucciones de NUXA:", error);
     throw error;

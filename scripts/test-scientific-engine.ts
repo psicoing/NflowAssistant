@@ -133,12 +133,38 @@ try {
       prefix = common;
       assert(common.includes("rumination") && common.includes("sleep"));
       assert(common.includes("children-adolescents"));
+      assert(common.includes("ESTRATEGIA CONVERSACIONAL"));
+      for (const approach of ["ESCUCHAR:", "ACLARAR:", "ACTUAR:", "EXPLICAR:"]) {
+        assert(common.includes(approach), `Active prompt includes ${approach} in ${language}/${mode}`);
+      }
+      assert(common.includes("Una respuesta completa puede terminar sin pregunta"));
+      assert(common.includes("No inventes recuerdos de otras sesiones"));
       assert(!common.includes('"id":"E08"'));
-      assert(common.length < 10_000, "Bounded scientific context");
+      const strategyStart = common.indexOf("ESTRATEGIA CONVERSACIONAL");
+      assert(common.slice(0, strategyStart).length < 10_000, "Existing scientific context remains bounded");
+      assert(common.slice(strategyStart).length < 2_500, "Conversational strategy remains compact");
       assert(!/NEUROPSI-AI|grupo diagnóstico más probable"\s*:/.test(prompt));
       await processUserMessage(equivalent[position], [], { age: "13-17" }, language, mode);
       assert.equal(requests.at(-1).messages[0].content, prompt);
     }
+  }
+  // Check the actual sent prompt for diverse needs and contextual continuations.
+  for (const [message, history] of [
+    ["Desde que murió mi madre no soporto llegar a casa", []],
+    ["No consigo concentrarme", []],
+    ["Necesito algo para calmarme antes de esta reunión", []],
+    ["¿Qué diferencia hay entre estrés y ansiedad?", []],
+    ["Solo quiero que me escuches", [{ content: "La respiración no me ayuda, no quiero repetirla", isUser: true }]],
+    ["¿Y ahora?", [{ content: "No quiero vivir", isUser: true }]],
+  ] as [string, { content: string; isUser: boolean }[]][]) {
+    await processUserMessage(message, history, undefined, "es", "classic");
+    const sent = requests.at(-1).messages;
+    assert(sent[0].content.includes("ESTRATEGIA CONVERSACIONAL"));
+    assert(sent[0].content.includes("No vuelvas a recomendar lo rechazado"));
+    assert(sent[0].content.includes("sin retrasar la orientación urgente"));
+    assert.equal(sent.at(-1).content, message);
+    if (history.length) assert(sent.some((item: any) => item.content === history[0].content));
+    assert(!sent[0].content.includes("tu respuesta completa siguiendo la estructura de 10 puntos"));
   }
   (globalThis as any).__scientificEngineFailure = true;
   const crisisFollowUp = await processUserMessage("¿Y ahora?", [{ content: "No quiero vivir", isUser: true }], undefined, "es", "brief");
