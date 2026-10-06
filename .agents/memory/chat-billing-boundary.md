@@ -3,7 +3,20 @@ name: Dual written-chat billing preference
 description: The user proposes OpenAI API credit first and Replit as a token-budgeted backup; voice and the approved spending ceiling remain separate.
 ---
 
-El usuario ahora plantea un sistema dual para el chat escrito: OpenAI primero
+El chat escrito se ha dejado temporalmente en Replit únicamente mientras está
+pendiente activar la facturación de OpenAI directo.
+
+**Why:** Una petición real en la web publicada recibió un 429 de OpenAI directo
+que no activó el respaldo; Replit no había recibido ninguna petición. Una única
+generación real usando Replit directamente sí produjo una respuesta.
+
+**How to apply:** Mantener el modelo y los 20 USD mensuales globales de Replit.
+No ampliar el respaldo a cualquier 429 ni borrar reservas inciertas. Comprobar
+la facturación y el comportamiento de la ruta nativa antes de reactivar el
+sistema dual. Los cambios de configuración requieren republicar para llegar
+al servicio publicado.
+
+La preferencia anterior del usuario era un sistema dual: OpenAI primero
 si hay saldo utilizable de API, y Replit como respaldo si no hay saldo, siempre
 dentro de un consumo de tokens controlado. La voz queda fuera del cambio.
 
