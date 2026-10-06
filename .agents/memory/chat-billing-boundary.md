@@ -55,3 +55,16 @@ red no prueba ausencia de cargo. No liberar reservas inciertas por caducidad
 o reinicio. Distinguir contabilidad conservadora local de factura real y del
 presupuesto global de la cuenta Replit. Las respuestas estáticas por bloqueo
 no deben consumir preguntas pagadas del cliente.
+
+Replit AI Integrations y el catálogo de conectores OAuth no son la misma
+superficie. Que OpenAI no aparezca en la búsqueda de conectores no demuestra
+que la facturación gestionada por Replit no exista.
+
+**Why:** La documentación oficial confirma credenciales gestionadas y cargos
+a créditos Replit, pero el catálogo normal no ofrecía su activación en esta
+sesión.
+
+**How to apply:** Utilizar el flujo de autorización de AI Integrations cuando
+esté disponible; no inventar identificadores de conectores ni pedir al usuario
+una clave gestionada por Replit. No afirmar que está activa hasta verificar
+la configuración y una respuesta real.
