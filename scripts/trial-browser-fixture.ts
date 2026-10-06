@@ -43,6 +43,9 @@ try {
       await client.query("DELETE FROM conversations WHERE user_id=$1", [userId]);
       await client.query("DELETE FROM nuxa_trial_questions WHERE phone_hash IN(SELECT phone_hash FROM nuxa_trial_identities WHERE user_id=$1)", [userId]);
       await client.query("DELETE FROM nuxa_trial_identities WHERE user_id=$1", [userId]);
+      if ((await client.query("SELECT to_regclass('nuxa_auth_sessions') AS name")).rows[0].name) {
+        await client.query("DELETE FROM nuxa_auth_sessions WHERE sess->>'userId'=$1", [String(userId)]);
+      }
       await client.query("DELETE FROM users WHERE id=$1", [userId]);
       await client.query("COMMIT");
       console.log("Ephemeral trial fixture removed");

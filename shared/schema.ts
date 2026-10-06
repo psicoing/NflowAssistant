@@ -1,6 +1,13 @@
-import { pgTable, text, serial, integer, boolean, timestamp, bigint } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, bigint, varchar, json } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+
+// Same dedicated shape used by connect-pg-simple; independent of user deletion.
+export const nuxaAuthSessions = pgTable("nuxa_auth_sessions", {
+  sid: varchar("sid").primaryKey(),
+  sess: json("sess").notNull(),
+  expire: timestamp("expire", { precision: 6 }).notNull(),
+});
 
 // Durable, aggregate written-chat budget. No conversations or patient identity.
 // Keep these in Drizzle so a later db:push cannot remove the spending ledger.

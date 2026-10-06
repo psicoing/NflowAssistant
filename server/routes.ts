@@ -451,8 +451,6 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
 
       // Verify password
       console.log("Comparing password with hash...");
-      console.log("Password provided:", password);
-      console.log("Hash in database:", user.password);
       
       const isValidPassword = await bcrypt.compare(password, user.password);
       console.log("Password validation result:", isValidPassword);
@@ -504,7 +502,6 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
   // Get current authenticated user
   app.get("/api/auth/me", async (req, res) => {
     try {
-      console.log("Session check - ID:", req.sessionID, "UserId:", req.session.userId);
       const userId = req.session.userId;
       
       if (!userId) {
@@ -701,7 +698,6 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
   app.get("/api/conversations", async (req, res) => {
     try {
       const userId = req.session.userId;
-      console.log("Session check - Conversations endpoint - Session ID:", req.sessionID, "UserId:", userId);
       
       if (!userId) {
         console.log("No userId in session for conversations endpoint");

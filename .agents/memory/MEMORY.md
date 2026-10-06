@@ -14,3 +14,4 @@
 - [Abuso de la prueba gratuita](free-trial-abuse.md) — el usuario quiere impedir que una persona multiplique las preguntas gratis registrando distintos correos.
 - [Tipos de Twilio y tarifas](twilio-pricing-types.md) — el SDK puede conservar snake_case en JSON anidado pese a declarar camelCase; validar tarifas contra respuestas reales.
 - [Base de datos de las pruebas](testing-datastore.md) — las herramientas SQL integradas pueden consultar una base distinta de la app; validar la fuente antes de modificar fixtures.
+- [Sesiones y publicación](publishing-sessions.md) — Autoscale requiere sesiones duraderas y secreto estable; los flujos por códigos no pueden depender de la memoria de una instancia.

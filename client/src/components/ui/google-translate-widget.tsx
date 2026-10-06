@@ -3,8 +3,8 @@ import { Globe } from 'lucide-react';
 
 declare global {
   interface Window {
-    google: any;
-    googleTranslateElementInit: () => void;
+    google?: any;
+    googleTranslateElementInit?: () => void;
   }
 }
 

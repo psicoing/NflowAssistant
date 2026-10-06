@@ -63,7 +63,12 @@ export async function registerTrialRoutes(app: Express, pool: Pool, providers: T
       used: count.rows[0].total, cap: 250, existingTrialUser, verificationRequired });
   }));
   app.post("/api/prueba-gratis/iniciar", handler(async (req, res) => {
-    res.json(await service.start(req.body, caller(req)));
+    const result = await service.start(req.body, caller(req));
+    // Persist a guest session even with saveUninitialized:false, so the email
+    // and SMS stages remain bound to the same session on another instance.
+    req.session.trialVerificationFlowId = result.flowId;
+    await new Promise<void>((resolve, reject) => req.session.save(err => err ? reject(err) : resolve()));
+    res.json(result);
   }));
   app.post("/api/prueba-gratis/enviar-codigo", handler(async (req, res) => {
     if (req.body?.channel !== "email" && req.body?.channel !== "sms") {
@@ -87,6 +92,7 @@ export async function registerTrialRoutes(app: Express, pool: Pool, providers: T
     req.session.cookie.secure = req.secure;
     req.session.cookie.sameSite = "lax";
     req.session.userId = result.userId;
+    delete req.session.trialVerificationFlowId;
     await new Promise<void>((resolve, reject) => req.session.save(err => err ? reject(err) : resolve()));
     res.json(result);
   }));

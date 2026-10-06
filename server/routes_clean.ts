@@ -64,7 +64,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         password: hashedPassword,
         email,
         subscriptionStatus: 'pending_payment',
-        subscriptionPlan: 'basic',
         hasCompletedPayment: false
       });
 

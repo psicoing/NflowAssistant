@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
 import MemoryStore from "memorystore";
+import { productionSessionOptions } from "./production-sessions";
 import bcrypt from "bcrypt";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
@@ -1127,7 +1128,7 @@ app.use(express.urlencoded({ extended: false }));
 const memoryStore = MemoryStore(session);
 
 // Session configuration for user authentication
-app.use(session({
+app.use(session(productionSessionOptions({
   secret: "nflow-admin-secret-2025",
   store: new memoryStore({
     checkPeriod: 86400000 // prune expired entries every 24h
@@ -1140,7 +1141,7 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     sameSite: 'lax' // Allow same-site requests
   }
-}));
+}, pool)));
 
 app.use((req, res, next) => {
   const start = Date.now();

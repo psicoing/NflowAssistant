@@ -10,6 +10,7 @@ import { quoteTrialSmsPrice } from "../server/trial/providers";
 import express from "express";
 import session from "express-session";
 import { registerTrialRoutes } from "../server/trial/routes";
+import { productionSessionOptions } from "../server/production-sessions";
 
 neonConfig.webSocketConstructor = ws;
 const namespace = `trial_test_${randomUUID().replaceAll("-", "")}`;
@@ -162,19 +163,33 @@ try {
   // Exercise the real HTTP handlers, session binding, old-route closure, and
   // authenticated status after completion; only transports are injected.
   await isolated.query("UPDATE nuxa_trial_sms_months SET booked_micro_usd=0");
-  const app = express();
-  app.set("trust proxy", 1);
-  app.use(express.json());
-  app.use(session({ secret: randomUUID(), resave: false, saveUninitialized: true,
-    cookie: { httpOnly: false, secure: false } }));
-  await registerTrialRoutes(app, isolated, providers);
-  const server = app.listen(0, "127.0.0.1");
-  try {
+  const sessionSecret = randomUUID();
+  const servers: ReturnType<ReturnType<typeof express>["listen"]>[] = [];
+  const sessionStores: { close?: () => void }[] = [];
+  const createInstance = async () => {
+    const app = express();
+    app.set("trust proxy", 1);
+    app.use(express.json());
+    const options = productionSessionOptions({ secret: "offline-unused-default",
+      cookie: { httpOnly: false, secure: false } }, isolated,
+      { NODE_ENV: "production", SESSION_SECRET: sessionSecret }, namespace);
+    assert.equal(options.saveUninitialized, false);
+    sessionStores.push(options.store as { close?: () => void });
+    app.use(session(options));
+    await registerTrialRoutes(app, isolated, providers);
+    const server = app.listen(0, "127.0.0.1");
+    servers.push(server);
     await new Promise<void>(resolve => server.on("listening", resolve));
-    const base = `http://127.0.0.1:${(server.address() as { port: number }).port}`;
+    return `http://127.0.0.1:${(server.address() as { port: number }).port}`;
+  };
+  assert.throws(() => productionSessionOptions({}, isolated, { NODE_ENV: "production" }), /SESSION_SECRET/);
+  const bases = [await createInstance(), await createInstance()];
+  try {
+    const base = bases[0];
+    let instance = 0;
     let cookie = "";
     const post = async (path: string, body: unknown) => {
-      const response = await fetch(`${base}${path}`, { method: "POST",
+      const response = await fetch(`${bases[instance++ % bases.length]}${path}`, { method: "POST",
         headers: { "Content-Type": "application/json", Cookie: cookie, "X-Forwarded-Proto": "https" }, body: JSON.stringify(body) });
       const setCookie = response.headers.get("set-cookie");
       if (setCookie) cookie = setCookie.split(";")[0];
@@ -189,6 +204,7 @@ try {
     const started = await post("/api/prueba-gratis/iniciar", contact);
     assert.equal(started.status, 200);
     const { flowId } = started.body;
+    assert.ok(cookie, "Pending email verification must save the guest session");
     assert.equal((await post("/api/prueba-gratis/verificar-correo", { flowId, code: emailCodes.get(contact.email) })).status, 200);
     assert.equal((await post("/api/prueba-gratis/enviar-codigo", { flowId, channel: "sms" })).status, 200);
     const result = await post("/api/prueba-gratis/verificar-movil", { flowId, code: smsCodes.get(contact.phone) });
@@ -197,12 +213,16 @@ try {
     assert.match(result.setCookie || "", /HttpOnly/);
     assert.match(result.setCookie || "", /Secure/);
     assert.match(result.setCookie || "", /SameSite=Lax/);
-    const status = await fetch(`${base}/api/prueba-gratis/estado`, { headers: { Cookie: cookie, "X-Forwarded-Proto": "https" } }).then(r => r.json());
+    const restartedBase = await createInstance();
+    const status = await fetch(`${restartedBase}/api/prueba-gratis/estado`, { headers: { Cookie: cookie, "X-Forwarded-Proto": "https" } }).then(r => r.json());
     assert.equal(status.existingTrialUser.username, contact.username);
     assert.equal(status.verificationRequired, false);
     assert.equal((await post("/api/prueba-gratis/verificar-movil", { flowId, code: smsCodes.get(contact.phone) })).body.userId, result.body.userId);
-  } finally { await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())); }
-  console.log("PASS: email/mobile verification, idempotency, expiry, durable anti-abuse, 14 concurrent free-question attempts, independent $5 SMS cap, paid paths, uncertain delivery. No real email, SMS or AI generation.");
+  } finally {
+    await Promise.all(servers.map(server => new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve()))));
+    sessionStores.forEach(store => store.close?.());
+  }
+  console.log("PASS: email/mobile verification, production PostgreSQL sessions across instances and restart, idempotency, expiry, durable anti-abuse, 14 concurrent free-question attempts, independent $5 SMS cap, paid paths, uncertain delivery. No real email, SMS or AI generation.");
 } finally {
   await isolated.end();
   if (created) await mainPool.query(`DROP SCHEMA "${namespace}" CASCADE`);

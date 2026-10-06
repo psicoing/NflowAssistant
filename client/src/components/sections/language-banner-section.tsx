@@ -127,7 +127,7 @@ export default function LanguageBannerSection() {
         };
 
         // ESC key handler
-        const handleEsc = (e) => {
+        const handleEsc = (e: KeyboardEvent) => {
           if (e.key === 'Escape') {
             closeModal();
             document.removeEventListener('keydown', handleEsc);
