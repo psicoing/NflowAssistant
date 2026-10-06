@@ -52,6 +52,9 @@ import {
 } from "./voiceDemoBridge";
 import { EMPRESA_LEGACY_NUXA_FROM_EMAIL, EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandStatuses, getEmpresaBrandStatus, isEmpresaBrand, type EmpresaBrand } from "./empresaBrands";
 import { db, pool } from "./db";
+import { TrialStore } from "./trial/store";
+import { registerTrialRoutes, respondTrialError } from "./trial/routes";
+const trialQuota = new TrialStore(pool);
 import { eq, and, desc, gte, count } from "drizzle-orm";
 import "./types"; // Import session types
 import multer from "multer";
@@ -799,6 +802,8 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
 
   // Send message to conversation with AI processing
   app.post("/api/conversations/:id/messages", async (req, res) => {
+    let trialQuestionId: string | null = null;
+    let trialDelivered = false;
     try {
       const conversationId = parseInt(req.params.id);
       const { content, userProfile, language, chatMode } = req.body;
@@ -823,12 +828,13 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       const limitCheck = await storage.checkQuestionLimit(userId);
       if (!limitCheck.canAsk) {
         return res.status(429).json({ 
-          message: "Límite de preguntas mensuales alcanzado",
+          message: limitCheck.limit === 5 ? "Has agotado la prueba gratuita. Elige un plan para continuar." : "Límite de preguntas mensuales alcanzado",
           limit: limitCheck.limit,
           remaining: 0,
           resetDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).toISOString()
         });
       }
+      trialQuestionId = await trialQuota.reserveQuestion(userId);
 
       // Save user message
       const userMessage = await storage.createMessage({
@@ -849,7 +855,9 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       console.log("AI Response received:", aiResponse);
 
       // A budget/input/provider error returns static guidance, not a paid reply.
-      const questionsRemaining = await countDeliveredChatQuestion(aiResponse, limitCheck, () => storage.incrementQuestionCount(userId));
+      trialDelivered = aiResponse.countsTowardQuestionQuota;
+      const questionsRemaining = await countDeliveredChatQuestion(aiResponse, limitCheck,
+        () => trialQuestionId ? trialQuota.settleQuestion(trialQuestionId, true) : storage.incrementQuestionCount(userId));
 
       // Fire-and-forget: email when trial user uses their last free question
       if (aiResponse.countsTowardQuestionQuota && questionsRemaining === 0) {
@@ -874,8 +882,14 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
         tags: aiResponse.tags || []
       });
     } catch (error) {
+      if (respondTrialError(res, error)) return;
       console.error("Error processing conversation message:", error);
       res.status(500).json({ message: "Error processing message" });
+    } finally {
+      if (trialQuestionId) {
+        try { await trialQuota.settleQuestion(trialQuestionId, trialDelivered); }
+        catch { console.error("[trial-quota] reservation retained for review"); }
+      }
     }
   });
 
@@ -892,6 +906,8 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
 
   // Process chat message
   app.post("/api/chat", async (req, res) => {
+    let trialQuestionId: string | null = null;
+    let trialDelivered = false;
     try {
       const { message, conversationId, userProfile } = req.body;
       const userId = req.session.userId;
@@ -919,6 +935,7 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
           resetDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).toISOString()
         });
       }
+      trialQuestionId = await trialQuota.reserveQuestion(userId);
 
       // Get conversation history
       const history = await storage.getMessages(conversationId);
@@ -929,7 +946,9 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       // Process the message with AI
       const aiResponse = await processUserMessage(message, history, userProfile, userLanguage);
 
-      const questionsRemaining = await countDeliveredChatQuestion(aiResponse, limitCheck, () => storage.incrementQuestionCount(userId));
+      trialDelivered = aiResponse.countsTowardQuestionQuota;
+      const questionsRemaining = await countDeliveredChatQuestion(aiResponse, limitCheck,
+        () => trialQuestionId ? trialQuota.settleQuestion(trialQuestionId, true) : storage.incrementQuestionCount(userId));
 
       res.json({
         content: aiResponse.content,
@@ -938,8 +957,14 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
         tags: aiResponse.tags || []
       });
     } catch (error) {
+      if (respondTrialError(res, error)) return;
       console.error("Error processing chat message:", error);
       res.status(500).json({ message: "Error processing message" });
+    } finally {
+      if (trialQuestionId) {
+        try { await trialQuota.settleQuestion(trialQuestionId, trialDelivered); }
+        catch { console.error("[trial-quota] reservation retained for review"); }
+      }
     }
   });
 
@@ -1101,77 +1126,8 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
     }
   });
 
-  // Free trial registration – 2 questions, no payment required
-  const TRIAL_MONTHLY_CAP = 250;
-
-  async function countTrialUsersThisMonth(): Promise<number> {
-    const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const [result] = await db
-      .select({ total: count() })
-      .from(users)
-      .where(and(eq(users.subscriptionStatus, "trial"), gte(users.createdAt, startOfMonth)));
-    return result?.total ?? 0;
-  }
-
-  // Public endpoint: check if monthly trial cap is reached
-  app.get("/api/prueba-gratis/estado", async (_req, res) => {
-    try {
-      const used = await countTrialUsersThisMonth();
-      const cap = TRIAL_MONTHLY_CAP;
-      res.json({ cupoLleno: used >= cap, used, cap });
-    } catch (error) {
-      console.error("Error checking trial status:", error);
-      res.json({ cupoLleno: false, used: 0, cap: TRIAL_MONTHLY_CAP });
-    }
-  });
-
-  app.post("/api/prueba-gratis", async (req, res) => {
-    try {
-      const { username, email, password } = req.body;
-      if (!username || !email || !password) {
-        return res.status(400).json({ message: "Todos los campos son obligatorios" });
-      }
-      if (password.length < 6) {
-        return res.status(400).json({ message: "La contraseña debe tener al menos 6 caracteres" });
-      }
-      if (!email.includes("@")) {
-        return res.status(400).json({ message: "Email no válido" });
-      }
-
-      // Check monthly cap
-      const trialCount = await countTrialUsersThisMonth();
-      if (trialCount >= TRIAL_MONTHLY_CAP) {
-        return res.status(429).json({ message: "Cupo mensual completo", cupoLleno: true });
-      }
-
-      const existing = await storage.getUserByUsername(username);
-      if (existing) {
-        return res.status(409).json({ message: "El nombre de usuario ya está en uso" });
-      }
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = await storage.createUser({
-        username,
-        password: hashedPassword,
-        email,
-        subscriptionPlan: "trial",
-        subscriptionStatus: "trial",
-        monthlyQuestionLimit: 5,
-        hasCompletedPayment: false,
-      });
-      req.session.userId = newUser.id;
-      req.session.save((err) => {
-        if (err) {
-          console.error("Session save error in prueba-gratis:", err);
-          return res.status(500).json({ message: "Error al guardar sesión" });
-        }
-        return res.json({ success: true, userId: newUser.id });
-      });
-    } catch (error) {
-      console.error("Error in prueba-gratis:", error);
-      res.status(500).json({ message: "Error al procesar la solicitud" });
-    }
-  });
+  // A free trial is only activated after both security codes are checked.
+  await registerTrialRoutes(app, pool);
 
   // Individual plan pre-registration with Skrill payment link (saved to DB, no email)
   app.post("/api/registro-individual", async (req, res) => {
@@ -4413,6 +4369,22 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       const user = await storage.getUser(userId);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
+      }
+      if (user.subscriptionStatus === "trial") {
+        if ((user.prepaidQuestions || 0) > 0) {
+          return res.json({ canAsk: true, remaining: user.prepaidQuestions, used: 0,
+            limit: user.prepaidQuestions, isTrial: false, prepaidQuestions: user.prepaidQuestions, resetDate: null });
+        }
+        try {
+          const state = await trialQuota.state(userId);
+          return res.json({ ...state, isTrial: true, resetDate: null, prepaidQuestions: user.prepaidQuestions || 0 });
+        } catch (error) {
+          if ((error as { code?: string }).code === "TRIAL_VERIFICATION_REQUIRED") {
+            return res.json({ canAsk: false, remaining: 0, used: user.questionsUsedThisMonth || 0,
+              limit: 5, isTrial: true, requiresVerification: true, verificationUrl: "/prueba-gratis", resetDate: null });
+          }
+          throw error;
+        }
       }
 
       // Check if we need to reset monthly counter

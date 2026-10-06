@@ -1107,6 +1107,9 @@ process.on("unhandledRejection", (reason: unknown) => {
 });
 
 const app = express();
+// Replit forwards the client IP through its reverse proxy. Without this,
+// verification rate limits would be shared by everyone behind that proxy.
+app.set("trust proxy", 1);
 registerSeoDiscovery(app);
 
 // Apply express.json() conditionally - exclude Stripe webhook route

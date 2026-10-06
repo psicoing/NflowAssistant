@@ -11,4 +11,16 @@ El usuario aprobó exigir correo y móvil verificados para acceder a las 5 pregu
 
 **Why:** El usuario eligió «Correo y móvil (recomendado)» tras explicar este alcance.
 
-**How to apply:** Verificar ambos medios antes de dar acceso al chat gratuito y conservar el control de la prueba por número. El presupuesto de SMS todavía necesita autorización. No prometer que un número verificado demuestra identidad única.
+**How to apply:** Verificar ambos medios antes de dar acceso al chat gratuito y conservar el control de la prueba por número. No prometer que un número verificado demuestra identidad única.
+
+El usuario autorizó 5 USD al mes para SMS de verificación, adicionales a los presupuestos del chat y separados de la voz y otras notificaciones.
+
+**Why:** Respondió 5 al formulario del máximo mensual en USD para SMS.
+
+**How to apply:** No ampliar este presupuesto sin permiso. Es un control interno conservador de los envíos de verificación, no un límite de la factura total de Twilio.
+
+La prueba es una sola por número: borrar una cuenta o cambiar la configuración de autenticación no debe conceder otras cinco preguntas. Los identificadores de prevención de abuso deben conservar su estabilidad y no depender de claves de sesión que puedan rotar.
+
+**Why:** Sin esta separación, cambiar de cuenta o renovar una clave de autenticación permitiría repetir la misma prueba, contrario al objetivo aprobado.
+
+**How to apply:** Mantener la continuidad del historial al modificar autenticación o gestionar cuentas; contemplar las solicitudes de protección de datos explícitamente.

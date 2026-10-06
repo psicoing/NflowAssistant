@@ -14,7 +14,9 @@ import {
   type EmpresaRegistration, type InsertEmpresaRegistration,
   type EmailLead, type InsertEmailLead
 } from "@shared/schema";
-import { db } from "./db";
+import { db, pool } from "./db";
+import { TrialStore } from "./trial/store";
+const trialQuota = new TrialStore(pool);
 import { eq, sql } from "drizzle-orm";
 
 export interface IStorage {
@@ -434,6 +436,13 @@ export class DatabaseStorage implements IStorage {
     if (!user) {
       throw new Error("Usuario no encontrado");
     }
+    if (user.subscriptionStatus === "trial") {
+      if ((user.prepaidQuestions || 0) > 0) {
+        return { canAsk: true, remaining: user.prepaidQuestions! - 1, limit: user.prepaidQuestions! };
+      }
+      const state = await trialQuota.state(userId);
+      return { canAsk: state!.canAsk, remaining: state!.remaining - 1, limit: 5 };
+    }
 
     // Check if we need to reset monthly counter
     const now = new Date();
@@ -467,6 +476,9 @@ export class DatabaseStorage implements IStorage {
     if (!user) {
       throw new Error("Usuario no encontrado");
     }
+    if (user.subscriptionStatus === "trial" && !(user.prepaidQuestions! > 0)) {
+      throw new Error("Trial questions require an atomic reservation");
+    }
 
     // Primero consumir créditos prepagados, luego cuota de suscripción
     const prepaid = user.prepaidQuestions || 0;
@@ -496,6 +508,8 @@ export class DatabaseStorage implements IStorage {
   }
 
   async resetMonthlyQuestions(userId: number): Promise<User> {
+    const current = await this.getUser(userId);
+    if (current?.subscriptionStatus === "trial") return current;
     const [updatedUser] = await db
       .update(users)
       .set({

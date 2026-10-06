@@ -75,6 +75,9 @@ export const users = pgTable("users", {
   monthlyQuestionLimit: integer("monthly_question_limit").default(10),
   questionsUsedThisMonth: integer("questions_used_this_month").default(0),
   lastQuestionResetDate: timestamp("last_question_reset_date").defaultNow(),
+  trialEmailVerifiedAt: timestamp("trial_email_verified_at", { withTimezone: true }),
+  trialPhoneVerifiedAt: timestamp("trial_phone_verified_at", { withTimezone: true }),
+  trialPhoneHash: text("trial_phone_hash"),
   // Créditos prepagados (pago por uso)
   prepaidQuestions: integer("prepaid_questions").default(0),
   // Magic Link para acceso directo después de compra
@@ -86,6 +89,72 @@ export const users = pgTable("users", {
   noticeVersion: text("notice_version"),
   // Partner que creó este usuario (para usuarios importados por empresas)
   createdByPartnerId: integer("created_by_partner_id"),
+});
+
+// Durable trial controls. Identities survive account deletion and month rollover.
+// The HMAC key is backend-only and independent of session-secret rotation.
+export const nuxaTrialSecurity = pgTable("nuxa_trial_security", {
+  id: integer("id").primaryKey(),
+  hmacKey: text("hmac_key").notNull(),
+});
+export const nuxaTrialFlows = pgTable("nuxa_trial_flows", {
+  id: text("id").primaryKey(),
+  sessionHash: text("session_hash").notNull(),
+  username: text("username").notNull(),
+  email: text("email").notNull(),
+  passwordHash: text("password_hash"),
+  phone: text("phone").notNull(),
+  phoneHash: text("phone_hash").notNull(),
+  emailHash: text("email_hash").notNull(),
+  existingUserId: integer("existing_user_id"),
+  emailCodeHash: text("email_code_hash"),
+  smsCodeHash: text("sms_code_hash"),
+  emailCodeExpiresAt: timestamp("email_code_expires_at", { withTimezone: true }),
+  smsCodeExpiresAt: timestamp("sms_code_expires_at", { withTimezone: true }),
+  emailSentAt: timestamp("email_sent_at", { withTimezone: true }),
+  smsSentAt: timestamp("sms_sent_at", { withTimezone: true }),
+  emailVerifiedAt: timestamp("email_verified_at", { withTimezone: true }),
+  phoneVerifiedAt: timestamp("phone_verified_at", { withTimezone: true }),
+  emailAttempts: integer("email_attempts").notNull().default(0),
+  smsAttempts: integer("sms_attempts").notNull().default(0),
+  emailSends: integer("email_sends").notNull().default(0),
+  smsSends: integer("sms_sends").notNull().default(0),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  completedUserId: integer("completed_user_id"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+export const nuxaTrialIdentities = pgTable("nuxa_trial_identities", {
+  phoneHash: text("phone_hash").primaryKey(),
+  emailHash: text("email_hash").notNull().unique(),
+  userId: integer("user_id").notNull().unique(),
+  used: integer("used").notNull().default(0),
+  reserved: integer("reserved").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+export const nuxaTrialQuestions = pgTable("nuxa_trial_questions", {
+  id: text("id").primaryKey(),
+  phoneHash: text("phone_hash").notNull().references(() => nuxaTrialIdentities.phoneHash),
+  state: text("state").notNull().default("reserved"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+export const nuxaTrialRateLimits = pgTable("nuxa_trial_rate_limits", {
+  key: text("key").primaryKey(),
+  used: integer("used").notNull().default(1),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+});
+export const nuxaTrialSmsMonths = pgTable("nuxa_trial_sms_months", {
+  month: text("month").primaryKey(),
+  maximumMicroUsd: bigint("maximum_micro_usd", { mode: "number" }).notNull().default(5_000_000),
+  bookedMicroUsd: bigint("booked_micro_usd", { mode: "number" }).notNull().default(0),
+  faulted: boolean("faulted").notNull().default(false),
+});
+export const nuxaTrialSmsSends = pgTable("nuxa_trial_sms_sends", {
+  id: text("id").primaryKey(),
+  month: text("month").notNull().references(() => nuxaTrialSmsMonths.month),
+  maximumMicroUsd: bigint("maximum_micro_usd", { mode: "number" }).notNull(),
+  providerId: text("provider_id"),
+  state: text("state").notNull().default("reserved"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const conversations = pgTable("conversations", {

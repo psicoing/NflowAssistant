@@ -93,12 +93,13 @@ export default function Chat() {
   }, [user?.id, user?.hasActiveSubscription, user?.profileCompleted, user?.ageRange, user?.gender]);
 
   // Fetch question limit (used to detect trial exhaustion)
-  const { data: questionLimit } = useQuery<{ canAsk: boolean; isTrial: boolean; remaining: number; used: number; limit: number }>({
+  const { data: questionLimit } = useQuery<{ canAsk: boolean; isTrial: boolean; remaining: number; used: number; limit: number; requiresVerification?: boolean }>({
     queryKey: ["/api/question-limit"],
     enabled: !!user && user.hasActiveSubscription,
     refetchInterval: 10000,
   });
-  const isTrialExhausted = questionLimit?.isTrial && !questionLimit?.canAsk;
+  const isTrialUnverified = questionLimit?.requiresVerification === true;
+  const isTrialExhausted = questionLimit?.isTrial && !questionLimit?.canAsk && !isTrialUnverified;
 
   // Fetch conversations list (subscription already verified in login)
   const { data: conversations = [], isLoading: isLoadingConversations } = useQuery<Conversation[]>({
@@ -172,7 +173,8 @@ export default function Chat() {
       });
       
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const failure = await response.json().catch(() => ({}));
+        throw new Error(`HTTP ${response.status}: ${failure.code || ""} ${failure.message || response.statusText}`);
       }
       
       return response.json();
@@ -194,6 +196,11 @@ export default function Chat() {
         reason: error.message?.includes("429") ? "limit" : "network_or_server",
       });
       
+      if (error.message?.includes("TRIAL_VERIFICATION_REQUIRED")) {
+        toast({ title: "Verifica tu prueba gratuita", description: "Confirma tu correo y tu móvil antes de usar las 5 preguntas.", variant: "destructive" });
+        queryClient.invalidateQueries({ queryKey: ["/api/question-limit"] });
+        return;
+      }
       // Handle question limit exceeded (429 status)
       if (error.message?.includes("429")) {
         toast({
@@ -862,6 +869,15 @@ export default function Chat() {
 
         {/* Chat Interface */}
         <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+          {isTrialUnverified && (
+            <div className="flex-1 flex items-center justify-center p-6 bg-slate-900">
+              <div className="max-w-md text-center space-y-5">
+                <h2 className="text-2xl font-bold text-white">Verifica tu prueba gratuita</h2>
+                <p className="text-slate-300">Confirma tu correo y tu móvil para acceder a las preguntas restantes. Hay una sola prueba de 5 preguntas por número, sin renovación mensual.</p>
+                <a href="/prueba-gratis" className="inline-flex rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white hover:bg-indigo-500">Verificar correo y móvil</a>
+              </div>
+            </div>
+          )}
           {/* Trial exhausted banner */}
           {isTrialExhausted && (
             <div className="flex-1 flex items-center justify-center p-6 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900">
@@ -903,7 +919,7 @@ export default function Chat() {
               </div>
             </div>
           )}
-          {!isTrialExhausted && currentConversationId ? (
+          {!isTrialExhausted && !isTrialUnverified && currentConversationId ? (
             chatMode === "bubbles" ? (
               <ChatBubbleInterface
                 messages={messages}
@@ -930,7 +946,7 @@ export default function Chat() {
               />
             )
           ) : (
-            <div className="flex-1 flex items-center justify-center overflow-hidden">
+            <div className={`flex-1 flex items-center justify-center overflow-hidden ${isTrialUnverified || isTrialExhausted ? "hidden" : ""}`}>
               <div className="text-center max-w-md mx-4">
                 <MessageCircle className="w-16 h-16 text-gray-500 mx-auto mb-4" />
                 <h2 className="text-xl font-semibold text-white mb-2">

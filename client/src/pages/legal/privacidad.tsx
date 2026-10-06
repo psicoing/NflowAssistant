@@ -103,10 +103,23 @@ export default function PoliticaPrivacidad() {
             <h3>2.2 Datos de Contacto</h3>
             <ul>
               <li>Dirección de correo electrónico</li>
+              <li>Móvil para verificar el acceso a la prueba gratuita y prevenir pruebas repetidas; no se utiliza para llamadas comerciales por este motivo.</li>
               <li>Información de suscripción</li>
               <li>Preferencias de comunicación</li>
               <li>Datos de facturación (si aplica)</li>
             </ul>
+            <p>
+              En la prueba gratuita enviamos códigos temporales mediante SendGrid (correo) y Twilio (SMS).
+              Estos proveedores reciben el contacto necesario para entregar el código, no el contenido de tus consultas.
+              Los códigos se guardan como resúmenes criptográficos, nunca en texto legible.
+              Los datos temporales de la verificación se eliminan tras caducar el proceso, que dura 30 minutos.
+              Conservamos identificadores seudonimizados de correo y móvil y el uso de la prueba para
+              impedir nuevas pruebas con el mismo número, incluso si se elimina la cuenta.
+              Estos identificadores siguen siendo datos personales y se tratan para prevenir el abuso
+              mientras se mantenga esta oferta. Puedes solicitar el ejercicio de tus derechos mediante
+              los datos de contacto de esta política. El proveedor puede conservar sus propios registros
+              de entrega según sus condiciones.
+            </p>
 
             <h3>2.3 Datos de Salud Mental - Especial Protección</h3>
             <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400">
