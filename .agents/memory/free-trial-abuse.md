@@ -7,4 +7,8 @@ El usuario pide un código de seguridad por correo y una casilla para introducir
 
 **Why:** Verificar el acceso a un correo no identifica a una persona ni impide que registre otras cuentas.
 
-**How to apply:** Evaluar la protección por encima de la cuenta de correo. No dar por aprobados todavía la obligatoriedad del móvil, un proveedor de verificación ni un presupuesto de SMS. No prometer que un número verificado demuestra identidad única.
+El usuario aprobó exigir correo y móvil verificados para acceder a las 5 preguntas gratuitas. La propuesta aceptada limita la prueba a una por número aunque cambie el correo, sin renovación mensual.
+
+**Why:** El usuario eligió «Correo y móvil (recomendado)» tras explicar este alcance.
+
+**How to apply:** Verificar ambos medios antes de dar acceso al chat gratuito y conservar el control de la prueba por número. El presupuesto de SMS todavía necesita autorización. No prometer que un número verificado demuestra identidad única.
