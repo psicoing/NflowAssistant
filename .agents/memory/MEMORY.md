@@ -16,3 +16,4 @@
 - [Base de datos de las pruebas](testing-datastore.md) — las herramientas SQL integradas pueden consultar una base distinta de la app; validar la fuente antes de modificar fixtures.
 - [Sesiones y publicación](publishing-sessions.md) — Autoscale requiere sesiones duraderas y secreto estable; los flujos por códigos no pueden depender de la memoria de una instancia.
 - [Chat sin IA disponible](chat-outage-transparency.md) — avisar de la indisponibilidad, identificar respuestas automáticas y conservar preguntas; nunca prometer una fecha de reactivación.
+- [Twilio Email](twilio-email-verification.md) — permisos mínimos de correo separados de voz/SMS; confirmar entrega mediante estadísticas de la operación.
