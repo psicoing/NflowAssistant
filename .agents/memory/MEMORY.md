@@ -11,3 +11,4 @@
 - [Valor del trabajo bibliográfico](bibliographic-work-value.md) — el usuario destaca la importancia de la bibliografía previa; valorar su uso real antes de proponer cambios.
 - [OpenAI billing diagnostics](openai-billing-diagnostics.md) — metadatos accesibles no prueban que la generación tenga facturación activa; separar autenticación, modelo y billing.
 - [Chat billing boundary](chat-billing-boundary.md) — propuesta OpenAI primero/Replit de respaldo; control de tokens, presupuesto autorizado y voz independiente.
+- [Abuso de la prueba gratuita](free-trial-abuse.md) — el usuario quiere impedir que una persona multiplique las preguntas gratis registrando distintos correos.
