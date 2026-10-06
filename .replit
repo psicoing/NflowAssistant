@@ -47,3 +47,4 @@ timeoutMs = 20000
 [userenv.shared]
 VOICE_DEMO_PUBLIC_URL = "https://nflow-assistant-rmportbou.replit.app"
 NUXA_AI_ALERT_EMAIL = "rmportbou@gmail.com"
+OPENAI_CHAT_MODEL = "gpt-5.5"
