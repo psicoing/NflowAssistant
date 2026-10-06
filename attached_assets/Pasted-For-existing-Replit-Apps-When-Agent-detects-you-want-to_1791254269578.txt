@@ -1,0 +1,30 @@
+For existing Replit Apps: When Agent detects you want to add AI functionality to an existing Replit App, Agent will explicitly tell you in the Project Editor that it’s asking to use Replit AI Integrations instead of your own API key. You’ll see a confirmation prompt:
+Confirm OpenAI Integration dialog showing message about adding OpenAI using Replit's managed service with no API keys required, with Dismiss and Approve buttons
+Click “Approve” to continue with Replit-managed credentials, or “Dismiss” if you prefer to use your own API key.
+Your usage is automatically tracked and billed to your Replit account at the public API price.
+​
+Bringing your own API key
+
+If you prefer to use your own credentials from OpenAI, Anthropic, Google, or other providers instead of Replit AI Integrations, you have a few options:
+For initial builds: Include in your prompt that you want to use your own API key:
+
+
+Create a web app that uses OpenAI to summarize articles. Use my own OpenAI API key.
+You’ll see the provider name (without “Replit managed”) in the response, indicating Agent will request your API key.
+For existing Replit Apps: When Agent tells you it wants to use Replit AI Integrations and shows the confirmation prompt, click “Dismiss” instead of “Approve.”
+In both cases, Agent will build through the first checkpoint before requesting your API key. This allows Agent to set up your project structure first, then pause to collect your credentials.
+When you use your own API key, you’re billed directly by the provider rather than through Replit credits.
+​
+Viewing your usage
+
+All Replit AI Integrations usage appears on your usage page alongside your other Replit usage. Usage is broken down by Existing Replit App so you can see exactly where your AI spend is going.
+​
+Supported providers
+
+Replit AI Integrations currently supports:
+OpenAI: Multimodal models for text generation, reasoning, and audio. Supports chat completions, responses, image generation, audio transcription (gpt-4o-transcribe, gpt-4o-mini-transcribe), and audio output (gpt-audio, gpt-audio-mini).
+Anthropic: Multimodal models for reasoning, writing, and coding. Supports the Messages API and interactions with web search.
+Google (Gemini): Multimodal models for text generation and reasoning. Supports text and image generation.
+Grok: Models for text generation, reasoning, and coding.
+OpenRouter: Access to models from providers such as Microsoft (Phi series), Meta (Llama series), Mistral, Qwen, DeepSeek, Nvidia, Amazon, and more.
+Replit AI Integrations supports text, image, and audio output. Video output is not supported. If you need video generation capabilities, you’ll need to use your own API key from a provider that offers them.
