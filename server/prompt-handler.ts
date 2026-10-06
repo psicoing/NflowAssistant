@@ -15,12 +15,15 @@ import { compactChatPresentation } from "./chat-presentation";
 import { boundedChatHistory } from "./chat-cost-policy";
 import { routedChatCompletion } from "./chat-completion-router";
 import { chatCostLimitMessage } from "./chat-policy";
+import { chatUnavailableNotice } from "../shared/chat-service";
 
 export interface ChatResponse {
   content: string;
   supportType: string;
   tags?: string[];
   countsTowardQuestionQuota: boolean;
+  responseKind: "ai" | "automatic";
+  aiUnavailable?: boolean;
 }
 
 /**
@@ -826,6 +829,7 @@ export async function processUserMessage(userMessage: string, history: Message[]
         content: generateOffTopicResponse(userLanguage),
         supportType: "off_topic",
         countsTowardQuestionQuota: false,
+        responseKind: "automatic",
         tags: ["off_topic_filtered"]
       };
     }
@@ -855,6 +859,7 @@ export async function processUserMessage(userMessage: string, history: Message[]
       content: responseContent,
       supportType,
       countsTowardQuestionQuota: true,
+      responseKind: "ai",
       tags
     };
   } catch (error: any) {
@@ -862,11 +867,13 @@ export async function processUserMessage(userMessage: string, history: Message[]
     
     // Proporcionar una respuesta de fallback estructurada
     return {
-      content: error?.code === "NUXA_CHAT_MONTHLY_BUDGET_EXCEEDED" || error?.code === "NUXA_CHAT_INPUT_TOO_LARGE"
+      content: error?.code === "NUXA_CHAT_INPUT_TOO_LARGE"
         ? chatCostLimitMessage(userLanguage, needsUrgentConversationSupport(userMessage, history), error.code)
-        : chatFailureMessage(userLanguage, needsUrgentConversationSupport(userMessage, history)),
+        : `${needsUrgentConversationSupport(userMessage, history) ? `${chatFailureMessage(userLanguage, true)}\n\n` : ""}${chatUnavailableNotice(userLanguage)}`,
       supportType: needsUrgentConversationSupport(userMessage, history) ? "crisis" : "general",
       countsTowardQuestionQuota: false,
+      responseKind: "automatic",
+      aiUnavailable: error?.code !== "NUXA_CHAT_INPUT_TOO_LARGE",
       tags: []
     };
   }

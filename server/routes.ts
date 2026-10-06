@@ -54,6 +54,7 @@ import { EMPRESA_LEGACY_NUXA_FROM_EMAIL, EMPRESA_SHARED_FROM_EMAIL, getEmpresaBr
 import { db, pool } from "./db";
 import { TrialStore } from "./trial/store";
 import { registerTrialRoutes, respondTrialError } from "./trial/routes";
+import { getChatServiceStatus } from "./chat-service-status";
 const trialQuota = new TrialStore(pool);
 import { eq, and, desc, gte, count } from "drizzle-orm";
 import "./types"; // Import session types
@@ -239,6 +240,13 @@ async function checkSubscription(userId: number): Promise<boolean> {
 }
 
 export async function registerRoutes(app: Express, existingServer?: Server): Promise<Server> {
+  // Preserve old history; unknown legacy replies must not be relabelled as AI.
+  await pool.query("ALTER TABLE messages ADD COLUMN IF NOT EXISTS response_kind text");
+  app.get("/api/chat/service-status", async (req, res) => {
+    if (!req.session.userId) return res.status(401).json({ message: "User not authenticated" });
+    res.setHeader("Cache-Control", "no-store");
+    res.json(await getChatServiceStatus());
+  });
   
   // Block WordPress bot requests - return 404 immediately
   app.use((req, res, next) => {
@@ -867,13 +875,16 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       const aiMessage = await storage.createMessage({
         conversationId,
         content: aiResponse.content,
-        isUser: false
+        isUser: false,
+        responseKind: aiResponse.responseKind,
       });
 
       res.json({
         userMessage,
         aiMessage,
         supportType: aiResponse.supportType,
+        responseKind: aiResponse.responseKind,
+        aiUnavailable: aiResponse.aiUnavailable || false,
         questionsRemaining,
         tags: aiResponse.tags || []
       });
@@ -949,6 +960,8 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       res.json({
         content: aiResponse.content,
         supportType: aiResponse.supportType,
+        responseKind: aiResponse.responseKind,
+        aiUnavailable: aiResponse.aiUnavailable || false,
         questionsRemaining,
         tags: aiResponse.tags || []
       });

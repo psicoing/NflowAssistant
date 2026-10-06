@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send, Bot, User, Loader2 } from "lucide-react";
 import type { Message } from "@shared/schema";
+import type { ReactNode } from "react";
+import { AutomaticReplyLabel } from "@/components/ui/chat-service-notice";
 
 interface ChatBriefInterfaceProps {
   messages: Message[];
@@ -11,6 +13,8 @@ interface ChatBriefInterfaceProps {
   isLoading: boolean;
   isLoadingMessages?: boolean;
   voiceEnabled?: boolean;
+  serviceNotice?: ReactNode;
+  language?: string;
 }
 
 export default function ChatBriefInterface({
@@ -19,6 +23,8 @@ export default function ChatBriefInterface({
   isLoading,
   isLoadingMessages = false,
   voiceEnabled = false,
+  serviceNotice,
+  language = "es",
 }: ChatBriefInterfaceProps) {
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -109,6 +115,7 @@ export default function ChatBriefInterface({
 
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+        {serviceNotice && <div className="sticky top-0 z-10 bg-gray-900/95 pb-2">{serviceNotice}</div>}
         {isLoadingMessages ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
@@ -145,6 +152,9 @@ export default function ChatBriefInterface({
                     : "bg-gray-800/80 text-gray-100 border border-gray-700/50"
                 }`}
               >
+                {!message.isUser && (message as Message & { responseKind?: string }).responseKind === "automatic" && (
+                  <AutomaticReplyLabel language={language} />
+                )}
                 <p className="text-sm leading-relaxed whitespace-pre-wrap">
                   {message.isUser ? message.content : <CitationText content={message.content} />}
                 </p>

@@ -151,6 +151,14 @@ export class ChatBudgetLedger {
     } finally { client.release(); }
   }
 
+  async lastOutcome(): Promise<string | null> {
+    await this.ensureTables();
+    const { rows } = await this.pool.query(`SELECT state FROM ${this.requests}
+      WHERE state IN ('settled', 'rejected_unbilled', 'uncertain')
+      ORDER BY created_at DESC, id DESC LIMIT 1`);
+    return rows[0]?.state ?? null;
+  }
+
   async status() {
     await this.ensureTables();
     const month = await this.currentMonth(this.pool);

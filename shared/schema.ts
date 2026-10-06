@@ -176,6 +176,7 @@ export const messages = pgTable("messages", {
   conversationId: integer("conversation_id").notNull(),
   content: text("content").notNull(),
   isUser: boolean("is_user").notNull(),
+  responseKind: text("response_kind"),
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 
@@ -442,3 +443,14 @@ export const emailLeads = pgTable("email_leads", {
 export const insertEmailLeadSchema = createInsertSchema(emailLeads).omit({ id: true, createdAt: true, unsubscribedAt: true });
 export type InsertEmailLead = z.infer<typeof insertEmailLeadSchema>;
 export type EmailLead = typeof emailLeads.$inferSelect;
+
+export const chatCreditAlerts = pgTable("nuxa_chat_credit_alerts", {
+  provider: text("provider").primaryKey(),
+  active: boolean("active").notNull().default(false),
+  incidentId: text("incident_id"),
+  reason: text("reason"),
+  state: text("state").notNull().default("idle"),
+  detectedAt: timestamp("detected_at", { withTimezone: true }),
+  sentAt: timestamp("sent_at", { withTimezone: true }),
+  retryAfter: timestamp("retry_after", { withTimezone: true }),
+});

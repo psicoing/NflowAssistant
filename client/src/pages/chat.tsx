@@ -7,6 +7,7 @@ import ChatHeader from "@/components/ui/chat-header";
 import ChatInterface from "@/components/ui/chat-interface";
 import ChatBubbleInterface from "@/components/ui/chat-bubble-interface";
 import ChatBriefInterface from "@/components/ui/chat-brief-interface";
+import { ChatServiceNotice } from "@/components/ui/chat-service-notice";
 import UserProfileForm from "@/components/ui/user-profile-form";
 import QuestionLimitIndicator from "@/components/ui/question-limit-indicator";
 import ChatLanguageBanner from "@/components/ui/chat-language-banner";
@@ -22,6 +23,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { Conversation, Message } from "@shared/schema";
 import { SEOHead } from "@/components/SEOHead";
 import { trackEvent } from "@/lib/analytics";
+import type { ChatServiceStatus } from "@shared/chat-service";
 
 export default function Chat() {
   const { id } = useParams<{ id?: string }>();
@@ -45,10 +47,23 @@ export default function Chat() {
     return saved === 'true';
   });
   const [showResourcesPanel, setShowResourcesPanel] = useState(false);
+  const [responseReportedUnavailable, setResponseReportedUnavailable] = useState(false);
 
   // Authentication handled by session-based auth
   const { user, isLoading: isAuthLoading } = useAuth();
   const { t, currentLanguage, changeLanguage, languages } = useLanguageContext();
+
+  const { data: chatServiceStatus } = useQuery<ChatServiceStatus>({
+    queryKey: ["/api/chat/service-status"],
+    queryFn: async () => {
+      const response = await fetch("/api/chat/service-status", { credentials: "include" });
+      if (!response.ok) throw new Error("Unable to load chat service status");
+      return response.json();
+    },
+    enabled: !!user && user.hasActiveSubscription,
+    refetchInterval: 60000,
+    refetchOnWindowFocus: false,
+  });
 
   // Check subscription status and redirect if needed
   useEffect(() => {
@@ -179,7 +194,10 @@ export default function Chat() {
       
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (result: { responseKind?: "ai" | "automatic"; aiUnavailable?: boolean }) => {
+      if (result.responseKind === "ai") setResponseReportedUnavailable(false);
+      else if (result.aiUnavailable === true) setResponseReportedUnavailable(true);
+      queryClient.invalidateQueries({ queryKey: ["/api/chat/service-status"] });
       trackEvent("chat_message_succeeded", {
         chat_mode: chatMode,
         language: currentLanguage,
@@ -923,6 +941,8 @@ export default function Chat() {
             chatMode === "bubbles" ? (
               <ChatBubbleInterface
                 messages={messages}
+                serviceNotice={<ChatServiceNotice status={chatServiceStatus} language={currentLanguage} forceUnavailable={responseReportedUnavailable} />}
+                language={currentLanguage}
                 onSendMessage={handleSendMessage}
                 isLoading={sendMessageMutation.isPending}
                 isLoadingMessages={isLoadingMessages}
@@ -931,6 +951,8 @@ export default function Chat() {
             ) : chatMode === "brief" ? (
               <ChatBriefInterface
                 messages={messages}
+                serviceNotice={<ChatServiceNotice status={chatServiceStatus} language={currentLanguage} forceUnavailable={responseReportedUnavailable} />}
+                language={currentLanguage}
                 onSendMessage={handleSendMessage}
                 isLoading={sendMessageMutation.isPending}
                 isLoadingMessages={isLoadingMessages}
@@ -939,6 +961,8 @@ export default function Chat() {
             ) : (
               <ChatInterface
                 messages={messages}
+                serviceNotice={<ChatServiceNotice status={chatServiceStatus} language={currentLanguage} forceUnavailable={responseReportedUnavailable} />}
+                language={currentLanguage}
                 onSendMessage={handleSendMessage}
                 isLoading={sendMessageMutation.isPending}
                 isLoadingMessages={isLoadingMessages}

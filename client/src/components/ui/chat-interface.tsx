@@ -7,6 +7,8 @@ import { useToast } from "@/hooks/use-toast";
 import type { Message } from "@shared/schema";
 import DOMPurify from 'dompurify';
 import { linkifyCitations } from "@/lib/citation-links";
+import type { ReactNode } from "react";
+import { AutomaticReplyLabel } from "@/components/ui/chat-service-notice";
 
 // Función para detectar y convertir técnicas/recursos en bookmarks automáticos
 function detectBookmarkableContent(content: string): string[] {
@@ -481,6 +483,8 @@ interface ChatInterfaceProps {
   onRegenerateResponse?: (messageId: number) => void;
   isQuestionLimitReached?: boolean;
   voiceEnabled?: boolean;
+  serviceNotice?: ReactNode;
+  language?: string;
 }
 
 export default function ChatInterface({ 
@@ -490,7 +494,9 @@ export default function ChatInterface({
   isLoadingMessages,
   onRegenerateResponse,
   isQuestionLimitReached = false,
-  voiceEnabled = false
+  voiceEnabled = false,
+  serviceNotice,
+  language = "es"
 }: ChatInterfaceProps) {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [playingMessageId, setPlayingMessageId] = useState<number | null>(null);
@@ -749,6 +755,7 @@ export default function ChatInterface({
           scrollBehavior: 'smooth'
         }}
       >
+        {serviceNotice && <div className="sticky top-0 z-10 mb-4 bg-gray-900/95 pb-2">{serviceNotice}</div>}
         <div className="space-y-3 md:space-y-4">
           {messages.length === 0 ? (
             <div className="text-center py-8 md:py-12">
@@ -841,12 +848,15 @@ export default function ChatInterface({
                         {message.content}
                       </p>
                     ) : (
-                      <ProgressiveResponse 
-                        content={message.content}
-                        messageId={message.id}
-                        isLatest={message.id === messages[messages.length - 1]?.id}
-                        onSendMessage={onSendMessage}
-                      />
+                      <>
+                        {(message as Message & { responseKind?: string }).responseKind === "automatic" && <AutomaticReplyLabel language={language} />}
+                        <ProgressiveResponse
+                          content={message.content}
+                          messageId={message.id}
+                          isLatest={message.id === messages[messages.length - 1]?.id}
+                          onSendMessage={onSendMessage}
+                        />
+                      </>
                     )}
                   </div>
                   

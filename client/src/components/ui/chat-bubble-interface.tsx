@@ -6,6 +6,8 @@ import { useToast } from "@/hooks/use-toast";
 import type { Message } from "@shared/schema";
 import DOMPurify from 'dompurify';
 import { linkifyCitations } from "@/lib/citation-links";
+import type { ReactNode } from "react";
+import { AutomaticReplyLabel } from "@/components/ui/chat-service-notice";
 
 // Función para detectar y convertir técnicas/recursos en bookmarks automáticos
 function detectBookmarkableContent(content: string): string[] {
@@ -240,6 +242,8 @@ interface ChatBubbleInterfaceProps {
   onRegenerateResponse?: (messageId: number) => void;
   isQuestionLimitReached?: boolean;
   voiceEnabled?: boolean;
+  serviceNotice?: ReactNode;
+  language?: string;
 }
 
 export default function ChatBubbleInterface({
@@ -249,7 +253,9 @@ export default function ChatBubbleInterface({
   isLoadingMessages,
   onRegenerateResponse,
   isQuestionLimitReached = false,
-  voiceEnabled = false
+  voiceEnabled = false,
+  serviceNotice,
+  language = "es"
 }: ChatBubbleInterfaceProps) {
   const [inputValue, setInputValue] = useState("");
   const [characterCount, setCharacterCount] = useState(0);
@@ -647,6 +653,7 @@ export default function ChatBubbleInterface({
           backgroundColor: '#0a1929'
         }}
       >
+        {serviceNotice && <div className="sticky top-0 z-10 bg-gray-900/95 px-2 pb-3">{serviceNotice}</div>}
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full py-12 px-4">
             {/* Mode Indicator */}
@@ -750,6 +757,9 @@ export default function ChatBubbleInterface({
                           
                           {/* Message Content */}
                           <div className="relative z-10">
+                            {!message.isUser && isFirstSegment && (message as Message & { responseKind?: string }).responseKind === "automatic" && (
+                              <AutomaticReplyLabel language={language} />
+                            )}
                             {message.isUser ? (
                               <div className="text-sm leading-relaxed whitespace-pre-wrap break-words">
                                 {segment}

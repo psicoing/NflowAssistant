@@ -5,6 +5,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { build } from "esbuild";
 import { chatFailureMessage, hasSafetySignal } from "../server/chat-policy";
+import { chatUnavailableNotice } from "../shared/chat-service";
 import { installOfflineManagedChatConfiguration, offlineChatBudgetPlugin } from "./fixtures/chat-provider-offline";
 
 installOfflineManagedChatConfiguration();
@@ -93,15 +94,17 @@ try {
     for (const mode of modes) {
       const response = await processUserMessage("Quiero hacerme daño. Trabajo", [], profile, language, mode);
       assert.equal(response.supportType, "crisis");
-      assert.equal(response.content, chatFailureMessage(language, true));
+      assert.equal(response.content, `${chatFailureMessage(language, true)}\n\n${chatUnavailableNotice(language)}`);
+      assert.equal(response.responseKind, "automatic");
+      assert.equal(response.aiUnavailable, true);
       assert(!response.content.includes("717 003 717"));
       const normal = await processUserMessage("Me preocupa mi trabajo", [], profile, language, mode);
-      assert.equal(normal.content, chatFailureMessage(language, false));
+      assert.equal(normal.content, chatUnavailableNotice(language));
     }
   }
   state.fail = false;
   state.invalid = true;
-  assert.equal((await processUserMessage("Me siento triste", [], profile, "fr", "brief")).content, chatFailureMessage("fr", false));
+  assert.equal((await processUserMessage("Me siento triste", [], profile, "fr", "brief")).content, chatUnavailableNotice("fr"));
   const regional = buildChatPrompt("I feel stressed", [], {}, "en-US", "brief");
   assert(regional.startsWith("ALWAYS RESPOND IN ENGLISH"));
   assert(!regional.includes("undefined"));

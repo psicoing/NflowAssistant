@@ -4,11 +4,13 @@ import { budgetedChatCompletion, getChatBudgetLedger, type BudgetedRequest } fro
 import { ChatCostPolicyError, quoteChatRequest } from "./chat-cost-policy";
 import { isConfirmedOpenAiBillingRejection } from "./chat-billing-errors";
 import type { ChatBudgetLedger } from "./chat-budget-ledger";
+import { creditAlertReason, getChatCreditAlerts, safelyNotifyCreditAlert, type CreditAlertSink } from "./chat-credit-alerts";
 
 interface ChatRoutingDependencies {
   env?: NodeJS.ProcessEnv;
   clientForProvider?: (provider: ChatProvider) => OpenAI;
   ledgerForProvider?: (provider: ChatProvider) => Promise<ChatBudgetLedger>;
+  creditAlerts?: CreditAlertSink;
 }
 
 /** Sequential approved payers; never retry a potentially charged failure. */
@@ -32,7 +34,22 @@ export async function routedChatCompletion(request: BudgetedRequest, dependencie
       throw new ChatCostPolicyError("NUXA_CHAT_ACCOUNTING_REVIEW_REQUIRED", "Accounting review required; no provider called.");
     }
   }
-  const run = (provider: ChatProvider) => budgetedChatCompletion(request, clientFor(provider), stores.get(provider)!);
+  // Injected SDKs are offline tests: never send real operational mail for them.
+  const alerts = dependencies.creditAlerts ?? (dependencies.clientForProvider ? undefined : getChatCreditAlerts());
+  const run = async (provider: ChatProvider) => {
+    try {
+      const completion = await budgetedChatCompletion(request, clientFor(provider), stores.get(provider)!);
+      if (alerts) {
+        try { await alerts.recovered(provider); }
+        catch { console.error(`[ai-credit-alert] Could not record recovery; provider=${provider}`); }
+      }
+      return completion;
+    } catch (error) {
+      const reason = creditAlertReason(error, provider);
+      if (alerts && reason) await safelyNotifyCreditAlert(alerts, provider, reason);
+      throw error;
+    }
+  };
   try {
     return await run(primary);
   } catch (error) {
