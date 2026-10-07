@@ -10,6 +10,7 @@ import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { installOfflineManagedChatConfiguration, offlineChatBudgetPlugin } from "./fixtures/chat-provider-offline";
+import { boundedChatHistory, CHAT_HISTORY_BYTES } from "../server/chat-cost-policy";
 
 installOfflineManagedChatConfiguration();
 
@@ -142,12 +143,67 @@ try {
       assert(!common.includes('"id":"E08"'));
       const strategyStart = common.indexOf("ESTRATEGIA CONVERSACIONAL");
       assert(common.slice(0, strategyStart).length < 10_000, "Existing scientific context remains bounded");
-      assert(common.slice(strategyStart).length < 2_500, "Conversational strategy remains compact");
+      assert(common.slice(strategyStart).length < 5_000, "Conversational strategy remains bounded");
+      for (const priority of ["COMPRENSIÓN COMPARTIDA:", "CONTINUIDAD DEL TRABAJO:", "ADAPTACIÓN SEGÚN RESULTADOS:"]) {
+        assert(common.includes(priority), `Active prompt includes ${priority} in ${language}/${mode}`);
+      }
       assert(!/NEUROPSI-AI|grupo diagnóstico más probable"\s*:/.test(prompt));
       await processUserMessage(equivalent[position], [], { age: "13-17" }, language, mode);
       assert.equal(requests.at(-1).messages[0].content, prompt);
     }
   }
+  const continuityHistory = [
+    { content: "No es ansiedad por la reunión; me cuesta empezar el correo. Respirar no me ayuda.", isUser: true },
+    { content: "Podrías escribir solo una frase del correo.", isUser: false },
+    { content: "Lo intentaré.", isUser: true },
+    { content: "Puedes empezar por el saludo.", isUser: false },
+    { content: "Escribí el saludo; el temporizador me agobió.", isUser: true },
+    { content: "Podemos conservar ese inicio sin temporizador.", isUser: false },
+    { content: "Hoy no quiero más pasos, solo que me escuches.", isUser: true },
+    { content: "Te escucho.", isUser: false },
+  ];
+  const snapshot = JSON.stringify(continuityHistory);
+  const retained = boundedChatHistory(continuityHistory, "Sigo frustrado");
+  assert.equal(retained.length, 8, "Earlier corrections/outcomes survive more than six short turns");
+  assert.equal(JSON.stringify(continuityHistory), snapshot, "Stored dialogue is never mutated");
+  assert.equal(boundedChatHistory([...continuityHistory, { content: "Sigo frustrado", isUser: true }], "Sigo frustrado").length, 8);
+  const longHistory = Array.from({ length: 40 }, (_, i) => ({ content: `${i}: ` + "á".repeat(350), isUser: i % 2 === 0 }));
+  const bounded = boundedChatHistory(longHistory);
+  assert(bounded.length <= 32);
+  assert(bounded.reduce((bytes, item) => bytes + Buffer.byteLength(item.content, "utf8"), 0) <= CHAT_HISTORY_BYTES);
+  assert.equal(bounded.at(-1)?.content, longHistory.at(-1)?.content);
+  for (const [message, language, mode] of [
+    ["No me entendiste: lo difícil no es la reunión, sino empezar.", "es", "classic"],
+    ["I accepted the suggestion, but I haven't tried it yet.", "en", "brief"],
+    ["Ça ne m'a pas aidé. Je ne veux pas refaire cet exercice.", "fr", "bubbles"],
+    ["Me ayudó escribir el saludo, pero el temporizador me agobió.", "es", "brief"],
+    ["Ahora solo quiero que me escuches, no otro plan.", "es", "bubbles"],
+    ["No sé si eso me ayudó.", "es", "classic"],
+  ]) {
+    await processUserMessage(message, continuityHistory, undefined, language, mode);
+    const sent = requests.at(-1).messages;
+    assert(sent[0].content.includes("COMPRENSIÓN COMPARTIDA:"));
+    assert(sent[0].content.includes("Ante una corrección"));
+    assert(sent[0].content.includes("NO demuestra que la persona la haya realizado"));
+    assert(sent[0].content.includes("Si ayudó parcialmente"));
+    assert(sent[0].content.includes("NO tres apartados visibles"));
+    assert(sent.some((item: any) => item.content === continuityHistory[0].content));
+    assert.equal(sent.at(-1).content, message);
+    assert.equal(sent.filter((item: any) => item.content === message).length, 1);
+  }
+  // Old material outside the transmitted window must not influence retrieval
+  // or inferred preferences in the actual final system prompt.
+  const staleHistory = [
+    { content: "Elijo plan estructurado. osteoporosis osteopenia", isUser: true },
+    ...Array.from({ length: 32 }, (_, i) => ({ content: `Turno reciente ${i}: estoy organizando un correo.`, isUser: i % 2 === 0 })),
+  ];
+  await processUserMessage("Quiero escribir un saludo.", staleHistory, undefined, "es", "brief");
+  assert(!requests.at(-1).messages[0].content.includes("Plan detallado paso a paso con cronograma semanal"));
+  await processUserMessage("¿Y ahora?", [
+    { content: "No quiero vivir. " + "x".repeat(CHAT_HISTORY_BYTES), isUser: true },
+  ], undefined, "es", "brief");
+  assert(requests.at(-1).messages[0].content.includes("El turno o contexto reciente contiene señales de seguridad"));
+  assert.equal(requests.at(-1).max_completion_tokens, 1000, "Pruning dialogue must not suppress existing safety handling");
   // Check the actual sent prompt for diverse needs and contextual continuations.
   for (const [message, history] of [
     ["Desde que murió mi madre no soporto llegar a casa", []],

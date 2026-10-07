@@ -44,7 +44,9 @@ export function boundedChatHistory(history: { content: string; isUser: boolean }
   // Send that turn only once, as the final request message.
   const previous = currentMessage !== undefined && history.at(-1)?.isUser && history.at(-1)?.content === currentMessage
     ? history.slice(0, -1) : history;
-  for (const message of previous.slice(-6).reverse()) {
+  // More short turns preserve corrections and intervention outcomes. The byte
+  // budget stays unchanged; this is not unlimited or cross-session memory.
+  for (const message of previous.slice(-32).reverse()) {
     const bytes = Buffer.byteLength(message.content, "utf8");
     // Keep complete turns only; don't cut a sentence into a different meaning.
     if (bytes > remaining) continue;

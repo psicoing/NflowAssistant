@@ -118,7 +118,7 @@ function detectUserPreferences(history: Message[]): string {
 /**
  * Genera una respuesta mejorada usando OpenAI con ejemplos contextuales
  */
-export function buildChatPrompt(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic'): string {
+export function buildChatPrompt(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic', urgentContext: boolean = false): string {
   try {
     // Seleccionar ejemplos relevantes basados en el mensaje del usuario
     const relevantExamples = selectRelevantExamples(userMessage, 2);
@@ -748,7 +748,7 @@ FORMATO JSON:
     // Preserve the original templates/catalogue above, but don't re-send the
     // entire repeated legacy structure and examples on every billable turn.
     const presentation = compactChatPresentation(chatMode, isEducationalQuery, isCancerRelated, isLaborRelated,
-      needsUrgentConversationSupport(userMessage, history));
+      urgentContext || needsUrgentConversationSupport(userMessage, history));
     const retrieval = scientificEvidenceEngine.retrieve(userMessage, history, userProfile);
     const sources = retrieval.sources;
     const evidence = chatEvidenceInstructions(sources);
@@ -764,9 +764,18 @@ FORMATO JSON:
 
 export async function generateChatResponse(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic'): Promise<string> {
   try {
-    const finalPrompt = buildChatPrompt(userMessage, history, userProfile, userLanguage, chatMode);
     const conversationHistory = boundedChatHistory(history, userMessage);
-    const maxTokens = chatMode === 'brief' ? (needsUrgentConversationSupport(userMessage, history) ? 1000 : 500) : 4000;
+    // Analyse the same dialogue the model actually receives, rather than
+    // deriving preferences/evidence from turns absent from its context.
+    const promptHistory = conversationHistory.map(message => ({
+      content: message.content,
+      isUser: message.role === "user"
+    })) as Message[];
+    // Keep the existing safety assessment even if a very long recent turn
+    // cannot fit the dialogue budget. Context limits must not suppress it.
+    const urgentContext = needsUrgentConversationSupport(userMessage, history);
+    const finalPrompt = buildChatPrompt(userMessage, promptHistory, userProfile, userLanguage, chatMode, urgentContext);
+    const maxTokens = chatMode === 'brief' ? (urgentContext ? 1000 : 500) : 4000;
 
     // Mantener una versión estable por defecto para que cambios futuros del alias
     // no alteren inesperadamente el comportamiento clínico-conversacional.
@@ -805,7 +814,7 @@ export async function generateChatResponse(userMessage: string, history: Message
     if (typeof parsedResponse.response !== "string" || !parsedResponse.response.trim()) {
       throw new Error("La respuesta de NUXA no contiene texto válido");
     }
-    const resolvedResponse = resolveEvidenceCitations(parsedResponse.response, retrieveChatEvidence(userMessage, history, userProfile));
+    const resolvedResponse = resolveEvidenceCitations(parsedResponse.response, retrieveChatEvidence(userMessage, promptHistory, userProfile));
     if (!resolvedResponse) throw new Error("La respuesta de NUXA no contiene texto después de validar las referencias");
     return resolvedResponse;
 
