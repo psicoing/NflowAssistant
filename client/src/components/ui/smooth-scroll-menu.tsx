@@ -130,8 +130,8 @@ const navigationGroups: NavigationGroup[] = [
     items: [
       {
         id: "quienes-somos",
-        name: "Nuestro software",
-        description: "La tecnología detrás",
+        name: "Quiénes somos",
+        description: "NUXA y su respaldo profesional",
         href: "/quienes-somos",
         icon: User,
       },

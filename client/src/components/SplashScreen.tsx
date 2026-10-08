@@ -7,7 +7,7 @@ const SLIDES = [
   {
     lang: "ES",
     title: "NUXA",
-    tagline: "Un espacio para sentir, entender y avanzar.",
+    tagline: "Un psicólogo en tu bolsillo",
     subtitle: "Tu app de salud mental y riesgos laborales",
     cta: "Pruébala gratis y sin tarjeta",
     phoneLabel: "Llama al robot NUXA",
@@ -15,7 +15,7 @@ const SLIDES = [
   {
     lang: "EN",
     title: "NUXA",
-    tagline: "A space to feel, understand and move forward.",
+    tagline: "A psychologist in your pocket",
     subtitle: "Your mental health & workplace wellbeing app",
     cta: "Try it free, no card required",
     phoneLabel: "Call NUXA's AI assistant",
@@ -23,7 +23,7 @@ const SLIDES = [
   {
     lang: "FR",
     title: "NUXA",
-    tagline: "Un espace pour ressentir, comprendre et avancer.",
+    tagline: "Un psychologue dans votre poche",
     subtitle: "Votre application de santé mentale et de risques psychosociaux",
     cta: "Essayez-la gratuitement, sans carte",
     phoneLabel: "Appelez l'assistant IA NUXA",
@@ -65,20 +65,17 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 transition-opacity duration-400 ${
+      className={`fixed inset-0 z-[9999] flex flex-col items-center overflow-y-auto bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 px-4 py-7 transition-opacity duration-400 ${
         fadingOut ? "opacity-0" : "opacity-100"
       }`}
       role="status"
       aria-live="polite"
     >
-      <p
-        key={`tagline-${activeSlide}`}
-        className="mb-5 max-w-md px-6 text-center text-sm sm:text-base font-light italic leading-relaxed tracking-[0.08em] text-indigo-100/90 animate-in fade-in duration-500"
-      >
+      <div className="my-auto flex w-full shrink-0 flex-col items-center">
+      <p key={`tagline-${activeSlide}`} className="mb-5 max-w-md px-6 text-center font-serif text-base sm:text-lg font-normal italic leading-relaxed tracking-[0.025em] text-indigo-100/95 animate-in fade-in duration-500">
         {slide.tagline}
       </p>
-
-      <div className="flex items-center gap-2.5 mb-4 sm:mb-6">
+      <div className="mb-4 flex items-center gap-2.5 sm:mb-5">
         {[
           { code: "eu", label: "Unión Europea" },
           { code: "gb", label: "Reino Unido" },
@@ -96,7 +93,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         ))}
       </div>
 
-      <div className="flex items-center gap-6 mb-5 sm:mb-7">
+      <div className="mb-4 flex items-center gap-6 sm:mb-5">
         <div className="flex items-center gap-3">
           <img src="/favicon.png" alt="NUXA" className="w-14 h-14 rounded-2xl shadow-lg shadow-indigo-500/30" />
           <img src="/icon-boy.png" alt="NUXA" className="w-14 h-14 rounded-2xl shadow-lg shadow-indigo-500/30" />
@@ -107,7 +104,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         </div>
       </div>
 
-      <div key={activeSlide} className="text-center px-6 max-w-md animate-in fade-in duration-500">
+      <div key={activeSlide} className="max-w-lg px-3 text-center animate-in fade-in duration-500">
         <span className="inline-block text-[11px] font-semibold tracking-widest text-indigo-300 bg-indigo-500/10 border border-indigo-400/20 rounded-full px-3 py-1 mb-4">
           {slide.lang}
         </span>
@@ -148,7 +145,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         </a>
       </div>
 
-      <div className="absolute bottom-10 flex gap-2">
+      <div className="mt-5 flex shrink-0 gap-2">
         {SLIDES.map((_, i) => (
           <div
             key={i}
@@ -157,6 +154,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
             }`}
           />
         ))}
+      </div>
       </div>
     </div>
   );

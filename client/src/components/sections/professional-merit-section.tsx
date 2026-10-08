@@ -72,7 +72,7 @@ export default function ProfessionalMeritSection() {
                     <Star className="w-5 h-5 text-nflow-orange mt-1 flex-shrink-0" />
                     <div>
                       <p className="font-semibold">Licencia Sanitaria Estatal</p>
-                      <p className="text-sm text-gray-400">E-17928702 - Habilitación para ejercicio clínico</p>
+                      <p className="text-sm text-gray-400">E-17928705 - Habilitación para ejercicio clínico</p>
                     </div>
                   </div>
                   

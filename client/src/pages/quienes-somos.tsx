@@ -4,6 +4,7 @@ import InstitutoSection from "@/components/sections/instituto-section";
 import ProfessionalMeritSection from "@/components/sections/professional-merit-section";
 import FounderSection from "@/components/sections/founder-section";
 import NosotrosSection from "@/components/sections/nosotros-section";
+import QuienesSomosIntro from "@/components/sections/quienes-somos-intro";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Target, Building2, Hospital, GraduationCap, Briefcase, Scale, ShieldCheck } from "lucide-react";
@@ -36,6 +37,8 @@ export default function QuienesSomosPage() {
           </Button>
         </div>
 
+        <QuienesSomosIntro />
+
         <section className="py-12 md:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
@@ -43,10 +46,10 @@ export default function QuienesSomosPage() {
                 <Target className="w-5 h-5 text-emerald-400" />
                 <span className="text-emerald-300 font-medium text-sm">Estrategia de Mercado</span>
               </div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
                 Ámbitos de crecimiento de{" "}
                 <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">NUXA</span>
-              </h1>
+              </h2>
               <p className="text-gray-400 text-lg max-w-3xl mx-auto">
                 NUXA está diseñada para entornos privados comprometidos con el bienestar emocional y la prevención psicosocial.
               </p>

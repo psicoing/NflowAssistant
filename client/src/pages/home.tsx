@@ -40,6 +40,7 @@ import NflowToNuxaTransitionSection from "@/components/sections/nflow-to-nuxa-tr
 import NuxaPurposeSection from "@/components/sections/nuxa-purpose-section";
 import NuxaBrandEvolutionSection from "@/components/sections/nuxa-brand-evolution-section";
 import NuxaPhonesShowcaseSection from "@/components/sections/nuxa-phones-showcase-section";
+import HomepageProfessionalDialog from "@/components/sections/homepage-professional-dialog";
 import { 
   NuxaRobotForestSection,
   NuxaRobotZenSection,
@@ -271,7 +272,7 @@ function HomepageConversionBlock() {
   const copy = {
     es: {
       eyebrow: "Empieza cuando lo necesites",
-      title: "Apoyo emocional claro, disponible",
+      title: "Un psicólogo en tu bolsillo",
       description: "Habla con NUXA cuando necesites ordenar lo que sientes, sin esperas y sin juicios. Para ti, tu familia o tu equipo.",
       trial: "Probar gratis ahora",
       call: "Llamar al asistente NUXA",
@@ -286,7 +287,7 @@ function HomepageConversionBlock() {
     },
     en: {
       eyebrow: "Start whenever you need",
-      title: "Clear emotional support, available",
+      title: "A psychologist in your pocket",
       description: "Talk to NUXA whenever you need to make sense of how you feel, without waiting or judgement. For you, your family or your team.",
       trial: "Try it free now",
       call: "Call the NUXA assistant",
@@ -301,7 +302,7 @@ function HomepageConversionBlock() {
     },
     fr: {
       eyebrow: "Commencez quand vous en avez besoin",
-      title: "Un soutien émotionnel clair, disponible",
+      title: "Un psychologue dans votre poche",
       description: "Parlez à NUXA lorsque vous avez besoin de comprendre ce que vous ressentez, sans attente et sans jugement. Pour vous, votre famille ou votre équipe.",
       trial: "Essayer gratuitement",
       call: "Appeler l’assistant NUXA",
@@ -350,7 +351,8 @@ function HomepageConversionBlock() {
               {content.title} <span className="text-orange-300">24/7</span>
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg">
-              {content.description}
+              {content.description}{" "}
+              <HomepageProfessionalDialog currentLanguage={currentLanguage} />
             </p>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">

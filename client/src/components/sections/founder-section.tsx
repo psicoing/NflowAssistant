@@ -56,7 +56,7 @@ export default function FounderSection() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="w-5 h-5 text-orange-400" />
-                  <span className="text-blue-100">Licencia Sanitaria Estatal E-17928702</span>
+                  <span className="text-blue-100">Licencia Sanitaria Estatal E-17928705</span>
                 </div>
               </div>
             </div>
