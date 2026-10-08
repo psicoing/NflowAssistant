@@ -59,3 +59,22 @@ de añadir más instrucciones.
 verificación externa. No confundir evidencia científica con certeza individual,
 ni las etiquetas de una rúbrica con un clasificador desplegado o calibrado.
 La incertidumbre no debe retrasar ayuda urgente ni impedir orientación útil.
+
+Separar anclaje literal de respaldo semántico. Para declarar respaldo personal
+o documental, un identificador y un fragmento existentes son necesarios,
+pero no prueban que justifiquen una afirmación.
+
+**Why:** El usuario pide comprobar qué respalda lo que NUXA afirma, no solo
+añadir etiquetas de certeza. Una fuente general puede usarse indebidamente
+para inventar una explicación individual.
+
+**How to apply:** Mantener autores y contexto acotado separados, comprobar
+referencias y evaluar sujeto, negación, tiempo y alcance. Una revisión con la
+misma IA no es verificación independiente ni calibración clínica. Sus llamadas
+cuentan dentro del presupuesto existente; la ayuda urgente tiene prioridad.
+No entregar un borrador si falla la revisión ni consumir una pregunta del
+cliente por el aviso automático de revisión fallida.
+No rechazar psicoeducación general solo por faltar documentos recuperados:
+distinguir orientación del conocimiento del modelo de evidencia documentada,
+sin usar esa excepción para hechos o causas individuales, diagnósticos,
+cifras, eficacia demostrada o derechos legales.

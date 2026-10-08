@@ -16,6 +16,13 @@ export const offlineChatBudgetPlugin: Plugin = {
           error.code = "NUXA_CHAT_MONTHLY_BUDGET_EXCEEDED";
           throw error;
         }
+        // Structural legacy suites simulate the entire review boundary too.
+        // This does NOT prove semantic grounding of their fixture responses.
+        if (request.messages[0]?.content.startsWith("NUXA_GROUNDING_REVIEW")) {
+          return {choices:[{message:{content:JSON.stringify({
+            decision:"accept",response:null,hasRelevantClaims:false,claims:[]
+          })}}]};
+        }
         return createChatAiClient().chat.completions.create(request);
       }`,
       loader: "js",

@@ -113,8 +113,9 @@ no una validación de seguridad clínica general.
 
 En esta muestra, NUXA no hizo los saltos centrales a intención demostrada,
 diagnóstico de depresión, causa exclusiva del agotamiento o país inferido.
-La distinción ya aparece en algunas respuestas, pero **no hay un clasificador
-interno estructurado de las cuatro categorías ni prueba de su consistencia**.
+La distinción ya aparecía en algunas respuestas, pero en esta fase todavía
+no había una revisión estructurada por afirmación ni prueba de consistencia.
+La implementación posterior se describe en `grounding-review-2026-10-08.md`.
 
 No se atribuye esta conducta a una mejora introducida durante el ensayo:
 no se cambió producción. Los resultados permiten priorizar atribución de fuentes,

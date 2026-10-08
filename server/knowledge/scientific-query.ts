@@ -10,7 +10,7 @@ export const normaliseScientificText = (text: string) =>
 export function requiresUrgentHumanSupport(text: string): boolean {
   const value = normaliseScientificText(text);
   return hasSafetySignal(text) ||
-    /\b(no vull viure|fer-me mal|matar-me|dolor (?:de|en el) pecho|chest pain|douleur thoracique|douleur (?:a|dans) la poitrine|dolor al pit|no puedo respirar|cannot breathe|can't breathe|je ne peux pas respirer|no puc respirar|he tomado todas las pastillas|sobredosis|overdose|surdose|sobredosi|me amenaza con matarme|threatens to kill me|menace de me tuer|amenaca de matar-me)\b/.test(value);
+    /\b(no vull viure|fer-me mal|matar-me|dolor(?: (?:fuerte|intenso|repentino|insoportable))? (?:de|en el) pecho|chest pain|douleur thoracique|douleur (?:a|dans) la poitrine|dolor al pit|no puedo respirar|cannot breathe|can't breathe|je ne peux pas respirer|no puc respirar|he tomado todas las pastillas|sobredosis|overdose|surdose|sobredosi|me amenaza con matarme|threatens to kill me|menace de me tuer|amenaca de matar-me)\b/.test(value);
 }
 
 export function hasRecentUrgentSupportNeed(message: string, history: readonly QueryHistory[] = []): boolean {

@@ -1,8 +1,9 @@
-# Certeza conversacional: pruebas preparadas, no clasificador desplegado
+# Certeza conversacional: rúbrica inicial
 
-La estrategia actual ya distingue hechos relatados, interpretación provisional y
-datos desconocidos. No hay un registro estructurado de certeza por afirmación
-ni probabilidades calibradas sobre la historia de la persona.
+Al preparar estas pruebas, la estrategia ya distinguía hechos relatados,
+interpretación provisional y datos desconocidos, pero no había una revisión
+estructurada por afirmación. La implementación posterior se describe en
+`grounding-review-2026-10-08.md`. No hay probabilidades calibradas sobre la persona.
 
 ## Cuatro categorías para revisar respuestas
 
@@ -15,7 +16,8 @@ ni probabilidades calibradas sobre la historia de la persona.
 4. **Información insuficiente:** falta base para una conclusión. Aclarar solo
    si el dato cambia la orientación; no inventarlo.
 
-Estas etiquetas son de la rúbrica, no resultados de un clasificador en producción.
+Estas etiquetas pertenecen a la rúbrica original, no son pruebas de calibración
+del mecanismo de revisión posterior.
 No se muestran porcentajes ni se usa “probable” para justificar diagnósticos.
 La calidad de una fuente científica es distinta de la certeza sobre esta persona.
 Una hipótesis del asistente no se convierte en un hecho por aparecer en el historial.

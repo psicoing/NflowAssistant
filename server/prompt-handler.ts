@@ -17,6 +17,7 @@ import { boundedChatHistory } from "./chat-cost-policy";
 import { routedChatCompletion } from "./chat-completion-router";
 import { chatCostLimitMessage } from "./chat-policy";
 import { chatUnavailableNotice } from "../shared/chat-service";
+import { reviewChatGrounding, ChatGroundingError, chatGroundingNotice } from "./chat-grounding";
 
 export interface ChatResponse {
   content: string;
@@ -820,9 +821,18 @@ export async function generateChatResponse(userMessage: string, history: Message
     if (typeof parsedResponse.response !== "string" || !parsedResponse.response.trim()) {
       throw new Error("La respuesta de NUXA no contiene texto válido");
     }
-    const resolvedResponse = resolveEvidenceCitations(parsedResponse.response, retrieveChatEvidence(userMessage, promptHistory, userProfile));
+    const sources = retrieveChatEvidence(userMessage, promptHistory, userProfile);
+    const resolvedResponse = resolveEvidenceCitations(parsedResponse.response, sources);
     if (!resolvedResponse) throw new Error("La respuesta de NUXA no contiene texto después de validar las referencias");
-    return resolvedResponse;
+    // Do not delay urgent human-help guidance with a second provider request.
+    if (urgentContext || parsedResponse.supportType === "crisis") return resolvedResponse;
+    const review = await reviewChatGrounding({
+      draft: resolvedResponse, history: conversationHistory, userMessage, profile: userProfile,
+      sources, language: userLanguage, mode: chatMode, model: chatModel, historyIncomplete,
+    });
+    const reviewedResponse = resolveEvidenceCitations(review.response, sources);
+    if (!reviewedResponse.trim()) throw new ChatGroundingError();
+    return reviewedResponse;
 
   } catch (error) {
     console.error("Error al generar respuesta con OpenAI:", error);
@@ -881,6 +891,13 @@ export async function processUserMessage(userMessage: string, history: Message[]
     };
   } catch (error: any) {
     console.error("Error al procesar mensaje:", error);
+    if (error instanceof ChatGroundingError) {
+      return {
+        content: chatGroundingNotice(userLanguage), supportType: "general",
+        countsTowardQuestionQuota: false, responseKind: "automatic", aiUnavailable: false,
+        tags: [],
+      };
+    }
     
     // Proporcionar una respuesta de fallback estructurada
     return {

@@ -3,10 +3,11 @@ import { performance } from "node:perf_hooks";
 import { processUserMessage, buildChatPrompt } from "../server/prompt-handler";
 import { chatAiReadiness } from "../server/chat-ai-client";
 import { boundedChatHistory, quoteChatRequest } from "../server/chat-cost-policy";
-import { needsUrgentConversationSupport } from "../server/chat-evidence";
+import { needsUrgentConversationSupport, retrieveChatEvidence } from "../server/chat-evidence";
 import type { Message } from "../shared/schema";
 import { conversationCases } from "./fixtures/chat-conversation-cases";
 import { certaintyCases } from "./fixtures/chat-certainty-cases";
+import { groundingCostBound } from "../server/chat-grounding";
 
 // Default is an offline inventory and conservative cost preview, not generation.
 // --live uses the real production handler/router and its unchanged budget limits.
@@ -40,6 +41,11 @@ for (const [index, item] of selected.entries()) {
   conservativeMaximumUsd += quoteChatRequest(readiness.model, [
     { role: "system", content: prompt }, ...history, { role: "user", content: item.question },
   ], mode === "brief" ? (urgent ? 1000 : 500) : 4000).maximumNanoUsd / 1e9;
+  if (!urgent) conservativeMaximumUsd += groundingCostBound({
+    history, userMessage: item.question, sources: retrieveChatEvidence(item.question, promptHistory, {}),
+    language: item.language, mode, model: readiness.model,
+    historyIncomplete: history.length < item.history.length,
+  }).maximumNanoUsd / 1e9;
 }
 console.log(JSON.stringify({
   live, suite, offset, configuredProvider: readiness.provider, model: readiness.model,
