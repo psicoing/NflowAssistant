@@ -26,15 +26,16 @@ interface ChatServiceNoticeProps {
 
 export function ChatServiceNotice({ status, language, forceUnavailable = false }: ChatServiceNoticeProps) {
   const state = forceUnavailable ? "unavailable" : status?.state;
-  if (!state || state === "available") return null;
+  const confirmedAlternative = state === "limited"
+    && status?.connections.some((connection) => connection.state === "unavailable")
+    && status.connections.some((connection) => connection.state === "available");
+  // No recent generation is not evidence of an outage. Do not display an
+  // uncertainty banner or claim success until a connection is confirmed.
+  if (state !== "unavailable" && !confirmedAlternative) return null;
 
   const text = state === "unavailable"
     ? chatUnavailableNotice(language)
-    : state === "limited" && status?.connections.some((connection) => connection.state === "unavailable")
-      ? status.connections.some((connection) => connection.state === "available")
-        ? languageCopy(language).confirmed
-        : languageCopy(language).unconfirmed
-      : languageCopy(language).unconfirmed;
+    : languageCopy(language).confirmed;
 
   return (
     <div

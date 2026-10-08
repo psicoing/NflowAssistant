@@ -9,6 +9,12 @@ El usuario quiere un aviso dentro del chat cuando una u otra conexión de IA est
 
 **How to apply:** No mencionar días, fechas de reactivación ni recargas automáticas. Etiquetar respuestas automáticas y no consumir preguntas por ellas. Ante peligro, anteponer ayuda humana urgente y no recomendar esperar a que vuelva NUXA. La mera presencia de una clave no demuestra generación o facturación operativa.
 
+No mostrar en el chat un aviso genérico de «disponibilidad no confirmada» por falta de una generación reciente. Mantener el estado desconocido interno sin convertirlo en una afirmación de éxito ni de fallo.
+
+**Why:** El usuario rechaza ese aviso porque la IA gestionada por Replit ya se ha confirmado; la falta de un resultado reciente no debe presentarse como una incidencia al entrar al chat.
+
+**How to apply:** Conservar los avisos de indisponibilidad real, las etiquetas de respuestas automáticas y las alertas de saldo. No reactivar OpenAI directo ni modificar proveedores para retirar el aviso.
+
 Enviar al responsable un aviso por correo cuando se detecte un rechazo confirmado por saldo/facturación o cuando el presupuesto interno no pueda cubrir una petición. Distinguir ambos motivos: un límite interno no demuestra que el saldo del proveedor sea cero. No enviar un correo por cada mensaje.
 
 **Why:** El usuario solicita recibir un correo cuando NUXA se quede sin saldo de IA; la alerta debe permitir actuar sin generar mensajes repetidos ni exponer conversaciones.
