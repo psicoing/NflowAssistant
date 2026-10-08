@@ -15,19 +15,23 @@ const suite = process.argv.includes("--certainty") ? "certainty" : "continuity";
 const cases = suite === "certainty" ? certaintyCases : conversationCases;
 const limitArg = process.argv.find(arg => arg.startsWith("--limit="));
 const limit = limitArg ? Number(limitArg.slice(8)) : 4;
+const offsetArg = process.argv.find(arg => arg.startsWith("--offset="));
+const offset = offsetArg ? Number(offsetArg.slice(9)) : 0;
 const labelArg = process.argv.find(arg => arg.startsWith("--label="));
 const label = labelArg?.slice(8) ?? "baseline";
-if (!Number.isInteger(limit) || limit < 1 || limit > cases.length || !/^[a-z0-9-]{1,32}$/.test(label)) {
-  throw new Error(`Use --limit=1..${cases.length} and an alphanumeric --label.`);
+if (!Number.isInteger(offset) || offset < 0 || offset >= cases.length ||
+    !Number.isInteger(limit) || limit < 1 || offset + limit > cases.length ||
+    !/^[a-z0-9-]{1,32}$/.test(label)) {
+  throw new Error(`Use a nonnegative --offset and positive --limit fitting the ${cases.length} cases, plus an alphanumeric --label.`);
 }
 const readiness = chatAiReadiness();
 if (live && (readiness.provider !== "replit" || !readiness.configured)) {
   throw new Error("Live evaluation requires the existing configured Replit chat; no provider switch is allowed.");
 }
-const selected = cases.slice(0, limit);
+const selected = cases.slice(offset, offset + limit);
 let conservativeMaximumUsd = 0;
 for (const [index, item] of selected.entries()) {
-  const mode = ["classic", "bubbles", "brief"][index % 3];
+  const mode = ["classic", "bubbles", "brief"][(offset + index) % 3];
   const history = boundedChatHistory(item.history, item.question);
   const promptHistory = history.map(message => ({ content: message.content, isUser: message.role === "user" })) as Message[];
   const urgent = needsUrgentConversationSupport(item.question, item.history as Message[]);
@@ -38,13 +42,13 @@ for (const [index, item] of selected.entries()) {
   ], mode === "brief" ? (urgent ? 1000 : 500) : 4000).maximumNanoUsd / 1e9;
 }
 console.log(JSON.stringify({
-  live, suite, configuredProvider: readiness.provider, model: readiness.model,
+  live, suite, offset, configuredProvider: readiness.provider, model: readiness.model,
   totalCases: cases.length, requestedCases: selected.map(item => item.id),
   conservativeMaximumUsd: Number(conservativeMaximumUsd.toFixed(4)),
   review: "Human qualitative review required. No automatic claim of clinical quality or superiority.",
 }, null, 2));
 if (!live) {
-  console.log(`No AI calls. Use${suite === "certainty" ? " --certainty" : ""} --live --limit=4 --label=baseline to run the small initial sample.`);
+  console.log(`No AI calls. Add --live to these options to evaluate the selected sample.`);
   process.exit(0);
 }
 // Separate from the global allowance: never let a single evaluation exceed this
@@ -57,7 +61,7 @@ const file = `${directory}/conversation-${suite}-${label}-${stamp}.json`;
 const results: Record<string, unknown>[] = [];
 let providerFailures = 0;
 for (const [index, item] of selected.entries()) {
-  const mode = ["classic", "bubbles", "brief"][index % 3];
+  const mode = ["classic", "bubbles", "brief"][(offset + index) % 3];
   const start = performance.now();
   const response = await processUserMessage(item.question, item.history as Message[], {}, item.language, mode);
   const generated = response.responseKind === "ai";
@@ -69,7 +73,7 @@ for (const [index, item] of selected.entries()) {
     ...("expectedClaims" in item ? { expectedClaims: item.expectedClaims } : {}),
   });
   await fs.writeFile(file, JSON.stringify({
-    evaluatedAt: new Date().toISOString(), suite, label, model: readiness.model, provider: readiness.provider,
+    evaluatedAt: new Date().toISOString(), suite, offset, label, model: readiness.model, provider: readiness.provider,
     conservativeMaximumUsd, requestedCases: limit, completedCases: results.length,
     results, limitations: [
       "Synthetic cases; no real accounts or stored conversations.",

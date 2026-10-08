@@ -39,11 +39,14 @@ npx tsx scripts/evaluate-chat-conversation.ts --certainty --limit=6
 
 # Una futura ejecución real requiere opt-in explícito:
 npx tsx scripts/evaluate-chat-conversation.ts --certainty --live --limit=4 --label=baseline
+
+# Ejecutar solo los dos pendientes, sin repetir los cuatro anteriores:
+npx tsx scripts/evaluate-chat-conversation.ts --certainty --live --offset=4 --limit=2 --label=remaining
 ```
 
 No se realizaron consultas reales durante la preparación. Posteriormente el
-usuario autorizó cuatro: véase `certainty-review-2026-10-08.md` para resultados,
-reservas y casos todavía no ejecutados.
+usuario autorizó cuatro y después los dos restantes: véase
+`certainty-review-2026-10-08.md` para los seis resultados y sus reservas.
 Se mantiene el router existente, su presupuesto y el techo conservador del evaluador.
 No se han cambiado instrucciones de producción, interfaz, proveedores ni memoria.
 
