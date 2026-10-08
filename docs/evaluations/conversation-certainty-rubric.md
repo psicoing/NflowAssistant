@@ -41,7 +41,9 @@ npx tsx scripts/evaluate-chat-conversation.ts --certainty --limit=6
 npx tsx scripts/evaluate-chat-conversation.ts --certainty --live --limit=4 --label=baseline
 ```
 
-No se han realizado consultas reales para estos casos durante su preparación.
+No se realizaron consultas reales durante la preparación. Posteriormente el
+usuario autorizó cuatro: véase `certainty-review-2026-10-08.md` para resultados,
+reservas y casos todavía no ejecutados.
 Se mantiene el router existente, su presupuesto y el techo conservador del evaluador.
 No se han cambiado instrucciones de producción, interfaz, proveedores ni memoria.
 
