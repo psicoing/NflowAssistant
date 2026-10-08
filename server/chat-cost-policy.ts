@@ -48,8 +48,10 @@ export function boundedChatHistory(history: { content: string; isUser: boolean }
   // budget stays unchanged; this is not unlimited or cross-session memory.
   for (const message of previous.slice(-32).reverse()) {
     const bytes = Buffer.byteLength(message.content, "utf8");
-    // Keep complete turns only; don't cut a sentence into a different meaning.
-    if (bytes > remaining) continue;
+    // Keep a contiguous recent suffix: skipping a correction and then retaining
+    // older claims would splice the conversation into a different meaning.
+    // Do not cut complete turns or increase the existing byte/token budgets.
+    if (bytes > remaining) break;
     remaining -= bytes;
     result.unshift({ role: message.isUser ? "user" : "assistant", content: message.content });
   }

@@ -118,7 +118,7 @@ function detectUserPreferences(history: Message[]): string {
 /**
  * Genera una respuesta mejorada usando OpenAI con ejemplos contextuales
  */
-export function buildChatPrompt(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic', urgentContext: boolean = false): string {
+export function buildChatPrompt(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic', urgentContext: boolean = false, historyIncomplete: boolean = false): string {
   try {
     // Seleccionar ejemplos relevantes basados en el mensaje del usuario
     const relevantExamples = selectRelevantExamples(userMessage, 2);
@@ -754,8 +754,11 @@ FORMATO JSON:
     const evidence = chatEvidenceInstructions(sources);
     const conceptualAnalysis = scientificAnalysisInstructions(retrieval);
     const conversationalStrategy = conversationStrategyInstructions();
+    const contextBoundary = historyIncomplete
+      ? "\nLÍMITE DEL CONTEXTO DE ESTA CONVERSACIÓN: algunos turnos anteriores no caben en el historial enviado. No es una síntesis completa ni demuestra que no hubo correcciones, intentos o resultados. No reconstruyas lo omitido ni atribuyas un resultado a una propuesta ausente; si un dato cambia la orientación, acláralo brevemente sin retrasar la ayuda urgente."
+      : "";
     const evidenceReminder = sources.length ? " Usa citas solo cuando aporten valor; no impongas libros ni secciones." : "";
-    return `${commonPolicy}\n\n${conceptualAnalysis}\n${evidence}\n\n${conversationalStrategy}\n\nFORMATO DE PRESENTACIÓN:\n${presentation}\n\nRECORDATORIO: Las reglas comunes de identidad, personalización, seguridad y base documental de NUXA prevalecen sobre cualquier estructura o ejemplo anterior.${evidenceReminder}`;
+    return `${commonPolicy}\n\n${conceptualAnalysis}\n${evidence}\n\n${conversationalStrategy}${contextBoundary}\n\nFORMATO DE PRESENTACIÓN:\n${presentation}\n\nRECORDATORIO: Las reglas comunes de identidad, personalización, seguridad y base documental de NUXA prevalecen sobre cualquier estructura o ejemplo anterior.${evidenceReminder}`;
   } catch (error) {
     console.error("Error al construir instrucciones de NUXA:", error);
     throw error;
@@ -774,7 +777,10 @@ export async function generateChatResponse(userMessage: string, history: Message
     // Keep the existing safety assessment even if a very long recent turn
     // cannot fit the dialogue budget. Context limits must not suppress it.
     const urgentContext = needsUrgentConversationSupport(userMessage, history);
-    const finalPrompt = buildChatPrompt(userMessage, promptHistory, userProfile, userLanguage, chatMode, urgentContext);
+    const priorTurnCount = history.length -
+      (history.at(-1)?.isUser && history.at(-1)?.content === userMessage ? 1 : 0);
+    const historyIncomplete = priorTurnCount > conversationHistory.length;
+    const finalPrompt = buildChatPrompt(userMessage, promptHistory, userProfile, userLanguage, chatMode, urgentContext, historyIncomplete);
     const maxTokens = chatMode === 'brief' ? (urgentContext ? 1000 : 500) : 4000;
 
     // Mantener una versión estable por defecto para que cambios futuros del alias

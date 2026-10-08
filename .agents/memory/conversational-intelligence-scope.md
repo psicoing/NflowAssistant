@@ -26,3 +26,36 @@ por su método conversacional, no por añadir técnicas o alargar respuestas.
 sin imponer tres apartados ni preguntas en cada turno. Esta etapa no autoriza
 introducir memoria entre conversaciones ni ampliar la recopilación de datos;
 esas decisiones requieren un alcance y consentimiento propios.
+
+Conservar un contexto reciente coherente es preferible a maximizar mensajes
+saltando turnos que podrían contener una corrección. Reconocer las lagunas no
+autoriza reconstruir objetivos, intentos ni resultados.
+
+**Why:** Una prueba reprodujo la pérdida de una corrección larga mientras
+seguían presentes afirmaciones antiguas, alterando el significado del diálogo.
+
+**How to apply:** Mantener los límites existentes, distinguir historial original
+de contexto enviado y conservar la evaluación de seguridad sobre el original.
+Un resumen futuro debe poder justificarse con mensajes, no rellenar lagunas.
+
+No acumular prohibiciones para dar por corregido un comportamiento semántico.
+
+**Why:** Respuestas reales siguieron añadiendo técnicas prematuras pese a reglas
+explícitas; enviar una instrucción no demuestra que el modelo la cumpla.
+
+**How to apply:** Separar regresiones estructurales de evaluación cualitativa,
+conservar resultados negativos y retirar reglas adicionales sin beneficio
+observado. No llamar validación clínica ni revisión profesional a una lectura
+del agente.
+
+Evaluar certeza interna distinguiendo relato del usuario, hipótesis apoyada,
+posibilidad e información insuficiente, sin porcentajes visibles.
+
+**Why:** El usuario propone esta distinción para impedir que NUXA rellene huecos
+con explicaciones psicológicas no demostradas y pide preparar pruebas antes
+de añadir más instrucciones.
+
+**How to apply:** “El usuario lo dijo” identifica la fuente del relato, no una
+verificación externa. No confundir evidencia científica con certeza individual,
+ni las etiquetas de una rúbrica con un clasificador desplegado o calibrado.
+La incertidumbre no debe retrasar ayuda urgente ni impedir orientación útil.
