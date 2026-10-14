@@ -88,3 +88,13 @@ eficacia clínica y la comparación debe conservar salvaguardas en ambos sistema
 **How to apply:** Auditar primero el flujo activo y las pruebas existentes;
 reservar casos no usados en ajustes, buscar evaluación independiente y mantener
 informes internos. Las consultas de IA de pago requieren autorización explícita.
+
+Priorizar la procedencia y pertenencia del historial antes de ampliar la
+continuidad. Autenticidad de un mensaje no equivale a verdad de su contenido.
+
+**Why:** El usuario fija este orden tras revisar MI-CLAIM y solicita revisar
+primero la solución técnica y los casos de prueba, sin despliegue.
+
+**How to apply:** No declarar fiables mensajes antiguos solo por estar en la
+base de datos; explicar y revisar cualquier exclusión que afecte la continuidad.
+Conservar motor científico, prompts, modelos e interfaz durante esta corrección.

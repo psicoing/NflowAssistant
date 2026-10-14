@@ -93,3 +93,17 @@ mtime_ms = 1791993010800
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/6c4ffe1f-e8d9-43e4-88e5-2d22596c406a/b65c6fad-8fe3-4ba3-a17a-04328e9c470a"
 storage_version_token = "1791993059425395"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "CbCGSTYWRm-9iPV57oR-X"
+uri = "file://docs/NEUROPSI_HISTORY_SECURITY_PLAN.md"
+type = "text"
+title = "Plan de seguridad del historial de NEUROPSI-AI"
+description = "Inspección de autenticación y almacenamiento, solución técnica propuesta y casos de prueba. Pendiente de revisión; sin implementación ni despliegue."
+logical_id = "82cd5c4f-ebf2-4048-bb46-994631cef907"
+content_hash = "sha256:9de59c0f4a1b652db738184c0a9481fc6631def00383711846971761e20b0e00"
+size = 13899
+mtime_ms = 1791996404041
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/82cd5c4f-ebf2-4048-bb46-994631cef907/9cb52e3e-cef7-4035-8922-4b277935b384"
+storage_version_token = "1791996422253270"
+content_type = "text/markdown"
