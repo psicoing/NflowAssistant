@@ -177,6 +177,9 @@ export const messages = pgTable("messages", {
   content: text("content").notNull(),
   isUser: boolean("is_user").notNull(),
   responseKind: text("response_kind"),
+  provenanceVersion: integer("provenance_version"),
+  authorUserId: integer("author_user_id"),
+  origin: text("origin"),
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 
@@ -322,6 +325,9 @@ export const insertConversationSchema = createInsertSchema(conversations).omit({
 export const insertMessageSchema = createInsertSchema(messages).omit({
   id: true,
   timestamp: true,
+  provenanceVersion: true,
+  authorUserId: true,
+  origin: true,
 });
 
 export const insertResourceSchema = createInsertSchema(resources).omit({

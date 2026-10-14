@@ -96,5 +96,7 @@ continuidad. Autenticidad de un mensaje no equivale a verdad de su contenido.
 primero la solución técnica y los casos de prueba, sin despliegue.
 
 **How to apply:** No declarar fiables mensajes antiguos solo por estar en la
-base de datos; explicar y revisar cualquier exclusión que afecte la continuidad.
-Conservar motor científico, prompts, modelos e interfaz durante esta corrección.
+base de datos. El usuario autoriza conservarlos visibles a su propietario pero
+excluirlos del contexto cuando no pueda acreditarse su procedencia.
+Conservar motor científico, prompts, modelos e interfaz durante esta corrección,
+sin publicación hasta revisar los resultados.

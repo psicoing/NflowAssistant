@@ -18,6 +18,7 @@ function isRateLimited(ip: string, maxPerHour = 5): boolean {
 import fs from "fs";
 import path from "path";
 import { storage } from "./storage";
+import { ChatHistoryAccessError, establishChatUserSession, installChatHistoryGuards } from "./chat-history-security";
 import {
   buildSkrillLink,
   sendSkrillRegistrationEmail,
@@ -242,6 +243,12 @@ async function checkSubscription(userId: number): Promise<boolean> {
 export async function registerRoutes(app: Express, existingServer?: Server): Promise<Server> {
   // Preserve old history; unknown legacy replies must not be relabelled as AI.
   await pool.query("ALTER TABLE messages ADD COLUMN IF NOT EXISTS response_kind text");
+  // No default/backfill: old rows are retained, but their origin is unverified.
+  await pool.query(`ALTER TABLE messages
+    ADD COLUMN IF NOT EXISTS provenance_version integer,
+    ADD COLUMN IF NOT EXISTS author_user_id integer,
+    ADD COLUMN IF NOT EXISTS origin text`);
+  installChatHistoryGuards(app, storage);
   app.get("/api/chat/service-status", async (req, res) => {
     if (!req.session.userId) return res.status(401).json({ message: "User not authenticated" });
     res.setHeader("Cache-Control", "no-store");
@@ -370,7 +377,7 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       });
 
       // Set session for newly registered user
-      req.session.userId = newUser.id;
+      await establishChatUserSession(req, newUser.id);
 
       // Process referral code if provided
       if (referralCode && typeof referralCode === 'string') {
@@ -472,12 +479,7 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       }
 
       // Set session for authenticated user
-      req.session.userId = user.id;
-
-      // If the user has admin role, also set admin session
-      if (user.role === "admin") {
-        req.session.isAdmin = true;
-      }
+      await establishChatUserSession(req, user.id, user.role === "admin");
 
       // Update last login
       await storage.updateUserLogin(user.id);
@@ -622,7 +624,7 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       await storage.updateUserLogin(user.id);
       
       // Create session
-      req.session.userId = user.id;
+      await establishChatUserSession(req, user.id);
       
       console.log(`✅ Magic link login successful for user: ${user.username}`);
       
@@ -768,7 +770,7 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
   app.get("/api/conversations/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      const conversation = await storage.getConversation(id);
+      const conversation = await storage.getOwnedConversation(id, req.session.userId!);
       if (!conversation) {
         return res.status(404).json({ message: "Conversation not found" });
       }
@@ -797,9 +799,10 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       }
 
       const conversationId = parseInt(req.params.id);
-      const messages = await storage.getMessages(conversationId);
+      const messages = await storage.getOwnedMessages(conversationId, userId);
       res.json(messages);
     } catch (error) {
+      if (error instanceof ChatHistoryAccessError) return res.status(404).json({ message: "Conversation not found" });
       res.status(500).json({ message: "Error fetching messages" });
     }
   });
@@ -841,14 +844,14 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       trialQuestionId = await trialQuota.reserveQuestion(userId);
 
       // Save user message
-      const userMessage = await storage.createMessage({
+      const userMessage = await storage.createOwnedMessage({
         conversationId,
         content,
         isUser: true
-      });
+      }, userId);
 
       // Get conversation history for AI context
-      const history = await storage.getMessages(conversationId);
+      const history = await storage.getOwnedMessages(conversationId, userId, true);
 
       // Get user language: prefer explicit language from body, then Accept-Language header, default to Spanish
       const userLanguage = language || req.headers['accept-language']?.split(',')[0]?.split('-')[0] || 'es';
@@ -857,6 +860,14 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       console.log("Calling processUserMessage with:", content, "language:", userLanguage, "mode:", chatMode);
       const aiResponse = await processUserMessage(content, history, userProfile, userLanguage, chatMode);
       console.log("AI Response received:", aiResponse);
+
+      // Recheck ownership while saving before charging for a delivered reply.
+      const aiMessage = await storage.createOwnedMessage({
+        conversationId,
+        content: aiResponse.content,
+        isUser: false,
+        responseKind: aiResponse.responseKind,
+      }, userId);
 
       // A budget/input/provider error returns static guidance, not a paid reply.
       trialDelivered = aiResponse.countsTowardQuestionQuota;
@@ -871,14 +882,6 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
         }
       }
 
-      // Save AI response
-      const aiMessage = await storage.createMessage({
-        conversationId,
-        content: aiResponse.content,
-        isUser: false,
-        responseKind: aiResponse.responseKind,
-      });
-
       res.json({
         userMessage,
         aiMessage,
@@ -889,6 +892,7 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
         tags: aiResponse.tags || []
       });
     } catch (error) {
+      if (error instanceof ChatHistoryAccessError) return res.status(404).json({ message: "Conversation not found" });
       if (respondTrialError(res, error)) return;
       console.error("Error processing conversation message:", error);
       res.status(500).json({ message: "Error processing message" });
@@ -902,13 +906,8 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
 
   // Create new message
   app.post("/api/messages", async (req, res) => {
-    try {
-      const validatedData = insertMessageSchema.parse(req.body);
-      const message = await storage.createMessage(validatedData);
-      res.json(message);
-    } catch (error) {
-      res.status(400).json({ message: "Invalid message data" });
-    }
+    // Defence in depth: never restore generic client-controlled message writes.
+    res.status(410).json({ message: "Direct message insertion is disabled" });
   });
 
   // Process chat message
@@ -945,7 +944,7 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       trialQuestionId = await trialQuota.reserveQuestion(userId);
 
       // Get conversation history
-      const history = await storage.getMessages(conversationId);
+      const history = await storage.getOwnedMessages(conversationId, userId, true);
 
       // Get user language from request headers or default to Spanish  
       const userLanguage = req.headers['accept-language']?.split(',')[0]?.split('-')[0] || 'es';
@@ -953,6 +952,7 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       // Process the message with AI
       const aiResponse = await processUserMessage(message, history, userProfile, userLanguage);
 
+      if (!await storage.getOwnedConversation(conversationId, userId)) throw new ChatHistoryAccessError();
       trialDelivered = aiResponse.countsTowardQuestionQuota;
       const questionsRemaining = await countDeliveredChatQuestion(aiResponse, limitCheck,
         () => trialQuestionId ? trialQuota.settleQuestion(trialQuestionId, true) : storage.incrementQuestionCount(userId));
@@ -966,6 +966,7 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
         tags: aiResponse.tags || []
       });
     } catch (error) {
+      if (error instanceof ChatHistoryAccessError) return res.status(404).json({ message: "Conversation not found" });
       if (respondTrialError(res, error)) return;
       console.error("Error processing chat message:", error);
       res.status(500).json({ message: "Error processing message" });

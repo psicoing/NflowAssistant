@@ -107,3 +107,17 @@ mtime_ms = 1791996404041
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/82cd5c4f-ebf2-4048-bb46-994631cef907/9cb52e3e-cef7-4035-8922-4b277935b384"
 storage_version_token = "1791996422253270"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "ngFXyf8zxanmWkk09US_m"
+uri = "file://docs/NEUROPSI_HISTORY_SECURITY_RESULTS.md"
+type = "text"
+title = "Resultados de seguridad del historial de NEUROPSI-AI"
+description = "Protecciones implementadas, 77 peticiones HTTP de prueba, regresiones superadas y límites. Cambios en desarrollo, sin publicación ni llamadas de IA de pago."
+logical_id = "7f257979-7ada-4036-a5ac-ae0ddcf95f74"
+content_hash = "sha256:cbe0531a9c8c5b8c4b103b7a601e9a88d14249b5faa4b5207ebf3e9e84fe1d78"
+size = 6339
+mtime_ms = 1791998694480
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/7f257979-7ada-4036-a5ac-ae0ddcf95f74/6e1164ef-0fa4-47fc-8f33-63f56cf2c633"
+storage_version_token = "1791998724485413"
+content_type = "text/markdown"

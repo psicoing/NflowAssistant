@@ -17,7 +17,8 @@ import {
 import { db, pool } from "./db";
 import { TrialStore } from "./trial/store";
 const trialQuota = new TrialStore(pool);
-import { eq, sql } from "drizzle-orm";
+import { and, eq, or, sql } from "drizzle-orm";
+import { ChatHistoryAccessError, CHAT_HISTORY_PROVENANCE_VERSION } from "./chat-history-security";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -46,6 +47,9 @@ export interface IStorage {
   createConversation(conversation: InsertConversation): Promise<Conversation>;
   getConversations(userId?: number): Promise<Conversation[]>;
   getConversation(id: number): Promise<Conversation | undefined>;
+  getOwnedConversation(id: number, userId: number): Promise<Conversation | undefined>;
+  getOwnedMessages(conversationId: number, userId: number, trustedOnly?: boolean): Promise<Message[]>;
+  createOwnedMessage(message: InsertMessage, userId: number): Promise<Message>;
   
   createMessage(message: InsertMessage): Promise<Message>;
   getMessages(conversationId: number): Promise<Message[]>;
@@ -150,15 +154,58 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getConversations(userId?: number): Promise<Conversation[]> {
-    if (userId) {
-      return await db.select().from(conversations).where(eq(conversations.userId, userId));
-    }
-    return await db.select().from(conversations);
+    if (!Number.isSafeInteger(userId) || !userId || userId <= 0) throw new ChatHistoryAccessError();
+    return await db.select().from(conversations).where(eq(conversations.userId, userId));
   }
 
   async getConversation(id: number): Promise<Conversation | undefined> {
     const [conversation] = await db.select().from(conversations).where(eq(conversations.id, id));
     return conversation || undefined;
+  }
+
+  async getOwnedConversation(id: number, userId: number): Promise<Conversation | undefined> {
+    const [conversation] = await db.select().from(conversations)
+      .where(and(eq(conversations.id, id), eq(conversations.userId, userId)));
+    return conversation;
+  }
+
+  async getOwnedMessages(conversationId: number, userId: number, trustedOnly = false): Promise<Message[]> {
+    if (!await this.getOwnedConversation(conversationId, userId)) throw new ChatHistoryAccessError();
+    const result = await db.select({ message: messages }).from(messages)
+      .innerJoin(conversations, eq(messages.conversationId, conversations.id))
+      .where(and(
+        eq(conversations.id, conversationId), eq(conversations.userId, userId),
+        trustedOnly ? and(
+          eq(messages.provenanceVersion, CHAT_HISTORY_PROVENANCE_VERSION),
+          eq(messages.authorUserId, userId),
+          or(
+            and(eq(messages.isUser, true), eq(messages.origin, "user")),
+            and(eq(messages.isUser, false), eq(messages.origin, "assistant")),
+          ),
+        ) : undefined,
+      ))
+      .orderBy(messages.timestamp, messages.id);
+    return result.map(row => row.message);
+  }
+
+  async createOwnedMessage(message: InsertMessage, userId: number): Promise<Message> {
+    return db.transaction(async transaction => {
+      // Serialize with deletion/reassignment without holding a lock during AI calls.
+      const [owned] = await transaction.select({ id: conversations.id }).from(conversations)
+        .where(and(eq(conversations.id, message.conversationId), eq(conversations.userId, userId)))
+        .for("update");
+      if (!owned) throw new ChatHistoryAccessError();
+      const [created] = await transaction.insert(messages).values({
+        conversationId: owned.id,
+        content: message.content,
+        isUser: message.isUser,
+        responseKind: message.isUser ? null : message.responseKind,
+        provenanceVersion: CHAT_HISTORY_PROVENANCE_VERSION,
+        authorUserId: userId,
+        origin: message.isUser ? "user" : "assistant",
+      }).returning();
+      return created;
+    });
   }
 
   async createMessage(insertMessage: InsertMessage): Promise<Message> {
