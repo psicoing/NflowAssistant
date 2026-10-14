@@ -1,0 +1,150 @@
+# NUXA — NEUROPSI-AI
+## Implementación de MI-CLAIM como marco de evaluación científica
+
+Quiero incorporar los principios de **MI-CLAIM (Minimum Information about Clinical Artificial Intelligence Modeling)** al desarrollo y evaluación de nuestro motor conversacional NEUROPSI-AI.
+
+MI-CLAIM es una guía de transparencia y reproducibilidad para investigaciones de inteligencia artificial clínica, publicada en *Nature Medicine*.
+
+Referencia: https://doi.org/10.1038/s41591-020-1041-y
+
+**OBJETIVO PRINCIPAL**
+
+Mejorar la calidad científica, la documentación, la trazabilidad y la reproducibilidad de NEUROPSI-AI.
+
+No queremos sustituir el motor actual, sino establecer un sistema de evaluación científica de su comportamiento.
+
+### FASE 1. AUDITORÍA DE LA ARQUITECTURA
+
+Analiza el código existente y documenta:
+
+1. Modelo de IA utilizado y proveedor.
+2. Arquitectura del motor NEUROPSI-AI.
+3. Prompts e instrucciones conversacionales.
+4. Procesamiento del mensaje del usuario.
+5. Sistema de razonamiento psicológico.
+6. Recuperación de bibliografía científica (RAG).
+7. Revisión de afirmaciones personales.
+8. Comprobación de fuentes científicas.
+9. Detección y gestión de riesgos.
+10. Generación y revisión de respuestas.
+
+Elabora un esquema completo del recorrido de una consulta hasta la respuesta final.
+
+### FASE 2. TRAZABILIDAD CIENTÍFICA
+
+Documenta cómo NEUROPSI distingue:
+
+- Información aportada por el usuario.
+- Hipótesis psicológicas.
+- Evidencia científica recuperada.
+- Información desconocida.
+- Correcciones introducidas durante la conversación.
+
+Comprueba que las afirmaciones personales estén respaldadas por los mensajes correspondientes.
+
+Una fuente científica general no debe utilizarse para justificar automáticamente una interpretación individual.
+
+### FASE 3. EVALUACIÓN DE CALIDAD
+
+Diseña una batería reproducible de pruebas con situaciones simuladas:
+
+- Ansiedad y estrés.
+- Depresión y duelo.
+- Insomnio y rumiación.
+- Problemas familiares.
+- Conflictos laborales.
+- Dificultades de atención.
+- Desarrollo infantil.
+- Neuropsicología.
+- Incertidumbre diagnóstica.
+- Situaciones de riesgo.
+- Correcciones de hipótesis.
+- Conversaciones prolongadas.
+
+Evalúa las respuestas mediante criterios explícitos:
+
+**Seguridad, precisión, empatía, utilidad, proporcionalidad, trazabilidad, evidencia científica y capacidad de rectificación.**
+
+Incluye casos correctos e incorrectos para comprobar que el sistema no rechace innecesariamente respuestas válidas.
+
+### FASE 4. REPRODUCIBILIDAD
+
+Cada evaluación deberá registrar, cuando sea posible:
+
+- Identificador y versión del modelo.
+- Versión de NEUROPSI-AI.
+- Versión de las instrucciones.
+- Configuración de generación.
+- Identificador del escenario de prueba.
+- Resultado esperado.
+- Resultado obtenido.
+- Criterios de puntuación.
+- Latencia.
+- Tokens consumidos.
+- Coste estimado.
+- Fecha de ejecución.
+
+Utiliza casos sintéticos o anonimizados adecuadamente. No almacenes conversaciones personales identificables para estas pruebas.
+
+### FASE 5. INFORME MI-CLAIM
+
+Genera un documento técnico interno:
+
+**NUXA_NEUROPSI_MI_CLAIM_REPORT.md**
+
+Debe contener:
+
+1. Descripción del sistema.
+2. Finalidad y ámbito de aplicación.
+3. Arquitectura técnica.
+4. Datos y fuentes utilizadas.
+5. Metodología de evaluación.
+6. Métricas y resultados.
+7. Análisis de errores.
+8. Limitaciones.
+9. Riesgos y medidas de seguridad.
+10. Reproducibilidad.
+11. Mejoras recomendadas.
+
+Incluye una matriz que relacione los criterios originales de MI-CLAIM con la evidencia disponible en NUXA.
+
+Identifica cada criterio como cumplido, parcialmente cumplido, no cumplido o no aplicable, justificando la clasificación.
+
+No afirmes que NUXA cumple completamente MI-CLAIM sin verificarlo.
+
+### FASE 6. COMPARACIÓN DEL MOTOR
+
+Prepara una metodología para comparar:
+
+**A.** Modelo base sin las mejoras específicas de NEUROPSI.
+
+**B.** Modelo con el sistema NEUROPSI-AI completo.
+
+Ambos deberán evaluarse con escenarios equivalentes, parámetros comparables y criterios idénticos.
+
+Queremos conocer qué mejoras aporta realmente nuestra arquitectura sobre el modelo base.
+
+No confundas la calidad del modelo general con la aportación específica de NEUROPSI-AI.
+
+### CONDICIONES IMPORTANTES
+
+- No modificar la interfaz de NUXA.
+- No cambiar los proveedores ni el modelo actual.
+- No alterar la voz.
+- No modificar pagos ni suscripciones.
+- No cambiar los tres modos conversacionales.
+- No modificar la seguridad clínica existente.
+- No introducir nuevos diagnósticos automáticos.
+- No añadir llamadas de IA de pago sin autorización.
+- No publicar información interna, claves, prompts confidenciales ni datos personales.
+- Mantener el presupuesto actual.
+
+**PRIMERA ENTREGA**
+
+Realiza primero la auditoría del código y crea el informe preliminar MI-CLAIM.
+
+Identifica qué elementos ya tenemos implementados, cuáles requieren documentación y qué aspectos necesitan evaluación adicional.
+
+No modifiques el motor conversacional ni despliegues cambios en producción durante esta primera fase.
+
+El objetivo es convertir NEUROPSI-AI en un sistema cada vez más transparente, evaluable y científicamente documentado, sin afirmar que dispone de validación clínica cuando todavía no se ha demostrado.
