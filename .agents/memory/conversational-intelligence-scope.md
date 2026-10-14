@@ -78,3 +78,13 @@ No rechazar psicoeducación general solo por faltar documentos recuperados:
 distinguir orientación del conocimiento del modelo de evidencia documentada,
 sin usar esa excepción para hechos o causas individuales, diagnósticos,
 cifras, eficacia demostrada o derechos legales.
+
+La evaluación científica se orientará por MI-CLAIM, adaptada a bienestar
+emocional, distinguiendo implementación, pruebas técnicas y evidencia clínica.
+
+**Why:** El usuario aceptó los ajustes metodológicos: MI-CLAIM no certifica
+eficacia clínica y la comparación debe conservar salvaguardas en ambos sistemas.
+
+**How to apply:** Auditar primero el flujo activo y las pruebas existentes;
+reservar casos no usados en ajustes, buscar evaluación independiente y mantener
+informes internos. Las consultas de IA de pago requieren autorización explícita.

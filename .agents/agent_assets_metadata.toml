@@ -79,3 +79,17 @@ mtime_ms = 1791207455457
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/78245618-7721-4fda-8a3a-4191fd2f4076/d66bad18-5ced-4940-a45a-9f741e4cfd59"
 storage_version_token = "1791208036021665"
 content_type = "text/csv"
+
+[[outputs]]
+id = "PP_qvJo33e5IoeZra_laz"
+uri = "file://NUXA_NEUROPSI_MI_CLAIM_REPORT.md"
+type = "text"
+title = "Informe preliminar de NEUROPSI-AI — MI-CLAIM"
+description = "Auditoría interna del flujo conversacional, evidencia disponible, limitaciones, comparación futura y cinco mejoras prioritarias. Sin cambios del motor ni nuevas consultas de IA de pago."
+logical_id = "6c4ffe1f-e8d9-43e4-88e5-2d22596c406a"
+content_hash = "sha256:b75a64179a0aad82a47bf996a8e8b3ee65ad98bc0364b81aeb5dc151a1470d88"
+size = 36085
+mtime_ms = 1791993010800
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/6c4ffe1f-e8d9-43e4-88e5-2d22596c406a/b65c6fad-8fe3-4ba3-a17a-04328e9c470a"
+storage_version_token = "1791993059425395"
+content_type = "text/markdown"

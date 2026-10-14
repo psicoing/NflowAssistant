@@ -1,0 +1,39 @@
+Estoy de acuerdo con tu análisis y acepto los ajustes metodológicos propuestos.
+
+Vamos a iniciar la primera fase de evaluación científica de NEUROPSI-AI, orientada por MI-CLAIM y adaptada a nuestro asistente de bienestar emocional.
+
+Quiero que realices ahora una auditoría técnica y conversacional del motor actual, sin modificar su funcionamiento.
+
+Especialmente:
+
+1. Reconstruye el recorrido real de cada mensaje desde que entra en NUXA hasta que se entrega la respuesta.
+
+2. Identifica qué componentes de NEUROPSI están implementados, cuáles han sido probados y cuáles cuentan con evidencia suficiente de funcionamiento.
+
+3. Analiza cómo se gestionan los hechos relatados, las hipótesis psicológicas, la evidencia científica, las incertidumbres y las rectificaciones.
+
+4. Documenta los mecanismos de comprensión compartida, continuidad conversacional, adaptación, prudencia y decisión entre escuchar, preguntar o intervenir.
+
+5. Revisa la integración efectiva de las fuentes científicas y sus limitaciones.
+
+6. Identifica posibles errores, redundancias, riesgos de pérdida de contexto y costes adicionales derivados de la revisión interna.
+
+7. Diseña una metodología futura para comparar NEUROPSI-AI con el mismo modelo base, manteniendo las salvaguardas esenciales en ambos sistemas.
+
+8. Relaciona los apartados aplicables de MI-CLAIM con las características reales de NUXA, indicando cuáles no resultan directamente aplicables.
+
+Crea un informe preliminar denominado:
+
+NUXA_NEUROPSI_MI_CLAIM_REPORT.md
+
+El informe debe distinguir claramente entre implementación técnica, resultados de pruebas y evidencia científica.
+
+No ejecutes nuevas consultas de IA de pago.
+
+No modifiques prompts, modelos, seguridad, proveedores, interfaz, voz ni producción.
+
+No publiques cambios.
+
+Cuando termines, preséntame un resumen ejecutivo con los principales hallazgos, las limitaciones y las cinco mejoras prioritarias que recomendarías.
+
+Nuestro objetivo es construir un sistema conversacional psicológicamente riguroso, científicamente evaluable y técnicamente reproducible, sin atribuirle una validación clínica que todavía no posee.
