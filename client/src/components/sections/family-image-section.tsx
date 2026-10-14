@@ -1,4 +1,4 @@
-import familyImage from "@assets/image_1752849322206.png";
+import familyImage from "@assets/nuxa-familia-apoyo.webp";
 
 export default function FamilyImageSection() {
   return (

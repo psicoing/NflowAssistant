@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 import { MessageCircle, Info, Brain, User, Heart } from "lucide-react";
 import { useLocation } from "wouter";
 import { useLanguageContext } from "@/components/LanguageProvider";
-import nflowPackageImage from "@assets/image_1749802552043.png";
-import nflowFamilyImage from "@assets/image_1749802597786.png";
+import nuxaPackageImage from "@assets/nuxa-individual.webp";
+import nuxaFamilyImage from "@assets/nuxa-familiar.webp";
 
 export default function HeroSection() {
   const [, setLocation] = useLocation();
@@ -67,9 +67,9 @@ export default function HeroSection() {
             {/* Individual Package */}
             <div className="relative group">
               <div className="transform hover:scale-105 transition-transform duration-500 nflow-package-card">
-                <img 
-                  src={nflowPackageImage} 
+                <img
                   alt="NUXA Salud Mental Individual"
+                  src={nuxaPackageImage}
                   className="w-4/5 mx-auto h-auto rounded-3xl shadow-2xl border border-gray-700/50 select-none"
                 />
               </div>
@@ -86,9 +86,9 @@ export default function HeroSection() {
             {/* Family Package */}
             <div className="relative group">
               <div className="transform hover:scale-105 transition-transform duration-500 nflow-package-card">
-                <img 
-                  src={nflowFamilyImage} 
+                <img
                   alt="NUXA Salud Mental Familiar"
+                  src={nuxaFamilyImage}
                   className="w-4/5 mx-auto h-auto rounded-3xl shadow-2xl border border-gray-700/50 select-none"
                 />
               </div>

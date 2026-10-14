@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Star } from "lucide-react";
-import adolescentesImage from "@assets/generated_images/NFLOW_adolescents_app_interface_154ebcf6.png";
-import padresImage from "@assets/generated_images/NFLOW_parents_app_interface_fe680f15.png";
-import empresasImage from "@assets/generated_images/NFLOW_business_app_interface_fcfe8f47.png";
-import laboralImage from "@assets/generated_images/NFLOW_workplace_wellness_interface_6d72e938.png";
+import adolescentesImage from "@assets/nuxa-personas-adolescentes.webp";
+import padresImage from "@assets/nuxa-personas-padres.webp";
+import empresasImage from "@assets/nuxa-personas-empresas.webp";
+import laboralImage from "@assets/nuxa-personas-laboral.webp";
 
 const personas = [
   {
@@ -67,34 +67,14 @@ export default function PersonasSection() {
                 key={persona.id}
                 className="group cursor-pointer transform hover:scale-105 transition-all duration-300"
               >
-                {/* Product Package */}
+                {/* Illustrated NUXA package */}
                 <div className="relative mb-6">
-                  {/* Blister Pack Background */}
-                  <div className="bg-gradient-to-br from-gray-200 to-gray-300 rounded-3xl p-4 shadow-2xl border-2 border-gray-400 relative overflow-hidden">
-                    {/* Cardboard header */}
-                    <div className={`${persona.bgColor} rounded-t-2xl -mx-4 -mt-4 mb-4 p-3 shadow-lg`}>
-                      <div className="text-white font-bold text-center text-sm mb-1">{persona.appName}</div>
-                      <div className="text-white/80 text-xs text-center font-medium">{persona.subtitle}</div>
-                      
-                      {/* Hanging hole */}
-                      <div className="absolute top-2 right-4 w-4 h-4 bg-gray-400 rounded-full shadow-inner"></div>
-                    </div>
-
-                    {/* App Interface Preview */}
-                    <div className="bg-gradient-to-br from-white/20 to-white/40 rounded-2xl p-2 backdrop-blur-sm border border-white/30 relative">
-                      {/* Mobile Interface Image */}
-                      <div className="text-center">
-                        <img 
-                          src={persona.image} 
-                          alt={`${persona.title} App Interface`}
-                          className="w-full h-auto rounded-xl shadow-lg transform group-hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Plastic shine effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent rounded-3xl pointer-events-none"></div>
-                  </div>
+                  <img
+                    src={persona.image}
+                    alt={`NUXA: ${persona.title}. ${persona.subtitle}`}
+                    className="w-full h-auto rounded-xl shadow-2xl"
+                    loading="lazy"
+                  />
                 </div>
 
                 {/* Description */}
