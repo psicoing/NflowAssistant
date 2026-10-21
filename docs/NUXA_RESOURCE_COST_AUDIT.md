@@ -290,10 +290,10 @@ razonable. Este informe no certifica ni impugna la corrección de la factura.
 
 ## 9. Actualización con el desglose de Usage aportado
 
-El usuario ha aportado las partidas de Usage, pero no las fechas ni los
-filtros de proyecto. Las siguientes cifras corresponden al alcance del panel
-copiado, que aún no se puede atribuir exclusivamente a NUXA ni considerar
-necesariamente un mes.
+El usuario ha aportado las partidas de Usage y ha confirmado que incluyen
+todos sus proyectos de Replit. No ha indicado las fechas del periodo.
+Las siguientes cifras son agregadas de esos proyectos: no se pueden atribuir
+exclusivamente a NUXA ni considerar necesariamente un mes.
 
 | Categoría | Importe mostrado (USD) |
 |---|---:|
@@ -357,8 +357,8 @@ Los escenarios de ahorro de BD anteriores permanecen condicionados a la
 atribución por proyecto y al intervalo. El desglose nuevo no permite cerrar
 el coste mensual de NUXA ni repartir costes con Radio Angrota.
 
-**Datos mínimos pendientes:** fechas de inicio/fin y confirmación del filtro
-de proyectos; después, partidas de Production Database Compute y Reserved VM
+**Datos mínimos pendientes:** fechas de inicio/fin y partidas de
+Production Database Compute y Reserved VM
 para NUXA y Radio Angrota por separado. No se necesitan credenciales.
 
 ## 10. Fuentes
