@@ -21,3 +21,12 @@ etiqueta, sin modificar el código de lectura.
 
 **How to apply:** Si la comprobación independiente coincide, revisar la fuente
 o preparación del fixture antes de cambiar consultas que funcionan.
+
+Los contadores aproximados de filas en una réplica de producción pueden estar
+a cero aunque existan registros. No interpretarlos como prueba de base vacía.
+
+**Why:** Durante una auditoría de costes, las estadísticas de tablas de la
+réplica mostraban ceros mientras las consultas agregadas confirmaban datos.
+
+**How to apply:** Separar estimaciones de estadísticas, conteos SQL y métricas
+de facturación; un snapshot SQL no permite reconstruir horas facturadas.

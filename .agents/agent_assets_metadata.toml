@@ -121,3 +121,17 @@ mtime_ms = 1791998694480
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/7f257979-7ada-4036-a5ac-ae0ddcf95f74/6e1164ef-0fa4-47fc-8f33-63f56cf2c633"
 storage_version_token = "1791998724485413"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "uED6JRTY3YdE8tm2d1c4l"
+uri = "file://docs/NUXA_RESOURCE_COST_AUDIT.md"
+type = "text"
+title = "Auditoría técnica y económica inicial de NUXA"
+description = "Inventario comprobado, procesos que pueden impedir el reposo, escenarios de ahorro y datos pendientes para atribuir los 29,53 USD. Sin cambios de aplicación, bases de datos ni producción."
+logical_id = "5d604780-b651-44c1-9233-7c560deddf92"
+content_hash = "sha256:ff95b28927c636c9925a7aa238c10c5688c33a9fc9014a621fcb4a6498ecf925"
+size = 18682
+mtime_ms = 1792566319230
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/5d604780-b651-44c1-9233-7c560deddf92/1e31960f-c36a-4222-95fc-222296ddbf39"
+storage_version_token = "1792566358014366"
+content_type = "text/markdown"
