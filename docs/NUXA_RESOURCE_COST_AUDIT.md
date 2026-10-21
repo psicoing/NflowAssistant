@@ -288,7 +288,80 @@ Con esos datos se podrá responder con importes comprobados qué parte pertenece
 a cada app, cuántas horas genera cada recurso y cuál es el ahorro mensual
 razonable. Este informe no certifica ni impugna la corrección de la factura.
 
-## 9. Fuentes
+## 9. Actualización con el desglose de Usage aportado
+
+El usuario ha aportado las partidas de Usage, pero no las fechas ni los
+filtros de proyecto. Las siguientes cifras corresponden al alcance del panel
+copiado, que aún no se puede atribuir exclusivamente a NUXA ni considerar
+necesariamente un mes.
+
+| Categoría | Importe mostrado (USD) |
+|---|---:|
+| Agent: trabajo en Projects; Conversations figura a cero | 110,07 |
+| Replit AI Integrations | 0,86 |
+| Herramientas | 0,47 |
+| Hosting Autoscale: cómputo, días y solicitudes | 4,00 |
+| Hosting Reserved VM | 8,82 |
+| Transferencia a visitantes | 2,36 |
+| Storage: principalmente cómputo de BD de producción | 29,53 |
+| **Suma de categorías mostradas** | **156,11** |
+
+La suma se realiza con importes visibles redondeados. Las líneas inferiores
+a un céntimo pueden introducir diferencias pequeñas respecto del total exacto.
+No es un cálculo de la cantidad pendiente de pago: faltan créditos,
+inclusiones, cuota del plan e impuestos.
+
+### Qué queda aclarado
+
+- Agent representa aproximadamente el **70,5 %** de los 156,11 USD.
+  Es una partida distinta de la inferencia del chatbot por Replit AI
+  Integrations. No procede describir 111,40 USD como consumo del chat de NUXA.
+- El uso de Replit AI Integrations mostrado es **0,86 USD**. Sin filtro de
+  proyecto no sabemos cuánto corresponde a NUXA.
+- Hosting, transferencia y Storage suman **44,71 USD**, sin Agent, herramientas
+  ni inferencia. Sumando las integraciones de IA son **45,57 USD**. Incluyendo
+  herramientas y excluyendo solo Agent, el total es **46,04 USD**.
+  Son agrupaciones del alcance mostrado, no una estimación mensual de NUXA.
+- Los 29,53 USD figuran bajo Storage, pero corresponden esencialmente al
+  **tiempo de cómputo de BD**, no al volumen de conversaciones almacenadas.
+  El almacenamiento lógico de BD figura en 0,02 GiB-mes, por debajo de un
+  céntimo; recuperación y objetos también son mínimos en este desglose.
+  No hay justificación económica para borrar datos a partir de estas cifras.
+- Se facturan tanto **Autoscale** como **Reserved VM**. NUXA tiene una
+  publicación Autoscale observada; no se ha identificado el proyecto al que
+  pertenecen las 424,1 horas de Reserved VM. No atribuirlas a Radio Angrota
+  ni considerarlas un duplicado sin comprobarlo.
+- Los **103 días de Autoscale** no prueban que el intervalo dure 103 días:
+  pueden acumular días facturados de varias publicaciones. Las fechas y el
+  desglose por proyecto siguen siendo necesarios.
+- Los **47,17 GiB** de transferencia son una partida comprobada del alcance
+  mostrado, pero no demuestran por sí mismos tráfico humano, abuso ni qué
+  proyecto o archivos lo originan.
+
+### Prioridades económicas revisadas, sin implementar cambios
+
+1. Si el objetivo es reducir el consumo total de la cuenta, el mayor componente
+   observado es el trabajo con Agent. Separar ese presupuesto de desarrollo
+   del presupuesto operativo y evitar comprobaciones repetidas sin necesidad.
+   Un informe estático no permite predecir cuánto costará el desarrollo futuro.
+2. Para reducir gasto operativo sin tocar la calidad del chat, investigar primero
+   las horas de BD y los procesos periódicos ya identificados en este informe.
+   El ahorro depende de reducir ventanas activas reales, no solo consultas.
+3. Identificar qué publicación usa Reserved VM y si es necesaria, antes de
+   plantear cambios de modalidad. No apagar ni convertir servicios durante
+   esta auditoría; preservar la disponibilidad 24/7.
+4. Identificar el origen de la transferencia antes de proponer compresión o
+   caché de archivos. Su coste observado, 2,36 USD, es menor que el de BD.
+
+Los escenarios de ahorro de BD anteriores permanecen condicionados a la
+atribución por proyecto y al intervalo. El desglose nuevo no permite cerrar
+el coste mensual de NUXA ni repartir costes con Radio Angrota.
+
+**Datos mínimos pendientes:** fechas de inicio/fin y confirmación del filtro
+de proyectos; después, partidas de Production Database Compute y Reserved VM
+para NUXA y Radio Angrota por separado. No se necesitan credenciales.
+
+## 10. Fuentes
 
 - Código inspeccionado: `.replit`, `server/db.ts`, `server/index.ts`,
   `server/routes.ts`, `server/storage.ts`, `server/trial/routes.ts`,
