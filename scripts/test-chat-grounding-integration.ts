@@ -6,6 +6,7 @@ import { pathToFileURL } from "node:url";
 import { build } from "esbuild";
 import { installOfflineManagedChatConfiguration } from "./fixtures/chat-provider-offline";
 import { chatGroundingNotice } from "../server/chat-grounding";
+import { prepareChatWorkingContext } from "../server/chat-working-context";
 
 installOfflineManagedChatConfiguration();
 const state = {
@@ -78,6 +79,51 @@ try {
   const modelCrisis = await processUserMessage("Necesito hablar de algo que me preocupa.", [], {}, "es", "brief");
   assert.equal(modelCrisis.content, state.draft);
   assert.equal(state.requests.length - beforeModelCrisis, 1, "A crisis signalled by the draft also avoids review delay.");
+  // Long dialogue through the ACTUAL handler: one extractive context reaches
+  // generation and review, not a second invented summary or an extra AI call.
+  state.crisisDraft = false;
+  const longHistory = [
+    { isUser: true, content: "No he intentado todavía la propuesta; necesito que me escuches." },
+    ...Array.from({ length: 10 }, (_, index) => [
+      { isUser: true, content: `Sigo preocupado por el trabajo, detalle ${index}.` },
+      { isUser: false, content: "Respuesta previa de apoyo. ".repeat(50) },
+    ]).flat(),
+  ];
+  const followup = "¿Podemos seguir hablando de mi preocupación?";
+  const context = prepareChatWorkingContext(longHistory, followup);
+  assert(context.memoryTurnCount > 0);
+  const quotedIndex = context.history.findIndex(turn => turn.content === longHistory[0].content);
+  assert(quotedIndex >= 0 && quotedIndex < context.memoryTurnCount);
+  state.draft = "Según lo que cuentas, todavía no lo has intentado.";
+  state.audit = JSON.stringify({
+    decision: "accept", response: null, hasRelevantClaims: true,
+    claims: [{ text: "todavía no lo has intentado", category: "reported",
+      references: [{ id: `U${quotedIndex + 1}`, quote: "No he intentado todavía la propuesta" }] }],
+  });
+  const beforeLong = state.requests.length;
+  const remembered = await processUserMessage(followup, longHistory, {}, "es", "brief");
+  assert.equal(remembered.responseKind, "ai");
+  assert.equal(remembered.content, state.draft);
+  assert.equal(state.requests.length - beforeLong, 2, "No extra summarisation or retrieval generation.");
+  const generation = state.requests[beforeLong];
+  const review = state.requests[beforeLong + 1];
+  assert(generation.messages[0].content.includes("MEMORIA DE TRABAJO EXTRACTIVA"));
+  assert(review.messages[0].content.includes("MEMORIA DE TRABAJO EXTRACTIVA"));
+  assert.deepEqual(generation.messages.slice(1, -1), context.history);
+  const reviewData = JSON.parse(review.messages[1].content);
+  assert.equal(reviewData.contextIncomplete, true);
+  assert.deepEqual(reviewData.sources.filter((source: any) => source.kind === "user" || source.kind === "assistant")
+    .map((source: any) => source.text), [...context.history.map(turn => turn.content), followup]);
+  // Omitted historical messages cannot become evidence just by guessing a ref.
+  state.audit = JSON.stringify({
+    decision: "accept", response: null, hasRelevantClaims: true,
+    claims: [{ text: "todavía no lo has intentado", category: "reported",
+      references: [{ id: "U999999", quote: "No he intentado todavía la propuesta" }] }],
+  });
+  const failedMemoryReview = await processUserMessage(followup, longHistory, {}, "es", "brief");
+  assert.equal(failedMemoryReview.responseKind, "automatic");
+  assert.equal(failedMemoryReview.countsTowardQuestionQuota, false);
+  assert(!failedMemoryReview.content.includes(state.draft));
   console.log("PASS: real handler/router boundary, corrected output, hidden metadata, unverified draft never delivered, no client quota charge on failure, budget-preserving review, and one-call emergency path. No external calls.");
 } finally {
   delete (globalThis as any).__groundingIntegration;

@@ -11,7 +11,7 @@ import pg from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
 import * as schema from "../shared/schema";
 import { installChatHistoryGuards, establishChatUserSession } from "../server/chat-history-security";
-import { boundedChatHistory } from "../server/chat-cost-policy";
+import { prepareChatWorkingContext } from "../server/chat-working-context";
 import { groundingSources, validateGroundingReview, ChatGroundingError } from "../server/chat-grounding";
 
 // Isolated PostgreSQL, UNIX socket only. No app DB, secrets or network providers.
@@ -118,9 +118,11 @@ try {
     sendTrialExhaustedEmail: async () => { state.emails++; },
     respondTrialError: () => false,
     processUserMessage: async (message: string, history: any[], profile: any, language: string, mode: string) => {
-      const bounded = boundedChatHistory(history, message);
+      const context = prepareChatWorkingContext(history, message);
+      const bounded = context.history;
       const input = { draft: "Respuesta de prueba.", history: bounded, userMessage: message,
-        profile, sources: [], language, mode: mode || "classic", model: "gpt-5.5" };
+        profile, sources: [], language, mode: mode || "classic", model: "gpt-5.5",
+        historyIncomplete: context.historyIncomplete, memoryTurnCount: context.memoryTurnCount };
       state.calls.push({ message, history, profile, language, mode, bounded, sources: groundingSources(input) });
       if (state.deletedDuringAI) await pool!.query("DELETE FROM conversations WHERE id=44");
       return { content: input.draft, responseKind: message === "automatic" ? "automatic" : "ai",

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "suite": "neuropsi-reserved",
+  "file": "scripts/fixtures/neuropsi-reserved-cases.json",
+  "sha256": "21699f565ecc432e2e665b50a4514746a27868c2f043a368d6babd319aa92509",
+  "caseCount": 8,
+  "status": "reserved-not-evaluated",
+  "limitations": [
+    "Synthetic cases, not patients or clinical validation.",
+    "Repository-visible, not an independently held secret test set.",
+    "Do not tune on these cases and then claim held-out performance.",
+    "No paid inference is authorized by this manifest."
+  ]
+}

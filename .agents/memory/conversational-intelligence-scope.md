@@ -100,3 +100,16 @@ base de datos. El usuario autoriza conservarlos visibles a su propietario pero
 excluirlos del contexto cuando no pueda acreditarse su procedencia.
 Conservar motor científico, prompts, modelos e interfaz durante esta corrección,
 sin publicación hasta revisar los resultados.
+
+No presentar una memoria de trabajo extractiva como un estado semántico
+completo ni como una mejora de calidad ya demostrada.
+
+**Why:** Se eligió una primera mejora mediante mensajes literales para evitar
+otra inferencia que pudiera inventar recuerdos y otra llamada de coste. Las
+pruebas de selección y transporte no demuestran que el modelo interprete bien
+referentes incompletos o actualice objetivos e hipótesis.
+
+**How to apply:** Antes de introducir resúmenes o ampliar esta memoria, evaluar
+correcciones, referentes ambiguos y resultados con casos separados del desarrollo.
+No recuperar afirmaciones antiguas atravesando una corrección omitida ni dar
+por resueltas lagunas del diálogo por haber conservado más mensajes.

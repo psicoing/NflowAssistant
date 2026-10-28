@@ -135,3 +135,17 @@ mtime_ms = 1792569547382
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/5d604780-b651-44c1-9233-7c560deddf92/7987cfe6-09da-4259-95a1-c64c0fb4fb99"
 storage_version_token = "1792569556002710"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "eoA13GWN35Wav2BkL3eNu"
+uri = "file://docs/evaluations/NEUROPSI_BCDE_RESULTS.md"
+type = "text"
+title = "NEUROPSI: implementación y resultados"
+description = "Seguridad comprobada, contexto extractivo implementado, pruebas ejecutadas y límites pendientes. Sin publicación ni consultas de IA de pago."
+logical_id = "97aec8cf-6ba4-466c-8206-5473936c4e73"
+content_hash = "sha256:53cd65a08230daf4a7c2ec20819853cddcf01bdf3095afd63c470a0b0b38c631"
+size = 6763
+mtime_ms = 1793185783873
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/97aec8cf-6ba4-466c-8206-5473936c4e73/a43b2dc0-adbc-42af-9197-43fb85bedda0"
+storage_version_token = "1793185805648245"
+content_type = "text/markdown"

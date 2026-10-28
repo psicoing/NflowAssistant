@@ -1,6 +1,7 @@
 import { routedChatCompletion } from "./chat-completion-router";
 import { quoteChatRequest, type CostedChatMessage } from "./chat-cost-policy";
 import type { EvidenceSource } from "./knowledge/pilot-sources";
+import { workingMemoryInstructions } from "./chat-working-context";
 
 export const GROUNDING_REVIEW_MARKER = "NUXA_GROUNDING_REVIEW";
 export const GROUNDING_OUTPUT_TOKENS = 1600;
@@ -27,6 +28,7 @@ export interface GroundingInput {
   mode: string;
   model: string;
   historyIncomplete?: boolean;
+  memoryTurnCount?: number;
 }
 
 export class ChatGroundingError extends Error {
@@ -42,6 +44,8 @@ export function groundingSources(input: GroundingInput): GroundingSource[] {
   const result: GroundingSource[] = turns.map((turn, index) => ({
     id: `${turn.role === "user" ? "U" : "A"}${index + 1}`,
     kind: turn.role === "user" ? "user" : "assistant", text: turn.content,
+    ...(index < (input.memoryTurnCount ?? 0)
+      ? { metadata: { context: "literal-earlier-user-turn", interveningAssistantTurnsOmitted: true } } : {}),
   }));
   const profile = input.profile;
   if (profile) {
@@ -87,7 +91,7 @@ Devuelve solo JSON: {"decision":"accept|revise","response":null,"hasRelevantClai
 
 export function groundingRequest(input: GroundingInput): CostedChatMessage[] {
   return [
-    { role: "system", content: instructions },
+    { role: "system", content: instructions + workingMemoryInstructions(input.memoryTurnCount ?? 0) },
     { role: "user", content: JSON.stringify({
       language: input.language, mode: input.mode, contextIncomplete: !!input.historyIncomplete,
       sources: groundingSources(input), draft: input.draft,

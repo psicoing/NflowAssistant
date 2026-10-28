@@ -195,9 +195,14 @@ try {
   // or inferred preferences in the actual final system prompt.
   const staleHistory = [
     { content: "Elijo plan estructurado. osteoporosis osteopenia", isUser: true },
+    // More than 32 turns is no longer sufficient to prove omission: extractive
+    // memory can legitimately recover earlier user turns. A complete oversized
+    // correction is a real boundary which neither context selector may cross.
+    { content: "Corrijo esa petición: " + "x".repeat(CHAT_HISTORY_BYTES), isUser: true },
     ...Array.from({ length: 32 }, (_, i) => ({ content: `Turno reciente ${i}: estoy organizando un correo.`, isUser: i % 2 === 0 })),
   ];
   await processUserMessage("Quiero escribir un saludo.", staleHistory, undefined, "es", "brief");
+  assert(!requests.at(-1).messages.some((item: any) => item.content === staleHistory[0].content));
   assert(!requests.at(-1).messages[0].content.includes("Plan detallado paso a paso con cronograma semanal"));
   await processUserMessage("¿Y ahora?", [
     { content: "No quiero vivir. " + "x".repeat(CHAT_HISTORY_BYTES), isUser: true },

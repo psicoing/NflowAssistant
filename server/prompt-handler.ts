@@ -13,7 +13,7 @@ import { chatEvidenceInstructions, needsUrgentConversationSupport, resolveEviden
 import { scientificAnalysisInstructions, scientificEvidenceEngine } from "./knowledge/scientific-engine";
 import { compactChatPresentation } from "./chat-presentation";
 import { conversationStrategyInstructions } from "./chat-conversation-strategy";
-import { boundedChatHistory } from "./chat-cost-policy";
+import { prepareChatWorkingContext, workingMemoryInstructions } from "./chat-working-context";
 import { routedChatCompletion } from "./chat-completion-router";
 import { chatCostLimitMessage } from "./chat-policy";
 import { chatUnavailableNotice } from "../shared/chat-service";
@@ -119,7 +119,7 @@ function detectUserPreferences(history: Message[]): string {
 /**
  * Genera una respuesta mejorada usando OpenAI con ejemplos contextuales
  */
-export function buildChatPrompt(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic', urgentContext: boolean = false, historyIncomplete: boolean = false): string {
+export function buildChatPrompt(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic', urgentContext: boolean = false, historyIncomplete: boolean = false, memoryTurnCount: number = 0): string {
   try {
     // Seleccionar ejemplos relevantes basados en el mensaje del usuario
     const relevantExamples = selectRelevantExamples(userMessage, 2);
@@ -754,7 +754,7 @@ FORMATO JSON:
     const sources = retrieval.sources;
     const evidence = chatEvidenceInstructions(sources);
     const conceptualAnalysis = scientificAnalysisInstructions(retrieval);
-    const conversationalStrategy = conversationStrategyInstructions();
+    const conversationalStrategy = conversationStrategyInstructions() + workingMemoryInstructions(memoryTurnCount);
     const contextBoundary = historyIncomplete
       ? "\nLÍMITE DEL CONTEXTO DE ESTA CONVERSACIÓN: algunos turnos anteriores no caben en el historial enviado. No es una síntesis completa ni demuestra que no hubo correcciones, intentos o resultados. No reconstruyas lo omitido ni atribuyas un resultado a una propuesta ausente; si un dato cambia la orientación, acláralo brevemente sin retrasar la ayuda urgente."
       : "";
@@ -768,7 +768,8 @@ FORMATO JSON:
 
 export async function generateChatResponse(userMessage: string, history: Message[], userProfile?: any, userLanguage: string = 'es', chatMode: string = 'classic'): Promise<string> {
   try {
-    const conversationHistory = boundedChatHistory(history, userMessage);
+    const context = prepareChatWorkingContext(history, userMessage);
+    const conversationHistory = context.history;
     // Analyse the same dialogue the model actually receives, rather than
     // deriving preferences/evidence from turns absent from its context.
     const promptHistory = conversationHistory.map(message => ({
@@ -778,10 +779,8 @@ export async function generateChatResponse(userMessage: string, history: Message
     // Keep the existing safety assessment even if a very long recent turn
     // cannot fit the dialogue budget. Context limits must not suppress it.
     const urgentContext = needsUrgentConversationSupport(userMessage, history);
-    const priorTurnCount = history.length -
-      (history.at(-1)?.isUser && history.at(-1)?.content === userMessage ? 1 : 0);
-    const historyIncomplete = priorTurnCount > conversationHistory.length;
-    const finalPrompt = buildChatPrompt(userMessage, promptHistory, userProfile, userLanguage, chatMode, urgentContext, historyIncomplete);
+    const historyIncomplete = context.historyIncomplete;
+    const finalPrompt = buildChatPrompt(userMessage, promptHistory, userProfile, userLanguage, chatMode, urgentContext, historyIncomplete, context.memoryTurnCount);
     const maxTokens = chatMode === 'brief' ? (urgentContext ? 1000 : 500) : 4000;
 
     // Mantener una versión estable por defecto para que cambios futuros del alias
@@ -829,6 +828,7 @@ export async function generateChatResponse(userMessage: string, history: Message
     const review = await reviewChatGrounding({
       draft: resolvedResponse, history: conversationHistory, userMessage, profile: userProfile,
       sources, language: userLanguage, mode: chatMode, model: chatModel, historyIncomplete,
+      memoryTurnCount: context.memoryTurnCount,
     });
     const reviewedResponse = resolveEvidenceCitations(review.response, sources);
     if (!reviewedResponse.trim()) throw new ChatGroundingError();

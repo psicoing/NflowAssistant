@@ -37,9 +37,13 @@ export function assertPricedChatModel(model: string) {
   }
 }
 
-export function boundedChatHistory(history: { content: string; isUser: boolean }[], currentMessage?: string): CostedChatMessage[] {
+export function boundedChatHistory(history: { content: string; isUser: boolean }[], currentMessage?: string,
+  byteLimit: number = CHAT_HISTORY_BYTES): CostedChatMessage[] {
+  if (!Number.isSafeInteger(byteLimit) || byteLimit < 0 || byteLimit > CHAT_HISTORY_BYTES) {
+    throw new RangeError("History selection cannot increase the approved byte budget.");
+  }
   const result: CostedChatMessage[] = [];
-  let remaining = CHAT_HISTORY_BYTES;
+  let remaining = byteLimit;
   // The conversation route saves the current user turn before reading history.
   // Send that turn only once, as the final request message.
   const previous = currentMessage !== undefined && history.at(-1)?.isUser && history.at(-1)?.content === currentMessage

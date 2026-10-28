@@ -2,7 +2,8 @@ import fs from "node:fs/promises";
 import { performance } from "node:perf_hooks";
 import { processUserMessage, buildChatPrompt } from "../server/prompt-handler";
 import { chatAiReadiness } from "../server/chat-ai-client";
-import { boundedChatHistory, quoteChatRequest } from "../server/chat-cost-policy";
+import { quoteChatRequest } from "../server/chat-cost-policy";
+import { prepareChatWorkingContext } from "../server/chat-working-context";
 import { needsUrgentConversationSupport, retrieveChatEvidence } from "../server/chat-evidence";
 import type { Message } from "../shared/schema";
 import { conversationCases } from "./fixtures/chat-conversation-cases";
@@ -33,18 +34,19 @@ const selected = cases.slice(offset, offset + limit);
 let conservativeMaximumUsd = 0;
 for (const [index, item] of selected.entries()) {
   const mode = ["classic", "bubbles", "brief"][(offset + index) % 3];
-  const history = boundedChatHistory(item.history, item.question);
+   const context = prepareChatWorkingContext(item.history, item.question);
+   const history = context.history;
   const promptHistory = history.map(message => ({ content: message.content, isUser: message.role === "user" })) as Message[];
   const urgent = needsUrgentConversationSupport(item.question, item.history as Message[]);
   const prompt = buildChatPrompt(item.question, promptHistory, {}, item.language, mode, urgent,
-    history.length < item.history.length);
+     context.historyIncomplete, context.memoryTurnCount);
   conservativeMaximumUsd += quoteChatRequest(readiness.model, [
     { role: "system", content: prompt }, ...history, { role: "user", content: item.question },
   ], mode === "brief" ? (urgent ? 1000 : 500) : 4000).maximumNanoUsd / 1e9;
   if (!urgent) conservativeMaximumUsd += groundingCostBound({
     history, userMessage: item.question, sources: retrieveChatEvidence(item.question, promptHistory, {}),
     language: item.language, mode, model: readiness.model,
-    historyIncomplete: history.length < item.history.length,
+     historyIncomplete: context.historyIncomplete, memoryTurnCount: context.memoryTurnCount,
   }).maximumNanoUsd / 1e9;
 }
 console.log(JSON.stringify({
