@@ -516,13 +516,13 @@ const routeMetadata: Record<string, RouteMeta> = {
   "/prueba-gratis": {
     title: "Prueba NUXA Gratis | 5 Consultas Sin Registro",
     description:
-      "Prueba NUXA gratis sin registro. Habla con nuestro asistente de bienestar emocional ahora mismo. 5 consultas gratuitas para descubrir el apoyo emocional digital.",
+      "Prueba NUXA con correo y móvil verificados. Dos consultas gratuitas para descubrir el apoyo emocional digital; después, acceso de pago.",
     canonical: `${SITE_URL}/prueba-gratis`,
     jsonLd: orgSchema,
     bodyHtml: `
       <main>
         <h1>Prueba NUXA Gratis — 5 Consultas Sin Registro</h1>
-        <p>Accede al asistente de bienestar emocional de NUXA sin necesidad de crear una cuenta. Tienes 5 consultas gratuitas para descubrir cómo la IA puede apoyar tu bienestar emocional.</p>
+        <p>Crea tu cuenta y verifica tu correo y móvil para acceder a dos consultas gratuitas con NUXA. A partir de la tercera necesitas acceso de pago.</p>
         <ul>
           <li>Sin tarjeta de crédito</li>
           <li>Sin registro obligatorio</li>

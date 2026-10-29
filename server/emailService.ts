@@ -452,7 +452,7 @@ export async function sendTrialExhaustedEmail(params: {
         <tr><td style="padding:32px;">
           <p style="margin:0 0 20px;color:#374151;font-size:15px;line-height:1.7;">
             Hola <strong>${params.username}</strong>,<br><br>
-            Has utilizado tus 5 consultas gratuitas con NUXA. Esperamos que hayas podido sentir el apoyo que ofrece.
+            Has utilizado tus 2 consultas gratuitas con NUXA. Esperamos que hayas podido sentir el apoyo que ofrece.
           </p>
           <div style="background:#fff7ed;border-left:4px solid #f97316;border-radius:8px;padding:16px 20px;margin-bottom:24px;">
             <p style="margin:0;color:#92400e;font-size:14px;line-height:1.7;">
@@ -496,7 +496,7 @@ export async function sendTrialExhaustedEmail(params: {
       from: "NUXA <hola@nuxa.life>",
       to: params.email,
       subject: "Tu prueba gratuita ha terminado — continúa con NUXA desde €2.99/mes",
-      text: `Hola ${params.username},\n\nHas utilizado tus 5 consultas gratuitas con NUXA.\n\nContinúa con un plan desde €2.99/mes, sin permanencia: https://nuxa.life/registro/planes\n\nO explora recursos gratuitos: https://nuxa.life/recursos-gratuitos`,
+      text: `Hola ${params.username},\n\nHas utilizado tus 2 consultas gratuitas con NUXA.\n\nContinúa con un plan desde €2.99/mes, sin permanencia: https://nuxa.life/registro/planes\n\nO explora recursos gratuitos: https://nuxa.life/recursos-gratuitos`,
       html,
     });
     if (trialErr) { console.error("sendTrialExhaustedEmail Resend error:", trialErr); return false; }
@@ -936,7 +936,7 @@ export async function sendReactivationEmail(params: {
           </p>
           <div style="background:#ecfdf5;border-left:4px solid #10b981;border-radius:8px;padding:16px 20px;margin-bottom:24px;">
             <p style="margin:0;color:#065f46;font-size:14px;line-height:1.7;">
-              Además, ahora tienes <strong>5 consultas gratuitas</strong> esperándote.
+              Puedes probar NUXA con <strong>2 consultas gratuitas en total</strong>, si todavía no has agotado tu prueba.
             </p>
           </div>
           <div style="text-align:center;margin-bottom:24px;">
@@ -968,7 +968,7 @@ export async function sendReactivationEmail(params: {
       from: "NUXA <hola@nuxa.life>",
       to: params.email,
       subject: "¿Cómo estás? Tu espacio en NUXA te espera 🧠",
-      text: `Hola ${params.username},\n\nHace un tiempo probaste NUXA. Si alguna vez necesitas un espacio donde hablar sin juicios, aquí seguimos.\n\nAhora tienes 5 consultas gratuitas esperándote:\nhttps://nuxa.life/prueba-gratis\n\n---\nPara no recibir más mensajes: ${unsubscribeUrl}`,
+      text: `Hola ${params.username},\n\nHace un tiempo probaste NUXA. Si alguna vez necesitas un espacio donde hablar sin juicios, aquí seguimos.\n\nPuedes probar NUXA con 2 consultas gratuitas en total, si todavía no has agotado tu prueba:\nhttps://nuxa.life/prueba-gratis\n\n---\nPara no recibir más mensajes: ${unsubscribeUrl}`,
       html,
     });
     if (reactErr) { console.error("sendReactivationEmail Resend error:", reactErr); return false; }

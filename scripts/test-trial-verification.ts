@@ -73,7 +73,8 @@ try {
   await rejectsCode(service.send(flow.flowId, "sms", a), "RESEND_LIMIT");
   const phoneCode = smsCodes.get(details("first").phone)!;
   const activated = await service.check(flow.flowId, "sms", phoneCode, a) as any;
-  assert.equal(activated.remaining, 5);
+  assert.equal(activated.remaining, 2);
+  assert.equal((await isolated.query("SELECT monthly_question_limit FROM users WHERE id=$1", [activated.userId])).rows[0].monthly_question_limit, 2);
   assert.equal((await isolated.query("SELECT COUNT(*)::int AS n FROM users")).rows[0].n, 1);
   const again = await service.check(flow.flowId, "sms", phoneCode, a) as any;
   assert.equal(again.userId, activated.userId, "Completion is idempotent");
@@ -90,7 +91,7 @@ try {
   // Concurrent paid-generation bookings cannot pass the lifetime free quota.
   const bookings = await Promise.allSettled(Array.from({ length: 14 }, () => store.reserveQuestion(activated.userId)));
   const accepted = bookings.filter(r => r.status === "fulfilled").map(r => (r as PromiseFulfilledResult<string>).value);
-  assert.equal(accepted.length, 5);
+  assert.equal(accepted.length, 2);
   assert(bookings.filter(r => r.status === "rejected").every(r => (r as PromiseRejectedResult).reason.code === "TRIAL_EXHAUSTED"));
   await store.settleQuestion(accepted[0], false);
   await store.settleQuestion(accepted[0], false);
@@ -98,7 +99,18 @@ try {
   await Promise.all(accepted.slice(1).map(id => store.settleQuestion(id, true)));
   await store.settleQuestion(replacement, true);
   await store.settleQuestion(replacement, true);
-  assert.equal((await store.state(activated.userId))!.used, 5);
+  assert.equal((await store.state(activated.userId))!.used, 2);
+  await rejectsCode(store.reserveQuestion(activated.userId), "TRIAL_EXHAUSTED");
+  // Existing trials retain consumption, including users already above the new limit.
+  for (const used of [0, 1, 2, 3, 5]) {
+    await isolated.query("UPDATE nuxa_trial_identities SET used=$2 WHERE user_id=$1", [activated.userId, used]);
+    const state = (await store.state(activated.userId))!;
+    assert.equal(state.used, used);
+    assert.equal(state.limit, 2);
+    assert.equal(state.remaining, Math.max(0, 2 - used));
+    assert.equal(state.canAsk, used < 2);
+    if (used >= 2) await rejectsCode(store.reserveQuestion(activated.userId), "TRIAL_EXHAUSTED");
+  }
   await isolated.query("UPDATE users SET last_question_reset_date='2020-01-01',questions_used_this_month=0 WHERE id=$1", [activated.userId]);
   const restartedStore = new TrialStore(isolated);
   assert.equal((await restartedStore.state(activated.userId))!.remaining, 0, "User-month counter cannot reset a phone's lifetime quota");
@@ -116,7 +128,9 @@ try {
   await service.send(oldFlow.flowId, "sms", legacyCaller);
   const oldResult = await service.check(oldFlow.flowId, "sms", smsCodes.get("+33612345678"), legacyCaller) as any;
   assert.equal(oldResult.userId, legacy);
-  assert.equal(oldResult.remaining, 2, "Legacy trials retain used questions");
+  assert.equal(oldResult.remaining, 0, "Legacy trials retain used questions and receive no new allowance");
+  assert.equal((await store.state(legacy))!.used, 3);
+  await rejectsCode(store.reserveQuestion(legacy), "TRIAL_EXHAUSTED");
   await isolated.query("UPDATE users SET prepaid_questions=10 WHERE id=$1", [legacy]);
   assert.equal(await store.reserveQuestion(legacy), null, "Purchased credits retain the paid path");
   const paid = (await isolated.query(`INSERT INTO users(username,email,password,subscription_status)
@@ -209,7 +223,7 @@ try {
     assert.equal((await post("/api/prueba-gratis/enviar-codigo", { flowId, channel: "sms" })).status, 200);
     const result = await post("/api/prueba-gratis/verificar-movil", { flowId, code: smsCodes.get(contact.phone) });
     assert.equal(result.status, 200);
-    assert.equal(result.body.remaining, 5);
+    assert.equal(result.body.remaining, 2);
     assert.match(result.setCookie || "", /HttpOnly/);
     assert.match(result.setCookie || "", /Secure/);
     assert.match(result.setCookie || "", /SameSite=Lax/);

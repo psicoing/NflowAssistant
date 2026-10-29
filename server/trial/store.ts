@@ -1,7 +1,7 @@
 import { createHmac, randomBytes, randomUUID } from "node:crypto";
 import type { Pool } from "@neondatabase/serverless";
 
-export const TRIAL_LIMIT = 5;
+export const TRIAL_LIMIT = 2;
 export const SMS_MONTHLY_MICRO_USD = 5_000_000;
 export class TrialError extends Error {
   constructor(public status: number, public code: string, message: string) { super(message); }
@@ -10,6 +10,8 @@ export const unavailableTrial = () => new TrialError(409, "TRIAL_UNAVAILABLE",
   "No podemos activar otra prueba con estos datos. Si ya tienes cuenta, inicia sesión o elige un plan de pago.");
 
 export async function ensureTrialTables(pool: Pool) {
+  // Keep the legacy <=5 storage constraint so historical consumption remains intact.
+  // The current access limit is enforced atomically by reserveQuestion, not by resetting rows.
   await pool.query(`
     ALTER TABLE users ADD COLUMN IF NOT EXISTS trial_email_verified_at TIMESTAMPTZ;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS trial_phone_verified_at TIMESTAMPTZ;
@@ -104,9 +106,9 @@ export class TrialStore {
     try {
       await client.query("BEGIN");
       const r = await client.query(`UPDATE nuxa_trial_identities SET reserved=reserved+1
-        WHERE user_id=$1 AND used+reserved<5 RETURNING phone_hash`, [userId]);
+        WHERE user_id=$1 AND used+reserved<$2 RETURNING phone_hash`, [userId, TRIAL_LIMIT]);
       if (!r.rowCount) throw new TrialError(429, "TRIAL_EXHAUSTED",
-        "Has agotado las 5 preguntas de la prueba. No se renuevan cada mes; elige un plan para continuar.");
+        "Has agotado las 2 preguntas gratuitas. A partir de la tercera necesitas contratar acceso de pago. La prueba no se renueva cada mes.");
       const id = randomUUID();
       await client.query("INSERT INTO nuxa_trial_questions(id,phone_hash) VALUES($1,$2)",
         [id, r.rows[0].phone_hash]);

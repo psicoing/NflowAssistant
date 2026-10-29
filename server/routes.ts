@@ -53,7 +53,7 @@ import {
 } from "./voiceDemoBridge";
 import { EMPRESA_LEGACY_NUXA_FROM_EMAIL, EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandStatuses, getEmpresaBrandStatus, isEmpresaBrand, type EmpresaBrand } from "./empresaBrands";
 import { db, pool } from "./db";
-import { TrialStore } from "./trial/store";
+import { TrialStore, TRIAL_LIMIT } from "./trial/store";
 import { registerTrialRoutes, respondTrialError } from "./trial/routes";
 import { getChatServiceStatus } from "./chat-service-status";
 const trialQuota = new TrialStore(pool);
@@ -835,7 +835,7 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
       const limitCheck = await storage.checkQuestionLimit(userId);
       if (!limitCheck.canAsk) {
         return res.status(429).json({ 
-          message: limitCheck.limit === 5 ? "Has agotado la prueba gratuita. Elige un plan para continuar." : "Límite de preguntas mensuales alcanzado",
+          message: limitCheck.limit === TRIAL_LIMIT ? "Has agotado las 2 preguntas gratuitas. Contrata un plan para continuar." : "Límite de preguntas mensuales alcanzado",
           limit: limitCheck.limit,
           remaining: 0,
           resetDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).toISOString()
@@ -4391,7 +4391,7 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
         } catch (error) {
           if ((error as { code?: string }).code === "TRIAL_VERIFICATION_REQUIRED") {
             return res.json({ canAsk: false, remaining: 0, used: user.questionsUsedThisMonth || 0,
-              limit: 5, isTrial: true, requiresVerification: true, verificationUrl: "/prueba-gratis", resetDate: null });
+              limit: TRIAL_LIMIT, isTrial: true, requiresVerification: true, verificationUrl: "/prueba-gratis", resetDate: null });
           }
           throw error;
         }

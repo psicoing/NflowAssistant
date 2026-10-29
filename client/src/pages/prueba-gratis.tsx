@@ -320,8 +320,8 @@ export default function PruebaGratis() {
   return (
     <>
       <SEOHead
-        title="Prueba NUXA gratis – 5 consultas sin coste"
-        description="Prueba NUXA con cinco preguntas de bienestar emocional. Verificación de correo y móvil; sin renovación mensual."
+        title="Prueba NUXA gratis – 2 consultas sin coste"
+        description="Prueba NUXA con dos preguntas de bienestar emocional. Verificación de correo y móvil; sin renovación mensual."
         canonicalUrl="/prueba-gratis"
       />
       <main className="min-h-[100dvh] bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 flex flex-col items-center justify-center px-4 py-10 sm:py-16">
@@ -342,7 +342,7 @@ export default function PruebaGratis() {
           <section className="rounded-2xl border border-white/10 bg-white/[0.045] p-5 sm:p-6 mb-5">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
-                { icon: MessageSquareText, title: "5 preguntas", detail: "Una prueba por número móvil" },
+                { icon: MessageSquareText, title: "2 preguntas", detail: "Una prueba por número móvil" },
                 { icon: LockKeyhole, title: "Sin renovación", detail: "No se inicia ningún cobro mensual" },
                 { icon: ShieldCheck, title: "Privado", detail: "Verificamos correo y móvil" },
               ].map(({ icon: Icon, title, detail }) => (
@@ -608,7 +608,7 @@ export default function PruebaGratis() {
             </button>
           </p>
           <p className="mt-3 text-center text-xs leading-relaxed text-slate-600">
-            Tu prueba incluye hasta cinco preguntas. No hay renovación ni cargos automáticos.
+            Tu prueba incluye dos preguntas gratuitas. A partir de la tercera, contrata acceso de pago para continuar. No hay renovación ni cargos automáticos.
           </p>
         </div>
       </main>

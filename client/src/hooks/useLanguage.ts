@@ -195,7 +195,7 @@ export const translations = {
 
     // Home CTA button
     'home.cta.button': 'Comenzar gratis',
-    'home.cta.subtitle': 'Sin tarjeta · Sin registro · 5 consultas gratis',
+    'home.cta.subtitle': 'Sin tarjeta · Registro verificado · 2 consultas gratis',
 
     // Emergency
     'emergency.title': 'Números de Emergencia',
@@ -441,7 +441,7 @@ export const translations = {
 
     // Home CTA button
     'home.cta.button': 'Start for free',
-    'home.cta.subtitle': 'No card · No registration · 3 free consultations',
+    'home.cta.subtitle': 'No card · Verified registration · 2 free consultations',
 
     // Emergency
     'emergency.title': 'Emergency Numbers',
@@ -689,7 +689,7 @@ export const translations = {
 
     // Home CTA button
     'home.cta.button': 'Commencer gratuitement',
-    'home.cta.subtitle': 'Sans carte · Sans inscription · 5 consultations gratuites',
+    'home.cta.subtitle': 'Sans carte · Inscription vérifiée · 2 consultations gratuites',
 
     // Emergency
     'emergency.title': 'Numéros d\'Urgence',
@@ -759,7 +759,7 @@ export const translations = {
     'nav.home': 'Startseite',
     'hero.cta': 'Chat Starten',
     'home.cta.button': 'Kostenlos starten',
-    'home.cta.subtitle': 'Keine Karte · Keine Registrierung · 3 kostenlose Beratungen',
+    'home.cta.subtitle': 'Keine Karte · Verifizierte Registrierung · 2 kostenlose Beratungen',
     'chat.welcome.title': 'Willkommen bei NUXA Chat',
     'chat.conversations.new': 'Neu',
     'chat.filters.all': 'Alle',
@@ -771,7 +771,7 @@ export const translations = {
     'nav.home': 'Casa',
     'hero.cta': 'Inizia Chat',
     'home.cta.button': 'Inizia gratis',
-    'home.cta.subtitle': 'Senza carta · Senza registrazione · 5 consulenze gratuite',
+    'home.cta.subtitle': 'Senza carta · Registrazione verificata · 2 consulenze gratuite',
     'chat.welcome.title': 'Benvenuto in NUXA Chat',
     'chat.conversations.new': 'Nuovo',
     'chat.filters.all': 'Tutti',
@@ -783,7 +783,7 @@ export const translations = {
     'nav.home': 'Início',
     'hero.cta': 'Iniciar Chat',
     'home.cta.button': 'Começar grátis',
-    'home.cta.subtitle': 'Sem cartão · Sem registo · 5 consultas grátis',
+    'home.cta.subtitle': 'Sem cartão · Registo verificado · 2 consultas grátis',
     'chat.welcome.title': 'Bem-vindo ao NUXA Chat',
     'chat.conversations.new': 'Novo',
     'chat.filters.all': 'Todos',
@@ -795,7 +795,7 @@ export const translations = {
     'nav.home': 'Inici',
     'hero.cta': 'Començar Chat',
     'home.cta.button': 'Començar gratis',
-    'home.cta.subtitle': 'Sense targeta · Sense registre · 5 consultes gratuïtes',
+    'home.cta.subtitle': 'Sense targeta · Registre verificat · 2 consultes gratuïtes',
     'chat.welcome.title': 'Benvingut a NUXA Chat',
     'chat.conversations.new': 'Nou',
     'chat.filters.all': 'Tots',
@@ -807,7 +807,7 @@ export const translations = {
     'nav.home': 'Hasiera',
     'hero.cta': 'Txata Hasi',
     'home.cta.button': 'Doan hasi',
-    'home.cta.subtitle': 'Txartelik gabe · Erregistrorik gabe · 3 kontsulta doan',
+    'home.cta.subtitle': 'Txartelik gabe · Erregistro egiaztatua · 2 kontsulta doan',
     'chat.welcome.title': 'Ongi etorri NUXA Chat-era',
     'chat.conversations.new': 'Berria',
     'chat.filters.all': 'Denak',
@@ -819,7 +819,7 @@ export const translations = {
     'nav.home': 'Inicio',
     'hero.cta': 'Comezar Chat',
     'home.cta.button': 'Comezar gratis',
-    'home.cta.subtitle': 'Sen tarxeta · Sen rexistro · 5 consultas gratis',
+    'home.cta.subtitle': 'Sen tarxeta · Rexistro verificado · 2 consultas gratis',
     'chat.welcome.title': 'Benvido a NUXA Chat',
     'chat.conversations.new': 'Novo',
     'chat.filters.all': 'Todos',

@@ -3821,7 +3821,7 @@ export default function AdminDashboard() {
                     <div className="border-t border-gray-700 pt-3 text-gray-300 leading-relaxed space-y-2">
                       <p>Hola <span className="text-emerald-400">[nombre]</span>,</p>
                       <p>Hace un tiempo probaste NUXA. Si alguna vez necesitas un espacio donde hablar <strong>sin juicios y sin prisas</strong>, aquí seguimos.</p>
-                      <p>Además, ahora tienes <strong className="text-emerald-400">5 consultas gratuitas</strong> esperándote.</p>
+                      <p>Puedes probar NUXA con <strong className="text-emerald-400">2 consultas gratuitas en total</strong>, si todavía no has agotado tu prueba.</p>
                       <p className="text-center mt-2">
                         <span className="bg-emerald-600 text-white px-4 py-1.5 rounded-lg text-sm font-semibold">Volver a NUXA →</span>
                       </p>

@@ -7,9 +7,9 @@ El usuario pide un código de seguridad por correo y una casilla para introducir
 
 **Why:** Verificar el acceso a un correo no identifica a una persona ni impide que registre otras cuentas.
 
-El usuario aprobó exigir correo y móvil verificados para acceder a las 5 preguntas gratuitas. La propuesta aceptada limita la prueba a una por número aunque cambie el correo, sin renovación mensual.
+El usuario aprobó exigir correo y móvil verificados para acceder a la prueba gratuita. Posteriormente redujo la prueba a dos preguntas: desde la tercera se requiere acceso de pago. La prueba sigue siendo una por número aunque cambie el correo, sin renovación mensual.
 
-**Why:** El usuario eligió «Correo y móvil (recomendado)» tras explicar este alcance.
+**Why:** El usuario eligió «Correo y móvil (recomendado)» y después pidió dos preguntas para permitir probar el valor del servicio sin prolongar el uso gratuito.
 
 **How to apply:** Verificar ambos medios antes de dar acceso al chat gratuito y conservar el control de la prueba por número. No prometer que un número verificado demuestra identidad única.
 
@@ -19,7 +19,7 @@ El usuario autorizó 5 USD al mes para SMS de verificación, adicionales a los p
 
 **How to apply:** No ampliar este presupuesto sin permiso. Es un control interno conservador de los envíos de verificación, no un límite de la factura total de Twilio.
 
-La prueba es una sola por número: borrar una cuenta o cambiar la configuración de autenticación no debe conceder otras cinco preguntas. Los identificadores de prevención de abuso deben conservar su estabilidad y no depender de claves de sesión que puedan rotar.
+La prueba es una sola por número: borrar una cuenta o cambiar la configuración de autenticación no debe conceder otras dos preguntas. Los identificadores de prevención de abuso deben conservar su estabilidad y no depender de claves de sesión que puedan rotar.
 
 **Why:** Sin esta separación, cambiar de cuenta o renovar una clave de autenticación permitiría repetir la misma prueba, contrario al objetivo aprobado.
 

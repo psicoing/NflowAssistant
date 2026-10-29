@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { z } from "zod";
 import type { TrialProviders } from "./providers";
 import { normalizeTrialPhone } from "./providers";
-import { TrialStore, TrialError, unavailableTrial } from "./store";
+import { TrialStore, TrialError, unavailableTrial, TRIAL_LIMIT } from "./store";
 
 export interface TrialCaller { sessionId: string; ip: string; userId?: number }
 const startSchema = z.object({
@@ -200,6 +200,7 @@ export class TrialVerification {
       if (userId) {
         const old = await client.query("SELECT * FROM users WHERE id=$1 FOR UPDATE", [userId]);
         if (old.rows[0]?.subscription_status !== "trial" || old.rows[0]?.trial_phone_verified_at) throw unavailableTrial();
+        // Preserve consumption under the former five-question policy; never reset it.
         used = Math.min(5, Math.max(0, old.rows[0].questions_used_this_month || 0));
       } else {
         const count = await client.query(`SELECT COUNT(*)::integer AS total FROM users
@@ -209,18 +210,18 @@ export class TrialVerification {
         if (existing.rowCount) throw unavailableTrial();
         const user = await client.query(`INSERT INTO users
           (username,email,password,subscription_plan,subscription_status,monthly_question_limit,has_completed_payment)
-          VALUES($1,$2,$3,'trial','trial',5,FALSE) RETURNING id`, [row.username, row.email, row.password_hash]);
+          VALUES($1,$2,$3,'trial','trial',$4,FALSE) RETURNING id`, [row.username, row.email, row.password_hash, TRIAL_LIMIT]);
         userId = user.rows[0].id;
       }
       const identity = await client.query(`INSERT INTO nuxa_trial_identities(phone_hash,email_hash,user_id,used)
         VALUES($1,$2,$3,$4) ON CONFLICT DO NOTHING RETURNING user_id`, [row.phone_hash, row.email_hash, userId, used]);
       if (!identity.rowCount) throw unavailableTrial();
       await client.query(`UPDATE users SET trial_email_verified_at=NOW(),trial_phone_verified_at=NOW(),
-        trial_phone_hash=$2,monthly_question_limit=5 WHERE id=$1`, [userId, row.phone_hash]);
+        trial_phone_hash=$2,monthly_question_limit=$3 WHERE id=$1`, [userId, row.phone_hash, TRIAL_LIMIT]);
       await client.query(`UPDATE nuxa_trial_flows SET completed_user_id=$2,
         phone='',email='',username='',password_hash=NULL,email_code_hash=NULL,sms_code_hash=NULL WHERE id=$1`, [id, userId]);
       await client.query("COMMIT");
-      return { success: true, userId: userId!, remaining: 5 - used };
+      return { success: true, userId: userId!, remaining: Math.max(0, TRIAL_LIMIT - used) };
     } catch (error) {
       await client.query("ROLLBACK");
       if ((error as { code?: string }).code === "23505") throw unavailableTrial();

@@ -488,7 +488,7 @@ export class DatabaseStorage implements IStorage {
         return { canAsk: true, remaining: user.prepaidQuestions! - 1, limit: user.prepaidQuestions! };
       }
       const state = await trialQuota.state(userId);
-      return { canAsk: state!.canAsk, remaining: state!.remaining - 1, limit: 5 };
+      return { canAsk: state!.canAsk, remaining: Math.max(0, state!.remaining - 1), limit: state!.limit };
     }
 
     // Check if we need to reset monthly counter

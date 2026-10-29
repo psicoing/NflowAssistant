@@ -215,7 +215,7 @@ export default function Chat() {
       });
       
       if (error.message?.includes("TRIAL_VERIFICATION_REQUIRED")) {
-        toast({ title: "Verifica tu prueba gratuita", description: "Confirma tu correo y tu móvil antes de usar las 5 preguntas.", variant: "destructive" });
+        toast({ title: "Verifica tu prueba gratuita", description: "Confirma tu correo y tu móvil antes de usar las 2 preguntas.", variant: "destructive" });
         queryClient.invalidateQueries({ queryKey: ["/api/question-limit"] });
         return;
       }
@@ -891,7 +891,7 @@ export default function Chat() {
             <div className="flex-1 flex items-center justify-center p-6 bg-slate-900">
               <div className="max-w-md text-center space-y-5">
                 <h2 className="text-2xl font-bold text-white">Verifica tu prueba gratuita</h2>
-                <p className="text-slate-300">Confirma tu correo y tu móvil para acceder a las preguntas restantes. Hay una sola prueba de 5 preguntas por número, sin renovación mensual.</p>
+                <p className="text-slate-300">Confirma tu correo y tu móvil para acceder a las preguntas restantes. Hay una sola prueba de 2 preguntas por número, sin renovación mensual.</p>
                 <a href="/prueba-gratis" className="inline-flex rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white hover:bg-indigo-500">Verificar correo y móvil</a>
               </div>
             </div>
@@ -907,7 +907,7 @@ export default function Chat() {
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-3">Has completado tu prueba gratuita</h2>
                 <p className="text-slate-400 text-base leading-relaxed mb-6">
-                  Has utilizado tus 5 consultas de prueba. Para seguir hablando con NUXA, elige el plan que mejor se adapta a ti.
+                  Has utilizado tus 2 consultas gratuitas. A partir de la tercera necesitas acceso de pago. Elige un plan para seguir hablando con NUXA.
                 </p>
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6 text-left space-y-3">
                   {[
