@@ -1,17 +1,29 @@
 # Campañas: observabilidad y activación coordinada
 
-## Estado y límites
+## Resultado tras republicar — 2026-11-01
+
+- Ambas tablas existen en producción; no se aplicó DDL manual a producción en esta comprobación.
+- Ambas rutas publicadas rechazan peticiones sin firma con JSON/401.
+- Se activó SendGrid después de comprobar receptor y almacenamiento.
+- Se envió **un único correo al administrador**, con identidad NUXA y Reply-To a su Gmail. Ningún envío a empresas u otros destinatarios.
+- SendGrid aceptó el envío a las 17:43:57 UTC. El evento auténtico de entrega llegó al receptor firmado a las 17:44:06 UTC y quedó almacenado y vinculado a la campaña interna 37.
+- Se ejecutó en modo de solo lectura la misma función de resumen utilizada por el panel: 1 aceptado, 1 entregado, 0 rechazados, 0 pendientes y 0 aperturas únicas en la comprobación. No se atribuyen lecturas humanas ni se inventan aperturas.
+- Recibo verificable: `mail-published-owner-test.json`. No repetir el envío; el script conserva el bloqueo de repetición.
+- El circuito de entrega **SendGrid → webhook firmado publicado → base → resumen del panel** está confirmado. La recepción de un evento auténtico de apertura y la prueba equivalente de Resend siguen pendientes.
+- No se cambió código de aplicación ni se requiere otra publicación por esta comprobación.
+
+## Antecedentes y límites
 
 - La versión con receptores firmados ya está publicada: ambas rutas rechazan peticiones sin firma con JSON/401.
-- **Bloqueo detectado tras publicar:** faltaban las dos tablas de observabilidad en producción. La preparación anterior las había añadido solamente en producción, no en el esquema de desarrollo utilizado por Publish. La prueba nueva se detuvo antes de crear una campaña, reservar un envío o enviar correo.
+- **Bloqueo anterior, ya resuelto:** faltaban las dos tablas de observabilidad en producción. La preparación anterior las había añadido solamente en producción, no en el esquema de desarrollo utilizado por Publish. En ese intento la prueba se detuvo antes de crear una campaña, reservar un envío o enviar correo.
 - Se corrigió la preparación incorporando ambas tablas a la base gestionada de desarrollo. También se alinearon únicamente las definiciones faltantes de funciones existentes (prueba gratuita, procedencia del historial, supresiones y CRM), sin copiar filas de producción ni modificar sus registros.
-- La nueva comparación de publicación contiene solo la creación de las dos tablas de observabilidad, su clave foránea e índices; no contiene tablas/columnas a eliminar, truncamientos, advertencias ni cambios incompatibles.
+- La comparación previa a esta última publicación contenía solo la creación de las dos tablas de observabilidad, su clave foránea e índices; no contenía tablas/columnas a eliminar, truncamientos, advertencias ni cambios incompatibles.
 - Se ha confirmado que Publish administra el esquema de esta producción, aunque la aplicación lo alcance a través de una variable de conexión con nombre de proveedor. No tratarla como una base externa ajena a la migración de Replit.
 - El recibo `mail-schema-activation.json` documenta una actuación anterior, no la disponibilidad actual tras publicar. Se retiró el script de migración manual a producción para evitar repetir ese procedimiento incorrecto.
 - El servidor de desarrollo sigue apuntando a producción; la base gestionada de desarrollo es distinta. No usar el servidor como entorno de fixtures con escrituras.
 - Las pruebas de escritura se ejecutaron exclusivamente en un esquema temporal de esa base de desarrollo separada, eliminado al terminar.
-- La prueba real anterior fue un solo correo al administrador, nunca a empresas u otros contactos. Su recibo se guarda en `mail-audit-owner-test.json`. La nueva prueba posterior a la publicación no ha enviado ningún correo porque falló la comprobación previa de las tablas.
-- SendGrid tiene un webhook nuevo preparado y firmado hacia `https://nuxa.life/api/webhooks/sendgrid`; la clave pública está configurada como `SENDGRID_EVENT_PUBLIC_KEY`. Se activó brevemente al comprobar las rutas y se volvió a desactivar al detectar la ausencia de tablas. Sigue **desactivado** hasta verificar el almacenamiento después de la próxima publicación.
+- La prueba real anterior fue un solo correo al administrador, nunca a empresas u otros contactos. Su recibo se guarda en `mail-audit-owner-test.json`; no comprobó entonces la recepción del webhook. La prueba nueva y su resultado se documentan arriba.
+- SendGrid tiene un webhook firmado hacia `https://nuxa.life/api/webhooks/sendgrid`; la clave pública está configurada como `SENDGRID_EVENT_PUBLIC_KEY`. Se pausó durante el bloqueo anterior y ahora está **activado**, con una entrega auténtica ya persistida.
 - La consulta de webhooks de Resend devolvió `restricted_api_key`: la clave existente solo permite enviar. No prueba que no existan webhooks ni que haya que pagar. El administrador guardó posteriormente `RESEND_WEBHOOK_SECRET` mediante el formulario seguro, sin sustituir la API key de envío.
 - La clave de Resend tiene el formato esperado y pasó una comprobación local de firma sin mostrar su valor, enviar correos ni persistir eventos. La ruta de desarrollo devuelve JSON/401 ante una petición sin firma. Esto no prueba todavía que la clave corresponda al webhook remoto ni valida el circuito real.
 - Las rutas nuevas en desarrollo y producción rechazan una firma inválida con JSON/401. Una versión anterior devolvía HTML/200: ese 200 no validaba un webhook.
@@ -39,15 +51,15 @@
 - `npx tsx scripts/test-nuxa-email-routing.ts`: identidad From/Reply-To, códigos de verificación, rutas de otras marcas sin migración y ausencia de reintento/fallback automático de NUXA.
 - Prueba real única con la ruta SendGrid utilizada por NUXA, aperturas activadas solo en ese correo y categoría exclusiva de prueba. HTTP 202 confirma aceptación, no entrega, lectura ni actualización del panel.
 
-## Activación pendiente
+## Activación y pendientes
 
 1. **Corregido:** esta producción participa en la sincronización de esquema de Replit. No volver a aplicar DDL manual a producción ni añadirlo al arranque/build.
-2. **Preparado:** las tablas están ahora en desarrollo y la comparación es únicamente aditiva. Hace falta que el administrador vuelva a publicar para que Replit cree las dos tablas de seguimiento en producción.
+2. **Completado:** el administrador volvió a publicar; se verificó que ambas tablas existen ahora en producción.
 3. **Configuradas:** `SENDGRID_EVENT_PUBLIC_KEY` y `RESEND_WEBHOOK_SECRET`. La clave de Resend pasó las comprobaciones locales; falta confirmar la correspondencia mediante un evento auténtico después de publicar. Nunca usar la API key de envío como clave del webhook ni sustituirla innecesariamente.
-4. Después de publicar, comprobar **tanto las firmas como la existencia de las dos tablas en producción** antes de habilitar el proveedor. Un envío comercial nuevo se rechaza antes de enviar si no está disponible el registro persistente.
-5. Solo entonces activar SendGrid. En Resend, revisar el webhook `/api/webhooks/resend`, su firma y eventos desde el panel; no crear duplicados a ciegas porque la API actual no permite consultar su configuración.
-6. Ejecutar `scripts/test-published-owner-email.ts` con confirmación explícita de destinatario único y destino. Añadirá una campaña interna claramente etiquetada, únicamente para el administrador, sin invocar la selección masiva ni enviar copias. El recibo impide repetir automáticamente un resultado incierto.
-7. Confirmar el circuito proveedor → webhook firmado → base → contador. No declarar validada una apertura hasta observar un evento auténtico; no generar aperturas ficticias.
+4. **Completado:** comprobados firmas y almacenamiento antes de activar. Un envío comercial nuevo se rechaza antes de enviar si no está disponible el registro persistente.
+5. **Completado en SendGrid.** En Resend queda revisar su configuración y confirmar un evento auténtico; no crear duplicados a ciegas porque la API actual no permite consultar sus webhooks.
+6. **Ejecutado una sola vez:** `scripts/test-published-owner-email.ts`, con confirmación explícita de destinatario único y destino. Se creó una campaña interna claramente etiquetada, únicamente para el administrador, sin invocar la selección masiva ni enviar copias. No volver a enviarla.
+7. **Entrega confirmada de extremo a extremo.** No declarar validada una apertura hasta observar un evento auténtico; no generar aperturas ficticias.
 
 Las URLs finales deben obtenerse de la publicación real al preparar la activación, no de un dominio de desarrollo.
 
