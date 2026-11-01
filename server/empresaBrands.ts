@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import { getConfiguredSendGridFromEmail } from "./sendgridClient";
+import { NUXA_EMAIL_FROM, NUXA_EMAIL_REPLY_TO } from "./nuxa-email-identity";
 
 export type EmpresaBrand = "nuxa" | "jobda" | "empordajobs";
 
@@ -164,7 +165,7 @@ function statusForProfile(
  * The three campaign profiles intentionally share one operational sender.
  * Brand selection changes the letter identity, not the mailbox used to send it.
  */
-export async function getEmpresaBrandStatuses(): Promise<EmpresaBrandStatus[]> {
+async function getLegacyEmpresaBrandStatuses(): Promise<EmpresaBrandStatus[]> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     return EMPRESA_BRAND_IDS.map(id =>
@@ -261,7 +262,26 @@ export async function getEmpresaBrandStatuses(): Promise<EmpresaBrandStatus[]> {
   }
 }
 
+async function getNuxaSendGridStatus(): Promise<EmpresaBrandStatus> {
+  try {
+    await getConfiguredSendGridFromEmail();
+    return statusForProfile(profiles.nuxa, false,
+      `SendGrid configurado: ${NUXA_EMAIL_FROM.email}; las respuestas llegan a ${NUXA_EMAIL_REPLY_TO.email}. La entrega requiere que SendGrid acepte el remitente.`,
+      true, NUXA_EMAIL_FROM.email);
+  } catch {
+    return statusForProfile(profiles.nuxa, false,
+      "No se puede acceder a la conexión de SendGrid. No se cambiará automáticamente de proveedor.",
+      false, NUXA_EMAIL_FROM.email);
+  }
+}
+
+export async function getEmpresaBrandStatuses(): Promise<EmpresaBrandStatus[]> {
+  const [legacy, nuxa] = await Promise.all([getLegacyEmpresaBrandStatuses(), getNuxaSendGridStatus()]);
+  return legacy.map(status => status.id === "nuxa" ? nuxa : status);
+}
+
 export async function getEmpresaBrandStatus(brand: EmpresaBrand): Promise<EmpresaBrandStatus> {
+  if (brand === "nuxa") return getNuxaSendGridStatus();
   const statuses = await getEmpresaBrandStatuses();
   return statuses.find(status => status.id === brand)!;
 }

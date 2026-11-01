@@ -1,6 +1,6 @@
 import twilio from "twilio";
 import { parsePhoneNumberFromString } from "libphonenumber-js/max";
-import { getUncachableSendGridClient } from "../sendgridClient";
+import { sendNuxaSendGridEmail } from "../sendgridClient";
 import { TrialError } from "./store";
 
 export interface TrialProviders {
@@ -61,9 +61,8 @@ export function normalizeTrialPhone(input: string) {
 
 export const productionTrialProviders: TrialProviders = {
   async email(to, code) {
-    const { client, fromEmail } = await getUncachableSendGridClient();
-    await client.send({
-      to, from: fromEmail, subject: "Tu código de verificación de NUXA",
+    await sendNuxaSendGridEmail({
+      to, subject: "Tu código de verificación de NUXA",
       text: `Tu código de verificación de NUXA es ${code}. Caduca en 10 minutos. No lo compartas. Si no has solicitado la prueba, ignora este mensaje.`,
       // No user-controlled HTML, links or tracking in security codes.
       trackingSettings: { clickTracking: { enable: false }, openTracking: { enable: false } },

@@ -21,6 +21,12 @@ El usuario eligió «Conservar Twilio Email y añadir SendGrid» al preparar el 
 
 **How to apply:** Conservar las credenciales y autenticación de Twilio Email. Para autenticar el mismo dominio en la nueva cuenta, generar selectores DKIM diferentes en SendGrid; no sobrescribir los selectores existentes ni duplicar DMARC.
 
+Para NUXA, el usuario aprobó enviar desde su dominio autenticado y recibir las respuestas en su Gmail mediante Reply-To; no usar Gmail como identidad From de SendGrid.
+
+**Why:** Aceptó esta separación después de aclarar que autenticar un dominio para envío no crea un buzón de entrada y que enviar como Gmail desde SendGrid puede fallar DMARC.
+
+**How to apply:** Aplicar la identidad de NUXA a sus envíos por SendGrid, incluidos códigos y mensajes comerciales de NUXA. Conservar los otros flujos de Resend, Twilio Email y otras marcas; no confundir Reply-To con un buzón o reenvío para mensajes nuevos dirigidos al dominio.
+
 Sending is asynchronous: HTTP 202 confirms acceptance, not delivery. The operation may initially report PROCESSING with zero totals, then show delivered emails while its status still says PROCESSING.
 
 **Why:** This behavior occurred during the successful real test; relying on status alone would have missed delivery confirmation.

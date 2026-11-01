@@ -2,7 +2,8 @@ import { Resend } from 'resend';
 import twilio from 'twilio';
 import crypto from 'crypto';
 import { EMPRESA_LEGACY_NUXA_FROM_EMAIL, EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandProfile, type EmpresaBrand } from './empresaBrands';
-import { getUncachableSendGridClient } from './sendgridClient';
+import { getUncachableSendGridClient, sendNuxaSendGridEmail } from './sendgridClient';
+import { NUXA_EMAIL_FROM } from './nuxa-email-identity';
 
 // -------------------------------------------------------
 // Resend client (owner notifications)
@@ -761,8 +762,8 @@ export async function sendEmpresaEmail(params: {
 }): Promise<{ ok: boolean; messageId?: string }> {
   try {
     const brand = getEmpresaBrandProfile(params.brand || "nuxa");
-    const fromEmail = params.fromEmailOverride || brand.fromEmail;
-    const fromName = params.fromNameOverride || brand.fromName;
+    const fromEmail = brand.id === "nuxa" ? NUXA_EMAIL_FROM.email : params.fromEmailOverride || brand.fromEmail;
+    const fromName = brand.id === "nuxa" ? NUXA_EMAIL_FROM.name : params.fromNameOverride || brand.fromName;
     if (!fromEmail) {
       console.error(`sendEmpresaEmail: no hay remitente configurado para ${brand.id}`);
       return { ok: false };
@@ -851,6 +852,19 @@ export async function sendEmpresaEmail(params: {
       ? [{ name: "campaign_id", value: `e${params.campaignId}` }]
       : undefined;
 
+    if (brand.id === "nuxa") {
+      // No automatic provider fallback: an uncertain send must not duplicate a campaign.
+      const [response] = await sendNuxaSendGridEmail({
+        to: params.email,
+        subject: params.subject,
+        text: `${params.body}\n\n${callConsentUrl ? `¿Quieres recibir información sobre NUXA.life?\nAutoriza una breve llamada informativa con nuestra asistente comercial de IA para conocer cómo contratar NUXA.life: ${callConsentUrl}\nLa atención psicológica no se realiza por teléfono: la ofrece la app NUXA.life.\n${EMPRESA_CALL_NUMBER_NOTICE}\nDespués podrás contactar con nosotros directamente si te interesa; no queremos repetirte comunicaciones.\n` : ""}\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
+        html,
+        ...(params.campaignId ? { categories: [`empresa-${params.campaignId}`] } : {}),
+      });
+      const messageId = response.headers?.["x-message-id"];
+      return { ok: response.statusCode === 202, messageId: Array.isArray(messageId) ? messageId[0] : messageId };
+    }
+
     if (fromEmail.toLowerCase().endsWith("@gmail.com")) {
       try {
         const { client, fromEmail: configuredFromEmail } = await getUncachableSendGridClient();
@@ -894,7 +908,10 @@ export async function sendEmpresaEmail(params: {
     }
     return { ok: true, messageId: data?.id };
   } catch (err) {
-    console.error("sendEmpresaEmail error:", err);
+    // SDK errors can contain request headers; never log the entire error object.
+    console.error("sendEmpresaEmail error:", {
+      status: (err as { code?: number })?.code || "unavailable",
+    });
     return { ok: false };
   }
 }
