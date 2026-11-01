@@ -70,6 +70,7 @@ export function parseMailEvents(provider: EmailProvider, raw: Buffer, webhookId?
     unsubscribe: "unsubscribed", group_unsubscribe: "unsubscribed", spamreport: "complained",
     "email.delivered": "delivered", "email.opened": "opened", "email.clicked": "clicked",
     "email.bounced": "bounced", "email.failed": "dropped", "email.complained": "complained",
+    "email.delivery_delayed": "deferred", "email.suppressed": "dropped",
   };
   return items.flatMap((item: any) => {
     let kind = mapping[provider === "sendgrid" ? item.event : item.type];

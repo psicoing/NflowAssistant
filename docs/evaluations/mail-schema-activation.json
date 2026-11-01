@@ -1,0 +1,23 @@
+{
+  "appliedAt": "2026-11-01T16:58:27.414Z",
+  "authorized": true,
+  "operation": "additive_campaign_observability_tables",
+  "schemaSha256": "271b9da649c1eaa08d1a7e009a5f213d9a784c403f0cbc71059e1b4e2ec19138",
+  "existingRowCountsBefore": {
+    "campaigns": 36,
+    "contacts": 342,
+    "users": 75,
+    "conversations": 301,
+    "messages": 1049
+  },
+  "existingRowCountsAfter": {
+    "campaigns": 36,
+    "contacts": 342,
+    "users": 75,
+    "conversations": 301,
+    "messages": 1049
+  },
+  "existingDataUpdatedOrDeleted": false,
+  "sendingPerformed": false,
+  "autoStartupMigrationAdded": false
+}

@@ -32,3 +32,15 @@ Sending is asynchronous: HTTP 202 confirms acceptance, not delivery. The operati
 **Why:** This behavior occurred during the successful real test; relying on status alone would have missed delivery confirmation.
 
 **How to apply:** Consult the operation statistics, distinguish delivered from inbox placement/read confirmation, and never resend automatically merely because processing or delivery is uncertain.
+
+Preparar los webhooks nuevos desactivados y activarlos solo después de publicar
+y comprobar el receptor firmado con su clave correcta.
+
+**Why:** La versión publicada podía devolver HTTP 200 con una página HTML para
+la ruta todavía inexistente. Un proveedor puede interpretar ese 200 como
+recepción correcta y dejar de reintentar, aunque no se almacene ningún evento.
+
+**How to apply:** No aceptar un simple 200 como prueba del circuito. Comprobar
+el tipo y contenido de la respuesta, el rechazo JSON de firmas inválidas y,
+después, un evento auténtico persistido. Coordinar claves, esquema y publicación
+sin habilitar un webhook que todavía apunta al receptor antiguo.
