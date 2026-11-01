@@ -3,6 +3,7 @@ import twilio from 'twilio';
 import crypto from 'crypto';
 import { EMPRESA_LEGACY_NUXA_FROM_EMAIL, EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandProfile, type EmpresaBrand } from './empresaBrands';
 import { getUncachableSendGridClient, sendNuxaSendGridEmail } from './sendgridClient';
+import { safeMailError, type EmailProvider } from './campaign-email-events';
 import { NUXA_EMAIL_FROM } from './nuxa-email-identity';
 
 // -------------------------------------------------------
@@ -759,7 +760,8 @@ export async function sendEmpresaEmail(params: {
   brand?: EmpresaBrand;
   fromEmailOverride?: string;
   fromNameOverride?: string;
-}): Promise<{ ok: boolean; messageId?: string }> {
+}): Promise<{ ok: boolean; messageId?: string; provider?: EmailProvider; errorCode?: string; errorReason?: string }> {
+  let attemptedProvider: EmailProvider = "sendgrid";
   try {
     const brand = getEmpresaBrandProfile(params.brand || "nuxa");
     const fromEmail = brand.id === "nuxa" ? NUXA_EMAIL_FROM.email : params.fromEmailOverride || brand.fromEmail;
@@ -859,10 +861,13 @@ export async function sendEmpresaEmail(params: {
         subject: params.subject,
         text: `${params.body}\n\n${callConsentUrl ? `¿Quieres recibir información sobre NUXA.life?\nAutoriza una breve llamada informativa con nuestra asistente comercial de IA para conocer cómo contratar NUXA.life: ${callConsentUrl}\nLa atención psicológica no se realiza por teléfono: la ofrece la app NUXA.life.\n${EMPRESA_CALL_NUMBER_NOTICE}\nDespués podrás contactar con nosotros directamente si te interesa; no queremos repetirte comunicaciones.\n` : ""}\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
         html,
+        trackingSettings: { openTracking: { enable: true }, clickTracking: { enable: true, enableText: false } },
         ...(params.campaignId ? { categories: [`empresa-${params.campaignId}`] } : {}),
       });
       const messageId = response.headers?.["x-message-id"];
-      return { ok: response.statusCode === 202, messageId: Array.isArray(messageId) ? messageId[0] : messageId };
+      return { ok: response.statusCode === 202, provider: "sendgrid",
+        errorCode: response.statusCode === 202 ? undefined : String(response.statusCode),
+        messageId: Array.isArray(messageId) ? messageId[0] : messageId };
     }
 
     if (fromEmail.toLowerCase().endsWith("@gmail.com")) {
@@ -879,7 +884,7 @@ export async function sendEmpresaEmail(params: {
             ...(params.campaignId ? { categories: [`empresa-${params.campaignId}`] } : {}),
           });
           const messageId = response.headers?.["x-message-id"];
-          return { ok: true, messageId: Array.isArray(messageId) ? messageId[0] : messageId };
+          return { ok: response.statusCode === 202, provider: "sendgrid", messageId: Array.isArray(messageId) ? messageId[0] : messageId };
         }
         console.warn(`sendEmpresaEmail: ${fromEmail} no está autorizado en SendGrid; se usará ${EMPRESA_LEGACY_NUXA_FROM_EMAIL}`);
       } catch (error) {
@@ -887,6 +892,7 @@ export async function sendEmpresaEmail(params: {
       }
     }
 
+    attemptedProvider = "resend";
     const resend = getResendClient();
     const resendFromEmail = fromEmail.toLowerCase().endsWith("@gmail.com")
       ? EMPRESA_LEGACY_NUXA_FROM_EMAIL
@@ -903,16 +909,18 @@ export async function sendEmpresaEmail(params: {
     });
 
     if (error) {
-      console.error("sendEmpresaEmail Resend error:", error);
-      return { ok: false };
+      const detail = safeMailError(error);
+      console.error("sendEmpresaEmail Resend error:", { code: detail.code });
+      return { ok: false, provider: "resend", errorCode: detail.code, errorReason: detail.reason };
     }
-    return { ok: true, messageId: data?.id };
+    return { ok: true, provider: "resend", messageId: data?.id };
   } catch (err) {
     // SDK errors can contain request headers; never log the entire error object.
     console.error("sendEmpresaEmail error:", {
       status: (err as { code?: number })?.code || "unavailable",
     });
-    return { ok: false };
+    const detail = safeMailError(err);
+    return { ok: false, provider: attemptedProvider, errorCode: detail.code, errorReason: detail.reason };
   }
 }
 

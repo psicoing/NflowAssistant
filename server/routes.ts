@@ -53,6 +53,10 @@ import {
 } from "./voiceDemoBridge";
 import { EMPRESA_LEGACY_NUXA_FROM_EMAIL, EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandStatuses, getEmpresaBrandStatus, isEmpresaBrand, type EmpresaBrand } from "./empresaBrands";
 import { db, pool } from "./db";
+import { CampaignEmailStore } from "./campaign-email-store";
+import { registerCampaignEmailWebhooks } from "./campaign-email-webhooks";
+import { addCampaignDeliverySummaries } from "./campaign-email-summary";
+const campaignEmailStore = new CampaignEmailStore(pool);
 import { TrialStore, TRIAL_LIMIT } from "./trial/store";
 import { registerTrialRoutes, respondTrialError } from "./trial/routes";
 import { getChatServiceStatus } from "./chat-service-status";
@@ -1528,50 +1532,7 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
     res.json({ imported, skipped });
   });
 
-  // Resend webhook — open/click tracking (public, no admin check)
-  app.post("/api/webhooks/resend", async (req, res) => {
-    try {
-      const event = req.body;
-      if (event?.type === "email.opened" && event?.data?.tags) {
-        const campaignTag = event.data.tags.find((t: any) => t.name === "campaign_id");
-        if (campaignTag?.value) {
-          const raw: string = campaignTag.value;
-          const email = event.data?.to?.[0] || null;
-          let historyTable: string;
-          let trackingTable: string;
-          let numericId: number;
-          if (raw.startsWith("m")) {
-            historyTable = "mutua_campaign_history";
-            trackingTable = "mutua_email_tracking";
-            numericId = parseInt(raw.slice(1), 10);
-          } else if (raw.startsWith("e")) {
-            historyTable = "empresa_campaign_history";
-            trackingTable = "empresa_email_tracking";
-            numericId = parseInt(raw.slice(1), 10);
-          } else {
-            historyTable = "institution_campaign_history";
-            trackingTable = "institution_email_tracking";
-            numericId = parseInt(raw, 10);
-          }
-          if (!isNaN(numericId)) {
-            await pool.query(
-              `UPDATE ${historyTable} SET opens = opens + 1 WHERE id = $1`,
-              [numericId]
-            );
-            if (email) {
-              await pool.query(
-                `UPDATE ${trackingTable} SET opened_at = NOW() WHERE campaign_id = $1 AND contact_email = $2 AND opened_at IS NULL`,
-                [numericId, email]
-              ).catch(() => {});
-            }
-          }
-        }
-      }
-      res.json({ ok: true });
-    } catch (e) {
-      res.json({ ok: true }); // Always return 200 to Resend
-    }
-  });
+  registerCampaignEmailWebhooks(app, campaignEmailStore);
 
   // Unsubscribe institution (one-click)
   app.get("/api/unsubscribe-institution", async (req, res) => {
@@ -1931,6 +1892,19 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
   });
 
   async function executeEmpresaCampaignSend(campaignId: number, subject: string, body: string, contacts: any[], subjectB?: string, brand: EmpresaBrand = "nuxa") {
+    try { await performEmpresaCampaignSend(campaignId, subject, body, contacts, subjectB, brand); }
+    catch {
+      console.error(`Empresa campaign #${campaignId}: processing interrupted; no automatic resend`);
+      await pool.query("UPDATE empresa_campaign_history SET status='tracking_error' WHERE id=$1", [campaignId]).catch(() => {});
+    }
+  }
+
+  async function performEmpresaCampaignSend(campaignId: number, subject: string, body: string, contacts: any[], subjectB?: string, brand: EmpresaBrand = "nuxa") {
+    try { await campaignEmailStore.ready(); }
+    catch {
+      await pool.query("UPDATE empresa_campaign_history SET status='blocked' WHERE id=$1", [campaignId]);
+      return; // Never send if durable outcome tracking is unavailable.
+    }
     const brandStatus = await getEmpresaBrandStatus(brand);
     if (!brandStatus.available) {
       await pool.query(
@@ -1941,6 +1915,7 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       return;
     }
     let sent = 0, failed = 0;
+    await pool.query("UPDATE empresa_campaign_history SET status='processing' WHERE id=$1", [campaignId]);
     const half = subjectB ? Math.ceil(contacts.length / 2) : contacts.length;
     for (let i = 0; i < contacts.length; i++) {
       const contact = contacts[i];
@@ -1960,7 +1935,16 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       if (stillAllowed.rows.length === 0) continue;
       const variant = (subjectB && i >= half) ? "b" : "a";
       const usedSubject = variant === "b" && subjectB ? subjectB : subject;
+      const attemptId = await campaignEmailStore.reserve(campaignId, contact.email, variant);
+      if (!attemptId) continue; // Includes a concurrent worker or previous acceptance.
       const result = await sendEmpresaEmail({ email: contact.email, subject: usedSubject, body, empresaId: contact.id, campaignId, brand });
+      try { await campaignEmailStore.finish(attemptId, result); }
+      catch {
+        // Acceptance is uncertain: do not resend or continue without durable results.
+        await pool.query("UPDATE empresa_campaign_history SET status='tracking_error',sent_count=$2,failed_count=$3 WHERE id=$1",
+          [campaignId, sent + (result.ok ? 1 : 0), failed + (result.ok ? 0 : 1)]);
+        return;
+      }
       if (result.ok) {
         sent++;
         await pool.query(
@@ -1970,10 +1954,11 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       } else { failed++; }
       await new Promise(resolve => setTimeout(resolve, 150));
     }
-    await sendEmpresaEmail({ email: "rmportbou@gmail.com", subject: `[COPIA] ${subject}`, body, empresaId: 0, campaignId, brand }).catch(() => {});
+    // Owner copy is not a campaign recipient and must not inflate its metrics.
+    await sendEmpresaEmail({ email: "rmportbou@gmail.com", subject: `[COPIA] ${subject}`, body, empresaId: 0, brand }).catch(() => {});
     await pool.query(
-      "UPDATE empresa_campaign_history SET sent_count=$1, failed_count=$2, status='sent', sent_at=NOW() WHERE id=$3",
-      [sent, failed, campaignId]
+      "UPDATE empresa_campaign_history SET sent_count=$1, failed_count=$2, status=$4, sent_at=NOW() WHERE id=$3",
+      [sent, failed, campaignId, failed ? (sent ? "partial" : "failed") : "completed"]
     );
     console.log(`Empresa campaign #${campaignId}: sent=${sent} failed=${failed}`);
   }
@@ -1988,6 +1973,8 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       return res.status(400).json({ message: "Filtro de tamaño inválido" });
     }
     try {
+      try { await campaignEmailStore.ready(); }
+      catch { return res.status(503).json({ message: "Registro de entregas pendiente de activar. No se ha enviado ningún correo." }); }
       const brandStatus = await getEmpresaBrandStatus(brand);
       if (!brandStatus.available) {
         return res.status(400).json({
@@ -2018,7 +2005,7 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       const campaignRow = await pool.query(
         `INSERT INTO empresa_campaign_history (subject, subject_b, body, brand, sent_count, failed_count, companies_filter, sizes_filter, scheduled_at, status)
          VALUES ($1,$2,$3,$4,0,0,$5,$6,$7,$8) RETURNING id`,
-        [subject, subjectB || null, body, brand, companiesStr, sizesStr, scheduledDate, isScheduled ? "scheduled" : "sent"]
+        [subject, subjectB || null, body, brand, companiesStr, sizesStr, scheduledDate, isScheduled ? "scheduled" : "queued"]
       );
       const campaignId: number = campaignRow.rows[0].id;
       if (isScheduled) {
@@ -2474,7 +2461,7 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
     try {
       const r = await pool.query("SELECT * FROM empresa_campaign_history ORDER BY sent_at DESC LIMIT 20");
-      res.json(r.rows);
+      res.json(await addCampaignDeliverySummaries(pool, r.rows));
     } catch { res.status(500).json({ message: "Error" }); }
   });
 

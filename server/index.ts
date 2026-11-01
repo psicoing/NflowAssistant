@@ -1113,10 +1113,10 @@ const app = express();
 app.set("trust proxy", 1);
 registerSeoDiscovery(app);
 
-// Apply express.json() conditionally - exclude Stripe webhook route
+// Signature verification requires the exact raw bytes for these webhooks.
 app.use((req, res, next) => {
-  if (req.path === "/api/stripe/webhook") {
-    // Skip JSON parsing for Stripe webhook - it needs raw body
+  if (["/api/stripe/webhook", "/api/webhooks/sendgrid", "/api/webhooks/resend"].includes(req.path)) {
+    // Each webhook installs its own bounded raw-body parser.
     return next();
   }
   express.json()(req, res, next);

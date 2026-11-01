@@ -30,3 +30,15 @@ réplica mostraban ceros mientras las consultas agregadas confirmaban datos.
 
 **How to apply:** Separar estimaciones de estadísticas, conteos SQL y métricas
 de facturación; un snapshot SQL no permite reconstruir horas facturadas.
+
+En esta instalación, el servidor de desarrollo se ha encontrado conectado a
+la misma base externa que producción, mientras la base gestionada de desarrollo
+era distinta. No asumir que ejecutar un script desde el workspace lo aísla.
+
+**Why:** La comprobación de identidad de la base y sus conteos coincidió con
+la réplica de producción, no con la base gestionada de desarrollo.
+
+**How to apply:** Antes de fixtures, migraciones o pruebas con escrituras,
+contrastar ambos destinos sin revelar credenciales. Usar una base de desarrollo
+verificada y un esquema temporal exclusivo. No añadir migraciones de campañas
+al arranque para resolverlo; su activación externa requiere autorización.

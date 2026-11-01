@@ -3578,9 +3578,9 @@ export default function AdminDashboard() {
                              <th className="text-left pb-2 pr-3">Marca</th>
                             <th className="text-left pb-2 pr-3">Asunto</th>
                             <th className="text-left pb-2 pr-3">Empresas</th>
-                            <th className="text-center pb-2 pr-3">Enviados</th>
-                            <th className="text-center pb-2 pr-3">Fallidos</th>
-                            <th className="text-center pb-2 pr-3">Aperturas</th>
+                            <th className="text-center pb-2 pr-3">Aceptados</th>
+                            <th className="text-center pb-2 pr-3">Rechazados</th>
+                            <th className="text-center pb-2 pr-3">Entrega y aperturas</th>
                             <th className="text-center pb-2">Estado</th>
                           </tr>
                         </thead>
@@ -3602,16 +3602,47 @@ export default function AdminDashboard() {
                               <td className="py-2 pr-3 text-xs text-gray-500">
                                 {c.companies_filter || c.sizes_filter ? [c.companies_filter, c.sizes_filter ? `Tamaños: ${c.sizes_filter.split(", ").map(empresaSizeLabel).join(", ")}` : null].filter(Boolean).join(" · ") : "Todas"}
                               </td>
-                              <td className="py-2 pr-3 text-center"><span className="text-emerald-400 font-semibold">{c.sent_count}</span></td>
-                              <td className="py-2 pr-3 text-center"><span className={c.failed_count > 0 ? "text-red-400 font-semibold" : "text-gray-500"}>{c.failed_count}</span></td>
+                              <td className="py-2 pr-3 text-center"><span className="text-emerald-400 font-semibold">{c.delivery?.accepted ?? c.sent_count}</span></td>
+                              <td className="py-2 pr-3 text-center"><span className={c.failed_count > 0 ? "text-red-400 font-semibold" : "text-gray-500"}>{c.delivery?.rejected ?? c.failed_count}</span></td>
                               <td className="py-2 pr-3 text-center">
-                                <span className="text-blue-400 font-semibold">{c.opens}</span>
-                                {c.sent_count > 0 && <span className="text-gray-500 text-xs ml-1">({Math.round((c.opens / c.sent_count) * 100)}%)</span>}
+                                {c.delivery ? (
+                                  <div className="text-xs text-left min-w-[150px]">
+                                    <p>Entregados: {c.delivery.delivered}</p>
+                                    <p>Aperturas únicas: {c.delivery.unique_opens}</p>
+                                    <p>Pendientes de confirmar: {c.delivery.awaiting_delivery}</p>
+                                    <p>Rebotes: {c.delivery.bounced} · Bloqueados: {c.delivery.blocked}</p>
+                                    <p>Descartados: {c.delivery.dropped} · Diferidos: {c.delivery.deferred}</p>
+                                    {c.delivery.uncertain > 0 && <p className="text-amber-300">Aceptación sin confirmar: {c.delivery.uncertain}</p>}
+                                  </div>
+                                ) : <span className="text-xs text-gray-400">Entrega no verificada · Aperturas históricas: {c.opens}</span>}
                               </td>
                               <td className="py-2 text-center">
                                 <span className={`text-xs px-2 py-0.5 rounded-full ${c.status === "scheduled" ? "bg-amber-500/20 text-amber-300" : "bg-emerald-500/20 text-emerald-300"}`}>
-                                  {c.status === "scheduled" ? "⏰ Programado" : "✓ Enviado"}
+                                  {({
+                                    scheduled: "Programada", queued: "En cola", processing: "Procesando",
+                                    completed: "Procesada", partial: "Con rechazos", failed: "Fallida",
+                                    blocked: "Bloqueada", tracking_error: "Revisar registro", sent: "Histórica: sin entrega verificada",
+                                  } as Record<string, string>)[c.status] || "Estado desconocido"}
                                 </span>
+                                {c.delivery_errors?.length > 0 && (
+                                  <details className="mt-2 text-xs text-left max-w-[240px]">
+                                    <summary className="cursor-pointer text-amber-300">Ver motivos de rechazo</summary>
+                                    {c.delivery_errors.map((e: any, index: number) => (
+                                      <p key={index} className="mt-1 break-words">{e.count} × {e.error_code}: {e.error_reason}</p>
+                                    ))}
+                                  </details>
+                                )}
+                                {c.delivery_outcomes?.length > 0 && (
+                                  <details className="mt-2 text-xs text-left max-w-[240px]">
+                                    <summary className="cursor-pointer text-amber-300">Ver eventos del proveedor</summary>
+                                    {c.delivery_outcomes.map((e: any, index: number) => (
+                                      <p key={index} className="mt-1 break-words">{e.count} × {({
+                                        bounced: "Rebote", blocked: "Bloqueo", dropped: "Descartado",
+                                        deferred: "Diferido", complained: "Queja de spam", unsubscribed: "Baja",
+                                      } as Record<string, string>)[e.kind] || e.kind}: {e.reason}</p>
+                                    ))}
+                                  </details>
+                                )}
                               </td>
                             </tr>
                           ))}

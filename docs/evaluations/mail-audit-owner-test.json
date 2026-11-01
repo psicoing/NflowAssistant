@@ -1,0 +1,8 @@
+{
+  "auditId": "53eaad24-9b80-42cf-9743-b248c0ded270",
+  "at": "2026-11-01T16:42:46.725Z",
+  "state": "accepted_not_delivery_confirmed",
+  "httpStatus": 202,
+  "messageId": "UMXnagD2SMSyVLvST-pqPw",
+  "productionWebhookChanged": false
+}
