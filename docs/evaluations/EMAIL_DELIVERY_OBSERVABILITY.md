@@ -8,7 +8,8 @@
 - Las pruebas de escritura se ejecutaron exclusivamente en un esquema temporal de esa base de desarrollo separada, eliminado al terminar.
 - La prueba real autorizada fue un solo correo al administrador, nunca a empresas u otros contactos. El recibo se guarda en `mail-audit-owner-test.json`; impide repetir el envío automáticamente ante un resultado incierto.
 - SendGrid tiene un webhook nuevo preparado y firmado, todavía **desactivado**, hacia `https://nuxa.life/api/webhooks/sendgrid`; la clave pública quedó configurada como `SENDGRID_EVENT_PUBLIC_KEY`. No se activará hasta publicar y comprobar la ruta nueva.
-- La consulta de webhooks de Resend devolvió `restricted_api_key`: la clave existente solo permite enviar. No prueba que no existan webhooks ni que haya que pagar; falta obtener la clave de firma desde el panel y guardarla como `RESEND_WEBHOOK_SECRET`.
+- La consulta de webhooks de Resend devolvió `restricted_api_key`: la clave existente solo permite enviar. No prueba que no existan webhooks ni que haya que pagar. El administrador guardó posteriormente `RESEND_WEBHOOK_SECRET` mediante el formulario seguro, sin sustituir la API key de envío.
+- La clave de Resend tiene el formato esperado y pasó una comprobación local de firma sin mostrar su valor, enviar correos ni persistir eventos. La ruta de desarrollo devuelve JSON/401 ante una petición sin firma. Esto no prueba todavía que la clave corresponda al webhook remoto ni valida el circuito real.
 - La ruta nueva en desarrollo rechaza una firma inválida con JSON/401. La publicación todavía devuelve HTML/200 para esa ruta: ese 200 **no** valida un webhook y no autoriza activarlo.
 - No se han cambiado rutas de Twilio Email, avisos de IA, SMS, voz, pagos ni modelos.
 - No se han migrado JOBDA/EMPORDAJOBS a otro proveedor.
@@ -38,7 +39,7 @@
 
 1. **Completado:** autorización expresa para modificar el esquema externo. Publish no se considera una migración de esta base ni se sustituye por la base gestionada.
 2. **Completado:** destino contrastado y SQL aditivo aplicado en una transacción con límites de espera y comprobación de conteos. No hay migración automática al arrancar ni cambios en tablas existentes.
-3. **Parcial:** `SENDGRID_EVENT_PUBLIC_KEY` configurada. Falta `RESEND_WEBHOOK_SECRET` por Secrets para el webhook Resend correcto. Nunca usar la API key de envío como clave del webhook ni sustituirla innecesariamente.
+3. **Configuradas:** `SENDGRID_EVENT_PUBLIC_KEY` y `RESEND_WEBHOOK_SECRET`. La clave de Resend pasó las comprobaciones locales; falta confirmar la correspondencia mediante un evento auténtico después de publicar. Nunca usar la API key de envío como clave del webhook ni sustituirla innecesariamente.
 4. Revisar publicación y configuración de los proveedores como un cambio coordinado autorizado: el endpoint antiguo de Resend dejará de aceptar eventos sin firma. Un envío comercial nuevo se rechaza antes de enviar si no está disponible el registro persistente.
 5. En SendGrid, **después de publicar y verificar la ruta**, activar el webhook firmado ya preparado con entrega, apertura, clic, rebote, descarte, diferido, baja y queja. En Resend, revisar el webhook `/api/webhooks/resend`, su firma y eventos desde el panel; no crear duplicados a ciegas porque la API actual no permite consultar su configuración.
 6. Hacer una nueva prueba autorizada solo al administrador para comprobar el circuito completo proveedor → webhook → base → panel, sin campañas comerciales.
