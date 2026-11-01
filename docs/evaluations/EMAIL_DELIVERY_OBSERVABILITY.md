@@ -7,9 +7,9 @@
 - Se activó SendGrid después de comprobar receptor y almacenamiento.
 - Se envió **un único correo al administrador**, con identidad NUXA y Reply-To a su Gmail. Ningún envío a empresas u otros destinatarios.
 - SendGrid aceptó el envío a las 17:43:57 UTC. El evento auténtico de entrega llegó al receptor firmado a las 17:44:06 UTC y quedó almacenado y vinculado a la campaña interna 37.
-- Se ejecutó en modo de solo lectura la misma función de resumen utilizada por el panel: 1 aceptado, 1 entregado, 0 rechazados, 0 pendientes y 0 aperturas únicas en la comprobación. No se atribuyen lecturas humanas ni se inventan aperturas.
+- Se ejecutó en modo de solo lectura la misma función de resumen utilizada por el panel: inicialmente 1 aceptado, 1 entregado, 0 rechazados, 0 pendientes y 0 aperturas únicas. Después llegó un evento auténtico de apertura a las 17:46:18 UTC (apertura informada a las 17:46:09 UTC), quedó persistido y el contador de la campaña pasó a 1. El administrador confirmó además recepción en Recibidos. No se inventaron aperturas.
 - Recibo verificable: `mail-published-owner-test.json`. No repetir el envío; el script conserva el bloqueo de repetición.
-- El circuito de entrega **SendGrid → webhook firmado publicado → base → resumen del panel** está confirmado. La recepción de un evento auténtico de apertura y la prueba equivalente de Resend siguen pendientes.
+- El circuito de entrega y apertura **SendGrid → webhook firmado publicado → base → contador del panel** está confirmado para esta prueba nueva. La prueba equivalente de Resend sigue pendiente. Esto no reconstruye aperturas históricas ni convierte el seguimiento por imágenes en una medida exacta de lectura humana.
 - No se cambió código de aplicación ni se requiere otra publicación por esta comprobación.
 
 ## Antecedentes y límites
@@ -59,7 +59,7 @@
 4. **Completado:** comprobados firmas y almacenamiento antes de activar. Un envío comercial nuevo se rechaza antes de enviar si no está disponible el registro persistente.
 5. **Completado en SendGrid.** En Resend queda revisar su configuración y confirmar un evento auténtico; no crear duplicados a ciegas porque la API actual no permite consultar sus webhooks.
 6. **Ejecutado una sola vez:** `scripts/test-published-owner-email.ts`, con confirmación explícita de destinatario único y destino. Se creó una campaña interna claramente etiquetada, únicamente para el administrador, sin invocar la selección masiva ni enviar copias. No volver a enviarla.
-7. **Entrega confirmada de extremo a extremo.** No declarar validada una apertura hasta observar un evento auténtico; no generar aperturas ficticias.
+7. **Entrega y apertura confirmadas de extremo a extremo**, con eventos auténticos persistidos y contador actualizado. No se generaron aperturas ficticias.
 
 Las URLs finales deben obtenerse de la publicación real al preparar la activación, no de un dominio de desarrollo.
 

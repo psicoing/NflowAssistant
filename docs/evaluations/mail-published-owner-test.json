@@ -17,8 +17,10 @@
       "delivered": 1,
       "rejected": 0,
       "awaitingDelivery": 0,
-      "uniqueOpens": 0
+      "uniqueOpens": 1
     },
-    "openVerification": "not_yet_observed"
+    "openVerification": "authentic_signed_webhook_persisted_and_campaign_counter_updated",
+    "providerOpenedAt": "2026-11-01T17:46:09Z",
+    "openWebhookReceivedAt": "2026-11-01T17:46:18.881620Z"
   }
 }
