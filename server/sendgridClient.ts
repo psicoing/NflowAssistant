@@ -52,3 +52,15 @@ export async function sendNuxaSendGridEmail(
     replyTo: NUXA_EMAIL_REPLY_TO,
   });
 }
+
+/** JOBDA uses the authenticated domain, never Gmail as its From address. */
+export async function sendJobdaSendGridEmail(
+  message: Omit<MailDataRequired, "from" | "replyTo"> & { text: string },
+) {
+  const { client } = await getUncachableSendGridClient();
+  return client.send({
+    ...message,
+    from: { email: NUXA_EMAIL_FROM.email, name: "JOBDA" },
+    replyTo: { email: NUXA_EMAIL_REPLY_TO.email, name: "JOBDA" },
+  });
+}

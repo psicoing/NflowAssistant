@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
 // Exercise real send helpers, trial provider and campaign routing with offline SDKs.
-const state = { messages: [] as any[], fail: false, connectorFail: false, resendCalls: 0 };
+const state = { messages: [] as any[], fail: false, connectorFail: false, resendCalls: 0, paced: 0 };
 (globalThis as any).__nuxaMailTest = state;
 const originalFetch = globalThis.fetch;
 const envKeys = ["REPLIT_CONNECTORS_HOSTNAME", "REPL_IDENTITY", "RESEND_API_KEY"];
@@ -39,11 +39,16 @@ try {
     plugins: [{
       name: "offline-mail",
       setup(builder) {
-        builder.onResolve({ filter: /^(@sendgrid\/mail|resend|node-fetch)$/ },
+        builder.onResolve({ filter: /^(@sendgrid\/mail|resend|node-fetch)$|campaign-email-control$/ },
           args => ({ path: args.path, namespace: "offline" }));
         builder.onLoad({ filter: /.*/, namespace: "offline" }, args => ({
           loader: "js",
-          contents: args.path === "@sendgrid/mail" ? `
+          contents: args.path.endsWith("campaign-email-control") ? `
+            export async function paceCommercialEmail(_pool, send) {
+              globalThis.__nuxaMailTest.paced++;
+              return send();
+            }
+          ` : args.path === "@sendgrid/mail" ? `
             export default {
               setApiKey() {},
               async send(message) {
@@ -95,18 +100,38 @@ try {
   assert.equal(status.verified, false, "Credential presence is not delivery or domain verification");
   const statuses = await app.getEmpresaBrandStatuses();
   assert.equal(statuses.find((item: any) => item.id === "nuxa").from, "avisos@nuxa.life");
-  assert.equal(statuses.find((item: any) => item.id === "jobda").from, "hola@nuxa.life",
-    "Other brand legacy routing must remain unchanged");
+  assert.equal(statuses.find((item: any) => item.id === "jobda").from, "avisos@nuxa.life");
+  assert.equal(statuses.find((item: any) => item.id === "empordajobs").from, "hola@nuxa.life",
+    "EMPORDAJOBS legacy routing must remain unchanged");
+  const jobda = await app.sendEmpresaEmail({ ...campaign, brand: "jobda",
+    fromEmailOverride: "unverified@gmail.com", fromNameOverride: "Untrusted override" });
+  assert.equal(jobda.ok, true);
+  assert.equal(jobda.provider, "sendgrid");
+  assert.deepEqual(state.messages.at(-1).from, { email: "avisos@nuxa.life", name: "JOBDA" });
+  assert.deepEqual(state.messages.at(-1).replyTo, { email: "rmportbou@gmail.com", name: "JOBDA" });
+  assert.deepEqual(state.messages.at(-1).categories, ["empresa-42"]);
+  assert.equal(state.messages.at(-1).trackingSettings.openTracking.enable, true);
+  assert(state.paced >= 2, "Commercial helper always passes through pacing");
+  assert.equal(state.resendCalls, 0, "JOBDA must not fall back to Resend");
   state.fail = true;
   const before = state.messages.length;
   assert.equal((await app.sendEmpresaEmail(campaign)).ok, false);
   assert.equal(state.messages.length, before + 1, "No retry after rejection or uncertain delivery");
   assert.equal(state.resendCalls, 0, "No silent fallback to another provider");
+  const jobdaFailed = await app.sendEmpresaEmail({ ...campaign, brand: "jobda" });
+  assert.equal(jobdaFailed.ok, false);
+  assert.equal(jobdaFailed.provider, "sendgrid");
+  assert.equal(jobdaFailed.errorCode, "403");
+  assert.equal(state.resendCalls, 0, "No JOBDA fallback after rejection");
   state.connectorFail = true;
   assert.equal((await app.getEmpresaBrandStatus("nuxa")).available, false);
+  assert.equal((await app.getEmpresaBrandStatus("jobda")).available, false);
+  const jobdaDisconnected = await app.sendEmpresaEmail({ ...campaign, brand: "jobda" });
+  assert.equal(jobdaDisconnected.ok, false);
+  assert.equal(state.resendCalls, 0);
   await assert.rejects(app.productionTrialProviders.email("trial@example.invalid", "123456"));
-  assert.equal(state.messages.length, before + 1);
-  console.log("PASS: NUXA From/Reply-To, verification codes, commercial/test overrides, unsubscribe, campaign tags, status, failures without retry/fallback; other brand routing unchanged. No real emails, database changes or AI calls.");
+  assert.equal(state.messages.length, before + 2);
+  console.log("PASS: NUXA and JOBDA authenticated From/Reply-To, codes, forced identity, tracking, pacing hook, status, failures without retry/fallback; EMPORDAJOBS unchanged. No real emails, database writes or AI calls.");
 } finally {
   globalThis.fetch = originalFetch;
   for (const key of envKeys) {

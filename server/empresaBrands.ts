@@ -262,26 +262,29 @@ async function getLegacyEmpresaBrandStatuses(): Promise<EmpresaBrandStatus[]> {
   }
 }
 
-async function getNuxaSendGridStatus(): Promise<EmpresaBrandStatus> {
+async function getAuthenticatedSendGridStatus(brand: "nuxa" | "jobda"): Promise<EmpresaBrandStatus> {
   try {
     await getConfiguredSendGridFromEmail();
-    return statusForProfile(profiles.nuxa, false,
+    return statusForProfile(profiles[brand], false,
       `SendGrid configurado: ${NUXA_EMAIL_FROM.email}; las respuestas llegan a ${NUXA_EMAIL_REPLY_TO.email}. La entrega requiere que SendGrid acepte el remitente.`,
       true, NUXA_EMAIL_FROM.email);
   } catch {
-    return statusForProfile(profiles.nuxa, false,
+    return statusForProfile(profiles[brand], false,
       "No se puede acceder a la conexión de SendGrid. No se cambiará automáticamente de proveedor.",
       false, NUXA_EMAIL_FROM.email);
   }
 }
 
 export async function getEmpresaBrandStatuses(): Promise<EmpresaBrandStatus[]> {
-  const [legacy, nuxa] = await Promise.all([getLegacyEmpresaBrandStatuses(), getNuxaSendGridStatus()]);
-  return legacy.map(status => status.id === "nuxa" ? nuxa : status);
+  const [legacy, nuxa, jobda] = await Promise.all([
+    getLegacyEmpresaBrandStatuses(), getAuthenticatedSendGridStatus("nuxa"),
+    getAuthenticatedSendGridStatus("jobda"),
+  ]);
+  return legacy.map(status => status.id === "nuxa" ? nuxa : status.id === "jobda" ? jobda : status);
 }
 
 export async function getEmpresaBrandStatus(brand: EmpresaBrand): Promise<EmpresaBrandStatus> {
-  if (brand === "nuxa") return getNuxaSendGridStatus();
+  if (brand === "nuxa" || brand === "jobda") return getAuthenticatedSendGridStatus(brand);
   const statuses = await getEmpresaBrandStatuses();
   return statuses.find(status => status.id === brand)!;
 }

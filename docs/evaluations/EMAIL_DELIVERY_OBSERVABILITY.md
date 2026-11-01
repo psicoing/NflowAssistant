@@ -14,6 +14,36 @@
 
 ## Antecedentes y límites
 
+### Corrección preparada para JOBDA tras el límite de Resend
+
+- Se confirmó en producción que JOBDA utilizaba Resend y recibía HTTP 429 tanto
+  por cuota diaria como por velocidad. El pago de SendGrid no cambiaba esa ruta.
+- Con autorización expresa para corregir **sin reenviar**, JOBDA pasa a SendGrid
+  con `JOBDA <avisos@nuxa.life>` y respuestas al Gmail del administrador. No usa
+  Gmail como From, no hace fallback a Resend y no modifica el proveedor de EMPORDAJOBS.
+- Los envíos comerciales comparten un bloqueo transaccional de PostgreSQL y
+  esperan 600ms antes de contactar al proveedor. Funciona entre procesos que
+  comparten la misma base; no limita todos los posibles envíos transaccionales de
+  la cuenta, por lo que los errores del proveedor siguen siendo vinculantes.
+- Un 429, falta de crédito, fallo de autorización o indisponibilidad detiene el
+  lote y lo deja bloqueado, con sus conteos reales y el motivo. No se intenta el
+  resto, no se envía la copia al administrador y no hay reanudación automática.
+- No se reenviaron campañas ni se alteraron sus filas históricas durante la
+  corrección. No hay cambios de esquema. Para que el nuevo comportamiento afecte
+  a producción, el administrador debe publicar esta versión.
+- Pruebas sin envíos reales: `test-nuxa-email-routing.ts` valida JOBDA/NUXA,
+  identidades forzadas, seguimiento, ausencia de fallback y conservación de
+  EMPORDAJOBS; `test-campaign-email-control.ts` valida cortes, conteos, ausencia de
+  reintentos y el bloqueo compartido con conexiones reales solo en desarrollo.
+- Estas pruebas no afirman que la campaña histórica fallida se haya entregado
+  ni sustituyen una nueva autorización para cualquier envío real.
+- La aplicación reiniciada sirve la página inicial. Persiste el aviso previo de
+  unicidad del administrador en el arranque, sin impedir que quede lista.
+- En el control previo a publicar se detectó la definición de sesiones presente
+  solo en producción. Se añadió únicamente su definición a desarrollo, sin
+  consultar ni copiar sesiones. La comparación final de publicación indica
+  `hasDiff=false`, sin sentencias SQL ni advertencias de pérdida de datos.
+
 - La versión con receptores firmados ya está publicada: ambas rutas rechazan peticiones sin firma con JSON/401.
 - **Bloqueo anterior, ya resuelto:** faltaban las dos tablas de observabilidad en producción. La preparación anterior las había añadido solamente en producción, no en el esquema de desarrollo utilizado por Publish. En ese intento la prueba se detuvo antes de crear una campaña, reservar un envío o enviar correo.
 - Se corrigió la preparación incorporando ambas tablas a la base gestionada de desarrollo. También se alinearon únicamente las definiciones faltantes de funciones existentes (prueba gratuita, procedencia del historial, supresiones y CRM), sin copiar filas de producción ni modificar sus registros.

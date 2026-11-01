@@ -27,6 +27,17 @@ Para NUXA, el usuario aprobó enviar desde su dominio autenticado y recibir las 
 
 **How to apply:** Aplicar la identidad de NUXA a sus envíos por SendGrid, incluidos códigos y mensajes comerciales de NUXA. Conservar los otros flujos de Resend, Twilio Email y otras marcas; no confundir Reply-To con un buzón o reenvío para mensajes nuevos dirigidos al dominio.
 
+El usuario autorizó después incorporar JOBDA a SendGrid usando el dominio ya
+autenticado de NUXA, conservando JOBDA como nombre visible y Gmail como Reply-To.
+Esta autorización no incluye migrar EMPORDAJOBS ni reenviar campañas históricas.
+
+**Why:** JOBDA seguía enviando por Resend y agotó su cuota, aunque existía un plan
+de pago en SendGrid. El usuario autorizó corregir proveedor y límites «sin reenviar».
+
+**How to apply:** Mantener los límites de esta autorización. Cambiar de proveedor
+no autoriza reintentos históricos, envíos a empresas como prueba ni fallback
+automático ante resultados inciertos; las pruebas reales requieren permiso aparte.
+
 Sending is asynchronous: HTTP 202 confirms acceptance, not delivery. The operation may initially report PROCESSING with zero totals, then show delivered emails while its status still says PROCESSING.
 
 **Why:** This behavior occurred during the successful real test; relying on status alone would have missed delivery confirmation.

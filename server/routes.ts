@@ -52,6 +52,7 @@ import {
   isValidTwilioVoiceSignature,
 } from "./voiceDemoBridge";
 import { EMPRESA_LEGACY_NUXA_FROM_EMAIL, EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandStatuses, getEmpresaBrandStatus, isEmpresaBrand, type EmpresaBrand } from "./empresaBrands";
+import { runCampaignBatch } from "./campaign-email-control";
 import { db, pool } from "./db";
 import { CampaignEmailStore } from "./campaign-email-store";
 import { registerCampaignEmailWebhooks } from "./campaign-email-webhooks";
@@ -1917,8 +1918,7 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     let sent = 0, failed = 0;
     await pool.query("UPDATE empresa_campaign_history SET status='processing' WHERE id=$1", [campaignId]);
     const half = subjectB ? Math.ceil(contacts.length / 2) : contacts.length;
-    for (let i = 0; i < contacts.length; i++) {
-      const contact = contacts[i];
+    const batch = await runCampaignBatch(contacts, async (contact, i) => {
       const stillAllowed = await pool.query(
         `SELECT 1
          FROM empresa_contacts ec
@@ -1932,18 +1932,18 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
            )`,
         [contact.id],
       );
-      if (stillAllowed.rows.length === 0) continue;
+      if (stillAllowed.rows.length === 0) return null;
       const variant = (subjectB && i >= half) ? "b" : "a";
       const usedSubject = variant === "b" && subjectB ? subjectB : subject;
       const attemptId = await campaignEmailStore.reserve(campaignId, contact.email, variant);
-      if (!attemptId) continue; // Includes a concurrent worker or previous acceptance.
+      if (!attemptId) return null; // Includes a concurrent worker or previous acceptance.
       const result = await sendEmpresaEmail({ email: contact.email, subject: usedSubject, body, empresaId: contact.id, campaignId, brand });
       try { await campaignEmailStore.finish(attemptId, result); }
       catch {
         // Acceptance is uncertain: do not resend or continue without durable results.
         await pool.query("UPDATE empresa_campaign_history SET status='tracking_error',sent_count=$2,failed_count=$3 WHERE id=$1",
           [campaignId, sent + (result.ok ? 1 : 0), failed + (result.ok ? 0 : 1)]);
-        return;
+        throw new Error("Campaign tracking failed; no retry");
       }
       if (result.ok) {
         sent++;
@@ -1952,7 +1952,14 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
           [campaignId, contact.email, result.messageId || null, variant]
         ).catch(() => {});
       } else { failed++; }
-      await new Promise(resolve => setTimeout(resolve, 150));
+      return result;
+    });
+    if (batch.blocked) {
+      await pool.query(
+        "UPDATE empresa_campaign_history SET sent_count=$2,failed_count=$3,status='blocked' WHERE id=$1",
+        [campaignId, sent, failed],
+      );
+      return; // No remaining contacts, automatic retry, fallback or owner copy.
     }
     // Owner copy is not a campaign recipient and must not inflate its metrics.
     await sendEmpresaEmail({ email: "rmportbou@gmail.com", subject: `[COPIA] ${subject}`, body, empresaId: 0, brand }).catch(() => {});

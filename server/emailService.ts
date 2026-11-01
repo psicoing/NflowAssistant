@@ -2,7 +2,9 @@ import { Resend } from 'resend';
 import twilio from 'twilio';
 import crypto from 'crypto';
 import { EMPRESA_LEGACY_NUXA_FROM_EMAIL, EMPRESA_SHARED_FROM_EMAIL, getEmpresaBrandProfile, type EmpresaBrand } from './empresaBrands';
-import { getUncachableSendGridClient, sendNuxaSendGridEmail } from './sendgridClient';
+import { getUncachableSendGridClient, sendNuxaSendGridEmail, sendJobdaSendGridEmail } from './sendgridClient';
+import { pool } from './db';
+import { paceCommercialEmail } from './campaign-email-control';
 import { safeMailError, type EmailProvider } from './campaign-email-events';
 import { NUXA_EMAIL_FROM } from './nuxa-email-identity';
 
@@ -751,7 +753,7 @@ export async function sendMutuaEmail(params: {
 // ---------------------------------------------------------------------------
 // Grandes Empresas campaign email
 // ---------------------------------------------------------------------------
-export async function sendEmpresaEmail(params: {
+interface EmpresaEmailParams {
   email: string;
   subject: string;
   body: string;
@@ -760,12 +762,40 @@ export async function sendEmpresaEmail(params: {
   brand?: EmpresaBrand;
   fromEmailOverride?: string;
   fromNameOverride?: string;
-}): Promise<{ ok: boolean; messageId?: string; provider?: EmailProvider; errorCode?: string; errorReason?: string }> {
+}
+
+type EmpresaEmailResult = {
+  ok: boolean; messageId?: string; provider?: EmailProvider;
+  errorCode?: string; errorReason?: string;
+};
+
+export async function sendEmpresaEmail(params: EmpresaEmailParams): Promise<EmpresaEmailResult> {
+  let providerStarted = false;
+  try {
+    return await paceCommercialEmail(pool, () => {
+      providerStarted = true;
+      return sendEmpresaEmailUnpaced(params);
+    });
+  } catch (error) {
+    const detail = safeMailError(error);
+    // Failure to obtain a turn must stop the batch without contacting recipients.
+    return {
+      ok: false,
+      errorCode: providerStarted ? "send_uncertain" : "429",
+      errorReason: providerStarted
+        ? "Resultado del envío incierto; no se reintentará automáticamente."
+        : `Envío detenido antes de contactar al proveedor: ${detail.reason}`,
+    };
+  }
+}
+
+async function sendEmpresaEmailUnpaced(params: EmpresaEmailParams): Promise<EmpresaEmailResult> {
   let attemptedProvider: EmailProvider = "sendgrid";
   try {
     const brand = getEmpresaBrandProfile(params.brand || "nuxa");
-    const fromEmail = brand.id === "nuxa" ? NUXA_EMAIL_FROM.email : params.fromEmailOverride || brand.fromEmail;
-    const fromName = brand.id === "nuxa" ? NUXA_EMAIL_FROM.name : params.fromNameOverride || brand.fromName;
+    const authenticatedBrand = brand.id === "nuxa" || brand.id === "jobda";
+    const fromEmail = authenticatedBrand ? NUXA_EMAIL_FROM.email : params.fromEmailOverride || brand.fromEmail;
+    const fromName = authenticatedBrand ? brand.fromName : params.fromNameOverride || brand.fromName;
     if (!fromEmail) {
       console.error(`sendEmpresaEmail: no hay remitente configurado para ${brand.id}`);
       return { ok: false };
@@ -854,9 +884,10 @@ export async function sendEmpresaEmail(params: {
       ? [{ name: "campaign_id", value: `e${params.campaignId}` }]
       : undefined;
 
-    if (brand.id === "nuxa") {
+    if (authenticatedBrand) {
       // No automatic provider fallback: an uncertain send must not duplicate a campaign.
-      const [response] = await sendNuxaSendGridEmail({
+      const send = brand.id === "jobda" ? sendJobdaSendGridEmail : sendNuxaSendGridEmail;
+      const [response] = await send({
         to: params.email,
         subject: params.subject,
         text: `${params.body}\n\n${callConsentUrl ? `¿Quieres recibir información sobre NUXA.life?\nAutoriza una breve llamada informativa con nuestra asistente comercial de IA para conocer cómo contratar NUXA.life: ${callConsentUrl}\nLa atención psicológica no se realiza por teléfono: la ofrece la app NUXA.life.\n${EMPRESA_CALL_NUMBER_NOTICE}\nDespués podrás contactar con nosotros directamente si te interesa; no queremos repetirte comunicaciones.\n` : ""}\n---\n${brand.name} · ${brand.contact} · ${brand.contactPhone}\nPara no recibir más comunicaciones: ${unsubscribeUrl}`,
