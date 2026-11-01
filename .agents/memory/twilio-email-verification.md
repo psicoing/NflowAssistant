@@ -41,6 +41,7 @@ la ruta todavía inexistente. Un proveedor puede interpretar ese 200 como
 recepción correcta y dejar de reintentar, aunque no se almacene ningún evento.
 
 **How to apply:** No aceptar un simple 200 como prueba del circuito. Comprobar
-el tipo y contenido de la respuesta, el rechazo JSON de firmas inválidas y,
-después, un evento auténtico persistido. Coordinar claves, esquema y publicación
-sin habilitar un webhook que todavía apunta al receptor antiguo.
+el tipo y contenido de la respuesta, el rechazo JSON de firmas inválidas y la
+existencia de las tablas en la producción recién publicada antes de activar el
+proveedor; después confirmar un evento auténtico persistido. Coordinar claves,
+esquema y publicación sin habilitar un receptor o almacenamiento no preparado.

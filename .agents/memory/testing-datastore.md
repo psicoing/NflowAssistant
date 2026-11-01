@@ -32,13 +32,19 @@ réplica mostraban ceros mientras las consultas agregadas confirmaban datos.
 de facturación; un snapshot SQL no permite reconstruir horas facturadas.
 
 En esta instalación, el servidor de desarrollo se ha encontrado conectado a
-la misma base externa que producción, mientras la base gestionada de desarrollo
-era distinta. No asumir que ejecutar un script desde el workspace lo aísla.
+la base de producción mientras la base gestionada de desarrollo era distinta.
+No asumir que ejecutar un script desde el workspace lo aísla, ni que una
+variable de conexión con nombre de proveedor identifica una base ajena a Replit.
 
-**Why:** La comprobación de identidad de la base y sus conteos coincidió con
-la réplica de producción, no con la base gestionada de desarrollo.
+**Why:** La comprobación de identidad y conteos coincidió con la réplica de
+producción, no con desarrollo. Además, Publish administra su esquema: las tablas
+añadidas solo en producción desaparecieron al republicar porque faltaban en
+desarrollo. También se detectaron eliminaciones pendientes de otras estructuras
+creadas en el arranque.
 
 **How to apply:** Antes de fixtures, migraciones o pruebas con escrituras,
 contrastar ambos destinos sin revelar credenciales. Usar una base de desarrollo
-verificada y un esquema temporal exclusivo. No añadir migraciones de campañas
-al arranque para resolverlo; su activación externa requiere autorización.
+verificada y un esquema temporal exclusivo. Para el esquema gestionado, aplicar
+las definiciones a desarrollo y revisar la comparación antes de Publish; debe
+ser aditiva y no eliminar estructuras de otras funciones. No usar scripts,
+arranque ni hooks para migrar producción manualmente.

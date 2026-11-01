@@ -1,6 +1,7 @@
 /**
- * Explicit migration, never run by server startup. Apply to a verified target
- * only. Historical successes are not backfilled as delivered.
+ * Development schema, never run by server startup or against managed production.
+ * Apply to verified development; Replit Publish carries the additive schema diff.
+ * Historical successes are not backfilled as delivered.
  */
 export const campaignEmailSchema = `
 CREATE TABLE IF NOT EXISTS campaign_email_attempts (
