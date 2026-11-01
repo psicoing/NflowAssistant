@@ -15,6 +15,12 @@ The user approved replacing SendGrid with Twilio Email only for AI credit/budget
 
 **How to apply:** Preserve incident deduplication and the configured owner recipient. Do not migrate verification, campaign or other transactional emails without a new request.
 
+El usuario eligió «Conservar Twilio Email y añadir SendGrid» al preparar el plan de pago de SendGrid.
+
+**Why:** Quiere incorporar SendGrid sin sustituir el servicio actual de Twilio Email.
+
+**How to apply:** Conservar las credenciales y autenticación de Twilio Email. Para autenticar el mismo dominio en la nueva cuenta, generar selectores DKIM diferentes en SendGrid; no sobrescribir los selectores existentes ni duplicar DMARC.
+
 Sending is asynchronous: HTTP 202 confirms acceptance, not delivery. The operation may initially report PROCESSING with zero totals, then show delivered emails while its status still says PROCESSING.
 
 **Why:** This behavior occurred during the successful real test; relying on status alone would have missed delivery confirmation.
