@@ -14,15 +14,16 @@ type ContactSummary = { total: number; pendingReview: number; suppressed: number
 type DispatchRecipient = { contactId: number; email: string; status: "pending" | "attempting" | "accepted" | "rejected" | "skipped" | "uncertain"; reason: string | null; messageId: string | null };
 type Dispatch = { id: string; language: Language; subject: string; body: string; status: "prepared" | "running" | "completed" | "stopped"; createdAt: string; recipients: DispatchRecipient[] };
 type AuthRecord = { id: number; action: "grant" | "revoke"; source: string; evidence: string; obtainedAt: string; recordedAt: string };
-type ApiError = Error & { code?: string; status?: number };
+type ApiError = Error & { code?: string; status?: number; reference?: string };
 type ImportResult = { inserted: number; existing: number; invalidEmailRecords: number; duplicateEmailRecords: number };
 
 async function apiError(response: Response): Promise<ApiError> {
-  let payload: { message?: string; code?: string } = {};
+  let payload: { message?: string; code?: string; reference?: string } = {};
   try { payload = await response.json(); } catch { /* status text is enough */ }
   const error = new Error(payload.message || `La solicitud no pudo completarse (${response.status}).`) as ApiError;
   error.code = payload.code;
   error.status = response.status;
+  if (typeof payload.reference === "string" && /^[a-f0-9-]{36}$/i.test(payload.reference)) error.reference = payload.reference;
   return error;
 }
 async function jsonRequest<T>(url: string, init?: RequestInit): Promise<T> {
@@ -44,6 +45,7 @@ export default function StripeContactsPanel() {
   const [refreshing, setRefreshing] = useState(false);
   const [importing, setImporting] = useState(false);
   const [error, setError] = useState<ApiError | null>(null);
+  const [retryOperation, setRetryOperation] = useState<"load" | "import">("load");
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<number[]>([]);
@@ -69,6 +71,7 @@ export default function StripeContactsPanel() {
   const [detailDispatch, setDetailDispatch] = useState<Dispatch | null>(null);
 
   const loadContacts = useCallback(async (quiet = false) => {
+    setRetryOperation("load");
     quiet ? setRefreshing(true) : setLoading(true);
     setError(null);
     try {
@@ -103,7 +106,7 @@ export default function StripeContactsPanel() {
       const result = await jsonRequest<ImportResult>("/api/admin/stripe-contacts/import", { method: "POST", headers: { "Content-Type": "application/json" } });
       setImportResult(result);
       await loadContacts(true);
-    } catch (caught) { setError(caught as ApiError); }
+    } catch (caught) { setRetryOperation("import"); setError(caught as ApiError); }
     finally { setImporting(false); }
   }
 
@@ -192,7 +195,7 @@ export default function StripeContactsPanel() {
     finally { setDispatchBusy(false); }
   }
 
-  const schemaMessage = "El esquema comercial está pendiente. Vuelve a publicar la aplicación antes de continuar; no se usará una alternativa local.";
+  const schemaMessage = "La estructura comercial de la base de datos está pendiente. Revisa su preparación al publicar; no se usará una lista local alternativa.";
   return (
     <section className="space-y-6" aria-labelledby="stripe-contacts-title">
       <div className="flex flex-col justify-between gap-4 border-b border-border/70 pb-5 sm:flex-row sm:items-end">
@@ -216,7 +219,8 @@ export default function StripeContactsPanel() {
 
       {(error || dispatchError || historyError) && <div role="alert" className="flex items-start gap-3 rounded-lg border border-destructive/30 bg-destructive/5 p-4">
         <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" /><div className="flex-1"><p className="text-sm font-semibold">{[error, dispatchError, historyError].some((item) => item?.status === 401) ? "La sesión de administrador necesita renovarse" : schemaPending ? "Esquema pendiente" : "No se pudo completar la operación"}</p><p className="mt-1 text-sm text-muted-foreground">{schemaPending ? schemaMessage : (dispatchError || error || historyError)?.message}</p></div>
-        {error && <Button variant="outline" size="sm" onClick={() => void loadContacts()} disabled={loading}>Reintentar</Button>}
+        {error?.reference && <span className="text-xs text-muted-foreground">Referencia: {error.reference}</span>}
+        {error && <Button variant="outline" size="sm" onClick={() => void (retryOperation === "import" ? importContacts() : loadContacts())} disabled={loading || importing || refreshing}>{importing ? "Importando…" : retryOperation === "import" ? "Reintentar importación" : "Reintentar carga"}</Button>}
       </div>}
       {importResult && <div role="status" className="rounded-lg border border-emerald-300/70 bg-emerald-50/70 p-4 text-sm text-emerald-950"><p className="font-semibold"><Check className="mr-1.5 inline h-4 w-4" />Importación completada</p><p className="mt-1">{importResult.inserted} nuevas · {importResult.existing} ya existentes · {importResult.invalidEmailRecords} inválidas · {importResult.duplicateEmailRecords} duplicadas. Ninguna dirección quedó autorizada por importar.</p></div>}
 

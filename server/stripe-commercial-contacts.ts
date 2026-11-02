@@ -6,6 +6,7 @@ import { pool } from "./db";
 import { registerStripeLetterRoutes, isSameOriginJson } from "./stripe-commercial-letter";
 import { stripeSuppressionCondition, stripeAuthorizationCondition } from "./stripe-commercial-eligibility";
 import { registerStripeDispatchRoutes, type StripeDispatchDependencies } from "./stripe-commercial-dispatch";
+import { stripeContactFailure, type StripeContactPhase } from "./stripe-contact-errors";
 
 const emailSchema = z.string().email().max(254);
 type CustomerEmail = { email?: string | null };
@@ -48,7 +49,7 @@ async function listCustomerEmails(): Promise<CustomerEmail[]> {
   });
   const customers: CustomerEmail[] = [];
   for await (const customer of stripe.customers.list({ limit: 100 })) {
-    if (!customer.livemode) throw new Error("Expected live Stripe customers");
+    if (!customer.livemode) throw Object.assign(new Error("Expected live Stripe customers"), { code: "stripe_live_required" });
     // Keep only the email, never the payment/customer payload.
     customers.push({ email: customer.email });
     if (customers.length > 20_000) {
@@ -64,23 +65,19 @@ export function registerStripeCommercialContactRoutes(app: Express, dependencies
   signingSecret?: () => string;
   delivery?: StripeDispatchDependencies["delivery"];
   pace?: StripeDispatchDependencies["pace"];
+  reportFailure?: (diagnostic: ReturnType<typeof stripeContactFailure>["diagnostic"]) => void;
 }) {
   const database = dependencies?.database || pool;
   const listCustomers = dependencies?.listCustomers || listCustomerEmails;
   registerStripeLetterRoutes(app, { database, signingSecret: dependencies?.signingSecret });
   registerStripeDispatchRoutes(app, { database, signingSecret: dependencies?.signingSecret,
     delivery: dependencies?.delivery, pace: dependencies?.pace });
-  const fail = (res: any, error: any) => {
-    if (error?.code === "42P01") {
-      return res.status(503).json({
-        code: "stripe_contacts_schema_pending",
-        message: "Republica la aplicación para activar la lista Stripe. No se ha importado ningún contacto.",
-      });
-    }
-    // Provider/SQL errors can contain emails or credentials: never return/log them.
+  const fail = (res: any, error: unknown, phase: StripeContactPhase) => {
+    const { diagnostic, payload } = stripeContactFailure(error, phase);
+    if (dependencies?.reportFailure) dependencies.reportFailure(diagnostic);
+    else console.error("[stripe-contacts]", JSON.stringify(diagnostic));
     return res.status(503).json({
-      code: "stripe_contacts_unavailable",
-      message: "No se ha podido completar la operación. No se ha enviado ningún correo.",
+      ...payload, reference: diagnostic.reference, phase: diagnostic.phase,
     });
   };
 
@@ -99,7 +96,7 @@ export function registerStripeCommercialContactRoutes(app: Express, dependencies
       res.json({ contacts, summary: {
         total: contacts.length, pendingReview: contacts.length - suppressed - sendable, suppressed, sendable,
       } });
-    } catch (error) { fail(res, error); }
+    } catch (error) { fail(res, error, "read_contacts"); }
   });
 
   app.post("/api/admin/stripe-contacts/import", async (req, res) => {
@@ -110,10 +107,13 @@ export function registerStripeCommercialContactRoutes(app: Express, dependencies
       return res.status(403).json({ message: "Solicitud no permitida" });
     }
     let client: PoolClient | undefined;
+    let phase: StripeContactPhase = "schema";
     try {
       // Fail before calling Stripe if Publish has not created the table yet.
       await database.query("SELECT id FROM stripe_commercial_contacts LIMIT 0");
+      phase = "stripe";
       const { emails, ...counts } = normalizeStripeContactEmails(await listCustomers());
+      phase = "storage";
       client = await database.connect();
       await client.query("BEGIN");
       await client.query("SET LOCAL lock_timeout = '5s'");
@@ -135,7 +135,7 @@ export function registerStripeCommercialContactRoutes(app: Express, dependencies
       });
     } catch (error) {
       if (client) await client.query("ROLLBACK").catch(() => {});
-      fail(res, error);
+      fail(res, error, phase);
     } finally { client?.release(); }
   });
 }

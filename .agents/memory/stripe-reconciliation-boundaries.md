@@ -69,3 +69,14 @@ en inglés y español».
 **How to apply:** Mantener la revisión de destinatarios e idioma antes de
 confirmar, sin activar envíos automáticos ni interpretar importación o pago
 como autorización comercial de los contactos.
+
+Una lectura correcta de Stripe desde el entorno de trabajo no certifica que
+la conexión del servidor publicado funcione. No dar por resuelta una importación
+de producción basándose solo en esa prueba.
+
+**Why:** Se observaron fallos de importación publicados a pesar de que la
+consulta desde el workspace y las pruebas aisladas funcionaban; los mensajes
+genéricos no permitían atribuir la causa a Stripe o al almacenamiento.
+
+**How to apply:** Confirmar el resultado del endpoint publicado y su diagnóstico
+seguro antes de atribuir la causa, cambiar credenciales o declarar éxito.

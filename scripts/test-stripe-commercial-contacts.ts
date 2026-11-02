@@ -5,6 +5,34 @@ import { pool as applicationPool } from "../server/db";
 import { normalizeStripeContactEmails, registerStripeCommercialContactRoutes } from "../server/stripe-commercial-contacts";
 import { createStripeUnsubscribeToken, verifyStripeUnsubscribeToken, renderStripeCommercialLetter } from "../server/stripe-commercial-letter";
 import { testStripeManualDispatch } from "./test-stripe-manual-dispatch";
+import { stripeContactFailure } from "../server/stripe-contact-errors";
+
+const diagnosticCases = [
+  [{ type: "StripeAuthenticationError" }, "stripe", "stripe_authentication"],
+  [{ type: "StripePermissionError" }, "stripe", "stripe_permission"],
+  [{ type: "StripeRateLimitError" }, "stripe", "stripe_rate_limit"],
+  [{ type: "StripeConnectionError" }, "stripe", "stripe_connection"],
+  [{ type: "StripeInvalidRequestError" }, "stripe", "stripe_request"],
+  [{ code: "stripe_unavailable" }, "stripe", "stripe_configuration"],
+  [{ code: "stripe_live_required" }, "stripe", "stripe_mode"],
+  [{ code: "stripe_import_limit" }, "stripe", "stripe_import_limit"],
+  [{ code: "42P01" }, "schema", "schema"],
+  [{ code: "42703" }, "read_contacts", "schema"],
+  [{ code: "42501" }, "storage", "database_42501"],
+  [{ code: "unrecognized_sensitive_code" }, "stripe", "unexpected"],
+] as const;
+for (const [properties, phase, category] of diagnosticCases) {
+  const result = stripeContactFailure({
+    ...properties, message: "private@example.invalid sk_private_fixture",
+    raw: { email: "private@example.invalid" },
+  }, phase);
+  assert.equal(result.diagnostic.category, category);
+  assert.equal(result.diagnostic.phase, phase);
+  assert.match(result.diagnostic.reference, /^[a-f0-9-]{36}$/);
+  assert(!JSON.stringify(result).includes("private"));
+  assert(!JSON.stringify(result).includes("unrecognized_sensitive_code"));
+}
+console.log("PASS: 12 safe failure classifications, phase and reference; no raw provider data.");
 
 const normalized = normalizeStripeContactEmails([
   { email: " Example@Example.invalid " }, { email: "example@example.invalid" },
@@ -53,6 +81,8 @@ try {
   let providerCalls = 0;
   let providerFailure = false;
   let databaseMissing = false;
+  let storageFailure = false;
+  const failures: ReturnType<typeof stripeContactFailure>["diagnostic"][] = [];
   const deliveryState: {
     messages: any[]; mode: string; beforePace?: () => Promise<void>; duringDelivery?: () => Promise<void>;
   } = { messages: [], mode: "ok" };
@@ -61,12 +91,18 @@ try {
       if (databaseMissing) throw Object.assign(new Error("Missing"), { code: "42P01" });
       return client.query(...args);
     },
-    connect: async () => ({ query: (...args: any[]) => client.query(...args), release() {} }),
+    connect: async () => ({ query: (...args: any[]) => {
+      if (storageFailure && String(args[0]).includes("UPDATE stripe_commercial_contacts")) {
+        throw Object.assign(new Error("private storage failure"), { code: "42501" });
+      }
+      return client.query(...args);
+    }, release() {} }),
   };
   const web = express();
   web.use(express.json());
   web.use((req: any, _res, next) => { req.session = { isAdmin: req.get("x-test-admin") === "yes" }; next(); });
   registerStripeCommercialContactRoutes(web, {
+    reportFailure: diagnostic => failures.push(diagnostic),
     database: database as any,
     signingSecret: () => "offline-fixture-secret",
     pace: async send => {
@@ -88,7 +124,8 @@ try {
       if (providerFailure) throw new Error("Mock provider failed; must not leak");
       return ["normal", "blocked", "user", "company", "institution", "mutua", "bounced"]
         .map(name => ({ email: `${name}@example.invalid` }))
-        .concat([{ email: " NORMAL@example.invalid " }, { email: "invalid" }]);
+        .concat([{ email: " NORMAL@example.invalid " }, { email: "invalid" }])
+        .concat(storageFailure ? [{ email: "rollback@example.invalid" }] : []);
     },
   });
   server = web.listen(0, "127.0.0.1");
@@ -109,7 +146,10 @@ try {
   databaseMissing = true;
   const missing = await request("/import", { method: "POST", headers });
   assert.equal(missing.status, 503);
-  assert.equal((await missing.json()).code, "stripe_contacts_schema_pending");
+  const missingBody = await missing.json();
+  assert.equal(missingBody.code, "stripe_contacts_schema_pending");
+  assert.equal(missingBody.phase, "schema");
+  assert.equal(missingBody.reference, failures.at(-1)?.reference);
   assert.equal(providerCalls, 0, "Missing schema must not call Stripe");
   databaseMissing = false;
   const first = await request("/import", { method: "POST", headers });
@@ -188,7 +228,20 @@ try {
   providerFailure = true;
   const failure = await request("/import", { method: "POST", headers });
   assert.equal(failure.status, 503);
-  assert(!(await failure.text()).includes("Mock provider"));
+  const failureBody = await failure.json();
+  assert.equal(failureBody.phase, "stripe");
+  assert.equal(failureBody.reference, failures.at(-1)?.reference);
+  assert(!JSON.stringify(failureBody).includes("Mock provider"));
+  assert.deepEqual(Object.keys(failures.at(-1)!).sort(), ["category", "event", "phase", "reference"]);
+  providerFailure = false;
+  storageFailure = true;
+  const storageFailed = await request("/import", { method: "POST", headers });
+  assert.equal(storageFailed.status, 503);
+  assert.equal((await storageFailed.json()).phase, "storage");
+  assert.equal(failures.at(-1)?.category, "database_42501");
+  assert.equal((await client.query("SELECT count(*)::int AS n FROM stripe_commercial_contacts WHERE email='rollback@example.invalid'")).rows[0].n, 0);
+  storageFailure = false;
+  assert.equal((await request("/import", { method: "POST", headers })).status, 200, "Import retries can recover, not just reload an empty list");
   assert.equal((await client.query("SELECT count(*)::int AS n FROM stripe_commercial_contacts")).rows[0].n, 7);
   await testStripeManualDispatch({ request, publicRequest, headers, client, deliveryState });
   console.log("PASS: admin auth, same-origin checks, draft persistence/validation, mandatory footer, escaped preview, signed email-bound unsubscribe, GET/demo non-mutating, forged tokens rejected, idempotent POST, opt-out across commercial sources, deduplicated reimport keeps suppression, no consent granted, provider failure safe. Synthetic development schema only; zero real Stripe requests, emails or production writes.");
