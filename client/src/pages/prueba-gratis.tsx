@@ -209,6 +209,7 @@ export default function PruebaGratis() {
       if (!isLegacyUnverified) data.password = form.password;
       const response = await apiRequest("POST", "/api/prueba-gratis/iniciar", data);
       const result: FlowResponse = await response.json();
+      trackEvent("trial_verification_started");
       setFlowId(result.flowId);
       setStage("email");
       setEmailCode("");
@@ -216,6 +217,7 @@ export default function PruebaGratis() {
       setNotice("Te hemos enviado un código de seis cifras a tu correo.");
       setError("");
     } catch (requestError) {
+      trackEvent("trial_verification_failed", { step: "details" });
       if (isCapacityError(requestError)) {
         setStatus((current) => current ? { ...current, cupoLleno: true } : current);
       }
@@ -237,12 +239,14 @@ export default function PruebaGratis() {
     setNotice("");
     try {
       await apiRequest("POST", "/api/prueba-gratis/verificar-correo", { flowId, code: emailCode });
+      trackEvent("trial_email_verified");
       setStage("sms");
       setSmsSent(false);
       setSmsCode("");
       setCooldown(0);
       setNotice("Correo verificado. Envía ahora el código al móvil para continuar.");
     } catch (requestError) {
+      trackEvent("trial_verification_failed", { step: "email" });
       setError(safeErrorMessage(requestError, "email"));
     } finally {
       setBusy(false);
@@ -257,6 +261,7 @@ export default function PruebaGratis() {
     try {
       const response = await apiRequest("POST", "/api/prueba-gratis/enviar-codigo", { flowId, channel });
       const result = await response.json();
+      trackEvent("trial_code_requested", { channel });
       setCooldown(Math.max(0, Number(result.resendAfterSeconds) || 0));
       if (channel === "sms") {
         setSmsSent(true);
@@ -267,6 +272,7 @@ export default function PruebaGratis() {
         setNotice("Hemos enviado un nuevo código a tu correo.");
       }
     } catch (requestError) {
+      trackEvent("trial_code_request_failed", { channel });
       setError(safeErrorMessage(requestError, channel === "sms" ? "sms" : "email"));
     } finally {
       setBusy(false);
@@ -301,8 +307,10 @@ export default function PruebaGratis() {
     setNotice("");
     try {
       await apiRequest("POST", "/api/prueba-gratis/verificar-movil", { flowId, code: smsCode });
+      trackEvent("trial_phone_verified");
       await finishTrial(true);
     } catch (requestError) {
+      trackEvent("trial_verification_failed", { step: "sms" });
       setError(safeErrorMessage(requestError, "sms"));
       setBusy(false);
     }

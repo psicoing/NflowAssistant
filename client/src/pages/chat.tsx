@@ -198,7 +198,7 @@ export default function Chat() {
       if (result.responseKind === "ai") setResponseReportedUnavailable(false);
       else if (result.aiUnavailable === true) setResponseReportedUnavailable(true);
       queryClient.invalidateQueries({ queryKey: ["/api/chat/service-status"] });
-      trackEvent("chat_message_succeeded", {
+      trackEvent(result.responseKind === "ai" ? "chat_message_succeeded" : "chat_automatic_notice", {
         chat_mode: chatMode,
         language: currentLanguage,
       });
@@ -215,12 +215,14 @@ export default function Chat() {
       });
       
       if (error.message?.includes("TRIAL_VERIFICATION_REQUIRED")) {
+        trackEvent("chat_access_blocked", { reason: "verification_required" });
         toast({ title: "Verifica tu prueba gratuita", description: "Confirma tu correo y tu móvil antes de usar las 2 preguntas.", variant: "destructive" });
         queryClient.invalidateQueries({ queryKey: ["/api/question-limit"] });
         return;
       }
       // Handle question limit exceeded (429 status)
       if (error.message?.includes("429")) {
+        trackEvent("chat_access_blocked", { reason: "limit" });
         toast({
           title: t('chat.limit.title'),
           description: t('chat.limit.description'),

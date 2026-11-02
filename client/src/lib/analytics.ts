@@ -3,7 +3,7 @@ export type AnalyticsData = Record<string, string | number | boolean>;
 declare global {
   interface Window {
     umami?: {
-      track(name: string, data?: AnalyticsData): void;
+      track(name: string, data?: AnalyticsData): void | Promise<unknown>;
     };
   }
 }
@@ -22,7 +22,11 @@ export function trackEvent(name: string, data?: AnalyticsData): void {
   if (typeof window === "undefined" || !hasAnalyticsConsent()) return;
 
   try {
-    window.umami?.track(name, data);
+    const pending = window.umami?.track(name, data);
+    // A rejected tracker request must not become an unhandled rejection.
+    if (pending && typeof pending.catch === "function") {
+      void pending.catch(() => {});
+    }
   } catch {
     // Analytics must never interrupt the user journey.
   }
