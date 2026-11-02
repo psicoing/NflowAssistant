@@ -19,3 +19,4 @@
 - [Optimización de costes](cost-optimization-constraints.md) — diagnóstico antes de cambios; conservar disponibilidad 24/7 e integridad, sin atribuir cargos compartidos sin desglose.
 - [Chat sin IA disponible](chat-outage-transparency.md) — avisar de la indisponibilidad, identificar respuestas automáticas y conservar preguntas; nunca prometer una fecha de reactivación.
 - [Twilio Email](twilio-email-verification.md) — permisos mínimos de correo separados de voz/SMS; confirmar entrega mediante estadísticas de la operación.
+- [Conciliación Stripe](stripe-reconciliation-boundaries.md) — la cuenta incluye histórico de otras líneas; cliente y coincidencia de correo no acreditan acceso vigente.
