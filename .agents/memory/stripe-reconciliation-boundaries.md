@@ -17,6 +17,17 @@ autorizadas.
 Verificar referencias del pago y titularidad antes de atribuir ingresos o
 corregir accesos. Conservar las excepciones de administración y pruebas.
 
+La atribución tampoco debe exigir que todos los pagos digan NUXA o vuelvan a
+nuxa.life: los recorridos históricos de NFLOW pueden corresponder al antecedente
+de esta app y deben investigarse, no descartarse como otra línea por el nombre.
+
+**Why:** La revisión por procedencia encontró Checkout del recorrido anterior
+con referencias de usuario que ya no enlazan con la base actual; filtrar solo
+por la marca o el dominio nuevos habría ocultado esos casos.
+
+**How to apply:** Contrastar dominios históricos, metadatos y referencias de
+cuenta. Un retorno genérico de Stripe tampoco demuestra una procedencia ajena.
+
 Los contactos extraídos de Stripe deben mantenerse separados de las empresas
 y bloqueados para publicidad hasta comprobar autorización; respetar bajas y
 supresiones, sin incorporar información de compras de salud ni clínica.
