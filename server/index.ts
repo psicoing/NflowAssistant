@@ -1150,7 +1150,8 @@ app.use((req, res, next) => {
 
   const originalResJson = res.json;
   res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
+    // Stripe contact responses contain personal addresses, not log data.
+    if (!path.startsWith("/api/admin/stripe-contacts")) capturedJsonResponse = bodyJson;
     return originalResJson.apply(res, [bodyJson, ...args]);
   };
 

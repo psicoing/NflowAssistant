@@ -18,6 +18,7 @@ function isRateLimited(ip: string, maxPerHour = 5): boolean {
 import fs from "fs";
 import path from "path";
 import { storage } from "./storage";
+import { registerStripeCommercialContactRoutes } from "./stripe-commercial-contacts";
 import { ChatHistoryAccessError, establishChatUserSession, installChatHistoryGuards } from "./chat-history-security";
 import {
   buildSkrillLink,
@@ -246,6 +247,7 @@ async function checkSubscription(userId: number): Promise<boolean> {
 }
 
 export async function registerRoutes(app: Express, existingServer?: Server): Promise<Server> {
+  registerStripeCommercialContactRoutes(app);
   // Preserve old history; unknown legacy replies must not be relabelled as AI.
   await pool.query("ALTER TABLE messages ADD COLUMN IF NOT EXISTS response_kind text");
   // No default/backfill: old rows are retained, but their origin is unverified.

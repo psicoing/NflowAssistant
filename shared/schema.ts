@@ -2,6 +2,15 @@ import { pgTable, text, serial, integer, boolean, timestamp, bigint, varchar, js
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Isolated review list: deliberately has no marketing-consent or campaign membership.
+// Schema is applied in development and reaches production only through Publish.
+export const stripeCommercialContacts = pgTable("stripe_commercial_contacts", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  importedAt: timestamp("imported_at", { withTimezone: true }).notNull().defaultNow(),
+  lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 // Same dedicated shape used by connect-pg-simple; independent of user deletion.
 export const nuxaAuthSessions = pgTable("nuxa_auth_sessions", {
   sid: varchar("sid").primaryKey(),

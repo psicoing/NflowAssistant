@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import StripeContactsPanel from "@/components/admin/StripeContactsPanel";
 import { 
   Users, 
   DollarSign, 
@@ -1162,6 +1163,7 @@ export default function AdminDashboard() {
               <TabsTrigger value="instituciones" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchInstitutions(); checkResendDomain(); fetchInstCampaignHistory(); }}>🏛️ Instituciones</TabsTrigger>
               <TabsTrigger value="mutuas" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchMutuas(); checkResendDomain(); fetchMutuaCampaignHistory(); }}>🤝 Mutuas</TabsTrigger>
               <TabsTrigger value="empresas" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchEmpresas(); checkResendDomain(); fetchEmpresaCampaignHistory(); }}>🏢 Empresas</TabsTrigger>
+              <TabsTrigger value="stripe" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Stripe</TabsTrigger>
               <TabsTrigger value="voz" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">📞 Demo Voz IA</TabsTrigger>
             </TabsList>
           </div>
@@ -3654,6 +3656,10 @@ export default function AdminDashboard() {
               </Card>
 
             </div>
+          </TabsContent>
+
+          <TabsContent value="stripe">
+            <StripeContactsPanel />
           </TabsContent>
 
           {/* ── DEMO DE LLAMADA CON IA POR VOZ ── */}

@@ -16,3 +16,14 @@ autorizadas.
 **How to apply:** Distinguir cliente, intento, cobro, producto y derecho vigente.
 Verificar referencias del pago y titularidad antes de atribuir ingresos o
 corregir accesos. Conservar las excepciones de administración y pruebas.
+
+Los contactos extraídos de Stripe deben mantenerse separados de las empresas
+y bloqueados para publicidad hasta comprobar autorización; respetar bajas y
+supresiones, sin incorporar información de compras de salud ni clínica.
+
+**Why:** El propietario aceptó expresamente preparar la lista para revisión,
+sin considerar que un pago autoriza publicidad ni enviar una campaña.
+
+**How to apply:** Una importación o reimportación nunca concede consentimiento.
+No conectar esta audiencia a envíos ni usarla para solicitar permiso por correo
+sin resolver primero la autorización aplicable.
