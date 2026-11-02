@@ -18,6 +18,9 @@ function isRateLimited(ip: string, maxPerHour = 5): boolean {
 import fs from "fs";
 import path from "path";
 import { storage } from "./storage";
+import { CheckoutError, StripeCheckoutStore } from "./stripe-checkout-store";
+import { CHECKOUT_PRODUCTS, StripeCheckoutService } from "./stripe-checkout-service";
+import { hasMonthlyEntitlement, paidQuestionBalance } from "./paid-question-balance";
 import { registerStripeCommercialContactRoutes } from "./stripe-commercial-contacts";
 import { ChatHistoryAccessError, establishChatUserSession, installChatHistoryGuards } from "./chat-history-security";
 import {
@@ -59,6 +62,21 @@ import { CampaignEmailStore } from "./campaign-email-store";
 import { registerCampaignEmailWebhooks } from "./campaign-email-webhooks";
 import { addCampaignDeliverySummaries } from "./campaign-email-summary";
 const campaignEmailStore = new CampaignEmailStore(pool);
+const checkoutStore = new StripeCheckoutStore(pool);
+async function checkoutService() {
+  const Stripe = (await import("stripe")).default;
+  const key = process.env.STRIPE_SECRET_KEY || process.env.TESTING_STRIPE_SECRET_KEY;
+  if (!key) throw new CheckoutError(503, "stripe_unavailable", "No se puede iniciar el pago en este momento.");
+  return new StripeCheckoutService(checkoutStore, new Stripe(key, { apiVersion: "2025-08-27.basil" }), /^(sk|rk)_live_/.test(key));
+}
+function checkoutFailure(res: express.Response, error: unknown) {
+  if (error instanceof CheckoutError) {
+    return res.status(error.status).json({ success: false, code: error.code, message: error.message,
+      ...(error.code === "account_required" ? { loginUrl: "/login" } : {}) });
+  }
+  console.error("[stripe-checkout] Payment operation failed");
+  return res.status(503).json({ success: false, message: "No se pudo comprobar el pago. Inténtalo de nuevo; no repitas la compra." });
+}
 import { TrialStore, TRIAL_LIMIT } from "./trial/store";
 import { registerTrialRoutes, respondTrialError } from "./trial/routes";
 import { getChatServiceStatus } from "./chat-service-status";
@@ -222,6 +240,7 @@ async function checkSubscription(userId: number): Promise<boolean> {
   try {
     const user = await storage.getUser(userId);
     if (!user) return false;
+    if ((user.prepaidQuestions || 0) > 0) return true;
     
     // Trial users always get access (question limit enforced separately)
     if (user.subscriptionStatus === 'trial') {
@@ -3606,13 +3625,20 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
 
   // Stripe checkout session - simplificado para máxima compatibilidad
   app.post("/api/stripe/create-checkout-session", async (req, res) => {
+    if (!req.session.userId) {
+      return checkoutFailure(res, new CheckoutError(401, "account_required", "Inicia sesión o regístrate en NUXA antes de pagar."));
+    }
     const ip = req.ip || req.socket.remoteAddress || 'unknown';
     if (isRateLimited(ip)) {
       console.warn(`⚠️ Rate limit hit on create-checkout-session from IP: ${ip}`);
       return res.status(429).json({ error: 'Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.' });
     }
     try {
+      if (!await checkoutStore.user(req.session.userId)) throw new CheckoutError(401, "account_required", "Inicia sesión en NUXA antes de pagar.");
       const { referralCode, plan = 'basic' } = req.body;
+      if (!["basic", "individual", "premium"].includes(plan)) {
+        return res.status(400).json({ message: "Plan inválido" });
+      }
       console.log(`Creating Stripe checkout session - plan: ${plan}`);
 
       // Importar Stripe solo cuando se necesite
@@ -3666,7 +3692,7 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       // Prepare metadata with referral information and plan
       let metadata: any = {
         source: "activation_page",
-        userId: req.session.userId?.toString() || "unknown",
+        userId: req.session.userId.toString(),
         plan: plan // Guardar el plan seleccionado
       };
 
@@ -3693,7 +3719,7 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
         }
       }
 
-      const session = await stripe.checkout.sessions.create({
+      const session = await (await checkoutService()).create(req.session.userId, CHECKOUT_PRODUCTS[plan], {
         mode: "subscription",
         line_items: [
           {
@@ -3708,23 +3734,23 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       
       res.json({ url: session.url });
     } catch (error: any) {
-      console.error('Stripe checkout session error:', error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Error creating checkout session" 
-      });
+      return checkoutFailure(res, error);
     }
   });
 
   // Endpoint para compra de packs de preguntas (pago único)
   app.post("/api/stripe/create-pack-session", async (req, res) => {
+    if (!req.session.userId) {
+      return checkoutFailure(res, new CheckoutError(401, "account_required", "Inicia sesión o regístrate en NUXA antes de pagar."));
+    }
     const ip = req.ip || req.socket.remoteAddress || 'unknown';
     if (isRateLimited(ip)) {
       console.warn(`⚠️ Rate limit hit on create-pack-session from IP: ${ip}`);
       return res.status(429).json({ error: 'Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.' });
     }
     try {
-      const { packType, email } = req.body;
+      if (!await checkoutStore.user(req.session.userId)) throw new CheckoutError(401, "account_required", "Inicia sesión en NUXA antes de pagar.");
+      const { packType } = req.body;
       
       const packConfig: Record<string, { amount: number; questions: number; name: string }> = {
         'pack10':  { amount: 299,  questions: 10,  name: 'NUXA Pack 10 Preguntas'  },
@@ -3733,7 +3759,7 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       };
       
       const pack = packConfig[packType];
-      if (!pack) {
+      if (!["pack10", "pack20", "pack100"].includes(packType) || !pack) {
         return res.status(400).json({ error: 'Pack type not valid' });
       }
       
@@ -3745,11 +3771,10 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       
       const stripe = new Stripe(stripeKey, { apiVersion: '2025-08-27.basil' });
       
-      const userId = req.session.userId?.toString() || 'unknown';
+      const userId = req.session.userId.toString();
       
-      const session = await stripe.checkout.sessions.create({
+      const session = await (await checkoutService()).create(req.session.userId, CHECKOUT_PRODUCTS[packType], {
         mode: 'payment',
-        customer_email: email || undefined,
         line_items: [{
           price_data: {
             currency: 'eur',
@@ -3770,52 +3795,18 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       
       res.json({ url: session.url });
     } catch (error: any) {
-      console.error('Stripe pack session error:', error);
-      res.status(500).json({ error: 'Error creating checkout session' });
+      return checkoutFailure(res, error);
     }
   });
 
   app.get("/stripe-return", async (req, res) => {
-    const Stripe = (await import('stripe')).default;
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-      apiVersion: '2025-08-27.basil',
-    });
-    
-    const session = await stripe.checkout.sessions.retrieve(req.query.session_id as string);
-
-    if (session.payment_status === "paid") {
-      // Activar usuario por email
-      const customerEmail = session.customer_details?.email || session.customer_email;
-      
-      if (customerEmail) {
-        const users = await storage.getAllUsers();
-        const user = users.find(u => u.email === customerEmail);
-        
-        if (user) {
-          // Obtener el plan desde los metadatos de la sesión
-          const plan = session.metadata?.plan || 'basic';
-          
-          // Calcular fecha de expiración según el plan
-          let expiresAt: Date;
-          if (plan === 'premium') {
-            expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000); // 12 meses
-          } else {
-            expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 1 mes
-          }
-          
-          await storage.updateUserSubscription(user.id, {
-            status: 'active',
-            plan: plan,
-            subscriptionId: req.query.session_id as string,
-            expiresAt: expiresAt
-          });
-        }
-      }
-      
-      return res.redirect("/login");
-    } else {
-      return res.send("Error en pago");
-    }
+    // Webhooks can confirm payment without a browser session; a URL alone cannot.
+    res.setHeader("Cache-Control", "no-store");
+    if (!req.session.userId) return res.redirect("/login");
+    try {
+      const result = await (await checkoutService()).confirm(req.query.session_id, req.session.userId);
+      return res.redirect(result.questions ? "/chat?credits_purchased=true" : "/chat");
+    } catch (error) { return checkoutFailure(res, error); }
   });
 
   // Stripe webhook automático - activación inmediata de suscripciones
@@ -3832,11 +3823,8 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       const sig = req.headers["stripe-signature"];
       let event;
 
-      // Verificar la firma del webhook para seguridad (skip en development para testing)
-      if (process.env.NODE_ENV === 'development' && req.body.test_mode) {
-        console.log("🧪 DEV MODE: Skipping signature verification for testing");
-        event = req.body;
-      } else {
+      // Verify signatures in every environment, including development.
+      {
         if (!sig) {
           console.error("❌ Missing stripe signature");
           return res.status(400).send('Missing stripe signature');
@@ -3852,258 +3840,18 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       }
       
       console.log("Event type:", event.type);
-      
-      // Múltiples eventos de Stripe que indican pago exitoso
-      if (event.type === 'checkout.session.completed' || 
-          event.type === 'payment_intent.succeeded' ||
-          event.type === 'invoice.payment_succeeded') {
-        
-        const eventData = event.data.object as any;
-        const customerEmail = eventData.customer_details?.email || 
-                             eventData.customer_email ||
-                             eventData.receipt_email;
-        
-        console.log("Processing Stripe payment for email:", customerEmail);
-        
-        if (customerEmail) {
-          const users = await storage.getAllUsers();
-          const user = users.find(u => u.email === customerEmail);
-          
-          if (user) {
-            // Check for referral code in metadata to process commission
-            const metadata = eventData.metadata;
-            
-            // MANEJO DE CRÉDITOS PREPAGADOS (PAGO POR USO)
-            if (metadata?.type === 'prepaid_credits') {
-              console.log("=== PROCESSING PREPAID CREDITS PURCHASE ===");
-              console.log("User:", user.username, "ID:", user.id);
-              console.log("Pack type:", metadata.packType);
-              console.log("Questions:", metadata.questions);
-              console.log("Amount paid:", eventData.amount_total);
-              
-              try {
-                // VALIDACIÓN CRÍTICA: Verificar que el monto pagado coincida con el pack
-                const packType = metadata.packType;
-                const expectedAmounts: Record<string, number> = {
-                  'pack10': 299,   // €2.99 en centavos
-                  'pack20': 599,   // €5.99 en centavos
-                  'pack100': 3200, // €32 en centavos
-                  'pack15': 500,   // legacy
-                  'pack35': 1000   // legacy
-                };
-                
-                const expectedAmount = expectedAmounts[packType];
-                const actualAmount = eventData.amount_total;
-                
-                if (!expectedAmount || actualAmount !== expectedAmount) {
-                  console.error(`❌ SECURITY: Amount mismatch! Expected ${expectedAmount}, got ${actualAmount} for pack ${packType}`);
-                  res.status(400).json({ 
-                    received: true, 
-                    creditsAdded: false,
-                    error: 'Amount mismatch' 
-                  });
-                  return;
-                }
-                
-                // Verificar que las preguntas correspondan al pack
-                const expectedQuestions: Record<string, number> = {
-                  'pack10': 10,
-                  'pack20': 20,
-                  'pack100': 100,
-                  'pack15': 15,
-                  'pack35': 35
-                };
-                
-                const questionsToAdd = expectedQuestions[packType];
-                if (!questionsToAdd || questionsToAdd !== parseInt(metadata.questions)) {
-                  console.error(`❌ SECURITY: Questions mismatch! Expected ${questionsToAdd}, got ${metadata.questions} for pack ${packType}`);
-                  res.status(400).json({ 
-                    received: true, 
-                    creditsAdded: false,
-                    error: 'Questions mismatch' 
-                  });
-                  return;
-                }
-                
-                // Todo verificado - añadir créditos
-                await storage.addPrepaidQuestions(user.id, questionsToAdd);
-                
-                console.log(`✅ Added ${questionsToAdd} prepaid questions to user ${user.username}`);
-                
-                res.json({ 
-                  received: true, 
-                  creditsAdded: true,
-                  questions: questionsToAdd,
-                  user: { username: user.username, email: user.email }
-                });
-                return;
-              } catch (error) {
-                console.error("❌ Error adding prepaid questions:", error);
-                res.json({ received: true, creditsAdded: false });
-                return;
-              }
-            }
-            
-            // MANEJO DE SUSCRIPCIONES (FLUJO ORIGINAL)
-            console.log("=== ACTIVATING STRIPE SUBSCRIPTION ===");
-            console.log("User found:", user.username, "ID:", user.id, "Current status:", user.subscriptionStatus);
-            
-            const selectedPlan = metadata?.plan || 'basic';
-            
-            if (metadata && metadata.referralCode && metadata.partnerId) {
-              console.log("=== PROCESSING REFERRAL COMMISSION ===");
-              console.log("Referral code:", metadata.referralCode);
-              console.log("Partner ID:", metadata.partnerId);
-              console.log("Selected plan:", selectedPlan);
-              
-              try {
-                const partnerId = parseInt(metadata.partnerId);
-                const partner = await storage.getPartner(partnerId);
-                
-                if (partner && (partner.status === 'approved' || partner.status === 'active')) {
-                  const amount = ((eventData.amount_total || 299) / 100).toFixed(2); // Convert from cents to euros
-                  const commission = ((eventData.amount_total || 299) * 0.1 / 100).toFixed(2); // 10% commission in euros
-                  
-                  console.log(`💰 Processing payment: €${amount}, Commission: €${commission}`);
-                  
-                  // Check if a referral already exists for this user and partner
-                  const existingReferrals = await storage.getPartnerReferrals(partnerId);
-                  const existingReferral = existingReferrals.find(r => r.userId === user.id);
-                  
-                  if (existingReferral) {
-                    console.log(`📝 Updating existing referral record for user ${user.id}`);
-                    // Update existing referral with payment information
-                    await db.update(partnerReferrals)
-                      .set({
-                        subscriptionPlan: selectedPlan,
-                        amount: amount,
-                        commission: commission,
-                        status: 'completed',
-                        paidAt: new Date()
-                      })
-                      .where(eq(partnerReferrals.id, existingReferral.id));
-                  } else {
-                    console.log(`➕ Creating new referral record for user ${user.id}`);
-                    // Create new partner referral record
-                    await storage.createPartnerReferral({
-                      partnerId: partnerId,
-                      userId: user.id,
-                      referralCode: metadata.referralCode,
-                      subscriptionPlan: selectedPlan,
-                      amount: amount,
-                      commission: commission,
-                      status: 'completed'
-                    });
-                  }
-                  
-                  // Update partner statistics
-                  const allReferrals = await storage.getPartnerReferrals(partnerId);
-                  const completedReferrals = allReferrals.filter(r => r.status === 'completed');
-                  const totalEarnings = completedReferrals.reduce((sum, r) => sum + parseFloat(r.commission || '0'), 0);
-                  
-                  await storage.updatePartnerStats(partnerId, completedReferrals.length, totalEarnings.toFixed(2));
-                  
-                  console.log(`✅ Commission processed: €${commission} for partner: ${partner.companyName}`);
-                  console.log(`📊 Partner stats updated: ${completedReferrals.length} referrals, €${totalEarnings.toFixed(2)} total earnings`);
-                }
-              } catch (error) {
-                console.error("❌ Error processing referral commission:", error);
-              }
-            }
-            
-            // Determine expiration date based on plan
-            const expiresAt = selectedPlan === 'premium' 
-              ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 365 days para premium
-              : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days para basic e individual
 
-            await storage.updateUserSubscription(user.id, {
-              status: 'active',
-              plan: selectedPlan,
-              subscriptionId: eventData.id || `stripe_${Date.now()}`,
-              expiresAt: expiresAt
-            });
-            
-            console.log("✅ Stripe subscription activated successfully for:", user.username);
-            
-            // ALSO check for pending referrals (for users who registered with referral links)
-            // This handles cases where referral code came from URL during registration
-            if (!metadata || !metadata.referralCode) {
-              console.log("=== CHECKING FOR PENDING REFERRALS ===");
-              try {
-                // Search for any pending referral for this user
-                const allPartners = await storage.getAllPartners();
-                for (const partner of allPartners) {
-                  const referrals = await storage.getPartnerReferrals(partner.id);
-                  const pendingReferral = referrals.find(
-                    r => r.userId === user.id && r.status === 'pending'
-                  );
-                  
-                  if (pendingReferral) {
-                    console.log(`✓ Found pending referral for user ${user.id}, partner ${partner.id}`);
-                    const amount = ((eventData.amount_total || 299) / 100).toFixed(2);
-                    const commission = ((eventData.amount_total || 299) * 0.1 / 100).toFixed(2);
-                    
-                    // Update pending referral to completed
-                    await db.update(partnerReferrals)
-                      .set({
-                        subscriptionPlan: selectedPlan,
-                        amount: amount,
-                        commission: commission,
-                        status: 'completed',
-                        paidAt: new Date()
-                      })
-                      .where(eq(partnerReferrals.id, pendingReferral.id));
-                    
-                    // Update partner stats
-                    const allReferrals = await storage.getPartnerReferrals(partner.id);
-                    const completedReferrals = allReferrals.filter(r => r.status === 'completed');
-                    const totalEarnings = completedReferrals.reduce((sum, r) => sum + parseFloat(r.commission || '0'), 0);
-                    
-                    await storage.updatePartnerStats(partner.id, completedReferrals.length, totalEarnings.toFixed(2));
-                    
-                    console.log(`✅ Pending referral updated: €${commission} commission for partner ${partner.companyName}`);
-                    console.log(`📊 Partner stats updated: ${completedReferrals.length} referrals, €${totalEarnings.toFixed(2)} total`);
-                    break; // Only one referral per user
-                  }
-                }
-              } catch (error) {
-                console.error("❌ Error checking pending referrals:", error);
-              }
-            }
-            
-            // Return success with user info
-            res.json({ 
-              received: true, 
-              activated: true,
-              user: { username: user.username, email: user.email }
-            });
-            return;
-          } else {
-            console.log("❌ User not found for email:", customerEmail);
-            
-            // Log available users for debugging
-            console.log("Available users with emails:", users.filter(u => u.email).map(u => ({ 
-              id: u.id, 
-              username: u.username, 
-              email: u.email 
-            })));
-          }
-        } else {
-          console.log("❌ No customer email found in Stripe event");
-          console.log("Available email fields:", {
-            'customer_details.email': eventData.customer_details?.email,
-            'customer_email': eventData.customer_email,
-            'receipt_email': eventData.receipt_email
-          });
+      try {
+        return res.json({ received: true, ...await (await checkoutService()).event(event) });
+      } catch (error) {
+        if (error instanceof CheckoutError && error.code === "unbound_payment") {
+          console.warn("[stripe-checkout] Historical/unbound payment requires separate review");
+          return res.json({ received: true, ignored: true, reason: "unbound_payment" });
         }
-      } else {
-        console.log("ℹ️ Stripe event type not handled:", event.type);
+        return checkoutFailure(res, error);
       }
-      
-      res.json({ received: true, activated: false });
     } catch (error: any) {
-      console.error("❌ Stripe webhook error:", error);
-      res.status(400).json({ error: 'Webhook error', details: error.message });
+      return checkoutFailure(res, error);
     }
   });
 
@@ -4234,47 +3982,9 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
         });
       }
 
-      // Verify payment with Stripe before activating
-      const Stripe = (await import('stripe')).default;
-      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-        apiVersion: '2025-08-27.basil',
-      });
-
-      const session = await stripe.checkout.sessions.retrieve(sessionId);
-
-      if (session.payment_status !== 'paid') {
-        console.warn(`⚠️ capture-subscription: session ${sessionId} not paid (status: ${session.payment_status})`);
-        return res.status(402).json({ 
-          success: false, 
-          message: "El pago no ha sido confirmado por Stripe" 
-        });
-      }
-
-      // Read plan and expiry from session metadata
-      const plan = session.metadata?.plan || 'basic';
-      const expiresAt = plan === 'premium'
-        ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
-        : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-
-      await storage.updateUserSubscription(userId, {
-        status: "active",
-        plan,
-        subscriptionId: sessionId,
-        expiresAt
-      });
-
-      console.log(`✅ capture-subscription: user ${userId} activated on plan ${plan}`);
-      res.json({ 
-        success: true, 
-        message: "Suscripción activada exitosamente",
-        plan
-      });
+      return res.json(await (await checkoutService()).confirm(sessionId, userId));
     } catch (error) {
-      console.error("Stripe capture error:", error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Error procesando pago" 
-      });
+      return checkoutFailure(res, error);
     }
   });
 
@@ -4316,6 +4026,10 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
   // Manual Stripe activation by username (for support/admin use)
   app.post("/api/stripe/manual-activate", async (req, res) => {
     try {
+      if (!req.session.userId) return res.status(401).json({ message: "Usuario no autenticado" });
+      if ((await checkoutStore.user(req.session.userId))?.role !== "admin") {
+        return res.status(403).json({ message: "Solo administración puede autorizar una activación manual." });
+      }
       const { username } = req.body;
 
       if (!username) {
@@ -4398,24 +4112,21 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       const lastReset = user.lastQuestionResetDate ? new Date(user.lastQuestionResetDate) : new Date();
       const isNewMonth = now.getMonth() !== lastReset.getMonth() || now.getFullYear() !== lastReset.getFullYear();
 
-      if (isNewMonth) {
+      if (isNewMonth && hasMonthlyEntitlement(user, now)) {
         await storage.resetMonthlyQuestions(userId);
         const updatedUser = await storage.getUser(userId);
         return res.json({
-          limit: updatedUser?.monthlyQuestionLimit || 10,
-          remaining: updatedUser?.monthlyQuestionLimit || 10,
+          limit: updatedUser?.monthlyQuestionLimit ?? 10,
+          remaining: updatedUser?.monthlyQuestionLimit ?? 10,
+          prepaidQuestions: updatedUser?.prepaidQuestions || 0,
           used: 0,
           canAsk: true,
           resetDate: new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString()
         });
       }
 
-      const used = user.questionsUsedThisMonth || 0;
-      const limit = user.monthlyQuestionLimit || 10;
-      const prepaid = user.prepaidQuestions || 0;
+      const { used, limit, prepaid, subscriptionRemaining, totalRemaining } = paidQuestionBalance(user, now);
       const isTrial = user.subscriptionStatus === 'trial';
-      const subscriptionRemaining = Math.max(0, limit - used);
-      const totalRemaining = prepaid + subscriptionRemaining;
       
       res.json({
         limit,
@@ -4476,7 +4187,7 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       const selectedPack = packConfig[pack];
 
       // Crear sesión de Stripe para pago único
-      const session = await stripe.checkout.sessions.create({
+      const session = await (await checkoutService()).create(userId, CHECKOUT_PRODUCTS[pack], {
         mode: "payment",
         line_items: [
           {
@@ -4503,11 +4214,7 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       
       res.json({ url: session.url });
     } catch (error: any) {
-      console.error('Error al crear sesión de compra:', error);
-      res.status(500).json({ 
-        error: 'Error al procesar la compra',
-        details: error.message 
-      });
+      return checkoutFailure(res, error);
     }
   });
 
@@ -4531,53 +4238,12 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
   // 🚀 CRITICAL: Auto-activation by email (NEVER FAILS)
   app.post("/api/auto-activate-by-email", async (req, res) => {
     try {
-      const { email } = req.body;
-
-      if (!email) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Email requerido" 
-        });
+      if (!req.session.userId) return res.status(401).json({ message: "Usuario no autenticado" });
+      const user = await storage.getUser(req.session.userId);
+      if (user?.subscriptionStatus === 'active') {
+        return res.json({ success: true, message: "Tu cuenta ya está activa." });
       }
-
-      console.log("=== AUTO ACTIVATION BY EMAIL ===");
-      console.log("Email:", email);
-
-      // Find user by email
-      const allUsers = await storage.getAllUsers();
-      const user = allUsers.find(u => u.email === email);
-
-      if (!user) {
-        return res.status(404).json({ 
-          success: false, 
-          message: "Usuario no encontrado" 
-        });
-      }
-
-      // Check if already active
-      if (user.subscriptionStatus === 'active') {
-        return res.json({ 
-          success: true, 
-          message: "Usuario ya activo",
-          user: { username: user.username, email: user.email }
-        });
-      }
-
-      // Activate user - no questions asked (payment was verified externally)
-      await storage.updateUserSubscription(user.id, {
-        status: "active",
-        plan: "basic",
-        subscriptionId: `auto_${Date.now()}`,
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
-      });
-
-      console.log("✅ User auto-activated:", user.username);
-
-      res.json({ 
-        success: true, 
-        message: `Cuenta ${user.username} activada automáticamente`,
-        user: { username: user.username, email: user.email }
-      });
+      return res.status(402).json({ success: false, message: "Se requiere un pago verificado vinculado a tu cuenta." });
 
     } catch (error) {
       console.error("Auto activation error:", error);
@@ -4592,173 +4258,22 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
   app.post("/api/stripe/activate-by-session", async (req, res) => {
     try {
       const { sessionId } = req.body;
-
-      if (!sessionId) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Session ID requerido" 
-        });
-      }
-
-      console.log("=== STRIPE ACTIVATION BY SESSION ===");
-      console.log("Session ID:", sessionId);
-
-      // For demonstration, we'll activate based on recent payment evidence
-      // In real production, you'd validate this sessionId with Stripe API
-      // For now, find the most recent unpaid user and activate them
-      const allUsers = await storage.getAllUsers();
-      const unpaidUsers = allUsers.filter(user => 
-        user.subscriptionStatus !== 'active' && 
-        user.hasCompletedPayment !== true
-      );
-
-      if (unpaidUsers.length > 0) {
-        const userToActivate = unpaidUsers[unpaidUsers.length - 1]; // Most recent
-        
-        console.log("Activating most recent user:", userToActivate.username);
-        
-        await storage.updateUserSubscription(userToActivate.id, {
-          status: "active",
-          plan: "basic",
-          subscriptionId: sessionId,
-          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
-        });
-
-        console.log("✅ User activated successfully:", userToActivate.username);
-
-        res.json({ 
-          success: true, 
-          message: `Cuenta ${userToActivate.username} activada exitosamente`,
-          user: { username: userToActivate.username, email: userToActivate.email }
-        });
-        return;
-      }
-
-      // If no unpaid users, just return success (maybe already activated)
-      res.json({ 
-        success: true, 
-        message: "Activación completada" 
-      });
-
+      if (!req.session.userId) return res.status(401).json({ success: false, message: "Inicia sesión para comprobar tu pago." });
+      return res.json(await (await checkoutService()).confirm(sessionId, req.session.userId));
     } catch (error) {
-      console.error("Stripe session activation error:", error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Error en activación por sesión" 
-      });
+      return checkoutFailure(res, error);
     }
   });
 
 
-  // 🧪 TEST: Webhook sin verificación de firma para debugging
+  // Retired public debug activators: never grant access without verified payment.
   app.post("/api/test/stripe-webhook", async (req, res) => {
-    try {
-      console.log("🧪 TEST WEBHOOK: Evento recibido:", req.body?.type);
-      
-      const event = req.body;
-      
-      if (event.type === 'checkout.session.completed') {
-        const eventData = event.data.object;
-        const customerEmail = eventData.customer_details?.email || 
-                             eventData.customer_email ||
-                             eventData.receipt_email;
-        
-        console.log("🧪 TEST WEBHOOK: Email del cliente:", customerEmail);
-        
-        if (customerEmail) {
-          const users = await storage.getAllUsers();
-          const user = users.find(u => u.email === customerEmail);
-          
-          if (user) {
-            console.log("🧪 TEST WEBHOOK: Usuario encontrado:", user.username, "Status:", user.subscriptionStatus);
-            
-            const updatedUser = await storage.updateUserSubscription(user.id, {
-              status: 'active',
-              plan: 'basic',
-              subscriptionId: `test_webhook_${Date.now()}`,
-              expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-            });
-            
-            console.log("🧪 TEST WEBHOOK: Usuario actualizado:", updatedUser.subscriptionStatus);
-            
-            res.json({ 
-              success: true, 
-              activated: true,
-              user: updatedUser.username,
-              newStatus: updatedUser.subscriptionStatus
-            });
-            return;
-          } else {
-            console.log("🧪 TEST WEBHOOK: Usuario no encontrado para email:", customerEmail);
-            res.json({ 
-              success: false, 
-              error: "Usuario no encontrado",
-              searchedEmail: customerEmail,
-              availableEmails: users.filter(u => u.email).map(u => u.email)
-            });
-            return;
-          }
-        }
-      }
-      
-      res.json({ success: false, error: "Evento no manejado o sin email" });
-      
-    } catch (error: any) {
-      console.error("🧪 TEST WEBHOOK ERROR:", error);
-      res.json({ success: false, error: error.message });
-    }
+    return res.status(410).json({ success: false, message: "Ruta de activación de pruebas retirada." });
   });
 
   // 🧪 TEST: Endpoint para probar activación de usuarios directamente
   app.post("/api/test/activate-user", async (req, res) => {
-    try {
-      const { email } = req.body;
-      
-      if (!email) {
-        return res.status(400).json({ error: "Email requerido" });
-      }
-      
-      console.log("🧪 TEST: Intentando activar usuario con email:", email);
-      
-      // Buscar usuario por email
-      const users = await storage.getAllUsers();
-      const user = users.find(u => u.email === email);
-      
-      if (!user) {
-        console.log("❌ TEST: Usuario no encontrado");
-        return res.status(404).json({ 
-          error: "Usuario no encontrado",
-          availableEmails: users.filter(u => u.email).map(u => u.email)
-        });
-      }
-      
-      console.log("✅ TEST: Usuario encontrado:", user.username, "Status actual:", user.subscriptionStatus);
-      
-      // Activar suscripción
-      const updatedUser = await storage.updateUserSubscription(user.id, {
-        status: 'active',
-        plan: 'basic',
-        subscriptionId: `test_${Date.now()}`,
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-      });
-      
-      console.log("✅ TEST: Usuario actualizado:", updatedUser.subscriptionStatus);
-      
-      res.json({ 
-        success: true, 
-        user: {
-          id: updatedUser.id,
-          username: updatedUser.username,
-          email: updatedUser.email,
-          subscriptionStatus: updatedUser.subscriptionStatus,
-          hasCompletedPayment: updatedUser.hasCompletedPayment
-        }
-      });
-      
-    } catch (error: any) {
-      console.error("❌ TEST: Error en activación:", error);
-      res.status(500).json({ error: error.message });
-    }
+    return res.status(410).json({ success: false, message: "Ruta de activación de pruebas retirada." });
   });
 
   // Text-to-Speech endpoint using OpenAI TTS

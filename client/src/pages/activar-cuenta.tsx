@@ -1,3 +1,4 @@
+import { requireCheckoutLogin } from "@/lib/checkout-navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -144,6 +145,10 @@ export default function ActivarCuenta() {
 
       const data = await response.json();
 
+      if (response.status === 401) {
+        requireCheckoutLogin("/activar-cuenta");
+        return;
+      }
       if (data.url) {
         console.log('✅ Redirecting to Stripe checkout:', data.url);
         window.location.href = data.url;
@@ -167,7 +172,7 @@ export default function ActivarCuenta() {
     setCreditLoading(true);
     
     try {
-      const pack = packId === 'basic_15' ? 'basic' : 'premium';
+      const pack = packId === 'basic_15' ? 'pack15' : 'pack35';
       
       const response = await fetch('/api/purchase-credits', {
         method: 'POST',
@@ -180,6 +185,10 @@ export default function ActivarCuenta() {
 
       const data = await response.json();
 
+      if (response.status === 401) {
+        requireCheckoutLogin("/activar-cuenta");
+        return;
+      }
       if (data.url) {
         console.log('✅ Redirecting to Stripe checkout for credits:', data.url);
         window.location.href = data.url;

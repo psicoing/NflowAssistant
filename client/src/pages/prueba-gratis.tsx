@@ -1,3 +1,4 @@
+import { takeCheckoutReturn } from "@/lib/checkout-navigation";
 import { useEffect, useState, type FormEvent } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -280,6 +281,11 @@ export default function PruebaGratis() {
   };
 
   const finishTrial = async (isNewTrial: boolean) => {
+    const checkoutReturn = takeCheckoutReturn();
+    if (checkoutReturn) {
+      window.location.href = checkoutReturn;
+      return;
+    }
     if (isNewTrial) {
       trackEvent("registration_succeeded", {
         registration_type: "free_trial",

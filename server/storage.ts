@@ -1,3 +1,4 @@
+import { hasMonthlyEntitlement, paidQuestionBalance } from "./paid-question-balance";
 import { 
   users, conversations, messages, resources, stripeTransactions, shopifyTransactions, partners, partnerReferrals, books, sorteoEntries, individualRegistrations, empresaRegistrations, emailLeads,
   type User, type InsertUser, 
@@ -496,20 +497,16 @@ export class DatabaseStorage implements IStorage {
     const lastReset = user.lastQuestionResetDate ? new Date(user.lastQuestionResetDate) : new Date();
     const isNewMonth = now.getMonth() !== lastReset.getMonth() || now.getFullYear() !== lastReset.getFullYear();
 
-    if (isNewMonth) {
+    if (isNewMonth && hasMonthlyEntitlement(user, now)) {
       await this.resetMonthlyQuestions(userId);
       return { 
         canAsk: true, 
-        remaining: (user.monthlyQuestionLimit || 10) - 1, 
-        limit: user.monthlyQuestionLimit || 10 
+        remaining: (user.monthlyQuestionLimit ?? 10) + (user.prepaidQuestions || 0) - 1,
+        limit: user.monthlyQuestionLimit ?? 10
       };
     }
 
-    const used = user.questionsUsedThisMonth || 0;
-    const limit = user.monthlyQuestionLimit || 10;
-    const prepaid = user.prepaidQuestions || 0;
-    const subscriptionRemaining = Math.max(0, limit - used);
-    const totalRemaining = prepaid + subscriptionRemaining;
+    const { limit, totalRemaining } = paidQuestionBalance(user, now);
 
     return {
       canAsk: totalRemaining > 0,

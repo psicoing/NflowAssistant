@@ -11,6 +11,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { trackEvent } from "@/lib/analytics";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import { requireCheckoutLogin, requireCheckoutRegistration } from "@/lib/checkout-navigation";
 
 const PLANES_INDIVIDUAL = [
   { id: "basico", label: "10 preguntas", price: "€2.99" },
@@ -28,7 +29,10 @@ const PLANES_MEDIANA = [
 export default function Registro() {
   // Individual plan form state
   const PLAN_TO_PACK: Record<string, string> = { basico: "pack10", pro: "pack20", anual: "pack100" };
-  const [form, setForm] = useState({ email: "", plan: "basico" });
+  const [form, setForm] = useState(() => {
+    const plan = new URLSearchParams(window.location.search).get("plan") || "basico";
+    return { plan: ["basico", "pro", "anual"].includes(plan) ? plan : "basico" };
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -50,7 +54,14 @@ export default function Registro() {
     setLoading(true);
     try {
       const packType = PLAN_TO_PACK[form.plan] || "pack10";
-      const res = await apiRequest("POST", "/api/stripe/create-pack-session", { packType, email: form.email });
+      const res = await fetch("/api/stripe/create-pack-session", {
+        method: "POST", credentials: "include", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ packType }),
+      });
+      if (res.status === 401) {
+        requireCheckoutLogin(`/registro/planes?plan=${form.plan}`);
+        return;
+      }
       const data = await res.json();
       if (data.url) {
         trackEvent("checkout_started", {
@@ -64,7 +75,7 @@ export default function Registro() {
           plan_id: form.plan,
           reason: "no_checkout_url",
         });
-        setError(data.error || "Error al crear la sesión de pago");
+        setError(data.message || data.error || "Error al crear la sesión de pago");
       }
     } catch {
       trackEvent("checkout_start_failed", {
@@ -223,16 +234,11 @@ export default function Registro() {
                     </div>
 
                     <div>
-                      <Label htmlFor="email" className="text-sm font-medium text-gray-700">Correo electrónico</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="tu@correo.com"
-                        value={form.email}
-                        onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                        required
-                        className="mt-1"
-                      />
+                      <p className="text-sm text-gray-600">
+                        La compra se vincula a tu cuenta de NUXA. Antes de pagar deberás iniciar sesión
+                        o <button type="button" onClick={() => requireCheckoutRegistration(`/registro/planes?plan=${form.plan}`)}
+                          className="text-purple-600 underline">crear tu cuenta</button>.
+                      </p>
                     </div>
 
                     {error && (

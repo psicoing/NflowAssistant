@@ -17,6 +17,16 @@ autorizadas.
 Verificar referencias del pago y titularidad antes de atribuir ingresos o
 corregir accesos. Conservar las excepciones de administración y pruebas.
 
+Las nuevas compras de NUXA deben partir de una cuenta registrada; no ofrecer
+checkout como invitado ni convertir la lista de clientes Stripe en usuarios.
+
+**Why:** El propietario autorizó cerrar la vía de pago sin cuenta para evitar
+nuevas compras que no puedan vincularse al registro de NUXA.
+
+**How to apply:** Mantener esa condición en futuros botones y recorridos de
+contratación. Los casos históricos requieren conciliación aparte, no una
+creación o activación masiva de cuentas.
+
 La atribución tampoco debe exigir que todos los pagos digan NUXA o vuelvan a
 nuxa.life: los recorridos históricos de NFLOW pueden corresponder al antecedente
 de esta app y deben investigarse, no descartarse como otra línea por el nombre.

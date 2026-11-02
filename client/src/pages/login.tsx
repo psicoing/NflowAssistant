@@ -11,6 +11,7 @@ import { LogIn, User, ShieldAlert } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { useLanguageContext } from "@/components/LanguageProvider";
 import { trackEvent } from "@/lib/analytics";
+import { hasCheckoutReturn, takeCheckoutReturn } from "@/lib/checkout-navigation";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -22,6 +23,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const { toast } = useToast();
   const { t } = useLanguageContext();
+  const checkoutPending = hasCheckoutReturn();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,6 +74,12 @@ export default function Login() {
         // Pequeño delay para asegurar que el cache se actualice
         await new Promise(resolve => setTimeout(resolve, 100));
 
+        const checkoutReturn = takeCheckoutReturn();
+        if (checkoutReturn) {
+          setLocation(checkoutReturn);
+          return;
+        }
+
         // Admin personal → intranet directa (por role o por username de seguridad)
         if (data.role === "admin" || formData.username === "rmolons") {
           setLocation("/admin/dashboard");
@@ -79,7 +87,7 @@ export default function Login() {
         }
 
         // Redirigir según estado de suscripción
-        if (data.hasCompletedPayment && data.subscriptionStatus === 'active' && data.hasActiveSubscription) {
+        if (data.hasCompletedPayment && data.hasActiveSubscription) {
           console.log("Usuario con suscripción activa, redirigiendo al chat");
           setLocation("/chat");
         } else {
@@ -176,6 +184,14 @@ export default function Login() {
             <CardDescription className="text-gray-400">
               Accede a tu cuenta de NUXA
             </CardDescription>
+            {checkoutPending && (
+              <p className="text-sm text-orange-200 mt-3">
+                Antes de pagar, inicia sesión. Si todavía no tienes cuenta,{" "}
+                <button type="button" onClick={() => setLocation("/prueba-gratis")} className="underline">
+                  crea tu cuenta de NUXA
+                </button>. Después volverás al plan elegido, sin iniciar ningún cobro automáticamente.
+              </p>
+            )}
             
             {/* Password Security Notice */}
             <div className="mt-4 p-4 bg-gradient-to-r from-emerald-900/40 to-teal-900/40 border border-emerald-600/50 rounded-xl">
@@ -258,7 +274,7 @@ export default function Login() {
               <div className="text-center text-gray-400">
                 <button
                   type="button"
-                  onClick={() => setLocation("/registro")}
+                  onClick={() => setLocation(hasCheckoutReturn() ? "/prueba-gratis" : "/registro")}
                   className="text-orange-400 hover:text-orange-300 hover:underline flex items-center justify-center gap-1 mx-auto"
                 >
                   <span>❓</span> {t('login.access')}
