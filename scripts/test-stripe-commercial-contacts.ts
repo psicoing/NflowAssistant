@@ -4,6 +4,7 @@ import { Pool } from "@neondatabase/serverless";
 import { pool as applicationPool } from "../server/db";
 import { normalizeStripeContactEmails, registerStripeCommercialContactRoutes } from "../server/stripe-commercial-contacts";
 import { createStripeUnsubscribeToken, verifyStripeUnsubscribeToken, renderStripeCommercialLetter } from "../server/stripe-commercial-letter";
+import { testStripeManualDispatch } from "./test-stripe-manual-dispatch";
 
 const normalized = normalizeStripeContactEmails([
   { email: " Example@Example.invalid " }, { email: "example@example.invalid" },
@@ -32,6 +33,9 @@ try {
       id serial PRIMARY KEY,email text NOT NULL UNIQUE,
       imported_at timestamptz NOT NULL DEFAULT now(),last_seen_at timestamptz NOT NULL DEFAULT now());
     CREATE TABLE stripe_commercial_letter (id integer PRIMARY KEY,subject text NOT NULL,body text NOT NULL,updated_at timestamptz NOT NULL DEFAULT now());
+    CREATE TABLE stripe_commercial_authorizations (id serial PRIMARY KEY,contact_id integer NOT NULL,email text NOT NULL,action text NOT NULL,source text,evidence text,obtained_at timestamptz,recorded_by integer,recorded_at timestamptz NOT NULL DEFAULT now());
+    CREATE TABLE stripe_commercial_dispatches (id text PRIMARY KEY,language text NOT NULL,subject text NOT NULL,body text NOT NULL,status text NOT NULL DEFAULT 'prepared',created_by integer,created_at timestamptz NOT NULL DEFAULT now());
+    CREATE TABLE stripe_commercial_recipients (id serial PRIMARY KEY,dispatch_id text NOT NULL,contact_id integer NOT NULL,email text NOT NULL,dedupe_key text NOT NULL UNIQUE,status text NOT NULL DEFAULT 'pending',reason text,message_id text,attempted_at timestamptz);
     CREATE TABLE empresa_suppression_list (suppression_type text,normalized_value text,UNIQUE(suppression_type,normalized_value));
     CREATE TABLE users (email text,marketing_opted_out boolean);
     CREATE TABLE email_leads (email text,consent_marketing boolean,unsubscribed_at timestamptz);
@@ -49,6 +53,9 @@ try {
   let providerCalls = 0;
   let providerFailure = false;
   let databaseMissing = false;
+  const deliveryState: {
+    messages: any[]; mode: string; beforePace?: () => Promise<void>; duringDelivery?: () => Promise<void>;
+  } = { messages: [], mode: "ok" };
   const database = {
     query: (...args: any[]) => {
       if (databaseMissing) throw Object.assign(new Error("Missing"), { code: "42P01" });
@@ -62,6 +69,20 @@ try {
   registerStripeCommercialContactRoutes(web, {
     database: database as any,
     signingSecret: () => "offline-fixture-secret",
+    pace: async send => {
+      const before = deliveryState.beforePace;
+      deliveryState.beforePace = undefined;
+      if (before) await before();
+      return send();
+    },
+    delivery: async message => {
+      assert(message.to.endsWith("@example.invalid"), "No real recipients allowed in tests");
+      deliveryState.messages.push(message);
+      if (deliveryState.duringDelivery) await deliveryState.duringDelivery();
+      if (deliveryState.mode === "quota") throw Object.assign(new Error("Daily sending quota reached"), { code: 429 });
+      if (deliveryState.mode === "uncertain") throw new Error("Mock network interruption");
+      return { statusCode: 202, messageId: `mock${deliveryState.messages.length}.suffix` };
+    },
     listCustomers: async () => {
       providerCalls++;
       if (providerFailure) throw new Error("Mock provider failed; must not leak");
@@ -110,7 +131,7 @@ try {
   const initialLetter = await (await request("/letter", { headers })).json();
   assert(initialLetter.body.includes("contratar"));
   assert.equal(initialLetter.updatedAt, null);
-  assert.equal(initialLetter.commercialSendingEnabled, false);
+  assert.equal(initialLetter.commercialSendingEnabled, true);
   assert.equal((await request("/letter", { method: "PUT", headers: { ...headers, origin: "https://attacker.invalid" }, body: JSON.stringify({ subject: "Test", body: "Test" }) })).status, 403);
   assert.equal((await request("/letter", { method: "PUT", headers, body: JSON.stringify({ subject: "Bad\r\nBcc: x", body: "Test" }) })).status, 400);
   assert.equal((await request("/letter", { method: "PUT", headers, body: JSON.stringify({ subject: "Test", body: "Test", footer: "" }) })).status, 400);
@@ -169,6 +190,7 @@ try {
   assert.equal(failure.status, 503);
   assert(!(await failure.text()).includes("Mock provider"));
   assert.equal((await client.query("SELECT count(*)::int AS n FROM stripe_commercial_contacts")).rows[0].n, 7);
+  await testStripeManualDispatch({ request, publicRequest, headers, client, deliveryState });
   console.log("PASS: admin auth, same-origin checks, draft persistence/validation, mandatory footer, escaped preview, signed email-bound unsubscribe, GET/demo non-mutating, forged tokens rejected, idempotent POST, opt-out across commercial sources, deduplicated reimport keeps suppression, no consent granted, provider failure safe. Synthetic development schema only; zero real Stripe requests, emails or production writes.");
 } finally {
   if (server) await new Promise<void>(resolve => server!.close(() => resolve()));

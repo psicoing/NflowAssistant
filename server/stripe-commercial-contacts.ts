@@ -4,6 +4,8 @@ import Stripe from "stripe";
 import { z } from "zod";
 import { pool } from "./db";
 import { registerStripeLetterRoutes, isSameOriginJson } from "./stripe-commercial-letter";
+import { stripeSuppressionCondition, stripeAuthorizationCondition } from "./stripe-commercial-eligibility";
+import { registerStripeDispatchRoutes, type StripeDispatchDependencies } from "./stripe-commercial-dispatch";
 
 const emailSchema = z.string().email().max(254);
 type CustomerEmail = { email?: string | null };
@@ -28,28 +30,14 @@ export function normalizeStripeContactEmails(customers: CustomerEmail[]) {
   };
 }
 
-// Evaluate existing opt-outs at read time. Import/reimport cannot undo them.
-const suppressionCondition = `(
-  EXISTS (SELECT 1 FROM empresa_suppression_list s
-    WHERE s.suppression_type='email' AND lower(trim(s.normalized_value))=c.email)
-  OR EXISTS (SELECT 1 FROM users u WHERE lower(trim(u.email))=c.email AND u.marketing_opted_out IS TRUE)
-  OR EXISTS (SELECT 1 FROM email_leads l WHERE lower(trim(l.email))=c.email AND (l.consent_marketing IS FALSE OR l.unsubscribed_at IS NOT NULL))
-  OR EXISTS (SELECT 1 FROM empresa_contacts e WHERE lower(trim(e.email))=c.email AND e.opted_out IS TRUE)
-  OR EXISTS (SELECT 1 FROM institution_contacts i WHERE lower(trim(i.email))=c.email AND i.opted_out IS TRUE)
-  OR EXISTS (SELECT 1 FROM mutua_contacts m WHERE lower(trim(m.email))=c.email AND m.opted_out IS TRUE)
-  OR EXISTS (SELECT 1 FROM campaign_email_events e WHERE lower(trim(e.contact_email))=c.email
-    AND e.kind IN ('unsubscribed','complained','bounced','blocked'))
-)`;
-
 export function stripeContactView(row: {
-  id: number; email: string; imported_at: string | Date; last_seen_at: string | Date; suppressed: boolean;
+  id: number; email: string; imported_at: string | Date; last_seen_at: string | Date; suppressed: boolean; authorized?: boolean;
 }) {
   return {
     id: row.id, email: row.email, source: "stripe" as const,
-    status: row.suppressed ? "suppressed" as const : "pending_review" as const,
+    status: row.suppressed ? "suppressed" as const : row.authorized ? "authorized" as const : "pending_review" as const,
     importedAt: row.imported_at, lastSeenAt: row.last_seen_at,
-    // No endpoint grants consent or adds these records to a campaign audience.
-    canSend: false as const,
+    canSend: !row.suppressed && row.authorized === true,
   };
 }
 
@@ -74,10 +62,14 @@ export function registerStripeCommercialContactRoutes(app: Express, dependencies
   database?: Pick<Pool, "query" | "connect">;
   listCustomers?: () => Promise<CustomerEmail[]>;
   signingSecret?: () => string;
+  delivery?: StripeDispatchDependencies["delivery"];
+  pace?: StripeDispatchDependencies["pace"];
 }) {
   const database = dependencies?.database || pool;
   const listCustomers = dependencies?.listCustomers || listCustomerEmails;
   registerStripeLetterRoutes(app, { database, signingSecret: dependencies?.signingSecret });
+  registerStripeDispatchRoutes(app, { database, signingSecret: dependencies?.signingSecret,
+    delivery: dependencies?.delivery, pace: dependencies?.pace });
   const fail = (res: any, error: any) => {
     if (error?.code === "42P01") {
       return res.status(503).json({
@@ -97,13 +89,15 @@ export function registerStripeCommercialContactRoutes(app: Express, dependencies
     res.setHeader("Cache-Control", "no-store");
     try {
       const result = await database.query(`
-        SELECT c.id,c.email,c.imported_at,c.last_seen_at,${suppressionCondition} AS suppressed
+        SELECT c.id,c.email,c.imported_at,c.last_seen_at,${stripeSuppressionCondition} AS suppressed,
+          ${stripeAuthorizationCondition} AS authorized
         FROM stripe_commercial_contacts c ORDER BY c.email
       `);
       const contacts = result.rows.map(stripeContactView);
       const suppressed = contacts.filter(c => c.status === "suppressed").length;
+      const sendable = contacts.filter(c => c.canSend).length;
       res.json({ contacts, summary: {
-        total: contacts.length, pendingReview: contacts.length - suppressed, suppressed, sendable: 0,
+        total: contacts.length, pendingReview: contacts.length - suppressed - sendable, suppressed, sendable,
       } });
     } catch (error) { fail(res, error); }
   });

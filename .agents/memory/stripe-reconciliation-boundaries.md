@@ -31,8 +31,20 @@ sin resolver primero la autorización aplicable.
 La carta para estos contactos debe promover contratar NUXA, no registrarse
 en Stripe. La baja es de comunicaciones comerciales, no de cuentas ni pagos.
 
-**Why:** El usuario aclaró expresamente el objetivo de la carta y aceptó
-mantenerla como borrador mientras los envíos continúan bloqueados.
+**Why:** El usuario aclaró expresamente el objetivo de la carta; después pidió
+dejar preparados los envíos para ejecutarlos él mismo y que la carta esté
+en inglés y español.
 
 **How to apply:** Mantener el destino de contratación y el pie obligatorio
 separados del texto editable; una vista previa no debe dar de baja a nadie.
+
+Los envíos a contactos Stripe deben ser manuales, iniciados y confirmados por el
+propietario desde el panel, con cartas en español e inglés. La petición de
+preparar el servicio no autoriza al agente a enviar pruebas o campañas reales.
+
+**Why:** El usuario dijo «el que hace los envíos soy [yo]» y «la carta debe estar
+en inglés y español».
+
+**How to apply:** Mantener la revisión de destinatarios e idioma antes de
+confirmar, sin activar envíos automáticos ni interpretar importación o pago
+como autorización comercial de los contactos.

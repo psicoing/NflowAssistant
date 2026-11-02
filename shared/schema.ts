@@ -2,7 +2,7 @@ import { pgTable, text, serial, integer, boolean, timestamp, bigint, varchar, js
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// Isolated review list: deliberately has no marketing-consent or campaign membership.
+// Import alone never confers marketing permission.
 // Schema is applied in development and reaches production only through Publish.
 export const stripeCommercialContacts = pgTable("stripe_commercial_contacts", {
   id: serial("id").primaryKey(),
@@ -17,6 +17,40 @@ export const stripeCommercialLetter = pgTable("stripe_commercial_letter", {
   subject: text("subject").notNull(),
   body: text("body").notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+// Append-only permission evidence: latest record wins, suppression always overrides.
+export const stripeCommercialAuthorizations = pgTable("stripe_commercial_authorizations", {
+  id: serial("id").primaryKey(),
+  contactId: integer("contact_id").notNull().references(() => stripeCommercialContacts.id),
+  email: text("email").notNull(),
+  action: text("action").notNull(),
+  source: text("source"),
+  evidence: text("evidence"),
+  obtainedAt: timestamp("obtained_at", { withTimezone: true }),
+  recordedBy: integer("recorded_by"),
+  recordedAt: timestamp("recorded_at", { withTimezone: true }).notNull().defaultNow(),
+});
+export const stripeCommercialDispatches = pgTable("stripe_commercial_dispatches", {
+  id: text("id").primaryKey(),
+  language: text("language").notNull(),
+  subject: text("subject").notNull(),
+  body: text("body").notNull(),
+  status: text("status").notNull().default("prepared"),
+  createdBy: integer("created_by"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+export const stripeCommercialRecipients = pgTable("stripe_commercial_recipients", {
+  id: serial("id").primaryKey(),
+  dispatchId: text("dispatch_id").notNull().references(() => stripeCommercialDispatches.id),
+  contactId: integer("contact_id").notNull().references(() => stripeCommercialContacts.id),
+  email: text("email").notNull(),
+  // Unique reservation across all batches; committed before any provider call.
+  dedupeKey: text("dedupe_key").notNull().unique(),
+  status: text("status").notNull().default("pending"),
+  reason: text("reason"),
+  messageId: text("message_id"),
+  attemptedAt: timestamp("attempted_at", { withTimezone: true }),
 });
 
 // Same dedicated shape used by connect-pg-simple; independent of user deletion.
