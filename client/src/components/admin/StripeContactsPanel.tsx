@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import StripeLetterEditor from "@/components/admin/StripeLetterEditor";
 
 type StripeContact = {
   id: number;
@@ -142,10 +143,12 @@ export default function StripeContactsPanel() {
         <div>
           <p className="text-sm font-semibold">Envío comercial bloqueado para todos los contactos</p>
           <p className="mt-0.5 text-sm leading-5 text-amber-900/80">
-            Esta sección solo permite revisar e importar direcciones. No se envían mensajes ni se concede consentimiento.
+            Esta sección permite importar, revisar direcciones y guardar borradores. No se envían mensajes ni se concede consentimiento.
           </p>
         </div>
       </div>
+
+      <StripeLetterEditor />
 
       {error && (
         <div role="alert" className="flex flex-col gap-3 rounded-lg border border-destructive/30 bg-destructive/5 p-4 sm:flex-row sm:items-start">

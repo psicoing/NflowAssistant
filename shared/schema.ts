@@ -11,6 +11,14 @@ export const stripeCommercialContacts = pgTable("stripe_commercial_contacts", {
   lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+// Persisted draft only; saving never schedules or sends a message.
+export const stripeCommercialLetter = pgTable("stripe_commercial_letter", {
+  id: integer("id").primaryKey(),
+  subject: text("subject").notNull(),
+  body: text("body").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 // Same dedicated shape used by connect-pg-simple; independent of user deletion.
 export const nuxaAuthSessions = pgTable("nuxa_auth_sessions", {
   sid: varchar("sid").primaryKey(),

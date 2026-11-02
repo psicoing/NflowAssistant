@@ -3,6 +3,7 @@ import type { Pool, PoolClient } from "@neondatabase/serverless";
 import Stripe from "stripe";
 import { z } from "zod";
 import { pool } from "./db";
+import { registerStripeLetterRoutes, isSameOriginJson } from "./stripe-commercial-letter";
 
 const emailSchema = z.string().email().max(254);
 type CustomerEmail = { email?: string | null };
@@ -32,6 +33,7 @@ const suppressionCondition = `(
   EXISTS (SELECT 1 FROM empresa_suppression_list s
     WHERE s.suppression_type='email' AND lower(trim(s.normalized_value))=c.email)
   OR EXISTS (SELECT 1 FROM users u WHERE lower(trim(u.email))=c.email AND u.marketing_opted_out IS TRUE)
+  OR EXISTS (SELECT 1 FROM email_leads l WHERE lower(trim(l.email))=c.email AND (l.consent_marketing IS FALSE OR l.unsubscribed_at IS NOT NULL))
   OR EXISTS (SELECT 1 FROM empresa_contacts e WHERE lower(trim(e.email))=c.email AND e.opted_out IS TRUE)
   OR EXISTS (SELECT 1 FROM institution_contacts i WHERE lower(trim(i.email))=c.email AND i.opted_out IS TRUE)
   OR EXISTS (SELECT 1 FROM mutua_contacts m WHERE lower(trim(m.email))=c.email AND m.opted_out IS TRUE)
@@ -71,9 +73,11 @@ async function listCustomerEmails(): Promise<CustomerEmail[]> {
 export function registerStripeCommercialContactRoutes(app: Express, dependencies?: {
   database?: Pick<Pool, "query" | "connect">;
   listCustomers?: () => Promise<CustomerEmail[]>;
+  signingSecret?: () => string;
 }) {
   const database = dependencies?.database || pool;
   const listCustomers = dependencies?.listCustomers || listCustomerEmails;
+  registerStripeLetterRoutes(app, { database, signingSecret: dependencies?.signingSecret });
   const fail = (res: any, error: any) => {
     if (error?.code === "42P01") {
       return res.status(503).json({
@@ -108,16 +112,8 @@ export function registerStripeCommercialContactRoutes(app: Express, dependencies
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
     res.setHeader("Cache-Control", "no-store");
     // This browser-only mutation must be same-origin JSON, not a cross-site form.
-    if (!req.is("application/json") || req.get("sec-fetch-site") === "cross-site") {
+    if (!isSameOriginJson(req)) {
       return res.status(403).json({ message: "Solicitud no permitida" });
-    }
-    const origin = req.get("origin");
-    if (origin) {
-      try {
-        if (new URL(origin).host !== req.get("host")) {
-          return res.status(403).json({ message: "Solicitud no permitida" });
-        }
-      } catch { return res.status(403).json({ message: "Solicitud no permitida" }); }
     }
     let client: PoolClient | undefined;
     try {

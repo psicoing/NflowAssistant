@@ -27,3 +27,12 @@ sin considerar que un pago autoriza publicidad ni enviar una campaña.
 **How to apply:** Una importación o reimportación nunca concede consentimiento.
 No conectar esta audiencia a envíos ni usarla para solicitar permiso por correo
 sin resolver primero la autorización aplicable.
+
+La carta para estos contactos debe promover contratar NUXA, no registrarse
+en Stripe. La baja es de comunicaciones comerciales, no de cuentas ni pagos.
+
+**Why:** El usuario aclaró expresamente el objetivo de la carta y aceptó
+mantenerla como borrador mientras los envíos continúan bloqueados.
+
+**How to apply:** Mantener el destino de contratación y el pie obligatorio
+separados del texto editable; una vista previa no debe dar de baja a nadie.
