@@ -2,8 +2,18 @@
 
 ## Resultado
 
-La causa del HTTP 503 en producción **todavía no está confirmada**. No se
-debe presentar esta intervención como una importación real completada.
+La captura posterior a la publicación confirma un fallo de autenticación de
+Stripe en el servidor publicado: el panel muestra «Stripe rechaza la credencial
+del servidor». No se debe presentar esta intervención como una importación real
+completada.
+
+Una nueva consulta de solo lectura desde el workspace autentica correctamente
+y devuelve un cliente de modo real. La herramienta de configuración confirma
+que STRIPE_SECRET_KEY figura presente tanto en desarrollo como en producción,
+pero esa presencia no permite comparar ni acreditar los valores efectivos.
+No se han leído ni mostrado claves. Queda por corregir la credencial efectiva
+del despliegue mediante su configuración segura y republicar; no se ha
+determinado si la rechazada es antigua, revocada o corresponde a otra configuración.
 
 Comprobaciones de solo lectura:
 
@@ -51,6 +61,7 @@ solo de consulta; el resto de pruebas usó contactos sintéticos.
 
 ## Paso pendiente
 
-Publicar el diagnóstico y observar el próximo intento de importación iniciado
-por el administrador. Corregir según la categoría y fase obtenidas; no sustituir
-credenciales ni modificar la base de producción por una suposición.
+Actualizar STRIPE_SECRET_KEY en la configuración segura de producción con una
+credencial válida de la cuenta real de Stripe y republicar. Después confirmar
+que el siguiente intento de importación iniciado por el administrador funciona.
+No cambiar la clave del webhook ni modificar cuentas, pagos o suscripciones.
