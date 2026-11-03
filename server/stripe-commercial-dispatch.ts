@@ -4,13 +4,15 @@ import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
 import type { StripeDispatch } from "@shared/stripe-commercial-api";
 import { createStripeUnsubscribeToken, isSameOriginJson, renderStripeCommercialLetter } from "./stripe-commercial-letter";
-import { stripeEligibilitySelect } from "./stripe-commercial-eligibility";
+import { commercialEligibilitySelect } from "./stripe-commercial-eligibility";
+import { commercialAudience, type CommercialAudienceId } from "@shared/commercial-audience";
 import { mustStopCampaign, paceCommercialEmail } from "./campaign-email-control";
 import { normalizeMailMessageId, safeMailError } from "./campaign-email-events";
 import { registerStripeAuthorizationRoutes } from "./stripe-commercial-permission";
 
 type DeliveryMessage = { to: string; subject: string; text: string; html: string };
 export type StripeDispatchDependencies = {
+  audienceId?: CommercialAudienceId;
   database: Pick<Pool, "query" | "connect">;
   signingSecret?: () => string;
   delivery?: (message: DeliveryMessage) => Promise<{ statusCode: number; messageId?: string }>;
@@ -42,12 +44,15 @@ async function sendViaSendGrid(message: DeliveryMessage) {
 }
 
 export function registerStripeDispatchRoutes(app: Express, deps: StripeDispatchDependencies) {
+  const audience = commercialAudience(deps.audienceId);
+  const tables = audience.tables;
+  const eligibility = commercialEligibilitySelect(tables.contacts as "stripe_commercial_contacts" | "probadores_commercial_contacts");
   const db = deps.database;
   const secret = deps.signingSecret || (() => process.env.SESSION_SECRET || "");
   const delivery = deps.delivery || sendViaSendGrid;
   const pace = deps.pace || (<T>(send: () => Promise<T>) => paceCommercialEmail(db, send));
-  const base = "/api/admin/stripe-contacts/dispatches";
-  registerStripeAuthorizationRoutes(app, db);
+  const base = `${audience.base}/dispatches`;
+  registerStripeAuthorizationRoutes(app, db, audience.id);
 
   // Only this route subtree: do not affect other admin routes or webhook parsers.
   app.use(base, (req, res, next) => {
@@ -58,21 +63,21 @@ export function registerStripeDispatchRoutes(app: Express, deps: StripeDispatchD
   });
   const readDispatch = async (id: string): Promise<StripeDispatch | undefined> => {
     const result = await db.query(`SELECT id,language,subject,body,status,created_at AS "createdAt"
-      FROM stripe_commercial_dispatches WHERE id=$1`, [id]);
+      FROM ${tables.dispatches} WHERE id=$1`, [id]);
     if (!result.rows[0]) return;
     const recipients = await db.query(`SELECT contact_id AS "contactId",email,status,reason,message_id AS "messageId"
-      FROM stripe_commercial_recipients WHERE dispatch_id=$1 ORDER BY id`, [id]);
+      FROM ${tables.recipients} WHERE dispatch_id=$1 ORDER BY id`, [id]);
     return { ...result.rows[0], recipients: recipients.rows };
   };
   const stopPending = async (id: string, reason: string) => {
-    await db.query(`UPDATE stripe_commercial_recipients SET status='skipped',reason=$2,
+    await db.query(`UPDATE ${tables.recipients} SET status='skipped',reason=$2,
       dedupe_key='not-attempted:'||id::text
       WHERE dispatch_id=$1 AND status='pending'`, [id, reason]);
   };
 
   app.get(base, async (_req, res) => {
     try {
-      const ids = await db.query("SELECT id FROM stripe_commercial_dispatches ORDER BY created_at DESC LIMIT 20");
+      const ids = await db.query(`SELECT id FROM ${tables.dispatches} ORDER BY created_at DESC LIMIT 20`);
       const dispatches = [];
       for (const row of ids.rows) dispatches.push(await readDispatch(row.id));
       res.json({ dispatches });
@@ -96,25 +101,25 @@ export function registerStripeDispatchRoutes(app: Express, deps: StripeDispatchD
       client = await db.connect();
       await client.query("BEGIN");
       // Serialize preparation to avoid competing reservations of the same content.
-      await client.query("SELECT pg_advisory_xact_lock(hashtext('stripe-commercial-prepare'))");
-      const eligible = await client.query(`${stripeEligibilitySelect} WHERE c.id=ANY($1::int[])`, [contactIds]);
+      await client.query("SELECT pg_advisory_xact_lock(hashtext($1))", [`${audience.id}-commercial-prepare`]);
+      const eligible = await client.query(`${eligibility} WHERE c.id=ANY($1::int[])`, [contactIds]);
       if (eligible.rows.length !== contactIds.length || eligible.rows.some(c => c.suppressed || !c.authorized)) {
         await client.query("ROLLBACK");
         return res.status(409).json({ message: "Algún contacto no tiene autorización registrada o está suprimido. Actualiza la lista." });
       }
-      const letter = await client.query("SELECT subject,body FROM stripe_commercial_letter WHERE id=$1", [language === "es" ? 1 : 2]);
+      const letter = await client.query(`SELECT subject,body FROM ${tables.letter} WHERE id=$1`, [language === "es" ? 1 : 2]);
       if (!letter.rows[0]) {
         await client.query("ROLLBACK");
         return res.status(409).json({ message: "Guarda primero la carta en el idioma elegido." });
       }
       const { subject, body } = letter.rows[0];
       const id = randomUUID();
-      await client.query(`INSERT INTO stripe_commercial_dispatches(id,language,subject,body,created_by)
+      await client.query(`INSERT INTO ${tables.dispatches}(id,language,subject,body,created_by)
         VALUES($1,$2,$3,$4,$5)`, [id, language, subject, body, req.session.userId || null]);
       for (const contact of eligible.rows) {
         // Identical content cannot be sent twice, including across new batches.
         const key = createHash("sha256").update(JSON.stringify([contact.id, contact.email, language, subject, body])).digest("hex");
-        const inserted = await client.query(`INSERT INTO stripe_commercial_recipients(dispatch_id,contact_id,email,dedupe_key)
+        const inserted = await client.query(`INSERT INTO ${tables.recipients}(dispatch_id,contact_id,email,dedupe_key)
           VALUES($1,$2,$3,$4) ON CONFLICT(dedupe_key) DO NOTHING RETURNING id`, [id, contact.id, contact.email, key]);
         if (!inserted.rows.length) {
           await client.query("ROLLBACK");
@@ -132,7 +137,7 @@ export function registerStripeDispatchRoutes(app: Express, deps: StripeDispatchD
   app.post(`${base}/:id/cancel`, async (req, res) => {
     if (!validId(req.params.id)) return res.status(400).json({ message: "Lote no válido." });
     try {
-      await db.query(`UPDATE stripe_commercial_dispatches SET status='stopped'
+      await db.query(`UPDATE ${tables.dispatches} SET status='stopped'
         WHERE id=$1 AND status IN ('prepared','running')`, [req.params.id]);
       await stopPending(req.params.id, "Detenido por el administrador; no enviado.");
       const dispatch = await readDispatch(req.params.id);
@@ -150,31 +155,31 @@ export function registerStripeDispatchRoutes(app: Express, deps: StripeDispatchD
       const signingKey = secret();
       if (!signingKey) return res.status(503).json({ message: "La firma de bajas no está disponible. No se ha iniciado el envío." });
       // Only one request may take ownership. Never resume running/ambiguous work.
-      const claimed = await db.query(`UPDATE stripe_commercial_dispatches SET status='running'
+      const claimed = await db.query(`UPDATE ${tables.dispatches} SET status='running'
         WHERE id=$1 AND status='prepared' RETURNING id`, [id]);
       const dispatch = await readDispatch(id);
       if (!dispatch) return res.status(404).json({ message: "Lote no encontrado." });
       if (!claimed.rows.length) return res.json(dispatch);
       for (const recipient of dispatch.recipients) {
         const result = await pace(async () => {
-          const state = await db.query("SELECT status FROM stripe_commercial_dispatches WHERE id=$1", [id]);
+          const state = await db.query(`SELECT status FROM ${tables.dispatches} WHERE id=$1`, [id]);
           if (state.rows[0]?.status !== "running") return null;
           // Recheck after pacing, immediately before committing the attempt.
-          const allowed = await db.query(`${stripeEligibilitySelect} WHERE c.id=$1`, [recipient.contactId]);
+          const allowed = await db.query(`${eligibility} WHERE c.id=$1`, [recipient.contactId]);
           const contact = allowed.rows[0];
           if (!contact || contact.email !== recipient.email || contact.suppressed || !contact.authorized) {
-            await db.query(`UPDATE stripe_commercial_recipients SET status='skipped',reason=$3,
+            await db.query(`UPDATE ${tables.recipients} SET status='skipped',reason=$3,
               dedupe_key='not-attempted:'||id::text
               WHERE dispatch_id=$1 AND contact_id=$2 AND status='pending'`,
             [id, recipient.contactId, "Sin autorización vigente o suprimido antes del envío."]);
             return null;
           }
-          const token = createStripeUnsubscribeToken(contact, signingKey);
-          const url = `https://nuxa.life/api/stripe-commercial/unsubscribe?token=${encodeURIComponent(token)}&language=${dispatch.language}`;
-          const mail = renderStripeCommercialLetter({ subject: dispatch.subject, body: dispatch.body }, url, dispatch.language);
-          const reserved = await db.query(`UPDATE stripe_commercial_recipients SET status='attempting',attempted_at=NOW()
+          const token = createStripeUnsubscribeToken(contact, signingKey, audience.id);
+          const url = `https://nuxa.life${audience.publicPath}?token=${encodeURIComponent(token)}&language=${dispatch.language}`;
+          const mail = renderStripeCommercialLetter({ subject: dispatch.subject, body: dispatch.body }, url, dispatch.language, audience.id);
+          const reserved = await db.query(`UPDATE ${tables.recipients} SET status='attempting',attempted_at=NOW()
             WHERE dispatch_id=$1 AND contact_id=$2 AND status='pending'
-              AND EXISTS(SELECT 1 FROM stripe_commercial_dispatches WHERE id=$1 AND status='running')
+              AND EXISTS(SELECT 1 FROM ${tables.dispatches} WHERE id=$1 AND status='running')
             RETURNING id`, [id, recipient.contactId]);
           if (!reserved.rows.length) return null;
           let outcome: { ok: boolean; status: string; reason: string | null; messageId: string | null; errorCode?: string };
@@ -198,21 +203,21 @@ export function registerStripeDispatchRoutes(app: Express, deps: StripeDispatchD
             };
           }
           // If this persistence fails, the durable 'attempting' state blocks retry.
-          await db.query(`UPDATE stripe_commercial_recipients SET status=$3,reason=$4,message_id=$5
+          await db.query(`UPDATE ${tables.recipients} SET status=$3,reason=$4,message_id=$5
             WHERE dispatch_id=$1 AND contact_id=$2 AND status='attempting'`,
           [id, recipient.contactId, outcome.status, outcome.reason, outcome.messageId]);
           return outcome;
         });
         if (result && mustStopCampaign(result)) {
-          await db.query("UPDATE stripe_commercial_dispatches SET status='stopped' WHERE id=$1", [id]);
+          await db.query(`UPDATE ${tables.dispatches} SET status='stopped' WHERE id=$1`, [id]);
           await stopPending(id, "Lote detenido por un error del proveedor; no enviado.");
           break;
         }
       }
-      await db.query("UPDATE stripe_commercial_dispatches SET status='completed' WHERE id=$1 AND status='running'", [id]);
+      await db.query(`UPDATE ${tables.dispatches} SET status='completed' WHERE id=$1 AND status='running'`, [id]);
       res.json(await readDispatch(id));
     } catch (error) {
-      await db.query("UPDATE stripe_commercial_dispatches SET status='stopped' WHERE id=$1 AND status='running'", [id]).catch(() => {});
+      await db.query(`UPDATE ${tables.dispatches} SET status='stopped' WHERE id=$1 AND status='running'`, [id]).catch(() => {});
       await stopPending(id, "Operación interrumpida; no enviado.").catch(() => {});
       stripeCommercialError(res, error);
     }

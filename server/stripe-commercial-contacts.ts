@@ -4,9 +4,10 @@ import Stripe from "stripe";
 import { z } from "zod";
 import { pool } from "./db";
 import { registerStripeLetterRoutes, isSameOriginJson } from "./stripe-commercial-letter";
-import { stripeSuppressionCondition, stripeAuthorizationCondition } from "./stripe-commercial-eligibility";
 import { registerStripeDispatchRoutes, type StripeDispatchDependencies } from "./stripe-commercial-dispatch";
 import { stripeContactFailure, type StripeContactPhase } from "./stripe-contact-errors";
+import { commercialAudience, type CommercialAudienceId } from "@shared/commercial-audience";
+import { commercialEligibilitySelect } from "./stripe-commercial-eligibility";
 
 const emailSchema = z.string().email().max(254);
 type CustomerEmail = { email?: string | null };
@@ -33,9 +34,9 @@ export function normalizeStripeContactEmails(customers: CustomerEmail[]) {
 
 export function stripeContactView(row: {
   id: number; email: string; imported_at: string | Date; last_seen_at: string | Date; suppressed: boolean; authorized?: boolean;
-}) {
+}, source: CommercialAudienceId = "stripe") {
   return {
-    id: row.id, email: row.email, source: "stripe" as const,
+    id: row.id, email: row.email, source,
     status: row.suppressed ? "suppressed" as const : row.authorized ? "authorized" as const : "pending_review" as const,
     importedAt: row.imported_at, lastSeenAt: row.last_seen_at,
     canSend: !row.suppressed && row.authorized === true,
@@ -60,6 +61,7 @@ async function listCustomerEmails(): Promise<CustomerEmail[]> {
 }
 
 export function registerStripeCommercialContactRoutes(app: Express, dependencies?: {
+  audienceId?: CommercialAudienceId;
   database?: Pick<Pool, "query" | "connect">;
   listCustomers?: () => Promise<CustomerEmail[]>;
   signingSecret?: () => string;
@@ -67,30 +69,32 @@ export function registerStripeCommercialContactRoutes(app: Express, dependencies
   pace?: StripeDispatchDependencies["pace"];
   reportFailure?: (diagnostic: ReturnType<typeof stripeContactFailure>["diagnostic"]) => void;
 }) {
+  const audience = commercialAudience(dependencies?.audienceId);
+  const table = audience.tables.contacts;
+  const eligibility = commercialEligibilitySelect(table as "stripe_commercial_contacts" | "probadores_commercial_contacts");
   const database = dependencies?.database || pool;
+  if (audience.id !== "stripe" && !dependencies?.listCustomers) throw new Error("A local contact source is required");
   const listCustomers = dependencies?.listCustomers || listCustomerEmails;
-  registerStripeLetterRoutes(app, { database, signingSecret: dependencies?.signingSecret });
+  registerStripeLetterRoutes(app, { database, signingSecret: dependencies?.signingSecret, audienceId: audience.id });
   registerStripeDispatchRoutes(app, { database, signingSecret: dependencies?.signingSecret,
-    delivery: dependencies?.delivery, pace: dependencies?.pace });
+    delivery: dependencies?.delivery, pace: dependencies?.pace, audienceId: audience.id });
   const fail = (res: any, error: unknown, phase: StripeContactPhase) => {
     const { diagnostic, payload } = stripeContactFailure(error, phase);
     if (dependencies?.reportFailure) dependencies.reportFailure(diagnostic);
     else console.error("[stripe-contacts]", JSON.stringify(diagnostic));
     return res.status(503).json({
-      ...payload, reference: diagnostic.reference, phase: diagnostic.phase,
+      ...payload, message: payload.message.replace("lista Stripe", `lista ${audience.label}`),
+      reference: diagnostic.reference, phase: diagnostic.phase,
     });
   };
 
-  app.get("/api/admin/stripe-contacts", async (req, res) => {
+  app.get(audience.base, async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
     res.setHeader("Cache-Control", "no-store");
     try {
-      const result = await database.query(`
-        SELECT c.id,c.email,c.imported_at,c.last_seen_at,${stripeSuppressionCondition} AS suppressed,
-          ${stripeAuthorizationCondition} AS authorized
-        FROM stripe_commercial_contacts c ORDER BY c.email
-      `);
-      const contacts = result.rows.map(stripeContactView);
+      const result = await database.query(`SELECT c.id,c.email,c.imported_at,c.last_seen_at,
+        e.suppressed,e.authorized FROM ${table} c JOIN (${eligibility}) e ON e.id=c.id ORDER BY c.email`);
+      const contacts = result.rows.map(row => stripeContactView(row, audience.id));
       const suppressed = contacts.filter(c => c.status === "suppressed").length;
       const sendable = contacts.filter(c => c.canSend).length;
       res.json({ contacts, summary: {
@@ -99,7 +103,7 @@ export function registerStripeCommercialContactRoutes(app: Express, dependencies
     } catch (error) { fail(res, error, "read_contacts"); }
   });
 
-  app.post("/api/admin/stripe-contacts/import", async (req, res) => {
+  app.post(`${audience.base}/import`, async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
     res.setHeader("Cache-Control", "no-store");
     // This browser-only mutation must be same-origin JSON, not a cross-site form.
@@ -110,23 +114,23 @@ export function registerStripeCommercialContactRoutes(app: Express, dependencies
     let phase: StripeContactPhase = "schema";
     try {
       // Fail before calling Stripe if Publish has not created the table yet.
-      await database.query("SELECT id FROM stripe_commercial_contacts LIMIT 0");
-      phase = "stripe";
+      await database.query(`SELECT id FROM ${table} LIMIT 0`);
+      phase = audience.id === "stripe" ? "stripe" : "storage";
       const { emails, ...counts } = normalizeStripeContactEmails(await listCustomers());
       phase = "storage";
       client = await database.connect();
       await client.query("BEGIN");
       await client.query("SET LOCAL lock_timeout = '5s'");
       await client.query("SET LOCAL statement_timeout = '30s'");
-      await client.query("SELECT pg_advisory_xact_lock(hashtext('stripe-contact-import'))");
+      await client.query("SELECT pg_advisory_xact_lock(hashtext($1))", [`${audience.id}-contact-import`]);
       const inserted = await client.query(`
-        INSERT INTO stripe_commercial_contacts(email)
+        INSERT INTO ${table}(email)
         SELECT unnest($1::text[]) ON CONFLICT(email) DO NOTHING RETURNING id
       `, [emails]);
       await client.query(`
-        UPDATE stripe_commercial_contacts SET last_seen_at=NOW() WHERE email=ANY($1::text[])
+        UPDATE ${table} SET last_seen_at=NOW() WHERE email=ANY($1::text[])
       `, [emails]);
-      const total = await client.query("SELECT count(*)::int AS total FROM stripe_commercial_contacts");
+      const total = await client.query(`SELECT count(*)::int AS total FROM ${table}`);
       await client.query("COMMIT");
       res.json({
         ...counts, inserted: inserted.rowCount || 0,

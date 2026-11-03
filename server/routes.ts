@@ -22,6 +22,7 @@ import { CheckoutError, StripeCheckoutStore } from "./stripe-checkout-store";
 import { CHECKOUT_PRODUCTS, StripeCheckoutService } from "./stripe-checkout-service";
 import { hasMonthlyEntitlement, paidQuestionBalance } from "./paid-question-balance";
 import { registerStripeCommercialContactRoutes } from "./stripe-commercial-contacts";
+import { registerProbadoresCommercialContactRoutes } from "./probadores-commercial-contacts";
 import { ChatHistoryAccessError, establishChatUserSession, installChatHistoryGuards } from "./chat-history-security";
 import {
   buildSkrillLink,
@@ -267,6 +268,7 @@ async function checkSubscription(userId: number): Promise<boolean> {
 
 export async function registerRoutes(app: Express, existingServer?: Server): Promise<Server> {
   registerStripeCommercialContactRoutes(app);
+  registerProbadoresCommercialContactRoutes(app);
   // Preserve old history; unknown legacy replies must not be relabelled as AI.
   await pool.query("ALTER TABLE messages ADD COLUMN IF NOT EXISTS response_kind text");
   // No default/backfill: old rows are retained, but their origin is unverified.

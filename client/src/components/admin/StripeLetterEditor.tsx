@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { commercialAudience, type CommercialAudienceId } from "@shared/commercial-audience";
 
 type Language = "es" | "en";
 type LetterData = { language: Language; subject: string; body: string; updatedAt: string | null; ctaLabel: string; ctaUrl: string; footer: string; previewUnsubscribeUrl: string; commercialSendingEnabled: boolean };
@@ -25,7 +26,9 @@ function formatUpdatedAt(value: string | null) {
   return Number.isNaN(date.getTime()) ? "Fecha de guardado no disponible" : new Intl.DateTimeFormat("es-ES", { dateStyle: "medium", timeStyle: "short" }).format(date);
 }
 
-export default function StripeLetterEditor() {
+export default function StripeLetterEditor({ audience = "stripe" }: { audience?: CommercialAudienceId }) {
+  const config = commercialAudience(audience);
+  const letterPath = `${config.base}/letter`;
   const [language, setLanguage] = useState<Language>("es");
   const [drafts, setDrafts] = useState<Partial<Record<Language, Draft>>>({});
   const [loading, setLoading] = useState(true);
@@ -40,7 +43,7 @@ export default function StripeLetterEditor() {
     else setLoadingLanguage(lang);
     setLoadErrors((old) => ({ ...old, [lang]: undefined }));
     try {
-      const response = await fetch(`/api/admin/stripe-contacts/letter?language=${lang}`, { credentials: "include" });
+      const response = await fetch(`${letterPath}?language=${lang}`, { credentials: "include" });
       if (!response.ok) throw await responseError(response);
       const data = await response.json() as LetterData;
       setDrafts((old) => {
@@ -55,7 +58,7 @@ export default function StripeLetterEditor() {
       if (initial) setLoading(false);
       else setLoadingLanguage(null);
     }
-  }, []);
+  }, [letterPath]);
 
   useEffect(() => { void loadLetter("es", true); }, [loadLetter]);
 
@@ -87,7 +90,7 @@ export default function StripeLetterEditor() {
     if (!draft || !saveEnabled) return;
     setSaveState("saving"); setSaveErrors((old) => ({ ...old, [language]: undefined }));
     try {
-      const response = await fetch("/api/admin/stripe-contacts/letter", {
+      const response = await fetch(letterPath, {
         method: "PUT", credentials: "include", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ language, subject: draft.subject, body: draft.body }),
       });
@@ -111,10 +114,12 @@ export default function StripeLetterEditor() {
   const previewSubject = useMemo(() => draft?.subject || (language === "es" ? "Sin asunto" : "No subject"), [draft?.subject, language]);
   const languageLabel = language === "es" ? "Español" : "English";
 
-  return <Card className="overflow-hidden border-border/80 shadow-sm" aria-labelledby="stripe-letter-title">
+  const subjectId = `${audience}-letter-subject`;
+  const bodyId = `${audience}-letter-body`;
+  return <Card className="overflow-hidden border-border/80 shadow-sm" aria-labelledby={`${audience}-letter-title`}>
     <CardHeader className="gap-4 border-b bg-muted/20 px-4 py-4 sm:px-5">
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
-        <div><div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground"><FileText className="h-3.5 w-3.5" />Borrador · no se envía</div><CardTitle id="stripe-letter-title" className="text-base">Invitación comercial de NUXA</CardTitle><CardDescription className="mt-1 max-w-2xl leading-5">Edita y guarda cada idioma por separado. Preparar un envío usará la última versión guardada; guardar nunca envía mensajes.</CardDescription></div>
+         <div><div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground"><FileText className="h-3.5 w-3.5" />Borrador · no se envía</div><CardTitle id={`${audience}-letter-title`} className="text-base">{audience === "stripe" ? "Invitación comercial de NUXA" : "Invitación comercial para probadores"}</CardTitle><CardDescription className="mt-1 max-w-2xl leading-5">Edita y guarda cada idioma por separado. Preparar un envío usará la última versión guardada; guardar nunca envía mensajes.</CardDescription></div>
         <div className="flex flex-wrap items-center gap-2">
           {draft && <Badge variant="outline" className="border-amber-300 bg-amber-50 text-amber-900"><ShieldCheck className="mr-1.5 h-3.5 w-3.5" />Envío solo manual</Badge>}
           <Button type="button" variant={preview ? "default" : "outline"} size="sm" onClick={() => setPreview((value) => !value)} disabled={!draft}>{preview ? "Volver a editar" : "Vista previa"}</Button>
@@ -139,8 +144,8 @@ export default function StripeLetterEditor() {
       {draft && !preview && <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
         <div className="space-y-5">
           {loadError && <div role="alert" className="rounded-md border border-amber-300/70 bg-amber-50/70 px-3.5 py-3 text-sm text-amber-950">No se pudo actualizar este idioma. Tus cambios locales se mantienen. {loadError.message}</div>}
-          <div className="space-y-2"><Label htmlFor="stripe-letter-subject">Asunto · {languageLabel}</Label><Input id="stripe-letter-subject" value={draft.subject} maxLength={180} onChange={(event) => edit("subject", event.target.value)} /><p className={`text-xs ${subjectInvalid ? "text-destructive" : "text-muted-foreground"}`}>{draft.subject.length}/180 · {language === "es" ? "No puede quedar vacío." : "Cannot be empty."}</p></div>
-          <div className="space-y-2"><Label htmlFor="stripe-letter-body">Cuerpo de la invitación</Label><Textarea id="stripe-letter-body" value={draft.body} maxLength={10000} onChange={(event) => edit("body", event.target.value)} rows={14} className="min-h-[280px] resize-y leading-6" /><p className={`text-xs ${bodyInvalid ? "text-destructive" : "text-muted-foreground"}`}>{draft.body.length.toLocaleString("es-ES")}/10.000 caracteres · {language === "es" ? "Texto sin formato HTML; no puede quedar vacío." : "Plain text only; cannot be empty."}</p></div>
+           <div className="space-y-2"><Label htmlFor={subjectId}>Asunto · {languageLabel}</Label><Input id={subjectId} value={draft.subject} maxLength={180} onChange={(event) => edit("subject", event.target.value)} /><p className={`text-xs ${subjectInvalid ? "text-destructive" : "text-muted-foreground"}`}>{draft.subject.length}/180 · {language === "es" ? "No puede quedar vacío." : "Cannot be empty."}</p></div>
+           <div className="space-y-2"><Label htmlFor={bodyId}>Cuerpo de la invitación</Label><Textarea id={bodyId} value={draft.body} maxLength={10000} onChange={(event) => edit("body", event.target.value)} rows={14} className="min-h-[280px] resize-y leading-6" /><p className={`text-xs ${bodyInvalid ? "text-destructive" : "text-muted-foreground"}`}>{draft.body.length.toLocaleString("es-ES")}/10.000 caracteres · {language === "es" ? "Texto sin formato HTML; no puede quedar vacío." : "Plain text only; cannot be empty."}</p></div>
           {saveError && <div role="alert" className="rounded-md border border-destructive/30 bg-destructive/5 px-3.5 py-3 text-sm"><p className="font-semibold">{saveError.status === 401 ? "Tu sesión necesita renovarse" : schemaPending ? "El esquema requiere volver a publicar la aplicación" : "No se pudo guardar el borrador"}</p><p className="mt-1 text-muted-foreground">{saveError.status === 401 ? "Vuelve a iniciar sesión en el panel y guarda de nuevo." : schemaPending ? "Vuelve a publicar la aplicación antes de continuar." : saveError.message}</p></div>}
           <div className="flex flex-col justify-between gap-3 border-t border-border/70 pt-4 sm:flex-row sm:items-center"><p role="status" className="min-h-5 text-sm text-muted-foreground">{saveState === "saved" && !isDirty ? <span className="inline-flex items-center gap-1.5 text-emerald-800"><Check className="h-4 w-4" />Borrador guardado para {languageLabel}</span> : isDirty ? "Cambios sin guardar" : `Último guardado: ${formatUpdatedAt(draft.server.updatedAt)}`}</p><Button type="button" onClick={() => void saveDraft()} disabled={!saveEnabled}>{saveState === "saving" ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}{saveState === "saving" ? "Guardando…" : `Guardar ${languageLabel}`}</Button></div>
         </div>

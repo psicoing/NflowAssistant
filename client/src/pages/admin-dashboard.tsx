@@ -1164,6 +1164,7 @@ export default function AdminDashboard() {
               <TabsTrigger value="mutuas" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchMutuas(); checkResendDomain(); fetchMutuaCampaignHistory(); }}>🤝 Mutuas</TabsTrigger>
               <TabsTrigger value="empresas" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3" onClick={() => { fetchEmpresas(); checkResendDomain(); fetchEmpresaCampaignHistory(); }}>🏢 Empresas</TabsTrigger>
               <TabsTrigger value="stripe" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Stripe</TabsTrigger>
+              <TabsTrigger value="probadores" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">Probadores</TabsTrigger>
               <TabsTrigger value="voz" className="data-[state=active]:bg-orange-600 shrink-0 text-xs sm:text-sm px-3">📞 Demo Voz IA</TabsTrigger>
             </TabsList>
           </div>
@@ -3659,7 +3660,11 @@ export default function AdminDashboard() {
           </TabsContent>
 
           <TabsContent value="stripe">
-            <StripeContactsPanel />
+            <StripeContactsPanel key="commercial-stripe" audience="stripe" />
+          </TabsContent>
+
+          <TabsContent value="probadores">
+            <StripeContactsPanel key="commercial-probadores" audience="probadores" />
           </TabsContent>
 
           {/* ── DEMO DE LLAMADA CON IA POR VOZ ── */}

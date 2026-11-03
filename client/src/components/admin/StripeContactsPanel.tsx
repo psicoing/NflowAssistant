@@ -6,10 +6,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import StripeLetterEditor from "@/components/admin/StripeLetterEditor";
-import { STRIPE_LETTERS, STRIPE_LETTER_CTA } from "@shared/stripe-commercial-letter";
+import { commercialAudience, type CommercialAudienceId } from "@shared/commercial-audience";
 
 type Language = "es" | "en";
-type Contact = { id: number; email: string; source: "stripe"; status: "pending_review" | "suppressed" | "authorized"; importedAt: string; lastSeenAt: string; canSend: boolean };
+type Contact = { id: number; email: string; source: "stripe" | "probadores"; status: "pending_review" | "suppressed" | "authorized"; importedAt: string; lastSeenAt: string; canSend: boolean };
 type ContactSummary = { total: number; pendingReview: number; suppressed: number; sendable: number };
 type DispatchRecipient = { contactId: number; email: string; status: "pending" | "attempting" | "accepted" | "rejected" | "skipped" | "uncertain"; reason: string | null; messageId: string | null };
 type Dispatch = { id: string; language: Language; subject: string; body: string; status: "prepared" | "running" | "completed" | "stopped"; createdAt: string; recipients: DispatchRecipient[] };
@@ -36,9 +36,10 @@ const dateLabel = (value: string | null) => {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? "Fecha no disponible" : new Intl.DateTimeFormat("es-ES", { dateStyle: "medium", timeStyle: "short" }).format(date);
 };
-const dispatchPath = "/api/admin/stripe-contacts/dispatches";
-
-export default function StripeContactsPanel() {
+export default function StripeContactsPanel({ audience = "stripe" }: { audience?: CommercialAudienceId }) {
+  const config = commercialAudience(audience);
+  const base = config.base;
+  const dispatchPath = `${base}/dispatches`;
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [summary, setSummary] = useState<ContactSummary | null>(null);
   const [loading, setLoading] = useState(true);
@@ -75,13 +76,13 @@ export default function StripeContactsPanel() {
     quiet ? setRefreshing(true) : setLoading(true);
     setError(null);
     try {
-      const result = await jsonRequest<{ contacts: Contact[]; summary: ContactSummary }>("/api/admin/stripe-contacts");
+      const result = await jsonRequest<{ contacts: Contact[]; summary: ContactSummary }>(base);
       setContacts(Array.isArray(result.contacts) ? result.contacts : []);
       setSummary(result.summary);
       setSelected((old) => old.filter((id) => result.contacts.some((contact) => contact.id === id && contact.canSend)));
     } catch (caught) { setError(caught as ApiError); }
     finally { setLoading(false); setRefreshing(false); }
-  }, []);
+  }, [base]);
 
   const loadDispatches = useCallback(async () => {
     setHistoryLoading(true); setHistoryError(null);
@@ -90,7 +91,7 @@ export default function StripeContactsPanel() {
       setDispatches(Array.isArray(result.dispatches) ? result.dispatches : []);
     } catch (caught) { setHistoryError(caught as ApiError); }
     finally { setHistoryLoading(false); }
-  }, []);
+  }, [dispatchPath]);
   useEffect(() => { void loadContacts(); void loadDispatches(); }, [loadContacts, loadDispatches]);
 
   const visibleContacts = useMemo(() => {
@@ -103,7 +104,7 @@ export default function StripeContactsPanel() {
   async function importContacts() {
     setImporting(true); setError(null); setImportResult(null);
     try {
-      const result = await jsonRequest<ImportResult>("/api/admin/stripe-contacts/import", { method: "POST", headers: { "Content-Type": "application/json" } });
+      const result = await jsonRequest<ImportResult>(`${base}/import`, { method: "POST", headers: { "Content-Type": "application/json" } });
       setImportResult(result);
       await loadContacts(true);
     } catch (caught) { setRetryOperation("import"); setError(caught as ApiError); }
@@ -115,7 +116,7 @@ export default function StripeContactsPanel() {
     setAuthSuppressed(contact.status === "suppressed");
     setEvidence(""); setObtainedAt(""); setAttested(false);
     try {
-      const result = await jsonRequest<{ records: AuthRecord[]; suppressed: boolean }>(`/api/admin/stripe-contacts/authorizations/${contact.id}`);
+      const result = await jsonRequest<{ records: AuthRecord[]; suppressed: boolean }>(`${base}/authorizations/${contact.id}`);
       setAuthRecords(result.records || []);
       setAuthSuppressed(result.suppressed);
     } catch (caught) { setAuthError(caught as ApiError); }
@@ -126,7 +127,7 @@ export default function StripeContactsPanel() {
     if (!authContact || evidence.trim().length < 20 || evidence.trim().length > 1000 || !obtainedAt || !attested || authBusy) return;
     setAuthBusy(true); setAuthError(null);
     try {
-      await jsonRequest(`/api/admin/stripe-contacts/authorizations/${authContact.id}`, {
+      await jsonRequest(`${base}/authorizations/${authContact.id}`, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "grant", source, evidence: evidence.trim(), obtainedAt: new Date(obtainedAt).toISOString(), attested: true }),
       });
@@ -138,7 +139,7 @@ export default function StripeContactsPanel() {
     if (!authContact || authBusy || !window.confirm(`¿Revocar la autorización comercial de ${authContact.email}?`)) return;
     setAuthBusy(true); setAuthError(null);
     try {
-      await jsonRequest(`/api/admin/stripe-contacts/authorizations/${authContact.id}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "revoke" }) });
+      await jsonRequest(`${base}/authorizations/${authContact.id}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "revoke" }) });
       await Promise.all([loadContacts(true), openAuthorization(authContact)]);
     } catch (caught) { setAuthError(caught as ApiError); }
     finally { setAuthBusy(false); }
@@ -197,25 +198,25 @@ export default function StripeContactsPanel() {
 
   const schemaMessage = "La estructura comercial de la base de datos está pendiente. Revisa su preparación al publicar; no se usará una lista local alternativa.";
   return (
-    <section className="space-y-6" aria-labelledby="stripe-contacts-title">
+    <section className="space-y-6" aria-labelledby={`${audience}-contacts-title`}>
       <div className="flex flex-col justify-between gap-4 border-b border-border/70 pb-5 sm:flex-row sm:items-end">
         <div className="max-w-2xl">
           <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground"><span className="h-2 w-2 rounded-full bg-amber-500" />Área comercial · solo propietario</div>
-          <h2 id="stripe-contacts-title" className="text-2xl font-semibold tracking-tight text-foreground">Contactos de Stripe</h2>
-          <p className="mt-1.5 text-sm leading-6 text-muted-foreground">Cada invitación requiere permiso explícito registrado y una revisión manual antes del envío. Importar no concede autorización.</p>
+          <h2 id={`${audience}-contacts-title`} className="text-2xl font-semibold tracking-tight text-foreground">Contactos de {config.label}</h2>
+          <p className="mt-1.5 text-sm leading-6 text-muted-foreground">{audience === "probadores" ? "Incluye emails de usuarios registrados en prueba gratuita y leads que dejaron su email para recibir recursos gratuitos; esto no demuestra que hayan usado el chat. El origen no es información clínica." : "Cada invitación requiere permiso explícito registrado y una revisión manual antes del envío. Importar no concede autorización."}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" onClick={() => void loadContacts(true)} disabled={loading || refreshing || importing}><RefreshCw className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />Actualizar</Button>
-          <Button onClick={() => void importContacts()} disabled={loading || refreshing || importing} className="bg-slate-900 text-white hover:bg-slate-800">{importing ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Database className="mr-2 h-4 w-4" />}{importing ? "Importando…" : "Importar desde Stripe"}</Button>
+          <Button onClick={() => void importContacts()} disabled={loading || refreshing || importing} className="bg-slate-900 text-white hover:bg-slate-800">{importing ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Database className="mr-2 h-4 w-4" />}{importing ? "Importando…" : audience === "probadores" ? "Cargar probadores" : "Importar desde Stripe"}</Button>
         </div>
       </div>
 
       <div role="note" className="flex items-start gap-3 rounded-lg border border-amber-300/70 bg-amber-50/70 px-4 py-3.5 text-amber-950">
         <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" />
-        <div><p className="text-sm font-semibold">La compra no es permiso para marketing</p><p className="mt-0.5 text-sm leading-5 text-amber-900/80">Registra una autorización afirmativa, específica para emails comerciales de NUXA. Guarda solo una referencia a la prueba; no incluyas información clínica.</p></div>
+        <div><p className="text-sm font-semibold">{audience === "probadores" ? "Registrarse o importar no es permiso para marketing" : "La compra no es permiso para marketing"}</p><p className="mt-0.5 text-sm leading-5 text-amber-900/80">Registra una autorización afirmativa, específica para emails comerciales de NUXA. Guarda solo una referencia a la prueba; no incluyas información clínica. {audience === "probadores" ? "La procedencia del contacto no acredita consentimiento." : ""}</p></div>
       </div>
 
-      <StripeLetterEditor />
+      <StripeLetterEditor audience={audience} />
 
       {(error || dispatchError || historyError) && <div role="alert" className="flex items-start gap-3 rounded-lg border border-destructive/30 bg-destructive/5 p-4">
         <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" /><div className="flex-1"><p className="text-sm font-semibold">{[error, dispatchError, historyError].some((item) => item?.status === 401) ? "La sesión de administrador necesita renovarse" : schemaPending ? "Esquema pendiente" : "No se pudo completar la operación"}</p><p className="mt-1 text-sm text-muted-foreground">{schemaPending ? schemaMessage : (dispatchError || error || historyError)?.message}</p></div>
@@ -238,7 +239,7 @@ export default function StripeContactsPanel() {
         </CardHeader>
         <CardContent className="p-0">
           {loading ? <div className="space-y-3 p-5" aria-label="Cargando contactos" aria-busy="true"><div className="h-4 w-44 animate-pulse rounded bg-muted" /><div className="h-12 animate-pulse rounded-md bg-muted/70" /><div className="h-12 animate-pulse rounded-md bg-muted/70" /></div>
-            : contacts.length === 0 ? <div className="px-6 py-12 text-center"><Users className="mx-auto mb-3 h-8 w-8 text-muted-foreground" /><p className="text-sm font-medium">Aún no hay contactos importados</p><p className="mt-1 text-sm text-muted-foreground">Importa desde Stripe para iniciar una revisión individual.</p></div>
+            : contacts.length === 0 ? <div className="px-6 py-12 text-center"><Users className="mx-auto mb-3 h-8 w-8 text-muted-foreground" /><p className="text-sm font-medium">Aún no hay contactos importados</p><p className="mt-1 text-sm text-muted-foreground">{audience === "probadores" ? "Carga probadores para iniciar una revisión individual." : "Importa desde Stripe para iniciar una revisión individual."}</p></div>
               : visibleContacts.length === 0 ? <p className="px-6 py-12 text-center text-sm text-muted-foreground">No hay coincidencias. Prueba con otro email.</p>
                 : <div className="overflow-x-auto"><table className="w-full min-w-[790px] text-left text-sm">
                   <thead className="bg-muted/30 text-xs font-medium uppercase tracking-wide text-muted-foreground"><tr><th className="w-12 px-4 py-3"><span className="sr-only">Seleccionar</span></th><th className="px-3 py-3">Email</th><th className="px-3 py-3">Estado</th><th className="px-3 py-3">Importado</th><th className="px-3 py-3">Última importación</th><th className="px-4 py-3 text-right">Permiso</th></tr></thead>
@@ -261,10 +262,10 @@ export default function StripeContactsPanel() {
           {authRecords.length > 0 && <div className="mb-5 space-y-2"><p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Registro de evidencia</p>{authRecords.map((record) => <div key={record.id} className="rounded-md border p-3 text-xs"><div className="flex justify-between gap-3"><Badge variant="outline" className={record.action === "grant" ? "border-emerald-200 text-emerald-800" : "border-rose-200 text-rose-800"}>{record.action === "grant" ? "Permiso registrado" : "Permiso revocado"}</Badge><span className="text-muted-foreground">{dateLabel(record.recordedAt)}</span></div><p className="mt-2 leading-5 text-foreground">{record.evidence}</p><p className="mt-1 text-muted-foreground">Fuente: {record.source} · Obtenido: {dateLabel(record.obtainedAt)}</p></div>)}</div>}
           {!authSuppressed && authContact.status !== "suppressed" && authContact.canSend && <div className="mb-4 flex items-center justify-between rounded-md border border-emerald-200 bg-emerald-50/60 p-3"><p className="text-sm font-medium text-emerald-950">Autorización activa y elegible</p><Button variant="outline" size="sm" onClick={() => void revokeAuthorization()} disabled={authBusy}>{authBusy ? "Guardando…" : "Revocar permiso"}</Button></div>}
           <form onSubmit={(event) => void registerAuthorization(event)} className="space-y-4 border-t pt-4">
-            <div><h3 className="text-sm font-semibold">Registrar permiso explícito</h3><p className="mt-1 text-xs leading-5 text-muted-foreground">Confirma solo consentimiento real y afirmativo para recibir emails de marketing de NUXA. Una compra, el uso del servicio o el email de Stripe no bastan.</p></div>
+             <div><h3 className="text-sm font-semibold">Registrar permiso explícito</h3><p className="mt-1 text-xs leading-5 text-muted-foreground">Confirma solo consentimiento real y afirmativo para recibir emails de marketing de NUXA. {audience === "probadores" ? "El registro, la prueba gratuita, el uso del servicio o solicitar recursos gratuitos no bastan." : "Una compra, el uso del servicio o el email de Stripe no bastan."}</p></div>
             <div className="grid gap-3 sm:grid-cols-2"><div className="space-y-1.5"><Label htmlFor="auth-source">Cómo se obtuvo</Label><select id="auth-source" value={source} onChange={(event) => setSource(event.target.value as typeof source)} className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"><option value="form">Formulario</option><option value="documented_email">Email documentado</option><option value="signed_document">Documento firmado</option></select></div><div className="space-y-1.5"><Label htmlFor="auth-date">Fecha y hora del permiso</Label><Input id="auth-date" type="datetime-local" value={obtainedAt} onChange={(event) => setObtainedAt(event.target.value)} required /></div></div>
             <div className="space-y-1.5"><Label htmlFor="auth-evidence">Referencia a la prueba</Label><textarea id="auth-evidence" value={evidence} onChange={(event) => setEvidence(event.target.value)} minLength={20} maxLength={1000} required rows={3} placeholder="Referencia de archivo, formulario o mensaje que documenta el permiso; no incluyas detalles clínicos." className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm leading-5" /><p className="text-xs text-muted-foreground">{evidence.trim().length}/1000 · mínimo 20 caracteres</p></div>
-            <label className="flex cursor-pointer items-start gap-2.5 rounded-md border border-amber-200 bg-amber-50/60 p-3 text-xs leading-5 text-amber-950"><input type="checkbox" checked={attested} onChange={(event) => setAttested(event.target.checked)} className="mt-0.5 h-4 w-4 accent-primary" /><span>Atestiguo que la persona dio permiso explícito para recibir emails comerciales de NUXA. No se infiere del pago ni de la compra.</span></label>
+             <label className="flex cursor-pointer items-start gap-2.5 rounded-md border border-amber-200 bg-amber-50/60 p-3 text-xs leading-5 text-amber-950"><input type="checkbox" checked={attested} onChange={(event) => setAttested(event.target.checked)} className="mt-0.5 h-4 w-4 accent-primary" /><span>Atestiguo que la persona dio permiso explícito para recibir emails comerciales de NUXA. {audience === "probadores" ? "No se infiere del registro, la prueba ni la solicitud de recursos." : "No se infiere del pago ni de la compra."}</span></label>
             {authError && <div role="alert" className="rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive">{authError.status === 401 ? "Tu sesión de administrador necesita renovarse." : authError.code === "stripe_contacts_schema_pending" ? schemaMessage : authError.message}</div>}
             <div className="flex justify-end gap-2"><Button type="button" variant="outline" onClick={() => setAuthContact(null)}>Cerrar</Button><Button type="submit" disabled={authBusy || authLoading || !!authError || authSuppressed || authContact.status === "suppressed" || evidence.trim().length < 20 || !obtainedAt || !attested}>{authBusy ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Check className="mr-2 h-4 w-4" />}Registrar autorización</Button></div>
           </form>
@@ -277,9 +278,9 @@ export default function StripeContactsPanel() {
         <div className="mb-4 rounded-md border bg-muted/20 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Asunto exacto</p><p className="mt-1 text-sm font-semibold">{reviewDispatch.subject}</p><p className="mt-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Cuerpo exacto</p><p className="mt-1 whitespace-pre-wrap text-sm leading-6">{reviewDispatch.body}</p></div>
         <div className="mb-4 max-h-40 overflow-y-auto rounded-md border"><div className="divide-y">{reviewDispatch.recipients.map((recipient) => <div key={recipient.contactId} className="px-3 py-2 text-sm">{recipient.email}</div>)}</div></div>
         <div className="mb-4 rounded-md border p-4 text-sm leading-6">
-          <a className="font-semibold text-primary underline" href={STRIPE_LETTER_CTA.url} target="_blank" rel="noreferrer">{STRIPE_LETTERS[reviewDispatch.language].ctaLabel}</a>
-          <p className="mt-3 text-xs text-muted-foreground">{STRIPE_LETTERS[reviewDispatch.language].footer}</p>
-          <a className="text-xs text-primary underline" href={`/api/stripe-commercial/unsubscribe?preview=1&language=${reviewDispatch.language}`} target="_blank" rel="noreferrer">{STRIPE_LETTERS[reviewDispatch.language].unsubscribeLabel} · Demo</a>
+          <a className="font-semibold text-primary underline" href="https://nuxa.life/precios" target="_blank" rel="noreferrer">{config.letters[reviewDispatch.language].ctaLabel}</a>
+          <p className="mt-3 text-xs text-muted-foreground">{config.letters[reviewDispatch.language].footer}</p>
+          <a className="text-xs text-primary underline" href={`${config.publicPath}?preview=1&language=${reviewDispatch.language}`} target="_blank" rel="noreferrer">{config.letters[reviewDispatch.language].unsubscribeLabel} · Demo</a>
         </div>
         <p className="mb-4 text-xs leading-5 text-muted-foreground">Cada correo llevará su enlace personal de baja. Esta demostración no da de baja a nadie. Los emails ya aceptados no se pueden retirar.</p>
         <div className="space-y-2"><Label htmlFor="send-confirmation">Para habilitar el envío, escribe ENVIAR</Label><Input id="send-confirmation" value={confirmation} onChange={(event) => setConfirmation(event.target.value)} autoComplete="off" placeholder="ENVIAR" /></div>

@@ -3,8 +3,9 @@ import type { Pool, PoolClient } from "@neondatabase/serverless";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { z } from "zod";
 import {
-  STRIPE_LETTER_CTA, STRIPE_LETTERS, type StripeLetterLanguage,
+  STRIPE_LETTER_CTA, type StripeLetterLanguage,
 } from "@shared/stripe-commercial-letter";
+import { commercialAudience, type CommercialAudienceId } from "@shared/commercial-audience";
 
 const draftSchema = z.object({
   subject: z.string().trim().min(1).max(180).refine(s => !/[\r\n]/.test(s)),
@@ -16,17 +17,18 @@ const escapeHtml = (s: string) => s.replace(/[&<>"']/g, c => ({
 }[c]!));
 
 /** Purpose-separated, email-bound and unguessable; token contains no address. */
-export function createStripeUnsubscribeToken(contact: { id: number; email: string }, secret: string) {
+export function createStripeUnsubscribeToken(contact: { id: number; email: string }, secret: string, audienceId: CommercialAudienceId = "stripe") {
+  const audience = commercialAudience(audienceId);
   if (!secret) throw new Error("Unsubscribe signing unavailable");
   const signature = createHmac("sha256", secret)
-    .update(`stripe-commercial-unsubscribe:v1:${contact.id}:${contact.email.trim().toLowerCase()}`)
+    .update(`${audience.id}-commercial-unsubscribe:v1:${contact.id}:${contact.email.trim().toLowerCase()}`)
     .digest("base64url");
   return `v1.${contact.id}.${signature}`;
 }
 
-export function verifyStripeUnsubscribeToken(token: string, contact: { id: number; email: string }, secret: string) {
+export function verifyStripeUnsubscribeToken(token: string, contact: { id: number; email: string }, secret: string, audienceId: CommercialAudienceId = "stripe") {
   if (!secret || !tokenPattern.test(token)) return false;
-  const expected = createStripeUnsubscribeToken(contact, secret);
+  const expected = createStripeUnsubscribeToken(contact, secret, audienceId);
   const a = Buffer.from(token), b = Buffer.from(expected);
   return a.length === b.length && timingSafeEqual(a, b);
 }
@@ -35,15 +37,16 @@ export function verifyStripeUnsubscribeToken(token: string, contact: { id: numbe
  * This module deliberately has no sender and does not grant authorization.
  */
 export function renderStripeCommercialLetter(
-  draft: { subject: string; body: string }, unsubscribeUrl: string, language: StripeLetterLanguage = "es",
+  draft: { subject: string; body: string }, unsubscribeUrl: string, language: StripeLetterLanguage = "es", audienceId: CommercialAudienceId = "stripe",
 ) {
-  if (!unsubscribeUrl.startsWith("https://nuxa.life/api/stripe-commercial/unsubscribe?token=")) {
+  const audience = commercialAudience(audienceId);
+  if (!unsubscribeUrl.startsWith(`https://nuxa.life${audience.publicPath}?token=`)) {
     throw new Error("Expected a recipient-specific unsubscribe URL");
   }
   const token = new URL(unsubscribeUrl).searchParams.get("token") || "";
   if (!tokenPattern.test(token)) throw new Error("Invalid unsubscribe token");
   const valid = draftSchema.parse(draft);
-  const copy = STRIPE_LETTERS[language];
+  const copy = audience.letters[language];
   return {
     subject: valid.subject,
     text: `${valid.body}\n\n${copy.ctaLabel}: ${STRIPE_LETTER_CTA.url}\n\n${copy.footer}\n${copy.unsubscribeLabel}: ${unsubscribeUrl}`,
@@ -69,11 +72,11 @@ const publicEnglish: Record<string, string> = {
   "Tu dirección ha quedado excluida de las comunicaciones comerciales del sistema.": "Your address has been excluded from the system's marketing emails.",
   "No se ha podido registrar la baja": "Unable to unsubscribe",
 };
-function page(title: string, message: string, token?: string, language: StripeLetterLanguage = "es") {
+function page(title: string, message: string, token?: string, language: StripeLetterLanguage = "es", audienceId: CommercialAudienceId = "stripe") {
   if (language === "en") { title = publicEnglish[title] || title; message = publicEnglish[message] || message; }
   return `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>${title} · NUXA</title></head>
 <body style="font-family:Arial,sans-serif;background:#f1f5f9;padding:32px;color:#172033"><main style="max-width:520px;margin:40px auto;background:white;padding:28px;border-radius:16px"><h1>${title}</h1><p>${message}</p>
- ${token ? `<form method="post" action="/api/stripe-commercial/unsubscribe"><input type="hidden" name="token" value="${escapeHtml(token)}"><input type="hidden" name="language" value="${language}"><button style="padding:12px 18px;background:#172033;color:white;border:0;border-radius:8px" type="submit">${language === "en" ? "Confirm unsubscribe" : "Confirmar baja comercial"}</button></form>` : ""}
+ ${token ? `<form method="post" action="${commercialAudience(audienceId).publicPath}"><input type="hidden" name="token" value="${escapeHtml(token)}"><input type="hidden" name="language" value="${language}"><button style="padding:12px 18px;background:#172033;color:white;border:0;border-radius:8px" type="submit">${language === "en" ? "Confirm unsubscribe" : "Confirmar baja comercial"}</button></form>` : ""}
  <p>${language === "en" ? "Unsubscribing does not delete your NUXA account or cancel subscriptions or payments." : "Esta baja no elimina cuentas de NUXA ni cancela suscripciones o pagos."}</p></main></body></html>`;
 }
 
@@ -86,17 +89,21 @@ export function isSameOriginJson(req: Request) {
 export function registerStripeLetterRoutes(app: Express, dependencies: {
   database: Pick<Pool, "query" | "connect">;
   signingSecret?: () => string;
+  audienceId?: CommercialAudienceId;
 }) {
+  const audience = commercialAudience(dependencies.audienceId);
+  const letters = audience.letters;
+  const tables = audience.tables;
   const { database } = dependencies;
   const signingSecret = dependencies.signingSecret || (() => process.env.SESSION_SECRET || "");
   const view = (language: StripeLetterLanguage, row?: { subject: string; body: string; updated_at: string }) => ({
     language,
-    subject: row?.subject || STRIPE_LETTERS[language].subject,
-    body: row?.body || STRIPE_LETTERS[language].body,
+    subject: row?.subject || letters[language].subject,
+    body: row?.body || letters[language].body,
     updatedAt: row?.updated_at || null,
-    ctaLabel: STRIPE_LETTERS[language].ctaLabel, ctaUrl: STRIPE_LETTER_CTA.url,
-    footer: STRIPE_LETTERS[language].footer,
-    previewUnsubscribeUrl: `/api/stripe-commercial/unsubscribe?preview=1&language=${language}`,
+    ctaLabel: letters[language].ctaLabel, ctaUrl: STRIPE_LETTER_CTA.url,
+    footer: letters[language].footer,
+    previewUnsubscribeUrl: `${audience.publicPath}?preview=1&language=${language}`,
     commercialSendingEnabled: true,
   });
   const draftError = (res: any, error: any) => res.status(503).json({
@@ -105,17 +112,17 @@ export function registerStripeLetterRoutes(app: Express, dependencies: {
       ? "Republica la aplicación para activar el guardado de la carta."
       : "No se ha podido guardar o cargar la carta. No se ha enviado ningún correo.",
   });
-  app.get("/api/admin/stripe-contacts/letter", async (req, res) => {
+  app.get(`${audience.base}/letter`, async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
     res.setHeader("Cache-Control", "no-store");
     const language = req.query.language === undefined ? "es" : req.query.language;
     if (language !== "es" && language !== "en") return res.status(400).json({ message: "Idioma no válido." });
     try {
-      const result = await database.query("SELECT subject,body,updated_at FROM stripe_commercial_letter WHERE id=$1", [language === "es" ? 1 : 2]);
+      const result = await database.query(`SELECT subject,body,updated_at FROM ${tables.letter} WHERE id=$1`, [language === "es" ? 1 : 2]);
       res.json(view(language, result.rows[0]));
     } catch (error) { draftError(res, error); }
   });
-  app.put("/api/admin/stripe-contacts/letter", async (req, res) => {
+  app.put(`${audience.base}/letter`, async (req, res) => {
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
     if (!isSameOriginJson(req)) return res.status(403).json({ message: "Solicitud no permitida" });
     res.setHeader("Cache-Control", "no-store");
@@ -123,7 +130,7 @@ export function registerStripeLetterRoutes(app: Express, dependencies: {
     if (!parsed.success) return res.status(400).json({ message: "Introduce un asunto de hasta 180 caracteres y un texto de hasta 10.000 caracteres." });
     try {
       const result = await database.query(`
-        INSERT INTO stripe_commercial_letter(id,subject,body) VALUES($1,$2,$3)
+        INSERT INTO ${tables.letter}(id,subject,body) VALUES($1,$2,$3)
         ON CONFLICT(id) DO UPDATE SET subject=EXCLUDED.subject,body=EXCLUDED.body,updated_at=NOW()
         RETURNING subject,body,updated_at
       `, [parsed.data.language === "es" ? 1 : 2, parsed.data.subject, parsed.data.body]);
@@ -132,9 +139,9 @@ export function registerStripeLetterRoutes(app: Express, dependencies: {
   });
 
   // GET confirms intent only. Mail scanners cannot unsubscribe recipients.
-  app.get("/api/stripe-commercial/unsubscribe", async (req, res) => {
+  app.get(audience.publicPath, async (req, res) => {
     const language = req.query.language === "en" ? "en" : "es";
-    const localizedPage = (title: string, message: string, token?: string) => page(title, message, token, language);
+    const localizedPage = (title: string, message: string, token?: string) => page(title, message, token, language, audience.id);
     res.set({ "Cache-Control": "no-store", "Referrer-Policy": "no-referrer",
       "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'" });
     if (req.query.preview === "1") {
@@ -146,8 +153,8 @@ export function registerStripeLetterRoutes(app: Express, dependencies: {
     try {
       const secret = signingSecret();
       if (!secret) return res.status(503).type("html").send(localizedPage("Servicio no disponible", "Vuelve a intentarlo más tarde."));
-      const result = await database.query("SELECT id,email FROM stripe_commercial_contacts WHERE id=$1", [Number(match[1])]);
-      if (!result.rows[0] || !verifyStripeUnsubscribeToken(token, result.rows[0], secret)) {
+      const result = await database.query(`SELECT id,email FROM ${tables.contacts} WHERE id=$1`, [Number(match[1])]);
+      if (!result.rows[0] || !verifyStripeUnsubscribeToken(token, result.rows[0], secret, audience.id)) {
         return res.status(400).type("html").send(localizedPage("Enlace no válido", "No se ha realizado ningún cambio."));
       }
       res.type("html").send(localizedPage("Baja de comunicaciones comerciales", "Confirma si no deseas recibir más comunicaciones comerciales.", token));
@@ -156,7 +163,7 @@ export function registerStripeLetterRoutes(app: Express, dependencies: {
     }
   });
   // URL-encoded parser is route-local, never changes the signed webhook parsers.
-  app.post("/api/stripe-commercial/unsubscribe", async (req, res, next) => {
+  app.post(audience.publicPath, async (req, res, next) => {
     if (req.is("application/x-www-form-urlencoded")) {
       const { default: express } = await import("express");
       return express.urlencoded({ extended: false, limit: "2kb" })(req, res, next);
@@ -164,7 +171,7 @@ export function registerStripeLetterRoutes(app: Express, dependencies: {
     next();
   }, async (req, res) => {
     const language = req.body?.language === "en" ? "en" : "es";
-    const localizedPage = (title: string, message: string) => page(title, message, undefined, language);
+    const localizedPage = (title: string, message: string) => page(title, message, undefined, language, audience.id);
     res.set({ "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" });
     const token = typeof req.body?.token === "string" ? req.body.token : "";
     const match = token.match(tokenPattern);
@@ -175,9 +182,9 @@ export function registerStripeLetterRoutes(app: Express, dependencies: {
     try {
       client = await database.connect();
       await client.query("BEGIN");
-      const result = await client.query("SELECT id,email FROM stripe_commercial_contacts WHERE id=$1 FOR UPDATE", [Number(match[1])]);
+      const result = await client.query(`SELECT id,email FROM ${tables.contacts} WHERE id=$1 FOR UPDATE`, [Number(match[1])]);
       const contact = result.rows[0];
-      if (!contact || !verifyStripeUnsubscribeToken(token, contact, secret)) {
+      if (!contact || !verifyStripeUnsubscribeToken(token, contact, secret, audience.id)) {
         await client.query("ROLLBACK");
         return res.status(400).type("html").send(localizedPage("Enlace no válido", "No se ha realizado ningún cambio."));
       }

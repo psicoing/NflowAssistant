@@ -53,6 +53,51 @@ export const stripeCommercialRecipients = pgTable("stripe_commercial_recipients"
   attemptedAt: timestamp("attempted_at", { withTimezone: true }),
 });
 
+// Independent audience; shared sending engine, never shared permissions or drafts.
+export const probadoresCommercialContacts = pgTable("probadores_commercial_contacts", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  importedAt: timestamp("imported_at", { withTimezone: true }).notNull().defaultNow(),
+  lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).notNull().defaultNow(),
+});
+export const probadoresCommercialLetter = pgTable("probadores_commercial_letter", {
+  id: integer("id").primaryKey(),
+  subject: text("subject").notNull(),
+  body: text("body").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+export const probadoresCommercialAuthorizations = pgTable("probadores_commercial_authorizations", {
+  id: serial("id").primaryKey(),
+  contactId: integer("contact_id").notNull().references(() => probadoresCommercialContacts.id),
+  email: text("email").notNull(),
+  action: text("action").notNull(),
+  source: text("source"),
+  evidence: text("evidence"),
+  obtainedAt: timestamp("obtained_at", { withTimezone: true }),
+  recordedBy: integer("recorded_by"),
+  recordedAt: timestamp("recorded_at", { withTimezone: true }).notNull().defaultNow(),
+});
+export const probadoresCommercialDispatches = pgTable("probadores_commercial_dispatches", {
+  id: text("id").primaryKey(),
+  language: text("language").notNull(),
+  subject: text("subject").notNull(),
+  body: text("body").notNull(),
+  status: text("status").notNull().default("prepared"),
+  createdBy: integer("created_by"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+export const probadoresCommercialRecipients = pgTable("probadores_commercial_recipients", {
+  id: serial("id").primaryKey(),
+  dispatchId: text("dispatch_id").notNull().references(() => probadoresCommercialDispatches.id),
+  contactId: integer("contact_id").notNull().references(() => probadoresCommercialContacts.id),
+  email: text("email").notNull(),
+  dedupeKey: text("dedupe_key").notNull().unique(),
+  status: text("status").notNull().default("pending"),
+  reason: text("reason"),
+  messageId: text("message_id"),
+  attemptedAt: timestamp("attempted_at", { withTimezone: true }),
+});
+
 // Same dedicated shape used by connect-pg-simple; independent of user deletion.
 export const nuxaAuthSessions = pgTable("nuxa_auth_sessions", {
   sid: varchar("sid").primaryKey(),

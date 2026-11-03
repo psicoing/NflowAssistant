@@ -16,6 +16,10 @@ export const stripeAuthorizationCondition = `COALESCE((
   WHERE a.contact_id=c.id AND a.email=c.email ORDER BY a.id DESC LIMIT 1
 ), false)`;
 
-export const stripeEligibilitySelect = `SELECT c.id,c.email,
+export function commercialEligibilitySelect(contactsTable: "stripe_commercial_contacts" | "probadores_commercial_contacts") {
+  return `SELECT c.id,c.email,
   ${stripeSuppressionCondition} AS suppressed,
-  ${stripeAuthorizationCondition} AS authorized FROM stripe_commercial_contacts c`;
+  COALESCE((SELECT a.action='grant' FROM ${contactsTable === "stripe_commercial_contacts" ? "stripe_commercial_authorizations" : "probadores_commercial_authorizations"} a
+    WHERE a.contact_id=c.id AND a.email=c.email ORDER BY a.id DESC LIMIT 1),false) AS authorized FROM ${contactsTable} c`;
+}
+export const stripeEligibilitySelect = commercialEligibilitySelect("stripe_commercial_contacts");

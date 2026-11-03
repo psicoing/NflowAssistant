@@ -80,3 +80,14 @@ genéricos no permitían atribuir la causa a Stripe o al almacenamiento.
 
 **How to apply:** Confirmar el resultado del endpoint publicado y su diagnóstico
 seguro antes de atribuir la causa, cambiar credenciales o declarar éxito.
+
+El propietario quiere una audiencia separada llamada «Probadores» para quienes
+dejaron su email en recursos gratuitos y para usuarios registrados en prueba,
+reutilizando las funciones comerciales de Stripe.
+
+**Why:** El usuario pidió «copia todo lo que has hecho para stripe» con una
+pestaña «probadores» que recoja los registros.
+
+**How to apply:** Mantener ese objetivo separado de la lista Stripe. El origen
+gratuito no prueba uso del chat ni autoriza publicidad; conservar el control
+manual de campañas y las cartas en español e inglés.
