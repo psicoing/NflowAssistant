@@ -149,3 +149,17 @@ mtime_ms = 1793185783873
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/97aec8cf-6ba4-466c-8206-5473936c4e73/a43b2dc0-adbc-42af-9197-43fb85bedda0"
 storage_version_token = "1793185805648245"
 content_type = "text/markdown"
+
+[[outputs]]
+id = "WkBz8lvMOOAMg0Xw_ZxUF"
+uri = "file://reports/auditoria-usuarios-nuxa-2026-11-05.txt"
+type = "text"
+title = "Auditoría de usuarios y estadísticas de NUXA"
+description = "Informe del 5 de noviembre de 2026 con cifras verificadas, consultas SQL, análisis de los accesos administrativos, límites de la evidencia y correcciones propuestas. Sin cambios en producción."
+logical_id = "c38c812b-62f6-4055-ac6a-b63909b98147"
+content_hash = "sha256:43f9abd7fd2c25ec245d6dc1eaea4385ddfab2061db27874871304ab4c77ca2d"
+size = 19382
+mtime_ms = 1793893934338
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/c38c812b-62f6-4055-ac6a-b63909b98147/232f0679-6fbc-4523-9ffe-57d1afbfa8b4"
+storage_version_token = "1793893985220257"
+content_type = "text/plain"

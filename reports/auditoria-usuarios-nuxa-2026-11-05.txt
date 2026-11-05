@@ -1,0 +1,404 @@
+AUDITORÍA DE USUARIOS Y ESTADÍSTICAS DE NUXA
+Fecha: 5 de noviembre de 2026
+Observaciones SQL y de analítica desde aproximadamente las 15:45 UTC.
+Ventanas móviles de 7, 15 y 30 días, hasta el momento de cada consulta.
+
+1. CONCLUSIÓN
+
+El total de 75 coincide en tres fuentes:
+- COUNT(*) de la tabla users de la réplica de producción.
+- Consulta de solo lectura mediante la conexión configurada de la aplicación.
+- GET https://nuxa.life/api/public-stats: HTTP 200, totalUsers "75".
+
+La identidad de las dos conexiones de datos se contrastó mediante una huella
+no secreta de base de datos y su OID, además de conteos y fechas. Coinciden.
+No se consultaron ni revelaron cadenas de conexión o credenciales.
+
+No se ha encontrado una constante 75 ni un contador desconectado de users.
+El servidor público ejecuta COUNT(*); el administrativo obtiene las filas
+de users y calcula su longitud. No se ha iniciado sesión para consultar el
+endpoint administrativo: esta última comprobación es de código, no una
+comparación autenticada de su respuesta publicada.
+
+El último registro conservado se creó el 2026-10-06 13:36:55 UTC
+(15:36:55, hora de Madrid). Es anterior al inicio de la ventana móvil de
+30 días de esta auditoría, aproximadamente 2026-10-06 15:45 UTC.
+
+Los 13 eventos login_succeeded de los últimos siete días tienen
+user_role=admin y destination=admin_dashboard. SQL muestra una única
+cuenta con last_login_at reciente en esa ventana, con rol admin.
+Esto respalda accesos repetidos de administración, no trece altas nuevas.
+No hay distinct_id en los eventos: no existe una unión evento-a-cuenta
+que permita asignar individualmente cada evento a una persona.
+
+Por tanto, se explica la aparente contradicción entre accesos y altas.
+No se ha demostrado por qué no se completan nuevos registros: la evidencia
+conservada no distingue ausencia de intentos de intentos abandonados o
+fallidos sin trazabilidad suficiente. No se declara resuelta esa parte.
+
+2. CIFRAS COMPROBADAS EN PRODUCCIÓN
+
+Total de cuentas: 75
+Cuentas con rol user: 72
+Cuentas con rol admin: 3
+Cuentas creadas sin fecha registrada: 0
+Primera cuenta conservada: 2025-10-01 18:21:57 UTC
+Última cuenta conservada: 2026-10-06 13:36:55 UTC
+
+Periodo     Altas   Cuentas con último login reciente   Cuentas con mensajes propios
+7 días      0       1, administrativa                    0
+15 días     0       1, administrativa                    0
+30 días     0       2, una administrativa                1
+
+Mensajes propios de usuarios registrados:
+- Últimos 7 días: 0.
+- Últimos 15 días: 0.
+- Últimos 30 días: 15, de una cuenta.
+Se han contado solo metadatos y la marca is_user, nunca contenido.
+
+Estas son dos definiciones de actividad distintas. last_login_at mide un
+inicio de sesión explícito registrado; no mide cada visita con una sesión
+ya abierta. Los mensajes permiten comprobar actividad de chat aunque el
+inicio de sesión original sea anterior a la ventana.
+
+Otros indicadores:
+- 10 cuentas tienen alguna fecha de inicio de sesión.
+- Suma de login_count actual: 153. Es acumulada, no el número del último mes.
+- 1 sesión autenticada vigente al consultar, administrativa. Es una foto
+  actual: no reconstruye sesiones históricas ni usuarios activos mensuales.
+- 4 perfiles marcados como completos. Un perfil incompleto no equivale a
+  un registro fallido: la cuenta ya existe.
+- 3 cuentas sin correo no vacío.
+- 69 correos distintos normalizados entre 72 cuentas con correo no vacío.
+  Son cuentas, no una estimación demostrada de personas únicas.
+
+3. ESTADOS: NO SON LA MISMA MÉTRICA
+
+Estado en users                 Cuentas
+trial, rol user                 57
+pending_payment, rol user       9
+active, rol user                6
+active, rol admin               3
+Total                          75
+
+- subscription_status=active: 9, incluyendo 3 administradores.
+- active con vencimiento futuro o sin fecha de vencimiento: 6,
+  de las cuales 3 son cuentas user y 3 administrativas.
+- has_completed_payment=true: 7, incluyendo 2 administradores.
+- Con ambas marcas de verificación del nuevo flujo de prueba: 0.
+- Con solo la marca de correo del nuevo flujo: 0.
+- Con solo la marca de móvil del nuevo flujo: 0.
+- Identidades conservadas del nuevo flujo de prueba: 0.
+
+Las marcas de verificación añadidas al nuevo flujo no certifican qué sucedió
+con cuentas históricas anteriores. Su ausencia no demuestra que nunca se
+verificaran por otro mecanismo.
+
+Estos estados de base de datos tampoco prueban suscripciones cobradas
+actualmente en Stripe. No se ha consultado Stripe ni conciliado pagos.
+
+El dashboard calcula activeSubscriptions por estado active, sin excluir
+administradores ni comprobar vencimiento. También calcula totalRevenue
+multiplicando ese número por 2,99: es una estimación, no ingresos contables.
+El endpoint público devuelve averageSatisfaction fijo en 4,9. No son las
+causas de que users marque 75, pero deben separarse de métricas observadas.
+
+4. ANALÍTICA: QUÉ SIGNIFICAN LOS EVENTOS
+
+Eventos                         7 días       15 días      30 días
+login_succeeded                 13           14           20
+public_discovery_entry          26           30           51
+chat_message_succeeded          0            0            15
+free_trial_cta_clicked          0            0            5
+registration_succeeded          0            0            0
+
+No hay eventos registrados de fallo de registro o de los pasos de
+verificación en esas consultas. Eso no demuestra cero fallos reales.
+El envoltorio solo emite con consentimiento de analítica y tracker disponible.
+
+Los 12 accesos y 25 entradas del documento eran una foto anterior: al
+consultar había 13 y 26. El 5 de noviembre aparece un login adicional.
+
+En 30 días:
+- 17 login_succeeded tienen rol admin y destino admin_dashboard.
+- 3 tienen rol user y destino chat.
+- Los 20 proceden del hostname nuxa.life.
+- Los 51 discovery events se reparten en 50 para nuxa.life y 1 para
+  chatbotpsicologia.org.
+- No hay distinct_id informado. Los identificadores técnicos de sesión
+  son aproximaciones de visitante y cambian de sal cada mes.
+
+No se debe convertir el número de eventos o sesiones en usuarios registrados
+ni sumar identificadores de octubre y noviembre como personas únicas exactas.
+
+Páginas relevantes, 30 días, datos recogidos por el tracker:
+/login          28 vistas
+/prueba-gratis  9 vistas
+/admin/login    5 vistas
+/precios        4 vistas
+/registro       3 vistas
+
+Páginas vistas por mes dentro de la ventana de 30 días:
+Octubre parcial:   649 vistas; 231 identificadores aproximados de visitante.
+Noviembre parcial: 1185 vistas; 264 identificadores aproximados de visitante.
+
+No se suman como personas únicas exactas entre meses.
+Las aproximadamente 2.500 IP del documento no se han reproducido como una
+métrica equivalente: tráfico del servidor, IP, sesiones del tracker, cuentas
+y personas son magnitudes diferentes y tienen distinta cobertura.
+No se demuestra que esas IP correspondan a personas registrables ni a bots.
+
+5. CÓDIGO Y PERSISTENCIA REVISADOS
+
+Ruta activa:
+- server/index.ts importa registerRoutes desde server/routes.ts.
+- server/routes_clean.ts no es la implementación activa revisada.
+
+Contadores:
+- /api/admin/stats -> storage.getAllUsers() -> SELECT sobre users -> length.
+- /api/public-stats -> storage.getPublicStats() -> COUNT(*) sobre users.
+- El panel administrativo solicita estadísticas al cargar. No tiene
+  actualización periódica propia para esta cifra.
+- El componente público de estadísticas tiene refetchInterval de 30 segundos.
+- La respuesta publicada comprobada de nuxa.life tiene Cache-Control private,
+  sin cabecera Age. Esto y su coincidencia con SQL no sustentan que el 75
+  observado actualmente se deba a caché.
+
+Registros:
+- /api/auth/register valida, comprueba username, calcula hash y usa
+  storage.createUser(), que inserta en users y devuelve la fila.
+- El flujo gratuito inicia una verificación persistida y no crea la cuenta
+  definitiva hasta verificar correo y móvil. La finalización usa transacción
+  para insertar/actualizar users y asociar la identidad de prueba.
+- Un usuario que solo deja su correo o no termina la verificación no tiene
+  por qué aparecer en users.
+- Hay formularios empresariales que emiten registration_succeeded al guardar
+  una solicitud comercial. Ese nombre de evento no debe interpretarse como
+  garantía universal de una nueva cuenta en users.
+- Los accesos con contraseña y magic link actualizan last_login_at y
+  login_count. La activación de prueba establece sesión por su propia ruta,
+  sin pasar por updateUserLogin.
+
+El análisis estático muestra el destino de las escrituras, pero no sustituye
+una prueba funcional completa. No se ha registrado una cuenta real ni se han
+solicitado códigos para evitar escrituras o mensajes no autorizados.
+
+6. REGISTROS FALLIDOS, INCOMPLETOS Y LOGS
+
+Datos retenidos:
+- nuxa_trial_flows: 0 filas.
+- nuxa_trial_identities: 0 filas.
+- nuxa_trial_sms_sends: 0 filas.
+- individual_registrations: 6 filas históricas, 0 en los últimos 30 días.
+- empresa_registrations: 1 fila histórica, 0 en los últimos 30 días.
+
+No equivale a cero intentos fallidos. cleanExpired() elimina flujos
+caducados; start() elimina el flujo si falla el primer envío de correo;
+reiniciar el proceso puede sustituir el flujo pendiente de esa sesión.
+No se dispone de un historial permanente de todos los intentos fallidos.
+
+Una investigación de telemetría de producción, separada y de solo lectura,
+informó:
+- Ventana 7 días: 2026-10-29 15:48:09 UTC a 2026-11-05 15:48:09 UTC.
+- /api/auth/login: 13 solicitudes; 0 respuestas 4xx y 0 respuestas 5xx.
+- No encontró entradas de logs coincidentes para las rutas de registro y
+  los pasos de verificación en 7 o 30 días.
+- La consulta agregada de endpoints de 30 días estaba limitada a 100 rutas.
+  No permite deducir un recuento completo para las rutas ausentes.
+- No se pudieron obtener tasas de fallo específicas de esas rutas.
+- Hubo entradas genéricas con términos de base de datos/sesión y
+  verificación, pero sin evidencia que las vincule a altas fallidas.
+- No se estableció relación causal con una publicación reciente.
+
+No se interpreta ausencia de logs como prueba de ausencia de intentos.
+
+7. EVOLUCIÓN HISTÓRICA RECONSTRUIBLE
+
+Mes        Cuentas conservadas creadas en el mes     Acumulado conservado
+2025-10    4                                        4
+2025-11    3                                        7
+2026-01    3                                        10
+2026-02    2                                        12
+2026-03    10                                       22
+2026-04    4                                        26
+2026-05    20                                       46
+2026-06    24                                       70
+2026-08    1                                        71
+2026-09    3                                        74
+2026-10    1                                        75
+
+Los meses sin filas no tuvieron altas que se conserven actualmente.
+Esto NO es una auditoría histórica inmutable: existen rutas administrativas
+de eliminación de cuentas. Sin un registro de altas y bajas no se pueden
+reconstruir cuentas eliminadas ni el total exacto en cada fecha pasada.
+
+8. HALLAZGO ADICIONAL DE DOMINIO
+
+El servicio de despliegue declara nflow.style como URL principal, con
+nuxa.life entre los dominios adicionales. La consulta al dominio principal
+falló con ENOTFOUND desde este entorno, mientras nuxa.life respondió 200.
+No se establece que esto cause el problema de registro; es una diferencia
+de configuración a revisar antes de usar esa URL como destino.
+
+9. CORRECCIONES PROPUESTAS, NO IMPLEMENTADAS
+
+Prioridad 1: separar métricas de personas/cuentas y operaciones internas.
+- Total de cuentas, cuentas no administrativas, nuevas cuentas, actividad
+  de chat, accesos administrativos y accesos de clientes por separado.
+- No presentar los 13 eventos administrativos como 13 clientes nuevos.
+- Distinguir cuenta creada, solicitud comercial y verificación completada.
+
+Prioridad 2: comprobar el embudo sin comprometer producción.
+- Prueba aislada en desarrollo verificado, proveedores de correo/SMS
+  simulados, sin cargos ni mensajes reales.
+- Probar alta normal, cuenta duplicada, verificación de correo y móvil,
+  abandono, expiración, fallo de proveedor y fallo al establecer sesión.
+- Verificar fila persistida, sesión, contador y respuesta en la misma base.
+- Una prueba real con correo/SMS requiere autorización específica.
+
+Prioridad 3: trazabilidad mínima y respetuosa de la privacidad.
+- Registro servidor de intento, paso, resultado, fecha y referencia opaca.
+- No guardar contraseñas, OTP, IP sin necesidad, contenido clínico ni
+  información personal en analítica pública.
+- Contar fallos aunque no exista consentimiento de analítica, mediante
+  registros operativos limitados y con retención definida.
+- Respetar la minimización del actual borrado de datos de verificación:
+  no conservar sus datos personales para resolver un problema de métricas.
+- Mantener el fallo de analítica aislado del funcionamiento del registro.
+
+Prioridad 4: revisar métricas de suscripción e importes.
+- Excluir cuentas administrativas de indicadores comerciales.
+- Separar estado active, vigencia, créditos y pagos conciliados.
+- No presentar una multiplicación por precio fijo como ingresos reales.
+
+No se ha modificado código, esquema, registros, secretos, configuración,
+despliegue ni datos de producción. Solo se ha generado este informe.
+No se han enviado correos/SMS, realizado cobros ni invocado IA de NUXA.
+
+10. CONSULTAS PRINCIPALES REALIZADAS
+
+Todas las consultas de datos fueron SELECT de solo lectura. Las ventanas
+usaron now() en cada petición; pueden diferir unos minutos entre fuentes.
+Se incluyen las consultas agregadas relevantes, sin valores personales.
+
+SQL PostgreSQL: conteo, fechas y categorías
+
+SELECT count(*) AS total, min(created_at) AS first_user,
+       max(created_at) AS last_user,
+       count(*) FILTER(WHERE created_at IS NULL) AS missing_created_at,
+       count(*) FILTER(WHERE last_login_at IS NOT NULL) AS ever_login_recorded,
+       sum(coalesce(login_count,0)) AS lifetime_login_counter
+FROM users;
+
+SELECT p.days,
+ count(*) FILTER(WHERE u.created_at>=now()-make_interval(days=>p.days)) AS new_users,
+ count(*) FILTER(WHERE u.last_login_at>=now()-make_interval(days=>p.days)) AS recent_last_login
+FROM (VALUES(7),(15),(30)) p(days)
+CROSS JOIN users u GROUP BY p.days ORDER BY p.days;
+
+SELECT subscription_status,coalesce(role,'user') AS role,count(*) AS accounts
+FROM users GROUP BY subscription_status,coalesce(role,'user')
+ORDER BY accounts DESC;
+
+SELECT coalesce(role,'user') AS role,count(*) AS accounts,
+ count(*) FILTER(WHERE subscription_status='active') AS active_status,
+ count(*) FILTER(WHERE subscription_status='active'
+   AND(subscription_expires_at IS NULL OR subscription_expires_at>now()))
+   AS active_not_expired_or_undated,
+ count(*) FILTER(WHERE has_completed_payment=true) AS payment_flag_true
+FROM users GROUP BY coalesce(role,'user') ORDER BY accounts DESC;
+
+SELECT p.days,
+ count(DISTINCT u.id) FILTER(WHERE u.last_login_at>=now()-make_interval(days=>p.days))
+   AS logged_in_accounts,
+ count(DISTINCT u.id) FILTER(WHERE u.last_login_at>=now()-make_interval(days=>p.days)
+   AND u.role='admin') AS logged_in_admin_accounts,
+ (SELECT count(DISTINCT c.user_id) FROM conversations c
+  JOIN messages m ON m.conversation_id=c.id JOIN users au ON au.id=c.user_id
+  WHERE m.is_user=true AND m.timestamp>=now()-make_interval(days=>p.days))
+   AS accounts_sending_messages,
+ (SELECT count(*) FROM messages m JOIN conversations c ON c.id=m.conversation_id
+  JOIN users au ON au.id=c.user_id
+  WHERE m.is_user=true AND m.timestamp>=now()-make_interval(days=>p.days))
+   AS user_messages
+FROM (VALUES(7),(15),(30)) p(days) CROSS JOIN users u
+GROUP BY p.days ORDER BY p.days;
+
+SELECT count(*) AS retained_trial_flows,
+ count(*) FILTER(WHERE completed_user_id IS NOT NULL) AS completed,
+ count(*) FILTER(WHERE completed_user_id IS NULL AND email_verified_at IS NULL)
+   AS email_not_verified,
+ count(*) FILTER(WHERE completed_user_id IS NULL AND email_verified_at IS NOT NULL
+   AND phone_verified_at IS NULL) AS phone_not_verified,
+ count(*) FILTER(WHERE completed_user_id IS NULL AND phone_verified_at IS NOT NULL)
+   AS verified_not_completed,
+ min(created_at) AS earliest,max(created_at) AS latest
+FROM nuxa_trial_flows;
+
+SELECT count(*) FROM nuxa_trial_identities;
+SELECT state,count(*) FROM nuxa_trial_sms_sends GROUP BY state;
+
+SELECT 'individual_registrations' AS source,count(*) AS retained_rows,
+ count(*) FILTER(WHERE created_at>=now()-interval '30 days') AS last30
+FROM individual_registrations
+UNION ALL
+SELECT 'empresa_registrations',count(*),
+ count(*) FILTER(WHERE created_at>=now()-interval '30 days')
+FROM empresa_registrations;
+
+SELECT to_char(created_at,'YYYY-MM') AS month,count(*) AS created_surviving_accounts,
+ sum(count(*)) OVER(ORDER BY to_char(created_at,'YYYY-MM'))
+   AS cumulative_surviving_accounts
+FROM users GROUP BY 1 ORDER BY 1;
+
+SELECT count(*) AS live_sessions,
+ count(DISTINCT s.sess->>'userId') FILTER(WHERE s.sess->>'userId' IS NOT NULL)
+   AS signed_in_distinct_accounts,
+ count(*) FILTER(WHERE s.sess->>'isAdmin'='true') AS admin_sessions
+FROM nuxa_auth_sessions s WHERE s.expire>now();
+
+SQL ClickHouse: eventos y propiedades
+
+SELECT event_name,count() AS occurrences,
+ uniqExact(session_id) AS approximate_visitors,
+ uniqExactIf(distinct_id,distinct_id!='') AS identified_users,
+ min(created_at) AS first_event,max(created_at) AS last_event
+FROM website_event
+WHERE event_type=2 AND created_at>=now()-INTERVAL 30 DAY
+GROUP BY event_name ORDER BY occurrences DESC LIMIT 35;
+
+La consulta de eventos se repitió en ventanas de 7 y 15 días.
+
+SELECT data_key,string_value,count() AS occurrences
+FROM event_data
+WHERE event_name='login_succeeded'
+ AND created_at>=now()-INTERVAL 7 DAY
+ AND data_key IN ('destination','user_role','has_active_subscription')
+GROUP BY data_key,string_value ORDER BY data_key,occurrences DESC LIMIT 20;
+
+La consulta de propiedades se repitió para 30 días.
+
+SELECT toDate(created_at) AS day,count() AS successful_login_events
+FROM website_event
+WHERE event_type=2 AND event_name='login_succeeded'
+ AND created_at>=now()-INTERVAL 30 DAY
+GROUP BY day ORDER BY day LIMIT 31;
+
+SELECT url_path,count() AS pageviews FROM website_event
+WHERE event_type=1 AND created_at>=now()-INTERVAL 30 DAY
+ AND url_path IN ('/registro','/register','/prueba-gratis','/login',
+                 '/admin/login','/precios','/planes')
+GROUP BY url_path ORDER BY pageviews DESC LIMIT 10;
+
+SELECT toStartOfMonth(created_at) AS month,
+ countIf(event_type=1) AS pageviews,
+ uniqExactIf(session_id,event_type=1) AS approximate_pageview_visitors,
+ min(created_at) AS first_recorded_in_window,max(created_at) AS latest_in_window
+FROM website_event WHERE created_at>=now()-INTERVAL 30 DAY
+GROUP BY month ORDER BY month LIMIT 2;
+
+SELECT hostname,event_name,count() AS occurrences
+FROM website_event
+WHERE event_type=2 AND event_name IN ('login_succeeded','public_discovery_entry')
+ AND created_at>=now()-INTERVAL 30 DAY
+GROUP BY hostname,event_name ORDER BY event_name,occurrences DESC LIMIT 20;
