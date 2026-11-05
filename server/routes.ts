@@ -24,6 +24,9 @@ import { hasMonthlyEntitlement, paidQuestionBalance } from "./paid-question-bala
 import { registerStripeCommercialContactRoutes } from "./stripe-commercial-contacts";
 import { registerProbadoresCommercialContactRoutes } from "./probadores-commercial-contacts";
 import { ChatHistoryAccessError, establishChatUserSession, installChatHistoryGuards } from "./chat-history-security";
+import { accountRegistrationHandler } from "./account-registration";
+import { registerAdminUserMetricsRoute } from "./admin-user-metrics";
+import { createRegistrationAuditWriter, installRegistrationAudit } from "./registration-audit";
 import {
   buildSkrillLink,
   sendSkrillRegistrationEmail,
@@ -327,145 +330,8 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
     next();
   });
 
-  // User registration
-  app.post("/api/auth/register", async (req, res) => {
-    try {
-      const { username, password, email, birthDate, userType, referralCode, acceptedNuxaNotice, noticeVersion } = req.body;
-      
-      if (!username || !password) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Username y password son requeridos" 
-        });
-      }
-      
-      // Validar que para usuarios individuales se requiera fecha de nacimiento
-      if (userType === "individual" && !birthDate) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Fecha de nacimiento es requerida para usuarios individuales" 
-        });
-      }
-
-      // Validar edad mínima solo para usuarios individuales
-      if (userType === "individual" && birthDate) {
-        const calculateAge = (birthDate: string) => {
-          const today = new Date();
-          const birth = new Date(birthDate);
-          let age = today.getFullYear() - birth.getFullYear();
-          const monthDiff = today.getMonth() - birth.getMonth();
-          
-          if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-            age--;
-          }
-          
-          return age;
-        };
-
-        const age = calculateAge(birthDate);
-        if (age < 18) {
-          return res.status(400).json({ 
-            success: false, 
-            message: "Debes tener al menos 18 años para registrarte. Si eres menor de edad, consulta con tus padres o tutores." 
-          });
-        }
-
-        if (age > 95) {
-          return res.status(400).json({ 
-            success: false, 
-            message: "La plataforma está diseñada para personas de 18 a 95 años" 
-          });
-        }
-      }
-
-      // Check if user already exists
-      const existingUser = await storage.getUserByUsername(username);
-      if (existingUser) {
-        return res.status(409).json({ 
-          success: false, 
-          message: "El usuario ya existe" 
-        });
-      }
-
-      // Hash password
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      // Create user with pending payment status and NO free questions
-      const newUser = await storage.createUser({
-        username,
-        password: hashedPassword,
-        email,
-        birthDate: userType === "individual" ? birthDate : null,
-        userType: userType || "individual",
-        subscriptionStatus: 'pending_payment',
-        hasCompletedPayment: false,
-        acceptedNuxaNotice: acceptedNuxaNotice === true,
-        noticeAcceptedAt: acceptedNuxaNotice === true ? new Date() : null,
-        noticeVersion: noticeVersion || null
-      });
-
-      // Set session for newly registered user
-      await establishChatUserSession(req, newUser.id);
-
-      // Process referral code if provided
-      if (referralCode && typeof referralCode === 'string') {
-        try {
-          console.log("=== PROCESSING REFERRAL CODE DURING REGISTRATION ===");
-          console.log("Referral code:", referralCode);
-          console.log("New user ID:", newUser.id);
-          
-          // Parse referral code format: COMPANYPREFIX_PARTNERID_TIMESTAMP
-          const parts = referralCode.split('_');
-          if (parts.length >= 2) {
-            const partnerIdStr = parts[parts.length - 2];
-            const partnerId = parseInt(partnerIdStr);
-            
-            if (!isNaN(partnerId)) {
-              // Verify partner exists and is active
-              const partner = await storage.getPartner(partnerId);
-              if (partner && (partner.status === 'approved' || partner.status === 'active')) {
-                console.log(`✓ Valid partner found: ${partner.companyName} (ID: ${partnerId})`);
-                
-                // Create partner referral record
-                await storage.createPartnerReferral({
-                  partnerId: partnerId,
-                  userId: newUser.id,
-                  referralCode: referralCode.trim(),
-                  subscriptionPlan: 'pending', // Will be updated when payment is made
-                  amount: '0.00', // Will be updated when payment is made
-                  commission: '0.00', // Will be updated when payment is made
-                  status: 'pending'
-                });
-                
-                console.log(`✓ Partner referral record created for partner ${partnerId} and user ${newUser.id}`);
-              } else {
-                console.log(`⚠ Invalid or inactive partner with ID: ${partnerId}`);
-              }
-            } else {
-              console.log(`⚠ Invalid partner ID in referral code: ${partnerIdStr}`);
-            }
-          } else {
-            console.log(`⚠ Invalid referral code format: ${referralCode}`);
-          }
-        } catch (error) {
-          console.error("Error processing referral code during registration:", error);
-        }
-      }
-
-      res.json({
-        success: true,
-        message: "Cuenta creada exitosamente",
-        userId: newUser.id,
-        requiresActivation: true
-      });
-    } catch (error) {
-      console.error("Registration error:", error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Error interno del servidor" 
-      });
-    }
-  });
+  installRegistrationAudit(app, createRegistrationAuditWriter(pool));
+  app.post("/api/auth/register", accountRegistrationHandler(storage, establishChatUserSession));
 
   // User login
   app.post("/api/auth/login", async (req, res) => {
@@ -2762,28 +2628,7 @@ h1{color:#15803d;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
   });
 
 
-  app.get("/api/admin/stats", async (req, res) => {
-    if (!req.session.isAdmin) {
-      return res.status(401).json({ message: "No autorizado" });
-    }
-
-    try {
-      const users = await storage.getAllUsers();
-      const totalUsers = users.length;
-      const activeSubscriptions = users.filter(u => u.subscriptionStatus === "active").length;
-      const totalRevenue = activeSubscriptions * 2.99; // €2.99 per subscription
-
-      res.json({
-        totalUsers,
-        activeSubscriptions,
-        totalRevenue: totalRevenue.toFixed(2),
-        pendingPayments: users.filter(u => u.subscriptionStatus === "pending_payment").length
-      });
-    } catch (error) {
-      console.error("Error fetching admin stats:", error);
-      res.status(500).json({ message: "Error fetching stats" });
-    }
-  });
+  registerAdminUserMetricsRoute(app, pool);
 
   // ===== ADMIN USER MANAGEMENT =====
 

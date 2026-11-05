@@ -43,7 +43,14 @@ export async function registerTrialRoutes(app: Express, pool: Pool, providers: T
       } catch (error) {
         if (!respondTrialError(res, error)) {
           console.error("[trial-verification] request failed");
-          res.status(503).json({ message: "La verificación no está disponible. Inténtalo más tarde.", code: "VERIFICATION_UNAVAILABLE" });
+          const persisted = res.locals.registrationAccountCreated === true;
+          res.status(503).json({
+            message: persisted
+              ? "La cuenta se creó, pero no se pudo iniciar la sesión. Accede desde «Iniciar sesión»."
+              : "La verificación no está disponible. Inténtalo más tarde.",
+            code: persisted ? "ACCOUNT_CREATED_SESSION_FAILED" : "VERIFICATION_UNAVAILABLE",
+            ...(persisted ? { accountCreated: true } : {}),
+          });
         }
       }
     };
@@ -81,8 +88,9 @@ export async function registerTrialRoutes(app: Express, pool: Pool, providers: T
   }));
   app.post("/api/prueba-gratis/verificar-movil", handler(async (req, res) => {
     const result = await service.check(req.body?.flowId, "sms", req.body?.code, caller(req)) as {
-      success: boolean; userId: number; remaining: number;
+      success: boolean; userId: number; remaining: number; accountCreated: boolean;
     };
+    res.locals.registrationAccountCreated = result.accountCreated === true;
     // Rotate the authenticated session; a retried completion can resume via userId.
     if (req.session.userId !== result.userId) {
       await new Promise<void>((resolve, reject) => req.session.regenerate(err => err ? reject(err) : resolve()));

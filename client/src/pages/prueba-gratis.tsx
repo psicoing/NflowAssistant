@@ -280,17 +280,17 @@ export default function PruebaGratis() {
     }
   };
 
-  const finishTrial = async (isNewTrial: boolean) => {
+  const finishTrial = async (accountCreated: boolean, trialActivated = false) => {
+    if (trialActivated) trackEvent("trial_activation_succeeded");
+    if (accountCreated) {
+      trackEvent("account_registration_succeeded", {
+        registration_type: "free_trial", destination: "chat",
+      });
+    }
     const checkoutReturn = takeCheckoutReturn();
     if (checkoutReturn) {
       window.location.href = checkoutReturn;
       return;
-    }
-    if (isNewTrial) {
-      trackEvent("registration_succeeded", {
-        registration_type: "free_trial",
-        destination: "chat",
-      });
     }
     try {
       const response = await apiRequest("POST", "/api/conversations", { title: "Mi primera consulta" });
@@ -312,9 +312,10 @@ export default function PruebaGratis() {
     setError("");
     setNotice("");
     try {
-      await apiRequest("POST", "/api/prueba-gratis/verificar-movil", { flowId, code: smsCode });
+      const response = await apiRequest("POST", "/api/prueba-gratis/verificar-movil", { flowId, code: smsCode });
+      const result = await response.json();
       trackEvent("trial_phone_verified");
-      await finishTrial(true);
+      await finishTrial(result.accountCreated === true, true);
     } catch (requestError) {
       trackEvent("trial_verification_failed", { step: "sms" });
       setError(safeErrorMessage(requestError, "sms"));

@@ -48,7 +48,7 @@ export default function Login() {
             : data.hasCompletedPayment && data.subscriptionStatus === "active" && data.hasActiveSubscription
               ? "chat"
               : "activation_or_plans";
-        trackEvent("login_succeeded", {
+        trackEvent(data.role === "admin" ? "admin_login_succeeded" : "login_succeeded", {
           destination,
           has_active_subscription: Boolean(data.hasActiveSubscription),
           user_role: data.role || "user",

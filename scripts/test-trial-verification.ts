@@ -1,8 +1,6 @@
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
-import { Pool, neonConfig } from "@neondatabase/serverless";
-import ws from "ws";
-import { pool as mainPool } from "../server/db";
+import { isolatedDevelopmentDatabase } from "./lib/development-test-database";
 import { TrialStore, TrialError, ensureTrialTables } from "../server/trial/store";
 import { TrialVerification } from "../server/trial/verification";
 import type { TrialProviders } from "../server/trial/providers";
@@ -12,13 +10,9 @@ import session from "express-session";
 import { registerTrialRoutes } from "../server/trial/routes";
 import { productionSessionOptions } from "../server/production-sessions";
 
-neonConfig.webSocketConstructor = ws;
-const namespace = `trial_test_${randomUUID().replaceAll("-", "")}`;
-const isolated = new Pool({
-  connectionString: process.env.NEON_DATABASE_URL || process.env.DATABASE_URL,
-  options: `-c search_path=${namespace}`,
-});
-let created = false;
+const developmentFixture = await isolatedDevelopmentDatabase("trial_test");
+const namespace = developmentFixture.schema;
+const isolated = developmentFixture.pool;
 const emailCodes = new Map<string, string>();
 const smsCodes = new Map<string, string>();
 let smsCalls = 0;
@@ -41,8 +35,6 @@ try {
   assert.equal(quoteTrialSmsPrice("usd", [{ prices: [{ currentPrice: "0.10" }] }]), 550_000);
   assert.throws(() => quoteTrialSmsPrice("EUR", [{ prices: [{ current_price: "0.10" }] }]), TrialError);
   assert.throws(() => quoteTrialSmsPrice("USD", [{ prices: [{ current_price: null }] }]), TrialError);
-  await mainPool.query(`CREATE SCHEMA "${namespace}"`);
-  created = true;
   assert.equal((await isolated.query("SELECT current_schema() AS schema")).rows[0].schema, namespace,
     "Never run fixtures against the application schema");
   await isolated.query(`CREATE TABLE users(
@@ -238,7 +230,5 @@ try {
   }
   console.log("PASS: email/mobile verification, production PostgreSQL sessions across instances and restart, idempotency, expiry, durable anti-abuse, 14 concurrent free-question attempts, independent $5 SMS cap, paid paths, uncertain delivery. No real email, SMS or AI generation.");
 } finally {
-  await isolated.end();
-  if (created) await mainPool.query(`DROP SCHEMA "${namespace}" CASCADE`);
-  await mainPool.end();
+  await developmentFixture.close();
 }

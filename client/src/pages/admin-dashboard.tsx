@@ -8,15 +8,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import StripeContactsPanel from "@/components/admin/StripeContactsPanel";
+import AdminUserMetricsPanel from "@/components/admin/AdminUserMetricsPanel";
+import type { AdminUserMetrics } from "../../../shared/admin-user-metrics";
 import { 
   Users, 
   DollarSign, 
-  MessageSquare, 
   FileText, 
   Settings,
   LogOut,
   TrendingUp,
-  UserPlus,
   CreditCard,
   HandHeart,
   CheckCircle,
@@ -32,15 +32,6 @@ import {
   RefreshCw,
   Eye
 } from "lucide-react";
-
-interface DashboardStats {
-  totalUsers: number;
-  activeSubscriptions: number;
-  totalRevenue: string;
-  totalConversations: number;
-  todayRegistrations: number;
-  todayPayments: number;
-}
 
 interface LicenseFormData {
   activeUsersLimit: string;
@@ -312,8 +303,10 @@ const getEmpresaLetter = (brand: EmpresaBrand, language: EmpresaLetterLanguage) 
 
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
-  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [stats, setStats] = useState<AdminUserMetrics | null>(null);
   const [loading, setLoading] = useState(true);
+  const [statsRefreshing, setStatsRefreshing] = useState(false);
+  const [statsError, setStatsError] = useState<string | null>(null);
   const [partners, setPartners] = useState<any[]>([]);
   const [pendingPartners, setPendingPartners] = useState<any[]>([]);
   const [pendingUsers, setPendingUsers] = useState<any[]>([]);
@@ -914,19 +907,29 @@ export default function AdminDashboard() {
   };
 
   const checkAuthAndFetchStats = async () => {
+    setStatsRefreshing(true);
+    setStatsError(null);
     try {
       const response = await fetch("/api/admin/stats");
       if (response.status === 401) {
         setLocation("/admin/login");
         return;
       }
+      if (!response.ok) {
+        throw new Error(`No se pudieron cargar los indicadores (HTTP ${response.status}).`);
+      }
       const data = await response.json();
-      setStats(data);
+      if (data?.metricsVersion !== 2) {
+        setStatsError("El servidor aún no ofrece las métricas versión 2; espera a que se publique la actualización del servidor.");
+        return;
+      }
+      setStats(data as AdminUserMetrics);
     } catch (error) {
       console.error("Error fetching stats:", error);
-      setLocation("/admin/login");
+      setStatsError(error instanceof Error ? error.message : "No se pudieron cargar los indicadores.");
     } finally {
       setLoading(false);
+      setStatsRefreshing(false);
     }
   };
 
@@ -1073,80 +1076,12 @@ export default function AdminDashboard() {
       </div>
 
       <div className="max-w-7xl mx-auto p-6">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
-          <Card className="bg-gray-800/50 border-gray-700">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <Users className="h-8 w-8 text-blue-500" />
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-400">Total Usuarios</p>
-                  <p className="text-2xl font-bold text-white">{stats?.totalUsers || 0}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gray-800/50 border-gray-700">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <CreditCard className="h-8 w-8 text-green-500" />
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-400">Suscripciones Activas</p>
-                  <p className="text-2xl font-bold text-white">{stats?.activeSubscriptions || 0}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gray-800/50 border-gray-700">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <DollarSign className="h-8 w-8 text-yellow-500" />
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-400">Ingresos Totales</p>
-                  <p className="text-2xl font-bold text-white">€{stats?.totalRevenue || "0"}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gray-800/50 border-gray-700">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <MessageSquare className="h-8 w-8 text-purple-500" />
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-400">Conversaciones</p>
-                  <p className="text-2xl font-bold text-white">{stats?.totalConversations || 0}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gray-800/50 border-gray-700">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <UserPlus className="h-8 w-8 text-orange-500" />
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-400">Registros Hoy</p>
-                  <p className="text-2xl font-bold text-white">{stats?.todayRegistrations || 0}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gray-800/50 border-gray-700">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <TrendingUp className="h-8 w-8 text-cyan-500" />
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-400">Pagos Hoy</p>
-                  <p className="text-2xl font-bold text-white">{stats?.todayPayments || 0}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <AdminUserMetricsPanel
+          metrics={stats}
+          loading={statsRefreshing}
+          error={statsError}
+          onRefresh={checkAuthAndFetchStats}
+        />
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
@@ -1181,16 +1116,16 @@ export default function AdminDashboard() {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-300">Nuevos registros hoy</span>
-                      <Badge variant="secondary">{stats?.todayRegistrations || 0}</Badge>
+                      <span className="text-gray-300">Nuevas cuentas cliente · 7 días</span>
+                      <Badge variant="secondary">{stats?.periods?.find((period) => period.days === 7)?.newUsers ?? "—"}</Badge>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-300">Pagos completados hoy</span>
-                      <Badge variant="secondary">{stats?.todayPayments || 0}</Badge>
+                      <span className="text-gray-300">Pagos pendientes</span>
+                      <Badge variant="secondary">{stats?.pendingPayments ?? "—"}</Badge>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-300">Conversaciones activas</span>
-                      <Badge variant="secondary">{stats?.totalConversations || 0}</Badge>
+                      <span className="text-gray-300">Conversaciones de clientes</span>
+                      <Badge variant="secondary">{stats?.totalConversations ?? "—"}</Badge>
                     </div>
                   </div>
                 </CardContent>
@@ -1709,8 +1644,8 @@ export default function AdminDashboard() {
                               <span className="text-white font-bold">{adminUsers.filter((u) => (u.prepaidQuestions || 0) > 0).length}</span>
                             </div>
                             <div className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
-                              <span className="text-gray-300">Ingresos totales reportados</span>
-                              <span className="text-white font-bold">€{stats?.totalRevenue || "0"}</span>
+                              <span className="text-gray-300">Ingresos conciliados</span>
+                              <span className="text-amber-200 font-semibold">No conciliados</span>
                             </div>
                           </div>
                         </CardContent>

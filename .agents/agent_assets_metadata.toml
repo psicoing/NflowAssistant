@@ -163,3 +163,17 @@ mtime_ms = 1793893934338
 storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/c38c812b-62f6-4055-ac6a-b63909b98147/232f0679-6fbc-4523-9ffe-57d1afbfa8b4"
 storage_version_token = "1793893985220257"
 content_type = "text/plain"
+
+[[outputs]]
+id = "yKfT7RCDBVHLJkQYQVXaW"
+uri = "file://docs/evaluations/USER_STATS_REGISTRATION_VALIDATION.md"
+type = "text"
+title = "Correcciones y pruebas de registro y estadísticas"
+description = "Cambios preparados solo en desarrollo, pruebas aisladas superadas, comprobaciones de navegador y límites pendientes. Sin publicar ni modificar producción."
+logical_id = "bd969b2f-7ba5-420a-a5f2-d925e7ad4dd3"
+content_hash = "sha256:0773c0b5d18587f10af155829a81dab296c8709998976f700a9f7bd484bdd037"
+size = 8309
+mtime_ms = 1793895413782
+storage_uri = "gcs://replit-rams-assets-spock/rams/assets/repl:53edd92b-4b6a-4888-b88f-2ec100a6fe20/bd969b2f-7ba5-420a-a5f2-d925e7ad4dd3/1dc0a1e5-800e-4a16-8db2-5b84ab8107e9"
+storage_version_token = "1793895493455728"
+content_type = "text/markdown"

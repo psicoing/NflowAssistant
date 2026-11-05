@@ -96,7 +96,7 @@ export default function Registro() {
       const res = await apiRequest("POST", "/api/registro-empresa", eForm);
       const data = await res.json();
       if (data.success) {
-        trackEvent("registration_succeeded", {
+        trackEvent("commercial_request_succeeded", {
           registration_type: "enterprise",
           destination: "confirmation",
         });
@@ -105,7 +105,7 @@ export default function Registro() {
         setEError(data.message || "Error al procesar la solicitud");
       }
     } catch {
-      trackEvent("registration_failed", {
+      trackEvent("commercial_request_failed", {
         registration_type: "enterprise",
         reason: "network",
       });
@@ -123,7 +123,7 @@ export default function Registro() {
       const res = await apiRequest("POST", "/api/registro-empresa-media", mForm);
       const data = await res.json();
       if (data.success) {
-        trackEvent("registration_succeeded", {
+        trackEvent("commercial_request_succeeded", {
           registration_type: "mid_market",
           plan_id: mForm.plan,
           destination: "confirmation",
@@ -133,7 +133,7 @@ export default function Registro() {
         setMError(data.message || "Error al procesar la solicitud");
       }
     } catch {
-      trackEvent("registration_failed", {
+      trackEvent("commercial_request_failed", {
         registration_type: "mid_market",
         reason: "network",
       });

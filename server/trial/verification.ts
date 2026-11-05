@@ -190,7 +190,7 @@ export class TrialVerification {
       if (row?.completed_user_id) {
         const state = await client.query("SELECT used,reserved FROM nuxa_trial_identities WHERE user_id=$1", [row.completed_user_id]);
         await client.query("COMMIT");
-        return { success: true, userId: row.completed_user_id, remaining: Math.max(0, 5 - state.rows[0].used - state.rows[0].reserved) };
+        return { success: true, accountCreated: false, userId: row.completed_user_id, remaining: Math.max(0, TRIAL_LIMIT - state.rows[0].used - state.rows[0].reserved) };
       }
       if (!row?.email_verified_at || !row.phone_verified_at || new Date(row.expires_at).getTime() <= Date.now()) {
         throw new TrialError(403, "VERIFICATION_REQUIRED", "Verifica el correo y el móvil antes de continuar.");
@@ -221,7 +221,7 @@ export class TrialVerification {
       await client.query(`UPDATE nuxa_trial_flows SET completed_user_id=$2,
         phone='',email='',username='',password_hash=NULL,email_code_hash=NULL,sms_code_hash=NULL WHERE id=$1`, [id, userId]);
       await client.query("COMMIT");
-      return { success: true, userId: userId!, remaining: Math.max(0, TRIAL_LIMIT - used) };
+      return { success: true, accountCreated: !row.existing_user_id, userId: userId!, remaining: Math.max(0, TRIAL_LIMIT - used) };
     } catch (error) {
       await client.query("ROLLBACK");
       if ((error as { code?: string }).code === "23505") throw unavailableTrial();

@@ -1,6 +1,17 @@
-import { pgTable, text, serial, integer, boolean, timestamp, bigint, varchar, json } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, bigint, varchar, json, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+
+export const registrationEvents = pgTable("nuxa_registration_events", {
+  id: text("id").primaryKey(),
+  occurredAt: timestamp("occurred_at", { withTimezone: true }).notNull().defaultNow(),
+  stage: text("stage").notNull(),
+  outcome: text("outcome").notNull(),
+  httpStatus: integer("http_status"),
+  code: text("code"),
+  accountCreated: boolean("account_created").notNull().default(false),
+  actorRole: text("actor_role"),
+}, table => [index("nuxa_registration_events_occurred_idx").on(table.occurredAt)]);
 
 // Import alone never confers marketing permission.
 // Schema is applied in development and reaches production only through Publish.
