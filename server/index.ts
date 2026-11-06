@@ -10,6 +10,7 @@ import { registerSeoDiscovery } from "./seo-discovery";
 import { pool } from "./db";
 import { attachVoiceDemoWebSocket } from "./voiceDemoBridge";
 import { createServer } from "http";
+import { shouldRunStartupDataBootstrap } from "./startup-policy";
 
 async function ensureAdminUser() {
   try {
@@ -1203,17 +1204,21 @@ app.use((req, res, next) => {
     log(`serving on port ${port} (initializing)`);
   });
 
-  await ensureAdminUser();
-  await ensureInstitutionTables();
-  await ensureInstitutionContacts();
-  await ensureInstitutionTemplates();
-  await ensureMutuaTables();
-  await ensureMutuaContacts();
-  await ensureEmpresasTables();
-  await ensureVoiceCrmTables();
-  await ensureEmpresasContacts();
-  await ensureEmpresaTemplates();
-  await ensureLeadTables();
+  if (shouldRunStartupDataBootstrap()) {
+    await ensureAdminUser();
+    await ensureInstitutionTables();
+    await ensureInstitutionContacts();
+    await ensureInstitutionTemplates();
+    await ensureMutuaTables();
+    await ensureMutuaContacts();
+    await ensureEmpresasTables();
+    await ensureVoiceCrmTables();
+    await ensureEmpresasContacts();
+    await ensureEmpresaTemplates();
+    await ensureLeadTables();
+  } else {
+    log("Development startup: automatic data/schema bootstrap disabled; existing data preserved");
+  }
   await registerRoutes(app, server);
   attachVoiceDemoWebSocket(server);
 

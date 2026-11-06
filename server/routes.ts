@@ -23,6 +23,7 @@ import { CHECKOUT_PRODUCTS, StripeCheckoutService } from "./stripe-checkout-serv
 import { hasMonthlyEntitlement, paidQuestionBalance } from "./paid-question-balance";
 import { registerStripeCommercialContactRoutes } from "./stripe-commercial-contacts";
 import { registerProbadoresCommercialContactRoutes } from "./probadores-commercial-contacts";
+import { shouldRunStartupDataBootstrap } from "./startup-policy";
 import { ChatHistoryAccessError, establishChatUserSession, installChatHistoryGuards } from "./chat-history-security";
 import { accountRegistrationHandler } from "./account-registration";
 import { registerAdminUserMetricsRoute } from "./admin-user-metrics";
@@ -274,13 +275,15 @@ async function checkSubscription(userId: number): Promise<boolean> {
 export async function registerRoutes(app: Express, existingServer?: Server): Promise<Server> {
   registerStripeCommercialContactRoutes(app);
   registerProbadoresCommercialContactRoutes(app);
-  // Preserve old history; unknown legacy replies must not be relabelled as AI.
-  await pool.query("ALTER TABLE messages ADD COLUMN IF NOT EXISTS response_kind text");
-  // No default/backfill: old rows are retained, but their origin is unverified.
-  await pool.query(`ALTER TABLE messages
-    ADD COLUMN IF NOT EXISTS provenance_version integer,
-    ADD COLUMN IF NOT EXISTS author_user_id integer,
-    ADD COLUMN IF NOT EXISTS origin text`);
+  if (shouldRunStartupDataBootstrap()) {
+    // Preserve old history; unknown legacy replies must not be relabelled as AI.
+    await pool.query("ALTER TABLE messages ADD COLUMN IF NOT EXISTS response_kind text");
+    // No default/backfill: old rows are retained, but their origin is unverified.
+    await pool.query(`ALTER TABLE messages
+      ADD COLUMN IF NOT EXISTS provenance_version integer,
+      ADD COLUMN IF NOT EXISTS author_user_id integer,
+      ADD COLUMN IF NOT EXISTS origin text`);
+  }
   installChatHistoryGuards(app, storage);
   app.get("/api/chat/service-status", async (req, res) => {
     if (!req.session.userId) return res.status(401).json({ message: "User not authenticated" });

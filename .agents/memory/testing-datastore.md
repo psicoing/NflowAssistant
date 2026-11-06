@@ -58,3 +58,16 @@ completar la limpieza asíncrona, tanto con un lanzador como con Node directo.
 **How to apply:** Comprobar después los esquemas temporales en desarrollo.
 Eliminar solo el esquema exacto creado por la prueba correspondiente, nunca
 una base completa ni esquemas ajenos; confirmar que no queden fixtures.
+
+Los reinicios de vista previa deben cargar el código actualizado sin ejecutar
+siembras, restablecer administradores ni modificar esquemas automáticamente.
+Esto no convierte la vista previa en un entorno de datos aislado.
+
+**Why:** La interfaz se actualizó en caliente mientras el servidor conservaba
+un contrato antiguo, dejando sin empresas ni recuento el preparador de campañas.
+Reiniciar sin precauciones habría ejecutado automatismos sobre los datos reales.
+
+**How to apply:** Ante una discrepancia entre interfaz y API, comprobar la
+versión del servidor y el código público publicado antes de tocar filtros o
+contadores. Revisar los efectos de arranque antes de reiniciar y no sustituir
+una política de elegibilidad desconocida por permisos inventados en el cliente.
