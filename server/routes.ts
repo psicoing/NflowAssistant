@@ -27,6 +27,8 @@ import { ChatHistoryAccessError, establishChatUserSession, installChatHistoryGua
 import { accountRegistrationHandler } from "./account-registration";
 import { registerAdminUserMetricsRoute } from "./admin-user-metrics";
 import { createRegistrationAuditWriter, installRegistrationAudit } from "./registration-audit";
+import { empresaEmailEligibilitySql } from "./empresa-email-eligibility";
+import { empresaSimpleImportHandler, empresaBulkImportHandler } from "./empresa-imports";
 import {
   buildSkrillLink,
   sendSkrillRegistrationEmail,
@@ -1675,7 +1677,7 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
     try {
       const r = await pool.query(`
-        SELECT ec.*, COUNT(eet.id)::int AS campaigns_sent
+        SELECT ec.*, ${empresaEmailEligibilitySql} AS email_campaign_eligible, COUNT(eet.id)::int AS campaigns_sent
         FROM empresa_contacts ec
         LEFT JOIN empresa_email_tracking eet ON eet.contact_email = ec.email
         GROUP BY ec.id ORDER BY ec.company, ec.email
@@ -1811,14 +1813,7 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
       const stillAllowed = await pool.query(
         `SELECT 1
          FROM empresa_contacts ec
-         WHERE ec.id = $1
-           AND ec.opted_out = false
-           AND NOT EXISTS (
-             SELECT 1 FROM empresa_suppression_list esl
-             WHERE (esl.suppression_type = 'email' AND esl.normalized_value = lower(trim(COALESCE(ec.email, ''))))
-                OR (esl.suppression_type = 'domain' AND esl.normalized_value = lower(split_part(COALESCE(ec.email, ''), '@', 2)))
-                OR (esl.suppression_type = 'company' AND esl.normalized_value = lower(regexp_replace(trim(COALESCE(ec.company, '')), '\\s+', ' ', 'g')))
-           )`,
+          WHERE ec.id = $1 AND ${empresaEmailEligibilitySql}`,
         [contact.id],
       );
       if (stillAllowed.rows.length === 0) return null;
@@ -1878,15 +1873,7 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
           message: `${brandStatus.name}: ${brandStatus.message}`,
         });
       }
-      let query = `SELECT * FROM empresa_contacts ec
-        WHERE opted_out = false
-          AND email IS NOT NULL
-          AND NOT EXISTS (
-            SELECT 1 FROM empresa_suppression_list esl
-            WHERE (esl.suppression_type = 'email' AND esl.normalized_value = lower(trim(ec.email)))
-               OR (esl.suppression_type = 'domain' AND esl.normalized_value = lower(split_part(ec.email, '@', 2)))
-               OR (esl.suppression_type = 'company' AND esl.normalized_value = lower(regexp_replace(trim(COALESCE(ec.company, '')), '\\s+', ' ', 'g')))
-          )`;
+       let query = `SELECT ec.* FROM empresa_contacts ec WHERE ${empresaEmailEligibilitySql}`;
       const params: any[] = [];
       if (Array.isArray(companies) && companies.length > 0) { query += ` AND company = ANY($1)`; params.push(companies); }
       const selectedSizes = Array.isArray(companySizes) ? Array.from(new Set(companySizes)) : [];
@@ -1949,124 +1936,13 @@ h1{color:#1d4ed8;font-size:22px;margin:0 0 12px;}p{color:#4b5563;font-size:15px;
     }
   });
 
-  app.post("/api/admin/empresas/import-csv", async (req, res) => {
-    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
-    const { rows } = req.body as { rows: { email: string; name?: string; company?: string; companySize?: string }[] };
-    if (!Array.isArray(rows) || rows.length === 0) return res.status(400).json({ message: "Sin filas" });
-    let imported = 0, skipped = 0;
-    for (const row of rows) {
-      if (!row.email || !row.email.includes("@")) { skipped++; continue; }
-      try {
-        const companySize = isEmpresaCompanySize(row.companySize) ? row.companySize : "unclassified";
-        const r = await pool.query(
-          "INSERT INTO empresa_contacts (email, name, company, company_size, company_size_source) VALUES ($1, $2, $3, $4, 'manual') ON CONFLICT (email) DO NOTHING RETURNING id",
-          [row.email.toLowerCase().trim(), row.name || null, row.company || null, companySize]
-        );
-        if (r.rows.length > 0) imported++; else skipped++;
-      } catch { skipped++; }
-    }
-    res.json({ imported, skipped });
-  });
+  app.post("/api/admin/empresas/import-csv", empresaSimpleImportHandler(pool));
 
   // Importador de contactos por lote: registros separados por ";" con 11 campos fijos:
   // EMPRESA;EMAIL;TELÉFONO;DIRECCIÓN;CP;MUNICIPIO;PROVINCIA;Nº EMPLEADOS;ÁREA;PRIORIDAD;FUENTE.
   // Campos vacíos se guardan vacíos (nunca se inventan). Detecta duplicados por
   // empresa + email y solo rellena los campos vacíos de los contactos existentes.
-  app.post("/api/admin/empresas/import-bulk", async (req, res) => {
-    if (!req.session.isAdmin) return res.status(401).json({ message: "No autorizado" });
-    const { text } = req.body as { text?: string };
-    if (!text || !text.trim()) return res.status(400).json({ message: "Sin contenido" });
-
-    // Quita el BOM UTF-8 que añaden Excel/Sheets al exportar CSV.
-    const cleanText = text.replace(/^\uFEFF/, "");
-    // Separa un campo CSV que puede venir entre comillas dobles (con "" como comilla escapada)
-    // o sin comillas; nunca altera el contenido real del campo.
-    const stripQuotes = (f: string) => {
-      const t = f.trim();
-      if (t.startsWith('"') && t.endsWith('"') && t.length >= 2) {
-        return t.slice(1, -1).replace(/""/g, '"').trim();
-      }
-      return t;
-    };
-    const lines = cleanText.split("\n").map(l => l.trim()).filter(Boolean);
-    let created = 0, updated = 0, skipped = 0;
-    const errors: string[] = [];
-
-    for (const line of lines) {
-      const fields = line.split(";").map(stripQuotes);
-      // Se admite que falte el último campo (FUENTE) si la línea no lo incluye —
-      // se trata como vacío, nunca se inventa. No se admite si faltan más campos.
-      if (fields.length < 10 || fields.length > 11) {
-        skipped++;
-        errors.push(`Formato inválido (se esperan 10 u 11 campos separados por ";"): "${line.slice(0, 60)}"`);
-        continue;
-      }
-      while (fields.length < 11) fields.push("");
-      // Salta la fila de cabecera si el CSV la incluye (p.ej. "EMPRESA";"EMAIL";...).
-      if (fields[0].toUpperCase() === "EMPRESA" && fields[1].toUpperCase() === "EMAIL") {
-        continue;
-      }
-      const [company, emailRaw, phone, address, postalCode, municipio, provincia, employeesRaw, contactArea, priority, source] = fields;
-      const email = emailRaw ? emailRaw.toLowerCase() : "";
-      if (email && !email.includes("@")) {
-        skipped++;
-        errors.push(`Email inválido: "${line.slice(0, 60)}"`);
-        continue;
-      }
-      // Sin email no hay forma de mandar campañas por correo a este contacto, pero
-      // sí se guarda para futuras campañas de llamada/visita si al menos hay empresa.
-      if (!email && !company) {
-        skipped++;
-        errors.push(`Sin email ni empresa, no se puede identificar el contacto: "${line.slice(0, 60)}"`);
-        continue;
-      }
-      // Extrae el primer número del campo aunque venga con cualificadores ("500+", "500 aprox.")
-      // o con puntos como separador de millares ("1.400"); nunca se inventa una cifra si no
-      // hay ningún número en el campo. El separador de millares solo se reconoce cuando el
-      // patrón completo aparece (dígitos-punto-3dígitos), para no fundir números distintos
-      // separados por espacios o guiones (p.ej. "400 planta / 1.400 grupo" → 400, el primero).
-      const employeeMatch = employeesRaw.match(/\d{1,3}(?:\.\d{3})+|\d+/);
-      const employeeCount = employeeMatch ? parseInt(employeeMatch[0].replace(/\./g, ""), 10) : null;
-
-      try {
-        const existing = email
-          ? await pool.query("SELECT id FROM empresa_contacts WHERE lower(email) = $1", [email])
-          : await pool.query("SELECT id FROM empresa_contacts WHERE email IS NULL AND lower(trim(company)) = lower(trim($1))", [company]);
-        if (existing.rows.length > 0) {
-          const id = existing.rows[0].id;
-          await pool.query(
-            `UPDATE empresa_contacts SET
-               company = COALESCE(NULLIF(company, ''), NULLIF($1, '')),
-               phone = COALESCE(NULLIF(phone, ''), NULLIF($2, '')),
-               address = COALESCE(NULLIF(address, ''), NULLIF($3, '')),
-               postal_code = COALESCE(NULLIF(postal_code, ''), NULLIF($4, '')),
-               municipio = COALESCE(NULLIF(municipio, ''), NULLIF($5, '')),
-               provincia = COALESCE(NULLIF(provincia, ''), NULLIF($6, '')),
-               employee_count = COALESCE(employee_count, $7),
-               contact_area = COALESCE(NULLIF(contact_area, ''), NULLIF($8, '')),
-               priority = COALESCE(NULLIF(priority, ''), NULLIF($9, '')),
-               source = COALESCE(NULLIF(source, ''), NULLIF($10, ''))
-             WHERE id = $11`,
-            [company, phone, address, postalCode, municipio, provincia, employeeCount, contactArea, priority, source, id]
-          );
-          updated++;
-        } else {
-          await pool.query(
-            `INSERT INTO empresa_contacts
-               (email, company, phone, address, postal_code, municipio, provincia, employee_count, contact_area, priority, source, company_size_source)
-             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,'manual')`,
-            [email || null, company || null, phone || null, address || null, postalCode || null, municipio || null, provincia || null, employeeCount, contactArea || null, priority || null, source || null]
-          );
-          created++;
-        }
-      } catch (e: any) {
-        skipped++;
-        errors.push(`Error guardando "${email || company}": ${e.message}`);
-      }
-    }
-
-    res.json({ created, updated, skipped, errors: errors.slice(0, 20) });
-  });
+  app.post("/api/admin/empresas/import-bulk", empresaBulkImportHandler(pool));
 
   // Voice CRM is deliberately a manual, consent-gated workflow.  This importer
   // accepts the supplied USA list but never creates or changes call consent.

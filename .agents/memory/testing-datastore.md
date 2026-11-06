@@ -48,3 +48,13 @@ verificada y un esquema temporal exclusivo. Para el esquema gestionado, aplicar
 las definiciones a desarrollo y revisar la comparación antes de Publish; debe
 ser aditiva y no eliminar estructuras de otras funciones. No usar scripts,
 arranque ni hooks para migrar producción manualmente.
+
+No confiar en el cierre de un proceso de pruebas como prueba de eliminación
+de sus fixtures.
+
+**Why:** Al detener servidores temporales, el proceso terminó antes de
+completar la limpieza asíncrona, tanto con un lanzador como con Node directo.
+
+**How to apply:** Comprobar después los esquemas temporales en desarrollo.
+Eliminar solo el esquema exacto creado por la prueba correspondiente, nunca
+una base completa ni esquemas ajenos; confirmar que no queden fixtures.

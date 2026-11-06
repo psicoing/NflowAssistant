@@ -18,6 +18,20 @@ On a matching email, only NULL/empty destination fields get filled from the impo
 
 **Why:** explicit user requirement — re-importing a list must fill gaps in existing records, not clobber manually corrected or previously-imported data.
 
+## Importing contacts is not selecting email recipients
+
+Keep company-only contacts available, but do not count imported or merely
+active records as email recipients. Preview, confirmation and sending must
+apply the same authoritative email, opt-out and suppression rules.
+
+**Why:** The owner encountered a whole imported company batch that appeared
+to enlarge the campaign audience even though its stored email fields were
+empty. A contact import must not imply email readiness.
+
+**How to apply:** Explain missing-email rows before confirming an import;
+retain legitimate non-email contacts without inventing addresses. Treat
+format-valid emails as neither deliverability proof nor marketing consent.
+
 ## Data model note
 `employee_count` (exact headcount per contact, from the import) is a separate column from `company_size` (the pre-existing categorical bucket like `5k_19999` used for campaign segmentation and manually/seed-assigned). They are intentionally not derived from each other — `employee_count` is importer-sourced raw data, `company_size` remains the curated segmentation field.
 

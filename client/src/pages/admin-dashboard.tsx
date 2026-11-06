@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label";
 import StripeContactsPanel from "@/components/admin/StripeContactsPanel";
 import AdminUserMetricsPanel from "@/components/admin/AdminUserMetricsPanel";
 import type { AdminUserMetrics } from "../../../shared/admin-user-metrics";
+import { parseEmpresaCsv, empresaImportSummary, type EmpresaCsvPreview } from "../../../shared/empresa-csv";
+import { selectEmpresaRecipients } from "../../../shared/empresa-email-policy";
 import { 
   Users, 
   DollarSign, 
@@ -556,8 +558,9 @@ export default function AdminDashboard() {
   const [instTypeFilter, setInstTypeFilter] = useState("all");
 
   // ── Grandes Empresas ────────────────────────────────────────────────────
-  const [empresas, setEmpresas] = useState<any[]>([]);
+  const [empresas, setEmpresas] = useState<Array<any & { email_campaign_eligible?: boolean }>>([]);
   const [empresaLoading, setEmpresaLoading] = useState(false);
+  const [empresaLoaded, setEmpresaLoaded] = useState(false);
   const [empresaNewEmail, setEmpresaNewEmail] = useState("");
   const [empresaNewName, setEmpresaNewName] = useState("");
   const [empresaNewCompany, setEmpresaNewCompany] = useState("");
@@ -571,9 +574,13 @@ export default function AdminDashboard() {
   const [empresaDeleteConfirmId, setEmpresaDeleteConfirmId] = useState<number | null>(null);
   const [empresaCsvImporting, setEmpresaCsvImporting] = useState(false);
   const [empresaCsvResult, setEmpresaCsvResult] = useState<{imported:number;skipped:number}|null>(null);
+  const [empresaCsvPreview, setEmpresaCsvPreview] = useState<{fileName:string; parsed:EmpresaCsvPreview}|null>(null);
+  const [empresaCsvError, setEmpresaCsvError] = useState<string|null>(null);
   const [empresaBulkText, setEmpresaBulkText] = useState("");
   const [empresaBulkImporting, setEmpresaBulkImporting] = useState(false);
   const [empresaBulkResult, setEmpresaBulkResult] = useState<{created:number;updated:number;skipped:number;errors:string[]}|null>(null);
+  const [empresaBulkConfirm, setEmpresaBulkConfirm] = useState(false);
+  const [empresaBulkFileName, setEmpresaBulkFileName] = useState("");
   const [empresaProvinciaFilter, setEmpresaProvinciaFilter] = useState("all");
   const [empresaMunicipioFilter, setEmpresaMunicipioFilter] = useState("all");
   const [empresaEmployeeFilter, setEmpresaEmployeeFilter] = useState("all");
@@ -716,8 +723,8 @@ export default function AdminDashboard() {
 
   const fetchEmpresas = async () => {
     setEmpresaLoading(true);
-    try { const r = await fetch("/api/admin/empresas"); const d = await r.json(); setEmpresas(Array.isArray(d) ? d : []); } catch {}
-    setEmpresaLoading(false);
+    try { const r = await fetch("/api/admin/empresas"); const d = await r.json(); if (r.ok) { setEmpresas(Array.isArray(d) ? d : []); setEmpresaLoaded(true); } } catch {}
+    finally { setEmpresaLoading(false); }
   };
   const fetchEmpresaCampaignHistory = async () => {
     setEmpresaHistoryLoading(true);
@@ -1023,6 +1030,9 @@ export default function AdminDashboard() {
 
   const selectedEmpresaBrand = getEmpresaBrandOption(empresaBrand);
   const selectedEmpresaBrandStatus = empresaBrandStatuses.find(status => status.id === empresaBrand);
+  const empresaPolicyAvailable = empresaLoaded && !empresaLoading && empresas.every(contact => typeof contact.email_campaign_eligible === "boolean");
+  const empresaCampaignRecipients = selectEmpresaRecipients(empresas, empresaCampaignCompanies, empresaCampaignSizes);
+  const empresaBulkPreview = parseEmpresaCsv(empresaBulkText, "bulk");
   const selectEmpresaBrand = (brand: EmpresaBrand) => {
     const letter = getEmpresaLetter(brand, empresaLanguage);
     setEmpresaBrand(brand);
@@ -3042,60 +3052,162 @@ export default function AdminDashboard() {
                     </div>
                     {empresaAddError && <p className="text-red-400 text-xs px-1">{empresaAddError}</p>}
 
-                    <label className="block cursor-pointer bg-gray-700/50 hover:bg-gray-700 border border-dashed border-gray-600 hover:border-blue-500 rounded-lg px-3 py-2 text-sm text-gray-400 hover:text-gray-200 transition-all text-center">
-                      {empresaCsvImporting ? "Importando…" : "📥 Importar CSV (email, nombre, empresa, tamaño)"}
-                      <input type="file" accept=".csv,.txt" className="hidden" onChange={async (e) => {
-                        const file = e.target.files?.[0]; if (!file) return;
-                        setEmpresaCsvImporting(true); setEmpresaCsvResult(null);
-                        try {
-                          const text = await file.text();
-                          const rows = text.split("\n").filter(l => l.trim()).map(line => {
-                            const p = line.split(/[,;]/).map(p => p.trim().replace(/^["']|["']$/g, ""));
-                            return { email: p[0] || "", name: p[1] || "", company: p[2] || "", companySize: p[3] || "unclassified" };
-                          }).filter(r => r.email.includes("@"));
-                          const r = await fetch("/api/admin/empresas/import-csv", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ rows }) });
-                          if (r.ok) { setEmpresaCsvResult(await r.json()); fetchEmpresas(); }
-                        } catch { setEmpresaCsvResult({ imported: 0, skipped: -1 }); }
-                        finally { setEmpresaCsvImporting(false); e.target.value = ""; }
-                      }} />
-                    </label>
-                    {empresaCsvResult && (
-                      <p className="text-xs px-1">{empresaCsvResult.skipped === -1 ? <span className="text-red-400">❌ Error al importar</span> : <span className="text-emerald-400">✅ {empresaCsvResult.imported} importados · {empresaCsvResult.skipped} omitidos</span>}</p>
-                    )}
+                    <div className="space-y-2 rounded-xl border border-gray-700 bg-gray-900/40 p-3">
+                      <label className="block cursor-pointer bg-gray-700/50 hover:bg-gray-700 border border-dashed border-gray-600 hover:border-blue-500 rounded-lg px-3 py-2 text-sm text-gray-300 transition-all text-center">
+                        {empresaCsvImporting ? "Leyendo archivo…" : "Seleccionar CSV de contactos"}
+                        <input type="file" accept=".csv,.txt" className="hidden" disabled={empresaCsvImporting} onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          setEmpresaCsvImporting(true);
+                          setEmpresaCsvResult(null);
+                          setEmpresaCsvError(null);
+                          try {
+                            const text = await file.text();
+                            setEmpresaCsvPreview({ fileName: file.name, parsed: parseEmpresaCsv(text, "simple") });
+                          } catch {
+                            setEmpresaCsvError("No se pudo leer el archivo seleccionado.");
+                            setEmpresaCsvPreview(null);
+                          } finally {
+                            setEmpresaCsvImporting(false);
+                            e.target.value = "";
+                          }
+                        }} />
+                      </label>
+                      {empresaCsvPreview && (
+                        <div className="space-y-2 rounded-lg border border-gray-700 bg-gray-800/70 p-3">
+                          <p className="truncate text-xs font-semibold text-gray-100" title={empresaCsvPreview.fileName}>{empresaCsvPreview.fileName}</p>
+                          <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+                            <p className="rounded-md bg-gray-900/70 p-2 text-gray-300"><strong className="block text-white">{empresaCsvPreview.parsed.total}</strong> filas</p>
+                            <p className="rounded-md bg-gray-900/70 p-2 text-gray-300"><strong className="block text-emerald-300">{empresaCsvPreview.parsed.validEmail}</strong> email válido</p>
+                            <p className="rounded-md bg-gray-900/70 p-2 text-gray-300"><strong className="block text-amber-300">{empresaCsvPreview.parsed.withoutEmail}</strong> sin email</p>
+                            <p className="rounded-md bg-gray-900/70 p-2 text-gray-300"><strong className="block text-rose-300">{empresaCsvPreview.parsed.invalid}</strong> inválidas</p>
+                          </div>
+                          {empresaCsvPreview.parsed.errors.length > 0 && (
+                            <div className="max-h-24 overflow-y-auto rounded-md border border-amber-500/20 bg-amber-500/5 p-2 text-[11px] text-amber-200">
+                              <ul className="list-inside list-disc space-y-1">
+                                {empresaCsvPreview.parsed.errors.slice(0, 8).map((error, index) => <li key={`${index}-${error}`}>{error}</li>)}
+                              </ul>
+                              {empresaCsvPreview.parsed.errors.length > 8 && <p className="mt-1 text-amber-100/70">Se muestran 8 de {empresaCsvPreview.parsed.errors.length} avisos.</p>}
+                            </div>
+                          )}
+                          <p className="text-[11px] leading-relaxed text-gray-400">La revisión local no comprueba duplicados ni elegibilidad de campaña. Confirma para enviar estas filas al registro de contactos.</p>
+                          <div className="flex flex-col gap-2 sm:flex-row">
+                            <button type="button" disabled={empresaCsvImporting || empresaCsvPreview.parsed.validEmail === 0} onClick={async () => {
+                              setEmpresaCsvImporting(true);
+                              setEmpresaCsvError(null);
+                              setEmpresaCsvResult(null);
+                              try {
+                                const rows = empresaCsvPreview.parsed.rows.filter(row => row.email).map(row => ({
+                                  email: row.email,
+                                  name: row.name || "",
+                                  company: row.company || "",
+                                  companySize: row.companySize || "unclassified",
+                                }));
+                                const response = await fetch("/api/admin/empresas/import-csv", {
+                                  method: "POST",
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify({ rows }),
+                                });
+                                const data = await response.json().catch(() => ({}));
+                                if (!response.ok) {
+                                  const details = [data.message, data.error, ...(Array.isArray(data.errors) ? data.errors : [])].filter(Boolean).join(" · ");
+                                  throw new Error(details || `Error ${response.status}`);
+                                }
+                                setEmpresaCsvResult(empresaImportSummary(empresaCsvPreview.parsed, data));
+                                setEmpresaCsvPreview(null);
+                                await fetchEmpresas();
+                              } catch (error: any) {
+                                setEmpresaCsvError(error?.message || "No se pudo importar el archivo.");
+                              } finally {
+                                setEmpresaCsvImporting(false);
+                              }
+                            }} className="flex-1 rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-40">
+                              {empresaCsvImporting ? "Importando…" : `Importar ${empresaCsvPreview.parsed.validEmail} ${empresaCsvPreview.parsed.validEmail === 1 ? "fila" : "filas"} con email válido`}
+                            </button>
+                            <button type="button" disabled={empresaCsvImporting} onClick={() => { setEmpresaCsvPreview(null); setEmpresaCsvError(null); }} className="rounded-lg border border-gray-600 px-3 py-2 text-xs font-medium text-gray-300 hover:bg-gray-700 disabled:opacity-40">Cancelar</button>
+                          </div>
+                        </div>
+                      )}
+                      {empresaCsvError && <p role="alert" className="text-xs text-rose-300">{empresaCsvError}</p>}
+                      {empresaCsvResult && <p className="text-xs text-emerald-300">{empresaCsvResult.imported} {empresaCsvResult.imported === 1 ? "contacto importado" : "contactos importados"} · {empresaCsvResult.skipped} omitidos. La elegibilidad para campañas se calcula por separado.</p>}
+                    </div>
 
                     <div className="space-y-1.5 bg-gray-900/40 border border-gray-700 rounded-lg p-2.5">
-                      <p className="text-xs font-semibold text-gray-300">📋 Importar registros (separados por ;)</p>
-                      <p className="text-[10px] text-gray-500 leading-relaxed">
+                      <p className="text-xs font-semibold text-gray-200">Importar registros empresariales (separados por ;)</p>
+                      <p className="text-[10px] text-gray-400 leading-relaxed [overflow-wrap:anywhere]">
                         Orden fijo: EMPRESA;EMAIL;TELÉFONO;DIRECCIÓN;CP;MUNICIPIO;PROVINCIA;Nº EMPLEADOS;ÁREA;PRIORIDAD;FUENTE — un registro por línea. Deja un campo vacío entre dos ; si no lo tienes. Admite CSV con comillas y con o sin fila de cabecera.
                       </p>
                       <label className="block cursor-pointer bg-gray-700/50 hover:bg-gray-700 border border-dashed border-gray-600 hover:border-indigo-500 rounded-lg px-3 py-1.5 text-[11px] text-gray-400 hover:text-gray-200 transition-all text-center">
-                        📎 Cargar archivo .csv/.txt con este formato
+                        {empresaBulkFileName ? `Archivo seleccionado: ${empresaBulkFileName} · cambiar archivo` : "Seleccionar archivo CSV/TXT"}
                         <input type="file" accept=".csv,.txt" className="hidden" onChange={async (e) => {
                           const file = e.target.files?.[0]; if (!file) return;
                           const text = await file.text();
                           setEmpresaBulkText(text);
+                          setEmpresaBulkFileName(file.name);
+                          setEmpresaBulkConfirm(false);
+                          setEmpresaBulkResult(null);
                           e.target.value = "";
                         }} />
                       </label>
-                      <textarea value={empresaBulkText} onChange={e => setEmpresaBulkText(e.target.value)}
+                      <textarea value={empresaBulkText} onChange={e => { setEmpresaBulkText(e.target.value); setEmpresaBulkConfirm(false); setEmpresaBulkResult(null); }}
                         placeholder={"Empresa;email@empresa.es;;Dirección;17001;Girona;Girona;7500;RRHH;A;LinkedIn"}
                         rows={4}
                         className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-2.5 py-2 text-xs font-mono placeholder-gray-500 focus:outline-none focus:border-blue-500" />
-                      <button disabled={empresaBulkImporting || !empresaBulkText.trim()} onClick={async () => {
-                        setEmpresaBulkImporting(true); setEmpresaBulkResult(null);
-                        try {
-                          const r = await fetch("/api/admin/empresas/import-bulk", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: empresaBulkText }) });
-                          if (r.ok) { const data = await r.json(); setEmpresaBulkResult(data); setEmpresaBulkText(""); fetchEmpresas(); }
-                          else { setEmpresaBulkResult({ created: 0, updated: 0, skipped: -1, errors: [] }); }
-                        } catch { setEmpresaBulkResult({ created: 0, updated: 0, skipped: -1, errors: [] }); }
-                        finally { setEmpresaBulkImporting(false); }
-                      }} className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white py-1.5 rounded-lg text-xs font-semibold transition-all">
-                        {empresaBulkImporting ? "Importando…" : "Importar registros"}
-                      </button>
+                      {empresaBulkText.trim() && (
+                        <div className="space-y-2 rounded-lg border border-gray-700 bg-gray-800/60 p-2.5">
+                          <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+                            <p className="rounded-md bg-gray-900/70 p-2 text-gray-300"><strong className="block text-white">{empresaBulkPreview.total}</strong> filas</p>
+                            <p className="rounded-md bg-gray-900/70 p-2 text-gray-300"><strong className="block text-emerald-300">{empresaBulkPreview.validEmail}</strong> email válido</p>
+                            <p className="rounded-md bg-gray-900/70 p-2 text-gray-300"><strong className="block text-amber-300">{empresaBulkPreview.withoutEmail}</strong> sin email</p>
+                            <p className="rounded-md bg-gray-900/70 p-2 text-gray-300"><strong className="block text-rose-300">{empresaBulkPreview.invalid}</strong> inválidas</p>
+                          </div>
+                          {empresaBulkPreview.withoutEmail > 0 && <p className="text-[11px] leading-relaxed text-amber-200">Se permiten filas identificadas por empresa o teléfono sin email. No son destinatarios de correo. El recuento de emails válidos no equivale a contactos nuevos ni elegibles; puede diferir por duplicados o supresión.</p>}
+                          {empresaBulkPreview.errors.length > 0 && (
+                            <div className="max-h-24 overflow-y-auto rounded-md border border-amber-500/20 bg-amber-500/5 p-2 text-[11px] text-amber-200">
+                              <ul className="list-inside list-disc space-y-1">{empresaBulkPreview.errors.slice(0, 8).map((error, index) => <li key={`${index}-${error}`}>{error}</li>)}</ul>
+                              {empresaBulkPreview.errors.length > 8 && <p className="mt-1 text-amber-100/70">Se muestran 8 de {empresaBulkPreview.errors.length} avisos.</p>}
+                            </div>
+                          )}
+                          <p className="text-[11px] text-gray-400">{empresaBulkPreview.rows.length} filas importables tras validar el formato.</p>
+                        </div>
+                      )}
+                      {!empresaBulkConfirm ? (
+                        <button disabled={empresaBulkImporting || empresaBulkPreview.rows.length === 0} onClick={() => setEmpresaBulkConfirm(true)} className="w-full rounded-lg bg-indigo-600 py-1.5 text-xs font-semibold text-white transition-all hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-40">
+                          Revisar e importar registros
+                        </button>
+                      ) : (
+                        <div className="space-y-2 rounded-lg border border-amber-500/30 bg-amber-500/5 p-2">
+                          <p className="text-xs text-amber-100">Confirma la importación de {empresaBulkPreview.rows.length} filas válidas. Se enviará el texto original para validación del servidor.</p>
+                          <div className="flex gap-2">
+                            <button disabled={empresaBulkImporting} onClick={async () => {
+                              setEmpresaBulkImporting(true);
+                              setEmpresaBulkResult(null);
+                              try {
+                                const response = await fetch("/api/admin/empresas/import-bulk", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: empresaBulkText }) });
+                                const data = await response.json().catch(() => ({}));
+                                if (!response.ok) {
+                                  const details = [data.message, data.error, ...(Array.isArray(data.errors) ? data.errors : [])].filter(Boolean).join(" · ");
+                                  throw new Error(details || `Error ${response.status}`);
+                                }
+                                setEmpresaBulkResult(data);
+                                setEmpresaBulkText("");
+                                setEmpresaBulkFileName("");
+                                setEmpresaBulkConfirm(false);
+                                await fetchEmpresas();
+                              } catch (error: any) {
+                                setEmpresaBulkResult({ created: 0, updated: 0, skipped: -1, errors: [error?.message || "No se pudo importar."] });
+                              } finally {
+                                setEmpresaBulkImporting(false);
+                              }
+                            }} className="flex-1 rounded-lg bg-indigo-600 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500 disabled:opacity-40">{empresaBulkImporting ? "Importando…" : "Confirmar importación"}</button>
+                            <button disabled={empresaBulkImporting} onClick={() => setEmpresaBulkConfirm(false)} className="rounded-lg border border-gray-600 px-3 py-1.5 text-xs text-gray-300 hover:bg-gray-700 disabled:opacity-40">Cancelar</button>
+                          </div>
+                        </div>
+                      )}
                       {empresaBulkResult && (
-                        empresaBulkResult.skipped === -1 ? <p className="text-xs text-red-400">❌ Error al importar</p> : (
+                        empresaBulkResult.skipped === -1 ? <div role="alert" className="text-xs text-red-300"><p>Error al importar. El texto sigue disponible para revisar o reintentar.</p>{empresaBulkResult.errors.map((error, index) => <p key={index}>{error}</p>)}</div> : (
                           <div className="text-xs space-y-0.5">
-                            <p className="text-emerald-400">✅ {empresaBulkResult.created} nuevos · {empresaBulkResult.updated} actualizados · {empresaBulkResult.skipped} omitidos</p>
+                            <p className="text-emerald-300">{empresaBulkResult.created} nuevos · {empresaBulkResult.updated} actualizados · {empresaBulkResult.skipped} omitidos</p>
                             {empresaBulkResult.errors.length > 0 && (
                               <ul className="text-red-400 text-[10px] list-disc list-inside space-y-0.5">
                                 {empresaBulkResult.errors.map((err, i) => <li key={i}>{err}</li>)}
@@ -3216,11 +3328,17 @@ export default function AdminDashboard() {
                     <CardTitle className="text-white flex items-center gap-2">✉️ Redactar campaña</CardTitle>
                     <CardDescription className="text-gray-400">
                       {empresaCampaignCompanies.length > 0 || empresaCampaignSizes.length > 0
-                        ? `${empresaCampaignCompanies.length > 0 ? `Empresas: ${empresaCampaignCompanies.join(", ")}` : "Todas las empresas"}${empresaCampaignSizes.length > 0 ? ` · Tamaños: ${empresaCampaignSizes.map(empresaSizeLabel).join(", ")}` : ""} · ${empresas.filter(e => !e.opted_out && (empresaCampaignCompanies.length === 0 || empresaCampaignCompanies.includes(e.company)) && (empresaCampaignSizes.length === 0 || empresaCampaignSizes.includes(e.company_size || "unclassified"))).length} destinatarios`
-                        : `Todas las activas · ${empresas.filter(e => !e.opted_out).length} destinatarios`}
+                        ? `${empresaCampaignCompanies.length > 0 ? `Empresas: ${empresaCampaignCompanies.join(", ")}` : "Todas las empresas"}${empresaCampaignSizes.length > 0 ? ` · Tamaños: ${empresaCampaignSizes.map(empresaSizeLabel).join(", ")}` : ""} · ${empresaPolicyAvailable ? empresaCampaignRecipients.length : "—"} destinatarios elegibles`
+                        : `Todas las empresas · ${empresaPolicyAvailable ? empresaCampaignRecipients.length : "—"} destinatarios elegibles`}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
+                    {!empresaPolicyAvailable && (
+                      <div role="status" className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-3">
+                        <p className="text-xs font-semibold text-amber-200">Elegibilidad de correo no disponible</p>
+                        <p className="mt-1 text-[11px] leading-relaxed text-amber-100/80">La respuesta del servidor no incluye la política de elegibilidad completa. Actualiza el servidor y vuelve a cargar los contactos. Preparar o enviar está desactivado; no se inferirá el recuento a partir de las bajas.</p>
+                      </div>
+                    )}
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <label className="text-gray-300 text-xs font-medium">Carta y remitente</label>
@@ -3376,7 +3494,7 @@ export default function AdminDashboard() {
                     <div>
                       <label className="text-gray-300 text-xs font-medium block mb-1">Enviar solo a estas empresas <span className="text-gray-500">(vacío = todas)</span></label>
                       <div className="flex flex-wrap gap-1.5">
-                        {Array.from(new Set(empresas.filter(e => !e.opted_out).map(e => e.company).filter(Boolean))).sort().map(company => (
+                        {Array.from(new Set(selectEmpresaRecipients(empresas).map(e => e.company).filter(Boolean))).sort().map(company => (
                           <button key={company} onClick={() => setEmpresaCampaignCompanies(prev => prev.includes(company) ? prev.filter(c => c !== company) : [...prev, company])}
                             className={`text-xs px-2.5 py-1 rounded-full border transition-all ${empresaCampaignCompanies.includes(company) ? "bg-blue-600 border-blue-500 text-white" : "border-gray-600 text-gray-400 hover:text-white hover:border-gray-400"}`}>
                             {company}
@@ -3411,21 +3529,22 @@ export default function AdminDashboard() {
                     {empresaResult && (
                       <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3">
                         {empresaResult.scheduled
-                          ? <p className="text-emerald-300 text-sm">🕐 Programado para {empresaResult.scheduledAt ? new Date(empresaResult.scheduledAt).toLocaleString("es-ES") : ""} · {empresaResult.recipients} destinatarios</p>
-                          : <p className="text-emerald-300 text-sm">✅ Enviado a <strong>{empresaResult.recipients}</strong> destinatarios</p>}
+                          ? <p className="text-emerald-300 text-sm">Programada para {empresaResult.scheduledAt ? new Date(empresaResult.scheduledAt).toLocaleString("es-ES") : ""} · {empresaResult.recipients} destinatarios en cola. La programación no confirma entrega.</p>
+                          : <p className="text-emerald-300 text-sm">Solicitud procesada para <strong>{empresaResult.recipients}</strong> destinatarios. Consulta el historial para confirmar resultados de entrega.</p>}
                       </div>
                     )}
                     {empresaStatus === "error" && (
                       <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3">
                         <p className="text-red-300 text-sm">❌ {empresaResult?.message || "Error al enviar. Revisa los logs."}</p>
+                        <button type="button" onClick={() => { setEmpresaStatus("idle"); setEmpresaResult(null); }} className="mt-2 rounded-lg border border-red-400/30 px-3 py-1.5 text-xs text-red-200 hover:bg-red-500/10">Volver a revisar destinatarios</button>
                       </div>
                     )}
 
                     {empresaStatus === "idle" && (
-                      <button onClick={() => setEmpresaStatus("confirm")} disabled={!empresaSubject.trim() || !empresaBody.trim() || !selectedEmpresaBrandStatus?.available}
+                      <button onClick={() => setEmpresaStatus("confirm")} disabled={!empresaPolicyAvailable || empresaCampaignRecipients.length === 0 || !empresaSubject.trim() || !empresaBody.trim() || !selectedEmpresaBrandStatus?.available}
                         className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-40 text-white font-semibold py-3 rounded-xl transition-all">
                         {empresaScheduledAt ? "🕐 Programar envío" : "Preparar envío"} →
-                        ({empresas.filter(e => !e.opted_out && (empresaCampaignCompanies.length === 0 || empresaCampaignCompanies.includes(e.company)) && (empresaCampaignSizes.length === 0 || empresaCampaignSizes.includes(e.company_size || "unclassified"))).length} destinatarios)
+                        ({empresaPolicyAvailable ? empresaCampaignRecipients.length : "—"} destinatarios elegibles)
                       </button>
                     )}
 
@@ -3434,20 +3553,43 @@ export default function AdminDashboard() {
                         <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center">
                           <p className="text-amber-300 text-sm font-semibold">¿Confirmas {empresaScheduledAt ? "la programación" : "el envío"}?</p>
                           <p className="text-gray-400 text-xs mt-1">
-                            {empresaCampaignCompanies.length > 0 ? `Empresas: ${empresaCampaignCompanies.join(", ")} · ` : "Todas las activas · "}
+                            {empresaCampaignCompanies.length > 0 ? `Empresas: ${empresaCampaignCompanies.join(", ")} · ` : "Todas las empresas · "}
                             {empresaCampaignSizes.length > 0 ? `Tamaños: ${empresaCampaignSizes.map(empresaSizeLabel).join(", ")} · ` : ""}
                             <strong className="text-white">Carta: {selectedEmpresaBrand.name} · </strong>
                             <strong className="text-white">
-                              {empresas.filter(e => !e.opted_out && (empresaCampaignCompanies.length === 0 || empresaCampaignCompanies.includes(e.company)) && (empresaCampaignSizes.length === 0 || empresaCampaignSizes.includes(e.company_size || "unclassified"))).length} destinatarios
+                              {empresaPolicyAvailable ? empresaCampaignRecipients.length : "—"} destinatarios elegibles
                             </strong>
                             {empresaAbTest && empresaSubjectB && " · A/B testing activo"}
                           </p>
+                          <p className="mt-2 text-[11px] text-amber-100/80">La cola o programación no acredita que los mensajes se hayan entregado.</p>
                         </div>
                         <div className="flex gap-3">
                           <button onClick={() => setEmpresaStatus("idle")} className="flex-1 border border-gray-600 text-gray-300 hover:bg-gray-700 py-2.5 rounded-xl font-medium transition-all text-sm">Cancelar</button>
-                          <button onClick={async () => {
+                          <button disabled={!empresaPolicyAvailable || empresaCampaignRecipients.length === 0} onClick={async () => {
                             setEmpresaStatus("sending");
                             try {
+                              const latestResponse = await fetch("/api/admin/empresas");
+                              const latestEmpresas = await latestResponse.json().catch(() => null);
+                              if (!latestResponse.ok || !Array.isArray(latestEmpresas) || latestEmpresas.some((contact: any) => typeof contact.email_campaign_eligible !== "boolean")) {
+                                setEmpresaResult({ message: "El servidor no confirma la elegibilidad actual. Actualiza los contactos y vuelve a revisar antes de enviar." });
+                                setEmpresaStatus("error");
+                                if (Array.isArray(latestEmpresas)) { setEmpresas(latestEmpresas); setEmpresaLoaded(true); }
+                                return;
+                              }
+                              setEmpresas(latestEmpresas);
+                              setEmpresaLoaded(true);
+                              const currentRecipients = selectEmpresaRecipients(latestEmpresas, empresaCampaignCompanies, empresaCampaignSizes);
+                              const recipientKey = (contacts: any[]) => contacts.map(contact => String(contact.id ?? contact.email ?? "")).sort().join("|");
+                              if (recipientKey(currentRecipients) !== recipientKey(empresaCampaignRecipients)) {
+                                setEmpresaResult({ message: "La lista de destinatarios cambió desde la revisión. Comprueba el recuento actualizado y vuelve a preparar la campaña." });
+                                setEmpresaStatus("error");
+                                return;
+                              }
+                              if (currentRecipients.length === 0) {
+                                setEmpresaResult({ message: "No hay destinatarios elegibles con los filtros actuales." });
+                                setEmpresaStatus("error");
+                                return;
+                              }
                               const r = await fetch("/api/admin/send-empresa-campaign", {
                                 method: "POST", headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify({
@@ -3467,7 +3609,7 @@ export default function AdminDashboard() {
                                }
                                setEmpresaStatus("done"); fetchEmpresaCampaignHistory();
                             } catch { setEmpresaStatus("error"); }
-                          }} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition-all text-sm">
+                          }} className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40 text-white font-bold py-2.5 rounded-xl transition-all text-sm">
                             {empresaScheduledAt ? "🕐 Programar" : "✉️ Enviar ahora"}
                           </button>
                         </div>
