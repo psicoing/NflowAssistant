@@ -46,6 +46,16 @@ incorporación sin modificar las anteriores.
 el verde en una marca genérica de todos los emails ni reasignarlo
 automáticamente al siguiente CSV. Conservar visibles las bajas y bloqueos.
 
+Las nuevas incorporaciones del archivo completo posterior deben llevar etiqueta
+roja, conservando en verde las ya incorporadas del lote anterior. Un CSV
+acumulativo no cambia la procedencia de los contactos repetidos.
+
+**Why:** El usuario pidió identificar esta nueva incorporación en rojo.
+
+**How to apply:** Marcar solo los contactos realmente añadidos en esta
+incorporación; conservar las etiquetas anteriores y distinguir siempre la
+etiqueta de lote del estado de baja.
+
 ## Data model note
 `employee_count` (exact headcount per contact, from the import) is a separate column from `company_size` (the pre-existing categorical bucket like `5k_19999` used for campaign segmentation and manually/seed-assigned). They are intentionally not derived from each other — `employee_count` is importer-sourced raw data, `company_size` remains the curated segmentation field.
 
