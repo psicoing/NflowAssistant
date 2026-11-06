@@ -32,6 +32,20 @@ empty. A contact import must not imply email readiness.
 retain legitimate non-email contacts without inventing addresses. Treat
 format-valid emails as neither deliverability proof nor marketing consent.
 
+## Colores por incorporación
+
+El propietario quiere distinguir las incorporaciones de Empresas por colores:
+las anteriores conservan su aspecto y la incorporación de emails revisada en
+esta conversación se identifica en verde. El color representa procedencia del
+lote, no validez del buzón, consentimiento ni permiso para enviar.
+
+**Why:** El usuario pidió reconocer visualmente las empresas de esta
+incorporación sin modificar las anteriores.
+
+**How to apply:** Mantener la identificación de cada lote estable; no convertir
+el verde en una marca genérica de todos los emails ni reasignarlo
+automáticamente al siguiente CSV. Conservar visibles las bajas y bloqueos.
+
 ## Data model note
 `employee_count` (exact headcount per contact, from the import) is a separate column from `company_size` (the pre-existing categorical bucket like `5k_19999` used for campaign segmentation and manually/seed-assigned). They are intentionally not derived from each other — `employee_count` is importer-sourced raw data, `company_size` remains the curated segmentation field.
 

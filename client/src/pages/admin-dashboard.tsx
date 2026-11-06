@@ -12,6 +12,7 @@ import AdminUserMetricsPanel from "@/components/admin/AdminUserMetricsPanel";
 import type { AdminUserMetrics } from "../../../shared/admin-user-metrics";
 import { parseEmpresaCsv, empresaImportSummary, type EmpresaCsvPreview } from "../../../shared/empresa-csv";
 import { selectEmpresaRecipients } from "../../../shared/empresa-email-policy";
+import { EMPRESA_IMPORT_BATCH_LABEL, getEmpresaImportBatch, isEmpresaInImportBatchCompany } from "@/lib/empresa-import-batches";
 import { 
   Users, 
   DollarSign, 
@@ -3266,6 +3267,11 @@ export default function AdminDashboard() {
                       </select>
                     </div>
 
+                    <p className="mt-2 text-[10px] leading-relaxed text-gray-400">
+                      <span className="mr-1 inline-block h-2 w-2 rounded-sm border border-emerald-400/70 bg-emerald-400/20 align-middle" />
+                      Verde: {EMPRESA_IMPORT_BATCH_LABEL}; no acredita consentimiento ni entrega.
+                    </p>
+
                     <div className="max-h-[400px] overflow-y-auto space-y-1 pr-1">
                       {empresaLoading ? (
                         <p className="text-gray-400 text-sm text-center py-4">Cargando...</p>
@@ -3286,37 +3292,41 @@ export default function AdminDashboard() {
                           return matchSearch && matchStatus && matchCompany && matchSize && matchProvincia && matchMunicipio && matchEmployee && matchPriority && matchSource;
                         });
                         if (filtered.length === 0) return <p className="text-gray-400 text-sm text-center py-4">Sin resultados</p>;
-                        return filtered.map(e => (
-                          <div key={e.id}
-                            onClick={() => { setEmpresaSelectedContact(e); setEmpresaContactHistory([]); fetchEmpresaContactHistory(e.id); }}
-                            className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all ${e.opted_out ? "opacity-50 bg-gray-700/20 hover:bg-gray-700/30" : "bg-gray-700/50 hover:bg-gray-700"}`}>
-                            <div className="min-w-0 flex-1">
-                              {e.name && <p className="text-white text-xs font-semibold truncate">{e.name}</p>}
-                              <p className="text-gray-300 text-xs truncate">{e.email || (e.phone ? `📞 ${e.phone}` : "Sin email")}</p>
-                              <div className="flex gap-1.5 mt-0.5 flex-wrap">
-                                {e.company && <span className="text-gray-500 text-xs">{e.company}</span>}
-                                <span className="text-indigo-300 text-xs bg-indigo-500/15 px-1.5 rounded">{empresaSizeLabel(e.company_size)}</span>
-                                {e.language === 'en_fr' && <span className="text-yellow-300 text-xs bg-yellow-500/15 px-1.5 rounded font-semibold">EN·FR</span>}
-                                {e.campaigns_sent > 0 && <span className="text-blue-400 text-xs bg-blue-500/10 px-1.5 rounded">📧 {e.campaigns_sent}</span>}
-                                {e.phone && <span className="text-emerald-300 text-xs bg-emerald-500/10 px-1.5 rounded">📞</span>}
-                                {e.call_authorized && !e.call_authorization_revoked_at && !e.opted_out && (
-                                  <span className="text-emerald-200 text-xs bg-emerald-500/20 border border-emerald-500/30 px-1.5 rounded font-semibold">
-                                    ✓ llamada autorizada
-                                  </span>
-                                )}
-                                {e.address && <span className="text-emerald-300 text-xs bg-emerald-500/10 px-1.5 rounded">📍</span>}
-                                {(e.municipio || e.provincia) && <span className="text-gray-500 text-xs">{[e.municipio, e.provincia].filter(Boolean).join(", ")}</span>}
-                                {e.employee_count != null && <span className="text-gray-500 text-xs">👥 {e.employee_count}</span>}
-                                {e.priority && <span className="text-orange-300 text-xs bg-orange-500/15 px-1.5 rounded font-semibold">{e.priority}</span>}
-                                {e.source && <span className="text-cyan-300 text-xs bg-cyan-500/10 px-1.5 rounded">{e.source}</span>}
-                                {e.opted_out && <span className="text-red-400 text-xs">baja</span>}
+                        return filtered.map(e => {
+                          const importBatch = getEmpresaImportBatch(e.company, e.email);
+                          return (
+                            <div key={e.id}
+                              onClick={() => { setEmpresaSelectedContact(e); setEmpresaContactHistory([]); fetchEmpresaContactHistory(e.id); }}
+                              className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all ${e.opted_out ? `opacity-50 bg-gray-700/20 hover:bg-gray-700/30 ${importBatch ? "ring-1 ring-inset ring-emerald-400/50" : ""}` : importBatch ? "bg-emerald-500/10 ring-1 ring-inset ring-emerald-400/50 hover:bg-emerald-500/15" : "bg-gray-700/50 hover:bg-gray-700"}`}>
+                              <div className="min-w-0 flex-1">
+                                {e.name && <p className="text-white text-xs font-semibold truncate">{e.name}</p>}
+                                <p className="text-gray-300 text-xs truncate">{e.email || (e.phone ? `📞 ${e.phone}` : "Sin email")}</p>
+                                <div className="flex gap-1.5 mt-0.5 flex-wrap">
+                                  {e.company && <span className="text-gray-500 text-xs">{e.company}</span>}
+                                  {importBatch && <span className="text-emerald-200 text-[10px] bg-emerald-500/15 border border-emerald-400/30 px-1.5 rounded">{importBatch}</span>}
+                                  <span className="text-indigo-300 text-xs bg-indigo-500/15 px-1.5 rounded">{empresaSizeLabel(e.company_size)}</span>
+                                  {e.language === 'en_fr' && <span className="text-yellow-300 text-xs bg-yellow-500/15 px-1.5 rounded font-semibold">EN·FR</span>}
+                                  {e.campaigns_sent > 0 && <span className="text-blue-400 text-xs bg-blue-500/10 px-1.5 rounded">📧 {e.campaigns_sent}</span>}
+                                  {e.phone && <span className="text-emerald-300 text-xs bg-emerald-500/10 px-1.5 rounded">📞</span>}
+                                  {e.call_authorized && !e.call_authorization_revoked_at && !e.opted_out && (
+                                    <span className="text-emerald-200 text-xs bg-emerald-500/20 border border-emerald-500/30 px-1.5 rounded font-semibold">
+                                      ✓ llamada autorizada
+                                    </span>
+                                  )}
+                                  {e.address && <span className="text-emerald-300 text-xs bg-emerald-500/10 px-1.5 rounded">📍</span>}
+                                  {(e.municipio || e.provincia) && <span className="text-gray-500 text-xs">{[e.municipio, e.provincia].filter(Boolean).join(", ")}</span>}
+                                  {e.employee_count != null && <span className="text-gray-500 text-xs">👥 {e.employee_count}</span>}
+                                  {e.priority && <span className="text-orange-300 text-xs bg-orange-500/15 px-1.5 rounded font-semibold">{e.priority}</span>}
+                                  {e.source && <span className="text-cyan-300 text-xs bg-cyan-500/10 px-1.5 rounded">{e.source}</span>}
+                                  {e.opted_out && <span className="text-red-400 text-xs">baja</span>}
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-1 ml-2 shrink-0" onClick={ev => ev.stopPropagation()}>
+                                <button onClick={() => setEmpresaDeleteConfirmId(e.id)} className="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded hover:bg-red-500/20 transition-all">✕</button>
                               </div>
                             </div>
-                            <div className="flex items-center gap-1 ml-2 shrink-0" onClick={ev => ev.stopPropagation()}>
-                              <button onClick={() => setEmpresaDeleteConfirmId(e.id)} className="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded hover:bg-red-500/20 transition-all">✕</button>
-                            </div>
-                          </div>
-                        ));
+                          );
+                        });
                       })()}
                     </div>
                   </CardContent>
@@ -3496,8 +3506,8 @@ export default function AdminDashboard() {
                       <div className="flex flex-wrap gap-1.5">
                         {Array.from(new Set(selectEmpresaRecipients(empresas).map(e => e.company).filter(Boolean))).sort().map(company => (
                           <button key={company} onClick={() => setEmpresaCampaignCompanies(prev => prev.includes(company) ? prev.filter(c => c !== company) : [...prev, company])}
-                            className={`text-xs px-2.5 py-1 rounded-full border transition-all ${empresaCampaignCompanies.includes(company) ? "bg-blue-600 border-blue-500 text-white" : "border-gray-600 text-gray-400 hover:text-white hover:border-gray-400"}`}>
-                            {company}
+                            className={`text-xs px-2.5 py-1 rounded-full border transition-all ${empresaCampaignCompanies.includes(company) ? "bg-blue-600 border-blue-500 text-white" : isEmpresaInImportBatchCompany(company) ? "border-emerald-400/60 text-emerald-200 hover:bg-emerald-500/10 hover:border-emerald-300" : "border-gray-600 text-gray-400 hover:text-white hover:border-gray-400"}`}>
+                            {company}{isEmpresaInImportBatchCompany(company) && <span className="ml-1 text-[9px] text-emerald-300">Lote 3</span>}
                           </button>
                         ))}
                         {empresaCampaignCompanies.length > 0 && (
