@@ -56,6 +56,15 @@ acumulativo no cambia la procedencia de los contactos repetidos.
 incorporación; conservar las etiquetas anteriores y distinguir siempre la
 etiqueta de lote del estado de baja.
 
+El propietario aprobó incorporar únicamente las empresas con correo del nuevo
+archivo de empresas adicionales y distinguirlas en azul, sin recolorear los
+lotes verdes y rojos existentes.
+
+**Why:** El usuario confirmó «Incorporar las 20 en azul».
+
+**How to apply:** El azul identifica esta incorporación, no todos los contactos
+futuros ni los registros sin email del mismo archivo acumulativo.
+
 ## Data model note
 `employee_count` (exact headcount per contact, from the import) is a separate column from `company_size` (the pre-existing categorical bucket like `5k_19999` used for campaign segmentation and manually/seed-assigned). They are intentionally not derived from each other — `employee_count` is importer-sourced raw data, `company_size` remains the curated segmentation field.
 

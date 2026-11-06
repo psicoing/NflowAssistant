@@ -5,6 +5,7 @@ type EmpresaImportBatchEntry = {
 
 export const EMPRESA_IMPORT_BATCH_LABEL = "Email incorporado · lote 3";
 export const EMPRESA_IMPORT_BATCH_RED_LABEL = "Email incorporado · bloques 4–8";
+export const EMPRESA_IMPORT_BATCH_BLUE_LABEL = "Empresas adicionales · lote azul";
 
 // Fixed manifest of the 19 ASCII-email contacts parsed from the lote 3 CSV.
 // The non-ASCII comunicación@estrellagalicia.es contact is intentionally excluded.
@@ -43,6 +44,30 @@ const bloques48Entries: EmpresaImportBatchEntry[] = [
   { company: "Viscofan", email: "info@viscofan.com" },
 ];
 
+// Fixed manifest of the 20 exact company/email pairs with email in the additional-companies CSV.
+const loteAzulEntries: EmpresaImportBatchEntry[] = [
+  { company: "Grupo ACS", email: "infogrupoacs@grupoacs.com" },
+  { company: "ISS Facility Services", email: "info@es.issworld.com" },
+  { company: "Grupo Fuertes", email: "info@grupofuertes.com" },
+  { company: "Cooperativas Agro-alimentarias de España", email: "cooperativas@agro-alimentarias.coop" },
+  { company: "COVAP", email: "covap@covap.es" },
+  { company: "Grupo AN", email: "an@grupoan.com" },
+  { company: "Grupo Roca", email: "infosan@roca.net" },
+  { company: "Simon", email: "sat@simon.es" },
+  { company: "Mecalux", email: "info@mecalux.com" },
+  { company: "Siemens Mobility España", email: "comunicacion.web.mobility.es@siemens.com" },
+  { company: "TK Elevator España", email: "servicliente@tkelevator.com" },
+  { company: "Kärcher España", email: "karcher.central@karcher.com" },
+  { company: "Stryker Iberia", email: "cs-iberia@stryker.com" },
+  { company: "Lilly España", email: "medica_informacion@lilly.com" },
+  { company: "Bristol Myers Squibb España", email: "informacion.medica@bms.com" },
+  { company: "Alcon Healthcare España", email: "alcon.responde@alcon.com" },
+  { company: "DS Smith España", email: "iberia.marketing@dssmith.com" },
+  { company: "Covestro España", email: "comunicacionspain@covestro.com" },
+  { company: "BASF Española", email: "comunicacion@basf.com" },
+  { company: "Air Liquide España", email: "soportecliente.es@airliquide.com" },
+];
+
 function normalizeCompany(value: string) {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase().replace(/\s+/g, " ");
 }
@@ -59,8 +84,12 @@ const bloques48Pairs = new Set(
   bloques48Entries.map(({ company, email }) => `${normalizeCompany(company)}\u0000${normalizeEmail(email)}`),
 );
 const bloques48Companies = new Set(bloques48Entries.map(({ company }) => normalizeCompany(company)));
+const loteAzulPairs = new Set(
+  loteAzulEntries.map(({ company, email }) => `${normalizeCompany(company)}\u0000${normalizeEmail(email)}`),
+);
+const loteAzulCompanies = new Set(loteAzulEntries.map(({ company }) => normalizeCompany(company)));
 
-export type EmpresaImportBatchColor = "green" | "red";
+export type EmpresaImportBatchColor = "green" | "red" | "blue";
 
 /** Resolves a batch color for exact contact pairs or company-only selection chips. */
 export function getEmpresaImportBatchColor(company?: string | null, email?: string | null): EmpresaImportBatchColor | null {
@@ -72,10 +101,12 @@ export function getEmpresaImportBatchColor(company?: string | null, email?: stri
     const pair = `${normalizedCompany}\u0000${normalizeEmail(email)}`;
     if (lote3Pairs.has(pair)) return "green";
     if (bloques48Pairs.has(pair)) return "red";
+    if (loteAzulPairs.has(pair)) return "blue";
     return null;
   }
   if (lote3Companies.has(normalizedCompany)) return "green";
   if (bloques48Companies.has(normalizedCompany)) return "red";
+  if (loteAzulCompanies.has(normalizedCompany)) return "blue";
   return null;
 }
 
@@ -85,6 +116,7 @@ export function getEmpresaImportBatch(company?: string | null, email?: string | 
   const color = getEmpresaImportBatchColor(company, email);
   if (color === "green") return EMPRESA_IMPORT_BATCH_LABEL;
   if (color === "red") return EMPRESA_IMPORT_BATCH_RED_LABEL;
+  if (color === "blue") return EMPRESA_IMPORT_BATCH_BLUE_LABEL;
   return null;
 }
 

@@ -12,7 +12,7 @@ import AdminUserMetricsPanel from "@/components/admin/AdminUserMetricsPanel";
 import type { AdminUserMetrics } from "../../../shared/admin-user-metrics";
 import { parseEmpresaCsv, empresaImportSummary, type EmpresaCsvPreview } from "../../../shared/empresa-csv";
 import { selectEmpresaRecipients } from "../../../shared/empresa-email-policy";
-import { EMPRESA_IMPORT_BATCH_LABEL, getEmpresaImportBatch, getEmpresaImportBatchColor } from "@/lib/empresa-import-batches";
+import { EMPRESA_IMPORT_BATCH_LABEL, EMPRESA_IMPORT_BATCH_BLUE_LABEL, getEmpresaImportBatch, getEmpresaImportBatchColor } from "@/lib/empresa-import-batches";
 import { 
   Users, 
   DollarSign, 
@@ -3272,6 +3272,8 @@ export default function AdminDashboard() {
                       Verde: {EMPRESA_IMPORT_BATCH_LABEL}; no acredita consentimiento ni entrega.
                       <span className="ml-3 mr-1 inline-block h-2 w-2 rounded-sm border border-red-400/70 bg-red-400/20 align-middle" />
                       Rojo: Email incorporado · bloques 4–8; no acredita consentimiento ni entrega, y no indica baja.
+                      <span className="ml-3 mr-1 inline-block h-2 w-2 rounded-sm border border-sky-400/70 bg-sky-400/20 align-middle" />
+                      Azul: {EMPRESA_IMPORT_BATCH_BLUE_LABEL}; indica procedencia, no consentimiento, entrega ni selección.
                     </p>
 
                     <div className="max-h-[400px] overflow-y-auto space-y-1 pr-1">
@@ -3296,18 +3298,18 @@ export default function AdminDashboard() {
                         if (filtered.length === 0) return <p className="text-gray-400 text-sm text-center py-4">Sin resultados</p>;
                         return filtered.map(e => {
                           const importBatch = getEmpresaImportBatch(e.company, e.email);
-                          const importBatchColor = getEmpresaImportBatchColor(e.company, e.email);
-                          const importBatchRing = importBatchColor === "red" ? "ring-red-400/50" : "ring-emerald-400/50";
+                          const importBatchColor = e.email?.trim() ? getEmpresaImportBatchColor(e.company, e.email) : null;
+                          const importBatchRing = importBatchColor === "red" ? "ring-red-400/50" : importBatchColor === "blue" ? "ring-sky-400/50" : "ring-emerald-400/50";
                           return (
                             <div key={e.id}
                               onClick={() => { setEmpresaSelectedContact(e); setEmpresaContactHistory([]); fetchEmpresaContactHistory(e.id); }}
-                              className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all ${e.opted_out ? `opacity-50 bg-gray-700/20 hover:bg-gray-700/30 ${importBatchColor ? `ring-1 ring-inset ${importBatchRing}` : ""}` : importBatchColor === "green" ? "bg-emerald-500/10 ring-1 ring-inset ring-emerald-400/50 hover:bg-emerald-500/15" : importBatchColor === "red" ? "bg-red-500/10 ring-1 ring-inset ring-red-400/50 hover:bg-red-500/15" : "bg-gray-700/50 hover:bg-gray-700"}`}>
+                              className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-all ${e.opted_out ? `opacity-50 bg-gray-700/20 hover:bg-gray-700/30 ${importBatchColor ? `ring-1 ring-inset ${importBatchRing}` : ""}` : importBatchColor === "green" ? "bg-emerald-500/10 ring-1 ring-inset ring-emerald-400/50 hover:bg-emerald-500/15" : importBatchColor === "red" ? "bg-red-500/10 ring-1 ring-inset ring-red-400/50 hover:bg-red-500/15" : importBatchColor === "blue" ? "bg-sky-500/10 ring-1 ring-inset ring-sky-400/50 hover:bg-sky-500/15" : "bg-gray-700/50 hover:bg-gray-700"}`}>
                               <div className="min-w-0 flex-1">
                                 {e.name && <p className="text-white text-xs font-semibold truncate">{e.name}</p>}
                                 <p className="text-gray-300 text-xs truncate">{e.email || (e.phone ? `📞 ${e.phone}` : "Sin email")}</p>
                                 <div className="flex gap-1.5 mt-0.5 flex-wrap">
                                   {e.company && <span className="text-gray-500 text-xs">{e.company}</span>}
-                                  {importBatch && <span className={`text-[10px] border px-1.5 rounded ${importBatchColor === "red" ? "text-red-200 bg-red-500/15 border-red-400/30" : "text-emerald-200 bg-emerald-500/15 border-emerald-400/30"}`}>{importBatch}</span>}
+                                  {importBatch && <span className={`text-[10px] border px-1.5 rounded ${importBatchColor === "red" ? "text-red-200 bg-red-500/15 border-red-400/30" : importBatchColor === "blue" ? "text-sky-200 bg-sky-500/15 border-sky-400/30" : "text-emerald-200 bg-emerald-500/15 border-emerald-400/30"}`}>{importBatch}</span>}
                                   <span className="text-indigo-300 text-xs bg-indigo-500/15 px-1.5 rounded">{empresaSizeLabel(e.company_size)}</span>
                                   {e.language === 'en_fr' && <span className="text-yellow-300 text-xs bg-yellow-500/15 px-1.5 rounded font-semibold">EN·FR</span>}
                                   {e.campaigns_sent > 0 && <span className="text-blue-400 text-xs bg-blue-500/10 px-1.5 rounded">📧 {e.campaigns_sent}</span>}
@@ -3510,10 +3512,11 @@ export default function AdminDashboard() {
                       <div className="flex flex-wrap gap-1.5">
                         {Array.from(new Set(selectEmpresaRecipients(empresas).map(e => e.company).filter(Boolean))).sort().map(company => {
                           const batchColor = getEmpresaImportBatchColor(company);
+                          const selected = empresaCampaignCompanies.includes(company);
                           return (
-                            <button key={company} onClick={() => setEmpresaCampaignCompanies(prev => prev.includes(company) ? prev.filter(c => c !== company) : [...prev, company])}
-                              className={`text-xs px-2.5 py-1 rounded-full border transition-all ${empresaCampaignCompanies.includes(company) ? "bg-blue-600 border-blue-500 text-white" : batchColor === "green" ? "border-emerald-400/60 text-emerald-200 hover:bg-emerald-500/10 hover:border-emerald-300" : batchColor === "red" ? "border-red-400/60 text-red-200 hover:bg-red-500/10 hover:border-red-300" : "border-gray-600 text-gray-400 hover:text-white hover:border-gray-400"}`}>
-                              {company}{batchColor && <span className={`ml-1 text-[9px] ${batchColor === "red" ? "text-red-300" : "text-emerald-300"}`}>{batchColor === "red" ? "Bloques 4–8" : "Lote 3"}</span>}
+                            <button key={company} aria-pressed={selected} onClick={() => setEmpresaCampaignCompanies(prev => prev.includes(company) ? prev.filter(c => c !== company) : [...prev, company])}
+                              className={`text-xs px-2.5 py-1 rounded-full border transition-all ${selected ? "bg-blue-600 border-blue-400 text-white ring-2 ring-blue-300/60" : batchColor === "green" ? "border-emerald-400/60 text-emerald-200 hover:bg-emerald-500/10 hover:border-emerald-300" : batchColor === "red" ? "border-red-400/60 text-red-200 hover:bg-red-500/10 hover:border-red-300" : batchColor === "blue" ? "border-sky-400/60 text-sky-200 hover:bg-sky-500/10 hover:border-sky-300" : "border-gray-600 text-gray-400 hover:text-white hover:border-gray-400"}`}>
+                              {company}{batchColor && <span className={`ml-1 text-[9px] ${batchColor === "red" ? "text-red-300" : batchColor === "blue" ? "text-sky-300" : "text-emerald-300"}`}>{batchColor === "red" ? "Bloques 4–8" : batchColor === "blue" ? "Lote azul" : "Lote 3"}</span>}{selected && <span className="ml-1 font-semibold">· Seleccionada</span>}
                             </button>
                           );
                         })}
