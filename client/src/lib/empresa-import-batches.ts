@@ -1,3 +1,4 @@
+import { ALT_EMPORDA_BATCH_ENTRIES } from "./empresa-alt-emporda-batch";
 type EmpresaImportBatchEntry = {
   company: string;
   email: string;
@@ -6,6 +7,7 @@ type EmpresaImportBatchEntry = {
 export const EMPRESA_IMPORT_BATCH_LABEL = "Email incorporado · lote 3";
 export const EMPRESA_IMPORT_BATCH_RED_LABEL = "Email incorporado · bloques 4–8";
 export const EMPRESA_IMPORT_BATCH_BLUE_LABEL = "Empresas adicionales · lote azul";
+export const EMPRESA_IMPORT_BATCH_BROWN_LABEL = "Alt Empordà · lote marrón";
 
 // Fixed manifest of the 19 ASCII-email contacts parsed from the lote 3 CSV.
 // The non-ASCII comunicación@estrellagalicia.es contact is intentionally excluded.
@@ -68,6 +70,8 @@ const loteAzulEntries: EmpresaImportBatchEntry[] = [
   { company: "Air Liquide España", email: "soportecliente.es@airliquide.com" },
 ];
 
+const altEmpordaEntries = ALT_EMPORDA_BATCH_ENTRIES;
+
 function normalizeCompany(value: string) {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase().replace(/\s+/g, " ");
 }
@@ -88,35 +92,48 @@ const loteAzulPairs = new Set(
   loteAzulEntries.map(({ company, email }) => `${normalizeCompany(company)}\u0000${normalizeEmail(email)}`),
 );
 const loteAzulCompanies = new Set(loteAzulEntries.map(({ company }) => normalizeCompany(company)));
+const altEmpordaEmailPairs = new Set(
+  altEmpordaEntries
+    .filter(({ email }) => email !== null)
+    .map(({ company, email }) => `${normalizeCompany(company)}\u0000${normalizeEmail(email!)}`),
+);
+const altEmpordaNoEmailCompanies = new Set(
+  altEmpordaEntries.filter(({ email }) => email === null).map(({ company }) => normalizeCompany(company)),
+);
+const altEmpordaCompanies = new Set(altEmpordaEntries.map(({ company }) => normalizeCompany(company)));
 
-export type EmpresaImportBatchColor = "green" | "red" | "blue";
+export type EmpresaImportBatchColor = "green" | "red" | "blue" | "brown";
 
 /** Resolves a batch color for exact contact pairs or company-only selection chips. */
 export function getEmpresaImportBatchColor(company?: string | null, email?: string | null): EmpresaImportBatchColor | null {
   if (!company?.trim()) return null;
-  if (email === null) return null;
   const normalizedCompany = normalizeCompany(company);
-  if (email !== undefined && email !== null) {
-    if (!email.trim()) return null;
+  if (email !== undefined) {
+    if (email === null || !email.trim()) {
+      return altEmpordaNoEmailCompanies.has(normalizedCompany) ? "brown" : null;
+    }
     const pair = `${normalizedCompany}\u0000${normalizeEmail(email)}`;
     if (lote3Pairs.has(pair)) return "green";
     if (bloques48Pairs.has(pair)) return "red";
     if (loteAzulPairs.has(pair)) return "blue";
+    if (altEmpordaEmailPairs.has(pair)) return "brown";
     return null;
   }
   if (lote3Companies.has(normalizedCompany)) return "green";
   if (bloques48Companies.has(normalizedCompany)) return "red";
   if (loteAzulCompanies.has(normalizedCompany)) return "blue";
+  if (altEmpordaCompanies.has(normalizedCompany)) return "brown";
   return null;
 }
 
-/** Returns the fixed-batch label only when both the company and email match. */
+/** Returns a label for exact email identities, or exact email-less brown identities. */
 export function getEmpresaImportBatch(company?: string | null, email?: string | null): string | null {
-  if (!company?.trim() || !email?.trim()) return null;
+  if (!company?.trim() || email === undefined) return null;
   const color = getEmpresaImportBatchColor(company, email);
   if (color === "green") return EMPRESA_IMPORT_BATCH_LABEL;
   if (color === "red") return EMPRESA_IMPORT_BATCH_RED_LABEL;
   if (color === "blue") return EMPRESA_IMPORT_BATCH_BLUE_LABEL;
+  if (color === "brown") return EMPRESA_IMPORT_BATCH_BROWN_LABEL;
   return null;
 }
 

@@ -65,6 +65,15 @@ lotes verdes y rojos existentes.
 **How to apply:** El azul identifica esta incorporación, no todos los contactos
 futuros ni los registros sin email del mismo archivo acumulativo.
 
+El lote de cámpings y restaurantes del Alt Empordà debe identificarse en marrón,
+manteniendo intactos los colores anteriores. Incluye contactos sin email:
+su pertenencia al lote no los convierte en destinatarios de campañas.
+
+**Why:** El usuario pidió incorporar estas empresas en color marrón.
+
+**How to apply:** Distinguir la incorporación de la elegibilidad para enviar;
+conservar el marrón también en sus fichas sin email y respetar bajas y bloqueos.
+
 ## Data model note
 `employee_count` (exact headcount per contact, from the import) is a separate column from `company_size` (the pre-existing categorical bucket like `5k_19999` used for campaign segmentation and manually/seed-assigned). They are intentionally not derived from each other — `employee_count` is importer-sourced raw data, `company_size` remains the curated segmentation field.
 
