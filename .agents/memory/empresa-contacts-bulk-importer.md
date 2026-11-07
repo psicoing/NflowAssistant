@@ -74,6 +74,16 @@ su pertenencia al lote no los convierte en destinatarios de campañas.
 **How to apply:** Distinguir la incorporación de la elegibilidad para enviar;
 conservar el marrón también en sus fichas sin email y respetar bajas y bloqueos.
 
+El propietario quiere un punto azul en las empresas a las que ya se haya
+escrito, además de los colores de incorporación y los indicadores anteriores.
+También aprobó un selector de campañas por sector, zona y lote.
+
+**Why:** Quiere reconocer contactos previos y seleccionar grupos sin recorrer
+una lista enorme de empresas.
+
+**How to apply:** Mantener separadas la procedencia del lote y la señal de
+contacto previo; un envío aceptado registrado no acredita entrega ni lectura.
+
 ## Data model note
 `employee_count` (exact headcount per contact, from the import) is a separate column from `company_size` (the pre-existing categorical bucket like `5k_19999` used for campaign segmentation and manually/seed-assigned). They are intentionally not derived from each other — `employee_count` is importer-sourced raw data, `company_size` remains the curated segmentation field.
 

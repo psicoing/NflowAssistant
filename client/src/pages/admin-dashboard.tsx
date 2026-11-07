@@ -13,6 +13,8 @@ import type { AdminUserMetrics } from "../../../shared/admin-user-metrics";
 import { parseEmpresaCsv, empresaImportSummary, type EmpresaCsvPreview } from "../../../shared/empresa-csv";
 import { selectEmpresaRecipients } from "../../../shared/empresa-email-policy";
 import { EMPRESA_IMPORT_BATCH_LABEL, EMPRESA_IMPORT_BATCH_BLUE_LABEL, EMPRESA_IMPORT_BATCH_BROWN_LABEL, getEmpresaImportBatch, getEmpresaImportBatchColor } from "@/lib/empresa-import-batches";
+import EmpresaCampaignCompanySelector from "@/components/admin/EmpresaCampaignCompanySelector";
+import { getEmpresaPreviouslyEmailedCompanies, normalizeEmpresaCompany } from "@/lib/empresa-company-groups";
 import { 
   Users, 
   DollarSign, 
@@ -1033,6 +1035,7 @@ export default function AdminDashboard() {
   const selectedEmpresaBrandStatus = empresaBrandStatuses.find(status => status.id === empresaBrand);
   const empresaPolicyAvailable = empresaLoaded && !empresaLoading && empresas.every(contact => typeof contact.email_campaign_eligible === "boolean");
   const empresaCampaignRecipients = selectEmpresaRecipients(empresas, empresaCampaignCompanies, empresaCampaignSizes);
+  const empresaPreviouslyEmailedCompanies = getEmpresaPreviouslyEmailedCompanies(empresas);
   const empresaBulkPreview = parseEmpresaCsv(empresaBulkText, "bulk");
   const selectEmpresaBrand = (brand: EmpresaBrand) => {
     const letter = getEmpresaLetter(brand, empresaLanguage);
@@ -3276,6 +3279,8 @@ export default function AdminDashboard() {
                       Azul: {EMPRESA_IMPORT_BATCH_BLUE_LABEL}; indica procedencia, no consentimiento, entrega ni selección.
                       <span className="ml-3 mr-1 inline-block h-2 w-2 rounded-sm border border-amber-700/80 bg-amber-500/20 align-middle" />
                       Marrón: {EMPRESA_IMPORT_BATCH_BROWN_LABEL}; indica procedencia, no consentimiento, entrega ni selección.
+                      <span className="ml-3 mr-1 inline-block h-2 w-2 rounded-full bg-blue-400 align-middle" />
+                      Punto azul: envío aceptado registrado; no confirma entrega.
                     </p>
 
                     <div className="max-h-[400px] overflow-y-auto space-y-1 pr-1">
@@ -3310,7 +3315,7 @@ export default function AdminDashboard() {
                                 {e.name && <p className="text-white text-xs font-semibold truncate">{e.name}</p>}
                                 <p className="text-gray-300 text-xs truncate">{e.email || (e.phone ? `📞 ${e.phone}` : "Sin email")}</p>
                                 <div className="flex gap-1.5 mt-0.5 flex-wrap">
-                                  {e.company && <span className="text-gray-500 text-xs">{e.company}</span>}
+                                  {e.company && <span className="inline-flex items-center gap-1 text-gray-500 text-xs">{e.company}{empresaPreviouslyEmailedCompanies.has(normalizeEmpresaCompany(e.company)) && <span title="Envío aceptado registrado; no confirma entrega" aria-label="Envío aceptado registrado; no confirma entrega" className="inline-block h-2 w-2 rounded-full bg-blue-400" />}</span>}
                                   {importBatch && <span className={`text-[10px] border px-1.5 rounded ${importBatchColor === "red" ? "text-red-200 bg-red-500/15 border-red-400/30" : importBatchColor === "blue" ? "text-sky-200 bg-sky-500/15 border-sky-400/30" : importBatchColor === "brown" ? "text-amber-200 bg-amber-900/40 border-amber-700/50" : "text-emerald-200 bg-emerald-500/15 border-emerald-400/30"}`}>{importBatch}</span>}
                                   <span className="text-indigo-300 text-xs bg-indigo-500/15 px-1.5 rounded">{empresaSizeLabel(e.company_size)}</span>
                                   {e.language === 'en_fr' && <span className="text-yellow-300 text-xs bg-yellow-500/15 px-1.5 rounded font-semibold">EN·FR</span>}
@@ -3345,9 +3350,11 @@ export default function AdminDashboard() {
                   <CardHeader>
                     <CardTitle className="text-white flex items-center gap-2">✉️ Redactar campaña</CardTitle>
                     <CardDescription className="text-gray-400">
-                      {empresaCampaignCompanies.length > 0 || empresaCampaignSizes.length > 0
-                        ? `${empresaCampaignCompanies.length > 0 ? `Empresas: ${empresaCampaignCompanies.join(", ")}` : "Todas las empresas"}${empresaCampaignSizes.length > 0 ? ` · Tamaños: ${empresaCampaignSizes.map(empresaSizeLabel).join(", ")}` : ""} · ${empresaPolicyAvailable ? empresaCampaignRecipients.length : "—"} destinatarios elegibles`
-                        : `Todas las empresas · ${empresaPolicyAvailable ? empresaCampaignRecipients.length : "—"} destinatarios elegibles`}
+                      {empresaCampaignCompanies.length > 0
+                        ? `${empresaCampaignCompanies.length} ${empresaCampaignCompanies.length === 1 ? "empresa seleccionada" : "empresas seleccionadas"}`
+                        : "Todas las empresas"}
+                      {empresaCampaignSizes.length > 0 ? ` · ${empresaCampaignSizes.length} tamaños` : ""}
+                      {` · ${empresaPolicyAvailable ? empresaCampaignRecipients.length : "—"} destinatarios elegibles`}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
@@ -3509,24 +3516,7 @@ export default function AdminDashboard() {
                         className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 resize-y font-mono" />
                     </div>
 
-                    <div>
-                      <label className="text-gray-300 text-xs font-medium block mb-1">Enviar solo a estas empresas <span className="text-gray-500">(vacío = todas)</span></label>
-                      <div className="flex flex-wrap gap-1.5">
-                        {Array.from(new Set(selectEmpresaRecipients(empresas).map(e => e.company).filter(Boolean))).sort().map(company => {
-                          const batchColor = getEmpresaImportBatchColor(company);
-                          const selected = empresaCampaignCompanies.includes(company);
-                          return (
-                            <button key={company} aria-pressed={selected} onClick={() => setEmpresaCampaignCompanies(prev => prev.includes(company) ? prev.filter(c => c !== company) : [...prev, company])}
-                              className={`text-xs px-2.5 py-1 rounded-full border transition-all ${selected ? "bg-blue-600 border-blue-400 text-white ring-2 ring-blue-300/60" : batchColor === "green" ? "border-emerald-400/60 text-emerald-200 hover:bg-emerald-500/10 hover:border-emerald-300" : batchColor === "red" ? "border-red-400/60 text-red-200 hover:bg-red-500/10 hover:border-red-300" : batchColor === "blue" ? "border-sky-400/60 text-sky-200 hover:bg-sky-500/10 hover:border-sky-300" : batchColor === "brown" ? "border-amber-700/70 text-amber-200 hover:bg-amber-900/40 hover:border-amber-600" : "border-gray-600 text-gray-400 hover:text-white hover:border-gray-400"}`}>
-                              {company}{batchColor && <span className={`ml-1 text-[9px] ${batchColor === "red" ? "text-red-300" : batchColor === "blue" ? "text-sky-300" : batchColor === "brown" ? "text-amber-300" : "text-emerald-300"}`}>{batchColor === "red" ? "Bloques 4–8" : batchColor === "blue" ? "Lote azul" : batchColor === "brown" ? "Alt Empordà" : "Lote 3"}</span>}{selected && <span className="ml-1 font-semibold">· Seleccionada</span>}
-                            </button>
-                          );
-                        })}
-                        {empresaCampaignCompanies.length > 0 && (
-                          <button onClick={() => setEmpresaCampaignCompanies([])} className="text-xs px-2.5 py-1 rounded-full border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-all">✕ Limpiar</button>
-                        )}
-                      </div>
-                    </div>
+                    <EmpresaCampaignCompanySelector contacts={empresas} selectedCompanies={empresaCampaignCompanies} onChange={setEmpresaCampaignCompanies} selectedSizes={empresaCampaignSizes} policyAvailable={empresaPolicyAvailable} />
                     <div>
                       <label className="text-gray-300 text-xs font-medium block mb-1">Filtrar por tamaño <span className="text-gray-500">(vacío = todos)</span></label>
                       <div className="flex flex-wrap gap-1.5">
@@ -3629,7 +3619,7 @@ export default function AdminDashboard() {
                                  fetchEmpresaBrandStatuses();
                                  return;
                                }
-                               setEmpresaStatus("done"); fetchEmpresaCampaignHistory();
+                                setEmpresaStatus("done"); fetchEmpresaCampaignHistory(); fetchEmpresas();
                             } catch { setEmpresaStatus("error"); }
                           }} className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40 text-white font-bold py-2.5 rounded-xl transition-all text-sm">
                             {empresaScheduledAt ? "🕐 Programar" : "✉️ Enviar ahora"}
