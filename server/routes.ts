@@ -26,6 +26,7 @@ import { registerProbadoresCommercialContactRoutes } from "./probadores-commerci
 import { shouldRunStartupDataBootstrap } from "./startup-policy";
 import { ChatHistoryAccessError, establishChatUserSession, installChatHistoryGuards } from "./chat-history-security";
 import { accountRegistrationHandler } from "./account-registration";
+import { registerGoogleAuthRoutes } from "./google-auth";
 import { registerAdminUserMetricsRoute } from "./admin-user-metrics";
 import { createRegistrationAuditWriter, installRegistrationAudit } from "./registration-audit";
 import { empresaEmailEligibilitySql } from "./empresa-email-eligibility";
@@ -337,6 +338,7 @@ export async function registerRoutes(app: Express, existingServer?: Server): Pro
 
   installRegistrationAudit(app, createRegistrationAuditWriter(pool));
   app.post("/api/auth/register", accountRegistrationHandler(storage, establishChatUserSession));
+  registerGoogleAuthRoutes(app);
 
   // User login
   app.post("/api/auth/login", async (req, res) => {

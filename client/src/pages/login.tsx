@@ -12,6 +12,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { useLanguageContext } from "@/components/LanguageProvider";
 import { trackEvent } from "@/lib/analytics";
 import { hasCheckoutReturn, takeCheckoutReturn } from "@/lib/checkout-navigation";
+import { GoogleEntryButton } from "@/components/GoogleEntryButton";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -218,6 +219,10 @@ export default function Login() {
               </div>
             </div>
           </CardHeader>
+
+          <div className="px-6 pb-2">
+            <GoogleEntryButton />
+          </div>
 
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">

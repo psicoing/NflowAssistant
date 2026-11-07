@@ -205,6 +205,15 @@ export const users = pgTable("users", {
   createdByPartnerId: integer("created_by_partner_id"),
 });
 
+// Additive social identities; email alone never authorizes access to an old account.
+// Schema reaches production exclusively through the managed Publish comparison.
+export const nuxaSocialIdentities = pgTable("nuxa_social_identities", {
+  identityKey: text("identity_key").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  provider: text("provider").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}, table => [index("nuxa_social_identities_user_idx").on(table.userId)]);
+
 // Durable trial controls. Identities survive account deletion and month rollover.
 // The HMAC key is backend-only and independent of session-secret rotation.
 export const nuxaTrialSecurity = pgTable("nuxa_trial_security", {

@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { signOutClerkIfPresent } from "@/lib/clerk-session";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -59,7 +60,10 @@ export default function ChatUserMenu() {
   });
 
   const logoutMutation = useMutation({
-    mutationFn: () => apiRequest("POST", "/api/auth/logout"),
+    mutationFn: async () => {
+      await signOutClerkIfPresent();
+      return apiRequest("POST", "/api/auth/logout");
+    },
     onSuccess: () => {
       localStorage.clear();
       queryClient.clear();

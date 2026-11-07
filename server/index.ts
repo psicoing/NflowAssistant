@@ -11,6 +11,9 @@ import { pool } from "./db";
 import { attachVoiceDemoWebSocket } from "./voiceDemoBridge";
 import { createServer } from "http";
 import { shouldRunStartupDataBootstrap } from "./startup-policy";
+import { clerkMiddleware } from "@clerk/express";
+import { publishableKeyFromHost } from "@clerk/shared/keys";
+import { CLERK_PROXY_PATH, clerkProxyMiddleware, getClerkProxyHost } from "./middlewares/clerkProxyMiddleware";
 
 async function ensureAdminUser() {
   try {
@@ -1109,6 +1112,18 @@ process.on("unhandledRejection", (reason: unknown) => {
 });
 
 const app = express();
+app.use(CLERK_PROXY_PATH, clerkProxyMiddleware());
+// Additive identity verification only. Existing NUXA sessions remain authoritative.
+if (process.env.CLERK_SECRET_KEY && process.env.CLERK_PUBLISHABLE_KEY) {
+  const verifyClerk = clerkMiddleware((req) => ({
+    publishableKey: publishableKeyFromHost(
+      getClerkProxyHost(req) ?? "",
+      process.env.CLERK_PUBLISHABLE_KEY,
+    ),
+  }));
+  // Do not introduce Clerk dependency/errors into existing APIs or webhooks.
+  app.use("/api/auth/google", verifyClerk);
+}
 // Replit forwards the client IP through its reverse proxy. Without this,
 // verification rate limits would be shared by everyone behind that proxy.
 app.set("trust proxy", 1);
@@ -1152,7 +1167,7 @@ app.use((req, res, next) => {
   const originalResJson = res.json;
   res.json = function (bodyJson, ...args) {
     // Stripe contact responses contain personal addresses, not log data.
-    if (!path.startsWith("/api/admin/stripe-contacts")) capturedJsonResponse = bodyJson;
+    if (!path.startsWith("/api/admin/stripe-contacts") && !path.startsWith("/api/auth/google")) capturedJsonResponse = bodyJson;
     return originalResJson.apply(res, [bodyJson, ...args]);
   };
 

@@ -69,6 +69,15 @@ const SorteoRecursos = lazy(() => import("@/pages/sorteo-recursos"));
 const ProgramaPartners = lazy(() => import("@/pages/programa-partners"));
 const BienestarTematico = lazy(() => import("@/pages/bienestar-tematico"));
 const InternationalSeoPage = lazy(() => import("@/pages/international-seo"));
+const ClerkScopedRoutes = lazy(() => import("@/components/ClerkScopedRoutes"));
+
+function isClerkScopedPath(path: string) {
+  return path === "/acceso-google" ||
+    path === "/sign-in" ||
+    path.startsWith("/sign-in/") ||
+    path === "/sign-up" ||
+    path.startsWith("/sign-up/");
+}
 
 function AuthenticatedRouter() {
   const { user, isLoading, isAuthenticated, needsPayment } = useAuth();
@@ -81,7 +90,8 @@ function AuthenticatedRouter() {
     if (isPublishedSeoPath(location)) return;
 
     // Always allow access to public routes
-    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos", "/test-bienestar", "/calculadora-burnout", "/programa-partners", "/recompensas", "/bienestar-emocional", "/ansiedad", "/ansiedad-antes-de-dormir", "/estres-laboral", "/duelo", "/soledad", "/autoestima", "/ruptura-de-pareja", "/limites-sin-culpa", "/ansiedad-adolescentes"];
+    const publicRoutes = ["/", "/ejemplos-chat", "/novedades", "/recursos", "/blog", "/precios", "/app-movil", "/login", "/registro", "/registro/planes", "/prueba-gratis", "/activar-cuenta", "/activacion-exitosa", "/admin/login", "/admin/dashboard", "/partners/login", "/partners/register", "/partners", "/partners-comerciales", "/partners/dashboard", "/nosotros", "/quienes-somos", "/control-parental", "/legal/terminos", "/legal/privacidad", "/legal/cookies", "/legal/aviso-legal", "/download-csv", "/empresa-privada", "/sector-publico", "/control-shell", "/recursos-gratuitos", "/competencia-nuxa", "/sorteo-recursos", "/test-bienestar", "/calculadora-burnout", "/programa-partners", "/recompensas", "/bienestar-emocional", "/ansiedad", "/ansiedad-antes-de-dormir", "/estres-laboral", "/duelo", "/soledad", "/autoestima", "/ruptura-de-pareja", "/limites-sin-culpa", "/ansiedad-adolescentes", "/sign-in", "/sign-up", "/acceso-google"];
+    if (isClerkScopedPath(location)) return;
     // Allow magic link access routes
     if (location.startsWith("/acceso/")) {
       return;
@@ -206,6 +216,11 @@ function AppContent() {
       !isSeoPublicDocument &&
       (isPreviewWebview || (location === "/" && !hasSplashBeenShown())),
   );
+  // Returning from Google must not re-open the preview splash and lose the
+  // destination after an otherwise successful local login.
+  useEffect(() => {
+    if (isClerkScopedPath(location)) setShowSplash(false);
+  }, [location]);
 
   // Si auth carga y el usuario ya vio el splash → saltarlo
   useEffect(() => {
@@ -217,6 +232,26 @@ function AppContent() {
   const showFloatingCTA = !isAuthenticated && 
     (location === "/" || location === "/ejemplos-chat" || location === "/precios" || 
      location === "/app-movil" || location === "/nosotros" || location === "/control-parental" || location === "/blog");
+
+  if (isClerkScopedPath(location)) {
+    return (
+      <>
+        <Toaster />
+        <Suspense fallback={
+          <main className="flex min-h-[100dvh] items-center justify-center bg-[#e8edf5] px-4" role="status">
+            <div className="w-full max-w-sm space-y-4 rounded-2xl bg-[#fbfaf7] p-7 shadow-xl">
+              <div className="h-5 w-32 animate-pulse rounded bg-slate-200" />
+              <div className="h-12 w-full animate-pulse rounded-xl bg-slate-200" />
+              <div className="h-12 w-full animate-pulse rounded-xl bg-slate-200" />
+              <span className="sr-only">Cargando acceso seguro…</span>
+            </div>
+          </main>
+        }>
+          <ClerkScopedRoutes />
+        </Suspense>
+      </>
+    );
+  }
 
   if (showSplash && !isStandaloneTool && !isSeoPublicDocument) {
     return <SplashScreen onFinish={() => {

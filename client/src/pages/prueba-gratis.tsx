@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { SEOHead } from "@/components/SEOHead";
 import { apiRequest } from "@/lib/queryClient";
 import { trackEvent } from "@/lib/analytics";
+import { GoogleEntryButton } from "@/components/GoogleEntryButton";
 import {
   ArrowLeft,
   ArrowRight,
@@ -433,6 +434,7 @@ export default function PruebaGratis() {
                         : "Verificaremos ambos contactos antes de abrir la prueba."}
                     </p>
                   </div>
+                  {!isLegacyUnverified && <GoogleEntryButton className="pb-4" />}
 
                   <div>
                     <Label htmlFor="username" className="mb-1.5 block text-sm text-slate-300">Nombre de usuario</Label>

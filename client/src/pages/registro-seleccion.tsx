@@ -1,6 +1,7 @@
 import { useLocation } from "wouter";
 import { Building2, User, Heart, Landmark, MapPin, Stethoscope, GraduationCap, ArrowRight, Sparkles, MessageCircle, CheckCircle } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
+import { GoogleEntryButton } from "@/components/GoogleEntryButton";
 
 const categorias = [
   {
@@ -130,6 +131,9 @@ export default function RegistroSeleccion() {
             <p className="text-gray-500 text-lg max-w-xl mx-auto">
               Selecciona tu perfil y te mostramos las opciones más adecuadas para ti.
             </p>
+            <div className="mx-auto mt-6 max-w-sm">
+              <GoogleEntryButton />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
