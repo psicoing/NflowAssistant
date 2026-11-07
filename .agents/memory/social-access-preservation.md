@@ -15,3 +15,12 @@ autorización para una migración general de identidad o para reiniciar pruebas.
 No vincular cuentas antiguas únicamente por coincidencia del correo: contienen
 historial sensible. La publicación y su comparación de esquemas se revisan
 separadamente, especialmente porque esta vista previa comparte datos reales.
+
+El usuario confirma que el acceso con Google funciona correctamente en
+producción y decide mantener Google y el acceso habitual, sin añadir Apple.
+
+**Why:** Considera suficiente Google y ha confirmado el funcionamiento en su
+uso real; no es una verificación técnica independiente de todos los recorridos.
+
+**How to apply:** No ampliar a Apple sin una nueva petición ni presentar Google
+como pendiente de publicación basándose en el estado anterior.
