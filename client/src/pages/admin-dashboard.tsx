@@ -3687,26 +3687,47 @@ export default function AdminDashboard() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-700/50">
-                          {empresaCampaignHistory.map((c: any) => (
+                          {empresaCampaignHistory.map((c: any) => {
+                            const companiesFilter = typeof c.companies_filter === "string" ? c.companies_filter : "";
+                            const sizesFilter = typeof c.sizes_filter === "string" ? c.sizes_filter : "";
+                            const companyPreviewLength = 72;
+
+                            return (
                             <tr key={c.id} className="text-gray-300 hover:bg-gray-700/20 transition-all">
-                              <td className="py-2 pr-3 text-xs text-gray-400 whitespace-nowrap">
+                              <td className="align-top py-2 pr-3 text-xs text-gray-400 whitespace-nowrap">
                                 {new Date(c.sent_at).toLocaleDateString("es-ES", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
                               </td>
-                               <td className="py-2 pr-3">
+                               <td className="align-top py-2 pr-3">
                                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-700 text-gray-200">
                                    {getEmpresaBrandOption(c.brand).icon} {empresaBrandLabel(c.brand)}
                                  </span>
                                </td>
-                              <td className="py-2 pr-3 max-w-[160px] text-xs">
+                              <td className="align-top py-2 pr-3 max-w-[160px] text-xs">
                                 <p className="truncate" title={c.subject}>{c.subject}</p>
                                 {c.subject_b && <p className="truncate text-purple-400" title={c.subject_b}>B: {c.subject_b}</p>}
                               </td>
-                              <td className="py-2 pr-3 text-xs text-gray-500">
-                                {c.companies_filter || c.sizes_filter ? [c.companies_filter, c.sizes_filter ? `Tamaños: ${c.sizes_filter.split(", ").map(empresaSizeLabel).join(", ")}` : null].filter(Boolean).join(" · ") : "Todas"}
+                              <td className="align-top py-2 pr-3 text-xs text-gray-500">
+                                {companiesFilter || sizesFilter ? (
+                                  <div className="min-w-[180px] max-w-[280px] space-y-1">
+                                    {companiesFilter && (
+                                      companiesFilter.length > companyPreviewLength ? (
+                                        <details>
+                                          <summary className="cursor-pointer break-words" title={companiesFilter}>
+                                            {companiesFilter.slice(0, companyPreviewLength)}…
+                                          </summary>
+                                          <p className="mt-1 whitespace-pre-wrap break-words">{companiesFilter}</p>
+                                        </details>
+                                      ) : (
+                                        <p className="whitespace-pre-wrap break-words">{companiesFilter}</p>
+                                      )
+                                    )}
+                                    {sizesFilter && <p className="break-words">Tamaños: {sizesFilter.split(", ").map(empresaSizeLabel).join(", ")}</p>}
+                                  </div>
+                                ) : "Todas"}
                               </td>
-                              <td className="py-2 pr-3 text-center"><span className="text-emerald-400 font-semibold">{c.delivery?.accepted ?? c.sent_count}</span></td>
-                              <td className="py-2 pr-3 text-center"><span className={c.failed_count > 0 ? "text-red-400 font-semibold" : "text-gray-500"}>{c.delivery?.rejected ?? c.failed_count}</span></td>
-                              <td className="py-2 pr-3 text-center">
+                              <td className="align-top py-2 pr-3 text-center"><span className="text-emerald-400 font-semibold">{c.delivery?.accepted ?? c.sent_count}</span></td>
+                              <td className="align-top py-2 pr-3 text-center"><span className={c.failed_count > 0 ? "text-red-400 font-semibold" : "text-gray-500"}>{c.delivery?.rejected ?? c.failed_count}</span></td>
+                              <td className="align-top py-2 pr-3 text-center">
                                 {c.delivery ? (
                                   <div className="text-xs text-left min-w-[150px]">
                                     <p>Entregados: {c.delivery.delivered}</p>
@@ -3718,7 +3739,7 @@ export default function AdminDashboard() {
                                   </div>
                                 ) : <span className="text-xs text-gray-400">Entrega no verificada · Aperturas históricas: {c.opens}</span>}
                               </td>
-                              <td className="py-2 text-center">
+                              <td className="align-top py-2 text-center">
                                 <span className={`text-xs px-2 py-0.5 rounded-full ${c.status === "scheduled" ? "bg-amber-500/20 text-amber-300" : "bg-emerald-500/20 text-emerald-300"}`}>
                                   {({
                                     scheduled: "Programada", queued: "En cola", processing: "Procesando",
@@ -3747,7 +3768,8 @@ export default function AdminDashboard() {
                                 )}
                               </td>
                             </tr>
-                          ))}
+                            );
+                          })}
                         </tbody>
                       </table>
                     </div>
