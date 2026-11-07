@@ -3268,6 +3268,19 @@ export default function AdminDashboard() {
                         <option value="all">Toda fuente</option>
                         {Array.from(new Set(empresas.map(e => e.source).filter(Boolean))).sort().map(s => <option key={s} value={s}>{s}</option>)}
                       </select>
+                      <button type="button" onClick={() => {
+                        setEmpresaSearch("");
+                        setEmpresaStatusFilter("all");
+                        setEmpresaCompanyFilter("all");
+                        setEmpresaSizeFilter("all");
+                        setEmpresaProvinciaFilter("all");
+                        setEmpresaMunicipioFilter("all");
+                        setEmpresaEmployeeFilter("all");
+                        setEmpresaPriorityFilter("all");
+                        setEmpresaSourceFilter("all");
+                      }} className="rounded-lg border border-gray-600 px-2.5 py-1.5 text-xs text-gray-300 hover:bg-gray-600">
+                        Ver todas las empresas
+                      </button>
                     </div>
 
                     <p className="mt-2 text-[10px] leading-relaxed text-gray-400">

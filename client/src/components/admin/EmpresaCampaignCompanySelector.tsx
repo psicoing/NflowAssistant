@@ -28,6 +28,7 @@ export default function EmpresaCampaignCompanySelector({
   const [municipio, setMunicipio] = useState("all");
   const [batch, setBatch] = useState<EmpresaGroupBatch | "all">("all");
   const [contacted, setContacted] = useState<"all" | "contacted" | "not-contacted">("all");
+  const [viewMode, setViewMode] = useState<"all" | "categories">("all");
   const groups = useMemo(() => groupEmpresaCompanies(contacts, policyAvailable, selectedSizes), [contacts, policyAvailable, selectedSizes]);
   const provinces = useMemo(() => Array.from(new Set(groups.flatMap(group => group.provincias))).sort((a, b) => a.localeCompare(b, "es")), [groups]);
   const municipalities = useMemo(() => Array.from(new Set(groups
@@ -53,7 +54,8 @@ export default function EmpresaCampaignCompanySelector({
           <h3 id="empresa-company-selector-title" className="text-xs font-semibold text-gray-100">Empresas destinatarias</h3>
           <p className="mt-1 text-[11px] text-gray-400">
             {selectedCount ? `${selectedCount} ${selectedCount === 1 ? "empresa seleccionada" : "empresas seleccionadas"}` : "Todas las empresas"}
-            {" · "}{policyAvailable ? `${eligibleGroups.length} empresas elegibles en esta vista` : "Elegibilidad no disponible"}
+            {" · "}{groups.length} empresas en total
+            {viewMode === "categories" && <> · {policyAvailable ? `${eligibleGroups.length} empresas elegibles en esta vista` : "Elegibilidad no disponible"}</>}
           </p>
         </div>
         <button type="button" onClick={() => onChange([])} disabled={!selectedCount}
@@ -61,9 +63,39 @@ export default function EmpresaCampaignCompanySelector({
           Usar todas las empresas
         </button>
       </div>
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Vista de empresas">
+        <button type="button" aria-pressed={viewMode === "all"} onClick={() => setViewMode("all")}
+          className={`rounded-md border px-2.5 py-1.5 text-[11px] font-medium ${viewMode === "all" ? "border-sky-400/50 bg-sky-400/15 text-sky-100" : "border-gray-700 text-gray-400 hover:bg-gray-800"}`}>
+          Ver todas las empresas
+        </button>
+        <button type="button" aria-pressed={viewMode === "categories"} onClick={() => setViewMode("categories")}
+          className={`rounded-md border px-2.5 py-1.5 text-[11px] font-medium ${viewMode === "categories" ? "border-sky-400/50 bg-sky-400/15 text-sky-100" : "border-gray-700 text-gray-400 hover:bg-gray-800"}`}>
+          Filtrar por categorías
+        </button>
+      </div>
       <p className="rounded-md border border-sky-400/20 bg-sky-400/5 px-2.5 py-2 text-[10px] leading-relaxed text-gray-300">
         La lista de empresas vacía significa todas las empresas. Los filtros solo sirven para explorar; usa un grupo para cambiar la selección. El punto azul registra un envío aceptado, no confirma entrega ni permiso.
       </p>
+      {viewMode === "all" ? (
+        <div role="group" aria-label="Todas las empresas" className="flex flex-wrap gap-2">
+          {groups.length === 0 ? <p className="w-full rounded-lg border border-gray-700/80 bg-gray-950/40 px-3 py-5 text-center text-xs text-gray-500">No hay empresas disponibles.</p> : groups.map(group => {
+            const selected = selectedNormalized.has(group.normalizedCompany);
+            const disabled = !policyAvailable || group.eligibleRecipients === 0;
+            return (
+              <button key={group.normalizedCompany} type="button" aria-pressed={selected} disabled={disabled}
+                title={disabled ? (policyAvailable ? "Sin destinatarios elegibles" : "Elegibilidad no disponible") : group.company}
+                onClick={() => updateSelection(group.company, !selected)}
+                className={`inline-flex min-h-9 max-w-full items-center gap-2 rounded-lg border px-3 py-2 text-left text-xs transition-colors ${selected ? "border-sky-400/50 bg-sky-400/10 text-sky-100" : "border-gray-700 bg-gray-950/40 text-gray-200 hover:border-gray-500 hover:bg-gray-800/70"} disabled:cursor-not-allowed disabled:opacity-50`}>
+                <span title={EMPRESA_BATCH_LABELS[group.batch]} aria-label={EMPRESA_BATCH_LABELS[group.batch]} className={`h-2 w-2 shrink-0 rounded-sm ${batchClass[group.batch]}`} />
+                <span className="min-w-0 truncate">{group.company}</span>
+                {group.previouslyEmailed && <span title="Envío aceptado registrado; no confirma entrega" aria-label="Envío aceptado registrado; no confirma entrega"><Circle className="h-2.5 w-2.5 shrink-0 fill-blue-400 text-blue-400" /></span>}
+                {selected && <Check aria-label="Seleccionada" className="h-3 w-3 shrink-0 text-sky-300" />}
+              </button>
+            );
+          })}
+        </div>
+      ) : (
+      <>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
         <label className="relative sm:col-span-2 lg:col-span-1">
           <span className="sr-only">Buscar empresa o área de contacto</span>
@@ -138,6 +170,9 @@ export default function EmpresaCampaignCompanySelector({
           </div>
         </details>
       )}
+      </>
+      )}
+      {viewMode === "all" && !policyAvailable && <p role="status" className="text-[10px] text-amber-300">Las empresas permanecen visibles, pero la selección está desactivada hasta que la política de elegibilidad esté disponible.</p>}
     </section>
   );
 }

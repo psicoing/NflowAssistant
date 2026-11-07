@@ -84,6 +84,15 @@ una lista enorme de empresas.
 **How to apply:** Mantener separadas la procedencia del lote y la señal de
 contacto previo; un envío aceptado registrado no acredita entrega ni lectura.
 
+El propietario prefiere poder ver todas las empresas como antes, no solo
+mediante el selector de categorías. Mantener esa vista directa como opción
+principal junto a los filtros, los colores de lote y los puntos azules.
+
+**Why:** Dijo «me gustaba más antes que podía ver todas las empresas».
+
+**How to apply:** No sustituir la vista completa al añadir formas de filtrar;
+cambiar de vista no debe seleccionar destinatarios ni iniciar envíos.
+
 ## Data model note
 `employee_count` (exact headcount per contact, from the import) is a separate column from `company_size` (the pre-existing categorical bucket like `5k_19999` used for campaign segmentation and manually/seed-assigned). They are intentionally not derived from each other — `employee_count` is importer-sourced raw data, `company_size` remains the curated segmentation field.
 
