@@ -1,4 +1,4 @@
-import { Smartphone, Bike, Laptop, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -8,45 +8,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { GIFT_PRIZES_URL, giftPrizes } from "@/components/sections/gift-prizes-data";
 
 interface GiftPrizesModalProps {
   children: React.ReactNode;
 }
-
-const prizes = [
-  {
-    users: "15.000",
-    label: "usuarios activos",
-    icon: Smartphone,
-    prize: "Sorteamos 10 iPhones entre toda la comunidad.",
-    bgColor: "bg-blue-50 dark:bg-blue-950/30",
-    iconColor: "text-blue-500",
-  },
-  {
-    users: "30.000",
-    label: "usuarios activos",
-    icon: Smartphone,
-    prize: "Sorteamos 20 iPhones entre toda la comunidad.",
-    bgColor: "bg-green-50 dark:bg-green-950/30",
-    iconColor: "text-green-500",
-  },
-  {
-    users: "150.000",
-    label: "usuarios activos",
-    icon: Bike,
-    prize: "Sorteamos 10 bicicletas eléctricas.",
-    bgColor: "bg-orange-50 dark:bg-orange-950/30",
-    iconColor: "text-orange-500",
-  },
-  {
-    users: "300.000",
-    label: "usuarios activos",
-    icon: Laptop,
-    prize: "Sorteamos 20 portátiles última generación.",
-    bgColor: "bg-cyan-50 dark:bg-cyan-950/30",
-    iconColor: "text-cyan-500",
-  },
-];
 
 export default function GiftPrizesModal({ children }: GiftPrizesModalProps) {
   return (
@@ -75,7 +41,7 @@ export default function GiftPrizesModal({ children }: GiftPrizesModalProps) {
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <a 
-                href="https://jobda.org/" 
+                href={GIFT_PRIZES_URL}
                 target="_blank" 
                 rel="noopener noreferrer"
                 data-testid="button-fecha-sorteos"
@@ -88,11 +54,11 @@ export default function GiftPrizesModal({ children }: GiftPrizesModalProps) {
 
           {/* Prize Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {prizes.map((prize, index) => {
+            {giftPrizes.map((prize) => {
               const IconComponent = prize.icon;
               return (
                 <div
-                  key={index}
+                  key={prize.users}
                   className={`${prize.bgColor} rounded-2xl p-6 border border-gray-200 dark:border-gray-700 transition-transform hover:scale-105 duration-300`}
                   data-testid={`card-prize-${prize.users}`}
                 >

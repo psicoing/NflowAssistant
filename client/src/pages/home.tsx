@@ -35,6 +35,7 @@ import NFlowComparisonSection from "@/components/sections/nflow-comparison-secti
 import ProfessionalSummarySection from "@/components/sections/professional-summary-section";
 import QueEsNflowSection from "@/components/sections/que-es-nflow-section";
 import FreeResourcesCardSection from "@/components/sections/free-resources-card-section";
+import GiftPrizesSection from "@/components/sections/gift-prizes-section";
 import FamilySupportHeroSection from "@/components/sections/family-support-hero-section";
 import NflowToNuxaTransitionSection from "@/components/sections/nflow-to-nuxa-transition-section";
 import NuxaPurposeSection from "@/components/sections/nuxa-purpose-section";
@@ -794,6 +795,7 @@ export default function Home() {
         
         <NuxaRobotFreeResourcesSection />
         <FreeResourcesCardSection />
+        <GiftPrizesSection />
 
         {/* ── Herramientas gratuitas ── */}
         <section className="py-14 bg-gradient-to-b from-gray-950 to-slate-900">
