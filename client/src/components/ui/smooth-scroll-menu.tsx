@@ -136,6 +136,13 @@ const navigationGroups: NavigationGroup[] = [
         icon: User,
       },
       {
+        id: "atencion-profesional",
+        name: "Atención profesional",
+        description: "Conoce INS NEURONMEG",
+        sectionId: "atencion-profesional",
+        icon: HeartHandshake,
+      },
+      {
         id: "competencia-nuxa",
         name: "Competencia NUXA",
         description: "Una mirada comparativa",
@@ -188,7 +195,7 @@ const isItemActive = (item: NavigationItem, location: string) => {
 
 export default function SmoothScrollMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
 
   useEffect(() => {
     const handleOpenMenu = () => setIsOpen(true);
@@ -212,7 +219,7 @@ export default function SmoothScrollMenu() {
     }
     setTimeout(() => {
       if (location !== "/") {
-        window.location.href = `/#${sectionId}`;
+        setLocation(`/#${sectionId}`);
         return;
       }
       const element = document.getElementById(sectionId);
@@ -225,7 +232,7 @@ export default function SmoothScrollMenu() {
   const renderItem = (item: NavigationItem) => {
     const Icon = item.icon;
     const active = isItemActive(item, location);
-    const itemClass = `group flex min-h-[60px] w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8de0c1] ${
+    const itemClass = `group flex min-h-[60px] w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left transition-all duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8de0c1] ${
       active
         ? "bg-[#d9f2e7] text-[#123e3d] shadow-[inset_3px_0_0_#f5a385]"
         : "text-[#d7e8e4] hover:bg-white/[0.08] hover:text-white active:scale-[0.985]"
@@ -234,7 +241,7 @@ export default function SmoothScrollMenu() {
       active
         ? "bg-[#b9e8d2] text-[#145c4c]"
         : "bg-white/[0.07] text-[#9ad8c3] group-hover:bg-[#8de0c1]/15"
-    }`;
+    } motion-reduce:transition-none`;
 
     const content = (
       <>
@@ -254,7 +261,7 @@ export default function SmoothScrollMenu() {
           </span>
         </span>
         <ChevronRight
-          className={`h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5 ${
+          className={`h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none group-hover:translate-x-0.5 ${
             active ? "text-[#397466]" : "text-[#66817b]"
           }`}
         />

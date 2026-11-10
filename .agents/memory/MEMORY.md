@@ -22,3 +22,4 @@
 - [Conciliación Stripe](stripe-reconciliation-boundaries.md) — la cuenta incluye histórico de otras líneas; cliente y coincidencia de correo no acreditan acceso vigente.
 - [Estadísticas de usuarios](user-metrics-scope.md) — separar cuentas, clientes y actividad administrativa; no convertir visitas o falta de cobertura en altas o ceros.
 - [Acceso social](social-access-preservation.md) — Google debe añadir rapidez sin sustituir cuentas, condiciones, planes ni límites existentes.
+- [INS NEURONMEG](neuronmeg-service-boundary.md) — presencia de atención humana y enlaces al instituto, sin fusionar aplicaciones, cuentas ni historiales.

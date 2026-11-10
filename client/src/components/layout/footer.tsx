@@ -112,6 +112,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <a href="/#atencion-profesional" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  Atención profesional
+                </a>
+              </li>
+              <li>
                 <Link href="/control-parental" className="text-gray-400 hover:text-white transition-colors text-sm">
                   Control Parental
                 </Link>

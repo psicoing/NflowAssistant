@@ -39,6 +39,7 @@ import GiftPrizesSection from "@/components/sections/gift-prizes-section";
 import FamilySupportHeroSection from "@/components/sections/family-support-hero-section";
 import NflowToNuxaTransitionSection from "@/components/sections/nflow-to-nuxa-transition-section";
 import NuxaPurposeSection from "@/components/sections/nuxa-purpose-section";
+import InsNeuronmegSection from "@/components/sections/ins-neuronmeg-section";
 import NuxaBrandEvolutionSection from "@/components/sections/nuxa-brand-evolution-section";
 import NuxaPhonesShowcaseSection from "@/components/sections/nuxa-phones-showcase-section";
 import HomepageProfessionalDialog from "@/components/sections/homepage-professional-dialog";
@@ -786,6 +787,7 @@ export default function Home() {
         </div>
 
         <NuxaPurposeSection />
+        <InsNeuronmegSection />
         
         <NuxaRobotPhoneShowcaseSection />
         <NuxaPhonesShowcaseSection />
