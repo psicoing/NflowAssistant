@@ -6,6 +6,16 @@ description: Commercial and conversational positioning; presentation modes must 
 Keep NUXA’s conversational identity as an AI emotional wellbeing assistant, not
 a licensed psychologist or replacement for clinical treatment.
 
+The user wants the homepage to highlight NUXA's noteworthy technical capabilities,
+not people's opinions or testimonials.
+
+**Why:** The user explicitly rejected the opinions section and requested a different
+design explaining technical strengths instead.
+
+**How to apply:** Keep homepage messaging grounded in implemented capabilities and
+their limits; do not reintroduce testimonials, satisfaction scores or claimed user
+outcomes as substitutes for technical explanations.
+
 **Why:** The selected positioning is clearer and avoids implying that the service is a licensed healthcare professional or a substitute for clinical treatment.
 
 **How to apply:** Use “asistente de bienestar emocional” in future headlines, navigation labels, emails, campaign copy, SEO metadata and product descriptions. References to real psychologists remain valid when discussing professionals, directories or editorial content.

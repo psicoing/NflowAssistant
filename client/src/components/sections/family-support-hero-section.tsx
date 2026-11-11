@@ -1,4 +1,4 @@
-import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X, Brain, Heart, Menu, ShieldCheck, Compass, Bot, Sparkles, ArrowRight, AlertTriangle, BookOpen, Star } from "lucide-react";
+import { Users, Shield, Award, Clock, MessageCircle, PlayCircle, FileText, X, Brain, Heart, Menu, ShieldCheck, Compass, Bot, Sparkles, ArrowRight, AlertTriangle, BookOpen, Cpu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation, Link } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -219,15 +219,15 @@ export default function FamilySupportHeroSection() {
               </Link>
 
               <a 
-                href="#testimonials"
+                href="#technical-strengths"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                 onClick={(e) => {
                   e.preventDefault();
-                  document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
+                  document.getElementById('technical-strengths')?.scrollIntoView({ behavior: 'smooth' });
                 }}
               >
-                <Star className="w-5 h-5" />
-                <span>Opiniones</span>
+                <Cpu className="w-5 h-5" />
+                <span>Cómo funciona</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
               

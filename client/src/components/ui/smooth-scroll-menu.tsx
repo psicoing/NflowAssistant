@@ -15,7 +15,6 @@ import {
   Scale,
   Shield,
   Smartphone,
-  Star,
   Trophy,
   User,
   Users,
@@ -172,10 +171,10 @@ const navigationGroups: NavigationGroup[] = [
       },
       {
         id: "testimonios",
-        name: "Opiniones",
-        description: "Lo que dicen de NUXA",
-        sectionId: "testimonials",
-        icon: Star,
+        name: "Cómo funciona",
+        description: "La tecnología detrás de la conversación",
+        sectionId: "technical-strengths",
+        icon: Shield,
       },
       {
         id: "marco-legal",
