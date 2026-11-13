@@ -15,7 +15,7 @@ La estrategia conversacional aprobada es flexible: escuchar, aclarar, explicar u
 
 **How to apply:** Las futuras mejoras deben conservar esa flexibilidad, la prioridad de seguridad y el respaldo documental pertinente. No confundir pruebas del prompt con evaluación de respuestas reales.
 
-Conservar el tono breve, prudente y proporcionado: el usuario valoró
+Conservar el tono cálido, prudente y proporcionado, con profundidad según el modo: el usuario valoró
 positivamente una conversación real y autorizó solo afinar la elección de
 la siguiente pregunta y la repetición de avisos, no rehacer NEUROPSI.
 
@@ -28,7 +28,8 @@ usar casos sintéticos para pruebas.
 
 El modo clásico debe conservar su naturaleza de ofrecer explicaciones,
 ejercicios y lecturas pertinentes; no ser simplemente una versión más larga
-del modo question & answer.
+del modo question & answer. El usuario aprobó recuperar un clásico completo
+con apartados útiles y flexibles, no diez secciones obligatorias.
 
 **Why:** El usuario señaló expresamente que el clásico había perdido esa
 diferencia. Valorar respuestas prudentes y proporcionadas no autoriza a

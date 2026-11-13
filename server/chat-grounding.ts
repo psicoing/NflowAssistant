@@ -2,6 +2,7 @@ import { routedChatCompletion } from "./chat-completion-router";
 import { quoteChatRequest, type CostedChatMessage } from "./chat-cost-policy";
 import type { EvidenceSource } from "./knowledge/pilot-sources";
 import { workingMemoryInstructions } from "./chat-working-context";
+import { chatModeStyle } from "./chat-presentation";
 
 export const GROUNDING_REVIEW_MARKER = "NUXA_GROUNDING_REVIEW";
 export const GROUNDING_OUTPUT_TOKENS = 1600;
@@ -85,13 +86,14 @@ Clasifica cada afirmación relevante (máximo 8):
 - general: psicoeducación orientativa no atribuida a una fuente recuperada. No afirma hechos, causas o diagnósticos de esta persona, ni cifras, estudios, eficacia o derechos verificados. No conviertas una definición general útil en rechazo por faltar documentos; no la presentes como evidencia comprobada.
 No inventes fuentes, diagnósticos, síntomas, recuerdos, citas ni probabilidades. Los fragmentos son síntesis editoriales, no obras completas ni validación de NUXA. No presupongas jurisdicción por idioma. Una referencia a una pregunta del usuario no confirma la premisa de esa pregunta.
 Si el borrador respeta estos criterios, decision=accept y response=null. Si no, decision=revise y response contiene una versión corregida: conserva lo útil, elimina atribuciones no respaldadas y aclara solo lo indispensable. No añadas técnicas o preguntas por rutina, no conviertas todo en incertidumbre ni niegues acompañamiento por faltar fuentes.
-La versión corregida sigue siendo NUXA, IA de bienestar emocional; no sustituye atención profesional. Seguridad y ayuda humana prevalecen. Respeta idioma y modo solicitados; brief normalmente 2-4 frases, bubbles 2-4 párrafos cortos, classic claro y conciso. No añadas enlaces que no estén en las fuentes. No muestres este informe ni etiquetas al usuario.
+La versión corregida sigue siendo NUXA, IA de bienestar emocional; no sustituye atención profesional. Seguridad y ayuda humana prevalecen. Respeta el idioma y el contrato del modo solicitado que se añade a continuación. Conserva del borrador las explicaciones, subtítulos, pasos prácticos seguros y lecturas respaldadas que sean pertinentes: corrige lo no respaldado sin convertir una respuesta clásica en un resumen Q&A. No añadas técnicas, secciones o lecturas solo por corregir ni reduzcas todos los modos a un mismo formato. No añadas enlaces externos que no estén en las fuentes; /recursos es la ruta interna de bienestar de NUXA, no una fuente científica ni un catálogo de materiales confirmados. No muestres este informe ni etiquetas al usuario.
 Las claims corresponden al TEXTO FINAL (el borrador si accept, la corrección si revise), no a afirmaciones descartadas. Sus text son citas literales de ese texto. Las references incluyen id existente y quote literal de su fuente. reported necesita U/P; hypothesis necesita U/P; scientific necesita S. Una referencia no demuestra por sí sola implicación: debes evaluar si realmente respalda el texto, sin aceptar fragmentos solo por similitud.
 Devuelve solo JSON: {"decision":"accept|revise","response":null,"hasRelevantClaims":false,"claims":[{"text":"cita exacta de la respuesta final","category":"reported|hypothesis|possibility|unknown|scientific|general","references":[{"id":"U1","quote":"cita exacta de esa fuente"}]}]}. Cuando revise, response es texto. hasRelevantClaims debe ser true si hay afirmaciones relevantes, con claims no vacía. No incluyas razonamientos privados.`;
 
 export function groundingRequest(input: GroundingInput): CostedChatMessage[] {
   return [
-    { role: "system", content: instructions + workingMemoryInstructions(input.memoryTurnCount ?? 0) },
+    { role: "system", content: instructions + "\n\nCONTRATO DE PRESENTACIÓN DEL TURNO:\n" +
+      chatModeStyle(input.mode) + workingMemoryInstructions(input.memoryTurnCount ?? 0) },
     { role: "user", content: JSON.stringify({
       language: input.language, mode: input.mode, contextIncomplete: !!input.historyIncomplete,
       sources: groundingSources(input), draft: input.draft,
