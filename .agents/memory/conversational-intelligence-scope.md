@@ -15,6 +15,29 @@ La estrategia conversacional aprobada es flexible: escuchar, aclarar, explicar u
 
 **How to apply:** Las futuras mejoras deben conservar esa flexibilidad, la prioridad de seguridad y el respaldo documental pertinente. No confundir pruebas del prompt con evaluación de respuestas reales.
 
+Conservar el tono breve, prudente y proporcionado: el usuario valoró
+positivamente una conversación real y autorizó solo afinar la elección de
+la siguiente pregunta y la repetición de avisos, no rehacer NEUROPSI.
+
+**Why:** El usuario recuerda que la adaptación al malestar ya está muy trabajada
+y pide mejorar sobre esa base, no tratarla como una capacidad inexistente.
+
+**How to apply:** Hacer ajustes localizados y contrastar tanto falta de
+exploración como exceso de alarmas. No copiar relatos sensibles a memoria;
+usar casos sintéticos para pruebas.
+
+El modo clásico debe conservar su naturaleza de ofrecer explicaciones,
+ejercicios y lecturas pertinentes; no ser simplemente una versión más larga
+del modo question & answer.
+
+**Why:** El usuario señaló expresamente que el clásico había perdido esa
+diferencia. Valorar respuestas prudentes y proporcionadas no autoriza a
+uniformar las modalidades.
+
+**How to apply:** Separar profundidad y presentación por modo, conservando
+seguridad y adaptación compartidas. No interpretar esta distinción como
+obligación de imponer técnicas o bibliografía cuando no son adecuadas.
+
 La prioridad diferencial aprobada por el usuario es «comprensión compartida,
 continuidad y adaptación según resultados»: comprobar si NUXA ha entendido,
 tener en cuenta lo ya trabajado y cambiar de enfoque cuando algo no ayuda.

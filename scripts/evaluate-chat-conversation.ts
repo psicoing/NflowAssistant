@@ -8,13 +8,17 @@ import { needsUrgentConversationSupport, retrieveChatEvidence } from "../server/
 import type { Message } from "../shared/schema";
 import { conversationCases } from "./fixtures/chat-conversation-cases";
 import { certaintyCases } from "./fixtures/chat-certainty-cases";
+import { moodFollowupCases } from "./fixtures/chat-mood-followup-cases";
 import { groundingCostBound } from "../server/chat-grounding";
 
 // Default is an offline inventory and conservative cost preview, not generation.
 // --live uses the real production handler/router and its unchanged budget limits.
 const live = process.argv.includes("--live");
-const suite = process.argv.includes("--certainty") ? "certainty" : "continuity";
-const cases = suite === "certainty" ? certaintyCases : conversationCases;
+if (process.argv.includes("--certainty") && process.argv.includes("--mood")) {
+  throw new Error("Choose either --certainty or --mood, not both.");
+}
+const suite = process.argv.includes("--mood") ? "mood" : process.argv.includes("--certainty") ? "certainty" : "continuity";
+const cases = suite === "mood" ? moodFollowupCases : suite === "certainty" ? certaintyCases : conversationCases;
 const limitArg = process.argv.find(arg => arg.startsWith("--limit="));
 const limit = limitArg ? Number(limitArg.slice(8)) : 4;
 const offsetArg = process.argv.find(arg => arg.startsWith("--offset="));

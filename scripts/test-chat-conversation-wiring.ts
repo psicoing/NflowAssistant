@@ -6,6 +6,7 @@ import { pathToFileURL } from "node:url";
 import { build } from "esbuild";
 import { CHAT_HISTORY_BYTES, boundedChatHistory } from "../server/chat-cost-policy";
 import { conversationCases } from "./fixtures/chat-conversation-cases";
+import { moodFollowupCases } from "./fixtures/chat-mood-followup-cases";
 import { installOfflineManagedChatConfiguration, offlineChatBudgetPlugin } from "./fixtures/chat-provider-offline";
 
 installOfflineManagedChatConfiguration();
@@ -46,6 +47,24 @@ try {
       assert.equal(request.max_completion_tokens, mode === "brief" ? (item.priority === "safety" ? 1000 : 500) : 4000);
     }
   }
+  assert.equal(new Set(moodFollowupCases.map(item => item.id)).size, 8);
+  for (const item of moodFollowupCases) {
+    assert(item.criteria.length >= 3);
+    for (const mode of ["classic", "bubbles", "brief"]) {
+      await generateChatResponse(item.question, item.history, {}, item.language, mode);
+      const request = requests.at(-1)!;
+      const policy = request.messages[0].content;
+      assert(policy.includes("duración, repercusión o barrera concreta"));
+      assert(policy.includes("una advertencia condicional no sustituye esa pregunta"));
+      assert(policy.includes("No omitas orientación urgente necesaria para evitar repetirte"));
+      assert(policy.includes("no imponer una evaluación clínica"));
+      assert(policy.includes("No conviertas una tristeza aislada en una alarma automática"));
+      assert.deepEqual(request.messages.slice(1), [
+        ...boundedChatHistory(item.history, item.question), { role: "user", content: item.question },
+      ]);
+      if (item.priority === "safety" && mode === "brief") assert.equal(request.max_completion_tokens, 1000);
+    }
+  }
   const history = [
     { isUser: true, content: "Mi objetivo es aprender a hablar más con mi pareja." },
     { isUser: true, content: "Corrijo: no tengo pareja ni quiero ese plan. " + "x".repeat(CHAT_HISTORY_BYTES) },
@@ -66,8 +85,15 @@ try {
   const manyTurns = Array.from({ length: 35 }, (_, index) => ({ isUser: index % 2 === 0, content: `Turno ${index}` }));
   await generateChatResponse(question, manyTurns, {}, "es", "classic");
   assert(requests.at(-1)!.messages[0].content.includes("LÍMITE DEL CONTEXTO DE ESTA CONVERSACIÓN"));
-  assert.equal(requests.at(-1)!.messages.length, 34);
-  console.log("PASS: 12 synthetic cases × 3 modes, actual provider-boundary prompt/history, safety token limits, gap handling and deduplication. Mock responses are NOT a quality evaluation.");
+  assert(requests.at(-1)!.messages[0].content.includes("MEMORIA DE TRABAJO EXTRACTIVA"));
+  assert.deepEqual(requests.at(-1)!.messages.slice(1), [
+    // Existing working memory retains older USER turns, not their assistant gap.
+    { role: "user", content: manyTurns[0].content },
+    { role: "user", content: manyTurns[2].content },
+    ...manyTurns.slice(3).map(turn => ({ role: turn.isUser ? "user" : "assistant", content: turn.content })),
+    { role: "user", content: question },
+  ]);
+  console.log(`PASS: ${conversationCases.length} continuity + ${moodFollowupCases.length} mood cases × 3 modes, actual provider-boundary prompt/history, shared safety/clarification rules, safety token limits, gap handling and deduplication. Mock responses are NOT a quality evaluation.`);
 } finally {
   delete (globalThis as any).__conversationWiringRequests;
   await fs.rm(directory, { recursive: true, force: true });
