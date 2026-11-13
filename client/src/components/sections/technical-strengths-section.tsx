@@ -60,7 +60,7 @@ export default function TechnicalStrengthsSection() {
   const content = copy[language];
 
   return (
-    <section id="technical-strengths" aria-labelledby="technical-strengths-title" className="relative overflow-hidden bg-[#eff5f1] px-5 py-20 text-[#183238] sm:px-8 sm:py-24 lg:py-28">
+    <section id="technical-strengths" aria-labelledby="technical-strengths-title" className="relative overflow-hidden bg-[#eff5f1] px-5 pt-8 pb-20 text-[#183238] sm:px-8 sm:pt-10 sm:pb-24 lg:pt-12 lg:pb-28">
       <span id="testimonials" aria-hidden="true" className="pointer-events-none absolute top-0" />
       <div className="pointer-events-none absolute -right-28 top-20 h-80 w-80 rounded-full border border-[#c6d8d0]/70" />
       <div className="pointer-events-none absolute -right-12 top-36 h-48 w-48 rounded-full border border-[#c6d8d0]/70" />

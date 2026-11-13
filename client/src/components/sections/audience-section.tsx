@@ -58,7 +58,7 @@ export default function AudienceSection() {
   return (
     <section
       aria-labelledby="audience-section-title"
-      className="relative overflow-hidden bg-[#eaf2ee] px-4 py-14 text-[#193442] sm:px-7 sm:py-20 lg:px-10 lg:py-24"
+      className="relative overflow-hidden bg-[#eaf2ee] px-4 pt-14 pb-6 text-[#193442] sm:px-7 sm:pt-20 sm:pb-8 lg:px-10 lg:pt-24 lg:pb-10"
     >
       <div aria-hidden="true" className="pointer-events-none absolute -right-36 top-12 h-[28rem] w-[28rem] rounded-full border border-[#b8d1c8]/55" />
       <div aria-hidden="true" className="pointer-events-none absolute -right-20 top-28 h-[20rem] w-[20rem] rounded-full border border-[#b8d1c8]/45" />
