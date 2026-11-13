@@ -89,7 +89,7 @@ try {
   const failure = await processUserMessage(evidenceCases[28].question, [], undefined, "es", "brief");
   assert.equal(failure.supportType, "crisis");
   assert(failure.content.includes("No esperes"));
-  console.log("PASS: 16 documented sources; 30 synthetic cases × 3 modes; topic relevance, bounded/shared context, minors' context, urgent and unrelated bypass, real handler wiring, verified citations, clickable rendering and provider failure. Offline tests, not model quality or clinical validation.");
+  console.log("PASS: original pilot source provenance; 30 synthetic cases × 3 modes; topic relevance, bounded/shared context, minors' context, urgent and unrelated bypass, real handler wiring, verified citations, clickable rendering and provider failure. Spanish extensions are checked separately. Offline tests, not model quality or clinical validation.");
 } finally {
   delete (globalThis as any).__nuxaEvidenceTest;
   await fs.rm(dir, { recursive: true, force: true });

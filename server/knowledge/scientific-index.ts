@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { pilotSources } from "./pilot-sources";
+import { spanishHealthSources, spanishSourceMetadata } from "./spanish-health-sources";
 import type { EvidenceLevel, RankedDocument, ScientificDocument, ScientificQuery } from "./scientific-types";
 
 const primary: Record<string, string[]> = {
@@ -18,19 +19,24 @@ const secondary: Record<string, string[]> = {
 };
 
 export function adaptPilotDocuments(): ScientificDocument[] {
-  return pilotSources.map((source): ScientificDocument => {
+  return [...pilotSources, ...spanishHealthSources].map((source): ScientificDocument => {
+    const spanish = spanishSourceMetadata[source.id as keyof typeof spanishSourceMetadata];
     const dates = source.publicationDate?.match(/\b\d{4}\b/g)?.map(Number) ?? [];
     return {
       ...source, topics: [...source.topics], tags: [...source.tags],
-      authors: [], year: dates[0] ?? null, updatedYear: dates.length > 1 ? dates[dates.length - 1] : null,
-      journal: null, doi: null, language: source.id === "E12" ? "es" : "en", summaryLanguage: "es",
+      authors: [], year: dates[0] ?? null,
+      updatedYear: source.id === "E19" ? 2023 : dates.length > 1 ? dates[dates.length - 1] : null,
+      journal: null, doi: null, language: spanish || source.id === "E12" ? "es" : "en", summaryLanguage: "es",
       domains: source.topics.length === 1 && source.topics[0] === "work-stress"
-        ? ["work-organisational"] : source.id === "E08" ? ["clinical-psychology", "psychotherapy"] : ["mental-health"],
-      population: source.id === "E08" ? "adults" : "general",
-      primaryConcepts: primary[source.id] ?? [], secondaryConcepts: secondary[source.id] ?? [],
-      keywords: [...source.tags, ...(primary[source.id] ?? [])],
+        ? ["work-organisational"] : source.id === "E08" || spanish?.guideline ? ["clinical-psychology", "psychotherapy"] : ["mental-health"],
+      population: source.id === "E08" || spanish ? "adults" : "general",
+      primaryConcepts: [...(spanish?.primary ?? primary[source.id] ?? [])],
+      secondaryConcepts: [...(spanish?.secondary ?? secondary[source.id] ?? [])],
+      keywords: [...source.tags, ...(spanish?.primary ?? primary[source.id] ?? [])],
       evidenceLevel: source.kind === "clinical-guideline" ? "guideline" : "authoritative-health-guidance",
-      methodologicalQuality: null, appraisalNote: null, sampleSize: null,
+      methodologicalQuality: null,
+      appraisalNote: spanish ? `Familia documental: ${spanish.family}; las versiones clínica y para pacientes no son evidencia independiente. Solo se han comprobado los apartados identificados, no la guía íntegra ni su calidad metodológica global.` : null,
+      sampleSize: null,
       replication: "not-established", consistency: "not-established",
       accessStatus: "public-summary", contentRights: "original-editorial-summary",
       rightsNote: "Síntesis editorial original de la página pública comprobada; no se copia ni indexa su texto completo.",

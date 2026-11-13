@@ -18,7 +18,7 @@ const corpus = adaptPilotDocuments();
 const index = new ScientificKnowledgeIndex(corpus);
 let clock = 0;
 const engine = new ScientificEvidenceEngine(index, 100, 4, () => clock);
-assert.equal(index.documents.length, 16);
+assert.equal(index.documents.length, 20);
 assert.equal(scientificDomains.length, 15);
 assert.equal(proposedJournals.length, 17);
 assert(proposedJournals.every(journal => journal.status === "catalogue-only" && journal.indexedDocuments === 0 && journal.url === null));
@@ -125,6 +125,16 @@ try {
     }],
   });
   const { buildChatPrompt, processUserMessage } = await import(pathToFileURL(outfile).href);
+  // New official Spanish material must reach the REAL generator boundary, not
+  // only the catalogue. Model behaviour is simulated; semantic quality is not measured.
+  for (const language of ["es", "en", "fr"]) {
+    const question = "¿Qué orientación general hay para la depresión en adultos?";
+    await processUserMessage(question, [], { age: "30-40" }, language, "brief");
+    const sent = requests.at(-1).messages[0].content;
+    assert(sent.includes('"id":"E19"') && sent.includes('"id":"E20"'));
+    assert(sent.includes("no para diagnosticar"));
+    assert(sent.includes("no estudio independiente de E19"));
+  }
   for (const [position, language] of ["es", "en", "fr", "ca"].entries()) {
     let prefix: string | undefined;
     for (const mode of ["classic", "bubbles", "brief"]) {

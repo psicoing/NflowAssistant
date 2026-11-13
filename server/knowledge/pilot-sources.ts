@@ -1,4 +1,4 @@
-export type EvidenceTopic = "anxiety" | "work-stress";
+export type EvidenceTopic = "anxiety" | "work-stress" | "depression";
 
 export interface EvidenceSource {
   id: string;

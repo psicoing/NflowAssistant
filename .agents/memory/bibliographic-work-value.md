@@ -6,6 +6,16 @@ description: The user emphasises the importance of the bibliography developed fo
 El usuario describe el trabajo previo de NUXA como «un trabajo muy importante
 con mucha bibliografía».
 
+El usuario quiere incorporar las guías de salud mental del Gobierno de España
+y del Ministerio de Sanidad: las considera «protocolos fundamentales».
+
+**Why:** Lo pidió expresamente al autorizar ampliar las fuentes de NEUROPSI.
+
+**How to apply:** Priorizar fuentes españolas oficiales pertinentes, comprobando
+la edición, población y apartado concreto; no confundir publicación web reciente
+con revisión de recomendaciones ni material profesional con un protocolo que
+pueda ejecutar el chatbot.
+
 **Why:** Lo destacó al pedir analizar la potencia de las respuestas, después
 de una propuesta de mejora del chat.
 
