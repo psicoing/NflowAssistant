@@ -39,8 +39,8 @@ export default function ProfessionalSummarySection() {
                 <Users className="w-6 h-6 text-orange-600 mt-1" />
                 <div>
                   <p className="text-gray-800 font-medium leading-relaxed">
-                    <strong>NFlow no es un chatbot cualquiera:</strong> está desarrollado por profesionales, 
-                    con contenidos actualizados y rigurosos que te ayudan a mejorar tu bienestar y el de tu equipo.
+                    <strong>NUXA no es un chatbot cualquiera:</strong>{" "}
+                    está desarrollado por profesionales, con contenidos actualizados y rigurosos que te ayudan a mejorar tu bienestar y el de tu equipo.
                   </p>
                 </div>
               </div>
