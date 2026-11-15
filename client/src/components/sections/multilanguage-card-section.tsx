@@ -179,69 +179,59 @@ export default function MultilanguageCardSection() {
   };
 
   return (
-    <section className="py-6 px-4 bg-nflow-dark overflow-x-hidden">
-      <div className="max-w-6xl mx-auto">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-950/90 via-blue-900/80 to-blue-950/90 border border-blue-800/40 shadow-2xl backdrop-blur-sm">
-          {/* Decorative gradient orbs */}
-          <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-nflow-orange/10 rounded-full blur-3xl"></div>
-          
-          <div className="relative px-4 py-8 md:px-12 md:py-10">
-            <div className="grid md:grid-cols-[auto_1fr] gap-6 md:gap-8 items-center">
-              {/* Icon */}
-              <div className="flex justify-center md:justify-start">
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-xl group-hover:bg-blue-400/40 transition-all duration-300"></div>
-                  <div className="relative w-24 h-24 md:w-28 md:h-28 bg-gradient-to-br from-blue-600 via-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
-                    <Globe className="w-12 h-12 md:w-14 md:h-14 text-white" strokeWidth={1.5} />
-                  </div>
+    <section
+      id="nuxa-accesible-en-tu-idioma"
+      className="px-4 py-8 sm:py-12"
+      aria-labelledby="language-section-title"
+    >
+      <div className="nflow-responsive-container">
+        <div className="relative isolate overflow-hidden rounded-[2rem] border border-[#d5e4df] bg-[#f3f7f4] shadow-[0_24px_70px_-42px_rgba(17,48,58,0.38)] dark:border-slate-700 dark:bg-slate-900">
+          <div aria-hidden="true" className="pointer-events-none absolute -right-12 -top-16 h-64 w-64 rounded-full border border-[#c5ddd4] dark:border-slate-700" />
+          <div aria-hidden="true" className="pointer-events-none absolute -right-1 -top-8 h-40 w-40 rounded-full border border-[#d5e4df] dark:border-slate-700" />
+
+          <div className="relative grid gap-8 px-6 py-8 sm:px-10 sm:py-11 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14 lg:px-16 lg:py-14">
+            <div className="flex flex-col items-start">
+              <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#c5ddd4] bg-[#e4f0eb] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#1f6459] dark:border-teal-900 dark:bg-teal-950/70 dark:text-teal-200">
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#398c79]" />
+                NUXA · a tu manera
+              </p>
+              <h2
+                id="language-section-title"
+                className="max-w-xl text-[2.35rem] font-semibold leading-[1.08] tracking-[-0.045em] text-[#173640] dark:text-[#e8f1ed] sm:text-5xl"
+              >
+                Entender también es sentirse cerca.
+              </h2>
+              <p className="mt-5 max-w-xl text-base leading-7 text-[#50666b] dark:text-slate-300 sm:text-lg sm:leading-8">
+                Explora la información de NUXA en el idioma que te resulte más cómodo. Un pequeño cambio puede hacer más sencillo encontrar tu propio ritmo.
+              </p>
+              <Button
+                onClick={handleTranslateClick}
+                size="lg"
+                className={`group mt-8 inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-full border-0 bg-[#174f50] px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_22px_-12px_rgba(23,79,80,0.8)] transition duration-200 hover:-translate-y-0.5 hover:bg-[#103f42] hover:shadow-[0_12px_28px_-14px_rgba(23,79,80,0.85)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b8275] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f3f7f4] motion-reduce:transform-none motion-reduce:transition-none sm:w-auto dark:focus-visible:ring-offset-slate-900 ${isTranslateActive ? "opacity-75" : ""}`}
+                data-testid="button-language-selector"
+              >
+                <Globe aria-hidden="true" className="h-4 w-4" />
+                <span>Explorar idiomas</span>
+                <span aria-hidden="true" className="text-base leading-none">→</span>
+              </Button>
+            </div>
+
+            <div className="relative flex flex-col justify-center border-t border-[#d5e4df] pt-6 dark:border-slate-700 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+              <div className="mb-5 flex items-center gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#e0eee8] text-[#27675d] dark:bg-teal-950 dark:text-teal-200">
+                  <Languages aria-hidden="true" className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#64807d] dark:text-teal-200">Accesibilidad</p>
+                  <p className="mt-1 font-semibold text-[#233f45] dark:text-slate-100">La web, en otro idioma</p>
                 </div>
               </div>
-
-              {/* Content */}
-              <div className="text-center md:text-left space-y-4">
-                <div>
-                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 flex items-center justify-center md:justify-start gap-2 flex-wrap">
-                    <span className="text-nflow-orange">✨</span>
-                    <span>Soporte Multiidioma</span>
-                  </h3>
-                  <p className="text-blue-200/90 text-base md:text-lg leading-relaxed max-w-3xl">
-                    Nuestro chatbot terapéutico habla <span className="font-bold text-white">más de 150 idiomas</span>. 
-                    Recibe apoyo emocional en tu idioma nativo, sin barreras de comunicación.
-                  </p>
-                </div>
-                
-                {/* Badges */}
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 md:gap-3">
-                  <div className="flex items-center gap-2 bg-blue-800/40 backdrop-blur-sm px-3 py-2 md:px-4 rounded-full border border-blue-600/40 shadow-md">
-                    <Languages className="w-4 h-4 text-blue-300 flex-shrink-0" />
-                    <span className="text-xs md:text-sm font-medium text-blue-100 whitespace-nowrap">150+ idiomas</span>
-                  </div>
-                  <div className="flex items-center gap-2 bg-blue-800/40 backdrop-blur-sm px-3 py-2 md:px-4 rounded-full border border-blue-600/40 shadow-md">
-                    <MessageSquare className="w-4 h-4 text-blue-300 flex-shrink-0" />
-                    <span className="text-xs md:text-sm font-medium text-blue-100 whitespace-nowrap">Chat en vivo</span>
-                  </div>
-                </div>
-
-                {/* CTA Button */}
-                <div className="pt-2 w-full">
-                  <Button
-                    onClick={handleTranslateClick}
-                    size="lg"
-                    className={`
-                      bg-gradient-to-r from-nflow-orange via-orange-500 to-orange-600 
-                      hover:from-orange-600 hover:via-orange-500 hover:to-red-500 
-                      text-white font-semibold px-6 py-4 md:px-8 md:py-5 rounded-xl shadow-xl
-                      transition-all duration-300 hover:scale-105 hover:shadow-2xl
-                      border border-orange-400/30 w-full md:w-auto
-                      ${isTranslateActive ? 'opacity-75' : ''}
-                    `}
-                    data-testid="button-language-selector"
-                  >
-                    <Globe className="w-5 h-5 mr-2 flex-shrink-0" />
-                    <span className="text-base md:text-lg">Cambiar de idioma</span>
-                  </Button>
-                </div>
+              <p className="max-w-md text-sm leading-6 text-[#617377] dark:text-slate-400">
+                El selector te permite traducir el contenido del sitio. Puedes elegir una opción y seguir explorando a tu ritmo.
+              </p>
+              <div className="mt-6 flex items-center gap-3 border-t border-[#d5e4df] pt-5 dark:border-slate-700">
+                <MessageSquare aria-hidden="true" className="h-4 w-4 shrink-0 text-[#398c79]" />
+                <span className="text-sm font-medium text-[#456168] dark:text-slate-300">Una experiencia más fácil de recorrer</span>
               </div>
             </div>
           </div>
