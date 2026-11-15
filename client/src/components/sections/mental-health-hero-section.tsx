@@ -1,124 +1,78 @@
-import { Heart, Users, Shield, Clock, Brain, Zap, MessageSquare, Bot, Sparkles, Star } from "lucide-react";
+import { ArrowUpRight, Brain, MessageCircle, Smartphone } from "lucide-react";
 import { Link } from "wouter";
 
 export default function MentalHealthHeroSection() {
   return (
-    <section className="py-12 px-4 bg-gradient-to-br from-emerald-50 to-cyan-100 dark:from-gray-900 dark:to-gray-800">
+    <section
+      id="nuxa-escucha"
+      className="px-4 py-10 sm:py-14"
+      aria-labelledby="nuxa-hero-title"
+    >
       <div className="nflow-responsive-container">
-        {/* Modern Card Layout */}
-        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-          {/* Header with emotional gradient background */}
-          <div className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 px-8 py-16 text-center relative overflow-hidden">
-            {/* Enhanced decorative elements */}
-            <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
-            <div className="absolute top-6 left-6 w-24 h-24 bg-white/20 rounded-full blur-xl animate-pulse"></div>
-            <div className="absolute bottom-6 right-6 w-20 h-20 bg-white/20 rounded-full blur-xl animate-pulse delay-1000"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
-            
-            {/* Floating hearts and stars */}
-            <div className="absolute top-8 right-1/4 animate-bounce delay-500">
-              <Heart className="w-6 h-6 text-white/60" />
-            </div>
-            <div className="absolute bottom-12 left-1/4 animate-bounce delay-1000">
-              <Sparkles className="w-5 h-5 text-white/60" />
-            </div>
-            <div className="absolute top-16 left-1/3 animate-bounce delay-1500">
-              <Star className="w-4 h-4 text-white/60" />
-            </div>
-            
-            <div className="relative z-10">
-              <div className="flex items-center justify-center mb-6">
-                <div className="relative">
-                  <Heart className="w-20 h-20 text-white drop-shadow-lg animate-pulse" />
-                  <div className="absolute -top-2 -right-2">
-                    <Sparkles className="w-8 h-8 text-yellow-300 animate-spin" />
-                  </div>
-                </div>
-              </div>
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 drop-shadow-md leading-tight">
-                👉 NUXA está aquí para escucharte y acompañarte.
-              </h1>
-              <p className="text-lg md:text-xl text-white/90 max-w-4xl mx-auto font-medium leading-relaxed">
-                💡 Cuando sientes estrés, dudas o soledad, NUXA te da apoyo inmediato, confidencial y accesible desde tu móvil, siempre que lo necesites.
+        <div className="relative isolate overflow-hidden rounded-[2rem] border border-[#d5e4df] bg-[#f3f7f4] shadow-[0_24px_70px_-42px_rgba(17,48,58,0.38)] dark:border-slate-700 dark:bg-slate-900">
+          <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-28 h-80 w-80 rounded-full border border-[#bdd9d0] dark:border-slate-700" />
+          <div aria-hidden="true" className="pointer-events-none absolute -right-8 -top-16 h-56 w-56 rounded-full border border-[#c9e0d8] dark:border-slate-700" />
+
+          <div className="relative grid gap-9 px-6 py-9 sm:px-10 sm:py-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16 lg:px-16 lg:py-[4.5rem]">
+            <div className="flex flex-col items-start">
+              <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#c5ddd4] bg-[#e4f0eb] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#1f6459] dark:border-teal-900 dark:bg-teal-950/70 dark:text-teal-200">
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#398c79]" />
+                NUXA · bienestar emocional
+              </p>
+              <h2
+                id="nuxa-hero-title"
+                className="max-w-2xl text-[2.5rem] font-semibold leading-[1.08] tracking-[-0.045em] text-[#173640] dark:text-[#e8f1ed] sm:text-5xl lg:text-[3.65rem]"
+              >
+                Un lugar para poner en palabras lo que sientes.
+              </h2>
+              <p className="mt-5 max-w-xl text-base leading-7 text-[#50666b] dark:text-slate-300 sm:text-lg sm:leading-8">
+                Si hoy hay estrés, dudas o soledad, puedes hablar a tu ritmo. NUXA te escucha sin juicios y te ayuda a entender mejor lo que estás viviendo.
+              </p>
+              <Link
+                href="/login"
+                className="group mt-8 inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-[#174f50] px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_22px_-12px_rgba(23,79,80,0.8)] transition duration-200 hover:-translate-y-0.5 hover:bg-[#103f42] hover:shadow-[0_12px_28px_-14px_rgba(23,79,80,0.85)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b8275] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f3f7f4] motion-reduce:transform-none motion-reduce:transition-none dark:focus-visible:ring-offset-slate-900"
+              >
+                <span>Empieza cuando quieras</span>
+                <ArrowUpRight aria-hidden="true" className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none" />
+              </Link>
+              <p className="mt-3 text-xs leading-5 text-[#667b7e] dark:text-slate-400">
+                La atención profesional es un camino distinto y complementario.
               </p>
             </div>
-          </div>
 
-          {/* Content Grid */}
-          <div className="p-8 md:p-12">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              {/* Emotional Features Column */}
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-4 p-5 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-gray-700 dark:to-gray-600 rounded-2xl border border-green-200 dark:border-gray-600 hover:shadow-lg transition-shadow">
-                    <div className="w-14 h-14 bg-green-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Shield className="w-7 h-7 text-green-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 dark:text-white text-lg">✅ Habla sin juicios</h3>
-                      <p className="text-gray-600 dark:text-gray-400">En un espacio seguro</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-4 p-5 bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 rounded-2xl border border-teal-200 dark:border-gray-600 hover:shadow-lg transition-shadow">
-                    <div className="w-14 h-14 bg-teal-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Sparkles className="w-7 h-7 text-teal-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 dark:text-white text-lg">✅ Con nuxa, siempre presente</h3>
-                      <p className="text-gray-600 dark:text-gray-400">Estés donde estés</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-4 p-5 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 rounded-2xl border border-purple-200 dark:border-gray-600 hover:shadow-lg transition-shadow">
-                    <div className="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Heart className="w-7 h-7 text-purple-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 dark:text-white text-lg">✅ Una ayuda real</h3>
-                      <p className="text-gray-600 dark:text-gray-400">Para entenderte mejor y sentirte acompañado</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Emotional CTA Column */}
-              <div className="flex items-center justify-center">
-                <Link href="/login">
-                  <div className="relative group">
-                    {/* Enhanced glow effect with emotional colors */}
-                    <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 rounded-3xl blur opacity-40 group-hover:opacity-60 transition duration-500"></div>
-                    
-                    <div className="relative bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-10 py-10 rounded-3xl font-bold hover:shadow-2xl transform hover:scale-105 transition-all duration-300 cursor-pointer text-center">
-                      <div className="flex flex-col items-center justify-center gap-5">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="relative">
-                            <Heart className="w-10 h-10 text-white animate-pulse" />
-                            <div className="absolute -top-1 -right-1">
-                              <Sparkles className="w-5 h-5 text-yellow-300 animate-spin" />
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <span className="text-xl md:text-2xl font-bold leading-tight">
-                          🔵 Empieza hoy tu camino hacia el bienestar
-                        </span>
-                        
-                        {/* Floating elements */}
-                        <div className="flex items-center gap-4 mt-3">
-                          <Star className="w-6 h-6 text-yellow-300 animate-bounce" style={{ animationDelay: '0ms' }} />
-                          <Heart className="w-6 h-6 text-pink-300 animate-bounce" style={{ animationDelay: '300ms' }} />
-                          <Sparkles className="w-6 h-6 text-blue-300 animate-bounce" style={{ animationDelay: '600ms' }} />
-                        </div>
-                        
-                        <div className="text-sm text-white/80 mt-2 font-medium">
-                          Tu bienestar está a un click de distancia ✨
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </div>
+            <div className="relative flex flex-col justify-center border-t border-[#d5e4df] pt-5 dark:border-slate-700 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#64807d] dark:text-teal-200">
+                A tu manera
+              </p>
+              <ul className="divide-y divide-[#d5e4df] dark:divide-slate-700">
+                <li className="flex items-start gap-4 py-4 first:pt-2">
+                  <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e0eee8] text-[#27675d] dark:bg-teal-950 dark:text-teal-200">
+                    <MessageCircle aria-hidden="true" className="h-5 w-5" />
+                  </span>
+                  <span>
+                    <span className="block font-semibold text-[#233f45] dark:text-slate-100">Habla sin juicios</span>
+                    <span className="mt-1 block text-sm leading-6 text-[#617377] dark:text-slate-400">Comparte lo que te pasa, a tu propio ritmo.</span>
+                  </span>
+                </li>
+                <li className="flex items-start gap-4 py-4">
+                  <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e0eee8] text-[#27675d] dark:bg-teal-950 dark:text-teal-200">
+                    <Smartphone aria-hidden="true" className="h-5 w-5" />
+                  </span>
+                  <span>
+                    <span className="block font-semibold text-[#233f45] dark:text-slate-100">Contigo en el móvil</span>
+                    <span className="mt-1 block text-sm leading-6 text-[#617377] dark:text-slate-400">Accede estés donde estés.</span>
+                  </span>
+                </li>
+                <li className="flex items-start gap-4 py-4 last:pb-2">
+                  <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e0eee8] text-[#27675d] dark:bg-teal-950 dark:text-teal-200">
+                    <Brain aria-hidden="true" className="h-5 w-5" />
+                  </span>
+                  <span>
+                    <span className="block font-semibold text-[#233f45] dark:text-slate-100">Entiende mejor lo que sientes</span>
+                    <span className="mt-1 block text-sm leading-6 text-[#617377] dark:text-slate-400">Un espacio para ordenar pensamientos y emociones.</span>
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
