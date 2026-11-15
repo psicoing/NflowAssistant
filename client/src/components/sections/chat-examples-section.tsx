@@ -1,78 +1,77 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { MessageCircle, Brain, ArrowRight, Eye, Users, Sparkles } from "lucide-react";
 import { Link } from "wouter";
 
 export default function ChatExamplesSection() {
   return (
-    <section className="py-16 px-4 bg-gradient-to-b from-nflow-dark to-nflow-navy">
+    <section className="px-4 py-14 sm:py-16">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
+        <div className="mb-12 text-center">
           {/* Multilingual Welcome */}
           <div className="mb-8">
-            <div className="inline-block bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-sm border border-blue-400/30 rounded-full px-6 py-3 mb-4">
-              <p className="text-xl text-white font-semibold tracking-wide">
+            <div className="mb-4 inline-block rounded-full border border-[#cbded6] bg-[#eaf1eb] px-5 py-2.5">
+              <p className="text-base font-semibold tracking-wide text-[#42695f] sm:text-lg">
                 Speaking 150+ languages • 支持150多种语言
               </p>
             </div>
-            <div className="w-32 h-1 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto rounded-full"></div>
+            <div className="mx-auto h-px w-20 bg-[#a9c1b4]"></div>
           </div>
 
           <div className="flex justify-center mb-6">
-            <div className="p-3 bg-gradient-to-br from-nflow-orange to-orange-600 rounded-2xl shadow-lg">
-              <Eye className="w-8 h-8 text-white" />
+            <div className="rounded-xl bg-[#174f50] p-2.5 text-[#d6e69a]">
+              <Eye className="h-6 w-6" />
             </div>
           </div>
           
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="mb-4 text-3xl font-semibold leading-tight tracking-[-0.04em] text-[#173e3d] sm:text-4xl">
             Conoce tu Asistente Psicológico
           </h2>
           
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="mx-auto max-w-3xl text-base leading-7 text-[#526b68] sm:text-lg">
             Descubre ejemplos reales de conversaciones con nuestro asistente de IA especializado en salud mental. Respuestas profesionales adaptadas a cada situación específica.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div className="grid items-center gap-8 md:grid-cols-2">
           {/* Left side - Features */}
           <div className="space-y-6">
             <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Brain className="w-6 h-6 text-blue-400" />
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#e1ebe3] text-[#47736a]">
+                <Brain className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-white font-semibold text-lg mb-2">
+                <h3 className="mb-2 text-lg font-semibold text-[#234844]">
                   Respuestas Multiidioma
                 </h3>
-                <p className="text-gray-400 leading-relaxed">
+                <p className="text-sm leading-6 text-[#647b75]">
                   El asistente adapta automáticamente sus respuestas al idioma detectado en tu consulta, proporcionando apoyo psicológico natural y culturalmente apropiado.
                 </p>
               </div>
             </div>
 
             <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Users className="w-6 h-6 text-purple-400" />
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#e1ebe3] text-[#47736a]">
+                <Users className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-white font-semibold text-lg mb-2">
+                <h3 className="mb-2 text-lg font-semibold text-[#234844]">
                   Para Todas las Edades
                 </h3>
-                <p className="text-gray-400 leading-relaxed">
+                <p className="text-sm leading-6 text-[#647b75]">
                   Desde adolescentes hasta adultos mayores, el asistente ajusta su enfoque terapéutico según la etapa vital y las necesidades específicas de cada usuario.
                 </p>
               </div>
             </div>
 
             <div className="flex items-start space-x-4">
-              <div className="w-12 h-12 bg-green-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Sparkles className="w-6 h-6 text-green-400" />
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#e1ebe3] text-[#47736a]">
+                <Sparkles className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-white font-semibold text-lg mb-2">
+                <h3 className="mb-2 text-lg font-semibold text-[#234844]">
                   Enfoque Profesional
                 </h3>
-                <p className="text-gray-400 leading-relaxed">
+                <p className="text-sm leading-6 text-[#647b75]">
                   Basado en técnicas de psicología clínica y terapia cognitivo-conductual, proporcionando orientación profesional con fundamento científico.
                 </p>
               </div>
@@ -81,25 +80,25 @@ export default function ChatExamplesSection() {
 
           {/* Right side - CTA Card */}
           <div>
-            <Card className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 border-gray-700/50 overflow-hidden">
+            <Card className="overflow-hidden rounded-[1.5rem] border-[#315d5b] bg-[#123f43] text-[#f2f4e8]">
               <CardContent className="p-8">
                 <div className="text-center space-y-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-nflow-orange to-orange-600 rounded-2xl mx-auto flex items-center justify-center">
-                    <MessageCircle className="w-8 h-8 text-white" />
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-[#d6e69a] text-[#173e3d]">
+                    <MessageCircle className="h-6 w-6" />
                   </div>
                   
                   <div>
-                    <h3 className="text-2xl font-bold text-white mb-3">
+                    <h3 className="mb-3 text-xl font-semibold text-[#f2f4e8] sm:text-2xl">
                       Ejemplos de Conversaciones
                     </h3>
-                    <p className="text-gray-300 leading-relaxed mb-6">
+                    <p className="mb-6 text-sm leading-6 text-[#c3d8d1] sm:text-base">
                       Descubre cómo NEUROPSI-AI puede ayudarte con situaciones reales. Cada respuesta está diseñada para ofrecer apoyo psicológico profesional.
                     </p>
                   </div>
 
-                  <div className="bg-gray-700/30 rounded-lg p-4 text-left">
-                    <div className="text-sm text-gray-400 mb-2">Ejemplos incluyen:</div>
-                    <ul className="text-sm text-gray-300 space-y-1">
+                  <div className="rounded-xl border border-white/10 bg-white/[0.06] p-4 text-left">
+                    <div className="mb-2 text-sm text-[#b7d7c4]">Ejemplos incluyen:</div>
+                    <ul className="space-y-1 text-sm text-[#e2e9df]">
                       <li>• Ansiedad en adolescentes</li>
                       <li>• Crisis profesional en adultos</li>
                       <li>• Duelo en la tercera edad</li>
@@ -107,16 +106,12 @@ export default function ChatExamplesSection() {
                     </ul>
                   </div>
 
-                  <Link href="/ejemplos-chat">
-                    <Button 
-                      className="w-full bg-nflow-orange hover:bg-nflow-orange-light text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 group"
-                    >
+                  <Link href="/ejemplos-chat" className="group inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[#d6e69a] px-6 py-3 text-sm font-semibold text-[#173e3d] transition-colors hover:bg-[#e3edb8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eff5c7] focus-visible:ring-offset-2 focus-visible:ring-offset-[#123f43] motion-reduce:transition-none">
                       Ver ejemplos del chat
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
                   </Link>
 
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-[#b7d7c4]">
                     Gratis • Sin necesidad de registro
                   </p>
                 </div>

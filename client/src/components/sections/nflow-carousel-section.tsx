@@ -92,15 +92,15 @@ export default function NFlowCarouselSection() {
   }, [emblaApi]);
 
   return (
-    <section className="py-16 px-4 bg-gradient-to-br from-gray-50 to-blue-50">
+    <section className="bg-[#f3f6ef] px-4 py-14 dark:bg-[#102f33] sm:py-16">
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Descubre <span className="text-orange-600">NUXA</span> en Acción
+        <div className="mb-12 text-center">
+          <h2 className="mb-4 text-3xl font-semibold leading-tight tracking-[-0.04em] text-[#173e3d] dark:text-[#f2f4e8] sm:text-4xl">
+            Descubre <span className="text-[#557d65] dark:text-[#c9dd83]">NUXA</span> en Acción
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="mx-auto max-w-3xl text-base leading-7 text-[#526b68] dark:text-[#c3d8d1] sm:text-lg">
             Explora cómo NUXA transforma vidas en diferentes contextos: 
             tecnología, comunidad, trabajo y familia
           </p>
@@ -112,7 +112,7 @@ export default function NFlowCarouselSection() {
             <div className="flex">
               {carouselData.map((item) => (
                 <div key={item.id} className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] px-4">
-                  <div className="bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                  <div className="h-full overflow-hidden rounded-[1.5rem] border border-[#d6e3dc] bg-[#f8f9f4] shadow-[0_20px_50px_-42px_rgba(19,61,59,0.55)] transition-colors hover:bg-white dark:border-[#315d5b] dark:bg-[#173e3d] dark:hover:bg-[#20494a]">
                     <div className="aspect-video overflow-hidden">
                       <img 
                         src={item.image} 
@@ -120,11 +120,11 @@ export default function NFlowCarouselSection() {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">
+                    <div className="p-5 sm:p-6">
+                      <h3 className="mb-3 text-lg font-semibold text-[#234844] dark:text-[#f2f4e8] sm:text-xl">
                         {item.title}
                       </h3>
-                      <p className="text-gray-600 leading-relaxed">
+                      <p className="text-sm leading-6 text-[#647b75] dark:text-[#c3d8d1] sm:text-base">
                         {item.description}
                       </p>
                     </div>
@@ -137,29 +137,29 @@ export default function NFlowCarouselSection() {
           {/* Navigation Buttons */}
           <button 
             onClick={scrollPrev}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white shadow-lg rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 z-10"
+            className="absolute left-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#cbded6] bg-[#f3f6ef]/95 text-[#42695f] shadow-sm transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#557d65] dark:border-[#456c68] dark:bg-[#173e3d]/95 dark:text-[#d6e69a] dark:hover:bg-[#20494a] motion-reduce:transition-none"
           >
-            <ChevronLeft className="w-6 h-6 text-gray-700" />
+            <ChevronLeft className="h-5 w-5" />
           </button>
           
           <button 
             onClick={scrollNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white shadow-lg rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 z-10"
+            className="absolute right-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#cbded6] bg-[#f3f6ef]/95 text-[#42695f] shadow-sm transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#557d65] dark:border-[#456c68] dark:bg-[#173e3d]/95 dark:text-[#d6e69a] dark:hover:bg-[#20494a] motion-reduce:transition-none"
           >
-            <ChevronRight className="w-6 h-6 text-gray-700" />
+            <ChevronRight className="h-5 w-5" />
           </button>
         </div>
 
         {/* Dots Indicator */}
-        <div className="flex justify-center mt-8 space-x-2">
+        <div className="mt-8 flex justify-center space-x-2">
           {carouselData.map((_, index) => (
             <button
               key={index}
               onClick={() => emblaApi && emblaApi.scrollTo(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`h-2.5 rounded-full transition-[width,background-color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#557d65] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#102f33] motion-reduce:transition-none ${
                 index === selectedIndex 
-                  ? 'bg-orange-500 scale-125' 
-                  : 'bg-gray-300 hover:bg-gray-400'
+                  ? 'w-7 bg-[#557d65] dark:bg-[#c9dd83]'
+                  : 'w-2.5 bg-[#cbded6] hover:bg-[#9db5a8] dark:bg-[#456c68] dark:hover:bg-[#6d9d8c]'
               }`}
             />
           ))}

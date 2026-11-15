@@ -63,74 +63,74 @@ function QADemoAnimation() {
   }, [messages, isTyping]);
   
   return (
-    <div className="bg-slate-900 rounded-2xl p-4 max-w-sm mx-auto shadow-2xl border border-slate-700/50 overflow-hidden">
-      <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-700/50">
+    <div className="mx-auto max-w-sm overflow-hidden rounded-2xl border border-[#456c68] bg-[#123f43] p-4 shadow-[0_20px_45px_-25px_rgba(18,63,67,0.55)]">
+      <div className="mb-3 flex items-center justify-between border-b border-[#6d9d8c]/35 pb-2">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-            <Zap className="w-4 h-4 text-white" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#d6e69a] text-[#173e3d]">
+            <Zap className="h-4 w-4" />
           </div>
           <div>
-            <span className="text-white text-sm font-semibold">Modo Q&A Breve</span>
-            <span className="text-blue-400 text-xs block">Respuestas rápidas</span>
+            <span className="text-sm font-semibold text-[#f2f4e8]">Modo Q&A Breve</span>
+            <span className="block text-xs text-[#b7d7c4]">Respuestas rápidas</span>
           </div>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-          <span className="text-green-400 text-xs">En vivo</span>
+          <div className="h-2 w-2 rounded-full bg-[#c9dd83]"></div>
+          <span className="text-xs text-[#c9dd83]">En vivo</span>
         </div>
       </div>
       
       <div 
         ref={containerRef}
-        className="space-y-3 h-[280px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent pr-1"
+        className="h-[280px] space-y-3 overflow-y-auto scrollbar-thin scrollbar-thumb-[#6d9d8c] scrollbar-track-transparent pr-1"
       >
         {messages.map((msg, idx) => (
           <div 
             key={idx}
-            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2 duration-300`}
+            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} motion-safe:animate-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300 motion-reduce:animate-none`}
           >
             {msg.role === 'assistant' && (
-              <div className="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center mr-2 flex-shrink-0 mt-1">
-                <Bot className="w-3.5 h-3.5 text-blue-400" />
+              <div className="mr-2 mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-white/10">
+                <Bot className="h-3.5 w-3.5 text-[#c9dd83]" />
               </div>
             )}
             <div 
               className={`max-w-[85%] px-3 py-2.5 rounded-xl text-sm leading-relaxed ${
                 msg.role === 'user' 
-                  ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-br-sm' 
-                  : 'bg-slate-800 text-gray-100 border border-slate-600/50 rounded-bl-sm'
+                  ? 'bg-[#d6e69a] text-[#173e3d] rounded-br-sm'
+                  : 'bg-white/10 text-[#f2f4e8] border border-white/10 rounded-bl-sm'
               }`}
             >
               {msg.text}
             </div>
             {msg.role === 'user' && (
-              <div className="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center ml-2 flex-shrink-0 mt-1">
-                <User className="w-3.5 h-3.5 text-orange-400" />
+              <div className="ml-2 mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[#d6e69a]/15">
+                <User className="h-3.5 w-3.5 text-[#d6e69a]" />
               </div>
             )}
           </div>
         ))}
         
         {isTyping && (
-          <div className="flex justify-start animate-in slide-in-from-bottom-2 duration-200">
-            <div className="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center mr-2 flex-shrink-0">
-              <Bot className="w-3.5 h-3.5 text-blue-400" />
+          <div className="flex justify-start motion-safe:animate-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-200 motion-reduce:animate-none">
+            <div className="mr-2 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-white/10">
+              <Bot className="h-3.5 w-3.5 text-[#c9dd83]" />
             </div>
-            <div className="bg-slate-800 border border-slate-600/50 px-4 py-3 rounded-xl rounded-bl-sm">
+            <div className="rounded-xl rounded-bl-sm border border-white/10 bg-white/10 px-4 py-3">
               <div className="flex gap-1">
-                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                <div className="h-1.5 w-1.5 rounded-full bg-[#c9dd83] motion-safe:animate-pulse motion-reduce:animate-none"></div>
+                <div className="h-1.5 w-1.5 rounded-full bg-[#c9dd83] motion-safe:animate-pulse motion-reduce:animate-none" style={{ animationDelay: '150ms' }}></div>
+                <div className="h-1.5 w-1.5 rounded-full bg-[#c9dd83] motion-safe:animate-pulse motion-reduce:animate-none" style={{ animationDelay: '300ms' }}></div>
               </div>
             </div>
           </div>
         )}
       </div>
       
-      <div className="mt-3 pt-2 border-t border-slate-700/50">
-        <div className="flex items-center gap-2 bg-slate-800/50 rounded-full px-4 py-2 border border-slate-600/30">
-          <span className="text-gray-500 text-sm flex-1">Escribe tu pregunta...</span>
-          <div className="w-7 h-7 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
+      <div className="mt-3 border-t border-[#6d9d8c]/35 pt-2">
+        <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-2">
+          <span className="flex-1 text-sm text-[#b7d7c4]">Escribe tu pregunta...</span>
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#d6e69a]">
             <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
@@ -145,31 +145,31 @@ export default function NflowToNuxaTransitionSection() {
   const [isPdfOpen, setIsPdfOpen] = useState(false);
 
   return (
-    <section className="relative bg-white dark:bg-slate-900 py-12 md:py-16">
+    <section className="py-12 md:py-16">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* NUXA vs ChatGPT Badge */}
         <div className="flex justify-center items-center mb-6">
-          <div className="flex items-center gap-4 bg-gradient-to-r from-emerald-100 via-emerald-50 to-emerald-100 dark:from-emerald-900/50 dark:via-emerald-800/30 dark:to-emerald-900/50 px-6 py-4 rounded-full border-2 border-emerald-300 dark:border-emerald-600 shadow-lg">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-300 via-amber-400 to-amber-600 p-2 shadow-lg ring-2 ring-amber-200">
-              <Compass className="w-full h-full text-amber-900" />
+          <div className="flex max-w-full items-center gap-3 rounded-2xl border border-[#cbded6] bg-[#eaf1eb] px-4 py-3 sm:gap-4 sm:px-6 sm:py-4">
+            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#174f50] text-[#d6e69a] sm:h-12 sm:w-12">
+              <Compass className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
             <div className="text-center">
-              <p className="text-base font-bold text-emerald-700 dark:text-emerald-300">NUXA entiende contextos.</p>
-              <p className="text-base font-bold text-emerald-600 dark:text-emerald-400">ChatGPT responde.</p>
+              <p className="text-sm font-semibold text-[#234844] sm:text-base">NUXA entiende contextos.</p>
+              <p className="text-sm font-semibold text-[#55776a] sm:text-base">ChatGPT responde.</p>
             </div>
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-300 via-emerald-400 to-emerald-600 p-2 shadow-lg ring-2 ring-emerald-200">
-              <Bot className="w-full h-full text-emerald-900" />
+            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#dce8dc] text-[#47736a] sm:h-12 sm:w-12">
+              <Bot className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
           </div>
         </div>
         
         {/* Privacy Notice */}
-        <div className="mb-6 max-w-lg mx-auto p-3 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700/50 rounded-lg">
+        <div className="mx-auto mb-6 max-w-lg rounded-xl border border-[#cbded6] bg-[#f3f6ef] p-3">
           <div className="flex items-start gap-2">
-            <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
-            <div className="text-xs text-emerald-700 dark:text-emerald-300/90 text-left leading-relaxed">
-              <span className="font-semibold text-emerald-800 dark:text-emerald-400">100% Confidencial.</span> Email solo para pago. Sin confirmaciones ni recuperaciones.
+            <ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#55776a]" />
+            <div className="text-left text-xs leading-relaxed text-[#526b68]">
+              <span className="font-semibold text-[#234844]">100% Confidencial.</span> Email solo para pago. Sin confirmaciones ni recuperaciones.
               Excepción: usuarios Shopify reciben email de acceso (seguridad extra). <span className="font-semibold">Confidencial total, todo entre tú y NUXA.</span>
             </div>
           </div>
@@ -179,23 +179,23 @@ export default function NflowToNuxaTransitionSection() {
         <div className="mb-8 max-w-3xl mx-auto">
           <button
             onClick={() => setIsPdfOpen(true)}
-            className="w-full bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border-2 border-emerald-400 dark:border-emerald-600 rounded-2xl p-4 hover:shadow-xl hover:border-emerald-500 dark:hover:border-emerald-500 transition-all duration-300 transform hover:scale-[1.02] group"
+            className="group w-full rounded-2xl border border-[#cbded6] bg-[#eaf1eb] p-4 transition-colors hover:bg-[#e1ebe3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#557d65] motion-reduce:transition-none"
             data-testid="button-departamento-salud"
           >
             <div className="flex items-center justify-center gap-4">
-              <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
-                <FileText className="w-5 h-5 text-white" />
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#174f50] text-[#d6e69a]">
+                <FileText className="h-5 w-5" />
               </div>
               <div className="text-left flex-1">
-                <p className="text-sm font-bold text-gray-900 dark:text-white mb-0.5 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
+                <p className="mb-0.5 text-sm font-semibold text-[#234844]">
                   Esta app recibió del Departamento de Salud de Catalunya - España una nota informativa de calidad
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+                <p className="text-xs italic text-[#647b75]">
                   This app received a quality informative note from the Health Department of Catalonia - Spain
                 </p>
               </div>
               <div className="flex-shrink-0">
-                <svg className="w-5 h-5 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-5 w-5 text-[#55776a] transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </div>
@@ -203,16 +203,15 @@ export default function NflowToNuxaTransitionSection() {
           </button>
         </div>
 
-        <div className="relative bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-slate-800 dark:via-slate-800 dark:to-slate-700 rounded-3xl p-8 md:p-12 border-2 border-emerald-200 dark:border-emerald-700 shadow-2xl overflow-hidden">
+        <div className="relative overflow-hidden rounded-[1.75rem] border border-[#cbded6] bg-[#f3f6ef] p-6 sm:p-8 md:p-12">
           
           {/* Decorative Elements */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-emerald-400/20 to-cyan-400/20 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-teal-400/20 to-emerald-400/20 rounded-full blur-3xl"></div>
+          <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full border border-[#cbded6]"></div>
           
           <div className="relative z-10 space-y-8">
             {/* Badge */}
             <div className="flex justify-center">
-              <span className="inline-flex items-center gap-2 bg-emerald-500 text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg">
+                <span className="inline-flex items-center gap-2 rounded-full bg-[#174f50] px-5 py-2.5 text-sm font-semibold text-white">
                 <Sparkles className="w-4 h-4" />
                 Conoce NUXA
               </span>
@@ -220,26 +219,26 @@ export default function NflowToNuxaTransitionSection() {
 
             {/* Title */}
             <div className="text-center">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight mb-4">
+              <h2 className="mb-4 text-3xl font-semibold leading-tight tracking-[-0.04em] text-[#173e3d] sm:text-4xl lg:text-5xl">
                 ¿Qué es NUXA?
               </h2>
-              <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-                NUXA no es una simple pestaña ni un chat más. Es un <span className="font-bold text-emerald-600 dark:text-emerald-400">entorno completo de apoyo psicológico y recursos profesionales</span>, diseñado para que tú elijas cómo y cuándo usarlo.
+              <p className="mx-auto max-w-3xl text-base leading-7 text-[#526b68] sm:text-lg">
+                NUXA combina conversación y recursos para que elijas cómo y cuándo usarlos.
               </p>
             </div>
 
             {/* Option 1: Chat with NEURO */}
-            <div className="bg-white/70 dark:bg-slate-700/50 rounded-2xl p-6 border border-emerald-200 dark:border-emerald-600/30 shadow-lg">
+            <div className="rounded-2xl border border-[#cbded6] bg-[#eaf1eb] p-5 sm:p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-emerald-500/20 rounded-xl">
-                  <MessageCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                <div className="rounded-xl bg-[#dce8dc] p-3 text-[#47736a]">
+                  <MessageCircle className="h-5 w-5" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">1. Chat con NEURO-PSI</h3>
+                <h3 className="text-lg font-semibold text-[#234844] sm:text-xl">1. Chat con NEURO-PSI</h3>
               </div>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                Puedes chatear con <span className="font-semibold text-emerald-600 dark:text-emerald-400">NEURO-PSI</span>, el asistente de NUXA. La experiencia es la de hablar con un psicólogo: escucha, responde con criterio y te acompaña en el proceso. <span className="font-medium">No simula, razona.</span>
+              <p className="leading-relaxed text-[#526b68]">
+                Puedes chatear con <span className="font-semibold text-[#42695f]">NEURO-PSI</span>, el asistente conversacional de NUXA. Puede ayudarte a explorar lo que estás viviendo y a encontrar recursos. No realiza diagnósticos ni sustituye la atención profesional.
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 italic">
+              <p className="mt-3 text-sm italic text-[#647b75]">
                 La diferencia no se nota… y eso es precisamente lo importante.
               </p>
             </div>
@@ -247,11 +246,11 @@ export default function NflowToNuxaTransitionSection() {
             {/* Q&A Demo Animation - Between Chat and Resources */}
             <div className="my-8">
               <div className="text-center mb-4">
-                <span className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-400/30 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-full text-sm font-medium">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#cbded6] bg-[#eaf1eb] px-4 py-2 text-sm font-medium text-[#42695f]">
                   <Zap className="w-4 h-4" />
                   Modo Q&A en acción
                 </span>
-                <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
+                <p className="mt-2 text-sm text-[#647b75]">
                   Conversación real en modo pregunta-respuesta breve
                 </p>
               </div>
@@ -259,61 +258,61 @@ export default function NflowToNuxaTransitionSection() {
             </div>
 
             {/* Option 2: Access Resources */}
-            <div className="bg-white/70 dark:bg-slate-700/50 rounded-2xl p-6 border border-cyan-200 dark:border-cyan-600/30 shadow-lg">
+            <div className="rounded-2xl border border-[#cbded6] bg-[#f3f6ef] p-5 sm:p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-cyan-500/20 rounded-xl">
-                  <BookOpen className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
+                <div className="rounded-xl bg-[#e1ebe3] p-3 text-[#47736a]">
+                  <BookOpen className="h-5 w-5" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">2. Acceso a recursos</h3>
+                <h3 className="text-lg font-semibold text-[#234844] sm:text-xl">2. Acceso a recursos</h3>
               </div>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              <p className="leading-relaxed text-[#526b68]">
                 Si no te apetece chatear, <span className="font-medium">no pasa nada</span>. NUXA te permite acceder directamente a recursos profesionales: materiales estructurados, guías y herramientas que no se encuentran al azar en internet.
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 italic">
+              <p className="mt-3 text-sm italic text-[#647b75]">
                 Recursos basados en protocolos clínicos reales.
               </p>
             </div>
 
             {/* The Real Value */}
-            <div className="bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 dark:from-emerald-600/20 dark:to-cyan-600/20 rounded-2xl p-6 md:p-8 border border-emerald-300/50 dark:border-emerald-500/30">
+            <div className="rounded-2xl border border-[#cbded6] bg-[#eaf1eb] p-6 sm:p-8">
               <div className="flex items-center gap-3 mb-4 justify-center">
-                <Zap className="w-6 h-6 text-amber-500" />
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">El verdadero valor de NUXA</h3>
+                <Zap className="h-5 w-5 text-[#55776a]" />
+                <h3 className="text-lg font-semibold text-[#234844] sm:text-2xl">El valor de NUXA</h3>
               </div>
-              <p className="text-center text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
+              <p className="mx-auto mb-6 max-w-2xl text-center text-[#526b68]">
                 NUXA combina ambas cosas en un solo entorno:
               </p>
               <div className="grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-                <div className="flex items-center gap-2 bg-white/60 dark:bg-slate-700/60 rounded-xl p-4 border border-gray-200 dark:border-gray-600">
-                  <Check className="w-5 h-5 text-emerald-500 flex-shrink-0" />
-                  <span className="text-sm font-medium text-gray-800 dark:text-gray-200">Puedes solo chatear</span>
+                <div className="flex items-center gap-2 rounded-xl border border-[#d6e3dc] bg-[#f8f9f4] p-4">
+                  <Check className="h-5 w-5 flex-shrink-0 text-[#638b72]" />
+                  <span className="text-sm font-medium text-[#34534f]">Puedes solo chatear</span>
                 </div>
-                <div className="flex items-center gap-2 bg-white/60 dark:bg-slate-700/60 rounded-xl p-4 border border-gray-200 dark:border-gray-600">
-                  <Check className="w-5 h-5 text-emerald-500 flex-shrink-0" />
-                  <span className="text-sm font-medium text-gray-800 dark:text-gray-200">Puedes solo consultar recursos</span>
+                <div className="flex items-center gap-2 rounded-xl border border-[#d6e3dc] bg-[#f8f9f4] p-4">
+                  <Check className="h-5 w-5 flex-shrink-0 text-[#638b72]" />
+                  <span className="text-sm font-medium text-[#34534f]">Puedes solo consultar recursos</span>
                 </div>
-                <div className="flex items-center gap-2 bg-white/60 dark:bg-slate-700/60 rounded-xl p-4 border border-gray-200 dark:border-gray-600">
-                  <Check className="w-5 h-5 text-emerald-500 flex-shrink-0" />
-                  <span className="text-sm font-medium text-gray-800 dark:text-gray-200">O usar recursos en el chat</span>
+                <div className="flex items-center gap-2 rounded-xl border border-[#d6e3dc] bg-[#f8f9f4] p-4">
+                  <Check className="h-5 w-5 flex-shrink-0 text-[#638b72]" />
+                  <span className="text-sm font-medium text-[#34534f]">O usar recursos en el chat</span>
                 </div>
               </div>
-              <p className="text-center text-gray-600 dark:text-gray-400 mt-6 text-sm max-w-xl mx-auto">
+              <p className="mx-auto mt-6 max-w-xl text-center text-sm text-[#647b75]">
                 Hoy puedes no querer hablar y solo leer. Mañana puedes querer orientación directa. Y pasado mañana, trabajar un recurso profesional acompañado por NEURO-PSI.
               </p>
             </div>
 
             {/* Bottom Accent - 2x1 Value */}
             <div className="text-center pt-4">
-              <div className="inline-flex flex-col items-center gap-3 bg-white dark:bg-slate-800 px-8 py-5 rounded-2xl border-2 border-emerald-300 dark:border-emerald-600 shadow-xl">
-                <span className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
-                  Un combo real de <span className="text-emerald-600 dark:text-emerald-400">dos por uno</span>
+              <div className="inline-flex max-w-full flex-col items-center gap-3 rounded-2xl border border-[#cbded6] bg-[#f3f6ef] px-6 py-5 sm:px-8">
+                <span className="text-lg font-semibold text-[#234844] sm:text-xl">
+                  Dos recursos en <span className="text-[#557d65]">un mismo espacio</span>
                 </span>
-                <span className="text-sm text-gray-600 dark:text-gray-400">
+                <span className="text-sm text-[#647b75]">
                   Conversación inteligente + recursos de alta calidad, en el mismo espacio
                 </span>
                 <div className="flex items-center gap-2 mt-2">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                  <div className="h-1.5 w-1.5 rounded-full bg-[#77977e]"></div>
+                  <span className="text-sm font-semibold text-[#42695f]">
                     Sin obligación. Sin rigidez. Tú eliges cómo usarlo.
                   </span>
                 </div>
@@ -328,19 +327,19 @@ export default function NflowToNuxaTransitionSection() {
         <DialogContent className="max-w-4xl max-h-[90vh] p-0 overflow-hidden">
           <DialogHeader className="p-6 pb-4 border-b border-gray-200 dark:border-gray-700">
             <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
-                <FileText className="w-5 h-5 text-white" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#174f50] text-[#d6e69a]">
+                <FileText className="h-5 w-5" />
               </div>
               Nota Informativa - Departament de Salut
             </DialogTitle>
           </DialogHeader>
           <div className="overflow-y-auto max-h-[calc(90vh-100px)] bg-white dark:bg-gray-900">
             <div className="relative">
-              <div className="sticky top-0 z-10 bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-4 shadow-lg">
+              <div className="sticky top-0 z-10 border-b border-[#6d9d8c]/40 bg-[#123f43] px-6 py-4 text-[#f2f4e8]">
                 <div className="flex items-center justify-center gap-3">
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-lg">NFlow.Style</span>
-                    <span className="text-xl">→</span>
+                    <span aria-hidden="true" className="text-[#c9dd83]">→</span>
                     <span className="font-bold text-lg">NUXA.life</span>
                   </div>
                 </div>

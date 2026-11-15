@@ -4,57 +4,50 @@ import youthImage from "@assets/ChatGPT Image 17 jul 2025, 18_00_01_175276809905
 
 export default function YouthMentalHealthSection() {
   return (
-    <section className="py-8 px-4 bg-gradient-to-br from-emerald-50 to-teal-100 dark:from-gray-800 dark:to-gray-900">
+    <section className="px-4 py-12 sm:py-16">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Image first on left */}
           <div className="relative order-2 lg:order-1">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+            <div className="relative overflow-hidden rounded-[1.75rem] border border-[#d6e3dc] shadow-[0_24px_60px_-38px_rgba(19,61,59,0.38)]">
               <img 
                 src={youthImage} 
                 alt="Jóvenes usando NUXA para apoyo en salud mental"
                 className="w-full h-auto object-cover"
               />
               {/* Overlay with subtle gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#123f43]/35 via-transparent to-transparent"></div>
               
               {/* Floating badge - positioned on teens */}
-              <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 shadow-lg">
+              <div className="absolute right-4 top-4 rounded-xl border border-white/70 bg-[#f3f6ef]/95 px-4 py-3 shadow-md sm:right-6 sm:top-6">
                 <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+                   <div className="h-2 w-2 rounded-full bg-[#658a70]"></div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">NUXA Adolescentes</p>
-                    <p className="text-xs text-gray-600">Control Parental</p>
+                    <p className="text-sm font-semibold text-[#173e3d]">NUXA Adolescentes</p>
+                    <p className="text-xs text-[#647b75]">Control Parental</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Decorative elements */}
-            <div className="absolute -top-6 -left-6 w-32 h-32 bg-emerald-400/20 rounded-full blur-xl"></div>
-            <div className="absolute -bottom-8 -right-8 w-40 h-40 bg-teal-400/20 rounded-full blur-xl"></div>
           </div>
 
           {/* Content on right */}
-          <div className="space-y-8 order-1 lg:order-2">
+          <div className="order-1 space-y-7 lg:order-2">
             <div>
-              <h2 className="text-2xl md:text-2xl font-bold mb-6 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent leading-tight">
+              <h2 className="mb-5 text-3xl font-semibold leading-tight tracking-[-0.035em] text-[#173e3d] sm:text-4xl">
                 Juventud y Salud Mental:<br />
-                <span className="text-emerald-700">El Momento Decisivo</span>
+                <span className="text-[#557d65]">Un momento para escuchar</span>
               </h2>
               
-              <div className="space-y-6 text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+              <div className="space-y-5 text-base leading-7 text-[#526b68] sm:text-lg sm:leading-8">
                 <p>
-                  La juventud no es simplemente una etapa más, es el <strong>verdadero cimiento</strong> sobre 
-                  el que se construye el resto de la vida. Es ahora, en estos años de formación y descubrimiento, 
-                  cuando se forjan los hábitos, las convicciones y la manera de enfrentarse a los retos del mundo.
+                  La juventud es una etapa de formación y descubrimiento. En estos años, muchas personas exploran sus emociones, sus vínculos y la manera de afrontar nuevos retos.
                 </p>
                 
                 <p>
-                  Cuidar la salud mental durante la adolescencia y la juventud es fundamental. 
-                  <strong>No es un lujo, es una necesidad.</strong> Las experiencias, los apoyos y las herramientas 
-                  que se adquieren en esta época marcan para siempre la capacidad de adaptarse, crecer y superar 
-                  adversidades en la vida adulta.
+                  El acompañamiento puede ayudar a poner en palabras lo que se vive. NUXA ofrece un espacio de conversación y orientación; no sustituye la atención de profesionales.
                 </p>
                 
 
@@ -62,54 +55,53 @@ export default function YouthMentalHealthSection() {
             </div>
 
             {/* Key Points Grid */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="flex items-start space-x-3">
-                <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Brain className="w-6 h-6 text-emerald-600" />
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#e1ebe3] text-[#47736a]">
+                  <Brain className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900 dark:text-white">Cimiento Vital</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Base sólida para toda la vida</p>
+                  <h3 className="font-semibold text-[#234844]">Escucha</h3>
+                  <p className="text-sm text-[#647b75]">Un lugar para expresarse</p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-3">
-                <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Heart className="w-6 h-6 text-teal-600" />
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#e1ebe3] text-[#47736a]">
+                  <Heart className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900 dark:text-white">Prevención</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Evita sufrimientos futuros</p>
+                  <h3 className="font-semibold text-[#234844]">A tu ritmo</h3>
+                  <p className="text-sm text-[#647b75]">Tú decides cuándo conversar</p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-3">
-                <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Users className="w-6 h-6 text-emerald-600" />
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#e1ebe3] text-[#47736a]">
+                  <Users className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900 dark:text-white">Apoyo Especializado</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Adaptado para jóvenes</p>
+                  <h3 className="font-semibold text-[#234844]">Acompañamiento</h3>
+                  <p className="text-sm text-[#647b75]">Un recurso complementario</p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-3">
-                <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <TrendingUp className="w-6 h-6 text-teal-600" />
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#e1ebe3] text-[#47736a]">
+                  <TrendingUp className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900 dark:text-white">Futuro Pleno</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Vida equilibrada y exitosa</p>
+                  <h3 className="font-semibold text-[#234844]">Orientación</h3>
+                  <p className="text-sm text-[#647b75]">Ideas para reflexionar</p>
                 </div>
               </div>
             </div>
 
             {/* CTA */}
-            <div className="pt-6">
-              <Link href="/control-parental">
-                <button className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300 hover:from-emerald-700 hover:to-teal-700">
-                  Explicación del control parental
-                </button>
+            <div className="pt-2">
+              <Link href="/control-parental" className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#174f50] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#103f42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4e8176] focus-visible:ring-offset-2 motion-reduce:transition-none">
+                Explicación del control parental
+                <span className="sr-only"> (abre información)</span>
               </Link>
             </div>
           </div>

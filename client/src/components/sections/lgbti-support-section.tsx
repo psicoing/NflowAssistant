@@ -1,4 +1,4 @@
-import { Heart, Shield, Users } from "lucide-react";
+import { Heart, Shield, Users, MessageCircle } from "lucide-react";
 import { useLocation } from "wouter";
 import lgbtiImagePath from "@assets/ChatGPT Image 18 jul 2025, 09_00_02_1752822021391.png";
 
@@ -6,116 +6,106 @@ export default function LGBTISupportSection() {
   const [, setLocation] = useLocation();
   
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-nflow-dark via-purple-950/30 to-nflow-dark relative overflow-hidden">
-      {/* Efectos de fondo */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-pink-900/20 to-red-900/20"></div>
-      <div className="absolute top-10 left-10 w-20 h-20 bg-rainbow-500/10 rounded-full blur-xl"></div>
-      <div className="absolute bottom-20 right-20 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl"></div>
-      <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-purple-500/10 rounded-full blur-lg"></div>
-      
-      <div className="max-w-7xl mx-auto relative z-10">
+    <section className="px-4 py-14 sm:py-20">
+      <div className="mx-auto max-w-6xl">
         {/* Header con badge */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 px-4 py-2 rounded-full border border-purple-500/30 mb-6">
-            <Heart className="w-4 h-4 text-pink-400" />
-            <span className="text-sm font-medium text-purple-300">NUXA LGBTI+ Apoyo Especializado</span>
+        <div className="mb-12 max-w-4xl">
+          <div className="mb-5 inline-flex items-center gap-2 border-b border-[#cbded6] pb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#55776a]">
+            <Heart className="h-4 w-4" />
+            <span>NUXA LGBTI+ · Apoyo y respeto</span>
           </div>
           
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent">
+          <h2 className="mb-5 text-3xl font-semibold leading-tight tracking-[-0.04em] text-[#173e3d] sm:text-5xl">
+            <span>
               Apoyo y Dignidad
             </span>
-            <br />
-            <span className="text-white">Garantizada</span>
+            <span className="block text-[#557d65]">con respeto a tu identidad</span>
           </h2>
           
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Reconocemos que la comunidad LGBTI+ enfrenta vulnerabilidades únicas en salud mental. 
-            En NUXA, ofrecemos un espacio seguro, libre de juicios y con apoyo especializado.
+          <p className="max-w-3xl text-base leading-7 text-[#526b68] sm:text-lg sm:leading-8">
+            Las experiencias de discriminación o rechazo pueden afectar el bienestar. En NUXA, ofrecemos un espacio de conversación sin juicios y con atención a las realidades LGBTI+.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid items-center gap-8 lg:grid-cols-[1fr_0.9fr] lg:gap-12">
           {/* Imagen de la comunidad LGBTI+ */}
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl blur-xl"></div>
-            <div className="relative overflow-hidden rounded-2xl border border-purple-500/30 shadow-2xl">
+            <div className="relative overflow-hidden rounded-[1.75rem] border border-[#cbded6] shadow-[0_24px_60px_-38px_rgba(19,61,59,0.38)]">
               <img 
                 src={lgbtiImagePath}
                 alt="Comunidad LGBTI+ unida con bandera del orgullo"
                 className="w-full h-auto object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-purple-900/30 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#123f43]/25 to-transparent"></div>
             </div>
             
             {/* Badge flotante */}
-            <div className="absolute -top-4 -right-4 bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-2 rounded-full border border-purple-400/50 shadow-lg">
-              <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4 text-white" />
-                <span className="text-sm font-semibold text-white">Espacio Seguro</span>
+            <div className="absolute -right-2 -top-3 rounded-full border border-[#cbded6] bg-[#f3f6ef] px-4 py-2 shadow-md sm:right-4 sm:top-4">
+              <div className="flex items-center gap-2 text-[#42695f]">
+                <Shield className="h-4 w-4" />
+                <span className="text-sm font-semibold">Un espacio de respeto</span>
               </div>
             </div>
           </div>
 
           {/* Contenido */}
-          <div className="space-y-8">
+          <div className="space-y-5">
             {/* Estadística importante */}
-            <div className="bg-gradient-to-br from-red-900/30 to-purple-900/30 p-6 rounded-xl border border-red-500/30">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
-                  <Heart className="w-5 h-5 text-red-400" />
+            <div className="rounded-2xl border-l-2 border-[#91aa72] bg-[#eaf1eb] p-5 sm:p-6">
+              <div className="mb-3 flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#dce8dc] text-[#55776a]">
+                  <MessageCircle className="h-4 w-4" />
                 </div>
-                <h3 className="text-xl font-semibold text-white">Realidad Preocupante</h3>
+                <h3 className="text-lg font-semibold text-[#234844]">Un espacio para hablar</h3>
               </div>
-              <p className="text-gray-300 text-sm leading-relaxed">
-                Las personas LGBTI+ presentan tasas <strong className="text-red-400">3-4 veces mayores</strong> de 
-                intentos de suicidio y trastornos de salud mental debido a discriminación, rechazo familiar y estrés de minorías.
+              <p className="text-sm leading-6 text-[#526b68]">
+                Si estás atravesando una situación difícil, puedes compartirla a tu ritmo. NUXA es un recurso de apoyo emocional y no sustituye la atención profesional.
               </p>
             </div>
 
             {/* Grid de características de apoyo */}
             <div className="grid gap-4">
-              <div className="flex items-center gap-4 p-4 bg-purple-900/20 rounded-lg border border-purple-500/30">
-                <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Shield className="w-4 h-4 text-purple-400" />
+              <div className="flex items-center gap-4 rounded-xl border border-[#d6e3dc] bg-[#f8f9f4] p-4">
+                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#e1ebe3] text-[#47736a]">
+                  <Shield className="h-4 w-4" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-white">Confidencialidad Total</h4>
-                  <p className="text-sm text-gray-400">Sin juicios, sin etiquetas, solo apoyo humano</p>
+                  <h4 className="font-semibold text-[#234844]">Confidencialidad</h4>
+                  <p className="text-sm text-[#647b75]">Sin juicios ni etiquetas</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 p-4 bg-pink-900/20 rounded-lg border border-pink-500/30">
-                <div className="w-8 h-8 bg-pink-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Heart className="w-4 h-4 text-pink-400" />
+              <div className="flex items-center gap-4 rounded-xl border border-[#d6e3dc] bg-[#f8f9f4] p-4">
+                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#e1ebe3] text-[#47736a]">
+                  <Heart className="h-4 w-4" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-white">Lenguaje Inclusivo</h4>
-                  <p className="text-sm text-gray-400">Respeto por tu identidad y orientación</p>
+                  <h4 className="font-semibold text-[#234844]">Lenguaje inclusivo</h4>
+                  <p className="text-sm text-[#647b75]">Respeto por tu identidad y orientación</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 p-4 bg-purple-900/20 rounded-lg border border-purple-500/30">
-                <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Users className="w-4 h-4 text-purple-400" />
+              <div className="flex items-center gap-4 rounded-xl border border-[#d6e3dc] bg-[#f8f9f4] p-4">
+                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#e1ebe3] text-[#47736a]">
+                  <Users className="h-4 w-4" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-white">Apoyo Especializado</h4>
-                  <p className="text-sm text-gray-400">Comprensión de las realidades LGBTI+</p>
+                  <h4 className="font-semibold text-[#234844]">Apoyo especializado</h4>
+                  <p className="text-sm text-[#647b75]">Comprensión de las realidades LGBTI+</p>
                 </div>
               </div>
             </div>
 
             {/* Mensaje de compromiso */}
-            <div className="bg-gradient-to-r from-purple-900/40 to-pink-900/40 p-6 rounded-xl border border-purple-500/30">
-              <h3 className="text-lg font-semibold text-white mb-3">Nuestro Compromiso</h3>
-              <p className="text-gray-300 text-sm leading-relaxed mb-4">
+            <div className="rounded-2xl border border-[#d6e3dc] bg-[#eaf1eb] p-5 sm:p-6">
+              <h3 className="mb-3 text-lg font-semibold text-[#234844]">Nuestro compromiso</h3>
+              <p className="mb-4 text-sm leading-relaxed text-[#526b68]">
                 Queremos aportar nuestro granito de arena creando un espacio donde puedas ser tú mismo/a sin miedo, 
                 donde tus emociones sean validadas y donde encuentres el apoyo que mereces.
               </p>
               <div className="flex items-center gap-2 text-sm">
-                <Heart className="w-4 h-4 text-pink-400" />
-                <span className="text-pink-300 font-medium">Con amor y respeto, equipo NUXA</span>
+                <Heart className="h-4 w-4 text-[#55776a]" />
+                <span className="font-medium text-[#42695f]">Con respeto, equipo NUXA</span>
               </div>
             </div>
 
@@ -123,7 +113,7 @@ export default function LGBTISupportSection() {
             <div className="text-center">
               <button
                 onClick={() => setLocation("/registro")}
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold px-8 py-4 rounded-xl border border-purple-400/50 shadow-lg transition-all duration-300 hover:shadow-purple-500/25 hover:scale-105"
+                className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#174f50] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#103f42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4e8176] focus-visible:ring-offset-2 motion-reduce:transition-none"
                 data-testid="button-lgbti-apoyo"
               >
                 <Heart className="w-5 h-5" />

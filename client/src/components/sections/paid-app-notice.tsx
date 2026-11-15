@@ -2,23 +2,23 @@ import { AlertTriangle, CreditCard } from "lucide-react";
 
 export default function PaidAppNotice() {
   return (
-    <section className="py-8 bg-gradient-to-r from-red-900/20 via-orange-900/20 to-red-900/20 border-y border-red-800/30">
+    <section className="border-y border-[#d7c8ae] bg-[#f1ede5] py-8 dark:border-[#614a3b] dark:bg-[#102f33]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-red-900/30 border border-red-700/50 rounded-xl p-6 backdrop-blur-sm">
+        <div className="rounded-[1.5rem] border border-[#d7c8ae] border-l-4 border-l-[#a87043] bg-[#f8f6f0] p-6 dark:border-[#614a3b] dark:border-l-[#c19262] dark:bg-[#173e3d] sm:p-8">
           <div className="flex items-center justify-center space-x-4 mb-4">
-            <AlertTriangle className="w-8 h-8 text-yellow-400" />
-            <h2 className="text-2xl font-bold text-white text-center">
+            <AlertTriangle className="h-7 w-7 text-[#9a6639]" />
+            <h2 className="text-center text-xl font-semibold tracking-[-0.025em] text-[#3d4841] dark:text-[#f2f4e8] sm:text-2xl">
               NUXA es una Aplicación de Pago
             </h2>
-            <CreditCard className="w-8 h-8 text-yellow-400" />
+            <CreditCard className="h-7 w-7 text-[#9a6639]" />
           </div>
           
           <div className="text-center space-y-3">
-            <p className="text-lg text-gray-200 font-medium">
+            <p className="text-base font-medium leading-7 text-[#3d4841] dark:text-[#e2e9df] sm:text-lg">
               <strong>No hay chat gratuito.</strong> Para acceder al asistente de IA necesitas comprar una suscripción.
             </p>
             
-            <p className="text-gray-300">
+            <p className="text-sm leading-6 text-[#59665d] dark:text-[#c3d8d1] sm:text-base">
               Los recursos informativos están disponibles gratuitamente en la barra de navegación. 
               <br />
               <strong>El chat con IA requiere suscripción activa - sin excepciones.</strong>
@@ -27,7 +27,7 @@ export default function PaidAppNotice() {
             <div className="flex justify-center pt-4">
               <a 
                 href="#precios" 
-                className="inline-flex items-center px-6 py-3 bg-nflow-orange hover:bg-orange-600 text-white font-bold rounded-lg transition-colors"
+                className="inline-flex min-h-11 items-center rounded-full bg-[#174f50] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#103f42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4e8176] focus-visible:ring-offset-2 motion-reduce:transition-none"
               >
                 <CreditCard className="w-5 h-5 mr-2" />
                 Ver Planes de Pago

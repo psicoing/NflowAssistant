@@ -2,120 +2,120 @@ import { Globe, Heart, Users, Shield } from "lucide-react";
 
 export default function GlobalSupportSection() {
   return (
-    <section className="py-8 px-4 bg-gradient-to-br from-nflow-navy via-nflow-blue-dark to-nflow-navy">
+    <section className="px-4 py-14 sm:py-20">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+        <div className="mb-12 grid gap-5 border-b border-[#cbded6] pb-8 sm:mb-14 sm:grid-cols-[1fr_0.8fr] sm:items-end">
+          <h2 className="max-w-2xl text-3xl font-semibold leading-tight tracking-[-0.04em] text-[#173e3d] sm:text-5xl">
             La Salud Mental No Tiene Fronteras
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="max-w-2xl text-base leading-7 text-[#526b68] sm:text-lg">
             NUXA es una aplicación para la salud mental de personas individuales, familias y trabajadores. 
             Funciona como un recurso digital de apoyo emocional continuo, donde estés, cuando lo necesites.
           </p>
         </div>
 
         {/* Main Content Cards */}
-        <div className="grid md:grid-cols-2 gap-12 mb-16">
+        <div className="mb-12 grid gap-5 md:grid-cols-2 sm:gap-7">
           {/* Primera Tarjeta - Apoyo Global */}
-          <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-3xl p-8 border border-gray-700/50 backdrop-blur-sm">
+          <div className="rounded-[1.5rem] border border-[#d6e3dc] bg-[#f3f6ef] p-6 sm:p-8">
             <div className="flex items-center mb-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl flex items-center justify-center mr-4">
-                <Globe className="w-8 h-8 text-white" />
+              <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#174f50] text-[#d6e69a]">
+                <Globe className="h-6 w-6" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-white">Apoyo Sin Límites</h3>
-                <p className="text-gray-400">Disponible en cualquier momento, en cualquier lugar</p>
+                <h3 className="text-xl font-semibold text-[#173e3d]">Apoyo Sin Límites</h3>
+                <p className="text-sm leading-6 text-[#647b75]">Disponible en cualquier momento, en cualquier lugar</p>
               </div>
             </div>
             
             <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-teal-400 rounded-full"></div>
-                <span className="text-gray-200">Completamente anónimo. Sin estigma. Sin límites.</span>
+                <div className="flex items-center space-x-3">
+                <div className="h-1.5 w-1.5 rounded-full bg-[#77977e]"></div>
+                <span className="text-[#49635e]">Completamente anónimo. Sin estigma. Sin límites.</span>
               </div>
               <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-teal-400 rounded-full"></div>
-                <span className="text-gray-200">Soporte para todos, en cualquier momento.</span>
+                <div className="h-1.5 w-1.5 rounded-full bg-[#77977e]"></div>
+                <span className="text-[#49635e]">Soporte para todos, en cualquier momento.</span>
               </div>
               <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-teal-400 rounded-full"></div>
-                <span className="text-gray-200">Accesible desde cualquier dispositivo, en cualquier zona horaria.</span>
+                <div className="h-1.5 w-1.5 rounded-full bg-[#77977e]"></div>
+                <span className="text-[#49635e]">Accesible desde cualquier dispositivo, en cualquier zona horaria.</span>
               </div>
             </div>
           </div>
 
           {/* Segunda Tarjeta - Primera Línea */}
-          <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-3xl p-8 border border-gray-700/50 backdrop-blur-sm">
+          <div className="rounded-[1.5rem] border border-[#d6e3dc] bg-[#eaf1eb] p-6 sm:p-8">
             <div className="flex items-center mb-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mr-4">
-                <Heart className="w-8 h-8 text-white" />
+              <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#dce8dc] text-[#55776a]">
+                <Heart className="h-6 w-6" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-white">Primera Línea de Apoyo</h3>
-                <p className="text-gray-400">La confianza de millones en todo el mundo</p>
+                <h3 className="text-xl font-semibold text-[#173e3d]">Primera Línea de Apoyo</h3>
+                <p className="text-sm leading-6 text-[#647b75]">Un recurso digital complementario para el bienestar emocional</p>
               </div>
             </div>
             
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                <span className="text-gray-200">Primera línea de apoyo emocional.</span>
+                <div className="h-1.5 w-1.5 rounded-full bg-[#77977e]"></div>
+                <span className="text-[#49635e]">Primera línea de apoyo emocional.</span>
               </div>
               <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                <span className="text-gray-200">La confianza de millones en todo el mundo.</span>
+                <div className="h-1.5 w-1.5 rounded-full bg-[#77977e]"></div>
+                <span className="text-[#49635e]">Un espacio para explorar lo que estás viviendo.</span>
               </div>
               <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                <span className="text-gray-200">Respuestas contextuales adaptadas a cada cultura y situación.</span>
+                <div className="h-1.5 w-1.5 rounded-full bg-[#77977e]"></div>
+                <span className="text-[#49635e]">Respuestas contextuales adaptadas a cada cultura y situación.</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-4 gap-6">
-          <div className="text-center p-6 bg-gray-800/50 rounded-2xl border border-gray-700/30">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <Globe className="w-6 h-6 text-white" />
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          <div className="rounded-2xl border border-[#d6e3dc] bg-[#f8f9f4] p-5 text-center">
+            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[#e1ebe3] text-[#47736a]">
+              <Globe className="h-5 w-5" />
             </div>
-            <h4 className="text-lg font-semibold text-white mb-2">150+ Idiomas</h4>
-            <p className="text-gray-400 text-sm">Comunicación sin barreras lingüísticas</p>
+            <h4 className="mb-2 text-base font-semibold text-[#234844]">150+ Idiomas</h4>
+            <p className="text-sm text-[#647b75]">Comunicación sin barreras lingüísticas</p>
           </div>
           
-          <div className="text-center p-6 bg-gray-800/50 rounded-2xl border border-gray-700/30">
-            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <Shield className="w-6 h-6 text-white" />
+          <div className="rounded-2xl border border-[#d6e3dc] bg-[#f8f9f4] p-5 text-center">
+            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[#e1ebe3] text-[#47736a]">
+              <Shield className="h-5 w-5" />
             </div>
-            <h4 className="text-lg font-semibold text-white mb-2">100% Anónimo</h4>
-            <p className="text-gray-400 text-sm">Privacidad total y confidencialidad</p>
+            <h4 className="mb-2 text-base font-semibold text-[#234844]">Anónimo</h4>
+            <p className="text-sm text-[#647b75]">Privacidad y confidencialidad</p>
           </div>
           
-          <div className="text-center p-6 bg-gray-800/50 rounded-2xl border border-gray-700/30">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <Users className="w-6 h-6 text-white" />
+          <div className="rounded-2xl border border-[#d6e3dc] bg-[#f8f9f4] p-5 text-center">
+            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[#e1ebe3] text-[#47736a]">
+              <Users className="h-5 w-5" />
             </div>
-            <h4 className="text-lg font-semibold text-white mb-2">Inclusivo</h4>
-            <p className="text-gray-400 text-sm">Apoyo para todas las culturas y contextos</p>
+            <h4 className="mb-2 text-base font-semibold text-[#234844]">Inclusivo</h4>
+            <p className="text-sm text-[#647b75]">Apoyo para todas las culturas y contextos</p>
           </div>
           
-          <div className="text-center p-6 bg-gray-800/50 rounded-2xl border border-gray-700/30">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <Heart className="w-6 h-6 text-white" />
+          <div className="rounded-2xl border border-[#d6e3dc] bg-[#f8f9f4] p-5 text-center">
+            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[#e1ebe3] text-[#47736a]">
+              <Heart className="h-5 w-5" />
             </div>
-            <h4 className="text-lg font-semibold text-white mb-2">24/7 Disponible</h4>
-            <p className="text-gray-400 text-sm">Siempre ahí cuando lo necesites</p>
+            <h4 className="mb-2 text-base font-semibold text-[#234844]">24/7 Disponible</h4>
+            <p className="text-sm text-[#647b75]">Siempre ahí cuando lo necesites</p>
           </div>
         </div>
 
         {/* Bottom Quote */}
-        <div className="mt-16 text-center">
-          <div className="inline-block bg-gradient-to-r from-teal-500/10 to-cyan-500/10 rounded-2xl p-8 border border-teal-500/20">
-            <blockquote className="text-2xl font-medium text-white mb-4">
+        <div className="mt-10 border-l-2 border-[#91aa72] pl-5 sm:pl-7">
+          <div className="max-w-3xl">
+            <blockquote className="mb-4 text-xl font-medium leading-relaxed text-[#234844] sm:text-2xl">
               "NUXA ofrece soluciones innovadoras alineadas con ISO 45003, centradas en el bienestar psicológico de individuos, familias y trabajadores."
             </blockquote>
-            <p className="text-gray-400 italic">- Filosofía NUXA</p>
+            <p className="text-sm text-[#647b75]">Filosofía NUXA</p>
           </div>
         </div>
       </div>

@@ -1,25 +1,24 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, Clock, Shield, Euro, Heart, Building2, UserCheck, ArrowRight } from "lucide-react";
 import { Link } from "wouter";
 
 export default function QueEsNflowSection() {
   return (
-    <section id="que-es-nflow" className="py-20 px-4 bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900">
+    <section id="que-es-nflow" className="bg-[#123f43] px-4 py-14 text-[#f2f4e8] sm:py-20">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <Badge className="bg-green-500 text-white mb-4 text-sm px-4 py-2">
+          <Badge className="mb-4 border border-[#6d9d8c]/40 bg-white/[0.07] px-4 py-2 text-sm text-[#d6e69a]">
             Conoce NUXA
           </Badge>
-          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="mb-6 text-4xl font-semibold leading-tight tracking-[-0.045em] text-[#f2f4e8] sm:text-5xl">
             ¿Qué es NUXA?
           </h2>
-          <p className="text-sm text-green-400 mb-4 italic">
+          <p className="mb-4 text-sm italic text-[#b7d7c4]">
             Anteriormente conocido como NFLOW, ahora somos NUXA
           </p>
-          <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+          <p className="mx-auto max-w-4xl text-base leading-7 text-[#c3d8d1] sm:text-lg">
             Un asistente digital de salud mental que ofrece apoyo psicológico adaptado a adolescentes, 
             familias y empresas.
           </p>
@@ -27,31 +26,31 @@ export default function QueEsNflowSection() {
 
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all duration-300">
+          <Card className="border-[#6d9d8c]/35 bg-white/[0.06] text-[#f2f4e8] transition-colors hover:bg-white/[0.09]">
             <CardContent className="p-6 text-center">
-              <Clock className="w-12 h-12 text-green-400 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white mb-3">Disponible 24/7</h3>
-              <p className="text-gray-300">
+              <Clock className="mx-auto mb-4 h-9 w-9 text-[#c9dd83]" />
+              <h3 className="mb-3 text-lg font-semibold text-[#f2f4e8]">Disponible 24/7</h3>
+              <p className="text-sm leading-6 text-[#c3d8d1]">
                 Apoyo emocional inmediato cuando más lo necesitas, sin horarios ni citas
               </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all duration-300">
+          <Card className="border-[#6d9d8c]/35 bg-white/[0.06] text-[#f2f4e8] transition-colors hover:bg-white/[0.09]">
             <CardContent className="p-6 text-center">
-              <Shield className="w-12 h-12 text-blue-400 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white mb-3">Seguro y accesible</h3>
-              <p className="text-gray-300">
+              <Shield className="mx-auto mb-4 h-9 w-9 text-[#b7d7c4]" />
+              <h3 className="mb-3 text-lg font-semibold text-[#f2f4e8]">Seguro y accesible</h3>
+              <p className="text-sm leading-6 text-[#c3d8d1]">
                 Plataforma segura y confidencial, accesible desde cualquier dispositivo
               </p>
             </CardContent>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all duration-300">
+          <Card className="border-[#6d9d8c]/35 bg-white/[0.06] text-[#f2f4e8] transition-colors hover:bg-white/[0.09]">
             <CardContent className="p-6 text-center">
-              <Euro className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white mb-3">Coste mínimo</h3>
-              <p className="text-gray-300">
+              <Euro className="mx-auto mb-4 h-9 w-9 text-[#c9dd83]" />
+              <h3 className="mb-3 text-lg font-semibold text-[#f2f4e8]">Coste mínimo</h3>
+              <p className="text-sm leading-6 text-[#c3d8d1]">
                 Solo <strong className="text-yellow-300">2,99 €/mes</strong> por usuario - menos que un café
               </p>
             </CardContent>
@@ -64,13 +63,13 @@ export default function QueEsNflowSection() {
           
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Para jóvenes y familias */}
-            <Card className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 backdrop-blur-sm border-purple-400/40">
+            <Card className="border-[#6d9d8c]/35 bg-[#20494a] text-[#f2f4e8]">
               <CardContent className="p-8">
                 <div className="flex items-center mb-6">
-                  <Heart className="w-8 h-8 text-pink-400 mr-3" />
+                  <Heart className="mr-3 h-7 w-7 text-[#c9dd83]" />
                   <h4 className="text-2xl font-bold text-white">Para jóvenes y familias</h4>
                 </div>
-                <p className="text-gray-200 text-lg leading-relaxed font-medium">
+                <p className="text-base font-medium leading-7 text-[#c3d8d1]">
                   Apoyo emocional inmediato, con control parental opcional. Un espacio seguro para 
                   expresarse y recibir orientación profesional.
                 </p>
@@ -78,27 +77,27 @@ export default function QueEsNflowSection() {
             </Card>
 
             {/* Para empresas */}
-            <Card className="bg-gradient-to-br from-blue-900/40 to-cyan-900/40 backdrop-blur-sm border-blue-400/40">
+            <Card className="border-[#6d9d8c]/35 bg-[#20494a] text-[#f2f4e8]">
               <CardContent className="p-8">
                 <div className="flex items-center mb-6">
-                  <Building2 className="w-8 h-8 text-cyan-400 mr-3" />
+                  <Building2 className="mr-3 h-7 w-7 text-[#b7d7c4]" />
                   <h4 className="text-2xl font-bold text-white">Para empresas</h4>
                 </div>
-                <p className="text-gray-200 text-lg leading-relaxed font-medium">
-                  Cumple con la <strong className="text-white">ISO 45003</strong> (bienestar laboral) de forma económica. 
+                <p className="text-base font-medium leading-7 text-[#c3d8d1]">
+                  Considera la <strong className="text-[#f2f4e8]">ISO 45003</strong> (bienestar laboral) de forma económica.
                   Cuida a tus empleados con una inversión mínima.
                 </p>
               </CardContent>
             </Card>
 
             {/* Para profesionales */}
-            <Card className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 backdrop-blur-sm border-green-400/40">
+            <Card className="border-[#6d9d8c]/35 bg-[#20494a] text-[#f2f4e8]">
               <CardContent className="p-8">
                 <div className="flex items-center mb-6">
-                  <UserCheck className="w-8 h-8 text-emerald-400 mr-3" />
+                  <UserCheck className="mr-3 h-7 w-7 text-[#b7d7c4]" />
                   <h4 className="text-2xl font-bold text-white">Para profesionales</h4>
                 </div>
-                <p className="text-gray-200 text-lg leading-relaxed font-medium">
+                <p className="text-base font-medium leading-7 text-[#c3d8d1]">
                   Complemento eficaz para prevención y orientación en salud y educación. 
                   Una herramienta de apoyo profesional.
                 </p>
@@ -108,38 +107,38 @@ export default function QueEsNflowSection() {
         </div>
 
         {/* Key Arguments */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20 mb-16">
-          <h3 className="text-3xl font-bold text-white text-center mb-8">Argumentos clave</h3>
+        <div className="mb-16 rounded-[1.5rem] border border-[#6d9d8c]/35 bg-white/[0.06] p-6 sm:p-8">
+          <h3 className="mb-8 text-center text-2xl font-semibold text-[#f2f4e8] sm:text-3xl">Argumentos clave</h3>
           
           <div className="space-y-6">
             <div className="flex items-start space-x-4">
-              <CheckCircle className="w-6 h-6 text-green-400 mt-1 flex-shrink-0" />
-              <p className="text-xl text-gray-200 leading-relaxed">
-                <strong className="text-white">"NUXA no sustituye al psicólogo, lo complementa"</strong>: 
+              <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-[#c9dd83]" />
+              <p className="text-base leading-7 text-[#c3d8d1] sm:text-lg">
+                <strong className="text-[#f2f4e8]">"NUXA no sustituye al psicólogo, lo complementa"</strong>:
                 es una ayuda inmediata y continua.
               </p>
             </div>
             
             <div className="flex items-start space-x-4">
-              <CheckCircle className="w-6 h-6 text-green-400 mt-1 flex-shrink-0" />
-              <p className="text-xl text-gray-200 leading-relaxed">
-                <strong className="text-white">"Por menos de un café al mes"</strong>, 
+              <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-[#c9dd83]" />
+              <p className="text-base leading-7 text-[#c3d8d1] sm:text-lg">
+                <strong className="text-[#f2f4e8]">"Por menos de un café al mes"</strong>,
                 tienes un recurso de salud mental disponible las 24 horas.
               </p>
             </div>
             
             <div className="flex items-start space-x-4">
-              <CheckCircle className="w-6 h-6 text-green-400 mt-1 flex-shrink-0" />
-              <p className="text-xl text-gray-200 leading-relaxed">
-                <strong className="text-white">"Las empresas pueden cuidar a sus trabajadores"</strong> 
+              <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-[#c9dd83]" />
+              <p className="text-base leading-7 text-[#c3d8d1] sm:text-lg">
+                <strong className="text-[#f2f4e8]">"Las empresas pueden cuidar a sus trabajadores"</strong>
                 con una inversión mínima.
               </p>
             </div>
             
             <div className="flex items-start space-x-4">
-              <CheckCircle className="w-6 h-6 text-green-400 mt-1 flex-shrink-0" />
-              <p className="text-xl text-gray-200 leading-relaxed">
-                <strong className="text-white">"NUXA acerca la salud mental a todo el mundo"</strong>, 
+              <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-[#c9dd83]" />
+              <p className="text-base leading-7 text-[#c3d8d1] sm:text-lg">
+                <strong className="text-[#f2f4e8]">"NUXA acerca la salud mental a todo el mundo"</strong>,
                 sin listas de espera ni burocracia.
               </p>
             </div>
@@ -169,15 +168,13 @@ export default function QueEsNflowSection() {
           </div>
 
           {/* CTA */}
-          <Link href="/login">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white w-full max-w-md px-6 sm:px-12 py-4 sm:py-6 text-base sm:text-xl font-semibold rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
+          <Link
+              href="/login"
+              className="inline-flex min-h-12 w-full max-w-md items-center justify-center rounded-full bg-[#d6e69a] px-6 py-3 text-base font-semibold text-[#173e3d] transition-colors hover:bg-[#e3edb8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eff5c7] focus-visible:ring-offset-2 focus-visible:ring-offset-[#123f43] motion-reduce:transition-none sm:px-10 sm:py-4 sm:text-lg"
               data-testid="button-bienestar-cta"
             >
               Comienza tu bienestar hoy mismo
               <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 ml-2" />
-            </Button>
           </Link>
         </div>
       </div>

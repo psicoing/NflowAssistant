@@ -1,49 +1,32 @@
+import { Globe2, MessageCircle } from "lucide-react";
+
 export default function BorderlessSupportSection() {
   return (
-    <section className="relative py-6 px-4 bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-900 overflow-hidden">
-      <div className="max-w-4xl mx-auto text-center relative z-10">
-        <h2 className="text-xl md:text-3xl font-bold mb-4 text-white leading-tight">
-          La Salud Mental{" "}
-          <span className="relative">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-500">
-              SIN
-            </span>
-            <span className="absolute inset-0 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-500 animate-pulse">
-              SIN
-            </span>
-          </span>{" "}
-          Fronteras
-        </h2>
-        
-        <div className="space-y-3">
-          <p className="text-lg md:text-xl text-gray-200 font-light">
-            <span className="text-white font-semibold tracking-wide">Tu asistente de bienestar emocional</span>
-          </p>
-          <p className="text-base md:text-lg text-gray-300 leading-relaxed max-w-2xl mx-auto">
-            <span className="text-teal-400 font-medium">Donde estés</span>, 
-            <span className="text-cyan-400 font-medium"> cuando lo necesites</span>, 
-            <span className="text-emerald-400 font-medium"> sin horarios</span>... 
-            <span className="text-teal-400 font-medium">¡Te ayudo!</span>
-          </p>
+    <section className="px-4 py-10 sm:py-14">
+      <div className="mx-auto max-w-6xl overflow-hidden rounded-[1.75rem] border border-[#cbded6] bg-[#eaf1eb] text-[#173e3d]">
+        <div className="grid gap-8 px-6 py-8 sm:px-10 sm:py-10 lg:grid-cols-[1fr_auto] lg:items-center lg:px-14">
+          <div>
+            <p className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.17em] text-[#47736a]">
+              <Globe2 aria-hidden="true" className="h-4 w-4" />
+              Bienestar emocional, sin fronteras
+            </p>
+            <h2 className="max-w-3xl text-3xl font-semibold leading-tight tracking-[-0.035em] sm:text-4xl">
+              La Salud Mental no tiene fronteras.
+            </h2>
+            <p className="mt-4 max-w-2xl text-base leading-7 text-[#526d68] sm:text-lg">
+              Tu asistente de bienestar emocional, donde estés y cuando quieras conversar. Sin horarios: tú marcas el ritmo.
+            </p>
+            <div className="mt-6 inline-flex items-center gap-2 border-l-2 border-[#91aa72] pl-3 text-sm font-medium text-[#365e56]">
+              <MessageCircle aria-hidden="true" className="h-4 w-4" />
+              Con NUXA, un espacio para ordenar lo que sientes.
+            </div>
+          </div>
+          <div aria-hidden="true" className="hidden h-36 w-36 items-center justify-center rounded-full border border-[#a9c1b4] text-[#47736a] lg:flex">
+            <div className="flex h-24 w-24 items-center justify-center rounded-full border border-[#a9c1b4]">
+              <MessageCircle className="h-9 w-9" />
+            </div>
+          </div>
         </div>
-
-        {/* Badge profesional */}
-        <div className="mt-4 inline-flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
-          <div className="w-2 h-2 bg-teal-400 rounded-full mr-2 animate-pulse"></div>
-          <span className="text-sm text-white font-medium">Con nuxa, tu equilibrio siempre</span>
-        </div>
-      </div>
-
-      {/* Decorative elements mejorados */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-teal-400 rounded-full animate-ping opacity-60"></div>
-        <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-cyan-400 rounded-full animate-ping delay-1000 opacity-60"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-emerald-400 rounded-full animate-ping delay-2000 opacity-60"></div>
-        <div className="absolute top-1/2 right-1/3 w-1 h-1 bg-teal-400 rounded-full animate-ping delay-3000 opacity-40"></div>
-        
-        {/* Círculos de fondo sutiles */}
-        <div className="absolute -top-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-teal-400/5 rounded-full blur-3xl"></div>
       </div>
     </section>
   );

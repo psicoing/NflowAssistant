@@ -1,22 +1,15 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Smartphone, Download, Chrome, Share, Plus, Home, CheckCircle } from "lucide-react";
 import nuxaLogo from "@assets/generated_images/NUXA_logo_with_circle_person_ba9dba6f.png";
 
 export default function PWAInstallationSection() {
   return (
-    <section id="app-movil" className="py-20 bg-gradient-to-b from-gray-900 via-slate-900 to-gray-800 relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/3 w-[400px] h-[400px] bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/3 w-[350px] h-[350px] bg-gradient-to-l from-teal-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section id="app-movil" className="px-4 py-14 sm:py-20">
+      <div className="max-w-6xl mx-auto sm:px-2 lg:px-4">
         {/* Header */}
         <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-6 border-emerald-500/30 text-emerald-400 bg-emerald-500/5 px-4 py-2">
+          <Badge variant="outline" className="mb-6 border-[#cbded6] bg-[#eaf1eb] px-4 py-2 text-[#42695f]">
             <Smartphone className="w-4 h-4 mr-2" />
             Aplicación Móvil
           </Badge>
@@ -30,13 +23,13 @@ export default function PWAInstallationSection() {
             />
           </div>
           
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <h2 className="mb-6 text-3xl font-semibold leading-tight tracking-[-0.04em] text-[#173e3d] sm:text-5xl">
             Instala NUXA en tu{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400">
+            <span className="text-[#557d65]">
               móvil sin tiendas
             </span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="mx-auto max-w-3xl text-base leading-7 text-[#526b68] sm:text-lg">
             NUXA es una aplicación web progresiva (PWA). Puedes instalarla directamente 
             desde tu navegador sin necesidad de App Store o Google Play.
           </p>
@@ -45,55 +38,55 @@ export default function PWAInstallationSection() {
         {/* Installation Steps */}
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
           {/* Android/Chrome Steps */}
-          <Card className="bg-gradient-to-br from-gray-800/60 via-gray-800/40 to-gray-900/60 border border-gray-700/30 backdrop-blur-xl overflow-hidden">
+          <Card className="overflow-hidden rounded-[1.5rem] border-[#d6e3dc] bg-[#f3f6ef] text-[#234844]">
             <CardContent className="p-8">
               <div className="flex items-center mb-6">
-                <Chrome className="w-8 h-8 text-emerald-500 mr-3" />
-                <h3 className="text-2xl font-bold text-white">Android / Chrome</h3>
+                <Chrome className="mr-3 h-7 w-7 text-[#557d65]" />
+                <h3 className="text-xl font-semibold text-[#173e3d]">Android / Chrome</h3>
               </div>
               
               <div className="space-y-6">
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">
+                  <div className="mr-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#174f50] text-sm font-semibold text-white">
                     1
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-2">Abre NUXA en Chrome</h4>
-                    <p className="text-gray-300 text-sm">Navega a la página web de NUXA usando Google Chrome</p>
+                    <h4 className="mb-2 font-semibold text-[#234844]">Abre NUXA en Chrome</h4>
+                    <p className="text-sm text-[#647b75]">Navega a la página web de NUXA usando Google Chrome</p>
                   </div>
                 </div>
 
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">
+                  <div className="mr-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#174f50] text-sm font-semibold text-white">
                     2
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-2 flex items-center">
+                    <h4 className="mb-2 flex items-center font-semibold text-[#234844]">
                       Toca el menú <Chrome className="w-4 h-4 ml-2" />
                     </h4>
-                    <p className="text-gray-300 text-sm">Busca los tres puntos verticales en la esquina superior derecha</p>
+                    <p className="text-sm text-[#647b75]">Busca los tres puntos verticales en la esquina superior derecha</p>
                   </div>
                 </div>
 
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">
+                  <div className="mr-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#174f50] text-sm font-semibold text-white">
                     3
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-2 flex items-center">
+                    <h4 className="mb-2 flex items-center font-semibold text-[#234844]">
                       Selecciona "Instalar app" <Download className="w-4 h-4 ml-2" />
                     </h4>
-                    <p className="text-gray-300 text-sm">Aparecerá la opción de instalación directamente en el menú</p>
+                    <p className="text-sm text-[#647b75]">Aparecerá la opción de instalación directamente en el menú</p>
                   </div>
                 </div>
 
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">
+                  <div className="mr-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#77977e] text-sm font-semibold text-white">
                     <CheckCircle className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-2">¡Listo!</h4>
-                    <p className="text-gray-300 text-sm">NUXA aparecerá en tu pantalla de inicio como cualquier otra app</p>
+                    <h4 className="mb-2 font-semibold text-[#234844]">¡Listo!</h4>
+                    <p className="text-sm text-[#647b75]">NUXA aparecerá en tu pantalla de inicio como cualquier otra app</p>
                   </div>
                 </div>
               </div>
@@ -101,57 +94,57 @@ export default function PWAInstallationSection() {
           </Card>
 
           {/* iOS/Safari Steps */}
-          <Card className="bg-gradient-to-br from-gray-800/60 via-gray-800/40 to-gray-900/60 border border-gray-700/30 backdrop-blur-xl overflow-hidden">
+          <Card className="overflow-hidden rounded-[1.5rem] border-[#d6e3dc] bg-[#f3f6ef] text-[#234844]">
             <CardContent className="p-8">
               <div className="flex items-center mb-6">
-                <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center mr-3">
-                  <Smartphone className="w-5 h-5 text-white" />
+                <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-lg bg-[#174f50] text-[#d6e69a]">
+                  <Smartphone className="h-4 w-4" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">iPhone / Safari</h3>
+                <h3 className="text-xl font-semibold text-[#173e3d]">iPhone / Safari</h3>
               </div>
               
               <div className="space-y-6">
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">
+                  <div className="mr-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#174f50] text-sm font-semibold text-white">
                     1
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-2">Abre NUXA en Safari</h4>
-                    <p className="text-gray-300 text-sm">Navega a la página web de NUXA usando Safari (navegador nativo)</p>
+                    <h4 className="mb-2 font-semibold text-[#234844]">Abre NUXA en Safari</h4>
+                    <p className="text-sm text-[#647b75]">Navega a la página web de NUXA usando Safari (navegador nativo)</p>
                   </div>
                 </div>
 
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">
+                  <div className="mr-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#174f50] text-sm font-semibold text-white">
                     2
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-2 flex items-center">
+                    <h4 className="mb-2 flex items-center font-semibold text-[#234844]">
                       Toca el botón compartir <Share className="w-4 h-4 ml-2" />
                     </h4>
-                    <p className="text-gray-300 text-sm">Busca el ícono de compartir en la barra inferior de Safari</p>
+                    <p className="text-sm text-[#647b75]">Busca el ícono de compartir en la barra inferior de Safari</p>
                   </div>
                 </div>
 
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">
+                  <div className="mr-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#174f50] text-sm font-semibold text-white">
                     3
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-2 flex items-center">
+                    <h4 className="mb-2 flex items-center font-semibold text-[#234844]">
                       "Añadir a pantalla de inicio" <Plus className="w-4 h-4 ml-2" />
                     </h4>
-                    <p className="text-gray-300 text-sm">Desplázate hacia abajo en el menú para encontrar esta opción</p>
+                    <p className="text-sm text-[#647b75]">Desplázate hacia abajo en el menú para encontrar esta opción</p>
                   </div>
                 </div>
 
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4">
+                  <div className="mr-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#77977e] text-sm font-semibold text-white">
                     <CheckCircle className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-2">¡Perfecto!</h4>
-                    <p className="text-gray-300 text-sm">NUXA estará disponible en tu pantalla de inicio con su propio ícono</p>
+                    <h4 className="mb-2 font-semibold text-[#234844]">¡Perfecto!</h4>
+                    <p className="text-sm text-[#647b75]">NUXA estará disponible en tu pantalla de inicio con su propio ícono</p>
                   </div>
                 </div>
               </div>
@@ -160,37 +153,37 @@ export default function PWAInstallationSection() {
         </div>
 
         {/* Benefits */}
-        <Card className="bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-gray-800/60 border border-emerald-500/20 backdrop-blur-xl">
+        <Card className="rounded-[1.5rem] border-[#cbded6] bg-[#eaf1eb] text-[#234844]">
           <CardContent className="p-8">
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-white mb-4">
+              <h3 className="mb-4 text-xl font-semibold text-[#173e3d] sm:text-2xl">
                 Ventajas de instalar NUXA como PWA
               </h3>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Home className="w-6 h-6 text-white" />
+                <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[#174f50] text-[#d6e69a]">
+                  <Home className="h-5 w-5" />
                 </div>
-                <h4 className="text-white font-semibold mb-2">Acceso Directo</h4>
-                <p className="text-gray-300 text-sm">Ícono en pantalla de inicio, como cualquier app nativa</p>
+                <h4 className="mb-2 font-semibold text-[#234844]">Acceso Directo</h4>
+                <p className="text-sm text-[#647b75]">Ícono en pantalla de inicio, como cualquier app nativa</p>
               </div>
               
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Smartphone className="w-6 h-6 text-white" />
+                <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[#dce8dc] text-[#47736a]">
+                  <Smartphone className="h-5 w-5" />
                 </div>
-                <h4 className="text-white font-semibold mb-2">Experiencia Nativa</h4>
-                <p className="text-gray-300 text-sm">Funciona como una app real, sin barra de navegador</p>
+                <h4 className="mb-2 font-semibold text-[#234844]">Experiencia Nativa</h4>
+                <p className="text-sm text-[#647b75]">Funciona como una app real, sin barra de navegador</p>
               </div>
               
               <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Download className="w-6 h-6 text-white" />
+                <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[#dce8dc] text-[#47736a]">
+                  <Download className="h-5 w-5" />
                 </div>
-                <h4 className="text-white font-semibold mb-2">Sin Tiendas</h4>
-                <p className="text-gray-300 text-sm">Instalación directa, sin pasar por App Store o Google Play</p>
+                <h4 className="mb-2 font-semibold text-[#234844]">Sin Tiendas</h4>
+                <p className="text-sm text-[#647b75]">Instalación directa, sin pasar por App Store o Google Play</p>
               </div>
             </div>
           </CardContent>

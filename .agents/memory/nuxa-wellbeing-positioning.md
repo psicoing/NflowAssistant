@@ -9,6 +9,16 @@ a licensed psychologist or replacement for clinical treatment.
 The user wants the homepage to highlight NUXA's noteworthy technical capabilities,
 not people's opinions or testimonials.
 
+For homepage banner refreshes, use the approved petrol-green and sage visual
+identity, with varied compositions instead of repeating one banner layout.
+Preserve already approved sections and existing navigation and interactions.
+
+**Why:** The user approved the redesigned NEUROPSI banner and then requested
+the same modernization for all outdated homepage banners.
+
+**How to apply:** Refresh legacy promotional presentation consistently without
+extending a visual request into chat, payment, access-policy or data changes.
+
 **Why:** The user explicitly rejected the opinions section and requested a different
 design explaining technical strengths instead.
 

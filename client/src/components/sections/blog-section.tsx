@@ -34,7 +34,7 @@ const blogPosts = [
     author: "Dr. Ana Martínez",
     category: "IA & Juventud",
     icon: Bot,
-    color: "bg-gradient-to-r from-blue-500 to-purple-600",
+    color: "bg-[#426f69]",
     image: aiTeenMentalHealthImage,
     readTime: "8 min",
     tags: ["IA", "Adolescentes", "Salud Mental", "Innovación"]
@@ -76,7 +76,7 @@ const blogPosts = [
     author: "Lic. Roberto Silva",
     category: "Empresas & Bienestar",
     icon: Building2,
-    color: "bg-gradient-to-r from-green-500 to-teal-600",
+    color: "bg-[#557d65]",
     image: chatbotBenefitsImage,
     readTime: "6 min",
     tags: ["Empresas", "Chatbots", "ROI", "Bienestar Laboral"]
@@ -115,7 +115,7 @@ const blogPosts = [
     author: "Dr. Miguel Herrera",
     category: "Innovación Terapéutica",
     icon: Sparkles,
-    color: "bg-gradient-to-r from-purple-500 to-pink-600",
+    color: "bg-[#6a7760]",
     image: aiTherapyImage,
     readTime: "7 min",
     tags: ["Terapia", "IA", "Psicólogos", "Innovación"]
@@ -126,30 +126,30 @@ export default function BlogSection() {
   const [, setLocation] = useLocation();
 
   return (
-    <section id="blog" className="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-blue-50">
+    <section id="blog" className="bg-[#f3f6ef] px-4 py-14 dark:bg-[#102f33] sm:py-20">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center space-x-3 mb-6">
-            <div className="relative">
-              <BookOpen className="w-14 h-14 text-orange-500" />
-              <Sparkles className="w-6 h-6 text-yellow-400 absolute -top-2 -right-2 animate-pulse" />
+        <div className="mb-12 text-center sm:mb-16">
+          <div className="mb-6 flex items-center justify-center gap-3">
+            <div className="relative text-[#557d65] dark:text-[#c9dd83]">
+              <BookOpen className="h-11 w-11" />
+              <Sparkles className="absolute -right-2 -top-2 h-5 w-5 text-[#91aa72]" />
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-semibold tracking-[-0.04em] text-[#173e3d] dark:text-[#f2f4e8] sm:text-5xl">
               Blog NUXA
             </h2>
           </div>
-          <p className="text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
+          <p className="mx-auto max-w-4xl text-base leading-7 text-[#526b68] dark:text-[#c3d8d1] sm:text-lg">
             Artículos especializados sobre IA y salud mental, investigaciones innovadoras 
             y las últimas tendencias en bienestar digital escritos por nuestros expertos.
           </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500 mx-auto mt-6 rounded-full"></div>
+          <div className="mx-auto mt-6 h-px w-20 bg-[#a9c1b4] dark:bg-[#6d9d8c]"></div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8 mb-12">
+        <div className="mb-12 grid gap-5 lg:grid-cols-3 sm:gap-7">
           {blogPosts.map((post) => {
             const IconComponent = post.icon;
             return (
-              <article key={post.id} className="group bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02]">
+              <article key={post.id} className="group overflow-hidden rounded-[1.5rem] border border-[#d6e3dc] bg-[#f8f9f4] shadow-[0_20px_50px_-42px_rgba(19,61,59,0.5)] transition-colors hover:bg-white dark:border-[#315d5b] dark:bg-[#173e3d] dark:hover:bg-[#20494a]">
                 {/* Imagen estilo periódico */}
                 <div className="relative h-48 overflow-hidden">
                   <img 
@@ -159,7 +159,7 @@ export default function BlogSection() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                   <div className="absolute top-4 left-4">
-                    <span className={`text-xs font-bold px-3 py-1 rounded-full text-white ${post.color}`}>
+                    <span className={`rounded-full px-3 py-1 text-xs font-semibold text-white ${post.color}`}>
                       {post.category}
                     </span>
                   </div>
@@ -174,25 +174,25 @@ export default function BlogSection() {
                 <div className="p-6">
                   <div className="flex items-center space-x-2 mb-3">
                     <IconComponent className="w-5 h-5 text-orange-500" />
-                    <h3 className="text-xl font-bold text-gray-900 leading-tight">
+                      <h3 className="text-lg font-semibold leading-tight text-[#234844] dark:text-[#f2f4e8] sm:text-xl">
                       {post.title}
                     </h3>
                   </div>
                   
-                  <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
+                  <p className="mb-4 line-clamp-3 leading-relaxed text-[#647b75] dark:text-[#c3d8d1]">
                     {post.excerpt}
                   </p>
                   
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {post.tags.map((tag, index) => (
-                      <span key={index} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                      <span key={index} className="rounded-full border border-[#d6e3dc] bg-[#eaf1eb] px-2 py-1 text-xs text-[#526b68] dark:border-[#456c68] dark:bg-[#20494a] dark:text-[#c3d8d1]">
                         {tag}
                       </span>
                     ))}
                   </div>
                   
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                  <div className="mb-4 flex items-center justify-between gap-2 text-xs text-[#74857c] dark:text-[#b7d7c4] sm:text-sm">
                     <div className="flex items-center space-x-2">
                       <User className="w-4 h-4" />
                       <span className="font-medium">{post.author}</span>
@@ -205,10 +205,10 @@ export default function BlogSection() {
                   
                   <Button 
                     onClick={() => setLocation(`/blog/${post.id}`)}
-                    className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 group-hover:shadow-lg"
+                    className="w-full rounded-full bg-[#174f50] py-3 font-semibold text-white transition-colors hover:bg-[#103f42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4e8176] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#173e3d] motion-reduce:transition-none"
                   >
                     Leer Artículo Completo
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
                   </Button>
                 </div>
               </article>
@@ -216,15 +216,15 @@ export default function BlogSection() {
           })}
         </div>
 
-        <div className="text-center bg-gradient-to-r from-orange-50 to-red-50 rounded-3xl p-8">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">¿Te interesan más artículos?</h3>
-          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+        <div className="rounded-[1.5rem] border border-[#d6e3dc] bg-[#eaf1eb] p-6 text-center dark:border-[#315d5b] dark:bg-[#173e3d] sm:p-8">
+          <h3 className="mb-4 text-xl font-semibold text-[#234844] dark:text-[#f2f4e8] sm:text-2xl">¿Te interesan más artículos?</h3>
+          <p className="mx-auto mb-6 max-w-2xl text-[#526b68] dark:text-[#c3d8d1]">
             Descubre nuestra biblioteca completa de artículos sobre inteligencia artificial, 
             salud mental y las últimas innovaciones en bienestar digital.
           </p>
           <Button 
             onClick={() => setLocation("/blog")}
-            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            className="rounded-full bg-[#174f50] px-7 py-3 font-semibold text-white transition-colors hover:bg-[#103f42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4e8176] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#173e3d] motion-reduce:transition-none sm:text-base"
           >
             Explorar Todo el Blog
             <TrendingUp className="w-5 h-5 ml-2" />

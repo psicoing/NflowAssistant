@@ -5,57 +5,51 @@ import { useLanguageContext } from "@/components/LanguageProvider";
 export default function AgeNoticeSection() {
   const { t } = useLanguageContext();
   return (
-    <section className="py-12 px-4 bg-gray-900 relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-10 left-1/4 w-72 h-72 bg-nflow-orange rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-blue-500 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
+    <section className="bg-[#123f43] px-4 py-12 sm:py-14">
 
-      <div className="max-w-4xl mx-auto relative z-10">
-        <Card className="bg-gray-800/95 border-2 border-nflow-orange/50 shadow-2xl backdrop-blur-sm overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-nflow-orange/10 to-blue-500/10"></div>
+      <div className="relative mx-auto max-w-5xl">
+        <Card className="overflow-hidden rounded-[1.5rem] border border-[#6d9d8c]/45 bg-[#f3f6ef] text-[#234844]">
 
-          <CardContent className="p-6 relative z-10">
-            <div className="flex items-center justify-between gap-6 md:flex-row flex-col">
+          <CardContent className="relative z-10 p-5 sm:p-7">
+            <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
 
               {/* Left side – icon + text */}
-              <div className="flex items-center gap-5 flex-1">
-                <div className="p-3 bg-nflow-orange rounded-lg flex-shrink-0">
-                  <Calendar className="w-8 h-8 text-white" />
+              <div className="flex flex-1 items-center gap-4">
+                <div className="flex-shrink-0 rounded-xl bg-[#174f50] p-3 text-[#d6e69a]">
+                  <Calendar className="h-6 w-6" />
                 </div>
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-nflow-orange via-orange-400 to-yellow-400 bg-clip-text text-transparent">
+                  <h2 className="text-xl font-semibold leading-tight tracking-[-0.03em] text-[#173e3d] sm:text-2xl md:text-3xl">
                     {t('ageWarning.title')}
                   </h2>
-                  <p className="text-gray-300 mt-2 text-sm md:text-base">
+                  <p className="mt-2 text-sm leading-6 text-[#647b75] md:text-base">
                     {t('ageWarning.subtitle')}
                   </p>
                 </div>
               </div>
 
               {/* Right side – two badges */}
-              <div className="flex gap-3 flex-shrink-0">
+              <div className="flex w-full flex-shrink-0 gap-3 sm:w-auto">
                 {/* Adults */}
-                <div className="text-center bg-gray-700/80 border-2 border-nflow-orange/60 rounded-2xl px-5 py-4 min-w-[100px]">
+                <div className="min-w-0 flex-1 rounded-xl border border-[#cbded6] bg-[#eaf1eb] px-4 py-3 text-center sm:min-w-[110px] sm:px-5 sm:py-4">
                   <div className="flex items-center justify-center mb-1">
-                    <Users className="w-5 h-5 text-nflow-orange mr-1.5" />
-                    <div className="text-3xl font-bold text-nflow-orange">
+                    <Users className="mr-1.5 h-4 w-4 text-[#557d65]" />
+                    <div className="text-2xl font-semibold text-[#234844] sm:text-3xl">
                       {t('ageWarning.adult')}
                     </div>
                   </div>
-                  <div className="text-xs font-medium text-gray-300">{t('ageWarning.adultLabel')}</div>
+                  <div className="text-xs font-medium text-[#647b75]">{t('ageWarning.adultLabel')}</div>
                 </div>
 
                 {/* Minors with guardian */}
-                <div className="text-center bg-gray-700/80 border-2 border-blue-500/60 rounded-2xl px-5 py-4 min-w-[100px]">
+                <div className="min-w-0 flex-1 rounded-xl border border-[#cbded6] bg-[#eaf1eb] px-4 py-3 text-center sm:min-w-[110px] sm:px-5 sm:py-4">
                   <div className="flex items-center justify-center mb-1">
-                    <UserCheck className="w-5 h-5 text-blue-400 mr-1.5" />
-                    <div className="text-2xl font-bold text-blue-400">
+                    <UserCheck className="mr-1.5 h-4 w-4 text-[#557d65]" />
+                    <div className="text-xl font-semibold text-[#234844] sm:text-2xl">
                       {t('ageWarning.minor')}
                     </div>
                   </div>
-                  <div className="text-xs font-medium text-gray-300">{t('ageWarning.minorLabel')}</div>
+                  <div className="text-xs font-medium text-[#647b75]">{t('ageWarning.minorLabel')}</div>
                 </div>
               </div>
 
